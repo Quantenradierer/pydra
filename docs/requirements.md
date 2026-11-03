@@ -68,9 +68,23 @@ when a requirement changes; the code, tests and the other docs follow it.
   - a "Next" button appears ("Finish" on question 10).
 - No auto-advance.
 - Keyboard: keys 1–4 pick a choice, Enter or Space activate Next.
-- Header: progress (e.g. 3/10) and a "Quit" button. Quit asks no
-  confirmation: it discards the session and returns home. Stats of questions
-  already answered are kept.
+- Header: the quiz hydra and a "Quit" button; below it, progress (e.g. 3/10)
+  and the topic. Quit asks no confirmation: it discards the session and
+  returns home. Stats of questions already answered are kept.
+- The quiz hydra has one head per question, rising from a swamp on a dark
+  panel. It is decorative (`aria-hidden`); progress and answers are announced
+  as text.
+  - The current question's head glows and sways; upcoming heads are dimmed.
+  - A right answer slashes the head off: it falls into the swamp and leaves a
+    stump with a yellow wound for the rest of the session.
+  - A wrong answer regrows the head: it is slashed, falls, and a yellow head
+    grows back from the stump.
+  - Head states are derived from the saved session, so a resumed session shows
+    the same stumps and regrown heads without replaying an animation.
+  - The animations (under a second) play with the answer feedback and never
+    block Next, the keys or Quit. With `prefers-reduced-motion: reduce` the
+    heads change state without motion.
+  - It fits the header row, so the quiz needs no more height than without it.
 - Resume: the session is saved to localStorage after every answer, including
   whether the feedback is showing, and resumed automatically on launch without
   a prompt, on the same screen. A saved session that references an unknown
@@ -84,15 +98,16 @@ when a requirement changes; the code, tests and the other docs follow it.
 | Wrong answer     | Head-scratcher, huh?   | Kopf hoch!               |
 | Summary headline | 7 of 10 heads slain    | 7 von 10 Köpfen erlegt   |
 
-The summary number is the score. The summary has a "Play again" button and a
-way home.
+The summary number is the score. The summary shows the hydra with `score`
+heads slashed (spread evenly) and the rest regrown, a "Play again" button and
+a way home.
 
 ## Screens
 
-- **Home:** title and hydra logo, Start button, one stats line in the active
-  language (e.g. "12 sessions · best 9/10 · 74% correct"; a friendly line
-  when no session has been played yet), a gear icon to Settings and a
-  speech-bubble icon to Feedback.
+- **Home:** title and hydra logo (its necks sway gently), Start button, one
+  stats line in the active language (e.g. "12 sessions · best 9/10 · 74%
+  correct"; a friendly line when no session has been played yet), a gear icon
+  to Settings and a speech-bubble icon to Feedback.
 - **Quiz:** as above.
 - **Summary:** as above.
 - **Settings:**
@@ -134,12 +149,14 @@ defensively: corrupt or foreign data is ignored and never throws.
 
 ## Icon
 
-- A flat, geometric four-headed hydra (four necks fanning from one body, one
-  per answer choice) in Python blue `#3776AB` and yellow `#FFD43B` on a dark
-  rounded square.
+- A flat five-headed hydra in Python blue `#3776AB` and yellow `#FFD43B` on a
+  dark rounded square: serpent necks in S-curves, alternately blue and
+  yellow, rising from one body with a curled tail and yellow belly plates;
+  dragon heads with a horn, an open jaw and slit-pupil eyes.
 - SVG source plus generated PNGs: 192, 512, maskable 512 (content inside the
   80% safe zone), apple-touch-icon and favicon. A script renders them; the
-  outputs are committed. The same hydra is the logo on Home.
+  outputs are committed. The same hydra is the logo on Home, inlined from the
+  SVG source; the quiz hydra reuses its head shape.
 
 ## Feedback
 
@@ -203,9 +220,11 @@ Hono on Node 24 with `node:sqlite`. API types and validation live in
     - token check;
     - feedback queue;
     - i18n completeness;
+    - quiz hydra geometry and head states;
     - a content validation test over all 80 questions.
   - **Playwright e2e,** against the built app served by the Node server:
-    - a full 10-question run;
+    - a full 10-question run, including the hydra heads and the summary hydra;
+    - slashed and regrown heads, restored after a reload without animation;
     - keyboard;
     - Quit;
     - auto-resume;

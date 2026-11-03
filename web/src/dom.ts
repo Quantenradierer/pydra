@@ -23,7 +23,7 @@ export function h<K extends keyof HTMLElementTagNameMap>(
   return el;
 }
 
-/** Parses trusted, static SVG markup (the icons in icons.ts). */
+/** Parses trusted SVG markup: the icons in icons.ts and the hydra drawings, never user input. */
 export function svg(markup: string): SVGSVGElement {
   const template = document.createElement('template');
   template.innerHTML = markup.trim();

@@ -30,8 +30,9 @@ In `web/src`:
 | `storage.ts`                    | localStorage access                                                 |
 | `update.ts`                     | Service worker update rule (never reload during a quiz)             |
 | `feedback/`                     | Feedback client and offline queue                                   |
+| `hydra/`                        | The quiz hydra: neck geometry, head states from the session, SVG; its animations are in `style.css` |
 | `i18n.ts`                       | UI texts in German and English                                      |
-| `icons/hydra.svg`, `scripts/icons.mjs` | Icon artwork and the PNG generator (`npm run icons -w web`)  |
+| `icons/hydra.svg`, `scripts/icons.mjs` | Icon artwork (also inlined as the Home logo) and the PNG generator (`npm run icons -w web`) |
 
 ## Development
 

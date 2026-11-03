@@ -23,7 +23,7 @@ function png(svg, size, name) {
   writeFileSync(out(name), image.asPng());
 }
 
-// Regular icon: rounded square, also the favicon and the home-screen logo.
+// Regular icon: rounded square, also the favicon. (Home inlines the artwork on the same background.)
 const icon = compose({ rounded: true, scale: 0.9 });
 writeFileSync(out('icon.svg'), icon);
 png(icon, 192, 'icon-192.png');

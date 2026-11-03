@@ -1,5 +1,6 @@
 import type { App, Screen } from '../app.ts';
 import { h, svg } from '../dom.ts';
+import { logoArt } from '../hydra/view.ts';
 import { GEAR, SPEECH_BUBBLE } from '../icons.ts';
 import { percentCorrect } from '../stats.ts';
 
@@ -28,7 +29,7 @@ export function homeScreen(app: App): Screen {
       iconButton(t('home.feedback'), SPEECH_BUBBLE, () => app.navigate('feedback'), 'open-feedback'),
       iconButton(t('home.settings'), GEAR, () => app.navigate('settings'), 'open-settings'),
     ),
-    h('img', { class: 'logo', src: '/icon.svg', alt: '', width: 160, height: 160 }),
+    logoArt(),
     h('h1', { tabindex: -1 }, 'Pydra'),
     h('p', { class: 'tagline' }, t('app.tagline')),
     h(

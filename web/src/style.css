@@ -9,6 +9,8 @@
   --accent-hover: #2c5f8a;
   --on-accent: #ffffff;
   --yellow: #ffd43b;
+  /* Background of the icon and the hydra drawings, in both colour schemes. */
+  --hydra-bg: #14202e;
   --focus: #1f6fbf;
   --green: #17723a;
   --green-bg: #e1f5e7;
@@ -186,12 +188,25 @@ button.primary:disabled {
 .logo {
   width: 160px;
   height: 160px;
+  padding: 8px;
+  border-radius: 22%;
+  background: var(--hydra-bg);
+  /* The swaying heads may reach a little past the artwork's edge. */
+  overflow: visible;
 }
 
-.summary .logo {
-  width: 120px;
-  height: 120px;
-  align-self: center;
+.logo .neck {
+  --amp: 1.5;
+  transform-box: view-box;
+  animation: hydra-sway 4s ease-in-out infinite alternate;
+}
+
+.logo .neck:nth-of-type(odd) {
+  animation-delay: -2s;
+}
+
+.logo .neck:nth-of-type(3n) {
+  animation-duration: 4.6s;
 }
 
 .home h1 {
@@ -211,12 +226,256 @@ button.primary:disabled {
   margin-top: 0.5rem;
 }
 
+/* Hydra: one head per question, see src/hydra/ */
+
+.hydra {
+  --blue: #3776ab;
+  --dim: #2a5680;
+  display: block;
+  border-radius: var(--radius);
+  background: var(--hydra-bg);
+}
+
+.hydra-body {
+  fill: #1f3e5e;
+}
+
+.hydra-tail {
+  fill: var(--blue);
+}
+
+.hydra-water {
+  fill: #1d3550;
+}
+
+.hydra-head {
+  --amp: 2;
+  --skin: var(--dim);
+  --stump: var(--dim);
+  --eye: #8c7a35;
+  transform-box: view-box;
+  animation: hydra-sway 3.6s ease-in-out var(--delay) infinite alternate;
+}
+
+.hydra-head[data-state='active'] {
+  --amp: 5;
+  --skin: var(--blue);
+  --stump: var(--blue);
+  --eye: var(--yellow);
+  filter: url('#hydra-glow');
+}
+
+.hydra-head[data-state='slashed'] {
+  --skin: var(--blue);
+  --stump: var(--blue);
+  --eye: var(--yellow);
+  animation: none;
+}
+
+.hydra-head[data-state='regrown'] {
+  --skin: var(--yellow);
+  --stump: var(--blue);
+  --eye: var(--blue);
+}
+
+.hydra-stump,
+.hydra-neck {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.hydra-stump {
+  stroke: var(--stump);
+}
+
+.hydra-neck {
+  stroke: var(--skin);
+}
+
+.hydra-skull {
+  fill: var(--skin);
+}
+
+.hydra-eye {
+  fill: var(--eye);
+}
+
+.hydra-upper {
+  transform-box: view-box;
+}
+
+.hydra-wound {
+  fill: var(--yellow);
+  opacity: 0;
+}
+
+.hydra-slash {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  opacity: 0;
+}
+
+.hydra-spark {
+  fill: none;
+  stroke: var(--yellow);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.hydra-head[data-state='slashed'] .hydra-upper {
+  opacity: 0;
+}
+
+.hydra-head[data-state='slashed'] .hydra-wound {
+  opacity: 1;
+}
+
+/* A fresh answer: a slash, then the head falls into the swamp or grows back. */
+
+.hydra-strike .hydra-slash {
+  animation: hydra-slash 450ms ease-out both;
+}
+
+.hydra-strike[data-state='slashed'] .hydra-upper {
+  animation: hydra-fall 800ms ease-in both;
+}
+
+.hydra-strike[data-state='slashed'] .hydra-wound {
+  animation: hydra-wound 800ms both;
+}
+
+.hydra-strike[data-state='regrown'] .hydra-upper {
+  animation: hydra-regrow 900ms ease-out both;
+}
+
+.hydra-strike[data-state='regrown'] .hydra-spark {
+  animation: hydra-spark 900ms ease-out both;
+}
+
+@keyframes hydra-sway {
+  from {
+    rotate: calc(var(--amp) * -1deg);
+  }
+  to {
+    rotate: calc(var(--amp) * 1deg);
+  }
+}
+
+@keyframes hydra-slash {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  35% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes hydra-fall {
+  0%,
+  15% {
+    transform: none;
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(var(--facing) * 6px), 34px) rotate(calc(var(--facing) * 70deg));
+    opacity: 0;
+  }
+}
+
+@keyframes hydra-wound {
+  0%,
+  20% {
+    opacity: 0;
+  }
+  30%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* The old head falls off in the colours of the current head, a yellow one grows back. */
+@keyframes hydra-regrow {
+  0%,
+  12% {
+    transform: none;
+    opacity: 1;
+    --skin: var(--blue);
+    --eye: var(--yellow);
+  }
+  40% {
+    transform: translate(calc(var(--facing) * 5px), 30px) rotate(calc(var(--facing) * 60deg));
+    opacity: 0;
+    --skin: var(--blue);
+    --eye: var(--yellow);
+  }
+  41% {
+    transform: scale(0);
+    opacity: 1;
+    --skin: var(--yellow);
+    --eye: var(--blue);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes hydra-spark {
+  0%,
+  40% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo *,
+  .hydra * {
+    animation: none !important;
+  }
+}
+
 /* Quiz */
 
 .quiz-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.quiz-header .hydra {
+  flex: 1;
+  min-width: 0;
+  height: 3rem;
+}
+
+.quiz-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  margin-bottom: -0.5rem;
 }
 
 .progress {
@@ -226,10 +485,8 @@ button.primary:disabled {
 
 .topic {
   color: var(--muted);
-  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: -0.5rem;
 }
 
 .prompt {
@@ -392,6 +649,12 @@ code,
   padding-top: 2rem;
 }
 
+.summary .hydra {
+  width: 100%;
+  max-width: 24rem;
+  align-self: center;
+}
+
 .actions {
   display: flex;
   flex-direction: column;
@@ -505,6 +768,10 @@ textarea {
 @media (min-width: 700px) {
   #app {
     padding-top: 2.5rem;
+  }
+
+  .quiz-header .hydra {
+    height: 4.5rem;
   }
 
   .actions {

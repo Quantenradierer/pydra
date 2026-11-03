@@ -1,6 +1,8 @@
 import type { App, Screen } from '../app.ts';
 import { h, svg } from '../dom.ts';
 import { codeBlock } from '../highlight.ts';
+import { sessionHeads } from '../hydra/heads.ts';
+import { hydra } from '../hydra/view.ts';
 import { CHECK, CROSS } from '../icons.ts';
 import { richText } from '../rich-text.ts';
 import { currentItem, isLastQuestion, present } from '../session.ts';
@@ -35,20 +37,21 @@ export function quizScreen(app: App): Screen {
   const feedback = h('section', { class: 'feedback', 'aria-live': 'polite', tabindex: -1, 'data-testid': 'feedback' });
 
   const heading = h('h1', { class: 'prompt', id: 'prompt', tabindex: -1 }, question.prompt[lang]);
+  const heads = hydra(sessionHeads(session, (id) => trainer.question(id)));
   const root = h(
     'main',
     { class: 'screen quiz' },
+    h('header', { class: 'quiz-header' }, heads.root, h('button', { class: 'quit', onclick: quit }, t('quiz.quit'))),
     h(
-      'header',
-      { class: 'quiz-header' },
+      'p',
+      { class: 'quiz-meta' },
       h(
         'span',
         { class: 'progress', 'aria-label': t('quiz.progress', { n: session.index + 1, total: session.items.length }) },
         `${session.index + 1}/${session.items.length}`,
       ),
-      h('button', { class: 'quit', onclick: quit }, t('quiz.quit')),
+      h('span', { class: 'topic' }, t(`topic.${question.topic}`)),
     ),
-    h('p', { class: 'topic' }, t(`topic.${question.topic}`)),
     heading,
     question.code === undefined ? null : codeBlock(question.code),
     h('div', { class: 'choices', role: 'group', 'aria-labelledby': 'prompt' }, ...choiceButtons),
@@ -79,6 +82,7 @@ export function quizScreen(app: App): Screen {
     if (currentItem(session).picked !== null) return;
     session = trainer.answer(slot) ?? session;
     showFeedback(slot);
+    heads.strike(session.index, slot === answerIndex);
     feedback.focus();
   }
 

@@ -1,5 +1,13 @@
-import { expect, test } from '@playwright/test';
-import { answer, stored } from './helpers.ts';
+import { expect, test, type Page } from '@playwright/test';
+import { answer, correctSlot, stored } from './helpers.ts';
+
+const head = (page: Page, index: number) => page.locator(`.hydra-head[data-index="${index}"]`);
+
+/** The summary hydra shows `score` slashed heads and the others regrown. */
+async function expectSummaryHydra(page: Page, score: number) {
+  await expect(page.locator('.hydra-head[data-state="slashed"]')).toHaveCount(score);
+  await expect(page.locator('.hydra-head[data-state="regrown"]')).toHaveCount(10 - score);
+}
 
 test('plays a full session with feedback and a summary', async ({ page }) => {
   await page.goto('/');
@@ -20,10 +28,15 @@ test('plays a full session with feedback and a summary', async ({ page }) => {
     await expect(page.locator('.verdict')).toHaveText(correct ? 'Köpfchen!' : 'Kopf hoch!');
     await expect(page.locator('.explanation')).not.toBeEmpty();
     await expect(page.getByTestId('feedback')).toBeFocused();
+    await expect(head(page, i - 1)).toHaveAttribute('data-state', correct ? 'slashed' : 'regrown');
     await page.getByRole('button', { name: i === 10 ? 'Fertig' : 'Weiter' }).click();
   }
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(`${score} von 10 Köpfen erlegt`);
+  await expectSummaryHydra(page, score);
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(`${score} von 10 Köpfen erlegt`);
+  await expectSummaryHydra(page, score);
   expect(await stored(page, 'counters')).toEqual({
     sessionsPlayed: 1,
     bestScore: score,
@@ -37,6 +50,32 @@ test('plays a full session with feedback and a summary', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Start' }).click();
   await expect(page.locator('.progress')).toHaveText('1/10');
+});
+
+test('slashes the head of a right answer, regrows a wrong one, and restores both after a reload', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Start' }).click();
+  await expect(page.locator('.hydra-head')).toHaveCount(10);
+  await expect(head(page, 0)).toHaveAttribute('data-state', 'active');
+  await expect(head(page, 1)).toHaveAttribute('data-state', 'idle');
+
+  await page.locator('.choice').nth(await correctSlot(page)).click();
+  await expect(head(page, 0)).toHaveAttribute('data-state', 'slashed');
+  await expect(head(page, 0)).toHaveClass(/hydra-strike/);
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await expect(head(page, 1)).toHaveAttribute('data-state', 'active');
+
+  await page.locator('.choice').nth(((await correctSlot(page)) + 1) % 4).click();
+  await expect(head(page, 1)).toHaveAttribute('data-state', 'regrown');
+  await expect(head(page, 1)).toHaveClass(/hydra-strike/);
+
+  // Resumed with the feedback showing: the same heads, without replaying the animation.
+  await page.reload();
+  await expect(page.getByTestId('feedback')).toBeVisible();
+  await expect(head(page, 0)).toHaveAttribute('data-state', 'slashed');
+  await expect(head(page, 1)).toHaveAttribute('data-state', 'regrown');
+  await expect(head(page, 2)).toHaveAttribute('data-state', 'idle');
+  await expect(page.locator('.hydra-strike')).toHaveCount(0);
 });
 
 test('plays again from the summary', async ({ page }) => {

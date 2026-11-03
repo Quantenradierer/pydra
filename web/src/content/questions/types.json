@@ -27,8 +27,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "3.0 hat einen Dezimalpunkt und ist deshalb ein float, auch wenn der Wert ganzzahlig aussieht.",
-      "en": "3.0 has a decimal point, so it is a float, even though the value looks like a whole number."
+      "de": "Jeder Wert in Python hat einen Typ, der sagt, was für eine Art Wert es ist. `type(x)` verrät ihn. Ganze Zahlen ohne Punkt sind `int`, Zahlen mit Dezimalpunkt sind `float` (Kommazahl).\n\n`3.0` hat einen Punkt, also ist es ein `float` – auch wenn der Wert wie eine ganze Zahl aussieht. Entscheidend ist, wie die Zahl geschrieben ist, nicht ob hinter dem Punkt eine 0 steht.",
+      "en": "Every value in Python has a type that says what kind of value it is. `type(x)` tells you. Whole numbers without a point are `int`; numbers with a decimal point are `float`.\n\n`3.0` has a point, so it is a `float` – even though the value looks like a whole number. What counts is how the number is written, not whether there is a 0 after the point."
     }
   },
   {
@@ -59,8 +59,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "x ist eine Zeichenkette. Eine Zeichenkette mal eine Zahl wiederholt sie: \"5\" * 2 ergibt \"55\", nicht 10.",
-      "en": "x is a string. Multiplying a string by a number repeats it: \"5\" * 2 gives \"55\", not 10."
+      "de": "`x = \"5\"` steht in Anführungszeichen, also ist `x` eine Zeichenkette (`str`), kein Zahlenwert. `y` ist die ganze Zahl 2. Zeichenkette mal Zahl bedeutet in Python „wiederholen“: `\"5\" * 2` ergibt \"55\".\n\nEs wird also nicht gerechnet, darum kommt nicht 10 heraus. Für 10 müsstest du erst umwandeln: `int(x) * y`. Wie ein Zettel mit einer 5 darauf: Zwei Zettel nebeneinander zeigen „55“, nicht 10.",
+      "en": "`x = \"5\"` is in quotes, so `x` is a string (`str`), not a number. `y` is the whole number 2. String times number means “repeat” in Python: `\"5\" * 2` gives \"55\".\n\nNo arithmetic happens, so you do not get 10. For 10 you would convert first: `int(x) * y`. Like a note with a 5 written on it: two notes side by side show “55”, not 10."
     }
   },
   {
@@ -91,8 +91,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "int(\"7\") wandelt die Zeichenkette in die Zahl 7 um, danach wird ganz normal addiert.",
-      "en": "int(\"7\") converts the string into the number 7, then normal addition happens."
+      "de": "`int()` wandelt einen Wert in eine ganze Zahl (`int`) um. `int(\"7\")` macht aus dem Text \"7\" die Zahl 7. Danach ist `7 + 3` eine ganz normale Addition: 10.\n\nOhne `int()` würde `\"7\" + 3` einen `TypeError` auslösen, weil Python Text und Zahl nicht mischt. Und \"73\" käme nur heraus, wenn beide Seiten Text wären: `\"7\" + \"3\"`.",
+      "en": "`int()` converts a value into a whole number (`int`). `int(\"7\")` turns the text \"7\" into the number 7. After that, `7 + 3` is plain addition: 10.\n\nWithout `int()`, `\"7\" + 3` would raise a `TypeError`, because Python does not mix text and numbers. And \"73\" would only come out if both sides were text: `\"7\" + \"3\"`."
     }
   },
   {
@@ -123,8 +123,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Python addiert keine Zeichenkette und Zahl automatisch. Du musst selbst umwandeln, z. B. mit int(\"7\") oder str(3).",
-      "en": "Python does not automatically add a string and a number. You must convert one yourself, e.g. with int(\"7\") or str(3)."
+      "de": "`\"7\"` ist eine Zeichenkette (`str`), `3` eine Zahl (`int`). Bei Text bedeutet `+` „aneinanderhängen“, bei Zahlen „addieren“. Python rät nicht, was du meinst, sondern bricht mit einem `TypeError` ab: Text und Zahl kann es nicht mit `+` verbinden.\n\nDu musst selbst umwandeln: `int(\"7\") + 3` ergibt 10, `\"7\" + str(3)` ergibt \"73\". Wie Äpfel und Birnen: Python zählt sie nicht einfach zusammen.",
+      "en": "`\"7\"` is a string (`str`), `3` is a number (`int`). For text, `+` means “join”; for numbers it means “add”. Python does not guess what you meant; it stops with a `TypeError`: it cannot combine text and a number with `+`.\n\nYou must convert yourself: `int(\"7\") + 3` gives 10, `\"7\" + str(3)` gives \"73\". Apples and oranges: Python will not just add them up."
     }
   },
   {
@@ -155,8 +155,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Der Operator / liefert immer einen float, auch wenn die Division aufgeht.",
-      "en": "The / operator always returns a float, even when the division is exact."
+      "de": "Der Operator `/` gibt immer eine Kommazahl (`float`) zurück, auch wenn die Division glatt aufgeht. 10 / 2 ist zwar genau 5, aber Python schreibt `5.0`, um zu zeigen, dass es ein `float` ist.\n\nEine ganze Zahl (`int`) bekommst du mit `//`: `10 // 2` ergibt 5. Und `5.00` zeigt Python nie von selbst an – es schreibt so wenige Nachkommastellen wie nötig.",
+      "en": "The `/` operator always returns a decimal number (`float`), even when the division comes out even. 10 / 2 is exactly 5, but Python writes `5.0` to show it is a `float`.\n\nYou get a whole number (`int`) with `//`: `10 // 2` gives 5. And Python never shows `5.00` on its own – it writes as few decimal places as needed."
     }
   },
   {
@@ -187,8 +187,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "True (ohne Anführungszeichen) ist ein Wahrheitswert vom Typ bool.",
-      "en": "True (without quotes) is a truth value of type bool."
+      "de": "`True` und `False` sind Wahrheitswerte vom Typ `bool` (Boolean, nach dem Mathematiker George Boole). Sie haben genau zwei mögliche Werte, wie ein Lichtschalter: an oder aus.\n\n`True` steht hier ohne Anführungszeichen, ist also kein Text. `type()` meldet deshalb `<class 'bool'>`. Mit Anführungszeichen, `\"True\"`, wäre es eine Zeichenkette (`str`).",
+      "en": "`True` and `False` are truth values of type `bool` (Boolean, named after the mathematician George Boole). They have exactly two possible values, like a light switch: on or off.\n\n`True` here has no quotes, so it is not text. That is why `type()` reports `<class 'bool'>`. With quotes, `\"True\"` would be a string (`str`)."
     }
   },
   {
@@ -218,8 +218,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Anführungszeichen machen einen Wert zur Zeichenkette. 42 ist ein int, 4.2 ein float und True ein bool.",
-      "en": "Quotes make a value a string. 42 is an int, 4.2 is a float and True is a bool."
+      "de": "Eine Zeichenkette (`str`) ist Text, und Text erkennst du in Python an den Anführungszeichen. `\"42\"` ist darum Text – auch wenn darin Ziffern stehen.\n\nDie anderen sind keine Zeichenketten: `42` ist eine ganze Zahl (`int`), `4.2` eine Kommazahl (`float`) und `True` ein Wahrheitswert (`bool`). Mit Text kannst du nicht rechnen: `\"42\" + 1` gibt einen `TypeError`.",
+      "en": "A string (`str`) is text, and in Python you recognise text by its quotes. So `\"42\"` is text – even though it contains digits.\n\nThe others are not strings: `42` is a whole number (`int`), `4.2` is a decimal number (`float`) and `True` is a truth value (`bool`). You cannot do maths with text: `\"42\" + 1` raises a `TypeError`."
     }
   },
   {
@@ -250,8 +250,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Eine Variable ist nur ein Name für einen Wert. Nach der zweiten Zuweisung zeigt x auf eine Zeichenkette.",
-      "en": "A variable is just a name for a value. After the second assignment, x refers to a string."
+      "de": "Eine Variable ist nur ein Namensschild, das an einem Wert hängt – sie hat selbst keinen festen Typ. Erst hängt `x` an der Zahl 5, dann wird das Schild an die Zeichenkette \"five\" umgehängt.\n\n`type(x)` fragt nach dem Typ des Werts, an dem `x` gerade hängt: `<class 'str'>`. Python erlaubt das Umhängen ohne Fehler. `<class 'five'>` gibt es nicht: Der Typ beschreibt die Art des Werts, nicht seinen Inhalt.",
+      "en": "A variable is just a name tag stuck on a value – it has no fixed type itself. First `x` is on the number 5, then the tag is moved to the string \"five\".\n\n`type(x)` asks for the type of the value `x` is currently on: `<class 'str'>`. Python allows this move without any error. `<class 'five'>` does not exist: the type describes the kind of value, not its content."
     }
   },
   {
@@ -282,8 +282,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "int() schneidet die Nachkommastellen ab, es rundet nicht. Deshalb wird aus 3.9 die 3.",
-      "en": "int() cuts off the decimal part, it does not round. So 3.9 becomes 3."
+      "de": "`int()` macht aus einer Kommazahl (`float`) eine ganze Zahl (`int`), indem es die Nachkommastellen einfach abschneidet. Es rundet nicht! Aus 3.9 wird also 3, nicht 4.\n\nWie ein Lineal, auf dem du nur die vollen Zentimeter abliest. Willst du richtig runden, nimm `round(3.9)`, das ergibt 4.",
+      "en": "`int()` turns a decimal number (`float`) into a whole number (`int`) by simply chopping off the decimal part. It does not round! So 3.9 becomes 3, not 4.\n\nLike reading only the full centimetres on a ruler. If you want proper rounding, use `round(3.9)`, which gives 4."
     }
   },
   {
@@ -314,8 +314,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Eine leere Zeichenkette gilt als falsch. Jede nicht-leere Zeichenkette, sogar \"False\", wäre True.",
-      "en": "An empty string counts as false. Any non-empty string, even \"False\", would be True."
+      "de": "`bool()` wandelt einen Wert in einen Wahrheitswert (`bool`) um, also `True` oder `False`. Die Regel: Leere Dinge sind falsch, alles andere ist wahr. `\"\"` ist eine leere Zeichenkette (`str`), darum ergibt `bool(\"\")` `False`.\n\nAchtung, der Inhalt zählt nicht, nur ob etwas drinsteht: Sogar `bool(\"False\")` ist `True`, weil der Text nicht leer ist. Wie ein Briefumschlag: Liegt irgendein Zettel drin, ist er nicht leer.",
+      "en": "`bool()` converts a value into a truth value (`bool`), `True` or `False`. The rule: empty things are false, everything else is true. `\"\"` is an empty string (`str`), so `bool(\"\")` gives `False`.\n\nCareful, the content does not matter, only whether there is any: even `bool(\"False\")` is `True`, because the text is not empty. Like an envelope: if any note is inside, it is not empty."
     }
   }
 ]

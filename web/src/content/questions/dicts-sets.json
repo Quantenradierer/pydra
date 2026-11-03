@@ -27,8 +27,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Mit eckigen Klammern und einem Schlüssel liest man den zugehörigen Wert aus dem Wörterbuch (dict).",
-      "en": "Square brackets with a key read the matching value from the dictionary."
+      "de": "Geschweifte Klammern mit Paaren `Schlüssel: Wert` bauen ein Wörterbuch (`dict`). Wie in einem echten Wörterbuch schlägst du ein Wort (den Schlüssel, englisch key) nach und bekommst die Bedeutung (den Wert) dazu. Hier gehört zu \"anna\" der Wert 25 und zu \"ben\" der Wert 30.\n\n`ages[\"ben\"]` schlägt den Schlüssel \"ben\" nach und liefert dessen Wert: 30. Den Schlüssel selbst bekommst du dabei nicht zurück, nur den zugeordneten Wert.",
+      "en": "Curly braces with `key: value` pairs build a dictionary (`dict`). Like a real dictionary, you look up a word (the key) and get its meaning (the value). Here \"anna\" maps to 25 and \"ben\" maps to 30.\n\n`ages[\"ben\"]` looks up the key \"ben\" and gives back its value: 30. You do not get the key itself back, only the value stored under it."
     }
   },
   {
@@ -59,8 +59,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Ein fehlender Schlüssel mit [] löst einen KeyError aus. Wer None möchte, nimmt .get().",
-      "en": "A missing key with [] raises a KeyError. If you want None instead, use .get()."
+      "de": "`ages[\"carl\"]` schlägt den Schlüssel \"carl\" im Wörterbuch (`dict`) nach. Den gibt es aber nicht – nur \"anna\" und \"ben\". Mit eckigen Klammern ist Python dann streng und bricht mit einem `KeyError` ab („Schlüssel nicht gefunden“).\n\nEs gibt kein stilles `None` und keine 0. Ein `IndexError` wäre es auch nicht: Der gehört zu Listen mit Zahlen-Positionen. Wenn ein fehlender Schlüssel normal sein kann, nimm `ages.get(\"carl\")`, das liefert dann `None`.",
+      "en": "`ages[\"carl\"]` looks up the key \"carl\" in the dictionary (`dict`). But it is not there – only \"anna\" and \"ben\" are. With square brackets Python is strict and stops with a `KeyError` (“key not found”).\n\nThere is no quiet `None` and no 0. It is not an `IndexError` either: that one belongs to lists with numbered positions. If a missing key is a normal case, use `ages.get(\"carl\")`, which gives `None` instead."
     }
   },
   {
@@ -91,8 +91,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": ".get() gibt None zurück, wenn der Schlüssel fehlt, statt einen Fehler auszulösen.",
-      "en": ".get() returns None when the key is missing instead of raising an error."
+      "de": "`get()` ist die höfliche Art, in einem Wörterbuch (`dict`) nachzuschlagen. Gibt es den Schlüssel, bekommst du seinen Wert. Fehlt er, gibt es keinen Fehler, sondern `None` – Pythons Wert für „nichts da“.\n\n\"carl\" steht nicht in `ages`, also liefert `ages.get(\"carl\")` `None`, und `print` zeigt `None` an. Vergleich: `ages[\"carl\"]` würde stattdessen mit einem `KeyError` abbrechen.",
+      "en": "`get()` is the polite way to look something up in a dictionary (`dict`). If the key exists, you get its value. If it is missing, there is no error but `None` – Python's value for “nothing here”.\n\n\"carl\" is not in `ages`, so `ages.get(\"carl\")` returns `None`, and `print` shows `None`. Compare: `ages[\"carl\"]` would stop with a `KeyError` instead."
     }
   },
   {
@@ -123,8 +123,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Das zweite Argument von .get() ist der Standardwert, der bei fehlendem Schlüssel zurückgegeben wird.",
-      "en": "The second argument of .get() is the default value returned when the key is missing."
+      "de": "`get()` kann ein zweites Argument bekommen: einen Standardwert (Default). Den liefert es zurück, wenn der Schlüssel fehlt. \"carl\" steht nicht im Wörterbuch (`dict`), also kommt der Standardwert 18 heraus.\n\nWie beim Bäcker: „Ein Roggenbrot, und falls keins da ist, ein Weißbrot.“ Wichtig: Das Wörterbuch selbst bleibt unverändert, \"carl\" wird dabei nicht eingetragen.",
+      "en": "`get()` can take a second argument: a default value. It returns that when the key is missing. \"carl\" is not in the dictionary (`dict`), so you get the default 18.\n\nLike at a bakery: “A rye bread, and if you have none, a white bread.” Note that the dictionary itself is not changed; \"carl\" is not added."
     }
   },
   {
@@ -155,8 +155,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "in prüft bei einem Wörterbuch nur die Schlüssel, nicht die Werte. 25 ist ein Wert, kein Schlüssel.",
-      "en": "For a dictionary, in only checks the keys, not the values. 25 is a value, not a key."
+      "de": "`in` fragt „ist das enthalten?“. Bei einem Wörterbuch (`dict`) schaut `in` aber nur bei den Schlüsseln nach, nicht bei den Werten. Die Schlüssel sind \"anna\" und \"ben\"; 25 ist nur ein Wert. Darum ist das Ergebnis `False`.\n\nWie im Telefonbuch: Du suchst nach Namen, nicht nach Telefonnummern. Willst du in den Werten suchen, schreib `25 in ages.values()` – das wäre `True`.",
+      "en": "`in` asks “is this contained?”. For a dictionary (`dict`), `in` only looks at the keys, not the values. The keys are \"anna\" and \"ben\"; 25 is just a value. So the result is `False`.\n\nLike a phone book: you search by name, not by phone number. To search the values, write `25 in ages.values()` – that would be `True`."
     }
   },
   {
@@ -187,8 +187,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Eine Menge (set) speichert jedes Element nur einmal; Duplikate fallen weg.",
-      "en": "A set stores each item only once; duplicates are dropped."
+      "de": "Geschweifte Klammern `{}` bauen entweder ein Wörterbuch (`dict`) oder eine Menge (`set`). Ein Wörterbuch hat immer Paare der Form `{\"Wort\": \"Bedeutung\", ...}`, ordnet also einer Sache etwas anderes zu. Hier stehen nur einzelne Werte ohne Doppelpunkt, also ist `s` eine Menge – ohne Zuordnung.\n\nEine Menge speichert jedes Element nur einmal; Duplikate fallen einfach weg. Aus `{1, 2, 2, 3, 3, 3}` wird `{1, 2, 3}`. `len(s)` fragt die Länge der Menge ab: 3 Elemente. Wie eine Gästeliste: Wer zweimal eingetragen wird, steht trotzdem nur einmal drauf.",
+      "en": "Curly braces `{}` build either a dictionary (`dict`) or a set (`set`). A dictionary always has pairs like `{\"word\": \"meaning\", ...}`, so it maps one thing to another. Here there are only single values with no colon, so `s` is a set – no mapping at all.\n\nA set stores each item only once; duplicates are simply dropped. `{1, 2, 2, 3, 3, 3}` becomes `{1, 2, 3}`. `len(s)` asks for the size of the set: 3 items. Like a guest list: someone written down twice is still only one guest."
     }
   },
   {
@@ -219,8 +219,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Jeder Schlüssel kommt in einem Wörterbuch nur einmal vor. Eine neue Zuweisung überschreibt den alten Wert.",
-      "en": "Each key appears only once in a dictionary. Assigning again overwrites the old value."
+      "de": "`d = {}` ist ein leeres Wörterbuch (`dict`). `d[\"x\"] = 1` legt den Schlüssel \"x\" mit dem Wert 1 an. `d[\"x\"] = 5` legt keinen zweiten \"x\" an, sondern überschreibt den alten Wert, denn jeder Schlüssel kommt in einem Wörterbuch nur einmal vor.\n\nWie ein beschriftetes Fach: Legst du etwas Neues hinein, fliegt das Alte raus. Darum steht am Ende `{'x': 5}` da. Zusammengezählt wird nichts, also nicht 6.",
+      "en": "`d = {}` is an empty dictionary (`dict`). `d[\"x\"] = 1` creates the key \"x\" with the value 1. `d[\"x\"] = 5` does not add a second \"x\"; it overwrites the old value, because each key appears only once in a dictionary.\n\nLike a labelled drawer: putting something new in throws the old thing out. So the end result is `{'x': 5}`. Nothing is added up, so it is not 6."
     }
   },
   {
@@ -251,8 +251,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Eine for-Schleife über ein Wörterbuch liefert die Schlüssel. Für Paare bräuchte man .items().",
-      "en": "A for loop over a dictionary yields its keys. For pairs you would use .items()."
+      "de": "Wenn eine `for`-Schleife über ein Wörterbuch (`dict`) läuft, bekommt sie bei jeder Runde einen Schlüssel – nicht den Wert und nicht das Paar. `key` ist also erst \"a\", dann \"b\". `end=\" \"` sorgt dafür, dass `print` statt eines Zeilenumbruchs ein Leerzeichen anhängt, darum steht alles in einer Zeile: `a b`.\n\nWillst du die Werte, nimm `.values()`; für Schlüssel und Wert zusammen `for key, value in d.items():`.",
+      "en": "When a `for` loop runs over a dictionary (`dict`), each round gives it a key – not the value, not the pair. So `key` is first \"a\", then \"b\". `end=\" \"` makes `print` add a space instead of a line break, so everything stays on one line: `a b`.\n\nFor the values use `.values()`; for key and value together use `for key, value in d.items():`."
     }
   },
   {
@@ -283,8 +283,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "& bildet die Schnittmenge: nur Elemente, die in beiden Mengen vorkommen. Die Vereinigung wäre a | b.",
-      "en": "& gives the intersection: only items found in both sets. The union would be a | b."
+      "de": "`a` und `b` sind Mengen (`set`). Der Operator `&` bildet die Schnittmenge: nur die Elemente, die in beiden Mengen vorkommen. 2 und 3 stehen in beiden, 1 nur in `a`, 4 nur in `b`. Ergebnis: `{2, 3}`.\n\nStell dir zwei Freundeskreise vor: Die Schnittmenge sind die Leute, die in beiden sind. Alle zusammen (die Vereinigung) bekämst du mit `a | b`, also `{1, 2, 3, 4}`.",
+      "en": "`a` and `b` are sets (`set`). The `&` operator builds the intersection: only the items found in both sets. 2 and 3 are in both, 1 only in `a`, 4 only in `b`. Result: `{2, 3}`.\n\nPicture two friend groups: the intersection is the people who belong to both. Everyone together (the union) would be `a | b`, i.e. `{1, 2, 3, 4}`."
     }
   },
   {
@@ -314,8 +314,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Mengen haben keine Duplikate und keine Indizes. {} ist ein leeres Wörterbuch; eine leere Menge erzeugt man mit set().",
-      "en": "Sets have no duplicates and no indexes. {} is an empty dictionary; an empty set is made with set()."
+      "de": "Eine Menge (`set`) enthält jedes Element nur einmal; doppelte Werte fallen weg. Außerdem hat sie keine feste Reihenfolge und darum keine Indizes – `s[0]` gibt einen `TypeError`.\n\nVorsicht bei `{}`: Leere geschweifte Klammern sind ein leeres Wörterbuch (`dict`), keine Menge. Eine leere Menge erzeugst du mit `set()`. Denk an einen Beutel mit Murmeln in verschiedenen Farben: Jede Farbe ist da oder nicht, aber es gibt kein „erstes“ Fach.",
+      "en": "A set (`set`) contains each item only once; duplicate values are dropped. It also has no fixed order and therefore no indexes – `s[0]` raises a `TypeError`.\n\nCareful with `{}`: empty curly braces are an empty dictionary (`dict`), not a set. You make an empty set with `set()`. Think of a bag of marbles in different colours: each colour is either in there or not, but there is no “first” slot."
     }
   }
 ]

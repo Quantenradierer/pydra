@@ -27,8 +27,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Negative Indizes zählen von hinten: -1 ist das letzte Element der Liste.",
-      "en": "Negative indexes count from the end: -1 is the last item of the list."
+      "de": "Eine Liste (`list`) ist wie eine nummerierte Reihe von Schubladen. Mit `nums[...]` öffnest du eine Schublade über ihre Nummer, den Index. Positive Indizes zählen von vorne und beginnen bei 0: `nums[0]` ist 10.\n\nNegative Indizes zählen von hinten: `nums[-1]` ist das letzte Element, `nums[-2]` das vorletzte. Darum kommt hier 40 heraus. Das ist praktisch, wenn du das Ende willst, ohne die Länge zu kennen.",
+      "en": "A list (`list`) is like a numbered row of drawers. `nums[...]` opens one drawer by its number, the index. Positive indexes count from the front and start at 0: `nums[0]` is 10.\n\nNegative indexes count from the back: `nums[-1]` is the last item, `nums[-2]` the second to last. That is why this prints 40. It is handy when you want the end without knowing the length."
     }
   },
   {
@@ -59,8 +59,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Ein Slice [1:3] nimmt die Indizes 1 und 2; das Ende 3 ist nicht enthalten.",
-      "en": "The slice [1:3] takes indexes 1 and 2; the end index 3 is not included."
+      "de": "`nums[1:3]` ist ein Ausschnitt (Slice): Er schneidet ein Stück aus der Liste heraus. Die erste Zahl ist der Start und ist dabei, die zweite ist das Ende und ist nicht mehr dabei. Du bekommst also die Indizes 1 und 2, das sind 20 und 30.\n\nStell dir den Ende-Index wie eine Ziellinie vor: Du läufst bis kurz davor, aber nicht darüber. So passt auch: `3 - 1` = 2 Elemente.",
+      "en": "`nums[1:3]` is a slice: it cuts a piece out of the list. The first number is the start and is included; the second is the end and is not included. So you get indexes 1 and 2, which are 20 and 30.\n\nThink of the end index as a finish line: you run up to it but not across. It also adds up: `3 - 1` = 2 items."
     }
   },
   {
@@ -91,8 +91,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Tupel sind unveränderlich. Der Versuch, ein Element zu ersetzen, löst einen TypeError aus.",
-      "en": "Tuples are immutable. Trying to replace an item raises a TypeError."
+      "de": "Runde Klammern `(1, 2, 3)` erzeugen ein Tupel (`tuple`). Ein Tupel ist wie eine Liste, aber unveränderlich: Ist es einmal gebaut, kannst du kein Element mehr austauschen, hinzufügen oder entfernen.\n\n`t[0] = 5` versucht genau das, deshalb bricht Python mit einem `TypeError` ab, und `print(t)` wird gar nicht mehr erreicht. Denk an eine verschweißte Packung: reinschauen ja, umpacken nein. Brauchst du Änderungen, nimm eine Liste.",
+      "en": "Round brackets `(1, 2, 3)` create a tuple (`tuple`). A tuple is like a list, but immutable: once built, you cannot replace, add or remove items.\n\n`t[0] = 5` tries exactly that, so Python stops with a `TypeError`, and `print(t)` is never reached. Think of a sealed package: you can look inside, but you cannot repack it. If you need changes, use a list."
     }
   },
   {
@@ -123,8 +123,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "append fügt genau ein Element hinzu – hier die ganze Liste [3, 4] als ein Element. Also hat a 3 Elemente.",
-      "en": "append adds exactly one item – here the whole list [3, 4] as a single item. So a has 3 items."
+      "de": "`append()` hängt genau ein Element hinten an eine Liste an. Hier ist dieses eine Element die ganze Liste `[3, 4]`. Danach sieht `a` so aus: `[1, 2, [3, 4]]` – eine Liste in der Liste.\n\n`len(a)` zählt nur die Elemente der äußeren Liste: 1, 2 und die innere Liste, also 3. Wie eine Tüte, die du in den Einkaufskorb legst: Sie zählt als ein Ding. Wolltest du 3 und 4 einzeln anhängen, wäre `a.extend([3, 4])` richtig, dann käme 4 heraus.",
+      "en": "`append()` adds exactly one item to the end of a list. Here that one item is the whole list `[3, 4]`. Afterwards `a` looks like `[1, 2, [3, 4]]` – a list inside a list.\n\n`len(a)` counts only the items of the outer list: 1, 2 and the inner list, so 3. Like putting a bag into your shopping basket: it counts as one thing. To add 3 and 4 separately you would use `a.extend([3, 4])`, which would give 4."
     }
   },
   {
@@ -155,8 +155,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "b = a kopiert die Liste nicht: beide Namen zeigen auf dieselbe Liste. Eine Änderung über b sieht man also auch in a.",
-      "en": "b = a does not copy the list: both names refer to the same list, so a change through b is visible in a too."
+      "de": "Eine Variable ist nur ein Namensschild, das an einem Wert hängt. `b = a` macht keine Kopie der Liste, sondern klebt ein zweites Schild an dieselbe Liste. `a` und `b` zeigen also auf genau ein und dieselbe Liste.\n\n`b.append(4)` verändert diese gemeinsame Liste, darum siehst du die 4 auch über `a`: `[1, 2, 3, 4]`. Willst du eine echte Kopie, schreib `b = a.copy()` oder `b = a[:]`.",
+      "en": "A variable is just a name tag stuck on a value. `b = a` does not copy the list; it sticks a second tag on the same list. So `a` and `b` both point to one and the same list.\n\n`b.append(4)` changes that shared list, which is why you also see the 4 through `a`: `[1, 2, 3, 4]`. If you want a real copy, write `b = a.copy()` or `b = a[:]`."
     }
   },
   {
@@ -186,8 +186,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Listen sind veränderlich, Tupel unveränderlich. Beide können beliebige Werte enthalten und per Index gelesen werden; Tupel schreibt man mit runden Klammern.",
-      "en": "Lists are mutable, tuples are immutable. Both can hold any values and be read by index; tuples use round brackets."
+      "de": "Listen (`list`, eckige Klammern `[]`) sind veränderlich: Du kannst Elemente anhängen, löschen oder austauschen. Tupel (`tuple`, runde Klammern `()`) sind unveränderlich: Nach dem Erstellen bleiben sie, wie sie sind.\n\nVieles haben beide gemeinsam: Sie können beliebige Werte enthalten (Zahlen, Text, sogar andere Listen), und du liest Elemente bei beiden per Index, z. B. `t[0]`. Eine Liste ist wie ein Notizzettel mit Bleistift, ein Tupel wie ein gedrucktes Etikett.",
+      "en": "Lists (`list`, square brackets `[]`) are mutable: you can add, remove or replace items. Tuples (`tuple`, round brackets `()`) are immutable: once created, they stay as they are.\n\nBoth have a lot in common: they can hold any values (numbers, text, even other lists), and you read items by index in both, e.g. `t[0]`. A list is like a note written in pencil, a tuple like a printed label."
     }
   },
   {
@@ -218,8 +218,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Der Operator + verbindet zwei Listen zu einer neuen Liste mit allen Elementen.",
-      "en": "The + operator joins two lists into a new list containing all the items."
+      "de": "Bei zwei Listen bedeutet `+` „aneinanderhängen“: Python baut eine neue Liste, die erst alle Elemente der linken und dann alle der rechten Liste enthält. Aus `[1, 2]` und `[3]` wird so `[1, 2, 3]`.\n\nDie 3 landet nicht als eigene Liste `[3]` darin, weil `+` die Elemente auspackt und einzeln übernimmt. Wie zwei Zugteile, die zu einem langen Zug gekoppelt werden.",
+      "en": "With two lists, `+` means “join them”: Python builds a new list holding first all items of the left list, then all items of the right one. `[1, 2]` and `[3]` become `[1, 2, 3]`.\n\nThe 3 does not end up as its own list `[3]`, because `+` unpacks the items and takes them one by one. Like coupling two trains into one long train."
     }
   },
   {
@@ -250,8 +250,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "sort() sortiert die Liste direkt (an Ort und Stelle) aufsteigend. Erst print(nums.sort()) würde None ausgeben.",
-      "en": "sort() sorts the list in place in ascending order. Only print(nums.sort()) would print None."
+      "de": "`nums.sort()` sortiert die Liste an Ort und Stelle („in place“): Sie verändert genau diese Liste, aufsteigend vom kleinsten zum größten Wert. Danach enthält `nums` also `[1, 2, 3]`, und genau das gibt `print(nums)` aus.\n\nAchtung, typische Falle: `sort()` selbst gibt nichts zurück, also `None`. `print(nums.sort())` würde deshalb `None` ausgeben. Willst du eine sortierte Kopie als Rückgabewert, nimm `sorted(nums)`.",
+      "en": "`nums.sort()` sorts the list in place: it changes this very list, ascending from smallest to largest. Afterwards `nums` holds `[1, 2, 3]`, and that is what `print(nums)` shows.\n\nWatch out for a common trap: `sort()` itself returns nothing, i.e. `None`. So `print(nums.sort())` would print `None`. If you want a sorted copy as the return value, use `sorted(nums)`."
     }
   },
   {
@@ -282,8 +282,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "len zählt nur die Elemente der äußeren Liste – das sind zwei innere Listen.",
-      "en": "len only counts the items of the outer list – that is two inner lists."
+      "de": "`len()` zählt, wie viele Elemente eine Sammlung direkt enthält – es schaut nicht in verschachtelte Listen hinein. Die äußere Liste hat genau zwei Elemente: die Liste `[1, 2]` und die Liste `[3]`.\n\nStell dir zwei Kisten in einem Regal vor: Das Regal enthält 2 Kisten, egal wie viel in den Kisten liegt. Darum ist das Ergebnis 2, nicht 3.",
+      "en": "`len()` counts how many items a collection holds directly – it does not look inside nested lists. The outer list has exactly two items: the list `[1, 2]` and the list `[3]`.\n\nPicture two boxes on a shelf: the shelf holds 2 boxes, no matter what is inside them. That is why the result is 2, not 3."
     }
   },
   {
@@ -313,8 +313,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Mit append hängt man ein Element ans Ende einer Liste. Listen haben weder add noch push, und Liste + Zeichenkette ergibt einen TypeError.",
-      "en": "append adds an item to the end of a list. Lists have neither add nor push, and list + string raises a TypeError."
+      "de": "Eine Methode ist eine Funktion, die zu einem Wert gehört und mit Punkt aufgerufen wird. Bei Listen heißt die Methode zum Anhängen `append()`: `items.append(\"x\")` setzt \"x\" ans Ende der Liste.\n\n`add()` gibt es nur bei Mengen (`set`), `push()` kommt aus anderen Sprachen wie JavaScript. Und `items + \"x\"` scheitert mit einem `TypeError`, weil `+` bei Listen nur eine andere Liste akzeptiert; `items + [\"x\"]` ginge, baut aber eine neue Liste, statt `items` zu ändern.",
+      "en": "A method is a function that belongs to a value and is called with a dot. For lists, the method to add to the end is `append()`: `items.append(\"x\")` puts \"x\" at the end of the list.\n\n`add()` only exists on sets (`set`), and `push()` comes from other languages such as JavaScript. `items + \"x\"` fails with a `TypeError`, because `+` on a list only accepts another list; `items + [\"x\"]` would work, but it builds a new list instead of changing `items`."
     }
   }
 ]

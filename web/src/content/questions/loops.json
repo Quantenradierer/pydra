@@ -27,8 +27,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "range(3) erzeugt die Zahlen 0, 1 und 2 – die Obergrenze 3 ist nicht enthalten.",
-      "en": "range(3) produces 0, 1 and 2 – the stop value 3 is not included."
+      "de": "Eine `for`-Schleife wiederholt den eingerückten Block für jeden Wert einer Folge. `range(3)` erzeugt die Zahlen 0, 1 und 2: Es fängt bei 0 an und hört kurz vor 3 auf – die Endzahl ist nie dabei.\n\n`end=\" \"` lässt `print` ein Leerzeichen statt eines Zeilenumbruchs anhängen, darum steht `0 1 2` in einer Zeile. Merkhilfe: `range(n)` liefert genau n Zahlen, von 0 bis n − 1.",
+      "en": "A `for` loop repeats the indented block for every value of a sequence. `range(3)` produces the numbers 0, 1 and 2: it starts at 0 and stops just before 3 – the stop number is never included.\n\n`end=\" \"` makes `print` add a space instead of a line break, so `0 1 2` appears on one line. Memory aid: `range(n)` gives exactly n numbers, from 0 to n − 1."
     }
   },
   {
@@ -59,8 +59,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "range(start, stop, step) beginnt bei 2 und springt jeweils um 3 weiter; 11 liegt schon über der Grenze 10.",
-      "en": "range(start, stop, step) starts at 2 and adds 3 each time; 11 is already past the stop value 10."
+      "de": "`range(start, stop, step)` zählt von `start` aus in Schritten von `step` und hört vor `stop` auf. Hier: Start bei 2, dann immer +3: 2, 5, 8. Die nächste Zahl wäre 11, aber die liegt schon hinter der Grenze 10.\n\n`list()` sammelt die Zahlen in eine Liste, damit `print` sie zeigt: `[2, 5, 8]`. Wie Treppensteigen, bei dem du immer drei Stufen nimmst und vor Stufe 10 stehen bleiben musst.",
+      "en": "`range(start, stop, step)` counts from `start` in steps of `step` and stops before `stop`. Here: start at 2, then +3 each time: 2, 5, 8. The next one would be 11, but that is already past the limit 10.\n\n`list()` collects the numbers into a list so `print` can show them: `[2, 5, 8]`. Like climbing stairs three steps at a time, stopping before step 10."
     }
   },
   {
@@ -91,8 +91,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "break beendet die Schleife sofort, sobald n gleich 3 ist. n behält danach den Wert 3.",
-      "en": "break ends the loop immediately when n is 3, so n keeps the value 3 afterwards."
+      "de": "Die Schleife geht `n` = 0, 1, 2, 3 … durch. Bei `n == 3` ist die Bedingung wahr, und `break` beendet die Schleife sofort – die restlichen Zahlen bis 9 kommen nie dran.\n\nDie Schleifenvariable `n` bleibt nach der Schleife bestehen und behält ihren letzten Wert. Darum gibt `print(n)` 3 aus. (Ohne `break` wäre es 9, der letzte Wert von `range(10)`.)",
+      "en": "The loop goes through `n` = 0, 1, 2, 3 … At `n == 3` the condition is true, and `break` ends the loop immediately – the remaining numbers up to 9 never come up.\n\nThe loop variable `n` still exists after the loop and keeps its last value. So `print(n)` prints 3. (Without `break` it would be 9, the last value of `range(10)`.)"
     }
   },
   {
@@ -123,8 +123,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "continue überspringt die geraden Zahlen 0, 2 und 4. Addiert werden nur 1 und 3, also 4.",
-      "en": "continue skips the even numbers 0, 2 and 4. Only 1 and 3 are added, giving 4."
+      "de": "`range(5)` liefert 0, 1, 2, 3, 4. `i % 2 == 0` prüft, ob `i` gerade ist (Rest 0 beim Teilen durch 2). Für gerade Zahlen springt `continue` sofort zur nächsten Runde, und `total += i` wird übersprungen.\n\nAddiert werden also nur die ungeraden Zahlen 1 und 3: `0 + 1 + 3` = 4. Anders als `break` beendet `continue` die Schleife nicht, es überspringt nur den Rest dieser einen Runde – wie ein Lied in der Playlist überspringen.",
+      "en": "`range(5)` gives 0, 1, 2, 3, 4. `i % 2 == 0` checks whether `i` is even (remainder 0 when divided by 2). For even numbers, `continue` jumps straight to the next round, skipping `total += i`.\n\nSo only the odd numbers 1 and 3 are added: `0 + 1 + 3` = 4. Unlike `break`, `continue` does not end the loop; it just skips the rest of this one round – like skipping a song in a playlist."
     }
   },
   {
@@ -155,8 +155,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "count wird 2, 4, 6. Erst bei 6 ist die Bedingung count < 5 falsch und die Schleife endet.",
-      "en": "count becomes 2, 4, 6. Only at 6 is count < 5 false, so the loop stops."
+      "de": "Eine `while`-Schleife wiederholt ihren Block, solange die Bedingung wahr ist, und prüft sie vor jeder Runde neu. `count += 2` erhöht `count` jedes Mal um 2: erst 2, dann 4, dann 6.\n\nBei 4 ist `4 < 5` noch wahr, also läuft noch eine Runde und `count` wird 6. Jetzt ist `6 < 5` falsch, die Schleife endet, und `print` zeigt 6. Die 5 wird übersprungen – darum stoppt die Schleife nicht bei genau 5, aber sie endet trotzdem.",
+      "en": "A `while` loop repeats its block as long as the condition is true, checking it again before every round. `count += 2` raises `count` by 2 each time: 2, then 4, then 6.\n\nAt 4, `4 < 5` is still true, so one more round runs and `count` becomes 6. Now `6 < 5` is false, the loop ends and `print` shows 6. The 5 is jumped over – so the loop does not stop at exactly 5, but it still ends."
     }
   },
   {
@@ -187,8 +187,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "range(1, 5) liefert 1, 2, 3, 4 – also vier Durchläufe. Die 5 ist nicht enthalten.",
-      "en": "range(1, 5) yields 1, 2, 3, 4 – four iterations. 5 is not included."
+      "de": "`range(1, 5)` startet bei 1 und hört vor 5 auf: 1, 2, 3, 4. Das sind vier Werte, also läuft die Schleife viermal, und jedes Mal macht `n += 1` den Zähler um eins größer.\n\nAm Ende ist `n` also 4. Die Anzahl der Runden ist immer `stop - start`, hier `5 - 1` = 4. Die Endzahl 5 ist, wie immer bei `range`, nicht dabei.",
+      "en": "`range(1, 5)` starts at 1 and stops before 5: 1, 2, 3, 4. That is four values, so the loop runs four times, and each time `n += 1` raises the counter by one.\n\nAt the end `n` is 4. The number of rounds is always `stop - start`, here `5 - 1` = 4. As always with `range`, the stop value 5 is not included."
     }
   },
   {
@@ -219,8 +219,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Eine for-Schleife geht eine Zeichenkette Zeichen für Zeichen durch. Mit end=\"\" wird nichts zwischen die Ausgaben gesetzt.",
-      "en": "A for loop walks through a string character by character. With end=\"\" nothing is printed between the outputs."
+      "de": "Eine Zeichenkette (`str`) ist eine Folge von Zeichen, und eine `for`-Schleife geht sie Zeichen für Zeichen durch: `char` ist nacheinander \"a\", \"b\", \"c\". `upper()` macht daraus jeweils einen Großbuchstaben.\n\nNormalerweise beendet `print` jede Ausgabe mit einem Zeilenumbruch. Mit `end=\"\"` hängt es gar nichts an, nicht einmal ein Leerzeichen. Darum stehen die Buchstaben direkt nebeneinander: `ABC`.",
+      "en": "A string (`str`) is a sequence of characters, and a `for` loop walks through it one character at a time: `char` is \"a\", then \"b\", then \"c\". `upper()` turns each one into a capital letter.\n\nNormally `print` ends each output with a line break. With `end=\"\"` it adds nothing at all, not even a space. So the letters end up right next to each other: `ABC`."
     }
   },
   {
@@ -250,8 +250,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "break verlässt die aktuelle Schleife sofort; das Programm läuft nach der Schleife weiter. Zum nächsten Durchlauf springt dagegen continue.",
-      "en": "break leaves the current loop right away; the program continues after the loop. Jumping to the next iteration is what continue does."
+      "de": "`break` verlässt die aktuelle Schleife sofort. Das Programm läuft danach ganz normal mit der ersten Zeile nach der Schleife weiter – es endet also nicht das ganze Programm.\n\nNicht verwechseln: `continue` springt nur zur nächsten Runde derselben Schleife. Ein Vergleich: Beim Durchblättern eines Buchs ist `continue` „diese Seite überspringen“, `break` „Buch zuklappen und etwas anderes machen“.",
+      "en": "`break` leaves the current loop immediately. The program then carries on normally with the first line after the loop – it does not end the whole program.\n\nDo not mix it up with `continue`, which just jumps to the next round of the same loop. Think of leafing through a book: `continue` is “skip this page”, `break` is “close the book and do something else”."
     }
   },
   {
@@ -282,8 +282,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Die innere Schleife läuft bei jedem der 3 äußeren Durchläufe 2-mal: 3 · 2 = 6.",
-      "en": "The inner loop runs 2 times for each of the 3 outer iterations: 3 × 2 = 6."
+      "de": "Das sind verschachtelte Schleifen: eine Schleife in einer Schleife. Für jede der 3 Runden der äußeren Schleife (`i` = 0, 1, 2) läuft die innere Schleife komplett durch, also 2 Runden (`j` = 0, 1).\n\n`count += 1` läuft damit 3 · 2 = 6 Mal. Wie bei einem Stundenplan: 3 Tage mit je 2 Stunden sind 6 Stunden. 5 (3 + 2) wäre falsch, weil die Runden multipliziert, nicht addiert werden.",
+      "en": "These are nested loops: a loop inside a loop. For each of the 3 rounds of the outer loop (`i` = 0, 1, 2), the inner loop runs completely, i.e. 2 rounds (`j` = 0, 1).\n\nSo `count += 1` runs 3 × 2 = 6 times. Like a timetable: 3 days with 2 lessons each make 6 lessons. 5 (3 + 2) is wrong, because the rounds multiply, they do not add."
     }
   },
   {
@@ -314,8 +314,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "enumerate liefert Paare aus Index und Element, und der Index beginnt bei 0.",
-      "en": "enumerate yields pairs of index and item, and the index starts at 0."
+      "de": "`enumerate()` nummeriert die Elemente einer Folge durch und liefert bei jeder Runde ein Paar: (Index, Element). Der Index beginnt bei 0. Für \"hi\" sind das `(0, \"h\")` und `(1, \"i\")`.\n\n`for i, letter in ...` packt jedes Paar in zwei Variablen aus. `print(i, letter, end=\" \")` gibt erst die Nummer, dann den Buchstaben aus: `0 h 1 i`. Wie eine Warteschlange, in der jeder eine Nummer bekommt – nur fängt Python bei 0 an.",
+      "en": "`enumerate()` numbers the items of a sequence and gives a pair each round: (index, item). The index starts at 0. For \"hi\" these are `(0, \"h\")` and `(1, \"i\")`.\n\n`for i, letter in ...` unpacks each pair into two variables. `print(i, letter, end=\" \")` prints the number first, then the letter: `0 h 1 i`. Like a queue where everyone gets a ticket number – except Python starts at 0."
     }
   }
 ]

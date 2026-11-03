@@ -27,8 +27,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Die Funktion gibt mit return die Summe 2 + 3 zurück. \"23\" käme nur bei Zeichenketten heraus.",
-      "en": "The function returns the sum 2 + 3. \"23\" would only happen with strings."
+      "de": "Eine Funktion ist wie ein kleines Rezept mit Namen. `def add(a, b):` legt es an; `a` und `b` sind Parameter, also Platzhalter für die Zutaten. Beim Aufruf `add(2, 3)` werden die Argumente eingesetzt: `a` ist 2, `b` ist 3.\n\n`return a + b` rechnet `2 + 3` und gibt 5 als Rückgabewert zurück, den `print` dann anzeigt. \"23\" käme nur heraus, wenn du Zeichenketten übergibst: `add(\"2\", \"3\")` klebt Text zusammen.",
+      "en": "A function is like a small named recipe. `def add(a, b):` defines it; `a` and `b` are parameters, placeholders for the ingredients. The call `add(2, 3)` fills in the arguments: `a` is 2, `b` is 3.\n\n`return a + b` computes `2 + 3` and hands back 5 as the return value, which `print` then shows. \"23\" would only happen with strings: `add(\"2\", \"3\")` glues text together."
     }
   },
   {
@@ -59,8 +59,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Ohne return gibt eine Funktion automatisch None zurück. Das Ergebnis x * 2 wird berechnet, aber verworfen.",
-      "en": "Without return, a function automatically returns None. x * 2 is computed but thrown away."
+      "de": "In `double` wird `x * 2` zwar ausgerechnet (8), aber das Ergebnis wird nirgends gespeichert und nicht mit `return` zurückgegeben – es verpufft. Eine Funktion ohne `return` gibt automatisch `None` zurück, Pythons Wert für „nichts“.\n\nDarum zeigt `print(double(4))` `None`. Wie ein Koch, der das Essen kocht, es aber nicht serviert. Richtig wäre `return x * 2`, dann käme 8 heraus.",
+      "en": "Inside `double`, `x * 2` is computed (8), but the result is not stored and not handed back with `return` – it just vanishes. A function without `return` automatically returns `None`, Python's value for “nothing”.\n\nThat is why `print(double(4))` shows `None`. Like a cook who prepares the meal but never serves it. With `return x * 2` you would get 8."
     }
   },
   {
@@ -91,8 +91,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Wird kein Argument übergeben, nutzt Python den Standardwert \"World\".",
-      "en": "If no argument is passed, Python uses the default value \"World\"."
+      "de": "`name=\"World\"` gibt dem Parameter `name` einen Standardwert (Default). Wird beim Aufruf kein Argument übergeben, setzt Python diesen Wert ein. `greet()` hat keine Argumente, also ist `name` gleich \"World\".\n\nDie Funktion gibt dann `\"Hello \" + \"World\"` zurück, also \"Hello World\". Wie eine Bestellung „wie immer“: Sagst du nichts, bekommst du das Übliche. Ein Fehler entsteht nicht, eben weil der Standardwert einspringt.",
+      "en": "`name=\"World\"` gives the parameter `name` a default value. If no argument is passed in the call, Python uses that value. `greet()` has no arguments, so `name` is \"World\".\n\nThe function then returns `\"Hello \" + \"World\"`, i.e. \"Hello World\". Like ordering “the usual”: if you say nothing, you get the standard. There is no error, precisely because the default steps in."
     }
   },
   {
@@ -123,8 +123,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Ein übergebenes Argument ersetzt den Standardwert.",
-      "en": "A passed argument replaces the default value."
+      "de": "Der Standardwert (Default) `\"World\"` wird nur benutzt, wenn kein Argument kommt. Hier rufst du `greet(\"Ada\")` auf, also ist `name` gleich \"Ada\", und der Standardwert spielt keine Rolle.\n\nDie Funktion gibt `\"Hello \" + \"Ada\"` zurück: \"Hello Ada\". Der Standardwert wird ersetzt, nicht ergänzt – darum gibt es kein „Hello World Ada“. Wie ein Formular mit vorausgefülltem Feld: Schreibst du etwas hinein, gilt dein Text.",
+      "en": "The default value `\"World\"` is only used when no argument is given. Here you call `greet(\"Ada\")`, so `name` is \"Ada\" and the default does not matter.\n\nThe function returns `\"Hello \" + \"Ada\"`: \"Hello Ada\". The default is replaced, not extended – so there is no “Hello World Ada”. Like a form with a pre-filled field: if you type something in, your text wins."
     }
   },
   {
@@ -155,8 +155,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "add braucht zwei Argumente und b hat keinen Standardwert. Fehlt eines, meldet Python einen TypeError.",
-      "en": "add needs two arguments and b has no default value. If one is missing, Python raises a TypeError."
+      "de": "`add` hat zwei Parameter, `a` und `b`, und keiner hat einen Standardwert. Beide sind also Pflicht. `add(1)` liefert nur ein Argument: `a` wird 1, aber für `b` fehlt etwas.\n\nPython bricht deshalb schon beim Aufruf mit einem `TypeError` ab und meldet, dass `b` fehlt. Es ist kein `NameError`, denn kein Name ist unbekannt – es fehlt nur eine Zutat. Wie ein Rezept für zwei Zutaten, bei dem du nur eine hinlegst.",
+      "en": "`add` has two parameters, `a` and `b`, and neither has a default value. So both are required. `add(1)` passes only one argument: `a` becomes 1, but `b` is missing.\n\nPython therefore stops at the call with a `TypeError` saying that `b` is missing. It is not a `NameError`, since no name is unknown – just an ingredient is missing. Like a two-ingredient recipe where you only put out one."
     }
   },
   {
@@ -187,8 +187,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "return beendet die Funktion sofort. Der Code danach wird nie ausgeführt.",
-      "en": "return ends the function immediately. The code after it never runs."
+      "de": "`return` beendet die Funktion sofort und gibt den Wert zurück – hier 1. Alles, was danach in der Funktion steht, wird nie ausgeführt. Das `print(\"x\")` ist also toter Code.\n\nDarum gibt `print(f())` nur `1` aus, ohne „x“. Wie ein Brief: Sobald er im Briefkasten ist, kannst du nichts mehr dazuschreiben.",
+      "en": "`return` ends the function immediately and hands back the value – here 1. Everything after it in the function never runs. So the `print(\"x\")` is dead code.\n\nThat is why `print(f())` shows only `1`, without “x”. Like a letter: once it is in the mailbox, you cannot add anything."
     }
   },
   {
@@ -219,8 +219,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Mit Schlüsselwort-Argumenten ist die Reihenfolge egal: base ist 2, exp ist 3, also 2 ** 3 = 8.",
-      "en": "With keyword arguments the order does not matter: base is 2, exp is 3, so 2 ** 3 = 8."
+      "de": "Hier werden Schlüsselwort-Argumente benutzt: `name=wert` im Aufruf. Damit sagst du direkt, welcher Parameter welchen Wert bekommt, und die Reihenfolge ist egal. `base` wird 2, `exp` wird 3 – der Standardwert 2 von `exp` wird überschrieben.\n\n`base ** exp` ist dann `2 ** 3`, also 2 · 2 · 2 = 8. Wer 9 tippt, hat die Werte vertauscht (3 hoch 2). Wie Namensschilder auf Paketen: Es zählt der Name, nicht die Reihenfolge der Lieferung.",
+      "en": "This uses keyword arguments: `name=value` in the call. You say directly which parameter gets which value, so the order does not matter. `base` becomes 2, `exp` becomes 3 – the default 2 for `exp` is overridden.\n\n`base ** exp` is then `2 ** 3`, i.e. 2 · 2 · 2 = 8. If you picked 9, you swapped them (3 to the power of 2). Like name labels on parcels: the name counts, not the delivery order."
     }
   },
   {
@@ -251,8 +251,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Das x in der Funktion ist eine lokale Variable. Sie ändert das x außerhalb nicht.",
-      "en": "The x inside the function is a local variable. It does not change the x outside."
+      "de": "Eine Variable, die innerhalb einer Funktion zugewiesen wird, ist lokal: Sie existiert nur in der Funktion. Das `x = 10` in `set_x` erzeugt also ein eigenes, neues `x`, das nach dem Funktionsaufruf wieder verschwindet.\n\nDas `x = 5` außerhalb bleibt davon unberührt, darum gibt `print(x)` 5 aus. Wie zwei Leute namens Max in verschiedenen Häusern: Gleicher Name, aber nicht dieselbe Person. Für Ergebnisse aus Funktionen benutzt man `return`.",
+      "en": "A variable assigned inside a function is local: it only exists inside that function. So `x = 10` in `set_x` creates its own, new `x`, which disappears after the call.\n\nThe `x = 5` outside is untouched, so `print(x)` prints 5. Like two people called Max in different houses: same name, different person. To get results out of a function, use `return`."
     }
   },
   {
@@ -282,8 +282,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "In Python beginnt jede Funktionsdefinition mit dem Schlüsselwort def.",
-      "en": "In Python every function definition starts with the keyword def."
+      "de": "In Python beginnt jede Funktionsdefinition mit dem Schlüsselwort `def` (kurz für „define“, definieren), z. B. `def greet(name):`. Danach kommen Name, Klammern mit Parametern, ein Doppelpunkt und der eingerückte Funktionskörper.\n\nEin Schlüsselwort ist ein reserviertes Wort mit fester Bedeutung. `function` gibt es in JavaScript, `func` in Go und Swift – in Python sind sie keine Schlüsselwörter.",
+      "en": "In Python every function definition starts with the keyword `def` (short for “define”), e.g. `def greet(name):`. Then come the name, brackets with parameters, a colon and the indented function body.\n\nA keyword is a reserved word with a fixed meaning. `function` is used in JavaScript, `func` in Go and Swift – in Python they are not keywords."
     }
   },
   {
@@ -314,8 +314,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Mehrere durch Komma getrennte Rückgabewerte werden als Tupel zurückgegeben.",
-      "en": "Several values separated by commas are returned as a tuple."
+      "de": "`min(nums)` ist 1 und `max(nums)` ist 4. Schreibst du nach `return` mehrere Werte mit Komma, packt Python sie automatisch in ein Tupel (`tuple`), also eine unveränderliche Reihe in runden Klammern: `(1, 4)`.\n\n`print` zeigt das Tupel mit Klammern an. Eine Liste `[1, 4]` entsteht nur, wenn du eckige Klammern schreibst. Praktisch: Mit `lo, hi = min_max([3, 1, 4])` packst du das Tupel gleich wieder in zwei Variablen aus.",
+      "en": "`min(nums)` is 1 and `max(nums)` is 4. When you write several values separated by commas after `return`, Python packs them into a tuple (`tuple`), an unchangeable sequence in round brackets: `(1, 4)`.\n\n`print` shows the tuple with its brackets. You only get a list `[1, 4]` if you write square brackets. Handy: `lo, hi = min_max([3, 1, 4])` unpacks the tuple straight into two variables."
     }
   }
 ]

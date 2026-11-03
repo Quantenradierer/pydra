@@ -27,8 +27,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "// ist die ganzzahlige Division: Sie teilt und rundet ab. 7 // 2 ergibt 3.",
-      "en": "// is floor division: it divides and rounds down. 7 // 2 gives 3."
+      "de": "`//` ist die Ganzzahldivision (Floor Division): Sie teilt und rundet dann ab, auf die nächste ganze Zahl darunter. `7 / 2` wäre 3.5, abgerundet ergibt das 3.\n\nWie wenn du 7 Kekse fair an 2 Kinder verteilst: Jedes bekommt 3 ganze Kekse, einer bleibt übrig. Diesen Rest bekommst du mit `7 % 2` (= 1). Achtung: „Abrunden“ heißt bei negativen Zahlen Richtung minus unendlich, `-7 // 2` ist -4.",
+      "en": "`//` is floor division: it divides and then rounds down to the next whole number below. `7 / 2` would be 3.5; rounded down that is 3.\n\nLike sharing 7 cookies fairly between 2 kids: each gets 3 whole cookies and one is left over. You get that leftover with `7 % 2` (= 1). Careful: “round down” means towards minus infinity for negative numbers, so `-7 // 2` is -4."
     }
   },
   {
@@ -59,8 +59,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "% liefert den Rest der Division: 7 = 2 * 3 + 1, also ist der Rest 1.",
-      "en": "% gives the remainder of a division: 7 = 2 * 3 + 1, so the remainder is 1."
+      "de": "`%` heißt Modulo und liefert den Rest einer Division. In 7 passt die 3 zweimal hinein (2 · 3 = 6), und es bleibt 1 übrig: 7 = 2 · 3 + 1. Also ist `7 % 3` gleich 1.\n\nWie 7 Äpfel in Tüten zu je 3: zwei volle Tüten, ein Apfel bleibt liegen. 2.33 wäre das Ergebnis von `/` (gerundet), nicht der Rest. Typischer Einsatz: `n % 2 == 0` prüft, ob eine Zahl gerade ist.",
+      "en": "`%` is called modulo and gives the remainder of a division. 3 fits into 7 twice (2 × 3 = 6), and 1 is left over: 7 = 2 × 3 + 1. So `7 % 3` is 1.\n\nLike packing 7 apples into bags of 3: two full bags, one apple left. 2.33 would be the (rounded) result of `/`, not the remainder. Typical use: `n % 2 == 0` checks whether a number is even."
     }
   },
   {
@@ -91,8 +91,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "** ist der Potenzoperator: 2 ** 3 bedeutet 2 * 2 * 2 = 8.",
-      "en": "** is the power operator: 2 ** 3 means 2 * 2 * 2 = 8."
+      "de": "`**` ist der Potenz-Operator („hoch“). `2 ** 3` heißt „2 hoch 3“: die 2 dreimal mit sich selbst malnehmen, 2 · 2 · 2 = 8.\n\nNicht verwechseln mit `2 * 3` (mal), das wäre 6. Und `^` bedeutet in Python nicht „hoch“, sondern etwas ganz anderes (bitweises Exklusiv-Oder). Für Potenzen nimmst du immer `**`.",
+      "en": "`**` is the power operator (“to the power of”). `2 ** 3` means “2 to the power of 3”: multiply 2 by itself three times, 2 × 2 × 2 = 8.\n\nDo not confuse it with `2 * 3` (times), which is 6. And `^` does not mean “power” in Python but something else entirely (bitwise exclusive or). For powers, always use `**`."
     }
   },
   {
@@ -123,8 +123,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Wie in der Mathematik gilt Punkt vor Strich: Erst 3 * 4 = 12, dann 2 + 12 = 14.",
-      "en": "Like in maths, multiplication comes before addition: first 3 * 4 = 12, then 2 + 12 = 14."
+      "de": "Python hält sich an „Punkt vor Strich“ wie in der Mathematik: Malnehmen und Teilen kommen vor Plus und Minus. Erst wird `3 * 4` = 12 gerechnet, dann `2 + 12` = 14.\n\n20 käme heraus, wenn man stur von links nach rechts rechnen würde (`2 + 3` = 5, dann `5 * 4`). Willst du genau das, musst du Klammern setzen: `(2 + 3) * 4`.",
+      "en": "Python follows the same order as maths: multiplication and division come before addition and subtraction. First `3 * 4` = 12, then `2 + 12` = 14.\n\nYou would get 20 by blindly going left to right (`2 + 3` = 5, then `5 * 4`). If that is what you want, add brackets: `(2 + 3) * 4`."
     }
   },
   {
@@ -155,8 +155,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Klammern werden zuerst ausgewertet: 2 + 3 = 5, dann 5 * 4 = 20.",
-      "en": "Parentheses are evaluated first: 2 + 3 = 5, then 5 * 4 = 20."
+      "de": "Klammern werden immer zuerst ausgerechnet, sie schlagen „Punkt vor Strich“. Also erst `2 + 3` = 5, danach `5 * 4` = 20.\n\nOhne Klammern käme 14 heraus, weil dann `3 * 4` zuerst dran wäre. Klammern sind wie ein „Bitte zuerst!“-Zettel. Und `print` zeigt nur das fertige Ergebnis, nie die Rechnung selbst.",
+      "en": "Brackets are always worked out first; they beat the usual “multiplication before addition” rule. So first `2 + 3` = 5, then `5 * 4` = 20.\n\nWithout the brackets you would get 14, because `3 * 4` would go first. Brackets are like a “do me first!” note. And `print` only shows the finished result, never the calculation itself."
     }
   },
   {
@@ -187,8 +187,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "/ ist die normale Division und liefert einen float mit Nachkommastellen.",
-      "en": "/ is normal division and returns a float with a decimal part."
+      "de": "`/` ist die normale Division und liefert immer eine Kommazahl (`float`), also eine Zahl mit Nachkommastellen. 10 geteilt durch 4 ist genau 2.5. Python schreibt dabei einen Punkt statt eines Kommas.\n\nNur `//` (Ganzzahldivision) würde abrunden und 2 liefern. Einen Rest wie „2 R 2“ zeigt Python nie an – den Rest bekommst du getrennt mit `10 % 4`.",
+      "en": "`/` is normal division and always gives a decimal number (`float`), a number with a fractional part. 10 divided by 4 is exactly 2.5.\n\nOnly `//` (floor division) would round down and give 2. Python never shows a remainder like “2 R 2” – you get the remainder separately with `10 % 4`."
     }
   },
   {
@@ -218,8 +218,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "== vergleicht Werte. = ist eine Zuweisung, und is prüft, ob es dasselbe Objekt ist – nicht, ob die Werte gleich sind. === gibt es in Python nicht.",
-      "en": "== compares values. = is assignment, and is checks whether it is the very same object, not whether the values are equal. === does not exist in Python."
+      "de": "`==` vergleicht zwei Werte: „Sind die gleich?“ Das Ergebnis ist `True` oder `False`. Das einfache `=` ist kein Vergleich, sondern eine Zuweisung: Es legt einen Wert in eine Variable.\n\n`is` ist eine Falle: Es fragt, ob beide Seiten dasselbe Objekt sind, nicht nur gleich aussehen. Zwei Bücher mit gleichem Inhalt sind `==`, aber nur dasselbe Exemplar ist `is`. `===` gibt es in JavaScript, in Python ist das ein Syntaxfehler.",
+      "en": "`==` compares two values: “are they equal?” The result is `True` or `False`. A single `=` is not a comparison but an assignment: it puts a value into a variable.\n\n`is` is a trap: it asks whether both sides are the very same object, not whether they just look the same. Two copies of the same book are `==`, but only the very same copy is `is`. `===` exists in JavaScript; in Python it is a syntax error."
     }
   },
   {
@@ -250,8 +250,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "== vergleicht den Inhalt. Beide Listen enthalten dieselben Werte, also ist das Ergebnis True.",
-      "en": "== compares the contents. Both lists contain the same values, so the result is True."
+      "de": "`a` und `b` sind zwei getrennte Listen, die zufällig dasselbe enthalten. `==` vergleicht den Inhalt, Element für Element: 1 mit 1, 2 mit 2. Alles gleich, also ist das Ergebnis `True`.\n\nZum Vergleich: `a is b` wäre hier `False`, denn es sind zwei verschiedene Listen – wie zwei Einkaufszettel mit denselben Sachen darauf: gleicher Inhalt, aber zwei Zettel.",
+      "en": "`a` and `b` are two separate lists that happen to contain the same things. `==` compares the contents, item by item: 1 with 1, 2 with 2. All equal, so the result is `True`.\n\nFor comparison: `a is b` would be `False` here, because they are two different lists – like two shopping lists with the same items: same content, but two pieces of paper."
     }
   },
   {
@@ -282,8 +282,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "x += 5 macht aus 10 eine 15, x *= 2 macht daraus 30. Die Kurzformen ändern x direkt.",
-      "en": "x += 5 turns 10 into 15, then x *= 2 turns it into 30. The shortcuts update x directly."
+      "de": "`x += 5` ist eine Abkürzung für `x = x + 5`: Nimm den alten Wert, rechne 5 dazu und speichere das Ergebnis wieder in `x`. Aus 10 wird 15. Genauso ist `x *= 2` kurz für `x = x * 2`: Aus 15 wird 30.\n\nDie Zeilen laufen nacheinander, und jede arbeitet mit dem neuen Wert der vorherigen. Wie ein Kontostand: erst 5 einzahlen, dann verdoppeln.",
+      "en": "`x += 5` is shorthand for `x = x + 5`: take the old value, add 5, and store the result back in `x`. 10 becomes 15. Likewise `x *= 2` is short for `x = x * 2`: 15 becomes 30.\n\nThe lines run one after another, and each works with the new value from the line before. Like a bank balance: first deposit 5, then double it."
     }
   },
   {
@@ -314,8 +314,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Erst wird 10 % 2 berechnet (Rest 0), dann verglichen: 0 == 0 ist True. So prüft man, ob eine Zahl gerade ist.",
-      "en": "First 10 % 2 is computed (remainder 0), then compared: 0 == 0 is True. This is how you check if a number is even."
+      "de": "Python rechnet erst, dann vergleicht es: `%` kommt vor `==`. `10 % 2` ist der Rest von 10 geteilt durch 2, also 0. Dann wird `0 == 0` geprüft, und das ist wahr: `True`.\n\nEin Vergleich ergibt immer einen Wahrheitswert (`bool`), also `True` oder `False`, nie eine Zahl. Genau so prüfst du, ob eine Zahl gerade ist: Lässt sie beim Teilen durch 2 keinen Rest, ist sie gerade.",
+      "en": "Python calculates first, then compares: `%` comes before `==`. `10 % 2` is the remainder of 10 divided by 2, which is 0. Then `0 == 0` is checked, and that is true: `True`.\n\nA comparison always gives a truth value (`bool`), `True` or `False`, never a number. This is exactly how you check whether a number is even: if dividing by 2 leaves no remainder, it is even."
     }
   }
 ]

@@ -27,8 +27,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Indizes beginnen bei 0, und das Ende eines Slices ist nicht enthalten: Zeichen 1, 2 und 3 ergeben \"yth\".",
-      "en": "Indexes start at 0 and the end of a slice is not included: characters 1, 2 and 3 give \"yth\"."
+      "de": "Eine Zeichenkette (`str`) ist wie eine Perlenkette aus Zeichen, und jedes Zeichen hat eine Nummer (Index), beginnend bei 0: P=0, y=1, t=2, h=3, o=4, n=5.\n\n`word[1:4]` ist ein Ausschnitt (Slice): Start 1 ist dabei, Ende 4 nicht. Du bekommst also die Zeichen 1, 2 und 3: \"yth\". Wer \"Pyt\" wählt, hat bei 1 statt bei 0 zu zählen begonnen; wer \"ytho\" wählt, hat das Ende mitgenommen.",
+      "en": "A string (`str`) is like a bead necklace of characters, and each character has a number (index), starting at 0: P=0, y=1, t=2, h=3, o=4, n=5.\n\n`word[1:4]` is a slice: start 1 is included, end 4 is not. So you get characters 1, 2 and 3: \"yth\". Picking \"Pyt\" means counting from 1 instead of 0; picking \"ytho\" means including the end."
     }
   },
   {
@@ -59,8 +59,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Negative Indizes zählen von hinten: -1 ist das letzte Zeichen.",
-      "en": "Negative indexes count from the end: -1 is the last character."
+      "de": "Negative Indizes zählen von hinten: `s[-1]` ist das letzte Zeichen, `s[-2]` das vorletzte. Bei \"Hello\" ist das letzte Zeichen ein \"o\".\n\nDas geht ohne Fehler, solange die Zeichenkette nicht leer ist. Praktisch, weil du die Länge nicht kennen musst – wie „die letzte Person in der Schlange“, egal wie lang sie ist.",
+      "en": "Negative indexes count from the back: `s[-1]` is the last character, `s[-2]` the second to last. In \"Hello\" the last character is \"o\".\n\nThis works without an error as long as the string is not empty. Handy, because you do not need to know the length – like “the last person in the queue”, however long it is."
     }
   },
   {
@@ -91,8 +91,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "In einem f-String werden die Ausdrücke in geschweiften Klammern durch ihre Werte ersetzt.",
-      "en": "In an f-string, the expressions inside curly braces are replaced by their values."
+      "de": "Das `f` vor den Anführungszeichen macht daraus einen f-String (formatierte Zeichenkette). Darin wird alles in geschweiften Klammern `{}` als Python-Ausdruck ausgerechnet und durch seinen Wert ersetzt: `{name}` wird \"Ana\", `{age}` wird 7.\n\nErgebnis: \"Ana is 7\". Die Zahl wird dabei automatisch in Text umgewandelt, darum gibt es keinen `TypeError`. Ohne das `f` stünden die Klammern wörtlich da. Wie ein Lückentext, den Python für dich ausfüllt.",
+      "en": "The `f` before the quotes makes it an f-string (formatted string). Everything inside curly braces `{}` is evaluated as a Python expression and replaced by its value: `{name}` becomes \"Ana\", `{age}` becomes 7.\n\nResult: \"Ana is 7\". The number is turned into text automatically, so there is no `TypeError`. Without the `f`, the braces would appear literally. Like a fill-in-the-blanks text that Python completes for you."
     }
   },
   {
@@ -123,8 +123,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "upper() liefert eine neue Zeichenkette, in der alle Buchstaben großgeschrieben sind.",
-      "en": "upper() returns a new string with all letters in uppercase."
+      "de": "`upper()` ist eine Methode von Zeichenketten (`str`): eine Funktion, die mit Punkt an den Wert gehängt wird. Sie gibt eine neue Zeichenkette zurück, in der alle Buchstaben großgeschrieben sind: aus \"hi\" wird \"HI\".\n\nNur den ersten Buchstaben groß („Hi“) macht `capitalize()`. Das Gegenstück zu `upper()` ist `lower()`.",
+      "en": "`upper()` is a string (`str`) method: a function attached to a value with a dot. It returns a new string with every letter in upper case: \"hi\" becomes \"HI\".\n\nTo capitalise only the first letter (“Hi”) you would use `capitalize()`. The opposite of `upper()` is `lower()`."
     }
   },
   {
@@ -155,8 +155,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "len() zählt die Zeichen: P-y-t-h-o-n sind 6 Zeichen. Der höchste Index ist 5, die Länge aber 6.",
-      "en": "len() counts the characters: P-y-t-h-o-n is 6 characters. The highest index is 5, but the length is 6."
+      "de": "`len()` zählt, wie viele Zeichen eine Zeichenkette (`str`) hat: P, y, t, h, o, n – das sind 6.\n\nDie Falle: Der höchste Index ist 5, weil das Zählen der Positionen bei 0 beginnt. Länge und letzter Index sind also nie gleich, die Länge ist immer eins größer. Wie Hausnummern, die bei 0 anfangen: 6 Häuser haben die Nummern 0 bis 5.",
+      "en": "`len()` counts how many characters a string (`str`) has: P, y, t, h, o, n – that is 6.\n\nThe trap: the highest index is 5, because positions are counted from 0. So length and last index are never the same; the length is always one bigger. Like house numbers starting at 0: 6 houses are numbered 0 to 5."
     }
   },
   {
@@ -187,8 +187,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Zeichenketten sind unveränderlich: Einzelne Zeichen kann man nicht ersetzen. Stattdessen erzeugt man eine neue Zeichenkette, z. B. \"H\" + s[1:].",
-      "en": "Strings are immutable: you cannot replace single characters. Instead you create a new string, e.g. \"H\" + s[1:]."
+      "de": "Zeichenketten (`str`) sind unveränderlich: Ist eine einmal erstellt, kannst du kein einzelnes Zeichen darin austauschen. `s[0] = \"H\"` versucht das, also bricht Python mit einem `TypeError` ab, und `print(s)` läuft gar nicht mehr.\n\nStattdessen baust du eine neue Zeichenkette und gibst ihr den Namen: `s = \"H\" + s[1:]` ergibt \"Hello\". Wie gedruckter Text: Du kannst ihn nicht ausradieren, aber neu drucken.",
+      "en": "Strings (`str`) are immutable: once created, you cannot replace a single character inside them. `s[0] = \"H\"` tries to, so Python stops with a `TypeError`, and `print(s)` never runs.\n\nInstead you build a new string and give it the name: `s = \"H\" + s[1:]` gives \"Hello\". Like printed text: you cannot erase it, but you can print it again."
     }
   },
   {
@@ -219,8 +219,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "split(\",\") trennt die Zeichenkette an jedem Komma und gibt eine Liste der Teile zurück.",
-      "en": "split(\",\") cuts the string at every comma and returns a list of the parts."
+      "de": "`split(\",\")` schneidet eine Zeichenkette (`str`) an jedem Komma auseinander und gibt die Stücke als Liste (`list`) zurück. Die Kommas selbst verschwinden dabei. Aus \"a,b,c\" wird `['a', 'b', 'c']`.\n\n`print` zeigt die Liste mit eckigen Klammern und einfachen Anführungszeichen an, weil die Elemente Zeichenketten sind. Wie eine Schokoladentafel, die du an den Rillen in Stücke brichst.",
+      "en": "`split(\",\")` cuts a string (`str`) apart at every comma and returns the pieces as a list (`list`). The commas themselves disappear. \"a,b,c\" becomes `['a', 'b', 'c']`.\n\n`print` shows the list with square brackets and single quotes because the items are strings. Like breaking a chocolate bar into pieces along its grooves."
     }
   },
   {
@@ -251,8 +251,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Eine Zeichenkette mal eine ganze Zahl wiederholt sie – ohne Leerzeichen dazwischen.",
-      "en": "Multiplying a string by an integer repeats it, without spaces in between."
+      "de": "Eine Zeichenkette (`str`) mal eine ganze Zahl (`int`) heißt: Wiederhole sie so oft. `\"ha\" * 3` ergibt \"ha\" dreimal hintereinander: \"hahaha\".\n\nPython fügt dabei nichts dazwischen ein, auch kein Leerzeichen. Willst du Abstände, musst du sie mitschreiben: `\"ha \" * 3`. Wie ein Stempel, den du dreimal direkt nebeneinander drückst.",
+      "en": "A string (`str`) times a whole number (`int`) means: repeat it that many times. `\"ha\" * 3` gives \"ha\" three times in a row: \"hahaha\".\n\nPython adds nothing in between, not even a space. If you want gaps, include them yourself: `\"ha \" * 3`. Like pressing a stamp three times right next to each other."
     }
   },
   {
@@ -283,8 +283,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "in prüft, ob eine Zeichenkette in einer anderen vorkommt. \"Py\" steht am Anfang von \"Python\".",
-      "en": "in checks whether one string appears inside another. \"Py\" is at the start of \"Python\"."
+      "de": "Bei Zeichenketten (`str`) fragt `in`: „Kommt dieser Text irgendwo im anderen vor?“ \"Py\" steht ganz am Anfang von \"Python\", also ist das Ergebnis `True`.\n\nDas Ergebnis ist immer ein Wahrheitswert (`bool`), keine Position. Groß- und Kleinschreibung zählen übrigens: `\"py\" in \"Python\"` wäre `False`.",
+      "en": "For strings (`str`), `in` asks: “does this text appear anywhere inside the other one?” \"Py\" is right at the start of \"Python\", so the result is `True`.\n\nThe result is always a truth value (`bool`), not a position. Upper and lower case matter: `\"py\" in \"Python\"` would be `False`."
     }
   },
   {
@@ -315,8 +315,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "replace() ändert s nicht, sondern gibt eine neue Zeichenkette zurück. Weil das Ergebnis nicht gespeichert wird, bleibt s \"banana\".",
-      "en": "replace() does not change s; it returns a new string. Since the result is not stored, s is still \"banana\"."
+      "de": "Zeichenketten (`str`) sind unveränderlich. `replace(\"a\", \"o\")` ändert `s` deshalb nicht, sondern baut eine neue Zeichenkette \"bonono\" und gibt sie zurück. Diese neue Zeichenkette wird hier aber nirgends gespeichert und geht verloren.\n\n`s` zeigt weiter auf das Original, also gibt `print(s)` \"banana\" aus. Richtig wäre `s = s.replace(\"a\", \"o\")`. Wie eine Fotokopie, auf der du etwas änderst: Das Original bleibt gleich, und wenn du die Kopie wegwirfst, ist die Änderung weg.",
+      "en": "Strings (`str`) are immutable. So `replace(\"a\", \"o\")` does not change `s`; it builds a new string \"bonono\" and returns it. But that new string is not stored anywhere here and gets lost.\n\n`s` still points to the original, so `print(s)` prints \"banana\". The fix is `s = s.replace(\"a\", \"o\")`. Like editing a photocopy: the original stays the same, and if you throw the copy away, the change is gone."
     }
   }
 ]

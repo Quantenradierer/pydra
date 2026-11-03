@@ -27,8 +27,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "x > 10 ist falsch, x > 5 ist wahr. Nur der erste zutreffende Zweig wird ausgeführt.",
-      "en": "x > 10 is false, x > 5 is true. Only the first matching branch runs."
+      "de": "`if`, `elif` und `else` sind wie eine Weiche: Python prüft die Bedingungen von oben nach unten und nimmt den ersten Zweig, dessen Bedingung wahr ist. Alle anderen werden übersprungen.\n\nHier: `x > 10` ist bei 7 falsch, also weiter. `x > 5` ist wahr, also wird \"medium\" ausgegeben. Danach ist Schluss – der `else`-Zweig läuft nur, wenn keine Bedingung davor gepasst hat. Darum kann nie „medium small“ herauskommen.",
+      "en": "`if`, `elif` and `else` work like a railway switch: Python checks the conditions from top to bottom and takes the first branch whose condition is true. All others are skipped.\n\nHere: `x > 10` is false for 7, so move on. `x > 5` is true, so \"medium\" is printed. Then it is done – the `else` branch only runs if no condition above matched. That is why you can never get “medium small”."
     }
   },
   {
@@ -59,8 +59,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Die Zahl 0 gilt in einer Bedingung als falsch, deshalb läuft der else-Zweig.",
-      "en": "The number 0 counts as false in a condition, so the else branch runs."
+      "de": "Eine Bedingung muss nicht `True` oder `False` sein: Python kann jeden Wert als „wahr“ oder „falsch“ deuten. Die Zahl 0 gilt als falsch, jede andere Zahl als wahr.\n\nWeil `if 0:` also „falsch“ bedeutet, wird der `if`-Zweig übersprungen und der `else`-Zweig gibt \"no\" aus. Faustregel: „nichts“ oder „leer“ ist falsch (0, `\"\"`, `[]`, `None`), alles andere ist wahr.",
+      "en": "A condition does not have to be `True` or `False`: Python can read any value as “truthy” or “falsy”. The number 0 counts as false, every other number as true.\n\nSince `if 0:` means “false”, the `if` branch is skipped and the `else` branch prints \"no\". Rule of thumb: “nothing” or “empty” is false (0, `\"\"`, `[]`, `None`), everything else is true."
     }
   },
   {
@@ -91,8 +91,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "Eine leere Liste gilt als falsch, eine Liste mit Elementen als wahr. So prüft man bequem, ob eine Liste leer ist.",
-      "en": "An empty list counts as false, a list with items as true. This is a handy way to check whether a list is empty."
+      "de": "`items = []` ist eine leere Liste. In einer Bedingung gilt eine leere Liste als falsch, eine Liste mit mindestens einem Element als wahr. Darum springt Python hier in den `else`-Zweig und gibt \"empty\" aus.\n\nWie ein Einkaufskorb: `if items:` fragt „liegt etwas drin?“. Das ist der übliche, kurze Weg, eine Liste auf Leere zu prüfen – statt `if len(items) > 0:`.",
+      "en": "`items = []` is an empty list. In a condition, an empty list counts as false and a list with at least one item as true. So Python goes to the `else` branch and prints \"empty\".\n\nLike a shopping basket: `if items:` asks “is anything in there?”. That is the usual short way to check whether a list is empty – instead of `if len(items) > 0:`."
     }
   },
   {
@@ -123,8 +123,8 @@
     ],
     "answerIndex": 3,
     "explanation": {
-      "de": "Python prüft die Bedingungen von oben nach unten und nimmt nur den ersten passenden Zweig. score >= 50 ist schon wahr, also wird elif gar nicht mehr geprüft.",
-      "en": "Python checks the conditions from top to bottom and takes only the first matching branch. score >= 50 is already true, so the elif is never checked."
+      "de": "Python prüft die Bedingungen von oben nach unten und nimmt nur den ersten Zweig, der passt. `score >= 50` ist bei 95 schon wahr, also wird `grade = \"pass\"` gesetzt – das `elif score >= 90` wird gar nicht mehr angeschaut, obwohl es auch wahr wäre.\n\nDas ist eine typische Falle: Die strengere Bedingung muss zuerst kommen. Richtig wäre: erst `if score >= 90`, dann `elif score >= 50`. Wie ein Türsteher, der den ersten passenden Eingang zuweist und nicht weitersucht.",
+      "en": "Python checks the conditions from top to bottom and takes only the first branch that fits. `score >= 50` is already true for 95, so `grade = \"pass\"` is set – the `elif score >= 90` is never looked at, even though it would be true as well.\n\nThis is a classic trap: the stricter condition must come first. The fix would be `if score >= 90` first, then `elif score >= 50`. Like a doorman who sends you to the first matching entrance and stops looking."
     }
   },
   {
@@ -154,8 +154,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "\"0\" ist eine nicht-leere Zeichenkette und daher wahr. 0, die leere Zeichenkette \"\" und None gelten als falsch.",
-      "en": "\"0\" is a non-empty string and therefore true. 0, the empty string \"\" and None count as false."
+      "de": "Python deutet in einer Bedingung jeden Wert als wahr oder falsch. Als falsch gelten „leere“ oder „nichts“-Werte: die Zahl 0, die leere Zeichenkette `\"\"` und `None` (Pythons Wert für „nichts“).\n\n`\"0\"` sieht zwar aus wie eine Null, ist aber eine Zeichenkette (`str`) mit einem Zeichen darin – also nicht leer und damit wahr. Entscheidend sind die Anführungszeichen: Ein Zettel, auf dem „0“ steht, ist trotzdem kein leerer Zettel.",
+      "en": "In a condition, Python reads every value as true or false. “Empty” or “nothing” values count as false: the number 0, the empty string `\"\"` and `None` (Python's value for “nothing”).\n\n`\"0\"` looks like a zero, but it is a string (`str`) with one character in it – so it is not empty and therefore true. The quotes are what matter: a note that says “0” is still not a blank note."
     }
   },
   {
@@ -186,8 +186,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "and ist nur wahr, wenn beide Teile wahr sind: 3 > 1 und 3 < 5 stimmen beide.",
-      "en": "and is only true if both parts are true: 3 > 1 and 3 < 5 are both true."
+      "de": "`and` verbindet zwei Bedingungen und ist nur dann wahr, wenn beide wahr sind. Hier: `x > 1` ist `3 > 1`, also `True`. `x < 5` ist `3 < 5`, auch `True`. Beides wahr, also gibt `print` `True` aus.\n\nStell dir zwei Schlüssel für eine Tür vor: Sie geht nur auf, wenn beide passen. (Bei `or` würde schon einer reichen.) Übrigens kannst du das in Python auch kurz als `1 < x < 5` schreiben.",
+      "en": "`and` joins two conditions and is only true if both are true. Here: `x > 1` is `3 > 1`, so `True`. `x < 5` is `3 < 5`, also `True`. Both true, so `print` shows `True`.\n\nPicture a door with two locks: it only opens if both keys fit. (With `or`, one would be enough.) By the way, Python also lets you write this as `1 < x < 5`."
     }
   },
   {
@@ -218,8 +218,8 @@
     ],
     "answerIndex": 0,
     "explanation": {
-      "de": "Die leere Zeichenkette ist falsch, not macht daraus wahr. Deshalb läuft der if-Zweig.",
-      "en": "The empty string is false, and not turns it into true. That is why the if branch runs."
+      "de": "`name = \"\"` ist eine leere Zeichenkette (`str`), und eine leere Zeichenkette gilt in Bedingungen als falsch. `not` dreht einen Wahrheitswert um: aus falsch wird wahr. `not name` ist also `True`, und der `if`-Zweig gibt \"no name\" aus.\n\nSo liest sich das fast wie Deutsch: „wenn kein Name da ist …“. Das ist der übliche Weg, zu prüfen, ob jemand ein Feld leer gelassen hat.",
+      "en": "`name = \"\"` is an empty string (`str`), and an empty string counts as false in a condition. `not` flips a truth value: false becomes true. So `not name` is `True`, and the `if` branch prints \"no name\".\n\nIt reads almost like English: “if there is no name …”. This is the usual way to check whether someone left a field empty."
     }
   },
   {
@@ -249,8 +249,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Python verwendet das Schlüsselwort elif (kurz für „else if“). Die anderen Schreibweisen stammen aus anderen Sprachen.",
-      "en": "Python uses the keyword elif (short for \"else if\"). The other spellings come from other languages."
+      "de": "In Python heißt der zusätzliche Bedingungszweig `elif`, eine Abkürzung für „else if“ (sonst, falls …). Du kannst nach einem `if` beliebig viele `elif` schreiben und am Ende optional ein `else`.\n\n`else if` gibt es so in C oder JavaScript, `elsif` in Ruby und Perl, `elseif` in PHP. In Python sind diese Schreibweisen ein Syntaxfehler – jede Sprache hat eben ihre eigenen Vokabeln.",
+      "en": "In Python the extra condition branch is written `elif`, short for “else if”. After an `if` you can add as many `elif` branches as you like and optionally an `else` at the end.\n\n`else if` is how C or JavaScript spell it, `elsif` is Ruby and Perl, `elseif` is PHP. In Python those spellings are a syntax error – every language has its own vocabulary."
     }
   },
   {
@@ -281,8 +281,8 @@
     ],
     "answerIndex": 1,
     "explanation": {
-      "de": "In einer Bedingung brauchst du == zum Vergleichen. Ein einzelnes = ist eine Zuweisung und dort nicht erlaubt.",
-      "en": "In a condition you need == to compare. A single = is an assignment and is not allowed there."
+      "de": "Ein einzelnes `=` ist eine Zuweisung: „lege den Wert in diese Variable“. Zum Vergleichen („ist das gleich?“) brauchst du zwei: `==`. In einer `if`-Bedingung ist eine Zuweisung nicht erlaubt.\n\nDeshalb lehnt Python den Code schon beim Lesen ab, bevor irgendetwas läuft: Es meldet einen `SyntaxError` (ein Grammatikfehler im Code) und schlägt sogar `==` vor. Richtig wäre `if x == 10:`.",
+      "en": "A single `=` is an assignment: “put this value into the variable”. To compare (“is it equal?”) you need two: `==`. An assignment is not allowed inside an `if` condition.\n\nSo Python rejects the code while reading it, before anything runs: it reports a `SyntaxError` (a grammar mistake in the code) and even suggests `==`. The correct line is `if x == 10:`."
     }
   },
   {
@@ -313,8 +313,8 @@
     ],
     "answerIndex": 2,
     "explanation": {
-      "de": "Das ist ein bedingter Ausdruck: Wenn die Bedingung wahr ist, wird der Wert vor if genommen, sonst der nach else. 4 % 2 ist 0, also \"even\".",
-      "en": "This is a conditional expression: if the condition is true, the value before if is used, otherwise the one after else. 4 % 2 is 0, so \"even\"."
+      "de": "Das ist ein bedingter Ausdruck, ein `if`/`else` in einer Zeile: `A if Bedingung else B`. Ist die Bedingung wahr, ist das Ergebnis `A`, sonst `B`.\n\nHier: `x % 2` ist der Rest beim Teilen durch 2. `4 % 2` ist 0, also ist `0 == 0` wahr, und `result` bekommt \"even\". Wie eine Frage mit zwei vorbereiteten Antworten: Je nach Ja oder Nein wird eine davon genommen.",
+      "en": "This is a conditional expression, an `if`/`else` on one line: `A if condition else B`. If the condition is true, the result is `A`, otherwise `B`.\n\nHere: `x % 2` is the remainder after dividing by 2. `4 % 2` is 0, so `0 == 0` is true, and `result` gets \"even\". Like a question with two prepared answers: depending on yes or no, one of them is picked."
     }
   }
 ]

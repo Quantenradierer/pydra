@@ -8,7 +8,7 @@ export function isLang(value: unknown): value is Lang {
 
 const de = {
   'app.title': 'Pydra: Python Trainer',
-  'app.tagline': 'Python-Grundlagen, ein Kopf nach dem anderen.',
+  'app.tagline': 'Python-Grundlagen. Aufgaben mit Köpfchen.',
   'home.lessons': 'Lektionen',
   'home.settings': 'Einstellungen',
   'home.feedback': 'Feedback',

@@ -1,0 +1,321 @@
+[
+  {
+    "id": "operators-01",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(7 // 2)",
+    "choices": [
+      {
+        "de": "3.5",
+        "en": "3.5"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "// ist die ganzzahlige Division: Sie teilt und rundet ab. 7 // 2 ergibt 3.",
+      "en": "// is floor division: it divides and rounds down. 7 // 2 gives 3."
+    }
+  },
+  {
+    "id": "operators-02",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(7 % 3)",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "2.33",
+        "en": "2.33"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "% liefert den Rest der Division: 7 = 2 * 3 + 1, also ist der Rest 1.",
+      "en": "% gives the remainder of a division: 7 = 2 * 3 + 1, so the remainder is 1."
+    }
+  },
+  {
+    "id": "operators-03",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(2 ** 3)",
+    "choices": [
+      {
+        "de": "8",
+        "en": "8"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "9",
+        "en": "9"
+      },
+      {
+        "de": "5",
+        "en": "5"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "** ist der Potenzoperator: 2 ** 3 bedeutet 2 * 2 * 2 = 8.",
+      "en": "** is the power operator: 2 ** 3 means 2 * 2 * 2 = 8."
+    }
+  },
+  {
+    "id": "operators-04",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(2 + 3 * 4)",
+    "choices": [
+      {
+        "de": "20",
+        "en": "20"
+      },
+      {
+        "de": "24",
+        "en": "24"
+      },
+      {
+        "de": "9",
+        "en": "9"
+      },
+      {
+        "de": "14",
+        "en": "14"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Wie in der Mathematik gilt Punkt vor Strich: Erst 3 * 4 = 12, dann 2 + 12 = 14.",
+      "en": "Like in maths, multiplication comes before addition: first 3 * 4 = 12, then 2 + 12 = 14."
+    }
+  },
+  {
+    "id": "operators-05",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print((2 + 3) * 4)",
+    "choices": [
+      {
+        "de": "14",
+        "en": "14"
+      },
+      {
+        "de": "20",
+        "en": "20"
+      },
+      {
+        "de": "24",
+        "en": "24"
+      },
+      {
+        "de": "(5) * 4",
+        "en": "(5) * 4"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Klammern werden zuerst ausgewertet: 2 + 3 = 5, dann 5 * 4 = 20.",
+      "en": "Parentheses are evaluated first: 2 + 3 = 5, then 5 * 4 = 20."
+    }
+  },
+  {
+    "id": "operators-06",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(10 / 4)",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "2.0",
+        "en": "2.0"
+      },
+      {
+        "de": "2.5",
+        "en": "2.5"
+      },
+      {
+        "de": "2 R 2",
+        "en": "2 R 2"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "/ ist die normale Division und liefert einen float mit Nachkommastellen.",
+      "en": "/ is normal division and returns a float with a decimal part."
+    }
+  },
+  {
+    "id": "operators-07",
+    "topic": "operators",
+    "prompt": {
+      "de": "Mit welchem Operator prüfst du, ob zwei Werte gleich sind?",
+      "en": "Which operator checks whether two values are equal?"
+    },
+    "choices": [
+      {
+        "de": "=",
+        "en": "="
+      },
+      {
+        "de": "is",
+        "en": "is"
+      },
+      {
+        "de": "==",
+        "en": "=="
+      },
+      {
+        "de": "===",
+        "en": "==="
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "== vergleicht Werte. = ist eine Zuweisung, und is prüft, ob es dasselbe Objekt ist – nicht, ob die Werte gleich sind. === gibt es in Python nicht.",
+      "en": "== compares values. = is assignment, and is checks whether it is the very same object, not whether the values are equal. === does not exist in Python."
+    }
+  },
+  {
+    "id": "operators-08",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = [1, 2]\nb = [1, 2]\nprint(a == b)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "[1, 2]",
+        "en": "[1, 2]"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "== vergleicht den Inhalt. Beide Listen enthalten dieselben Werte, also ist das Ergebnis True.",
+      "en": "== compares the contents. Both lists contain the same values, so the result is True."
+    }
+  },
+  {
+    "id": "operators-09",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 10\nx += 5\nx *= 2\nprint(x)",
+    "choices": [
+      {
+        "de": "20",
+        "en": "20"
+      },
+      {
+        "de": "25",
+        "en": "25"
+      },
+      {
+        "de": "15",
+        "en": "15"
+      },
+      {
+        "de": "30",
+        "en": "30"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "x += 5 macht aus 10 eine 15, x *= 2 macht daraus 30. Die Kurzformen ändern x direkt.",
+      "en": "x += 5 turns 10 into 15, then x *= 2 turns it into 30. The shortcuts update x directly."
+    }
+  },
+  {
+    "id": "operators-10",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(10 % 2 == 0)",
+    "choices": [
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Erst wird 10 % 2 berechnet (Rest 0), dann verglichen: 0 == 0 ist True. So prüft man, ob eine Zahl gerade ist.",
+      "en": "First 10 % 2 is computed (remainder 0), then compared: 0 == 0 is True. This is how you check if a number is even."
+    }
+  }
+]

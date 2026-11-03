@@ -1,0 +1,320 @@
+[
+  {
+    "id": "control-flow-01",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 7\nif x > 10:\n    print(\"big\")\nelif x > 5:\n    print(\"medium\")\nelse:\n    print(\"small\")",
+    "choices": [
+      {
+        "de": "big",
+        "en": "big"
+      },
+      {
+        "de": "medium",
+        "en": "medium"
+      },
+      {
+        "de": "small",
+        "en": "small"
+      },
+      {
+        "de": "medium small",
+        "en": "medium small"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "x > 10 ist falsch, x > 5 ist wahr. Nur der erste zutreffende Zweig wird ausgeführt.",
+      "en": "x > 10 is false, x > 5 is true. Only the first matching branch runs."
+    }
+  },
+  {
+    "id": "control-flow-02",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "if 0:\n    print(\"yes\")\nelse:\n    print(\"no\")",
+    "choices": [
+      {
+        "de": "yes",
+        "en": "yes"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "no",
+        "en": "no"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Die Zahl 0 gilt in einer Bedingung als falsch, deshalb läuft der else-Zweig.",
+      "en": "The number 0 counts as false in a condition, so the else branch runs."
+    }
+  },
+  {
+    "id": "control-flow-03",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "items = []\nif items:\n    print(\"full\")\nelse:\n    print(\"empty\")",
+    "choices": [
+      {
+        "de": "full",
+        "en": "full"
+      },
+      {
+        "de": "empty",
+        "en": "empty"
+      },
+      {
+        "de": "[]",
+        "en": "[]"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eine leere Liste gilt als falsch, eine Liste mit Elementen als wahr. So prüft man bequem, ob eine Liste leer ist.",
+      "en": "An empty list counts as false, a list with items as true. This is a handy way to check whether a list is empty."
+    }
+  },
+  {
+    "id": "control-flow-04",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "score = 95\nif score >= 50:\n    grade = \"pass\"\nelif score >= 90:\n    grade = \"top\"\nelse:\n    grade = \"fail\"\nprint(grade)",
+    "choices": [
+      {
+        "de": "top",
+        "en": "top"
+      },
+      {
+        "de": "fail",
+        "en": "fail"
+      },
+      {
+        "de": "pass top",
+        "en": "pass top"
+      },
+      {
+        "de": "pass",
+        "en": "pass"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Python prüft die Bedingungen von oben nach unten und nimmt nur den ersten passenden Zweig. score >= 50 ist schon wahr, also wird elif gar nicht mehr geprüft.",
+      "en": "Python checks the conditions from top to bottom and takes only the first matching branch. score >= 50 is already true, so the elif is never checked."
+    }
+  },
+  {
+    "id": "control-flow-05",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Welcher dieser Werte gilt in einer if-Bedingung als wahr?",
+      "en": "Which of these values counts as true in an if condition?"
+    },
+    "choices": [
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "\"\"",
+        "en": "\"\""
+      },
+      {
+        "de": "\"0\"",
+        "en": "\"0\""
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "\"0\" ist eine nicht-leere Zeichenkette und daher wahr. 0, die leere Zeichenkette \"\" und None gelten als falsch.",
+      "en": "\"0\" is a non-empty string and therefore true. 0, the empty string \"\" and None count as false."
+    }
+  },
+  {
+    "id": "control-flow-06",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 3\nprint(x > 1 and x < 5)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "and ist nur wahr, wenn beide Teile wahr sind: 3 > 1 und 3 < 5 stimmen beide.",
+      "en": "and is only true if both parts are true: 3 > 1 and 3 < 5 are both true."
+    }
+  },
+  {
+    "id": "control-flow-07",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "name = \"\"\nif not name:\n    print(\"no name\")\nelse:\n    print(name)",
+    "choices": [
+      {
+        "de": "no name",
+        "en": "no name"
+      },
+      {
+        "de": "\"\"",
+        "en": "\"\""
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      },
+      {
+        "de": "name",
+        "en": "name"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Die leere Zeichenkette ist falsch, not macht daraus wahr. Deshalb läuft der if-Zweig.",
+      "en": "The empty string is false, and not turns it into true. That is why the if branch runs."
+    }
+  },
+  {
+    "id": "control-flow-08",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Wie schreibt man in Python einen weiteren Bedingungszweig nach if?",
+      "en": "How do you write an extra condition branch after if in Python?"
+    },
+    "choices": [
+      {
+        "de": "else if",
+        "en": "else if"
+      },
+      {
+        "de": "elseif",
+        "en": "elseif"
+      },
+      {
+        "de": "elif",
+        "en": "elif"
+      },
+      {
+        "de": "elsif",
+        "en": "elsif"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Python verwendet das Schlüsselwort elif (kurz für „else if“). Die anderen Schreibweisen stammen aus anderen Sprachen.",
+      "en": "Python uses the keyword elif (short for \"else if\"). The other spellings come from other languages."
+    }
+  },
+  {
+    "id": "control-flow-09",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was passiert bei diesem Code?",
+      "en": "What happens with this code?"
+    },
+    "code": "x = 10\nif x = 10:\n    print(\"ten\")",
+    "choices": [
+      {
+        "de": "ten",
+        "en": "ten"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "In einer Bedingung brauchst du == zum Vergleichen. Ein einzelnes = ist eine Zuweisung und dort nicht erlaubt.",
+      "en": "In a condition you need == to compare. A single = is an assignment and is not allowed there."
+    }
+  },
+  {
+    "id": "control-flow-10",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 4\nresult = \"even\" if x % 2 == 0 else \"odd\"\nprint(result)",
+    "choices": [
+      {
+        "de": "odd",
+        "en": "odd"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "even",
+        "en": "even"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Das ist ein bedingter Ausdruck: Wenn die Bedingung wahr ist, wird der Wert vor if genommen, sonst der nach else. 4 % 2 ist 0, also \"even\".",
+      "en": "This is a conditional expression: if the condition is true, the value before if is used, otherwise the one after else. 4 % 2 is 0, so \"even\"."
+    }
+  }
+]

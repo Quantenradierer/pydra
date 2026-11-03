@@ -1,0 +1,321 @@
+[
+  {
+    "id": "functions-01",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def add(a, b):\n    return a + b\n\nprint(add(2, 3))",
+    "choices": [
+      {
+        "de": "23",
+        "en": "23"
+      },
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Funktion gibt mit return die Summe 2 + 3 zurück. \"23\" käme nur bei Zeichenketten heraus.",
+      "en": "The function returns the sum 2 + 3. \"23\" would only happen with strings."
+    }
+  },
+  {
+    "id": "functions-02",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def double(x):\n    x * 2\n\nprint(double(4))",
+    "choices": [
+      {
+        "de": "8",
+        "en": "8"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Ohne return gibt eine Funktion automatisch None zurück. Das Ergebnis x * 2 wird berechnet, aber verworfen.",
+      "en": "Without return, a function automatically returns None. x * 2 is computed but thrown away."
+    }
+  },
+  {
+    "id": "functions-03",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def greet(name=\"World\"):\n    return \"Hello \" + name\n\nprint(greet())",
+    "choices": [
+      {
+        "de": "Hello name",
+        "en": "Hello name"
+      },
+      {
+        "de": "Hello None",
+        "en": "Hello None"
+      },
+      {
+        "de": "Hello World",
+        "en": "Hello World"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Wird kein Argument übergeben, nutzt Python den Standardwert \"World\".",
+      "en": "If no argument is passed, Python uses the default value \"World\"."
+    }
+  },
+  {
+    "id": "functions-04",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def greet(name=\"World\"):\n    return \"Hello \" + name\n\nprint(greet(\"Ada\"))",
+    "choices": [
+      {
+        "de": "Hello Ada",
+        "en": "Hello Ada"
+      },
+      {
+        "de": "Hello World",
+        "en": "Hello World"
+      },
+      {
+        "de": "Hello World Ada",
+        "en": "Hello World Ada"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Ein übergebenes Argument ersetzt den Standardwert.",
+      "en": "A passed argument replaces the default value."
+    }
+  },
+  {
+    "id": "functions-05",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def add(a, b):\n    return a + b\n\nprint(add(1))",
+    "choices": [
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "add braucht zwei Argumente und b hat keinen Standardwert. Fehlt eines, meldet Python einen TypeError.",
+      "en": "add needs two arguments and b has no default value. If one is missing, Python raises a TypeError."
+    }
+  },
+  {
+    "id": "functions-06",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def f():\n    return 1\n    print(\"x\")\n\nprint(f())",
+    "choices": [
+      {
+        "de": "x",
+        "en": "x"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "1 x",
+        "en": "1 x"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "return beendet die Funktion sofort. Der Code danach wird nie ausgeführt.",
+      "en": "return ends the function immediately. The code after it never runs."
+    }
+  },
+  {
+    "id": "functions-07",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def power(base, exp=2):\n    return base ** exp\n\nprint(power(exp=3, base=2))",
+    "choices": [
+      {
+        "de": "8",
+        "en": "8"
+      },
+      {
+        "de": "9",
+        "en": "9"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Mit Schlüsselwort-Argumenten ist die Reihenfolge egal: base ist 2, exp ist 3, also 2 ** 3 = 8.",
+      "en": "With keyword arguments the order does not matter: base is 2, exp is 3, so 2 ** 3 = 8."
+    }
+  },
+  {
+    "id": "functions-08",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def set_x():\n    x = 10\n\nx = 5\nset_x()\nprint(x)",
+    "choices": [
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      },
+      {
+        "de": "5",
+        "en": "5"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Das x in der Funktion ist eine lokale Variable. Sie ändert das x außerhalb nicht.",
+      "en": "The x inside the function is a local variable. It does not change the x outside."
+    }
+  },
+  {
+    "id": "functions-09",
+    "topic": "functions",
+    "prompt": {
+      "de": "Mit welchem Schlüsselwort definierst du eine Funktion?",
+      "en": "Which keyword do you use to define a function?"
+    },
+    "choices": [
+      {
+        "de": "function",
+        "en": "function"
+      },
+      {
+        "de": "def",
+        "en": "def"
+      },
+      {
+        "de": "func",
+        "en": "func"
+      },
+      {
+        "de": "define",
+        "en": "define"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "In Python beginnt jede Funktionsdefinition mit dem Schlüsselwort def.",
+      "en": "In Python every function definition starts with the keyword def."
+    }
+  },
+  {
+    "id": "functions-10",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def min_max(nums):\n    return min(nums), max(nums)\n\nprint(min_max([3, 1, 4]))",
+    "choices": [
+      {
+        "de": "[1, 4]",
+        "en": "[1, 4]"
+      },
+      {
+        "de": "1 4",
+        "en": "1 4"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "(1, 4)",
+        "en": "(1, 4)"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Mehrere durch Komma getrennte Rückgabewerte werden als Tupel zurückgegeben.",
+      "en": "Several values separated by commas are returned as a tuple."
+    }
+  }
+]

@@ -1,0 +1,320 @@
+[
+  {
+    "id": "collections-01",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [10, 20, 30, 40]\nprint(nums[-1])",
+    "choices": [
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "30",
+        "en": "30"
+      },
+      {
+        "de": "Fehler (IndexError)",
+        "en": "Error (IndexError)"
+      },
+      {
+        "de": "40",
+        "en": "40"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Negative Indizes zählen von hinten: -1 ist das letzte Element der Liste.",
+      "en": "Negative indexes count from the end: -1 is the last item of the list."
+    }
+  },
+  {
+    "id": "collections-02",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [10, 20, 30, 40]\nprint(nums[1:3])",
+    "choices": [
+      {
+        "de": "[20, 30, 40]",
+        "en": "[20, 30, 40]"
+      },
+      {
+        "de": "[20, 30]",
+        "en": "[20, 30]"
+      },
+      {
+        "de": "[10, 20]",
+        "en": "[10, 20]"
+      },
+      {
+        "de": "[20]",
+        "en": "[20]"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Ein Slice [1:3] nimmt die Indizes 1 und 2; das Ende 3 ist nicht enthalten.",
+      "en": "The slice [1:3] takes indexes 1 and 2; the end index 3 is not included."
+    }
+  },
+  {
+    "id": "collections-03",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "t = (1, 2, 3)\nt[0] = 5\nprint(t)",
+    "choices": [
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "(5, 2, 3)",
+        "en": "(5, 2, 3)"
+      },
+      {
+        "de": "(1, 2, 3)",
+        "en": "(1, 2, 3)"
+      },
+      {
+        "de": "Fehler (IndexError)",
+        "en": "Error (IndexError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Tupel sind unveränderlich. Der Versuch, ein Element zu ersetzen, löst einen TypeError aus.",
+      "en": "Tuples are immutable. Trying to replace an item raises a TypeError."
+    }
+  },
+  {
+    "id": "collections-04",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = [1, 2]\na.append([3, 4])\nprint(len(a))",
+    "choices": [
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "append fügt genau ein Element hinzu – hier die ganze Liste [3, 4] als ein Element. Also hat a 3 Elemente.",
+      "en": "append adds exactly one item – here the whole list [3, 4] as a single item. So a has 3 items."
+    }
+  },
+  {
+    "id": "collections-05",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)",
+    "choices": [
+      {
+        "de": "[1, 2, 3, 4]",
+        "en": "[1, 2, 3, 4]"
+      },
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      },
+      {
+        "de": "[4, 1, 2, 3]",
+        "en": "[4, 1, 2, 3]"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "b = a kopiert die Liste nicht: beide Namen zeigen auf dieselbe Liste. Eine Änderung über b sieht man also auch in a.",
+      "en": "b = a does not copy the list: both names refer to the same list, so a change through b is visible in a too."
+    }
+  },
+  {
+    "id": "collections-06",
+    "topic": "collections",
+    "prompt": {
+      "de": "Welche Aussage über Listen und Tupel ist richtig?",
+      "en": "Which statement about lists and tuples is true?"
+    },
+    "choices": [
+      {
+        "de": "Listen können nur Zahlen enthalten.",
+        "en": "Lists can only contain numbers."
+      },
+      {
+        "de": "Tupel werden mit eckigen Klammern [] geschrieben.",
+        "en": "Tuples are written with square brackets []."
+      },
+      {
+        "de": "Auf Elemente eines Tupels kann man nicht per Index zugreifen.",
+        "en": "You cannot access tuple items by index."
+      },
+      {
+        "de": "Tupel können nach dem Erstellen nicht verändert werden, Listen schon.",
+        "en": "Tuples cannot be changed after creation, lists can."
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Listen sind veränderlich, Tupel unveränderlich. Beide können beliebige Werte enthalten und per Index gelesen werden; Tupel schreibt man mit runden Klammern.",
+      "en": "Lists are mutable, tuples are immutable. Both can hold any values and be read by index; tuples use round brackets."
+    }
+  },
+  {
+    "id": "collections-07",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print([1, 2] + [3])",
+    "choices": [
+      {
+        "de": "[[1, 2], 3]",
+        "en": "[[1, 2], 3]"
+      },
+      {
+        "de": "[1, 2, [3]]",
+        "en": "[1, 2, [3]]"
+      },
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Der Operator + verbindet zwei Listen zu einer neuen Liste mit allen Elementen.",
+      "en": "The + operator joins two lists into a new list containing all the items."
+    }
+  },
+  {
+    "id": "collections-08",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [3, 1, 2]\nnums.sort()\nprint(nums)",
+    "choices": [
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      },
+      {
+        "de": "[3, 1, 2]",
+        "en": "[3, 1, 2]"
+      },
+      {
+        "de": "[3, 2, 1]",
+        "en": "[3, 2, 1]"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "sort() sortiert die Liste direkt (an Ort und Stelle) aufsteigend. Erst print(nums.sort()) würde None ausgeben.",
+      "en": "sort() sorts the list in place in ascending order. Only print(nums.sort()) would print None."
+    }
+  },
+  {
+    "id": "collections-09",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(len([[1, 2], [3]]))",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "len zählt nur die Elemente der äußeren Liste – das sind zwei innere Listen.",
+      "en": "len only counts the items of the outer list – that is two inner lists."
+    }
+  },
+  {
+    "id": "collections-10",
+    "topic": "collections",
+    "prompt": {
+      "de": "Welcher Code hängt \"x\" ans Ende der Liste items an?",
+      "en": "Which code adds \"x\" to the end of the list items?"
+    },
+    "choices": [
+      {
+        "de": "items.add(\"x\")",
+        "en": "items.add(\"x\")"
+      },
+      {
+        "de": "items.append(\"x\")",
+        "en": "items.append(\"x\")"
+      },
+      {
+        "de": "items.push(\"x\")",
+        "en": "items.push(\"x\")"
+      },
+      {
+        "de": "items + \"x\"",
+        "en": "items + \"x\""
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Mit append hängt man ein Element ans Ende einer Liste. Listen haben weder add noch push, und Liste + Zeichenkette ergibt einen TypeError.",
+      "en": "append adds an item to the end of a list. Lists have neither add nor push, and list + string raises a TypeError."
+    }
+  }
+]

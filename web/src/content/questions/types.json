@@ -1,0 +1,321 @@
+[
+  {
+    "id": "types-01",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 3.0\nprint(type(x))",
+    "choices": [
+      {
+        "de": "<class 'int'>",
+        "en": "<class 'int'>"
+      },
+      {
+        "de": "<class 'float'>",
+        "en": "<class 'float'>"
+      },
+      {
+        "de": "<class 'str'>",
+        "en": "<class 'str'>"
+      },
+      {
+        "de": "<class 'bool'>",
+        "en": "<class 'bool'>"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "3.0 hat einen Dezimalpunkt und ist deshalb ein float, auch wenn der Wert ganzzahlig aussieht.",
+      "en": "3.0 has a decimal point, so it is a float, even though the value looks like a whole number."
+    }
+  },
+  {
+    "id": "types-02",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = \"5\"\ny = 2\nprint(x * y)",
+    "choices": [
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "55",
+        "en": "55"
+      },
+      {
+        "de": "7",
+        "en": "7"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "x ist eine Zeichenkette. Eine Zeichenkette mal eine Zahl wiederholt sie: \"5\" * 2 ergibt \"55\", nicht 10.",
+      "en": "x is a string. Multiplying a string by a number repeats it: \"5\" * 2 gives \"55\", not 10."
+    }
+  },
+  {
+    "id": "types-03",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(int(\"7\") + 3)",
+    "choices": [
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "73",
+        "en": "73"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "7 + 3",
+        "en": "7 + 3"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "int(\"7\") wandelt die Zeichenkette in die Zahl 7 um, danach wird ganz normal addiert.",
+      "en": "int(\"7\") converts the string into the number 7, then normal addition happens."
+    }
+  },
+  {
+    "id": "types-04",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"7\" + 3)",
+    "choices": [
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "73",
+        "en": "73"
+      },
+      {
+        "de": "\"73\"",
+        "en": "\"73\""
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Python addiert keine Zeichenkette und Zahl automatisch. Du musst selbst umwandeln, z. B. mit int(\"7\") oder str(3).",
+      "en": "Python does not automatically add a string and a number. You must convert one yourself, e.g. with int(\"7\") or str(3)."
+    }
+  },
+  {
+    "id": "types-05",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(10 / 2)",
+    "choices": [
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "5.0",
+        "en": "5.0"
+      },
+      {
+        "de": "5.00",
+        "en": "5.00"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Der Operator / liefert immer einen float, auch wenn die Division aufgeht.",
+      "en": "The / operator always returns a float, even when the division is exact."
+    }
+  },
+  {
+    "id": "types-06",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type(True))",
+    "choices": [
+      {
+        "de": "<class 'str'>",
+        "en": "<class 'str'>"
+      },
+      {
+        "de": "<class 'int'>",
+        "en": "<class 'int'>"
+      },
+      {
+        "de": "<class 'bool'>",
+        "en": "<class 'bool'>"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "True (ohne Anführungszeichen) ist ein Wahrheitswert vom Typ bool.",
+      "en": "True (without quotes) is a truth value of type bool."
+    }
+  },
+  {
+    "id": "types-07",
+    "topic": "types",
+    "prompt": {
+      "de": "Welcher dieser Werte ist eine Zeichenkette (str)?",
+      "en": "Which of these values is a string (str)?"
+    },
+    "choices": [
+      {
+        "de": "42",
+        "en": "42"
+      },
+      {
+        "de": "4.2",
+        "en": "4.2"
+      },
+      {
+        "de": "\"42\"",
+        "en": "\"42\""
+      },
+      {
+        "de": "True",
+        "en": "True"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Anführungszeichen machen einen Wert zur Zeichenkette. 42 ist ein int, 4.2 ein float und True ein bool.",
+      "en": "Quotes make a value a string. 42 is an int, 4.2 is a float and True is a bool."
+    }
+  },
+  {
+    "id": "types-08",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 5\nx = \"five\"\nprint(type(x))",
+    "choices": [
+      {
+        "de": "<class 'int'>",
+        "en": "<class 'int'>"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "<class 'five'>",
+        "en": "<class 'five'>"
+      },
+      {
+        "de": "<class 'str'>",
+        "en": "<class 'str'>"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Eine Variable ist nur ein Name für einen Wert. Nach der zweiten Zuweisung zeigt x auf eine Zeichenkette.",
+      "en": "A variable is just a name for a value. After the second assignment, x refers to a string."
+    }
+  },
+  {
+    "id": "types-09",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(int(3.9))",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "3.9",
+        "en": "3.9"
+      },
+      {
+        "de": "Fehler (ValueError)",
+        "en": "Error (ValueError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "int() schneidet die Nachkommastellen ab, es rundet nicht. Deshalb wird aus 3.9 die 3.",
+      "en": "int() cuts off the decimal part, it does not round. So 3.9 becomes 3."
+    }
+  },
+  {
+    "id": "types-10",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(bool(\"\"))",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "\"\"",
+        "en": "\"\""
+      },
+      {
+        "de": "Fehler (ValueError)",
+        "en": "Error (ValueError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eine leere Zeichenkette gilt als falsch. Jede nicht-leere Zeichenkette, sogar \"False\", wäre True.",
+      "en": "An empty string counts as false. Any non-empty string, even \"False\", would be True."
+    }
+  }
+]

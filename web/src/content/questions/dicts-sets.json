@@ -1,0 +1,321 @@
+[
+  {
+    "id": "dicts-sets-01",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "ages = {\"anna\": 25, \"ben\": 30}\nprint(ages[\"ben\"])",
+    "choices": [
+      {
+        "de": "25",
+        "en": "25"
+      },
+      {
+        "de": "ben",
+        "en": "ben"
+      },
+      {
+        "de": "30",
+        "en": "30"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Mit eckigen Klammern und einem Schlüssel liest man den zugehörigen Wert aus dem Wörterbuch (dict).",
+      "en": "Square brackets with a key read the matching value from the dictionary."
+    }
+  },
+  {
+    "id": "dicts-sets-02",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "ages = {\"anna\": 25, \"ben\": 30}\nprint(ages[\"carl\"])",
+    "choices": [
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "Fehler (IndexError)",
+        "en": "Error (IndexError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Ein fehlender Schlüssel mit [] löst einen KeyError aus. Wer None möchte, nimmt .get().",
+      "en": "A missing key with [] raises a KeyError. If you want None instead, use .get()."
+    }
+  },
+  {
+    "id": "dicts-sets-03",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "ages = {\"anna\": 25, \"ben\": 30}\nprint(ages.get(\"carl\"))",
+    "choices": [
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      },
+      {
+        "de": "carl",
+        "en": "carl"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": ".get() gibt None zurück, wenn der Schlüssel fehlt, statt einen Fehler auszulösen.",
+      "en": ".get() returns None when the key is missing instead of raising an error."
+    }
+  },
+  {
+    "id": "dicts-sets-04",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "ages = {\"anna\": 25, \"ben\": 30}\nprint(ages.get(\"carl\", 18))",
+    "choices": [
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "18",
+        "en": "18"
+      },
+      {
+        "de": "25",
+        "en": "25"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Das zweite Argument von .get() ist der Standardwert, der bei fehlendem Schlüssel zurückgegeben wird.",
+      "en": "The second argument of .get() is the default value returned when the key is missing."
+    }
+  },
+  {
+    "id": "dicts-sets-05",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "ages = {\"anna\": 25, \"ben\": 30}\nprint(25 in ages)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "25",
+        "en": "25"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "in prüft bei einem Wörterbuch nur die Schlüssel, nicht die Werte. 25 ist ein Wert, kein Schlüssel.",
+      "en": "For a dictionary, in only checks the keys, not the values. 25 is a value, not a key."
+    }
+  },
+  {
+    "id": "dicts-sets-06",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "s = {1, 2, 2, 3, 3, 3}\nprint(len(s))",
+    "choices": [
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Eine Menge (set) speichert jedes Element nur einmal; Duplikate fallen weg.",
+      "en": "A set stores each item only once; duplicates are dropped."
+    }
+  },
+  {
+    "id": "dicts-sets-07",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {}\nd[\"x\"] = 1\nd[\"x\"] = 5\nprint(d)",
+    "choices": [
+      {
+        "de": "{'x': 1}",
+        "en": "{'x': 1}"
+      },
+      {
+        "de": "{'x': 5}",
+        "en": "{'x': 5}"
+      },
+      {
+        "de": "{'x': 1, 'x': 5}",
+        "en": "{'x': 1, 'x': 5}"
+      },
+      {
+        "de": "{'x': 6}",
+        "en": "{'x': 6}"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Jeder Schlüssel kommt in einem Wörterbuch nur einmal vor. Eine neue Zuweisung überschreibt den alten Wert.",
+      "en": "Each key appears only once in a dictionary. Assigning again overwrites the old value."
+    }
+  },
+  {
+    "id": "dicts-sets-08",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for key in {\"a\": 1, \"b\": 2}:\n    print(key, end=\" \")",
+    "choices": [
+      {
+        "de": "a b",
+        "en": "a b"
+      },
+      {
+        "de": "1 2",
+        "en": "1 2"
+      },
+      {
+        "de": "a 1 b 2",
+        "en": "a 1 b 2"
+      },
+      {
+        "de": "('a', 1) ('b', 2)",
+        "en": "('a', 1) ('b', 2)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine for-Schleife über ein Wörterbuch liefert die Schlüssel. Für Paare bräuchte man .items().",
+      "en": "A for loop over a dictionary yields its keys. For pairs you would use .items()."
+    }
+  },
+  {
+    "id": "dicts-sets-09",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a & b)",
+    "choices": [
+      {
+        "de": "{1, 2, 3, 4}",
+        "en": "{1, 2, 3, 4}"
+      },
+      {
+        "de": "{1, 4}",
+        "en": "{1, 4}"
+      },
+      {
+        "de": "{2, 3}",
+        "en": "{2, 3}"
+      },
+      {
+        "de": "{1}",
+        "en": "{1}"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "& bildet die Schnittmenge: nur Elemente, die in beiden Mengen vorkommen. Die Vereinigung wäre a | b.",
+      "en": "& gives the intersection: only items found in both sets. The union would be a | b."
+    }
+  },
+  {
+    "id": "dicts-sets-10",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Welche Aussage über Mengen (set) ist richtig?",
+      "en": "Which statement about sets is true?"
+    },
+    "choices": [
+      {
+        "de": "Eine Menge (set) enthält jedes Element nur einmal.",
+        "en": "A set contains each item only once."
+      },
+      {
+        "de": "Mit s[0] bekommt man das erste Element einer Menge.",
+        "en": "s[0] gives you the first item of a set."
+      },
+      {
+        "de": "{} erzeugt eine leere Menge.",
+        "en": "{} creates an empty set."
+      },
+      {
+        "de": "Mengen können dasselbe Element mehrfach speichern.",
+        "en": "Sets can store the same item several times."
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Mengen haben keine Duplikate und keine Indizes. {} ist ein leeres Wörterbuch; eine leere Menge erzeugt man mit set().",
+      "en": "Sets have no duplicates and no indexes. {} is an empty dictionary; an empty set is made with set()."
+    }
+  }
+]

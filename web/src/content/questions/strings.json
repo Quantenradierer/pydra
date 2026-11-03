@@ -1,0 +1,322 @@
+[
+  {
+    "id": "strings-01",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "word = \"Python\"\nprint(word[1:4])",
+    "choices": [
+      {
+        "de": "yth",
+        "en": "yth"
+      },
+      {
+        "de": "Pyt",
+        "en": "Pyt"
+      },
+      {
+        "de": "ytho",
+        "en": "ytho"
+      },
+      {
+        "de": "Fehler (IndexError)",
+        "en": "Error (IndexError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Indizes beginnen bei 0, und das Ende eines Slices ist nicht enthalten: Zeichen 1, 2 und 3 ergeben \"yth\".",
+      "en": "Indexes start at 0 and the end of a slice is not included: characters 1, 2 and 3 give \"yth\"."
+    }
+  },
+  {
+    "id": "strings-02",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "s = \"Hello\"\nprint(s[-1])",
+    "choices": [
+      {
+        "de": "H",
+        "en": "H"
+      },
+      {
+        "de": "Fehler (IndexError)",
+        "en": "Error (IndexError)"
+      },
+      {
+        "de": "o",
+        "en": "o"
+      },
+      {
+        "de": "l",
+        "en": "l"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Negative Indizes zählen von hinten: -1 ist das letzte Zeichen.",
+      "en": "Negative indexes count from the end: -1 is the last character."
+    }
+  },
+  {
+    "id": "strings-03",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "name = \"Ana\"\nage = 7\nprint(f\"{name} is {age}\")",
+    "choices": [
+      {
+        "de": "{name} is {age}",
+        "en": "{name} is {age}"
+      },
+      {
+        "de": "Ana is age",
+        "en": "Ana is age"
+      },
+      {
+        "de": "Ana is 7",
+        "en": "Ana is 7"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "In einem f-String werden die Ausdrücke in geschweiften Klammern durch ihre Werte ersetzt.",
+      "en": "In an f-string, the expressions inside curly braces are replaced by their values."
+    }
+  },
+  {
+    "id": "strings-04",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"hi\".upper())",
+    "choices": [
+      {
+        "de": "hi",
+        "en": "hi"
+      },
+      {
+        "de": "HI",
+        "en": "HI"
+      },
+      {
+        "de": "Hi",
+        "en": "Hi"
+      },
+      {
+        "de": "Fehler (AttributeError)",
+        "en": "Error (AttributeError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "upper() liefert eine neue Zeichenkette, in der alle Buchstaben großgeschrieben sind.",
+      "en": "upper() returns a new string with all letters in uppercase."
+    }
+  },
+  {
+    "id": "strings-05",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(len(\"Python\"))",
+    "choices": [
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "7",
+        "en": "7"
+      },
+      {
+        "de": "Python",
+        "en": "Python"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "len() zählt die Zeichen: P-y-t-h-o-n sind 6 Zeichen. Der höchste Index ist 5, die Länge aber 6.",
+      "en": "len() counts the characters: P-y-t-h-o-n is 6 characters. The highest index is 5, but the length is 6."
+    }
+  },
+  {
+    "id": "strings-06",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was passiert bei diesem Code?",
+      "en": "What happens with this code?"
+    },
+    "code": "s = \"hello\"\ns[0] = \"H\"\nprint(s)",
+    "choices": [
+      {
+        "de": "Hello",
+        "en": "Hello"
+      },
+      {
+        "de": "hello",
+        "en": "hello"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "Fehler (IndexError)",
+        "en": "Error (IndexError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Zeichenketten sind unveränderlich: Einzelne Zeichen kann man nicht ersetzen. Stattdessen erzeugt man eine neue Zeichenkette, z. B. \"H\" + s[1:].",
+      "en": "Strings are immutable: you cannot replace single characters. Instead you create a new string, e.g. \"H\" + s[1:]."
+    }
+  },
+  {
+    "id": "strings-07",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"a,b,c\".split(\",\"))",
+    "choices": [
+      {
+        "de": "['a', 'b', 'c']",
+        "en": "['a', 'b', 'c']"
+      },
+      {
+        "de": "abc",
+        "en": "abc"
+      },
+      {
+        "de": "['a,b,c']",
+        "en": "['a,b,c']"
+      },
+      {
+        "de": "a b c",
+        "en": "a b c"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "split(\",\") trennt die Zeichenkette an jedem Komma und gibt eine Liste der Teile zurück.",
+      "en": "split(\",\") cuts the string at every comma and returns a list of the parts."
+    }
+  },
+  {
+    "id": "strings-08",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"ha\" * 3)",
+    "choices": [
+      {
+        "de": "ha3",
+        "en": "ha3"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "ha ha ha",
+        "en": "ha ha ha"
+      },
+      {
+        "de": "hahaha",
+        "en": "hahaha"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Eine Zeichenkette mal eine ganze Zahl wiederholt sie – ohne Leerzeichen dazwischen.",
+      "en": "Multiplying a string by an integer repeats it, without spaces in between."
+    }
+  },
+  {
+    "id": "strings-09",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"Py\" in \"Python\")",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "Py",
+        "en": "Py"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "in prüft, ob eine Zeichenkette in einer anderen vorkommt. \"Py\" steht am Anfang von \"Python\".",
+      "en": "in checks whether one string appears inside another. \"Py\" is at the start of \"Python\"."
+    }
+  },
+  {
+    "id": "strings-10",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "s = \"banana\"\ns.replace(\"a\", \"o\")\nprint(s)",
+    "choices": [
+      {
+        "de": "bonono",
+        "en": "bonono"
+      },
+      {
+        "de": "banana",
+        "en": "banana"
+      },
+      {
+        "de": "bonana",
+        "en": "bonana"
+      },
+      {
+        "de": "Banana",
+        "en": "Banana"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "replace() ändert s nicht, sondern gibt eine neue Zeichenkette zurück. Weil das Ergebnis nicht gespeichert wird, bleibt s \"banana\".",
+      "en": "replace() does not change s; it returns a new string. Since the result is not stored, s is still \"banana\"."
+    }
+  }
+]

@@ -1,0 +1,321 @@
+[
+  {
+    "id": "loops-01",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for i in range(3):\n    print(i, end=\" \")",
+    "choices": [
+      {
+        "de": "1 2 3",
+        "en": "1 2 3"
+      },
+      {
+        "de": "0 1 2",
+        "en": "0 1 2"
+      },
+      {
+        "de": "0 1 2 3",
+        "en": "0 1 2 3"
+      },
+      {
+        "de": "1 2",
+        "en": "1 2"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "range(3) erzeugt die Zahlen 0, 1 und 2 – die Obergrenze 3 ist nicht enthalten.",
+      "en": "range(3) produces 0, 1 and 2 – the stop value 3 is not included."
+    }
+  },
+  {
+    "id": "loops-02",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(list(range(2, 10, 3)))",
+    "choices": [
+      {
+        "de": "[2, 5, 8, 11]",
+        "en": "[2, 5, 8, 11]"
+      },
+      {
+        "de": "[3, 6, 9]",
+        "en": "[3, 6, 9]"
+      },
+      {
+        "de": "[2, 4, 6, 8]",
+        "en": "[2, 4, 6, 8]"
+      },
+      {
+        "de": "[2, 5, 8]",
+        "en": "[2, 5, 8]"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "range(start, stop, step) beginnt bei 2 und springt jeweils um 3 weiter; 11 liegt schon über der Grenze 10.",
+      "en": "range(start, stop, step) starts at 2 and adds 3 each time; 11 is already past the stop value 10."
+    }
+  },
+  {
+    "id": "loops-03",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for n in range(10):\n    if n == 3:\n        break\nprint(n)",
+    "choices": [
+      {
+        "de": "9",
+        "en": "9"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "break beendet die Schleife sofort, sobald n gleich 3 ist. n behält danach den Wert 3.",
+      "en": "break ends the loop immediately when n is 3, so n keeps the value 3 afterwards."
+    }
+  },
+  {
+    "id": "loops-04",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "total = 0\nfor i in range(5):\n    if i % 2 == 0:\n        continue\n    total += i\nprint(total)",
+    "choices": [
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "continue überspringt die geraden Zahlen 0, 2 und 4. Addiert werden nur 1 und 3, also 4.",
+      "en": "continue skips the even numbers 0, 2 and 4. Only 1 and 3 are added, giving 4."
+    }
+  },
+  {
+    "id": "loops-05",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "count = 0\nwhile count < 5:\n    count += 2\nprint(count)",
+    "choices": [
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "Nichts – Endlosschleife",
+        "en": "Nothing – infinite loop"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "count wird 2, 4, 6. Erst bei 6 ist die Bedingung count < 5 falsch und die Schleife endet.",
+      "en": "count becomes 2, 4, 6. Only at 6 is count < 5 false, so the loop stops."
+    }
+  },
+  {
+    "id": "loops-06",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "n = 0\nfor i in range(1, 5):\n    n += 1\nprint(n)",
+    "choices": [
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "range(1, 5) liefert 1, 2, 3, 4 – also vier Durchläufe. Die 5 ist nicht enthalten.",
+      "en": "range(1, 5) yields 1, 2, 3, 4 – four iterations. 5 is not included."
+    }
+  },
+  {
+    "id": "loops-07",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for char in \"abc\":\n    print(char.upper(), end=\"\")",
+    "choices": [
+      {
+        "de": "ABC",
+        "en": "ABC"
+      },
+      {
+        "de": "abc",
+        "en": "abc"
+      },
+      {
+        "de": "A B C",
+        "en": "A B C"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine for-Schleife geht eine Zeichenkette Zeichen für Zeichen durch. Mit end=\"\" wird nichts zwischen die Ausgaben gesetzt.",
+      "en": "A for loop walks through a string character by character. With end=\"\" nothing is printed between the outputs."
+    }
+  },
+  {
+    "id": "loops-08",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was bewirkt break in einer Schleife?",
+      "en": "What does break do inside a loop?"
+    },
+    "choices": [
+      {
+        "de": "Sie springt zum nächsten Durchlauf.",
+        "en": "It jumps to the next iteration."
+      },
+      {
+        "de": "Sie beendet das ganze Programm.",
+        "en": "It ends the whole program."
+      },
+      {
+        "de": "Sie startet die Schleife von vorne.",
+        "en": "It restarts the loop from the beginning."
+      },
+      {
+        "de": "Sie beendet die Schleife sofort.",
+        "en": "It ends the loop immediately."
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "break verlässt die aktuelle Schleife sofort; das Programm läuft nach der Schleife weiter. Zum nächsten Durchlauf springt dagegen continue.",
+      "en": "break leaves the current loop right away; the program continues after the loop. Jumping to the next iteration is what continue does."
+    }
+  },
+  {
+    "id": "loops-09",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "count = 0\nfor i in range(3):\n    for j in range(2):\n        count += 1\nprint(count)",
+    "choices": [
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "9",
+        "en": "9"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die innere Schleife läuft bei jedem der 3 äußeren Durchläufe 2-mal: 3 · 2 = 6.",
+      "en": "The inner loop runs 2 times for each of the 3 outer iterations: 3 × 2 = 6."
+    }
+  },
+  {
+    "id": "loops-10",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for i, letter in enumerate(\"hi\"):\n    print(i, letter, end=\" \")",
+    "choices": [
+      {
+        "de": "1 h 2 i",
+        "en": "1 h 2 i"
+      },
+      {
+        "de": "h 0 i 1",
+        "en": "h 0 i 1"
+      },
+      {
+        "de": "0 1",
+        "en": "0 1"
+      },
+      {
+        "de": "0 h 1 i",
+        "en": "0 h 1 i"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "enumerate liefert Paare aus Index und Element, und der Index beginnt bei 0.",
+      "en": "enumerate yields pairs of index and item, and the index starts at 0."
+    }
+  }
+]

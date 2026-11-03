@@ -29,8 +29,8 @@ services:
       WATCHTOWER_POLL_INTERVAL: ${WATCHTOWER_POLL_INTERVAL:-300}
       WATCHTOWER_CLEANUP: "true"
     volumes:
-      # Rootless Docker on the server: mount /run/user/1005/docker.sock instead (see DEPLOY.md).
-      - /var/run/docker.sock:/var/run/docker.sock
+      # Rootless Docker on the server (user deploy, uid 1005): the socket is under /run/user.
+      - /run/user/1005/docker.sock:/var/run/docker.sock
     labels:
       com.centurylinklabs.watchtower.scope: pydra
 

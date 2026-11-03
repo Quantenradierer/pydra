@@ -35,6 +35,10 @@ when a requirement changes; the code, tests and the other docs follow it.
 - Prompt, choices and explanation exist in `de` and `en`. German is natural
   and uses the du-form. Choices that are code or values may use the same
   string in both languages.
+- Explanations are detailed but explain-like-I'm-five: they walk through the
+  code, name the underlying rule in plain words, define every technical term
+  and use an everyday analogy where it helps. Inline code is written in
+  backticks and shown as code; a blank line separates up to two paragraphs.
 - Data: one JSON file per topic in `web/src/content/questions/<topic>.json`,
   loaded and typed by one module. Question shape:
 

@@ -94,7 +94,7 @@ Questions live in `web/src/content/questions/<topic>.json`, one JSON array of
 | `code`        | Optional Python snippet, the same in both languages, with English identifiers. Leave the key out when there is no snippet. |
 | `choices`     | Exactly 4, all different, none of them "all/none of the above". Choices that read the same in both languages (values, code) are shown in a monospace font. |
 | `answerIndex` | 0 to 3, the index of the correct choice. The app shuffles the choices.                    |
-| `explanation` | Text in `de` and `en`, shown after answering.                                             |
+| `explanation` | Text in `de` and `en`, shown after answering. Explain like to a five-year-old: walk through the code, name the rule in plain words, define every term (German and Python name, e.g. "Menge (`set`)"), add an everyday analogy or the typical wrong turn where it helps; about 40–110 words. `` `code` `` renders as inline code, a blank line (`\n\n`) starts a second paragraph (at most 2). |
 
 To add or change a question:
 

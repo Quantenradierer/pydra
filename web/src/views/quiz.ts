@@ -2,6 +2,7 @@ import type { App, Screen } from '../app.ts';
 import { h, svg } from '../dom.ts';
 import { codeBlock } from '../highlight.ts';
 import { CHECK, CROSS } from '../icons.ts';
+import { richText } from '../rich-text.ts';
 import { currentItem, isLastQuestion, present } from '../session.ts';
 
 /** Keys typed into these belong to them, not to the quiz shortcuts. */
@@ -29,7 +30,7 @@ export function quizScreen(app: App): Screen {
   });
 
   const verdict = h('p', { class: 'verdict' });
-  const explanation = h('p', { class: 'explanation' });
+  const explanation = h('div', { class: 'explanation' });
   const next = h('button', { class: 'primary next', onclick: () => goNext() }, isLastQuestion(session) ? t('quiz.finish') : t('quiz.next'));
   const feedback = h('section', { class: 'feedback', 'aria-live': 'polite', tabindex: -1, 'data-testid': 'feedback' });
 
@@ -70,7 +71,7 @@ export function quizScreen(app: App): Screen {
     }
     verdict.textContent = correct ? t('quiz.correct') : t('quiz.wrong');
     verdict.className = `verdict ${correct ? 'correct' : 'wrong'}`;
-    explanation.textContent = question.explanation[lang];
+    explanation.replaceChildren(...richText(question.explanation[lang]));
     feedback.replaceChildren(verdict, explanation, next);
   }
 

@@ -1,0 +1,38 @@
+# Production stack for the server. Watchtower pulls new :latest images that
+# CI pushes to GHCR and restarts the app. See DEPLOY.md for the setup steps.
+#
+# To roll back, replace :latest with a git SHA tag, e.g. :3f2c1e0…, and run
+# `docker compose -f compose.prod.yaml up -d`.
+services:
+  pydra:
+    image: ghcr.io/quantenradierer/pydra:latest
+    restart: unless-stopped
+    ports:
+      # Only the local reverse proxy should reach the app.
+      - "127.0.0.1:${HOST_PORT:-3001}:3000"
+    environment:
+      FEEDBACK_TOKEN: ${FEEDBACK_TOKEN:?set FEEDBACK_TOKEN in .env}
+    volumes:
+      - pydra-data:/data
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      com.centurylinklabs.watchtower.scope: pydra
+
+  watchtower:
+    # Maintained fork of containrrr/watchtower (archived in 2025).
+    image: nickfedor/watchtower:latest
+    restart: unless-stopped
+    environment:
+      # Only containers labelled for this scope are watched: the app above.
+      WATCHTOWER_LABEL_ENABLE: "true"
+      WATCHTOWER_SCOPE: pydra
+      WATCHTOWER_POLL_INTERVAL: ${WATCHTOWER_POLL_INTERVAL:-300}
+      WATCHTOWER_CLEANUP: "true"
+    volumes:
+      # Rootless Docker on the server: mount /run/user/1005/docker.sock instead (see DEPLOY.md).
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      com.centurylinklabs.watchtower.scope: pydra
+
+volumes:
+  pydra-data:

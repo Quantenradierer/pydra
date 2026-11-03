@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { QUESTIONS, QUESTIONS_BY_ID } from './content/questions.ts';
+import { CONTENT } from './content/lessons.ts';
 import {
   SESSION_LENGTH,
+  orderedSession,
+  pickLeastPlayed,
   advance,
   answer,
   buildSession,
@@ -103,12 +106,12 @@ describe('parseSession', () => {
   const session = answer(buildSession(QUESTIONS, seeded(9)), 2);
 
   it('accepts a valid saved session, including a showing feedback', () => {
-    expect(parseSession(JSON.parse(JSON.stringify(session)), QUESTIONS_BY_ID)).toEqual(session);
+    expect(parseSession(JSON.parse(JSON.stringify(session)), CONTENT)).toEqual(session);
   });
 
   it('rejects unknown question ids', () => {
     const stale = { ...session, items: session.items.map((it, i) => (i === 3 ? { ...it, id: 'gone-01' } : it)) };
-    expect(parseSession(stale, QUESTIONS_BY_ID)).toBeUndefined();
+    expect(parseSession(stale, CONTENT)).toBeUndefined();
   });
 
   it('rejects malformed data', () => {
@@ -126,7 +129,47 @@ describe('parseSession', () => {
       { ...session, items: session.items.map((it, i) => (i === 0 ? { ...it, picked: 4 } : it)) },
       { ...session, items: session.items.map((it, i) => (i === 5 ? { ...it, picked: 1 } : it)) },
       { ...session, items: [session.items[0], session.items[0]] },
+      { ...session, lesson: 'unknown' },
     ];
-    for (const raw of bad) expect(parseSession(raw, QUESTIONS_BY_ID), JSON.stringify(raw)).toBeUndefined();
+    for (const raw of bad) expect(parseSession(raw, CONTENT), JSON.stringify(raw)).toBeUndefined();
+  });
+});
+
+describe('lessons', () => {
+  const walk = CONTENT.walkthroughs[2]!;
+
+  it('keeps the order of a walkthrough and shuffles only the choices', () => {
+    const session = orderedSession('functions', walk.questions, seeded(3));
+    expect(session.lesson).toBe('functions');
+    expect(session.items.map((i) => i.id)).toEqual(walk.questions.map((q) => q.id));
+    for (const item of session.items) expect([...item.order].sort()).toEqual([0, 1, 2, 3]);
+  });
+
+  it('marks random sessions as the mixed lesson', () => {
+    expect(buildSession(QUESTIONS, seeded(1)).lesson).toBe('mixed');
+  });
+
+  it('picks among the least played options only', () => {
+    const played = new Map([['a', 2], ['b', 0], ['c', 1], ['d', 0]]);
+    const picks = new Set<string>();
+    for (let seed = 0; seed < 40; seed++) picks.add(pickLeastPlayed([...played.keys()], (k) => played.get(k)!, seeded(seed)));
+    expect([...picks].sort()).toEqual(['b', 'd']);
+  });
+
+  it('reads a session saved before lessons existed as mixed', () => {
+    const { lesson: _, ...old } = buildSession(QUESTIONS, seeded(4));
+    expect(parseSession(JSON.parse(JSON.stringify(old)), CONTENT)?.lesson).toBe('mixed');
+  });
+
+  it('accepts a saved walkthrough and rejects one that does not match a function', () => {
+    const session = answer(orderedSession('functions', walk.questions, seeded(5)), 1);
+    expect(parseSession(JSON.parse(JSON.stringify(session)), CONTENT)).toEqual(session);
+    const reversed = { ...session, index: 0, items: [...session.items].reverse().map((it) => ({ ...it, picked: null })) };
+    const truncated = { ...session, items: session.items.slice(0, -1) };
+    const mixedIds = { ...session, lesson: 'mixed' };
+    const walkAsMixed = { ...session, lesson: 'functions', items: buildSession(QUESTIONS, seeded(6)).items };
+    for (const raw of [reversed, truncated, mixedIds, walkAsMixed]) {
+      expect(parseSession(JSON.parse(JSON.stringify(raw)), CONTENT), JSON.stringify(raw)).toBeUndefined();
+    }
   });
 });

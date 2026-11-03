@@ -1,0 +1,187 @@
+{
+  "id": "find-max",
+  "code": "def find_max(numbers):\n    biggest = numbers[0]\n    for n in numbers[1:]:\n        if n > biggest:\n            biggest = n\n    return biggest",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion max auf",
+          "en": "Calls the built-in function max"
+        },
+        {
+          "de": "Sortiert die Liste numbers",
+          "en": "Sorts the list numbers"
+        },
+        {
+          "de": "Legt eine Liste find_max mit den Zahlen an",
+          "en": "Creates a list find_max containing the numbers"
+        },
+        {
+          "de": "Definiert eine Funktion find_max mit dem Parameter numbers",
+          "en": "Defines a function find_max with the parameter numbers"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`def` legt die Funktion `find_max` an („finde das Maximum“, also die größte Zahl). Der Körper darunter läuft erst, wenn jemand sie aufruft, zum Beispiel `find_max([3, 8, 5])`.\n\n`numbers` ist der Parameter: Beim Aufruf steht er für die übergebene Liste. Python hat schon eine eingebaute Funktion `max`, die dasselbe kann. Hier bauen wir sie selbst nach, um zu sehen, wie sie funktioniert.",
+        "en": "`def` creates the function `find_max` (\"find the maximum\", the largest number). The body below only runs when someone calls it, for example `find_max([3, 8, 5])`.\n\n`numbers` is the parameter: during a call it stands for the list passed in. Python already has a built-in function `max` that does the same. Here we rebuild it ourselves to see how it works."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Merkt sich die erste Zahl der Liste als bisher größte",
+          "en": "Remembers the first number of the list as the biggest so far"
+        },
+        {
+          "de": "Merkt sich die größte Zahl der Liste",
+          "en": "Remembers the largest number of the list"
+        },
+        {
+          "de": "Setzt das erste Element der Liste auf 0",
+          "en": "Sets the first element of the list to 0"
+        },
+        {
+          "de": "Merkt sich, wie viele Zahlen die Liste hat",
+          "en": "Remembers how many numbers the list has"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`numbers[0]` ist das erste Element der Liste, denn Python beginnt beim Zählen mit 0 (Index 0). Bei `[3, 8, 5]` ist das die 3.\n\nDiese Zahl kommt in die Variable `biggest` (die größte): Sie ist der bisherige Rekordhalter, wie der erste Läufer im Ziel. Ob sie wirklich die größte ist, weiß die Funktion noch nicht; das prüft die Schleife. Bei einer leeren Liste gäbe es kein erstes Element, Python meldet `IndexError`.",
+        "en": "`numbers[0]` is the first element of the list, because Python starts counting at 0 (index 0). For `[3, 8, 5]` that is the 3.\n\nThis number goes into the variable `biggest`: it is the record holder so far, like the first runner across the finish line. The function does not know yet whether it really is the largest; the loop checks that. An empty list has no first element, so Python would raise an `IndexError`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Nimmt nur die zweite Zahl der Liste",
+          "en": "Takes only the second number of the list"
+        },
+        {
+          "de": "Geht alle Zahlen ab der zweiten nacheinander durch; n ist jeweils die aktuelle Zahl",
+          "en": "Goes through every number from the second one on; n is the current number"
+        },
+        {
+          "de": "Geht alle Zahlen außer der letzten durch",
+          "en": "Goes through every number except the last"
+        },
+        {
+          "de": "Zählt von 1 bis zur Länge der Liste",
+          "en": "Counts from 1 up to the length of the list"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`numbers[1:]` ist ein Slice (Ausschnitt): alles ab Index 1 bis zum Ende. Bei `[3, 8, 5]` ist das `[8, 5]`. Die erste Zahl wird übersprungen, weil sie schon in `biggest` steht.\n\nDie `for`-Schleife nimmt diese Zahlen nacheinander: In der ersten Runde ist `n` gleich 8, in der zweiten 5. `numbers[1]` ohne Doppelpunkt wäre nur die eine Zahl 8, `numbers[:-1]` wäre alles außer der letzten.",
+        "en": "`numbers[1:]` is a slice: everything from index 1 to the end. For `[3, 8, 5]` that is `[8, 5]`. The first number is skipped because it is already in `biggest`.\n\nThe `for` loop takes these numbers one after another: in the first round `n` is 8, in the second 5. `numbers[1]` without the colon would be just the single number 8, and `numbers[:-1]` would be everything except the last."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob n größer als die letzte Zahl der Liste ist",
+          "en": "Checks whether n is bigger than the last number of the list"
+        },
+        {
+          "de": "Prüft, ob n und biggest gleich sind",
+          "en": "Checks whether n and biggest are equal"
+        },
+        {
+          "de": "Prüft, ob die aktuelle Zahl größer als der bisherige Rekord ist",
+          "en": "Checks whether the current number is bigger than the record so far"
+        },
+        {
+          "de": "Macht n zur größten Zahl und beendet die Schleife",
+          "en": "Makes n the largest number and ends the loop"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`>` heißt „größer als“ und liefert `True` oder `False`. Verglichen wird die aktuelle Zahl `n` mit dem bisherigen Rekord `biggest`, nicht mit dem Ende der Liste.\n\nNur bei `True` läuft die eingerückte Zeile darunter. Ist `n` genau so groß wie `biggest`, ist `>` `False`; für „größer oder gleich“ bräuchte es `>=`. Die Schleife läuft danach in jedem Fall weiter, `if` beendet sie nicht.",
+        "en": "`>` means \"greater than\" and gives `True` or `False`. It compares the current number `n` with the record so far, `biggest`, not with the end of the list.\n\nOnly on `True` does the indented line below run. If `n` is exactly as big as `biggest`, `>` is `False`; \"greater than or equal\" would need `>=`. Either way the loop carries on afterwards; `if` does not end it."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Setzt n auf den Wert von biggest",
+          "en": "Sets n to the value of biggest"
+        },
+        {
+          "de": "Gibt n sofort als Ergebnis zurück",
+          "en": "Immediately returns n as the result"
+        },
+        {
+          "de": "Vergleicht biggest und n noch einmal",
+          "en": "Compares biggest and n once more"
+        },
+        {
+          "de": "Macht die aktuelle Zahl zum neuen Rekord",
+          "en": "Makes the current number the new record"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Bei einer Zuweisung mit `=` fließt der Wert immer von rechts nach links: `biggest` bekommt den Wert von `n`, `n` selbst bleibt gleich. Bei `[3, 8, 5]` wird `biggest` von 3 auf 8 gesetzt.\n\nDie Zeile steht im `if`-Block, läuft also nur, wenn `n` größer war. Bei der 5 passiert nichts, denn 5 ist nicht größer als 8. Wie beim Hochsprung: Der Rekord wird nur ersetzt, wenn jemand höher springt.",
+        "en": "In an assignment with `=`, the value always flows from right to left: `biggest` gets the value of `n`, and `n` stays the same. For `[3, 8, 5]`, `biggest` changes from 3 to 8.\n\nThe line is inside the `if` block, so it only runs when `n` was bigger. Nothing happens for the 5, because 5 is not bigger than 8. Like the high jump: the record is only replaced when someone jumps higher."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt nach der Schleife den größten Wert zurück",
+          "en": "Returns the largest value after the loop"
+        },
+        {
+          "de": "Gibt die zuletzt geprüfte Zahl zurück",
+          "en": "Returns the last number checked"
+        },
+        {
+          "de": "Gibt die Liste sortiert zurück",
+          "en": "Returns the list sorted"
+        },
+        {
+          "de": "Gibt die Position der größten Zahl zurück",
+          "en": "Returns the position of the largest number"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`return biggest` steht auf derselben Stufe wie `for`, läuft also erst, wenn die Schleife alle Zahlen geprüft hat. Dann steht in `biggest` der Rekord: bei `[3, 8, 5]` die 8, nicht die zuletzt geprüfte 5.\n\n`return` gibt den Wert selbst zurück. Die Position in der Liste (den Index 1) gibt die Funktion nicht zurück, die hat sie sich gar nicht gemerkt.",
+        "en": "`return biggest` is on the same level as `for`, so it only runs once the loop has checked every number. By then `biggest` holds the record: for `[3, 8, 5]` that is 8, not the last number checked, 5.\n\n`return` hands back the value itself. The function does not return the position in the list (index 1); it never kept track of it."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Sortiert die Liste von groß nach klein",
+        "en": "Sorts the list from largest to smallest"
+      },
+      {
+        "de": "Gibt die erste Zahl der Liste zurück",
+        "en": "Returns the first number of the list"
+      },
+      {
+        "de": "Findet die größte Zahl in einer Liste und gibt sie zurück",
+        "en": "Finds the largest number in a list and returns it"
+      },
+      {
+        "de": "Gibt die letzte Zahl der Liste zurück",
+        "en": "Returns the last number of the list"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Das ist das Rekord-Muster: mit dem ersten Wert starten, dann jeden weiteren vergleichen und den Rekord ersetzen, wenn einer größer ist. `find_max([3, 8, 5])` gibt 8 zurück, `find_max([-4, -2])` gibt -2 zurück.\n\nDie Liste selbst bleibt unverändert, sortiert wird nichts. Python kann das auch fertig: `max([3, 8, 5])` ist ebenfalls 8. Mit einer leeren Liste bricht `find_max` mit `IndexError` ab, weil es kein `numbers[0]` gibt.",
+      "en": "This is the record pattern: start with the first value, compare every other one, and replace the record whenever one is bigger. `find_max([3, 8, 5])` returns 8, `find_max([-4, -2])` returns -2.\n\nThe list itself stays unchanged; nothing is sorted. Python also has this ready-made: `max([3, 8, 5])` is 8 as well. With an empty list `find_max` stops with an `IndexError`, because there is no `numbers[0]`."
+    }
+  }
+}

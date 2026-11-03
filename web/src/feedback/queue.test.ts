@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import { makeContent } from '../content/lessons.ts';
 import { FeedbackQueue } from './queue.ts';
 import { AppStorage, MemoryKeyValue } from '../storage.ts';
 import type { SendResult } from './client.ts';
 
-const newStorage = (kv = new MemoryKeyValue()) => new AppStorage(kv, new Map());
+const newStorage = (kv = new MemoryKeyValue()) => new AppStorage(kv, makeContent([], []));
 
 function fakeServer() {
   const server = { online: true, received: [] as string[] };

@@ -18,6 +18,8 @@ export function quizScreen(app: App): Screen {
   let session = trainer.session()!;
   const item = currentItem(session);
   const { question, choices, answerIndex } = present(trainer.question(item.id), item.order);
+  /** Walkthroughs show the lesson instead of the topic, and the code with line numbers. */
+  const walkthrough = session.lesson === 'functions';
 
   const choiceButtons = choices.map((choice, slot) => {
     // Values and code read the same in every language; show them as code.
@@ -50,10 +52,10 @@ export function quizScreen(app: App): Screen {
         { class: 'progress', 'aria-label': t('quiz.progress', { n: session.index + 1, total: session.items.length }) },
         `${session.index + 1}/${session.items.length}`,
       ),
-      h('span', { class: 'topic' }, t(`topic.${question.topic}`)),
+      h('span', { class: 'topic' }, walkthrough ? t('lesson.functions.title') : t(`topic.${question.topic}`)),
     ),
     heading,
-    question.code === undefined ? null : codeBlock(question.code),
+    question.code === undefined ? null : codeBlock(question.code, { numbered: walkthrough, focusLine: question.line }),
     h('div', { class: 'choices', role: 'group', 'aria-labelledby': 'prompt' }, ...choiceButtons),
     feedback,
   );

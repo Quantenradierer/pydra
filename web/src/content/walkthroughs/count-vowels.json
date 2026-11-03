@@ -1,0 +1,187 @@
+{
+  "id": "count-vowels",
+  "code": "def count_vowels(text):\n    count = 0\n    for letter in text.lower():\n        if letter in \"aeiou\":\n            count += 1\n    return count",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Zählt sofort die Vokale in der Variable text",
+          "en": "Immediately counts the vowels in the variable text"
+        },
+        {
+          "de": "Erstellt eine Variable count_vowels mit dem Wert text",
+          "en": "Creates a variable count_vowels holding text"
+        },
+        {
+          "de": "Definiert eine Funktion count_vowels mit dem Parameter text",
+          "en": "Defines a function count_vowels with the parameter text"
+        },
+        {
+          "de": "Ruft count_vowels mit dem Wort \"text\" auf",
+          "en": "Calls count_vowels with the word \"text\""
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`def` legt die Funktion `count_vowels` an („Vokale zählen“; Vokale sind a, e, i, o, u). Der Name verrät schon das Ziel, aber gezählt wird in dieser Zeile noch nichts: Der eingerückte Körper läuft erst beim Aufruf.\n\n`text` ist der Parameter. Bei `count_vowels(\"Banana\")` steht `text` für \"Banana\". Ohne Anführungszeichen ist `text` ein Name, kein Wort, und `def` ruft auch nichts auf.",
+        "en": "`def` creates the function `count_vowels` (vowels are a, e, i, o, u). The name already tells you the goal, but nothing is counted on this line: the indented body only runs when the function is called.\n\n`text` is the parameter. In `count_vowels(\"Banana\")`, `text` stands for \"Banana\". Without quotes, `text` is a name, not a word, and `def` does not call anything either."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob count gleich 0 ist",
+          "en": "Checks whether count equals 0"
+        },
+        {
+          "de": "Setzt die Länge von text auf 0",
+          "en": "Sets the length of text to 0"
+        },
+        {
+          "de": "Beendet die Funktion mit dem Ergebnis 0",
+          "en": "Ends the function with the result 0"
+        },
+        {
+          "de": "Legt einen Zähler count an, der bei 0 beginnt",
+          "en": "Creates a counter count that starts at 0"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Hier entsteht eine Zählervariable: `count` bekommt mit `=` den Startwert 0. Wie eine Strichliste, auf der noch kein Strich steht.\n\nDer Startwert ist wichtig, denn die Schleife darunter erhöht `count` nur. Ohne diese Zeile gäbe es `count` noch nicht, und `count += 1` würde mit einem Fehler (`UnboundLocalError`) abbrechen. Verglichen wird hier nichts, dafür bräuchte es `==`.",
+        "en": "This creates a counter variable: `=` gives `count` the starting value 0. Like a tally sheet with no marks on it yet.\n\nThe starting value matters, because the loop below only ever increases `count`. Without this line, `count` would not exist yet and `count += 1` would stop with an error (`UnboundLocalError`). Nothing is compared here; that would need `==`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Geht den Text in Kleinbuchstaben Zeichen für Zeichen durch; letter ist jeweils das aktuelle Zeichen",
+          "en": "Goes through the text in lowercase, one character at a time; letter is the current character"
+        },
+        {
+          "de": "Wandelt text dauerhaft in Kleinbuchstaben um und macht sonst nichts",
+          "en": "Permanently converts text to lowercase and does nothing else"
+        },
+        {
+          "de": "Geht den Text Wort für Wort durch",
+          "en": "Goes through the text word by word"
+        },
+        {
+          "de": "Geht nur die Kleinbuchstaben im Text durch und überspringt Großbuchstaben",
+          "en": "Goes through only the lowercase letters and skips capitals"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`text.lower()` macht eine Kopie des Texts in Kleinbuchstaben: Aus \"Banana\" wird \"banana\". Der ursprüngliche `text` bleibt unverändert, denn Zeichenketten (`str`) kann man nicht ändern.\n\nDie `for`-Schleife geht diese Kopie Zeichen für Zeichen durch, nicht Wort für Wort. In jeder Runde steht in `letter` das nächste Zeichen: \"b\", dann \"a\", dann \"n\" und so weiter. Die eingerückten Zeilen darunter laufen einmal pro Zeichen.",
+        "en": "`text.lower()` makes a lowercase copy of the text: \"Banana\" becomes \"banana\". The original `text` stays unchanged, because strings (`str`) cannot be changed.\n\nThe `for` loop goes through this copy one character at a time, not word by word. In each round `letter` holds the next character: \"b\", then \"a\", then \"n\", and so on. The indented lines below run once per character."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob letter genau gleich dem Text \"aeiou\" ist",
+          "en": "Checks whether letter is exactly the text \"aeiou\""
+        },
+        {
+          "de": "Prüft, ob das aktuelle Zeichen einer der Vokale a, e, i, o, u ist",
+          "en": "Checks whether the current character is one of the vowels a, e, i, o, u"
+        },
+        {
+          "de": "Prüft, ob der ganze Text alle fünf Vokale enthält",
+          "en": "Checks whether the whole text contains all five vowels"
+        },
+        {
+          "de": "Hängt letter an den Text \"aeiou\" an",
+          "en": "Appends letter to the text \"aeiou\""
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`in` prüft, ob etwas in etwas anderem enthalten ist. Bei Zeichenketten heißt das: Kommt das Zeichen `letter` im Text \"aeiou\" vor? Für \"a\" ist das `True`, für \"b\" `False`.\n\nDer kurze Text \"aeiou\" ist hier einfach eine Liste der erlaubten Zeichen, wie die Gästeliste eines Türstehers. `==` würde dagegen den ganzen Text vergleichen: `\"a\" == \"aeiou\"` ist `False`.",
+        "en": "`in` checks whether something is contained in something else. For strings that means: does the character `letter` appear in the text \"aeiou\"? For \"a\" that is `True`, for \"b\" `False`.\n\nThe short text \"aeiou\" is simply a list of allowed characters here, like a bouncer's guest list. `==` would compare the whole text instead: `\"a\" == \"aeiou\"` is `False`."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Setzt den Zähler auf 1",
+          "en": "Sets the counter to 1"
+        },
+        {
+          "de": "Prüft, ob count gleich 1 ist",
+          "en": "Checks whether count equals 1"
+        },
+        {
+          "de": "Erhöht den Zähler um 1",
+          "en": "Increases the counter by 1"
+        },
+        {
+          "de": "Springt zum übernächsten Zeichen",
+          "en": "Skips ahead to the character after next"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`count += 1` ist die Kurzform von `count = count + 1`: Nimm den alten Wert, rechne 1 dazu und speichere das Ergebnis wieder in `count`. Ein Strich mehr auf der Strichliste.\n\nDie Zeile ist zwei Stufen eingerückt, steht also im `if`-Block: Sie läuft nur, wenn das Zeichen ein Vokal ist. Bei \"banana\" passiert das dreimal, für jedes \"a\". `count = 1` würde den Zähler dagegen jedes Mal zurück auf 1 setzen.",
+        "en": "`count += 1` is short for `count = count + 1`: take the old value, add 1, and store the result back in `count`. One more mark on the tally sheet.\n\nThe line is indented two levels, so it is inside the `if` block: it only runs when the character is a vowel. For \"banana\" that happens three times, once for each \"a\". `count = 1` would instead reset the counter to 1 every time."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt den Zähler schon nach dem ersten Zeichen zurück",
+          "en": "Returns the counter right after the first character"
+        },
+        {
+          "de": "Gibt die Vokale selbst zurück, zum Beispiel \"aaa\"",
+          "en": "Returns the vowels themselves, for example \"aaa\""
+        },
+        {
+          "de": "Startet die Schleife von vorn",
+          "en": "Starts the loop over again"
+        },
+        {
+          "de": "Gibt nach der Schleife die Anzahl der Vokale zurück",
+          "en": "Returns the number of vowels after the loop"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Einrückung entscheidet: `return count` steht auf derselben Stufe wie `for`, also nicht in der Schleife. Python erreicht die Zeile erst, wenn alle Zeichen durch sind.\n\nDann gibt `return` den Zählerstand an den Aufrufer zurück, eine ganze Zahl (`int`). Stünde `return` eine Stufe tiefer in der Schleife, würde die Funktion schon nach dem ersten Zeichen enden, ein typischer Anfängerfehler.",
+        "en": "Indentation decides: `return count` is on the same level as `for`, so it is not inside the loop. Python only reaches this line once every character has been handled.\n\nThen `return` hands the counter's value back to the caller, a whole number (`int`). If `return` were indented one level deeper, inside the loop, the function would end after the first character, a typical beginner's mistake."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt den Text ohne Vokale zurück",
+        "en": "Returns the text without vowels"
+      },
+      {
+        "de": "Zählt, wie viele Vokale (a, e, i, o, u) im Text stehen, egal ob groß oder klein",
+        "en": "Counts how many vowels (a, e, i, o, u) are in the text, upper or lower case"
+      },
+      {
+        "de": "Zählt, wie viele Zeichen der Text hat",
+        "en": "Counts how many characters the text has"
+      },
+      {
+        "de": "Zählt nur die kleingeschriebenen Vokale",
+        "en": "Counts only the lowercase vowels"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Das ist das Zähler-Muster: Zähler auf 0 setzen, mit `for` alles durchgehen, bei jedem Treffer `+= 1`, am Ende `return`. `count_vowels(\"Banana\")` gibt 3 zurück, `count_vowels(\"Python\")` gibt 1 (nur das \"o\"; \"y\" steht nicht in \"aeiou\").\n\nGroßbuchstaben zählen mit, weil `.lower()` sie vorher klein macht: `count_vowels(\"AEIOU\")` ist 5. Die Vokale selbst gibt die Funktion nicht zurück, nur ihre Anzahl.",
+      "en": "This is the counter pattern: set a counter to 0, go through everything with `for`, add `+= 1` for every match, `return` at the end. `count_vowels(\"Banana\")` returns 3, `count_vowels(\"Python\")` returns 1 (only the \"o\"; \"y\" is not in \"aeiou\").\n\nCapitals count too, because `.lower()` makes them small first: `count_vowels(\"AEIOU\")` is 5. The function does not return the vowels themselves, only how many there are."
+    }
+  }
+}

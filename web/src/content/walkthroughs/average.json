@@ -1,0 +1,135 @@
+{
+  "id": "average",
+  "code": "def average(numbers):\n    total = sum(numbers)\n    count = len(numbers)\n    return total / count",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Rechnet sofort den Durchschnitt aller Zahlen im Programm aus",
+          "en": "Immediately computes the average of all numbers in the program"
+        },
+        {
+          "de": "Definiert eine Funktion average, die eine Liste von Zahlen als Parameter numbers bekommt",
+          "en": "Defines a function average that takes a list of numbers as the parameter numbers"
+        },
+        {
+          "de": "Erstellt eine leere Liste namens numbers",
+          "en": "Creates an empty list called numbers"
+        },
+        {
+          "de": "Ruft eine eingebaute Funktion average auf",
+          "en": "Calls a built-in function average"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`def` legt die Funktion `average` (Durchschnitt) an. Beim Anlegen wird noch nichts gerechnet: Der Körper läuft erst bei einem Aufruf wie `average([2, 4, 9])`.\n\n`numbers` ist der Parameter, ein Platzhalter. Beim Aufruf steht er für das, was du übergibst, hier die Liste `[2, 4, 9]`. Eine eingebaute Funktion `average` gibt es in Python übrigens nicht, deshalb schreiben wir sie selbst.",
+        "en": "`def` creates the function `average`. Nothing is computed yet: the body only runs on a call such as `average([2, 4, 9])`.\n\n`numbers` is the parameter, a placeholder. During a call it stands for whatever you pass in, here the list `[2, 4, 9]`. Python has no built-in function called `average`, by the way, which is why we write it ourselves."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Zählt, wie viele Zahlen es gibt",
+          "en": "Counts how many numbers there are"
+        },
+        {
+          "de": "Speichert die größte Zahl in total",
+          "en": "Stores the largest number in total"
+        },
+        {
+          "de": "Addiert alle Zahlen und speichert die Summe in total",
+          "en": "Adds up all the numbers and stores the sum in total"
+        },
+        {
+          "de": "Hängt total an die Liste numbers an",
+          "en": "Appends total to the list numbers"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`sum()` ist eine eingebaute Funktion (built-in), die alle Zahlen einer Liste zusammenzählt. Für `[2, 4, 9]` rechnet sie `2 + 4 + 9` und liefert 15.\n\nDas `=` speichert dieses Ergebnis in der neuen Variable `total` (Gesamtsumme). Wie auf einem Kassenbon: Erst wird alles zusammengerechnet, dann steht die Summe unten. Die Liste `numbers` selbst bleibt dabei unverändert.",
+        "en": "`sum()` is a built-in function that adds up all the numbers in a list. For `[2, 4, 9]` it computes `2 + 4 + 9` and gives 15.\n\nThe `=` stores that result in the new variable `total`. Like a till receipt: first everything is added up, then the total is written at the bottom. The list `numbers` itself stays unchanged."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Speichert, wie viele Ziffern die größte Zahl hat",
+          "en": "Stores how many digits the largest number has"
+        },
+        {
+          "de": "Zählt, wie oft die Zahl 0 vorkommt",
+          "en": "Counts how often the number 0 appears"
+        },
+        {
+          "de": "Addiert alle Zahlen noch einmal",
+          "en": "Adds up all the numbers again"
+        },
+        {
+          "de": "Speichert in count, wie viele Zahlen in numbers stehen",
+          "en": "Stores in count how many numbers are in numbers"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`len()` (kurz für length, „Länge“) zählt die Elemente einer Liste. `[2, 4, 9]` hat drei Elemente, also ist `count` jetzt 3.\n\n`len` schaut nicht auf die Werte, nur auf die Anzahl: `len([100, 200])` ist 2. Wir brauchen die Anzahl, weil man für den Durchschnitt die Summe durch die Anzahl teilt.",
+        "en": "`len()` (short for length) counts the elements of a list. `[2, 4, 9]` has three elements, so `count` is now 3.\n\n`len` does not look at the values, only at how many there are: `len([100, 200])` is 2. We need the count because the average is the sum divided by the count."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Teilt die Summe durch die Anzahl und gibt das Ergebnis zurück",
+          "en": "Divides the sum by the count and returns the result"
+        },
+        {
+          "de": "Teilt und rundet auf eine ganze Zahl ab",
+          "en": "Divides and rounds down to a whole number"
+        },
+        {
+          "de": "Gibt total und count getrennt zurück",
+          "en": "Returns total and count separately"
+        },
+        {
+          "de": "Zeigt das Ergebnis an, gibt aber None zurück",
+          "en": "Prints the result but returns None"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`/` ist die normale Division und liefert immer eine Kommazahl (`float`): `15 / 3` ergibt `5.0`, nicht `5`. Abrunden auf eine ganze Zahl würde `//` tun.\n\n`return` gibt dieses Ergebnis an den Aufrufer zurück und beendet die Funktion. Aufgepasst: Bei einer leeren Liste ist `count` 0, und durch 0 teilen geht nicht. Python meldet dann einen `ZeroDivisionError`.",
+        "en": "`/` is normal division and always gives a decimal number (`float`): `15 / 3` is `5.0`, not `5`. Rounding down to a whole number would be `//`.\n\n`return` hands this result back to the caller and ends the function. Watch out: for an empty list `count` is 0, and you cannot divide by 0. Python then raises a `ZeroDivisionError`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Berechnet die Summe einer Liste von Zahlen",
+        "en": "Calculates the sum of a list of numbers"
+      },
+      {
+        "de": "Zählt die Zahlen in einer Liste",
+        "en": "Counts the numbers in a list"
+      },
+      {
+        "de": "Berechnet den Durchschnitt (Mittelwert) einer Liste von Zahlen",
+        "en": "Calculates the average (mean) of a list of numbers"
+      },
+      {
+        "de": "Findet die mittlere Zahl einer sortierten Liste",
+        "en": "Finds the middle number of a sorted list"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Summe durch Anzahl ist genau der Durchschnitt, auch Mittelwert genannt: `average([2, 4, 9])` rechnet `15 / 3` und gibt `5.0` zurück. Stell dir vor, drei Kinder teilen 15 Bonbons gerecht auf: Jedes bekommt 5.\n\nSumme und Anzahl sind nur Zwischenschritte in den Variablen `total` und `count`. Die mittlere Zahl einer sortierten Liste heißt Median, das ist etwas anderes: Bei `[1, 2, 9]` ist der Median 2, der Durchschnitt `4.0`.",
+      "en": "Sum divided by count is exactly the average, also called the mean: `average([2, 4, 9])` computes `15 / 3` and returns `5.0`. Imagine three children sharing 15 sweets fairly: each gets 5.\n\nThe sum and the count are just in-between steps, kept in the variables `total` and `count`. The middle number of a sorted list is called the median, which is something else: for `[1, 2, 9]` the median is 2, the average `4.0`."
+    }
+  }
+}

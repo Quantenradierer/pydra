@@ -28,7 +28,7 @@ test('sends feedback from the speech-bubble screen', async ({ page, request }) =
   await expect(send).toBeDisabled();
 
   await page.getByRole('button', { name: 'Zurück' }).click();
-  await expect(page.getByRole('button', { name: 'Start' })).toBeVisible();
+  await expect(page.getByTestId('start-mixed')).toBeVisible();
 });
 
 test('delivers feedback written offline after reconnecting', async ({ page, context, request }) => {

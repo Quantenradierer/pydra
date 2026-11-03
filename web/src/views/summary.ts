@@ -20,7 +20,7 @@ export function summaryScreen(app: App): Screen {
         {
           class: 'primary',
           onclick: () => {
-            trainer.start();
+            trainer.start(result.lesson);
             app.navigate('quiz');
           },
         },

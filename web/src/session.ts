@@ -1,3 +1,4 @@
+import { fitsLesson, isLesson, type Content, type LessonId } from './content/lessons.ts';
 import type { Localized, Question } from './content/types.ts';
 
 export const SESSION_LENGTH = 10;
@@ -16,6 +17,7 @@ export interface SessionItem {
 
 /** A quiz in progress. Saved after every answer and resumed on launch. */
 export interface Session {
+  lesson: LessonId;
   items: SessionItem[];
   /** Current question. Its feedback is showing when it has been answered. */
   index: number;
@@ -38,11 +40,16 @@ export function shuffle<T>(items: readonly T[], rng: Rng): T[] {
   return result;
 }
 
-/** Picks SESSION_LENGTH distinct questions uniformly at random and shuffles their choices. */
+/** The mixed lesson: SESSION_LENGTH distinct questions picked uniformly at random, choices shuffled. */
 export function buildSession(questions: readonly Question[], rng: Rng = Math.random): Session {
-  const picked = shuffle(questions, rng).slice(0, SESSION_LENGTH);
+  return orderedSession('mixed', shuffle(questions, rng).slice(0, SESSION_LENGTH), rng);
+}
+
+/** A session over the given questions in the given order; only the choices are shuffled. */
+export function orderedSession(lesson: LessonId, questions: readonly Question[], rng: Rng = Math.random): Session {
   return {
-    items: picked.map((q) => ({
+    lesson,
+    items: questions.map((q) => ({
       id: q.id,
       order: shuffle(
         q.choices.map((_, i) => i),
@@ -52,6 +59,14 @@ export function buildSession(questions: readonly Question[], rng: Rng = Math.ran
     })),
     index: 0,
   };
+}
+
+/** One of the options played least often so far, chosen at random among ties. */
+export function pickLeastPlayed<T>(options: readonly T[], played: (option: T) => number, rng: Rng = Math.random): T {
+  const counts = options.map(played);
+  const fewest = Math.min(...counts);
+  const candidates = options.filter((_, i) => counts[i] === fewest);
+  return candidates[Math.floor(rng() * candidates.length)]!;
 }
 
 export function present(question: Question, order: readonly number[]): PresentedQuestion {
@@ -95,12 +110,14 @@ export function score(session: Session, byId: ReadonlyMap<string, Question>): nu
 const isInt = (v: unknown): v is number => Number.isInteger(v);
 
 /**
- * Validates a saved session against the current question bank. Anything
- * malformed, or a question id that no longer exists, yields undefined.
+ * Validates a saved session against the current content. Anything malformed,
+ * a question id that no longer exists, or questions that do not fit the
+ * lesson yield undefined. Sessions saved before lessons existed are `mixed`.
  */
-export function parseSession(raw: unknown, byId: ReadonlyMap<string, Question>): Session | undefined {
+export function parseSession(raw: unknown, content: Content): Session | undefined {
   if (typeof raw !== 'object' || raw === null) return undefined;
-  const { items, index } = raw as Partial<Session>;
+  const { items, index, lesson = 'mixed' } = raw as Partial<Session>;
+  if (!isLesson(lesson)) return undefined;
   if (!Array.isArray(items) || items.length === 0 || !isInt(index) || index < 0 || index >= items.length) {
     return undefined;
   }
@@ -110,7 +127,7 @@ export function parseSession(raw: unknown, byId: ReadonlyMap<string, Question>):
     if (typeof item !== 'object' || item === null) return undefined;
     const { id, order, picked } = item as Partial<SessionItem>;
     if (typeof id !== 'string' || ids.has(id)) return undefined;
-    const question = byId.get(id);
+    const question = content.byId.get(id);
     if (!question) return undefined;
     const n = question.choices.length;
     if (
@@ -127,5 +144,6 @@ export function parseSession(raw: unknown, byId: ReadonlyMap<string, Question>):
     ids.add(id);
     parsed.push({ id, order: [...order], picked });
   }
-  return { items: parsed, index };
+  if (!fitsLesson(content, lesson, [...ids])) return undefined;
+  return { lesson, items: parsed, index };
 }

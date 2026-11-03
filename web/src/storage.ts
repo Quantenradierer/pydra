@@ -1,4 +1,4 @@
-import type { Question } from './content/types.ts';
+import { isLesson, LESSONS, type Content, type LessonId } from './content/lessons.ts';
 import { DEFAULT_LANG, isLang, type Lang } from './i18n.ts';
 import { parseSession, type Session } from './session.ts';
 import { parseCounters, parseQuestionStats, type Counters, type QuestionStats } from './stats.ts';
@@ -11,6 +11,7 @@ export const NAMESPACE = 'pydra.v1.';
 
 /** Score of the last finished session, shown on the summary screen. */
 export interface LastResult {
+  lesson: LessonId;
   score: number;
   total: number;
 }
@@ -36,7 +37,7 @@ export class MemoryKeyValue implements KeyValue {
 export class AppStorage {
   constructor(
     private kv: KeyValue,
-    private questions: ReadonlyMap<string, Question>,
+    private content: Content,
   ) {}
 
   private read(key: string): unknown {
@@ -75,7 +76,7 @@ export class AppStorage {
 
   /** The saved session, or undefined if there is none or it is no longer valid. */
   session(): Session | undefined {
-    const session = parseSession(this.read('session'), this.questions);
+    const session = parseSession(this.read('session'), this.content);
     if (!session) this.remove('session');
     return session;
   }
@@ -88,12 +89,13 @@ export class AppStorage {
     this.remove('session');
   }
 
-  counters(): Counters {
-    return parseCounters(this.read('counters'));
+  /** Lifetime counters of one lesson. */
+  counters(lesson: LessonId = 'mixed'): Counters {
+    return parseCounters(this.read(countersKey(lesson)));
   }
 
-  setCounters(counters: Counters) {
-    this.write('counters', counters);
+  setCounters(counters: Counters, lesson: LessonId = 'mixed') {
+    this.write(countersKey(lesson), counters);
   }
 
   questionStats(): QuestionStats {
@@ -107,10 +109,10 @@ export class AppStorage {
   lastResult(): LastResult | undefined {
     const raw = this.read('lastResult');
     if (typeof raw !== 'object' || raw === null) return undefined;
-    const { score, total } = raw as Record<string, unknown>;
-    if (!Number.isInteger(total) || !Number.isInteger(score)) return undefined;
+    const { score, total, lesson = 'mixed' } = raw as Record<string, unknown>;
+    if (!Number.isInteger(total) || !Number.isInteger(score) || !isLesson(lesson)) return undefined;
     if ((score as number) < 0 || (score as number) > (total as number)) return undefined;
-    return { score: score as number, total: total as number };
+    return { lesson, score: score as number, total: total as number };
   }
 
   setLastResult(result: LastResult) {
@@ -133,6 +135,11 @@ export class AppStorage {
 
   /** Wipes stats, counters and any session; keeps the language and unsent feedback. */
   resetProgress() {
-    for (const key of ['session', 'counters', 'questionStats', 'lastResult']) this.remove(key);
+    for (const key of ['session', ...LESSONS.map(countersKey), 'questionStats', 'lastResult']) this.remove(key);
   }
+}
+
+/** The mixed lesson keeps the key it had before lessons existed. */
+function countersKey(lesson: LessonId): string {
+  return lesson === 'mixed' ? 'counters' : `counters.${lesson}`;
 }

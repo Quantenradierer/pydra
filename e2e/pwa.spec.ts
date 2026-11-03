@@ -49,8 +49,8 @@ test('loads and runs a quiz offline from the service worker', async ({ page, con
   await waitForServiceWorker(page);
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Start' })).toBeVisible();
-  await page.getByRole('button', { name: 'Start' }).click();
+  await expect(page.getByTestId('start-mixed')).toBeVisible();
+  await page.getByTestId('start-mixed').click();
   await answer(page);
   await expect(page.locator('.explanation')).not.toBeEmpty();
   // App routes fall back to the cached index.html.
@@ -67,14 +67,14 @@ test('reloads at once when a new version is deployed outside a quiz', async ({ p
   const reloaded = page.waitForEvent('load');
   await deployNewVersion(page);
   await reloaded;
-  await expect(page.getByRole('button', { name: 'Start' })).toBeVisible();
+  await expect(page.getByTestId('start-mixed')).toBeVisible();
   expect(await page.evaluate(() => 'marker' in window)).toBe(false);
 });
 
 test('waits with the update until the quiz ends', async ({ page }) => {
   await page.goto('/');
   await waitForServiceWorker(page);
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   await answer(page);
   await page.evaluate(() => Object.assign(window, { marker: true }));
 
@@ -86,6 +86,6 @@ test('waits with the update until the quiz ends', async ({ page }) => {
   const reloaded = page.waitForEvent('load');
   await page.getByRole('button', { name: 'Beenden' }).click();
   await reloaded;
-  await expect(page.getByRole('button', { name: 'Start' })).toBeVisible();
+  await expect(page.getByTestId('start-mixed')).toBeVisible();
   expect(await page.evaluate(() => 'marker' in window)).toBe(false);
 });

@@ -1,6 +1,6 @@
 import { registerSW } from 'virtual:pwa-register';
 import { App } from './app.ts';
-import { QUESTIONS, QUESTIONS_BY_ID } from './content/questions.ts';
+import { CONTENT } from './content/lessons.ts';
 import { FeedbackQueue } from './feedback/queue.ts';
 import { InstallPrompt } from './install.ts';
 import { AppStorage } from './storage.ts';
@@ -8,8 +8,8 @@ import { Trainer } from './trainer.ts';
 import { UpdateManager, watchForUpdates } from './update.ts';
 import './style.css';
 
-const storage = new AppStorage(localStorage, QUESTIONS_BY_ID);
-const trainer = new Trainer(storage, QUESTIONS, QUESTIONS_BY_ID);
+const storage = new AppStorage(localStorage, CONTENT);
+const trainer = new Trainer(storage, CONTENT);
 const feedback = new FeedbackQueue(storage);
 const install = new InstallPrompt(window);
 

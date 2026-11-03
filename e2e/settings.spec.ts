@@ -12,12 +12,12 @@ test('switches the language and keeps it after a reload', async ({ page }) => {
   await page.reload();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Settings');
   await page.getByRole('button', { name: 'Back' }).click();
-  await expect(page.getByTestId('stats')).toHaveText("No sessions yet. Let's go!");
+  await expect(page.getByTestId('stats-mixed')).toHaveText("No sessions yet. Let's go!");
 
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   await page.keyboard.press('1');
   await expect(page.locator('.verdict')).toHaveText(/Head of the class!|Head-scratcher, huh\?/);
-  await expect(page.getByRole('button', { name: 'Next' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeVisible();
 });
 
 test('resets progress after confirming, keeping the language', async ({ page }) => {
@@ -26,13 +26,13 @@ test('resets progress after confirming, keeping the language', async ({ page }) 
   await page.getByRole('button', { name: 'English' }).click();
   await page.getByRole('button', { name: 'Back' }).click();
 
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   for (let i = 1; i <= 10; i++) {
     await answer(page);
-    await page.getByRole('button', { name: i === 10 ? 'Finish' : 'Next' }).click();
+    await page.getByRole('button', { name: i === 10 ? 'Finish' : 'Next', exact: true }).click();
   }
   await page.getByRole('button', { name: 'Home' }).click();
-  await expect(page.getByTestId('stats')).toContainText('1 session');
+  await expect(page.getByTestId('stats-mixed')).toContainText('1 session');
 
   await page.getByRole('button', { name: 'Settings' }).click();
   // Cancelling keeps everything.
@@ -48,7 +48,7 @@ test('resets progress after confirming, keeping the language', async ({ page }) 
   expect(await stored(page, 'language')).toBe('en');
 
   await page.getByRole('button', { name: 'Back' }).click();
-  await expect(page.getByTestId('stats')).toHaveText("No sessions yet. Let's go!");
+  await expect(page.getByTestId('stats-mixed')).toHaveText("No sessions yet. Let's go!");
 });
 
 test('shows the install button only when the browser offers installation', async ({ page }) => {

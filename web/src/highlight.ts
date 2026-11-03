@@ -4,10 +4,26 @@ import { h } from './dom.ts';
 
 hljs.registerLanguage('python', python);
 
+const highlight = (code: string) => hljs.highlight(code, { language: 'python' }).value;
+
+export interface CodeBlockOptions {
+  /** Show line numbers; each line is highlighted on its own, fine for the short walkthrough functions. */
+  numbered?: boolean;
+  /** 1-based line to mark (implies numbered). */
+  focusLine?: number;
+}
+
 /** A highlighted Python snippet. Colours come from CSS variables in style.css. */
-export function codeBlock(code: string): HTMLPreElement {
+export function codeBlock(code: string, { numbered = false, focusLine }: CodeBlockOptions = {}): HTMLPreElement {
   const el = h('code', { class: 'hljs language-python' });
   // highlight.js escapes the source, so its HTML output is safe to insert.
-  el.innerHTML = hljs.highlight(code, { language: 'python' }).value;
+  if (numbered || focusLine !== undefined) {
+    el.innerHTML = code
+      .split('\n')
+      .map((line, i) => `<span class="line${i + 1 === focusLine ? ' focus' : ''}">${highlight(line)}</span>`)
+      .join('\n');
+    return h('pre', { class: 'code numbered' }, el);
+  }
+  el.innerHTML = highlight(code);
   return h('pre', { class: 'code' }, el);
 }

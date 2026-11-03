@@ -2,14 +2,23 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 
 const QUESTIONS_DIR = new URL('../web/src/content/questions/', import.meta.url);
-/** Right answer (index into the unshuffled choices) by question id. */
-const ANSWERS = new Map<string, number>(
-  readdirSync(QUESTIONS_DIR).flatMap((file) =>
-    (JSON.parse(readFileSync(new URL(file, QUESTIONS_DIR), 'utf8')) as { id: string; answerIndex: number }[]).map(
-      (q) => [q.id, q.answerIndex] as const,
-    ),
-  ),
-);
+const WALKTHROUGHS_DIR = new URL('../web/src/content/walkthroughs/', import.meta.url);
+const readJson = (dir: URL) => readdirSync(dir).map((file) => JSON.parse(readFileSync(new URL(file, dir), 'utf8')) as unknown);
+
+interface Walkthrough {
+  id: string;
+  lines: { line: number; answerIndex: number }[];
+  whole: { answerIndex: number };
+}
+
+/** Right answer (index into the unshuffled choices) by question id; step ids as in walkthroughs.ts. */
+const ANSWERS = new Map<string, number>([
+  ...(readJson(QUESTIONS_DIR) as { id: string; answerIndex: number }[][]).flat().map((q) => [q.id, q.answerIndex] as const),
+  ...(readJson(WALKTHROUGHS_DIR) as Walkthrough[]).flatMap((w) => [
+    ...w.lines.map((s) => [`walk-${w.id}-${String(s.line).padStart(2, '0')}`, s.answerIndex] as const),
+    [`walk-${w.id}-whole`, w.whole.answerIndex] as const,
+  ]),
+]);
 
 /** Waits until a service worker controls the page (reloading once if needed). */
 export async function waitForServiceWorker(page: Page) {

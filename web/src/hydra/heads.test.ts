@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { QUESTIONS, QUESTIONS_BY_ID } from '../content/questions.ts';
+import { CONTENT } from '../content/lessons.ts';
 import { advance, answer, buildSession, currentItem, parseSession, present, type Session } from '../session.ts';
 import { resultHeads, sessionHeads } from './heads.ts';
 
@@ -32,7 +33,7 @@ describe('session heads', () => {
     let session = buildSession(QUESTIONS);
     session = advance(answer(session, correctSlot(session)))!;
     session = answer(session, (correctSlot(session) + 2) % 4);
-    const restored = parseSession(JSON.parse(JSON.stringify(session)), QUESTIONS_BY_ID)!;
+    const restored = parseSession(JSON.parse(JSON.stringify(session)), CONTENT)!;
     expect(sessionHeads(restored, question)).toEqual(sessionHeads(session, question));
   });
 });

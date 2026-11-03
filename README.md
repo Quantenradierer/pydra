@@ -2,8 +2,9 @@
 
 Pydra (Py + Hydra) is a multiple-choice trainer for absolute Python beginners,
 in German (default) and English. It is an installable PWA that works fully
-offline: 80 questions in 8 topics, 10 random questions per session, with an
-explanation after every answer. Live at https://pydra.quantenradierer.de/.
+offline. Two lessons: a quiz of 10 random questions from 80 in 8 topics, and
+"Reading functions", which walks through a short function line by line and
+then asks what the whole function does. Every answer gets an explanation. Live at https://pydra.quantenradierer.de/.
 
 The agreed requirements are in [docs/requirements.md](docs/requirements.md);
 deployment is described in [DEPLOY.md](DEPLOY.md).
@@ -25,7 +26,8 @@ In `web/src`:
 | ------------------------------- | ------------------------------------------------------------------- |
 | `app.ts`                        | Hash router                                                         |
 | `views/`                        | The screens                                                         |
-| `session.ts`                    | Picks and shuffles questions                                        |
+| `content/lessons.ts`            | The lessons and the content they play (`CONTENT`)                   |
+| `session.ts`                    | Builds sessions (random or in order) and shuffles choices           |
 | `trainer.ts`                    | Quiz flow and stats                                                 |
 | `storage.ts`                    | localStorage access                                                 |
 | `update.ts`                     | Service worker update rule (never reload during a quiz)             |
@@ -111,6 +113,33 @@ To review all questions at once, run:
 ```sh
 node -e 'for (const f of require("fs").readdirSync("web/src/content/questions")) for (const q of require("./web/src/content/questions/" + f)) console.log(`\n## ${q.id}\n${q.prompt.de}\n${q.code ?? ""}\n${q.choices.map((c, i) => (i === q.answerIndex ? "* " : "  ") + c.de).join("\n")}\n${q.explanation.de}`)'
 ```
+
+## Walkthroughs (Reading functions)
+
+Each function of the "Reading functions" lesson lives in
+`web/src/content/walkthroughs/<id>.json` and is listed in
+`web/src/content/walkthroughs.ts`:
+
+```json
+{
+  "id": "average",
+  "code": "def average(numbers):\n    total = sum(numbers)\n    count = len(numbers)\n    return total / count",
+  "lines": [
+    { "line": 1, "choices": [{ "de": "…", "en": "…" }, …], "answerIndex": 1, "explanation": { "de": "…", "en": "…" } },
+    …
+  ],
+  "whole": { "choices": […], "answerIndex": 2, "explanation": { "de": "…", "en": "…" } }
+}
+```
+
+- `id` is stable: the step question ids `walk-<id>-NN` and `walk-<id>-whole`
+  are derived from it and used in saved sessions and stats.
+- `code` is one function of 4–8 lines without blank lines; `lines` has one
+  step per line, in order.
+- Choices, answer index and explanation follow the rules for questions
+  above; the prompts are generated. Choices are plain text (no backticks).
+- Run every claim in an explanation with `python3`, then `npm test`
+  (`walkthroughs.test.ts` checks the structure).
 
 ## Feedback API
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { QUESTIONS, QUESTIONS_BY_ID } from './content/questions.ts';
+import { CONTENT } from './content/lessons.ts';
 import { present } from './session.ts';
 import { EMPTY_COUNTERS, parseCounters, parseQuestionStats, percentCorrect } from './stats.ts';
 import { AppStorage, MemoryKeyValue, NAMESPACE } from './storage.ts';
@@ -8,14 +8,14 @@ import { Trainer } from './trainer.ts';
 const NOW = new Date('2026-11-03T10:00:00Z');
 
 function setup(kv = new MemoryKeyValue()) {
-  const storage = new AppStorage(kv, QUESTIONS_BY_ID);
+  const storage = new AppStorage(kv, CONTENT);
   let r = 0.37;
   const rng = () => (r = (r * 9301 + 0.49297) % 1);
-  const trainer = new Trainer(storage, QUESTIONS, QUESTIONS_BY_ID, rng, () => NOW);
+  const trainer = new Trainer(storage, CONTENT, rng, () => NOW);
   const correctSlot = () => {
     const s = trainer.session()!;
     const item = s.items[s.index]!;
-    return present(QUESTIONS_BY_ID.get(item.id)!, item.order).answerIndex;
+    return present(CONTENT.byId.get(item.id)!, item.order).answerIndex;
   };
   return { kv, storage, trainer, correctSlot };
 }
@@ -25,7 +25,7 @@ describe('storage', () => {
     const { storage, kv } = setup();
     expect(storage.language()).toBe('de');
     storage.setLanguage('en');
-    expect(new AppStorage(kv, QUESTIONS_BY_ID).language()).toBe('en');
+    expect(new AppStorage(kv, CONTENT).language()).toBe('en');
   });
 
   it('ignores corrupt and foreign values without throwing', () => {
@@ -36,7 +36,7 @@ describe('storage', () => {
     kv.setItem(NAMESPACE + 'questionStats', '[1,2]');
     kv.setItem(NAMESPACE + 'lastResult', '{"score":11,"total":10}');
     kv.setItem(NAMESPACE + 'feedbackQueue', '"text"');
-    const storage = new AppStorage(kv, QUESTIONS_BY_ID);
+    const storage = new AppStorage(kv, CONTENT);
     expect(storage.language()).toBe('de');
     expect(storage.session()).toBeUndefined();
     expect(storage.counters()).toEqual(EMPTY_COUNTERS);
@@ -57,7 +57,7 @@ describe('storage', () => {
         throw new Error('denied');
       },
     };
-    const storage = new AppStorage(throwing, QUESTIONS_BY_ID);
+    const storage = new AppStorage(throwing, CONTENT);
     expect(storage.language()).toBe('de');
     expect(() => storage.setLanguage('en')).not.toThrow();
     expect(() => storage.resetProgress()).not.toThrow();
@@ -125,9 +125,9 @@ describe('stats', () => {
       trainer.next();
       trainer.answer(i < 7 ? correctSlot() : (correctSlot() + 1) % 4);
     }
-    expect(trainer.next()).toEqual({ score: 7, total: 10 });
+    expect(trainer.next()).toEqual({ lesson: 'mixed', score: 7, total: 10 });
     expect(trainer.isRunning()).toBe(false);
-    expect(storage.lastResult()).toEqual({ score: 7, total: 10 });
+    expect(storage.lastResult()).toEqual({ lesson: 'mixed', score: 7, total: 10 });
     expect(storage.counters()).toEqual({ sessionsPlayed: 1, bestScore: 7, totalAnswers: 10, totalCorrect: 7 });
     expect(percentCorrect(storage.counters())).toBe(70);
     expect(Object.keys(storage.questionStats())).toHaveLength(10);
@@ -172,5 +172,60 @@ describe('stats', () => {
     expect(storage.counters()).toEqual(EMPTY_COUNTERS);
     expect(storage.questionStats()).toEqual({});
     expect(storage.language()).toBe('en');
+  });
+});
+
+describe('functions lesson', () => {
+  /** Plays a whole walkthrough, answering right for the first `right` steps. */
+  function playWalkthrough(trainer: Trainer, correctSlot: () => number, right = Infinity) {
+    const session = trainer.start('functions');
+    for (let i = 0; i < session.items.length; i++) {
+      if (i > 0) trainer.next();
+      trainer.answer(i < right ? correctSlot() : (correctSlot() + 1) % 4);
+    }
+    return { session, result: trainer.next() };
+  }
+
+  it('walks through one function line by line, then asks about the whole function', () => {
+    const { trainer } = setup();
+    const session = trainer.start('functions');
+    const walk = CONTENT.walkthroughs.find((w) => w.questions[0]!.id === session.items[0]!.id)!;
+    expect(session.items.map((i) => i.id)).toEqual(walk.questions.map((q) => q.id));
+    const lines = session.items.map((i) => trainer.question(i.id).line);
+    expect(lines).toEqual([...lines.slice(0, -1).map((_, i) => i + 1), undefined]);
+  });
+
+  it('keeps its own counters and result, apart from the mixed quiz', () => {
+    const { trainer, storage, correctSlot } = setup();
+    const { session, result } = playWalkthrough(trainer, correctSlot, 2);
+    const total = session.items.length;
+    expect(result).toEqual({ lesson: 'functions', score: 2, total });
+    expect(storage.lastResult()).toEqual({ lesson: 'functions', score: 2, total });
+    expect(storage.counters('functions')).toEqual({ sessionsPlayed: 1, bestScore: 2, totalAnswers: total, totalCorrect: 2 });
+    expect(storage.counters()).toEqual(EMPTY_COUNTERS);
+    expect(trainer.walkthroughProgress()).toEqual({ done: 1, total: CONTENT.walkthroughs.length });
+  });
+
+  it('plays every function once before repeating one', () => {
+    const { trainer, correctSlot } = setup();
+    const firsts = CONTENT.walkthroughs.map(() => playWalkthrough(trainer, correctSlot).session.items[0]!.id);
+    expect(new Set(firsts).size).toBe(CONTENT.walkthroughs.length);
+    expect(trainer.walkthroughProgress().done).toBe(CONTENT.walkthroughs.length);
+  });
+
+  it('resumes a walkthrough and resets its counters with the rest', () => {
+    const { trainer, storage, kv, correctSlot } = setup();
+    trainer.start('functions');
+    trainer.answer(correctSlot());
+    expect(setup(kv).trainer.session()).toEqual(trainer.session());
+    storage.resetProgress();
+    expect(storage.counters('functions')).toEqual(EMPTY_COUNTERS);
+    expect(trainer.walkthroughProgress().done).toBe(0);
+  });
+
+  it('reads a last result saved before lessons existed as the mixed quiz', () => {
+    const kv = new MemoryKeyValue();
+    kv.setItem(NAMESPACE + 'lastResult', '{"score":3,"total":10}');
+    expect(new AppStorage(kv, CONTENT).lastResult()).toEqual({ lesson: 'mixed', score: 3, total: 10 });
   });
 });

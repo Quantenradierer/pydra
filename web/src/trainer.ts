@@ -1,3 +1,4 @@
+import type { Content, LessonId, WalkthroughLesson } from './content/lessons.ts';
 import type { Question } from './content/types.ts';
 import {
   advance,
@@ -5,6 +6,8 @@ import {
   buildSession,
   currentItem,
   isCorrect,
+  orderedSession,
+  pickLeastPlayed,
   score,
   type Rng,
   type Session,
@@ -16,8 +19,7 @@ import type { AppStorage, LastResult } from './storage.ts';
 export class Trainer {
   constructor(
     private storage: AppStorage,
-    private questions: readonly Question[],
-    private byId: ReadonlyMap<string, Question>,
+    private content: Content,
     private rng: Rng = Math.random,
     private now: () => Date = () => new Date(),
   ) {}
@@ -32,11 +34,30 @@ export class Trainer {
   }
 
   question(id: string): Question {
-    return this.byId.get(id)!;
+    return this.content.byId.get(id)!;
   }
 
-  start(): Session {
-    const session = buildSession(this.questions, this.rng);
+  /** How often a walkthrough was played to its last question. */
+  private timesPlayed(walkthrough: WalkthroughLesson): number {
+    return this.storage.questionStats()[walkthrough.questions.at(-1)!.id]?.seen ?? 0;
+  }
+
+  /** Walkthroughs played to the end at least once, and how many there are. */
+  walkthroughProgress(): { done: number; total: number } {
+    const { walkthroughs } = this.content;
+    return { done: walkthroughs.filter((w) => this.timesPlayed(w) > 0).length, total: walkthroughs.length };
+  }
+
+  /** Starts a lesson. The functions lesson walks through the function played least often. */
+  start(lesson: LessonId = 'mixed'): Session {
+    const session =
+      lesson === 'mixed'
+        ? buildSession(this.content.questions, this.rng)
+        : orderedSession(
+            lesson,
+            pickLeastPlayed(this.content.walkthroughs, (w) => this.timesPlayed(w), this.rng).questions,
+            this.rng,
+          );
     this.storage.setSession(session);
     this.storage.clearLastResult();
     return session;
@@ -50,7 +71,7 @@ export class Trainer {
     if (next === session) return session;
     const item = currentItem(next);
     const correct = isCorrect(item, this.question(item.id));
-    this.storage.setCounters(recordAnswer(this.storage.counters(), correct));
+    this.storage.setCounters(recordAnswer(this.storage.counters(next.lesson), correct), next.lesson);
     this.storage.setQuestionStats(recordQuestion(this.storage.questionStats(), item.id, correct, this.now()));
     this.storage.setSession(next);
     return next;
@@ -65,8 +86,8 @@ export class Trainer {
       this.storage.setSession(next);
       return next;
     }
-    const result = { score: score(session, this.byId), total: session.items.length };
-    this.storage.setCounters(recordSession(this.storage.counters(), result.score));
+    const result = { lesson: session.lesson, score: score(session, this.content.byId), total: session.items.length };
+    this.storage.setCounters(recordSession(this.storage.counters(session.lesson), result.score), session.lesson);
     this.storage.setLastResult(result);
     this.storage.clearSession();
     return result;

@@ -1,0 +1,135 @@
+{
+  "id": "greet",
+  "code": "def greet(name, greeting=\"Hello\"):\n    if name == \"\":\n        name = \"stranger\"\n    return f\"{greeting}, {name}!\"",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert die Funktion greet mit den Parametern name und greeting; greeting ist \"Hello\", wenn man nichts angibt",
+          "en": "Defines the function greet with the parameters name and greeting; greeting is \"Hello\" unless you pass one"
+        },
+        {
+          "de": "Ruft die Funktion greet auf und gibt \"Hello\" aus",
+          "en": "Calls the function greet and prints \"Hello\""
+        },
+        {
+          "de": "Setzt die Variable greeting für das ganze Programm auf \"Hello\"",
+          "en": "Sets the variable greeting to \"Hello\" for the whole program"
+        },
+        {
+          "de": "Prüft, ob greeting gleich \"Hello\" ist",
+          "en": "Checks whether greeting equals \"Hello\""
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`def` (kurz für define, „festlegen“) legt eine Funktion an: ein Rezept mit Namen, das erst läuft, wenn man es aufruft. Deshalb passiert in dieser Zeile noch nichts Sichtbares.\n\nIn den Klammern stehen die Parameter, Platzhalter für die Zutaten: `name` und `greeting`. `greeting=\"Hello\"` ist ein Standardwert (default): Gibt ein Aufruf nur einen Namen an, ist `greeting` automatisch \"Hello\". Der Doppelpunkt am Ende sagt: Jetzt folgt der eingerückte Körper der Funktion.",
+        "en": "`def` (short for define) creates a function: a named recipe that only runs when you call it. That is why nothing visible happens on this line.\n\nThe brackets hold the parameters, placeholders for the ingredients: `name` and `greeting`. `greeting=\"Hello\"` is a default value: if a call only passes a name, `greeting` is automatically \"Hello\". The colon at the end says: the indented body of the function comes next."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Setzt name auf einen leeren Text",
+          "en": "Sets name to an empty string"
+        },
+        {
+          "de": "Prüft, ob name ein leerer Text ist",
+          "en": "Checks whether name is an empty string"
+        },
+        {
+          "de": "Prüft, ob name ein Leerzeichen enthält",
+          "en": "Checks whether name contains a space"
+        },
+        {
+          "de": "Löscht den Inhalt von name",
+          "en": "Deletes the content of name"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`if` heißt „wenn“: Der eingerückte Block darunter läuft nur, wenn die Bedingung wahr (`True`) ist. `==` vergleicht zwei Werte; ein einzelnes `=` würde dagegen etwas zuweisen.\n\n`\"\"` sind zwei Anführungszeichen ohne etwas dazwischen: eine leere Zeichenkette (`str`), also Text mit null Zeichen. Die Zeile fragt also: „Ist der Name leer?“ Ein Leerzeichen `\" \"` wäre übrigens nicht leer, es ist ein Zeichen.",
+        "en": "`if` means: the indented block below only runs when the condition is true (`True`). `==` compares two values; a single `=` would assign something instead.\n\n`\"\"` is two quotes with nothing in between: an empty string (`str`), text with zero characters. So the line asks: \"Is the name empty?\" A space `\" \"` would not be empty, by the way; it is one character."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Vergleicht name mit \"stranger\"",
+          "en": "Compares name with \"stranger\""
+        },
+        {
+          "de": "Hängt \"stranger\" an den Namen an",
+          "en": "Appends \"stranger\" to the name"
+        },
+        {
+          "de": "Ersetzt den leeren Namen durch \"stranger\"",
+          "en": "Replaces the empty name with \"stranger\""
+        },
+        {
+          "de": "Gibt \"stranger\" sofort als Ergebnis zurück",
+          "en": "Immediately returns \"stranger\" as the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Ein einzelnes `=` ist eine Zuweisung: Der Wert rechts kommt in die Variable links. Der Parameter `name` bekommt also den neuen Text \"stranger\" (Fremder), der alte leere Text ist weg.\n\nDie Zeile ist tiefer eingerückt und gehört damit zum `if`-Block: Sie läuft nur, wenn der Name leer war. Sonst überspringt Python sie. Die Funktion endet hier noch nicht, denn es steht kein `return` da.",
+        "en": "A single `=` is an assignment: the value on the right goes into the variable on the left. So the parameter `name` gets the new text \"stranger\", and the old empty text is gone.\n\nThe line is indented further, so it belongs to the `if` block: it only runs when the name was empty. Otherwise Python skips it. The function does not end here, because there is no `return`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt den Text {greeting}, {name}! wörtlich zurück, mit den geschweiften Klammern",
+          "en": "Returns the text {greeting}, {name}! literally, curly braces included"
+        },
+        {
+          "de": "Zeigt den Text auf dem Bildschirm an, gibt aber nichts zurück",
+          "en": "Prints the text on the screen but returns nothing"
+        },
+        {
+          "de": "Gibt eine Liste aus greeting und name zurück",
+          "en": "Returns a list of greeting and name"
+        },
+        {
+          "de": "Baut einen Text wie \"Hello, Ada!\" und gibt ihn als Ergebnis zurück",
+          "en": "Builds a text like \"Hello, Ada!\" and returns it as the result"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Das `f` vor den Anführungszeichen macht einen f-String (formatierte Zeichenkette): Was in geschweiften Klammern `{}` steht, wird durch den Wert der Variable ersetzt. Mit `greeting = \"Hello\"` und `name = \"Ada\"` entsteht \"Hello, Ada!\".\n\n`return` beendet die Funktion und gibt diesen Text an die Stelle zurück, die sie aufgerufen hat. Angezeigt wird dabei nichts, das würde `print` tun. Der Aufrufer entscheidet, was er mit dem Ergebnis macht.",
+        "en": "The `f` before the quotes makes an f-string (formatted string): whatever is inside curly braces `{}` is replaced by the variable's value. With `greeting = \"Hello\"` and `name = \"Ada\"` you get \"Hello, Ada!\".\n\n`return` ends the function and hands this text back to the place that called it. Nothing is shown on screen here; that would be `print`. The caller decides what to do with the result."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Zeigt einen Gruß an und gibt immer \"Hello\" zurück",
+        "en": "Prints a greeting and always returns \"Hello\""
+      },
+      {
+        "de": "Gibt einen Gruß wie \"Hello, Ada!\" zurück; ohne Namen grüßt sie \"stranger\"",
+        "en": "Returns a greeting like \"Hello, Ada!\"; without a name it greets \"stranger\""
+      },
+      {
+        "de": "Prüft, ob ein Name gültig ist, und gibt True oder False zurück",
+        "en": "Checks whether a name is valid and returns True or False"
+      },
+      {
+        "de": "Fragt den Benutzer nach seinem Namen",
+        "en": "Asks the user for their name"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Alles zusammen: `greet(\"Ada\")` ergibt \"Hello, Ada!\", `greet(\"Ada\", \"Hi\")` ergibt \"Hi, Ada!\", und `greet(\"\")` ergibt \"Hello, stranger!\", weil der leere Name ersetzt wird.\n\nSo liest du eine Funktion: erst die `def`-Zeile (Name und Zutaten), dann den Körper Zeile für Zeile, und am Ende schaust du, was `return` zurückgibt. Nach dem Namen fragt die Funktion niemanden, das würde `input()` tun.",
+      "en": "Putting it together: `greet(\"Ada\")` gives \"Hello, Ada!\", `greet(\"Ada\", \"Hi\")` gives \"Hi, Ada!\", and `greet(\"\")` gives \"Hello, stranger!\" because the empty name is replaced.\n\nThat is how you read a function: first the `def` line (name and ingredients), then the body line by line, and at the end you look at what `return` hands back. The function does not ask anyone for a name; that would be `input()`."
+    }
+  }
+}

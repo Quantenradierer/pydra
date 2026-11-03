@@ -12,8 +12,8 @@ async function expectSummaryHydra(page: Page, score: number) {
 test('plays a full session with feedback and a summary', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'de');
-  await expect(page.getByTestId('stats')).toHaveText('Noch keine Runde gespielt. Leg los!');
-  await page.getByRole('button', { name: 'Start' }).click();
+  await expect(page.getByTestId('stats-mixed')).toHaveText('Noch keine Runde gespielt. Leg los!');
+  await page.getByTestId('start-mixed').click();
 
   let score = 0;
   for (let i = 1; i <= 10; i++) {
@@ -29,7 +29,7 @@ test('plays a full session with feedback and a summary', async ({ page }) => {
     await expect(page.locator('.explanation')).not.toBeEmpty();
     await expect(page.getByTestId('feedback')).toBeFocused();
     await expect(head(page, i - 1)).toHaveAttribute('data-state', correct ? 'slashed' : 'regrown');
-    await page.getByRole('button', { name: i === 10 ? 'Fertig' : 'Weiter' }).click();
+    await page.getByRole('button', { name: i === 10 ? 'Fertig' : 'Weiter', exact: true }).click();
   }
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(`${score} von 10 Köpfen erlegt`);
@@ -46,15 +46,15 @@ test('plays a full session with feedback and a summary', async ({ page }) => {
   expect(Object.keys((await stored(page, 'questionStats')) as object)).toHaveLength(10);
 
   await page.getByRole('button', { name: 'Zur Startseite' }).click();
-  await expect(page.getByTestId('stats')).toHaveText(`1 Runde · Bestwert ${score}/10 · ${score * 10} % richtig`);
+  await expect(page.getByTestId('stats-mixed')).toHaveText(`1 Runde · Bestwert ${score}/10 · ${score * 10} % richtig`);
 
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   await expect(page.locator('.progress')).toHaveText('1/10');
 });
 
 test('slashes the head of a right answer, regrows a wrong one, and restores both after a reload', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   await expect(page.locator('.hydra-head')).toHaveCount(10);
   await expect(head(page, 0)).toHaveAttribute('data-state', 'active');
   await expect(head(page, 1)).toHaveAttribute('data-state', 'idle');
@@ -62,7 +62,7 @@ test('slashes the head of a right answer, regrows a wrong one, and restores both
   await page.locator('.choice').nth(await correctSlot(page)).click();
   await expect(head(page, 0)).toHaveAttribute('data-state', 'slashed');
   await expect(head(page, 0)).toHaveClass(/hydra-strike/);
-  await page.getByRole('button', { name: 'Weiter' }).click();
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
   await expect(head(page, 1)).toHaveAttribute('data-state', 'active');
 
   await page.locator('.choice').nth(((await correctSlot(page)) + 1) % 4).click();
@@ -80,7 +80,7 @@ test('slashes the head of a right answer, regrows a wrong one, and restores both
 
 test('plays again from the summary', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   for (let i = 1; i <= 10; i++) {
     await page.keyboard.press('1');
     await page.keyboard.press('Enter');
@@ -92,7 +92,7 @@ test('plays again from the summary', async ({ page }) => {
 
 test('answers with keys 1-4 and continues with Enter or Space', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   await page.keyboard.press('3');
   const picked = page.locator('.choice').nth(2);
   await expect(picked).toHaveClass(/correct|wrong/);
@@ -115,27 +115,27 @@ test('answers with keys 1-4 and continues with Enter or Space', async ({ page })
 
 test('quits without confirmation and keeps the stats of answered questions', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   await answer(page);
-  await page.getByRole('button', { name: 'Weiter' }).click();
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
   await answer(page);
   await page.getByRole('button', { name: 'Beenden' }).click();
 
-  await expect(page.getByRole('button', { name: 'Start' })).toBeVisible();
+  await expect(page.getByTestId('start-mixed')).toBeVisible();
   expect(await stored(page, 'session')).toBeNull();
   expect(await stored(page, 'counters')).toMatchObject({ sessionsPlayed: 0, totalAnswers: 2 });
 
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Start' })).toBeVisible();
+  await expect(page.getByTestId('start-mixed')).toBeVisible();
 });
 
 test('resumes a session after a reload, on the same screen', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   await answer(page);
-  await page.getByRole('button', { name: 'Weiter' }).click();
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
   await answer(page);
-  await page.getByRole('button', { name: 'Weiter' }).click();
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
 
   // Mid-question: resumes unanswered.
   const prompt = await page.locator('.prompt').textContent();
@@ -154,20 +154,20 @@ test('resumes a session after a reload, on the same screen', async ({ page }) =>
   await expect(page.getByTestId('feedback')).toBeVisible();
   await expect(page.locator('.explanation')).not.toBeEmpty();
   expect(await page.locator('.choice').evaluateAll((els) => els.map((e) => e.className))).toEqual(marked);
-  await page.getByRole('button', { name: 'Weiter' }).click();
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
   await expect(page.locator('.progress')).toHaveText('4/10');
 });
 
 test('discards a saved session that refers to an unknown question', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByTestId('start-mixed').click();
   await page.evaluate(() => {
     const session = JSON.parse(localStorage.getItem('pydra.v1.session')!);
     session.items[0].id = 'removed-01';
     localStorage.setItem('pydra.v1.session', JSON.stringify(session));
   });
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Start' })).toBeVisible();
+  await expect(page.getByTestId('start-mixed')).toBeVisible();
   expect(await stored(page, 'session')).toBeNull();
 });
 
@@ -175,7 +175,7 @@ test('highlights code snippets', async ({ page }) => {
   await page.goto('/');
   // Retry sessions until one shows a snippet (most questions have one).
   for (let attempt = 0; attempt < 10; attempt++) {
-    await page.getByRole('button', { name: 'Start' }).click();
+    await page.getByTestId('start-mixed').click();
     if (await page.locator('pre code.hljs').count()) break;
     await page.getByRole('button', { name: 'Beenden' }).click();
   }

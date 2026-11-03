@@ -11,6 +11,38 @@ when a requirement changes; the code, tests and the other docs follow it.
 - **Audience:** absolute Python beginners.
 - **Form:** an installable PWA that works fully offline, in German (default) and English.
 
+## Lessons
+
+Home offers two lessons. Both use the same quiz screen, answer feedback,
+explanations, hydra, resume and stats rules (below); they differ in which
+questions a session asks.
+
+| Lesson    | Name (de / en)                     | A session                                                               |
+| --------- | ---------------------------------- | ----------------------------------------------------------------------- |
+| `mixed`   | Quiz / Quiz                        | 10 random questions from the 80 (see Quiz session)                      |
+| `functions` | Funktionen lesen / Reading functions | one function read line by line: one question per line, in order, then one about the whole function |
+
+### Reading functions (walkthroughs)
+
+- 3–5 short beginner functions of 4–8 lines each, without blank lines.
+- For every line, in order: "Was macht die markierte Zeile N?" / "What does
+  the highlighted line N do?". The function is shown in full with line
+  numbers; the line asked about is marked (tinted, with a yellow bar and bold
+  text) and named in the prompt, so colour is not the only signal.
+- Last: "Was macht die ganze Funktion?" / "What does the whole function do?",
+  with no line marked.
+- Each step is a normal multiple-choice question: 4 choices (shuffled),
+  one correct, an explanation in the same style as the question bank.
+- A session plays one function; the hydra has one head per step. The
+  function is picked among those played to the end least often, at random
+  among ties, so every function comes up once before any repeats. "Play
+  again" starts the next one.
+- The quiz header shows the lesson name instead of the topic.
+- Data: one JSON file per function in
+  `web/src/content/walkthroughs/<id>.json` (`id`, `code`, `lines` with one
+  step per line incl. its 1-based `line`, `whole`). The prompts and the
+  question ids (`walk-<id>-NN`, `walk-<id>-whole`) are generated.
+
 ## Content
 
 - 80 multiple-choice questions, 10 per topic, in 8 topics:
@@ -56,6 +88,9 @@ when a requirement changes; the code, tests and the other docs follow it.
 
 ## Quiz session
 
+This section describes the `mixed` lesson; the `functions` lesson differs
+only as described under Lessons (number and order of questions, header text).
+
 - A session has 10 questions picked uniformly at random from the 80, with no
   repeats within a session.
 - The choices of each question are shuffled (the answer index is remapped).
@@ -89,6 +124,9 @@ when a requirement changes; the code, tests and the other docs follow it.
   whether the feedback is showing, and resumed automatically on launch without
   a prompt, on the same screen. A saved session that references an unknown
   question id, or fails validation, is silently discarded and Home is shown.
+  The session records its lesson; a walkthrough session must match one
+  function's steps exactly, in order. Sessions saved before lessons existed
+  count as `mixed`.
 
 ### Microcopy
 
@@ -104,10 +142,14 @@ a way home.
 
 ## Screens
 
-- **Home:** title and hydra logo (its necks sway gently), Start button, one
-  stats line in the active language (e.g. "12 sessions · best 9/10 · 74%
-  correct"; a friendly line when no session has been played yet), a gear icon
-  to Settings and a speech-bubble icon to Feedback.
+- **Home:** title and hydra logo (its necks sway gently), one button per
+  lesson (name and one-line description) with its stats line below, in the
+  active language, a gear icon to Settings and a speech-bubble icon to
+  Feedback.
+  - Quiz: e.g. "12 sessions · best 9/10 · 74% correct"; a friendly line when
+    no session has been played yet.
+  - Reading functions: e.g. "2 of 4 functions read · 80% correct"; "No
+    function read yet." before the first answer.
 - **Quiz:** as above.
 - **Summary:** as above.
 - **Settings:**
@@ -132,7 +174,10 @@ defensively: corrupt or foreign data is ignored and never throws.
 
 - language;
 - the in-progress session;
-- lifetime counters: sessions played, best score, total answers, total correct;
+- lifetime counters per lesson: sessions played, best score, total answers,
+  total correct (`counters` for the quiz, `counters.functions` for reading
+  functions);
+- the last result (lesson, score, total) for the summary;
 - per-question stats `{ seen, correct, lastSeen }` keyed by question id
   (collected now, not yet used to pick questions);
 - the feedback queue.

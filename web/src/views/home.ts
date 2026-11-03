@@ -1,4 +1,5 @@
 import type { App, Screen } from '../app.ts';
+import { LESSONS, type LessonId } from '../content/lessons.ts';
 import { h, svg } from '../dom.ts';
 import { logoArt } from '../hydra/view.ts';
 import { GEAR, SPEECH_BUBBLE } from '../icons.ts';
@@ -7,15 +8,45 @@ import { percentCorrect } from '../stats.ts';
 export function homeScreen(app: App): Screen {
   const { t } = app;
   const { storage, trainer } = app.services;
-  const counters = storage.counters();
-  const stats =
-    counters.sessionsPlayed === 0
+
+  /** One stats line per lesson, in the active language. */
+  function stats(lesson: LessonId): string {
+    const counters = storage.counters(lesson);
+    if (lesson === 'functions') {
+      const { done, total } = trainer.walkthroughProgress();
+      return counters.totalAnswers === 0
+        ? t('home.walk.noStats')
+        : t('home.walk.stats', { done, total, percent: percentCorrect(counters) });
+    }
+    return counters.sessionsPlayed === 0
       ? t('home.noStats')
       : t(counters.sessionsPlayed === 1 ? 'home.stats.one' : 'home.stats.other', {
           sessions: counters.sessionsPlayed,
           best: counters.bestScore,
           percent: percentCorrect(counters),
         });
+  }
+
+  const lessonCard = (lesson: LessonId) =>
+    h(
+      'li',
+      { class: 'lesson' },
+      h(
+        'button',
+        {
+          class: 'primary start',
+          'data-testid': `start-${lesson}`,
+          'aria-describedby': `stats-${lesson}`,
+          onclick: () => {
+            trainer.start(lesson);
+            app.navigate('quiz');
+          },
+        },
+        h('span', { class: 'lesson-title' }, t(`lesson.${lesson}.title`)),
+        h('span', { class: 'lesson-description' }, t(`lesson.${lesson}.description`)),
+      ),
+      h('p', { class: 'stats', id: `stats-${lesson}`, 'data-testid': `stats-${lesson}` }, stats(lesson)),
+    );
 
   const iconButton = (label: string, icon: string, onclick: () => void, testId: string) =>
     h('button', { class: 'icon-button', 'aria-label': label, title: label, 'data-testid': testId, onclick }, svg(icon));
@@ -32,18 +63,7 @@ export function homeScreen(app: App): Screen {
     logoArt(),
     h('h1', { tabindex: -1 }, 'Pydra'),
     h('p', { class: 'tagline' }, t('app.tagline')),
-    h(
-      'button',
-      {
-        class: 'primary start',
-        onclick: () => {
-          trainer.start();
-          app.navigate('quiz');
-        },
-      },
-      t('home.start'),
-    ),
-    h('p', { class: 'stats', 'data-testid': 'stats' }, stats),
+    h('ul', { class: 'lessons', 'aria-label': t('home.lessons') }, ...LESSONS.map(lessonCard)),
   );
   return { root };
 }

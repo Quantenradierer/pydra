@@ -27,4 +27,27 @@ export interface Question {
   choices: Localized[];
   answerIndex: 0 | 1 | 2 | 3;
   explanation: Localized;
+  /** Walkthrough steps only: the 1-based line of `code` the question is about, highlighted. */
+  line?: number;
+}
+
+/** One multiple-choice step of a walkthrough; the prompt is generated. */
+export interface WalkthroughStep {
+  /** Exactly four choices. */
+  choices: Localized[];
+  answerIndex: 0 | 1 | 2 | 3;
+  explanation: Localized;
+}
+
+/**
+ * A function read line by line: one step per line, in order, then one step
+ * about the whole function. Stored in content/walkthroughs/<id>.json.
+ */
+export interface Walkthrough {
+  /** Stable, e.g. "count-vowels"; the step question ids are derived from it. */
+  id: string;
+  /** The function's source, the same in every language, without blank lines. */
+  code: string;
+  lines: (WalkthroughStep & { line: number })[];
+  whole: WalkthroughStep;
 }

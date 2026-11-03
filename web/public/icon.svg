@@ -12,6 +12,8 @@
       <path d="M26-13v8M76-9h0" stroke="#14202E" stroke-width="5" stroke-linecap="round"/>
     </g>
   </defs>
+  <path d="M80 408 C92 352 170 336 256 336S420 352 432 408Z" fill="#1F3E5E"/>
+  <path d="M424 404C438 380 462 378 456 340C472 362 476 388 458 408Z" fill="#3776AB"/>
   <g class="neck" style="transform-origin: 200px 380px">
     <path d="M200 380C160 350 170 312 136 286S96 266 112 250" fill="none" stroke="#3776AB" stroke-width="34" stroke-linecap="round"/>
     <g transform="translate(112 250) scale(-1.3 1.3) rotate(20)">
@@ -48,7 +50,6 @@
       <use href="#hydra-eye" fill="#FFD43B"/>
     </g>
   </g>
-  <path d="M140 424C138 372 190 340 246 340 304 340 336 370 372 396 398 414 428 410 440 388 448 372 444 356 432 348 458 350 476 380 462 412 446 448 400 458 340 456H176C154 456 140 444 140 424Z" fill="#3776AB"/>
-  <path d="M168 440C220 446 300 446 380 440" fill="none" stroke="#FFD43B" stroke-width="14" stroke-dasharray="20.4 7"/>
+  <path d="M44 404q10-7 20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0V428Q472 468 424 468H92Q44 468 44 428Z" fill="#1D3550"/>
 </g>
 </svg>

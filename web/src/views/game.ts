@@ -30,7 +30,10 @@ function program(level: GameLevel, filled?: string): { root: HTMLPreElement; lin
       line.innerHTML = highlight(text);
       return line;
     }
-    const gap = h('span', { class: filled === undefined ? 'gap' : 'gap filled', 'data-testid': 'gap' });
+    const gap = h('span', {
+      class: filled === undefined ? 'gap' : 'gap filled',
+      'data-testid': 'gap',
+    });
     if (filled === undefined) gap.textContent = GAP;
     else gap.innerHTML = highlight(filled);
     // highlight.js escapes the source, so its HTML output is safe to insert.
@@ -41,7 +44,10 @@ function program(level: GameLevel, filled?: string): { root: HTMLPreElement; lin
   });
   const code = h('code', { class: 'hljs language-python' });
   for (const [i, line] of lines.entries()) code.append(...(i === 0 ? [line] : ['\n', line]));
-  return { root: h('pre', { class: 'code numbered program', 'data-testid': 'program' }, code), lines };
+  return {
+    root: h('pre', { class: 'code numbered program', 'data-testid': 'program' }, code),
+    lines,
+  };
 }
 
 export function gameScreen(app: App): Screen {
@@ -84,12 +90,24 @@ export function gameScreen(app: App): Screen {
 
   // ---------------------------------------------------------------- run controls
   const position = h('p', { class: 'run-position', 'data-testid': 'run-position' }, t('game.idle'));
-  const control = (label: MessageKey, onclick: () => void, testId: string) =>
-    h('button', { class: 'run-control', 'data-testid': testId, disabled: true, onclick }, t(label));
-  const restart = control('game.restart', () => go(0, true), 'run-restart');
-  const playPause = control('game.play', () => (timer === undefined ? play() : pause()), 'run-play');
-  const step = control('game.step', () => (pause(), go(index + 1)), 'run-step');
-  const toEnd = control('game.end', () => (pause(), go(Infinity)), 'run-end');
+  // Slim icon buttons; the words are their accessible names and tooltips.
+  const control = (label: MessageKey, glyph: string, onclick: () => void, testId: string) =>
+    h(
+      'button',
+      {
+        class: 'run-control',
+        'data-testid': testId,
+        disabled: true,
+        onclick,
+        'aria-label': t(label),
+        title: t(label),
+      },
+      glyph,
+    );
+  const restart = control('game.restart', '↺', () => go(0, true), 'run-restart');
+  const playPause = control('game.play', '▶', () => (timer === undefined ? play() : pause()), 'run-play');
+  const step = control('game.step', '→', () => (pause(), go(index + 1)), 'run-step');
+  const toEnd = control('game.end', '⇥', () => (pause(), go(Infinity)), 'run-end');
   const vars = h('p', { class: 'vars', 'data-testid': 'vars' });
 
   let code = program(level, state.solved ? level.choices[level.answerIndex]!.code : undefined);
@@ -105,42 +123,66 @@ export function gameScreen(app: App): Screen {
       h('span', { class: 'mark' }),
     ),
   );
-  const feedback = h('section', { class: 'feedback', 'aria-live': 'polite', tabindex: -1, 'data-testid': 'feedback' });
+  const feedback = h('section', {
+    class: 'feedback',
+    'aria-live': 'polite',
+    tabindex: -1,
+    'data-testid': 'feedback',
+  });
+  // Until a run has ended, the feedback slot shows the task, so no extra line is needed for it.
+  feedback.dataset.task = t('game.task');
 
   const heading = h('h2', { class: 'level-title', tabindex: -1 }, `${t('game.level', { n: levelIndex + 1 })}: ${level.title[lang]}`);
   const root = h(
     'main',
     { class: 'screen game' },
-    subpageHeader(app, t('lesson.game.title')),
-    strip,
-    heading,
-    h('div', { class: 'intro' }, ...richText(level.intro[lang])),
+    h('div', { class: 'game-bar' }, subpageHeader(app, t('lesson.game.title')), strip),
     h(
       'div',
       { class: 'stage', 'data-testid': 'stage' },
-      pool.root,
+      h(
+        'div',
+        {
+          class: 'arena-box',
+          style: `--ratio: ${(world.width * 10 + 2) / (world.height * 10 + 2)}`,
+        },
+        pool.root,
+        h(
+          'details',
+          { class: 'info' },
+          h('summary', {}, heading),
+          h(
+            'div',
+            { class: 'info-body' },
+            h('div', { class: 'intro' }, ...richText(level.intro[lang])),
+            h('p', { class: 'info-commands' }, t('game.commands')),
+            h('dl', {}, ...COMMANDS.flatMap(([name, key]) => [h('dt', {}, h('code', {}, name)), h('dd', {}, ...richText(t(key)))])),
+          ),
+        ),
+      ),
       h(
         'div',
         { class: 'run' },
         position,
-        h('div', { class: 'run-controls', role: 'group', 'aria-label': t('game.controls') }, restart, playPause, step, toEnd),
+        h(
+          'div',
+          {
+            class: 'run-controls',
+            role: 'group',
+            'aria-label': t('game.controls'),
+          },
+          restart,
+          playPause,
+          step,
+          toEnd,
+        ),
       ),
       codeSlot,
       vars,
     ),
-    h('p', { class: 'prompt', id: 'game-task' }, t('game.task')),
+    h('p', { class: 'prompt sr-only', id: 'game-task' }, t('game.task')),
     h('div', { class: 'choices', role: 'group', 'aria-labelledby': 'game-task' }, ...choiceButtons),
     feedback,
-    h(
-      'details',
-      { class: 'commands' },
-      h('summary', {}, t('game.commands')),
-      h(
-        'dl',
-        {},
-        ...COMMANDS.flatMap(([name, key]) => [h('dt', {}, h('code', {}, name)), h('dd', {}, ...richText(t(key)))]),
-      ),
-    ),
   );
 
   // ---------------------------------------------------------------- the run
@@ -188,7 +230,10 @@ export function gameScreen(app: App): Screen {
     playPause.disabled = disabled || last;
     step.disabled = disabled || last;
     toEnd.disabled = disabled || last;
-    playPause.textContent = timer === undefined ? t('game.play') : t('game.pause');
+    const label = timer === undefined ? t('game.play') : t('game.pause');
+    playPause.textContent = timer === undefined ? '▶' : '❚❚';
+    playPause.setAttribute('aria-label', label);
+    playPause.title = label;
   }
 
   function go(to: number, resume = false) {
@@ -246,7 +291,10 @@ export function gameScreen(app: App): Screen {
       case 'missed':
         return t(outcome.left === 1 ? 'game.outcome.missed.one' : 'game.outcome.missed.other', { left: outcome.left });
       case 'error':
-        return t('game.outcome.error', { line: outcome.line, message: outcome.message });
+        return t('game.outcome.error', {
+          line: outcome.line,
+          message: outcome.message,
+        });
     }
   }
 
@@ -272,7 +320,14 @@ export function gameScreen(app: App): Screen {
     finishedShown = true;
     const choice = level.choices[running]!;
     const right = running === level.answerIndex;
-    const verdict = h('p', { class: `verdict ${right ? 'correct' : 'wrong'}`, 'data-testid': 'outcome' }, outcomeText(trace.outcome));
+    const verdict = h(
+      'p',
+      {
+        class: `verdict ${right ? 'correct' : 'wrong'}`,
+        'data-testid': 'outcome',
+      },
+      outcomeText(trace.outcome),
+    );
     const parts: Node[] = [verdict, h('div', { class: 'explanation' }, ...richText(choice.note[lang]))];
     if (!right && !state.solved) parts.push(h('p', { class: 'try-again' }, t('game.tryAgain')));
     if (state.solved) parts.push(h('p', { class: 'compare' }, t('game.compare')));
@@ -309,8 +364,8 @@ export function gameScreen(app: App): Screen {
     state = game.pick(slot) ?? state;
     if (state.solved) strip.querySelector('[aria-current]')?.classList.add('solved');
     run(choice, true, !seen);
-    // On a phone the arena sits at the top: make sure the run can be watched.
-    root.querySelector('.stage')!.scrollIntoView?.({ block: 'nearest' });
+    // The level info is a drop-down over the arena: close it so the run can be watched.
+    root.querySelector('.info')?.removeAttribute('open');
   }
 
   function onKey(event: KeyboardEvent) {

@@ -1206,67 +1206,279 @@ textarea {
   color: var(--fg);
 }
 
-/* Phones: the arena, the run controls and the running code stay pinned while the answers scroll beneath. */
-@media (max-width: 699px) {
-  .game .stage {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    padding: 0.4rem 0;
-    gap: 0.3rem;
-    background: var(--bg);
-    box-shadow: 0 6px 6px -6px rgb(0 0 0 / 0.4);
-  }
+/*
+ * The game screen fills the visible viewport (dvh follows the mobile browser
+ * chrome) and never scrolls: a slim bar, the arena, the run controls, the code
+ * and the answers all stay in view. Everything else is minimal or collapsed.
+ */
+#app:has(.game) {
+  max-width: 640px;
+  padding: max(0.35rem, env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-right)) max(0.4rem, env(safe-area-inset-bottom))
+    max(0.5rem, env(safe-area-inset-left));
+}
 
-  .game .arena {
-    max-height: 5.5rem;
-  }
+.game {
+  height: calc(100dvh - max(0.35rem, env(safe-area-inset-top)) - max(0.4rem, env(safe-area-inset-bottom)));
+  gap: 0.3rem;
+  overflow: hidden;
+}
 
-  .game .run-position {
-    font-size: 0.8rem;
-    line-height: 1.2;
-  }
+.game > * {
+  flex: none;
+}
 
-  .game .run-control {
-    padding: 0.2rem;
-    min-height: 2.2rem;
-    font-size: 0.8rem;
-  }
+.game button {
+  min-height: 0;
+  padding: 0.2rem 0.5rem;
+}
 
-  .game .program {
-    max-height: 4.6rem;
-    margin: 0;
-    padding: 0.3rem 0.5rem 0.3rem 0;
-    font-size: 0.8rem;
-    line-height: 1.35;
-  }
+.game-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
 
-  .game .vars {
-    font-size: 0.8rem;
-    line-height: 1.2;
-  }
+.game-bar .subpage-header {
+  flex: none;
+  margin: 0;
+}
 
-  .game .choices {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.4rem;
-  }
+.game-bar .subpage-header h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
 
-  .game .choice {
-    min-height: 2.75rem;
-    padding: 0.3rem 0.5rem;
-    gap: 0.4rem;
-    font-size: 0.8rem;
-  }
+.game .icon-button {
+  width: 2.25rem;
+  height: 2.25rem;
+}
 
-  .game .choice .text {
-    overflow-wrap: normal;
-    white-space: normal;
-  }
+.game .level-strip {
+  flex: 1;
+  min-width: 0;
+  gap: 0.3rem;
+  padding: 0;
+  scrollbar-width: none;
+}
 
-  .game .choice .key {
-    width: 1.4rem;
-    height: 1.4rem;
-    font-size: 0.75rem;
-  }
+.game .level-dot {
+  min-width: 2.1rem;
+  width: 2.1rem;
+  height: 2.1rem;
+  min-height: 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.game .arena-box {
+  position: relative;
+  width: 100%;
+  max-width: calc(40dvh * var(--ratio));
+  margin: 0 auto;
+}
+
+/* The level title and intro sit on the arena's corner and drop down over it when opened. */
+.info {
+  position: absolute;
+  z-index: 10;
+  top: 0.35rem;
+  left: 0.35rem;
+  right: 0.35rem;
+  pointer-events: none;
+}
+
+.info summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 100%;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1rem;
+  background: rgb(10 20 32 / 0.72);
+  color: #e8eef5;
+  cursor: pointer;
+  pointer-events: auto;
+  font-size: 0.75rem;
+}
+
+.info summary .level-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+}
+
+.info summary::after {
+  content: '▾';
+}
+
+.info[open] summary::after {
+  content: '▴';
+}
+
+.info-body {
+  position: absolute;
+  z-index: 10;
+  inset: 100% 0 auto;
+  margin-top: 0.3rem;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 50dvh;
+  overflow-y: auto;
+  padding: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.35);
+  font-size: 0.9rem;
+}
+
+.info-body dl,
+.info-body dd {
+  margin: 0;
+}
+
+.info-commands {
+  font-weight: 600;
+}
+
+.info-body dt {
+  margin-top: 0.3rem;
+}
+
+.game .stage {
+  gap: 0.3rem;
+}
+
+.game .arena {
+  width: 100%;
+  height: auto;
+  max-height: none;
+}
+
+.game .run {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.game .run-position {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.game .run-controls {
+  flex: none;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.game .run-control {
+  width: 2.6rem;
+  height: 2.2rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.game .program-slot {
+  display: flex;
+  flex-direction: column;
+}
+
+.game .program {
+  max-height: 28dvh;
+  margin: 0;
+  padding: 0.3rem 0;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow: auto;
+}
+
+.game .code.numbered .line::before {
+  width: 1.6rem;
+  margin-right: 0.5rem;
+}
+
+.game .vars {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.game .choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+
+.game .choice {
+  min-height: 2.3rem;
+  padding: 0.15rem 0.4rem;
+  gap: 0.35rem;
+  border-width: 2px;
+  font-size: 0.85rem;
+}
+
+.game .choice .text {
+  overflow-wrap: break-word;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.game .choice .key {
+  width: 1.3rem;
+  height: 1.3rem;
+  font-size: 0.7rem;
+}
+
+.game .choice .mark {
+  width: 1.1rem;
+}
+
+.game .choice .mark:empty {
+  display: none;
+}
+
+/* One slot below the answers: the task before a run, then verdict, explanation and next button. */
+.game .feedback {
+  flex: 1 1 0;
+  min-height: 2.6rem;
+  overflow-y: auto;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.game .feedback:empty {
+  display: block;
+}
+
+.game .feedback:empty::before {
+  content: attr(data-task);
+  color: var(--muted);
+}
+
+.game .verdict {
+  font-size: 0.9rem;
+}
+
+.game .explanation {
+  gap: 0.3rem;
+}
+
+.game .next {
+  min-height: 2.4rem;
 }

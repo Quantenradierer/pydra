@@ -109,5 +109,7 @@ test('on a phone the level buttons stay on one line and the arena stays in view 
   expect(arena!.y).toBeGreaterThanOrEqual(0);
   expect(arena!.y + arena!.height).toBeLessThanOrEqual(641);
   expect(last!.y + last!.height).toBeLessThanOrEqual(641);
+  expect(arena!.width).toBeGreaterThan(300); // the arena fills the width
+  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(640); // nothing scrolls
   await page.screenshot({ path: 'test-results/game-phone.png' });
 });

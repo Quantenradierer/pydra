@@ -86,7 +86,17 @@ questions a session asks.
   return values. A strip of level buttons on the game screen (always one line, scrolling
   sideways with the current level in view) opens every solved level and the
   first unsolved one; a solved level replays from
-  scratch. A collapsible list explains the hydra's commands.
+  scratch. The level title is a small pill on the arena's corner; tapping it
+  drops down the intro and the list of the hydra's commands.
+- Layout: the game screen fills the visible viewport (`dvh`, safe-area
+  insets) and never scrolls, on phones (360×640 up to 412×915) and desktop:
+  a slim bar (back button + one-line level strip), the arena as large as
+  fits (up to 40 % of the height, full width), one row with the step text
+  and four icon buttons (restart, play/pause, step, to the end; the words
+  are their labels), the code (readable, the running line kept in view),
+  a one-line variables list, the answers in a 2×2 grid and one slot below
+  them that shows the task first, then verdict, explanation and "next"
+  (scrolls inside itself if long).
 - The programs run in a small interpreter for a Python subset
   (`web/src/game/python.ts`: ints, bools, arithmetic, comparisons,
   `not`/`and`/`or`, assignment, `+=`/`-=`, `if`/`elif`/`else`, `while`,
@@ -346,7 +356,7 @@ Hono on Node 24 with `node:sqlite`. API types and validation live in
       marked before it is picked, tried answers survive a reload, every
       answer stays pickable and replays after solving change no score;
     - the game speed setting, and a 360×640 phone: one-line level strip,
-      arena and answers visible together;
+      arena, code and answers visible together without scrolling;
     - keyboard;
     - Quit;
     - auto-resume;

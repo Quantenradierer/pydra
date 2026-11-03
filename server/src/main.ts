@@ -13,7 +13,21 @@ mkdirSync(dataDir, { recursive: true });
 const feedback = new FeedbackStore(join(dataDir, 'feedback.db'));
 if (!feedbackToken) console.warn('FEEDBACK_TOKEN is not set: GET /api/feedback is disabled.');
 
-const app = createApp({ staticDir, feedback, feedbackToken });
+function positiveInt(value: string | undefined): number | undefined {
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 ? n : undefined;
+}
+
+const openaiKey = process.env.OPENAI_API_KEY ?? '';
+if (!openaiKey) console.warn('OPENAI_API_KEY is not set: POST /api/ask answers 503.');
+
+const app = createApp({ staticDir, feedback, feedbackToken, ask: {
+    apiKey: openaiKey,
+    model: process.env.OPENAI_MODEL,
+    rateLimit: positiveInt(process.env.ASK_RATE_LIMIT),
+    dailyLimit: positiveInt(process.env.ASK_DAILY_LIMIT),
+  },
+});
 
 const server = serve({ fetch: app.fetch, port }, (info) => {
   console.log(`Pydra listening on port ${info.port}`);

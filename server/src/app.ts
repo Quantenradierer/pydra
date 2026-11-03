@@ -3,7 +3,8 @@ import { Hono, type Context } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { getConnInfo } from '@hono/node-server/conninfo';
-import { APP_NAME, FEEDBACK_PATH, validateFeedback, type ApiError } from '@pydra/shared';
+import { APP_NAME, ASK_LIMITS, ASK_PATH, FEEDBACK_PATH, validateAsk, validateFeedback, type ApiError, type AskError } from '@pydra/shared';
+import { ASK_DAY_MS, ASK_WINDOW_MS, DEFAULT_ASK_DAILY_LIMIT, DEFAULT_ASK_RATE_LIMIT, askTutor, type AskConfig } from './ask.ts';
 import type { FeedbackStore } from './feedback-store.ts';
 import { RateLimiter } from './rate-limit.ts';
 
@@ -20,6 +21,8 @@ export interface AppOptions {
   feedback?: FeedbackStore;
   /** Bearer token for reading feedback; reading is disabled when empty. */
   feedbackToken?: string;
+  /** OpenAI settings for POST /api/ask. */
+  ask?: AskConfig;
   now?: () => Date;
 }
 
@@ -54,6 +57,9 @@ export function createApp(options: AppOptions = {}): Hono {
   const error = (c: Context, status: 400 | 401 | 413 | 429, code: ApiError['error']) =>
     c.json<ApiError>({ error: code }, status);
 
+  const askPerIp = new RateLimiter(options.ask?.rateLimit ?? DEFAULT_ASK_RATE_LIMIT, ASK_WINDOW_MS, () => now().getTime());
+  const askDaily = new RateLimiter(options.ask?.dailyLimit ?? DEFAULT_ASK_DAILY_LIMIT, ASK_DAY_MS, () => now().getTime());
+
   const feedback = options.feedback;
 
   app.get('/api/health', (c) => {
@@ -85,6 +91,24 @@ export function createApp(options: AppOptions = {}): Hono {
       return c.json(feedback.list());
     });
   }
+
+  // Capped to protect the OpenAI bill: per client IP, plus a global daily cap.
+  app.post(
+    ASK_PATH,
+    bodyLimit({ maxSize: ASK_LIMITS.body, onError: (c) => c.json<AskError>({ error: 'too-long' }, 413) }),
+    async (c) => {
+      if (!options.ask?.apiKey) return c.json<AskError>({ error: 'not-configured' }, 503);
+      const body: unknown = await c.req.json().catch(() => null);
+      const req = validateAsk(body);
+      if ('error' in req) return c.json<AskError>(req, req.error === 'too-long' ? 413 : 400);
+      if (!askPerIp.allow(clientIp(c)) || !askDaily.allow('all')) {
+        return c.json<AskError>({ error: 'rate-limited' }, 429);
+      }
+      const stream = await askTutor(options.ask, req);
+      if (!stream) return c.json<AskError>({ error: 'upstream' }, 502);
+      return c.body(stream, 200, { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' });
+    },
+  );
 
   app.all('/api/*', (c) => c.json({ error: 'not-found' }, 404));
 

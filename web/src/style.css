@@ -843,3 +843,92 @@ textarea {
     justify-content: center;
   }
 }
+
+/* Ask about this question */
+.ask {
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.5rem 0.9rem;
+}
+
+.ask summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.4rem 0;
+}
+
+.ask[open] summary {
+  margin-bottom: 0.4rem;
+}
+
+.chat-intro,
+.chat-status {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.chat-status:empty {
+  display: none;
+}
+
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0.6rem 0;
+}
+
+.chat-log:empty {
+  display: none;
+}
+
+.chat-msg {
+  max-width: 92%;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius);
+  overflow-wrap: anywhere;
+}
+
+.chat-msg.user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.chat-msg.assistant {
+  align-self: flex-start;
+  background: var(--code-bg);
+  color: var(--code-fg);
+}
+
+.chat-msg p {
+  margin: 0.3rem 0;
+}
+
+.chat-code {
+  margin: 0.4rem 0;
+  padding: 0.5rem;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: var(--surface);
+  font-size: 0.9rem;
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.chat-input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--bg);
+  color: var(--fg);
+}

@@ -5,6 +5,7 @@ import { sessionHeads } from '../hydra/heads.ts';
 import { hydra } from '../hydra/view.ts';
 import { CHECK, CROSS } from '../icons.ts';
 import { richText } from '../rich-text.ts';
+import { askPanel } from './ask.ts';
 import { currentItem, isLastQuestion, present } from '../session.ts';
 
 /** Keys typed into these belong to them, not to the quiz shortcuts. */
@@ -38,6 +39,15 @@ export function quizScreen(app: App): Screen {
   const next = h('button', { class: 'primary next', onclick: () => goNext() }, isLastQuestion(session) ? t('quiz.finish') : t('quiz.next'));
   const feedback = h('section', { class: 'feedback', 'aria-live': 'polite', tabindex: -1, 'data-testid': 'feedback' });
 
+  const ask = askPanel(app, () => {
+    const picked = currentItem(session).picked;
+    return {
+      prompt: question.prompt[lang],
+      ...(question.code === undefined ? {} : { code: question.code }),
+      choices: choices.map((c) => c[lang]),
+      ...(picked === null ? {} : { answered: { picked, correct: answerIndex, explanation: question.explanation[lang] } }),
+    };
+  });
   const heading = h('h1', { class: 'prompt', id: 'prompt', tabindex: -1 }, question.prompt[lang]);
   const heads = hydra(sessionHeads(session, (id) => trainer.question(id)));
   const root = h(
@@ -58,6 +68,7 @@ export function quizScreen(app: App): Screen {
     question.code === undefined ? null : codeBlock(question.code, { numbered: walkthrough, focusLine: question.line }),
     h('div', { class: 'choices', role: 'group', 'aria-labelledby': 'prompt' }, ...choiceButtons),
     feedback,
+    ask.root,
   );
 
   /** Locks the choices and shows right/wrong with icons, text and explanation. */
@@ -120,6 +131,9 @@ export function quizScreen(app: App): Screen {
   return {
     root,
     focus: picked === null ? heading : feedback,
-    dispose: () => document.removeEventListener('keydown', onKey),
+    dispose: () => {
+      document.removeEventListener('keydown', onKey);
+      ask.dispose();
+    },
   };
 }

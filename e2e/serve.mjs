@@ -14,4 +14,5 @@ cpSync(join(root, 'web/dist'), STATIC_COPY, { recursive: true });
 process.env.DATA_DIR = mkdtempSync(join(tmpdir(), 'pydra-e2e-data-'));
 process.env.STATIC_DIR = STATIC_COPY;
 process.env.FEEDBACK_TOKEN = 'e2e-token';
+process.env.OPENAI_API_KEY = ''; // the e2e tests mock /api/ask in the browser
 await import(join(root, 'server/dist/main.js'));

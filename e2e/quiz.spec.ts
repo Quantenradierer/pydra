@@ -181,3 +181,55 @@ test('highlights code snippets', async ({ page }) => {
   }
   await expect(page.locator('pre code.hljs').locator('[class^=hljs-]').first()).toBeVisible();
 });
+
+test.describe('ask about this question', () => {
+  test('chats with the tutor, hides the answer until answered, resets per question', async ({ page }) => {
+    const bodies: { question: { answered?: unknown }; messages: unknown[] }[] = [];
+    await page.route('**/api/ask', async (route) => {
+      bodies.push(route.request().postDataJSON());
+      await route.fulfill({ contentType: 'text/plain', body: 'Think of `print` as **showing** things.' });
+    });
+    await page.goto('/');
+    await page.getByTestId('start-mixed').click();
+
+    await page.getByTestId('ask').locator('summary').click();
+    const input = page.locator('.chat-input');
+    await input.fill('Was macht print?');
+    await input.press('Enter');
+    await expect(page.locator('.chat-msg.assistant')).toContainText('Think of print as');
+    expect(bodies[0]!.question.answered).toBeUndefined();
+
+    await answer(page, 0);
+    await input.fill('Und warum?');
+    await page.locator('.chat-form button').click();
+    await expect(page.locator('.chat-msg.assistant')).toHaveCount(2);
+    expect(bodies[1]!.question.answered).toBeTruthy();
+    expect(bodies[1]!.messages).toHaveLength(3);
+
+    await page.getByRole('button', { name: 'Weiter', exact: true }).click();
+    await expect(page.locator('.progress')).toHaveText('2/10');
+    await expect(page.locator('.chat-msg')).toHaveCount(0);
+  });
+
+  test('shows a clear message when the tutor is not configured', async ({ page }) => {
+    await page.goto('/');
+    await page.getByTestId('start-mixed').click();
+    await page.getByTestId('ask').locator('summary').click();
+    await page.locator('.chat-input').fill('Hilfe');
+    await page.locator('.chat-form button').click();
+    await expect(page.getByTestId('ask-status')).toHaveText('Der Tutor ist gerade nicht verfügbar.');
+    await expect(page.locator('.chat-input')).toHaveValue('Hilfe');
+  });
+
+  test('is disabled while offline', async ({ page, context }) => {
+    await page.goto('/');
+    await page.getByTestId('start-mixed').click();
+    await page.getByTestId('ask').locator('summary').click();
+    await page.locator('.chat-input').fill('Hilfe');
+    await context.setOffline(true);
+    await expect(page.locator('.chat-form button')).toBeDisabled();
+    await expect(page.getByTestId('ask-status')).toContainText('Offline');
+    await context.setOffline(false);
+    await expect(page.locator('.chat-form button')).toBeEnabled();
+  });
+});

@@ -49,8 +49,10 @@ npm run dev          # Vite dev server; proxies /api to port 3000
 | `npm run check`    | TypeScript in all workspaces and e2e               |
 | `npm test`         | Vitest unit tests                                  |
 | `npm run build`    | Builds `web/dist` and `server/dist/main.js`        |
-| `npm start`        | Serves the build (`STATIC_DIR`, `DATA_DIR`, `PORT`, `FEEDBACK_TOKEN`) |
+| `npm start`        | Serves the build (`STATIC_DIR`, `DATA_DIR`, `PORT`, `FEEDBACK_TOKEN`, `OPENAI_API_KEY`, ...) |
 | `npm run test:e2e` | Playwright e2e tests (run `npm run build` first)   |
+
+For local development, put `OPENAI_API_KEY=…` in a git-ignored `.env` in the repo root; `npm start` reads it. Never commit it.
 
 The first time you run the e2e tests, install the browser with `npx playwright install chromium`.
 
@@ -147,4 +149,5 @@ Each function of the "Reading functions" lesson lives in
 | ------------------------ | ---------------------------------------------------------------------------- |
 | `POST /api/feedback` `{ "text": "…" }` | Stores anonymous feedback: 1–2000 characters, at most 5 per minute per IP. |
 | `GET /api/feedback`      | Returns all entries, newest first. Needs `Authorization: Bearer $FEEDBACK_TOKEN`; disabled when the token is empty. |
+| `POST /api/ask` | Chat with an AI tutor about one question (streams plain text). Body: `lang`, `question` (prompt, code, choices, and `answered` only after the user answered), `messages`. Needs `OPENAI_API_KEY` (503 otherwise); `OPENAI_MODEL` (default `gpt-5-mini`). Capped: `ASK_RATE_LIMIT` per IP per 10 minutes (default 30) and `ASK_DAILY_LIMIT` over all clients per 24 hours (default 1000), then 429; 64 KB body, 2000 characters per message. |
 | `GET /api/health`        | Returns `{ "ok": true, "app": "Pydra" }` when SQLite answers.                 |

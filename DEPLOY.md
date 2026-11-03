@@ -38,6 +38,9 @@ https://pydra.quantenradierer.de/.
    ```sh
    FEEDBACK_TOKEN=<long random string, e.g. from `openssl rand -hex 32`>
    # optional: HOST_PORT=3001, WATCHTOWER_POLL_INTERVAL=300
+   # "Ask about this question" chat (answers 503 while the key is unset):
+   OPENAI_API_KEY=<OpenAI API key>
+   # optional: OPENAI_MODEL=gpt-5-mini, ASK_RATE_LIMIT=30 (per IP per 10 min), ASK_DAILY_LIMIT=1000 (all clients per 24 h)
    ```
 
 2. Rootless Docker has its socket at `/run/user/1005/docker.sock`, not

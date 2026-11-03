@@ -12,6 +12,10 @@ services:
       - "127.0.0.1:${HOST_PORT:-3001}:3000"
     environment:
       FEEDBACK_TOKEN: ${FEEDBACK_TOKEN:?set FEEDBACK_TOKEN in .env}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      ASK_RATE_LIMIT: ${ASK_RATE_LIMIT:-}
+      ASK_DAILY_LIMIT: ${ASK_DAILY_LIMIT:-}
     volumes:
       - pydra-data:/data
     labels:

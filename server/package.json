@@ -1,0 +1,21 @@
+{
+  "name": "@pydra/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/main.ts --bundle --platform=node --format=esm --target=node24 --outfile=dist/main.js",
+    "start": "node dist/main.js",
+    "test": "vitest run",
+    "check": "tsc -p ."
+  },
+  "dependencies": {
+    "@pydra/shared": "*",
+    "@hono/node-server": "^2.1.5",
+    "hono": "^4.13.14"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.28.2"
+  }
+}

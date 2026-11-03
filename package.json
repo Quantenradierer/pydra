@@ -1,0 +1,24 @@
+{
+  "name": "pydra",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "web",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "dev:server": "npm run build -w server && npm start -w server",
+    "build": "npm run build -w web && npm run build -w server",
+    "test": "npm test --workspaces",
+    "check": "npm run check --workspaces && tsc -p e2e",
+    "start": "npm start -w server",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "typescript": "^6.0.0",
+    "vitest": "^5.0.5"
+  }
+}

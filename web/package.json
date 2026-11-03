@@ -1,0 +1,25 @@
+{
+  "name": "@pydra/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "icons": "node scripts/icons.mjs",
+    "test": "vitest run",
+    "check": "tsc -p ."
+  },
+  "dependencies": {
+    "@pydra/shared": "*",
+    "highlight.js": "^11.11.1"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^24.19.2",
+    "vite": "^8.3.5",
+    "vite-plugin-pwa": "^2.0.0",
+    "workbox-window": "^7.4.1"
+  }
+}

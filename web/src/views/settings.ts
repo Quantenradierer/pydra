@@ -1,5 +1,6 @@
 import type { App, Screen } from '../app.ts';
 import { h } from '../dom.ts';
+import { GAME_SPEEDS, type GameSpeed } from '../game/speed.ts';
 import { LANGS } from '../i18n.ts';
 import { subpageHeader } from './header.ts';
 
@@ -17,6 +18,27 @@ export function settingsScreen(app: App): Screen {
         'button',
         { 'data-lang': lang, lang, 'aria-pressed': String(app.lang === lang), onclick: () => app.setLanguage(lang) },
         LANGUAGE_NAMES[lang],
+      ),
+    ),
+  );
+
+  let speed = storage.gameSpeed();
+  const speeds = h(
+    'div',
+    { class: 'segmented', role: 'group', 'aria-labelledby': 'speed-heading' },
+    ...GAME_SPEEDS.map((value) =>
+      h(
+        'button',
+        {
+          'data-speed': value,
+          'aria-pressed': String(speed === value),
+          onclick: () => {
+            speed = value satisfies GameSpeed;
+            storage.setGameSpeed(speed);
+            for (const b of speeds.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b.dataset.speed === speed));
+          },
+        },
+        t(`settings.speed.${value}`),
       ),
     ),
   );
@@ -61,6 +83,7 @@ export function settingsScreen(app: App): Screen {
     { class: 'screen settings' },
     subpageHeader(app, t('settings.title')),
     h('section', {}, h('h2', { id: 'language-heading' }, t('settings.language')), languages),
+    h('section', {}, h('h2', { id: 'speed-heading' }, t('settings.gameSpeed')), speeds),
     h(
       'section',
       {},

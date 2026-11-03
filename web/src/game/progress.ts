@@ -59,21 +59,31 @@ export function openLevel(progress: GameProgress, level: GameLevel, rng: Rng = M
 }
 
 /**
- * Picks the choice in a slot of the current level. A wrong pick is
- * remembered as tried, the right one solves the level. Picks on a solved
- * level, of a tried choice or of an unknown slot change nothing.
+ * Picks the choice in a slot of the current level. Every choice can be
+ * picked at any time, so players can compare the answers; the progress
+ * only changes where it should:
+ * - a new wrong pick is remembered as tried;
+ * - the first right pick solves the level;
+ * - on a level that is already solved (practice) nothing counts as a pick
+ *   and nothing is un-solved: wrong choices are only marked as tried, so
+ *   their outcome stays visible;
+ * - picking a tried choice again, or an unknown slot, changes nothing.
  */
 export function pick(progress: GameProgress, level: GameLevel, slot: number): GameProgress {
   const current = progress.current;
-  if (!current || current.level !== level.id || current.solved) return progress;
+  if (!current || current.level !== level.id) return progress;
   const choice = current.order[slot];
-  if (choice === undefined || current.tried.includes(choice)) return progress;
+  if (choice === undefined) return progress;
   const correct = choice === level.answerIndex;
+  const practice = progress.solved.includes(level.id);
+  if (correct ? practice && current.solved : current.tried.includes(choice)) return progress;
+  const next: LevelState = correct ? { ...current, solved: true } : { ...current, tried: [...current.tried, choice] };
+  if (practice) return { ...progress, current: next };
   return {
-    solved: correct && !progress.solved.includes(level.id) ? [...progress.solved, level.id] : progress.solved,
+    solved: correct ? [...progress.solved, level.id] : progress.solved,
     picks: progress.picks + 1,
     correctPicks: progress.correctPicks + (correct ? 1 : 0),
-    current: correct ? { ...current, solved: true } : { ...current, tried: [...current.tried, choice] },
+    current: next,
   };
 }
 

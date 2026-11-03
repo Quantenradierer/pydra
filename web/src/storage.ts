@@ -1,5 +1,6 @@
 import { isLesson, LESSONS, type Content, type LessonId } from './content/lessons.ts';
 import { DEFAULT_LANG, isLang, type Lang } from './i18n.ts';
+import { DEFAULT_GAME_SPEED, isGameSpeed, type GameSpeed } from './game/speed.ts';
 import { parseSession, type Session } from './session.ts';
 import { parseCounters, parseQuestionStats, type Counters, type QuestionStats } from './stats.ts';
 
@@ -130,6 +131,16 @@ export class AppStorage {
 
   setGameData(progress: unknown) {
     this.write('game', progress);
+  }
+
+  /** How fast the game plays a run; a setting, so Reset progress keeps it. */
+  gameSpeed(): GameSpeed {
+    const speed = this.read('gameSpeed');
+    return isGameSpeed(speed) ? speed : DEFAULT_GAME_SPEED;
+  }
+
+  setGameSpeed(speed: GameSpeed) {
+    this.write('gameSpeed', speed);
   }
 
   feedbackQueue(): string[] {

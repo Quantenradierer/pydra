@@ -55,7 +55,7 @@ questions a session asks.
 - The run plays like a debugger: the line about to run is marked (as in
   walkthroughs), the variables in scope are listed below the code, and the
   position reads "Schritt 3 von 12 · Zeile 4" / "Step 3 of 12 · line 4". It
-  plays automatically (450 ms per step); "Von vorn" / "Restart", "Abspielen"
+  plays automatically at the speed set in Settings (slow 1.2 s, normal 0.7 s, fast 0.35 s per step; slow by default); the hydra's head and every body segment glide to the next cell together, never body first; "Von vorn" / "Restart", "Abspielen"
   / "Play" and "Pause", "Schritt" / "Step" and "Zum Ende" / "To the end"
   control it. Keys 1–4 pick an answer.
 - A wrong answer really runs and the hydra misbehaves: it swims into a wall
@@ -63,10 +63,19 @@ questions a session asks.
   When the run ends, the outcome is stated in text (e.g. "Autsch! In Zeile
   4 schwimmt die Hydra gegen die Wand."), followed by a note on why that
   answer went wrong, and "Probier eine andere Antwort." The answer is marked
-  ✗ and locked; the others can be picked.
+  ✗.
+- Every answer can be picked at any time, also while another run plays, after
+  the level is solved, and again after it was tried: picking re-runs the
+  program with that answer, so players can compare how the answers behave.
+  Replays never change the score: a tried wrong answer picked again counts
+  nothing; once a level is solved (now or earlier), picks count neither as
+  picks nor as mistakes, can never un-solve it, and wrong answers just get
+  their ✗; the right one shows ✓ from then on, and "Nächstes Level" stays
+  available.
 - The right answer is never revealed before it is picked: no mark, note or
   run shows it, however many wrong answers come first. While a run plays,
-  the picked answer shows no verdict and all answers are locked.
+  an answer whose outcome the player has not seen yet shows no verdict until
+  its run ends (already seen answers keep their mark).
 - Every wrong answer of a level behaves visibly differently (path, fish
   eaten or outcome); a unit test checks this for every level.
 - The right answer shows ✓, "Satt! Die Hydra hat alle Fische gefressen.",
@@ -74,8 +83,9 @@ questions a session asks.
   a closing line and a way home).
 - 8 levels in this order, one concept each: sequence, `for` with `range`,
   the loop body, `while`, `if`, variables, functions with a parameter,
-  return values. A strip of level buttons on the game screen opens every
-  solved level and the first unsolved one; a solved level replays from
+  return values. A strip of level buttons on the game screen (always one line, scrolling
+  sideways with the current level in view) opens every solved level and the
+  first unsolved one; a solved level replays from
   scratch. A collapsible list explains the hydra's commands.
 - The programs run in a small interpreter for a Python subset
   (`web/src/game/python.ts`: ints, bools, arithmetic, comparisons,
@@ -86,6 +96,10 @@ questions a session asks.
   its code; a run that reaches exactly the same state twice (or 300 steps)
   ends as an endless loop. Every answer's outcome was checked against real
   Python running the same world.
+- On phones (< 700 px wide) the arena, run controls, a small scrolling code
+  view and the variables stay pinned at the top while the answers (a 2×2
+  grid) scroll beneath, so a run can be watched without scrolling; a pick
+  scrolls the arena into view if needed. Checked at 360×640.
 - Progress (`game` in storage): levels solved, picks and right picks, and the
   level in progress with its answer order and the wrong answers tried. It
   is saved after every pick; opening the game continues that level, also
@@ -206,6 +220,8 @@ a way home.
 - **Summary:** as above.
 - **Settings:**
   - DE/EN toggle;
+  - hydra game speed: slow (default) / normal / fast, saved as `gameSpeed`
+    and kept by Reset progress;
   - "Reset progress" with a confirm dialog: wipes stats, counters, any
     saved session and the game's progress, keeps the language;
   - "Install app" button, shown only when the browser fires
@@ -327,7 +343,10 @@ Hono on Node 24 with `node:sqlite`. API types and validation live in
     - a full 10-question run, including the hydra heads and the summary hydra;
     - slashed and regrown heads, restored after a reload without animation;
     - a game level: wrong answers run and fail, the right answer is never
-      marked before it is picked, tried answers survive a reload;
+      marked before it is picked, tried answers survive a reload, every
+      answer stays pickable and replays after solving change no score;
+    - the game speed setting, and a 360×640 phone: one-line level strip,
+      arena and answers visible together;
     - keyboard;
     - Quit;
     - auto-resume;

@@ -9,8 +9,12 @@ const DY = [-1, 0, 1, 0];
 
 export interface Arena {
   root: SVGSVGElement;
-  /** Draws one step of a run; `outcome` is set on the last step, to show a crash. */
-  show(step: Snapshot, outcome?: Outcome): void;
+  /**
+   * Draws one step of a run; `outcome` is set on the last step, to show a
+   * crash. With `ms` > 0 the head and every body segment glide to their new
+   * places together, otherwise they jump.
+   */
+  show(step: Snapshot, outcome?: Outcome, ms?: number): void;
 }
 
 const centre = (p: Point) => ({ x: p.x * CELL + CELL / 2, y: p.y * CELL + CELL / 2 });
@@ -62,19 +66,47 @@ export function arena(world: World): Arena {
   const fishes = [...root.querySelectorAll<SVGPathElement>('.arena-fish')];
   /** Rotation in degrees, kept continuous so a turn never spins the long way round. */
   let angle: number | undefined;
+  /** Where the head and body are drawn now, in viewBox units. */
+  let drawn: Point[] = [];
+  let frame = 0;
+
+  /** Draws the snake through these points; the first one is the head. */
+  function draw(points: Point[]) {
+    drawn = points;
+    const d = `M${points.map((p) => `${p.x} ${p.y}`).join('L')}`;
+    body.setAttribute('d', d);
+    scales.setAttribute('d', d);
+    hydra.setAttribute('transform', `translate(${points[0]!.x} ${points[0]!.y})`);
+  }
 
   return {
     root,
-    show(step, outcome) {
-      const head = centre(step);
-      const points = [head, ...step.body.map(centre)];
-      const d = `M${points.map((p) => `${p.x} ${p.y}`).join('L')}`;
-      body.setAttribute('d', d);
-      scales.setAttribute('d', d);
+    show(step, outcome, ms = 0) {
+      cancelAnimationFrame(frame);
+      const to = [step, ...step.body].map(centre);
+      const from = drawn;
+      if (ms <= 0 || from.length === 0 || matchMedia('(prefers-reduced-motion: reduce)').matches) draw(to);
+      else {
+        // Every point glides from where it was to where it goes (a segment takes the
+        // place of the one in front of it), so the body never lags behind the head.
+        const start = performance.now();
+        const tick = (now: number) => {
+          const k = Math.min(1, (now - start) / ms);
+          draw(
+            to.map((p, i) => {
+              const q = from[Math.min(i, from.length - 1)]!;
+              return { x: q.x + (p.x - q.x) * k, y: q.y + (p.y - q.y) * k };
+            }),
+          );
+          if (k < 1) frame = requestAnimationFrame(tick);
+        };
+        tick(start);
+      }
+      const head = to[0]!;
       // The head artwork faces east (dir 1).
       const target = (step.dir - 1) * 90;
       angle = angle === undefined ? target : angle + ((((target - angle) % 360) + 540) % 360) - 180;
-      hydra.style.transform = `translate(${head.x}px, ${head.y}px)`;
+      turn.style.transitionDuration = `${ms}ms`;
       turn.style.transform = `rotate(${angle}deg)`;
       for (const [i, el] of fishes.entries()) el.classList.toggle('eaten', step.eaten[i]!);
 

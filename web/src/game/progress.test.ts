@@ -51,22 +51,39 @@ describe('game progress', () => {
     }
   });
 
-  it('ignores picks of a tried choice, on a solved level or of an unknown slot', () => {
+  it('ignores picks of a tried choice and of an unknown slot', () => {
     let progress = openLevel(EMPTY_PROGRESS, first, rng);
     progress = pick(progress, first, slotOf(progress, wrongChoices[0]!));
     expect(pick(progress, first, slotOf(progress, wrongChoices[0]!))).toBe(progress);
     expect(pick(progress, first, 7)).toBe(progress);
     expect(pick(progress, second, 0)).toBe(progress);
-    const solved = pick(progress, first, slotOf(progress, first.answerIndex));
-    expect(pick(solved, first, slotOf(solved, wrongChoices[1]!))).toBe(solved);
   });
 
-  it('counts a level solved once, even when replayed', () => {
+  it('lets every answer be tried on a solved level without changing the score or un-solving it', () => {
+    let progress = openLevel(EMPTY_PROGRESS, first, rng);
+    progress = pick(progress, first, slotOf(progress, first.answerIndex));
+    const score = { solved: [first.id], picks: 1, correctPicks: 1 };
+    expect(progress).toMatchObject(score);
+    expect(pick(progress, first, slotOf(progress, first.answerIndex))).toBe(progress);
+    for (const [n, choice] of wrongChoices.entries()) {
+      progress = pick(progress, first, slotOf(progress, choice));
+      expect(progress).toMatchObject(score);
+      expect(progress.current!.solved).toBe(true);
+      expect(progress.current!.tried).toHaveLength(n + 1);
+    }
+    expect(pick(progress, first, slotOf(progress, wrongChoices[0]!))).toBe(progress);
+    expect(choiceStates(first, progress.current!).filter((s) => s === 'wrong')).toHaveLength(3);
+  });
+
+  it('does not count picks on a level that was solved before and is reopened', () => {
     let progress = openLevel(EMPTY_PROGRESS, first, rng);
     progress = pick(progress, first, slotOf(progress, first.answerIndex));
     progress = openLevel(openLevel(progress, second, rng), first, rng);
+    expect(progress.current).toMatchObject({ tried: [], solved: false });
+    progress = pick(progress, first, slotOf(progress, wrongChoices[0]!));
     progress = pick(progress, first, slotOf(progress, first.answerIndex));
-    expect(progress).toMatchObject({ solved: [first.id], picks: 2, correctPicks: 2 });
+    expect(progress).toMatchObject({ solved: [first.id], picks: 1, correctPicks: 1 });
+    expect(progress.current).toMatchObject({ solved: true, tried: [wrongChoices[0]] });
   });
 
   it('unlocks the solved levels and the first unsolved one', () => {

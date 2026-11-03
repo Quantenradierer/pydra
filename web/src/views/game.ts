@@ -1,6 +1,7 @@
 import type { App, Screen } from '../app.ts';
 import { h, svg } from '../dom.ts';
 import { arena } from '../game/arena.ts';
+import { STEP_MS } from '../game/speed.ts';
 import { fill, GAP, type GameLevel } from '../game/levels.ts';
 import { choiceStates, unlocked, type LevelState } from '../game/progress.ts';
 import { parseMap, simulate, type Outcome, type Trace } from '../game/world.ts';
@@ -10,8 +11,6 @@ import type { MessageKey } from '../i18n.ts';
 import { richText } from '../rich-text.ts';
 import { subpageHeader } from './header.ts';
 
-/** Time per step when playing. */
-export const STEP_MS = 450;
 const TEXT_INPUTS = 'input, textarea, select, dialog';
 
 const COMMANDS: [string, MessageKey][] = [
@@ -116,15 +115,19 @@ export function gameScreen(app: App): Screen {
     strip,
     heading,
     h('div', { class: 'intro' }, ...richText(level.intro[lang])),
-    pool.root,
     h(
       'div',
-      { class: 'run' },
-      position,
-      h('div', { class: 'run-controls', role: 'group', 'aria-label': t('game.controls') }, restart, playPause, step, toEnd),
+      { class: 'stage', 'data-testid': 'stage' },
+      pool.root,
+      h(
+        'div',
+        { class: 'run' },
+        position,
+        h('div', { class: 'run-controls', role: 'group', 'aria-label': t('game.controls') }, restart, playPause, step, toEnd),
+      ),
+      codeSlot,
+      vars,
     ),
-    codeSlot,
-    vars,
     h('p', { class: 'prompt', id: 'game-task' }, t('game.task')),
     h('div', { class: 'choices', role: 'group', 'aria-labelledby': 'game-task' }, ...choiceButtons),
     feedback,
@@ -148,12 +151,25 @@ export function gameScreen(app: App): Screen {
   let finishedShown = false;
   /** The choice whose run is showing, if any. */
   let running: number | undefined;
+  /** Whether the run showing is of a choice the player had not seen the outcome of: its verdict waits for the end. */
+  let suspense = false;
+  /** Milliseconds the hydra takes to glide to the next step. */
+  let glide = 0;
 
   function render() {
     const snap = trace.steps[index]!;
     const last = index === trace.steps.length - 1;
-    pool.show(snap, last && running !== undefined ? trace.outcome : undefined);
+    pool.show(snap, last && running !== undefined ? trace.outcome : undefined, glide);
     for (const [i, line] of code.lines.entries()) line.classList.toggle('focus', running !== undefined && snap.line === i + 1);
+    const focused = code.lines[(snap.line ?? 0) - 1];
+    // Keep the running line visible inside a scrolling program, without moving the page.
+    if (running !== undefined && focused) {
+      const box = code.root;
+      if (focused.offsetTop < box.scrollTop) box.scrollTop = focused.offsetTop;
+      else if (focused.offsetTop + focused.offsetHeight > box.scrollTop + box.clientHeight) {
+        box.scrollTop = focused.offsetTop + focused.offsetHeight - box.clientHeight;
+      }
+    }
     const counter = { n: index + 1, total: trace.steps.length };
     position.textContent =
       running === undefined
@@ -176,6 +192,7 @@ export function gameScreen(app: App): Screen {
   }
 
   function go(to: number, resume = false) {
+    glide = timer !== undefined ? STEP_MS[app.services.storage.gameSpeed()] * 0.8 : to === index + 1 ? 300 : 0;
     index = Math.max(0, Math.min(to, trace.steps.length - 1));
     const atEnd = index === trace.steps.length - 1;
     if (atEnd) {
@@ -187,7 +204,7 @@ export function gameScreen(app: App): Screen {
 
   function play() {
     if (timer !== undefined || running === undefined) return;
-    timer = setInterval(() => go(index + 1), STEP_MS);
+    timer = setInterval(() => go(index + 1), STEP_MS[app.services.storage.gameSpeed()]);
     render();
   }
 
@@ -199,14 +216,16 @@ export function gameScreen(app: App): Screen {
   }
 
   /** Starts the run of a choice from the first step. */
-  function run(choice: number, autoplay: boolean) {
+  function run(choice: number, autoplay: boolean, hidden = false) {
     pause();
     running = choice;
+    suspense = hidden;
+    glide = 0;
     finishedShown = false;
     trace = simulate(world, fill(level, choice));
     code = program(level, level.choices[choice]!.code);
     codeSlot.replaceChildren(code.root);
-    lockChoices(true);
+    lockChoices();
     feedback.replaceChildren();
     index = 0;
     render();
@@ -231,13 +250,12 @@ export function gameScreen(app: App): Screen {
     }
   }
 
-  function lockChoices(locked: boolean) {
+  function lockChoices() {
     const states = choiceStates(level, state);
     for (const [slot, button] of choiceButtons.entries()) {
       // The choice whose run is playing shows its verdict only once the run ends.
-      const playing = locked && state.order[slot] === running;
+      const playing = suspense && !finishedShown && state.order[slot] === running;
       const s = playing ? 'open' : states[slot]!;
-      button.disabled = locked || s !== 'open' || state.solved;
       button.classList.toggle('wrong', s === 'wrong');
       button.classList.toggle('correct', s === 'right');
       button.classList.toggle('running', playing);
@@ -256,8 +274,9 @@ export function gameScreen(app: App): Screen {
     const right = running === level.answerIndex;
     const verdict = h('p', { class: `verdict ${right ? 'correct' : 'wrong'}`, 'data-testid': 'outcome' }, outcomeText(trace.outcome));
     const parts: Node[] = [verdict, h('div', { class: 'explanation' }, ...richText(choice.note[lang]))];
-    if (!right) parts.push(h('p', { class: 'try-again' }, t('game.tryAgain')));
-    else if (levelIndex < game.levels.length - 1) {
+    if (!right && !state.solved) parts.push(h('p', { class: 'try-again' }, t('game.tryAgain')));
+    if (state.solved) parts.push(h('p', { class: 'compare' }, t('game.compare')));
+    if (state.solved && levelIndex < game.levels.length - 1) {
       parts.push(
         h(
           'button',
@@ -271,22 +290,27 @@ export function gameScreen(app: App): Screen {
           t('game.next'),
         ),
       );
-    } else {
+    } else if (state.solved) {
       parts.push(
         h('p', { class: 'all-done' }, t('game.allDone')),
         h('button', { class: 'primary next', onclick: () => app.navigate('home') }, t('summary.home')),
       );
     }
     feedback.replaceChildren(...parts);
-    lockChoices(false);
+    lockChoices();
   }
 
   function choose(slot: number) {
-    if (state.solved || (running !== undefined && !finishedShown)) return;
     const choice = state.order[slot];
-    if (choice === undefined || state.tried.includes(choice)) return;
+    if (choice === undefined) return;
+    // Any answer can be run at any time, also while another one runs; the outcome
+    // of one the player has not seen yet stays hidden until its run ends.
+    const seen = choiceStates(level, state)[slot] !== 'open';
     state = game.pick(slot) ?? state;
-    run(choice, true);
+    if (state.solved) strip.querySelector('[aria-current]')?.classList.add('solved');
+    run(choice, true, !seen);
+    // On a phone the arena sits at the top: make sure the run can be watched.
+    root.querySelector('.stage')!.scrollIntoView?.({ block: 'nearest' });
   }
 
   function onKey(event: KeyboardEvent) {
@@ -302,10 +326,16 @@ export function gameScreen(app: App): Screen {
   }
 
   document.addEventListener('keydown', onKey);
-  lockChoices(false);
+  lockChoices();
   // A solved level shows its finished run again, without replaying it.
   if (state.solved) run(level.answerIndex, false);
   else render();
+
+  // Level buttons stay on one line; scroll the current one into view.
+  const current = strip.querySelector<HTMLElement>('[aria-current]');
+  requestAnimationFrame(() => {
+    if (current) strip.scrollLeft = current.offsetLeft - (strip.clientWidth - current.offsetWidth) / 2;
+  });
 
   return {
     root,

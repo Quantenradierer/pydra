@@ -832,12 +832,17 @@ textarea {
 /* Hydra game, see src/game/ */
 
 .level-strip {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: thin;
 }
 
 .level-dot {
+  flex: none;
   min-width: 2.75rem;
   min-height: 2.75rem;
   padding: 0;
@@ -924,7 +929,6 @@ textarea {
   stroke-dasharray: 0.1 2.5;
 }
 
-.arena-hydra,
 .arena-head-turn {
   transition: transform 0.3s ease-in-out;
 }
@@ -1055,6 +1059,18 @@ textarea {
 .game .prompt {
   font-size: 1.1rem;
   font-weight: 600;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.program {
+  max-height: 11rem;
+  overflow: auto;
+  position: relative;
 }
 
 .choice.running {
@@ -1188,4 +1204,69 @@ textarea {
   border-radius: 0.6rem;
   background: var(--bg);
   color: var(--fg);
+}
+
+/* Phones: the arena, the run controls and the running code stay pinned while the answers scroll beneath. */
+@media (max-width: 699px) {
+  .game .stage {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 0.4rem 0;
+    gap: 0.3rem;
+    background: var(--bg);
+    box-shadow: 0 6px 6px -6px rgb(0 0 0 / 0.4);
+  }
+
+  .game .arena {
+    max-height: 5.5rem;
+  }
+
+  .game .run-position {
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .game .run-control {
+    padding: 0.2rem;
+    min-height: 2.2rem;
+    font-size: 0.8rem;
+  }
+
+  .game .program {
+    max-height: 4.6rem;
+    margin: 0;
+    padding: 0.3rem 0.5rem 0.3rem 0;
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+
+  .game .vars {
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .game .choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .game .choice {
+    min-height: 2.75rem;
+    padding: 0.3rem 0.5rem;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .game .choice .text {
+    overflow-wrap: normal;
+    white-space: normal;
+  }
+
+  .game .choice .key {
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 0.75rem;
+  }
 }

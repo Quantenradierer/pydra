@@ -1,39 +1,54 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="112" fill="#14202E"/>
   <g transform="translate(25.599999999999994 25.599999999999994) scale(0.9)">
-  <!-- Pydra: a four-headed hydra, one head per answer choice. Artwork only;
-       scripts/icons.mjs adds the background and renders the PNG icons. -->
-  <g transform="translate(0 -18)">
-  <g fill="none" stroke-linecap="round" stroke-width="34">
-    <path d="M206 392 Q128 340 118 214" stroke="#3776AB"/>
-    <path d="M238 380 Q214 270 206 150" stroke="#FFD43B"/>
-    <path d="M274 380 Q298 270 306 150" stroke="#3776AB"/>
-    <path d="M306 392 Q384 340 394 214" stroke="#FFD43B"/>
-  </g>
-  <path d="M116 420 Q116 352 256 352 Q396 352 396 420 Q396 448 368 448 L144 448 Q116 448 116 420 Z" fill="#3776AB"/>
-  <path d="M184 448 Q184 392 256 392 Q328 392 328 448 Z" fill="#FFD43B"/>
-  <g>
-    <g transform="translate(118 196) rotate(-20)">
-      <rect x="-40" y="-30" width="80" height="60" rx="24" fill="#3776AB"/>
-      <rect x="-58" y="-6" width="40" height="30" rx="12" fill="#3776AB"/>
-      <circle cx="4" cy="-8" r="8" fill="#14202E"/>
+  <!-- Pydra: a five-headed hydra. Artwork only; scripts/icons.mjs adds the
+       background and renders the PNG icons. The Home screen inlines this file
+       and sways each .neck around its base (transform-origin). -->
+  <defs>
+    <!-- A dragon head facing right; the neck joins at the origin. -->
+    <path id="hydra-head" d="M-14 -2C-14-16-6-24 6-27L28-33 42-22 86-10Q92-7 87-3L64-1.5 59 10 54-.8 42 0 72 8Q73 16 64 18L22 24C4 26-14 16-14-2ZM6-8-40-38-2-20Z"/>
+    <g id="hydra-eye">
+      <path d="M13-18 37-12A12 12 0 0 1 13-18Z"/>
+      <path d="M26-13v8M76-9h0" stroke="#14202E" stroke-width="5" stroke-linecap="round"/>
     </g>
-    <g transform="translate(206 134) rotate(-8)">
-      <rect x="-40" y="-30" width="80" height="60" rx="24" fill="#FFD43B"/>
-      <rect x="-58" y="-6" width="40" height="30" rx="12" fill="#FFD43B"/>
-      <circle cx="4" cy="-8" r="8" fill="#14202E"/>
-    </g>
-    <g transform="translate(306 134) rotate(8)">
-      <rect x="-40" y="-30" width="80" height="60" rx="24" fill="#3776AB"/>
-      <rect x="18" y="-6" width="40" height="30" rx="12" fill="#3776AB"/>
-      <circle cx="-4" cy="-8" r="8" fill="#14202E"/>
-    </g>
-    <g transform="translate(394 196) rotate(20)">
-      <rect x="-40" y="-30" width="80" height="60" rx="24" fill="#FFD43B"/>
-      <rect x="18" y="-6" width="40" height="30" rx="12" fill="#FFD43B"/>
-      <circle cx="-4" cy="-8" r="8" fill="#14202E"/>
+  </defs>
+  <g class="neck" style="transform-origin: 200px 380px">
+    <path d="M200 380C160 350 170 312 136 286S96 266 112 250" fill="none" stroke="#3776AB" stroke-width="34" stroke-linecap="round"/>
+    <g transform="translate(112 250) scale(-1.3 1.3) rotate(20)">
+      <use href="#hydra-head" fill="#3776AB"/>
+      <use href="#hydra-eye" fill="#FFD43B"/>
     </g>
   </g>
+  <g class="neck" style="transform-origin: 224px 362px">
+    <path d="M224 362C202 292 146 272 156 212S198 162 166 136" fill="none" stroke="#FFD43B" stroke-width="34" stroke-linecap="round"/>
+    <g transform="translate(164 136) scale(-1.3 1.3) rotate(-15)">
+      <use href="#hydra-head" fill="#FFD43B"/>
+      <use href="#hydra-eye" fill="#3776AB"/>
+    </g>
   </g>
+  <g class="neck" style="transform-origin: 254px 356px">
+    <path d="M254 356C280 282 230 228 250 158S292 98 270 82" fill="none" stroke="#3776AB" stroke-width="34" stroke-linecap="round"/>
+    <g transform="translate(268 82) scale(1.3) rotate(-10)">
+      <use href="#hydra-head" fill="#3776AB"/>
+      <use href="#hydra-eye" fill="#FFD43B"/>
+      <path d="M88 4h16l8-6m-8 6 8 6" fill="none" stroke="#FFD43B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="neck" style="transform-origin: 284px 366px">
+    <path d="M284 366C324 308 300 258 342 216S400 198 380 168" fill="none" stroke="#FFD43B" stroke-width="34" stroke-linecap="round"/>
+    <g transform="translate(378 168) scale(1.3) rotate(5)">
+      <use href="#hydra-head" fill="#FFD43B"/>
+      <use href="#hydra-eye" fill="#3776AB"/>
+    </g>
+  </g>
+  <g class="neck" style="transform-origin: 302px 390px">
+    <path d="M302 390C350 362 380 338 398 310S426 280 412 270" fill="none" stroke="#3776AB" stroke-width="34" stroke-linecap="round"/>
+    <g transform="translate(410 270) scale(1.3) rotate(30)">
+      <use href="#hydra-head" fill="#3776AB"/>
+      <use href="#hydra-eye" fill="#FFD43B"/>
+    </g>
+  </g>
+  <path d="M140 424C138 372 190 340 246 340 304 340 336 370 372 396 398 414 428 410 440 388 448 372 444 356 432 348 458 350 476 380 462 412 446 448 400 458 340 456H176C154 456 140 444 140 424Z" fill="#3776AB"/>
+  <path d="M168 440C220 446 300 446 380 440" fill="none" stroke="#FFD43B" stroke-width="14" stroke-dasharray="20.4 7"/>
 </g>
 </svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#14202E"/>
+  <g transform="translate(25.599999999999994 25.599999999999994) scale(0.9)">
+  <!-- Pydra: a four-headed hydra, one head per answer choice. Artwork only;
+       scripts/icons.mjs adds the background and renders the PNG icons. -->
+  <g transform="translate(0 -18)">
+  <g fill="none" stroke-linecap="round" stroke-width="34">
+    <path d="M206 392 Q128 340 118 214" stroke="#3776AB"/>
+    <path d="M238 380 Q214 270 206 150" stroke="#FFD43B"/>
+    <path d="M274 380 Q298 270 306 150" stroke="#3776AB"/>
+    <path d="M306 392 Q384 340 394 214" stroke="#FFD43B"/>
+  </g>
+  <path d="M116 420 Q116 352 256 352 Q396 352 396 420 Q396 448 368 448 L144 448 Q116 448 116 420 Z" fill="#3776AB"/>
+  <path d="M184 448 Q184 392 256 392 Q328 392 328 448 Z" fill="#FFD43B"/>
+  <g>
+    <g transform="translate(118 196) rotate(-20)">
+      <rect x="-40" y="-30" width="80" height="60" rx="24" fill="#3776AB"/>
+      <rect x="-58" y="-6" width="40" height="30" rx="12" fill="#3776AB"/>
+      <circle cx="4" cy="-8" r="8" fill="#14202E"/>
+    </g>
+    <g transform="translate(206 134) rotate(-8)">
+      <rect x="-40" y="-30" width="80" height="60" rx="24" fill="#FFD43B"/>
+      <rect x="-58" y="-6" width="40" height="30" rx="12" fill="#FFD43B"/>
+      <circle cx="4" cy="-8" r="8" fill="#14202E"/>
+    </g>
+    <g transform="translate(306 134) rotate(8)">
+      <rect x="-40" y="-30" width="80" height="60" rx="24" fill="#3776AB"/>
+      <rect x="18" y="-6" width="40" height="30" rx="12" fill="#3776AB"/>
+      <circle cx="-4" cy="-8" r="8" fill="#14202E"/>
+    </g>
+    <g transform="translate(394 196) rotate(20)">
+      <rect x="-40" y="-30" width="80" height="60" rx="24" fill="#FFD43B"/>
+      <rect x="18" y="-6" width="40" height="30" rx="12" fill="#FFD43B"/>
+      <circle cx="-4" cy="-8" r="8" fill="#14202E"/>
+    </g>
+  </g>
+  </g>
+</g>
+</svg>

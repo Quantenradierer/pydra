@@ -1,0 +1,130 @@
+export const LANGS = ['de', 'en'] as const;
+export type Lang = (typeof LANGS)[number];
+export const DEFAULT_LANG: Lang = 'de';
+
+export function isLang(value: unknown): value is Lang {
+  return (LANGS as readonly unknown[]).includes(value);
+}
+
+const de = {
+  'app.title': 'Pydra: Python Trainer',
+  'app.tagline': 'Python-Grundlagen, ein Kopf nach dem anderen.',
+  'home.start': 'Start',
+  'home.settings': 'Einstellungen',
+  'home.feedback': 'Feedback',
+  'home.noStats': 'Noch keine Runde gespielt. Leg los!',
+  'home.stats.one': '1 Runde · Bestwert {best}/10 · {percent} % richtig',
+  'home.stats.other': '{sessions} Runden · Bestwert {best}/10 · {percent} % richtig',
+  'quiz.progress': 'Frage {n} von {total}',
+  'quiz.quit': 'Beenden',
+  'quiz.choices': 'Antworten',
+  'quiz.correct': 'Köpfchen!',
+  'quiz.wrong': 'Kopf hoch!',
+  'quiz.correctAnswer': 'richtige Antwort',
+  'quiz.yourWrongAnswer': 'deine Antwort, falsch',
+  'quiz.next': 'Weiter',
+  'quiz.finish': 'Fertig',
+  'summary.headline': '{score} von {total} Köpfen erlegt',
+  'summary.again': 'Nochmal spielen',
+  'summary.home': 'Zur Startseite',
+  'settings.title': 'Einstellungen',
+  'settings.language': 'Sprache',
+  'settings.progress': 'Fortschritt',
+  'settings.reset': 'Fortschritt zurücksetzen',
+  'settings.resetConfirm': 'Alle Statistiken und die laufende Runde löschen? Die Sprache bleibt erhalten.',
+  'settings.resetYes': 'Zurücksetzen',
+  'settings.resetNo': 'Abbrechen',
+  'settings.resetDone': 'Fortschritt zurückgesetzt.',
+  'settings.install': 'App installieren',
+  'settings.installHint': 'Installiere Pydra auf deinem Gerät, um ohne Browser zu üben.',
+  'nav.back': 'Zurück',
+  'feedback.title': 'Feedback',
+  'feedback.intro': 'Fehler gefunden, Idee für eine Frage oder Lob? Schreib uns. Das Feedback ist anonym.',
+  'feedback.placeholder': 'Dein Feedback …',
+  'feedback.count': '{n}/{max}',
+  'feedback.tooLong': 'Höchstens {max} Zeichen.',
+  'feedback.send': 'Senden',
+  'feedback.sending': 'Wird gesendet …',
+  'feedback.sent': 'Danke! Dein Feedback ist angekommen.',
+  'feedback.rejected': 'Das Feedback wurde abgelehnt.',
+  'feedback.rateLimited': 'Zu viel Feedback auf einmal. Versuch es in einer Minute nochmal.',
+  'feedback.queued': 'Gerade keine Verbindung. Dein Feedback wird gesendet, sobald du wieder online bist.',
+  'feedback.pending.one': '1 Feedback wartet auf den Versand.',
+  'feedback.pending.other': '{n} Feedbacks warten auf den Versand.',
+  'topic.types': 'Variablen und Datentypen',
+  'topic.operators': 'Operatoren',
+  'topic.strings': 'Zeichenketten',
+  'topic.control-flow': 'Verzweigungen',
+  'topic.loops': 'Schleifen',
+  'topic.collections': 'Listen und Tupel',
+  'topic.dicts-sets': 'Dictionaries und Mengen',
+  'topic.functions': 'Funktionen',
+};
+
+export type MessageKey = keyof typeof de;
+
+const en: Record<MessageKey, string> = {
+  'app.title': 'Pydra: Python Trainer',
+  'app.tagline': 'Python basics, one head at a time.',
+  'home.start': 'Start',
+  'home.settings': 'Settings',
+  'home.feedback': 'Feedback',
+  'home.noStats': "No sessions yet. Let's go!",
+  'home.stats.one': '1 session · best {best}/10 · {percent}% correct',
+  'home.stats.other': '{sessions} sessions · best {best}/10 · {percent}% correct',
+  'quiz.progress': 'Question {n} of {total}',
+  'quiz.quit': 'Quit',
+  'quiz.choices': 'Answers',
+  'quiz.correct': 'Head of the class!',
+  'quiz.wrong': 'Head-scratcher, huh?',
+  'quiz.correctAnswer': 'correct answer',
+  'quiz.yourWrongAnswer': 'your answer, wrong',
+  'quiz.next': 'Next',
+  'quiz.finish': 'Finish',
+  'summary.headline': '{score} of {total} heads slain',
+  'summary.again': 'Play again',
+  'summary.home': 'Home',
+  'settings.title': 'Settings',
+  'settings.language': 'Language',
+  'settings.progress': 'Progress',
+  'settings.reset': 'Reset progress',
+  'settings.resetConfirm': 'Delete all statistics and the running session? Your language stays as it is.',
+  'settings.resetYes': 'Reset',
+  'settings.resetNo': 'Cancel',
+  'settings.resetDone': 'Progress reset.',
+  'settings.install': 'Install app',
+  'settings.installHint': 'Install Pydra on your device to practise without the browser.',
+  'nav.back': 'Back',
+  'feedback.title': 'Feedback',
+  'feedback.intro': 'Found a mistake, have an idea for a question, or want to say something nice? Tell us. Feedback is anonymous.',
+  'feedback.placeholder': 'Your feedback…',
+  'feedback.count': '{n}/{max}',
+  'feedback.tooLong': 'At most {max} characters.',
+  'feedback.send': 'Send',
+  'feedback.sending': 'Sending…',
+  'feedback.sent': 'Thanks! Your feedback has arrived.',
+  'feedback.rejected': 'The feedback was rejected.',
+  'feedback.rateLimited': 'Too much feedback at once. Please try again in a minute.',
+  'feedback.queued': 'No connection right now. Your feedback will be sent as soon as you are back online.',
+  'feedback.pending.one': '1 feedback is waiting to be sent.',
+  'feedback.pending.other': '{n} feedbacks are waiting to be sent.',
+  'topic.types': 'Variables and types',
+  'topic.operators': 'Operators',
+  'topic.strings': 'Strings',
+  'topic.control-flow': 'Conditions',
+  'topic.loops': 'Loops',
+  'topic.collections': 'Lists and tuples',
+  'topic.dicts-sets': 'Dicts and sets',
+  'topic.functions': 'Functions',
+};
+
+export const MESSAGES: Record<Lang, Record<MessageKey, string>> = { de, en };
+
+export type Params = Record<string, string | number>;
+
+/** Looks up a UI text and fills in {placeholders}. */
+export function translate(lang: Lang, key: MessageKey, params: Params = {}): string {
+  return MESSAGES[lang][key].replace(/\{(\w+)\}/g, (match, name: string) =>
+    name in params ? String(params[name]) : match,
+  );
+}

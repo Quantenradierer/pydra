@@ -829,6 +829,263 @@ textarea {
   color: var(--muted);
 }
 
+/* Hydra game, see src/game/ */
+
+.level-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.level-dot {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border-radius: 50%;
+  font-weight: 600;
+}
+
+.level-dot.solved {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.level-dot[aria-current] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.level-dot:disabled {
+  opacity: 0.45;
+}
+
+.level-title:focus {
+  outline: none;
+}
+
+.intro code,
+.commands code,
+.vars code {
+  padding: 0.05em 0.3em;
+  border-radius: 0.3em;
+  background: var(--code-bg);
+  color: var(--code-fg);
+  font-size: 0.92em;
+}
+
+.arena {
+  display: block;
+  width: 100%;
+  max-height: 16rem;
+  border-radius: var(--radius);
+}
+
+.arena-water {
+  fill: var(--hydra-bg);
+}
+
+.arena-dot {
+  fill: #2a4560;
+}
+
+.arena-rock {
+  fill: #5d6b7c;
+  stroke: #3d4856;
+  stroke-width: 0.8;
+}
+
+.arena-fish {
+  fill: var(--yellow);
+  transition: opacity 0.3s, transform 0.3s;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.arena-fish.eaten {
+  opacity: 0;
+}
+
+.arena-body,
+.arena-scales {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.arena-body {
+  stroke: #3776ab;
+  stroke-width: 4;
+}
+
+.arena-scales {
+  stroke: var(--yellow);
+  stroke-width: 0.9;
+  stroke-dasharray: 0.1 2.5;
+}
+
+.arena-hydra,
+.arena-head-turn {
+  transition: transform 0.3s ease-in-out;
+}
+
+.arena-skull {
+  fill: #3776ab;
+}
+
+.arena-eye {
+  fill: var(--yellow);
+}
+
+.arena-bump {
+  display: none;
+  fill: #ff8a80;
+}
+
+.arena.crashed .arena-bump {
+  display: inline;
+  animation: arena-bump 0.5s ease-out;
+}
+
+.arena.crashed .arena-skull,
+.arena.crashed .arena-body {
+  fill: #c0504a;
+  stroke: #c0504a;
+}
+
+.arena.crashed .arena-skull {
+  stroke: none;
+}
+
+.arena.crashed .arena-head-turn {
+  animation: arena-shake 0.4s ease-in-out;
+}
+
+.arena.stuck .arena-body {
+  stroke: #2a5680;
+}
+
+.arena.fed .arena-scales {
+  stroke-width: 2;
+}
+
+@keyframes arena-bump {
+  from {
+    opacity: 0;
+    scale: 0.3;
+  }
+}
+
+@keyframes arena-shake {
+  25% {
+    translate: -1px 0;
+  }
+  75% {
+    translate: 1px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arena * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.run {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.run-position {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.run-controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+.run-control {
+  padding: 0.4rem 0.3rem;
+  font-size: 0.85rem;
+}
+
+.run-control:disabled {
+  opacity: 0.5;
+}
+
+.program .line:empty::after {
+  content: ' ';
+}
+
+.gap {
+  display: inline-block;
+  min-width: 3ch;
+  padding: 0 0.25em;
+  border: 2px dashed var(--yellow);
+  border-radius: 0.3em;
+  line-height: 1.2;
+}
+
+.gap:not(.filled) {
+  color: var(--code-comment);
+}
+
+.gap.filled {
+  border-style: solid;
+}
+
+.vars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+
+.vars-label,
+.vars-none {
+  color: var(--muted);
+}
+
+.game .prompt {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.choice.running {
+  border-color: var(--accent);
+}
+
+.try-again,
+.all-done {
+  font-weight: 600;
+}
+
+.commands summary {
+  cursor: pointer;
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+}
+
+.commands dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.commands dd {
+  margin: 0;
+}
+
 @media (min-width: 700px) {
   #app {
     padding-top: 2.5rem;

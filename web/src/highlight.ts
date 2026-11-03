@@ -4,7 +4,8 @@ import { h } from './dom.ts';
 
 hljs.registerLanguage('python', python);
 
-const highlight = (code: string) => hljs.highlight(code, { language: 'python' }).value;
+/** Python source as highlighted HTML (escaped, safe to insert). */
+export const highlight = (code: string) => hljs.highlight(code, { language: 'python' }).value;
 
 export interface CodeBlockOptions {
   /** Show line numbers; each line is highlighted on its own, fine for the short walkthrough functions. */

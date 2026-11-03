@@ -13,7 +13,7 @@ when a requirement changes; the code, tests and the other docs follow it.
 
 ## Lessons
 
-Home offers two lessons. Both use the same quiz screen, answer feedback,
+Home offers three lessons. The first two use the same quiz screen, answer feedback,
 explanations, hydra, resume and stats rules (below); they differ in which
 questions a session asks.
 
@@ -21,6 +21,7 @@ questions a session asks.
 | --------- | ---------------------------------- | ----------------------------------------------------------------------- |
 | `mixed`   | Quiz / Quiz                        | 10 random questions from the 80 (see Quiz session)                      |
 | `functions` | Funktionen lesen / Reading functions | one function read line by line: one question per line, in order, then one about the whole function |
+| game      | Hydra auf Fischfang / Hydra goes fishing | the hydra game: its own screen and progress (see below) |
 
 ### Reading functions (walkthroughs)
 
@@ -42,6 +43,53 @@ questions a session asks.
   `web/src/content/walkthroughs/<id>.json` (`id`, `code`, `lines` with one
   step per line incl. its 1-based `line`, `whole`). The prompts and the
   question ids (`walk-<id>-NN`, `walk-<id>-whole`) are generated.
+
+### Hydra goes fishing (the game)
+
+- A program with one gap `___` and four answers (shuffled once per level
+  start). Picking one fills the gap and runs the program: a young hydra
+  swims through a small grid pool (at most 7×7 cells) with rocks and fish,
+  seen from above, and eats a fish by swimming onto it. Its body grows by
+  one cell per fish. The level is solved when the program ends with every
+  fish eaten.
+- The run plays like a debugger: the line about to run is marked (as in
+  walkthroughs), the variables in scope are listed below the code, and the
+  position reads "Schritt 3 von 12 · Zeile 4" / "Step 3 of 12 · line 4". It
+  plays automatically (450 ms per step); "Von vorn" / "Restart", "Abspielen"
+  / "Play" and "Pause", "Schritt" / "Step" and "Zum Ende" / "To the end"
+  control it. Keys 1–4 pick an answer.
+- A wrong answer really runs and the hydra misbehaves: it swims into a wall
+  (with a red bump), circles, stops short, or Python stops with an error.
+  When the run ends, the outcome is stated in text (e.g. "Autsch! In Zeile
+  4 schwimmt die Hydra gegen die Wand."), followed by a note on why that
+  answer went wrong, and "Probier eine andere Antwort." The answer is marked
+  ✗ and locked; the others can be picked.
+- The right answer is never revealed before it is picked: no mark, note or
+  run shows it, however many wrong answers come first. While a run plays,
+  the picked answer shows no verdict and all answers are locked.
+- Every wrong answer of a level behaves visibly differently (path, fish
+  eaten or outcome); a unit test checks this for every level.
+- The right answer shows ✓, "Satt! Die Hydra hat alle Fische gefressen.",
+  the explanation and "Nächstes Level" / "Next level" (on the last level:
+  a closing line and a way home).
+- 8 levels in this order, one concept each: sequence, `for` with `range`,
+  the loop body, `while`, `if`, variables, functions with a parameter,
+  return values. A strip of level buttons on the game screen opens every
+  solved level and the first unsolved one; a solved level replays from
+  scratch. A collapsible list explains the hydra's commands.
+- The programs run in a small interpreter for a Python subset
+  (`web/src/game/python.ts`: ints, bools, arithmetic, comparisons,
+  `not`/`and`/`or`, assignment, `+=`/`-=`, `if`/`elif`/`else`, `while`,
+  `for … in range(…)`, `def`, `return`, `pass`); anything else is a syntax
+  error. World commands: `move()`, `turn_left()`, `turn_right()`,
+  `wall_ahead()`, `fish_ahead()`. The trace of every answer is computed from
+  its code; a run that reaches exactly the same state twice (or 300 steps)
+  ends as an endless loop. Every answer's outcome was checked against real
+  Python running the same world.
+- Progress (`game` in storage): levels solved, picks and right picks, and the
+  level in progress with its answer order and the wrong answers tried. It
+  is saved after every pick; opening the game continues that level, also
+  after a reload. An app update waits while the game screen is open.
 
 ## Content
 
@@ -150,12 +198,16 @@ a way home.
     no session has been played yet.
   - Reading functions: e.g. "2 of 4 functions read · 80% correct"; "No
     function read yet." before the first answer.
+  - Hydra goes fishing: e.g. "3 of 8 levels solved · 60% correct" (share of
+    right picks); "No level played yet." before the first pick.
 - **Quiz:** as above.
+- **Game:** as above, with a back button to Home (pushed onto the history
+  like Settings).
 - **Summary:** as above.
 - **Settings:**
   - DE/EN toggle;
-  - "Reset progress" with a confirm dialog: wipes stats, counters and any
-    saved session, keeps the language;
+  - "Reset progress" with a confirm dialog: wipes stats, counters, any
+    saved session and the game's progress, keeps the language;
   - "Install app" button, shown only when the browser fires
     `beforeinstallprompt`, hidden after install or when unavailable (so never
     on iOS).
@@ -177,6 +229,7 @@ defensively: corrupt or foreign data is ignored and never throws.
 - lifetime counters per lesson: sessions played, best score, total answers,
   total correct (`counters` for the quiz, `counters.functions` for reading
   functions);
+- the game's progress (see the game above);
 - the last result (lesson, score, total) for the summary;
 - per-question stats `{ seen, correct, lastSeen }` keyed by question id
   (collected now, not yet used to pick questions);
@@ -266,10 +319,15 @@ Hono on Node 24 with `node:sqlite`. API types and validation live in
     - feedback queue;
     - i18n completeness;
     - quiz hydra geometry and head states;
+    - the game's interpreter, world simulation and progress, and every
+      level: the right answer solves it, each wrong answer fails with its
+      own behaviour, and no note of a wrong answer names the right one;
     - a content validation test over all 80 questions.
   - **Playwright e2e,** against the built app served by the Node server:
     - a full 10-question run, including the hydra heads and the summary hydra;
     - slashed and regrown heads, restored after a reload without animation;
+    - a game level: wrong answers run and fail, the right answer is never
+      marked before it is picked, tried answers survive a reload;
     - keyboard;
     - Quit;
     - auto-resume;

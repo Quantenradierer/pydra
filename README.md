@@ -2,9 +2,10 @@
 
 Pydra (Py + Hydra) is a multiple-choice trainer for absolute Python beginners,
 in German (default) and English. It is an installable PWA that works fully
-offline. Two lessons: a quiz of 10 random questions from 80 in 8 topics, and
+offline. Three lessons: a quiz of 10 random questions from 80 in 8 topics,
 "Reading functions", which walks through a short function line by line and
-then asks what the whole function does. Every answer gets an explanation. Live at https://pydra.quantenradierer.de/.
+then asks what the whole function does, and "Hydra goes fishing", a game:
+fill the gap in a small program and watch a hydra run it step by step. Every answer gets an explanation. Live at https://pydra.quantenradierer.de/.
 
 The agreed requirements are in [docs/requirements.md](docs/requirements.md);
 deployment is described in [DEPLOY.md](DEPLOY.md).
@@ -33,6 +34,7 @@ In `web/src`:
 | `update.ts`                     | Service worker update rule (never reload during a quiz)             |
 | `feedback/`                     | Feedback client and offline queue                                   |
 | `hydra/`                        | The quiz hydra: neck geometry, head states from the session, SVG; its animations are in `style.css` |
+| `game/`                         | The hydra game: Python-subset interpreter (`python.ts`), pool simulation and traces (`world.ts`), levels (`levels.ts`), progress, the pool SVG (`arena.ts`); the screen is `views/game.ts` |
 | `i18n.ts`                       | UI texts in German and English                                      |
 | `icons/hydra.svg`, `scripts/icons.mjs` | Icon artwork (also inlined as the Home logo) and the PNG generator (`npm run icons -w web`) |
 
@@ -142,6 +144,36 @@ Each function of the "Reading functions" lesson lives in
   above; the prompts are generated. Choices are plain text (no backticks).
 - Run every claim in an explanation with `python3`, then `npm test`
   (`walkthroughs.test.ts` checks the structure).
+
+## Game levels (Hydra goes fishing)
+
+The levels live in `web/src/game/levels.ts` (TypeScript, in play order):
+
+```ts
+{
+  id: 'while',                                  // stable, saved in the progress
+  title: { de: 'while: solange …', en: 'while: as long as …' },
+  intro: { de: '…', en: '…' },                 // introduces the concept; backticks are code
+  map: ['#######', '>FF.FF#', '#######'],       // # rock, . water, F fish, start ^ > v <
+  code: 'while ___:\n    move()',             // exactly one gap ___
+  choices: [
+    { code: 'not wall_ahead()', note: { de: '…', en: '…' } }, // right: the explanation
+    { code: 'wall_ahead()', note: { de: '…', en: '…' } },     // wrong: why it went wrong
+    …                                                           // 4 choices in all
+  ],
+  answerIndex: 0,
+}
+```
+
+- Every choice is really run: `fill(level, i)` puts its code into the gap,
+  and `simulate()` in `world.ts` runs it with the interpreter in `python.ts`
+  and records a step per line. Only what the interpreter supports can be used
+  (see the comment at the top of `python.ts`).
+- The right answer must eat every fish; each wrong one must fail, and fail
+  differently from the others (path, fish eaten or outcome). A wrong
+  answer's note explains what went wrong without naming the right answer.
+- Add the expected outcomes of a new level to `EXPECTED` in
+  `levels.test.ts`, then run `npm test`.
 
 ## Feedback API
 

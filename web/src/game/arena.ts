@@ -30,16 +30,18 @@ const FISH = 'M-3.4 0C-1.8-2.4 1-2.4 2.2-.4L3.8-1.8V1.8L2.2.4C1 2.4-1.8 2.4-3.4 
 export function arena(world: World): Arena {
   const width = world.width * CELL;
   const height = world.height * CELL;
-  const cells: string[] = [];
+  const rocks: string[] = [];
+  let checker = '';
   for (let y = 0; y < world.height; y++) {
     for (let x = 0; x < world.width; x++) {
       if (world.rocks.has(`${x},${y}`)) {
-        cells.push(`<rect class="arena-rock" x="${x * CELL + 0.8}" y="${y * CELL + 0.8}" width="${CELL - 1.6}" height="${CELL - 1.6}" rx="3"/>`);
-      } else {
-        cells.push(`<circle class="arena-dot" cx="${x * CELL + CELL / 2}" cy="${y * CELL + CELL / 2}" r="0.5"/>`);
-      }
+        rocks.push(`<rect class="arena-rock" x="${x * CELL + 1}" y="${y * CELL + 1}" width="${CELL - 2}" height="${CELL - 2}" rx="2"/>`);
+      } else if ((x + y) % 2 === 0) checker += `M${x * CELL} ${y * CELL}h${CELL}v${CELL}h${-CELL}z`;
     }
   }
+  let lines = '';
+  for (let x = 0; x <= world.width; x++) lines += `M${x * CELL} 0V${height}`;
+  for (let y = 0; y <= world.height; y++) lines += `M0 ${y * CELL}H${width}`;
   const fish = world.fish
     .map((f, i) => {
       const c = centre(f);
@@ -49,7 +51,9 @@ export function arena(world: World): Arena {
 
   const root = svg(`<svg class="arena" viewBox="-1 -1 ${width + 2} ${height + 2}" aria-hidden="true" focusable="false" data-testid="arena">
   <rect class="arena-water" x="-1" y="-1" width="${width + 2}" height="${height + 2}" rx="3"/>
-  ${cells.join('')}
+  <path class="arena-checker" d="${checker}"/>
+  <path class="arena-grid" d="${lines}"/>
+  ${rocks.join('')}
   ${fish}
   <path class="arena-body"/>
   <path class="arena-scales"/>

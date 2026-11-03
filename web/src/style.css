@@ -890,8 +890,16 @@ textarea {
   fill: var(--hydra-bg);
 }
 
-.arena-dot {
-  fill: #2a4560;
+.arena-checker {
+  fill: #fff;
+  fill-opacity: 0.05;
+}
+
+.arena-grid {
+  fill: none;
+  stroke: #7fa6c9;
+  stroke-opacity: 0.28;
+  stroke-width: 0.35;
 }
 
 .arena-rock {

@@ -4,6 +4,8 @@ import type { Outcome, Point, Snapshot, World } from './world.ts';
 
 /** Size of one grid cell in viewBox units. */
 const CELL = 10;
+/** Distance from the middle of the head to where the body joins it. */
+const NECK = 3.5;
 const DX = [0, 1, 0, -1];
 const DY = [-1, 0, 1, 0];
 
@@ -49,22 +51,10 @@ export function arena(world: World): Arena {
     })
     .join('');
 
-  // Slow, soft bubbles and ripples in the water; pure CSS, so they cost next to nothing.
-  const bubbles = [
-    [0.12, 0.8, 0], [0.34, 0.95, 2.1], [0.58, 0.85, 4.3], [0.78, 0.9, 1.2], [0.92, 0.75, 3.4],
-  ]
-    .map(([x, y, delay]) => `<circle class="arena-bubble" cx="${x! * width}" cy="${y! * height}" r="0.9" style="animation-delay:-${delay}s"/>`)
-    .join('');
-  const ripples = [[0.25, 0.3, 0], [0.7, 0.65, 3.5]]
-    .map(([x, y, delay]) => `<circle class="arena-ripple" cx="${x! * width}" cy="${y! * height}" r="3" style="animation-delay:-${delay}s"/>`)
-    .join('');
-
   const root = svg(`<svg class="arena" viewBox="-1 -1 ${width + 2} ${height + 2}" aria-hidden="true" focusable="false" data-testid="arena">
   <rect class="arena-water" x="-1" y="-1" width="${width + 2}" height="${height + 2}" rx="3"/>
   <path class="arena-checker" d="${checker}"/>
   <path class="arena-grid" d="${lines}"/>
-  ${ripples}
-  ${bubbles}
   ${rocks.join('')}
   ${fish}
   <path class="arena-body"/>
@@ -97,7 +87,10 @@ export function arena(world: World): Arena {
   /** Draws the snake through these points; the first one is the head. */
   function draw(points: Point[], deg: number) {
     drawn = points;
-    const d = `M${points.map((p) => `${p.x} ${p.y}`).join('L')}`;
+    // The body ends at the back of the head (its neck), not in the middle of it.
+    const rad = (deg * Math.PI) / 180;
+    const neck = { x: points[0]!.x - Math.cos(rad) * NECK, y: points[0]!.y - Math.sin(rad) * NECK };
+    const d = `M${[neck, ...points.slice(1)].map((p) => `${p.x} ${p.y}`).join('L')}`;
     body.setAttribute('d', d);
     scales.setAttribute('d', d);
     hydra.setAttribute('transform', `translate(${points[0]!.x} ${points[0]!.y})`);

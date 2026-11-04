@@ -938,23 +938,6 @@ textarea {
   stroke-dasharray: 0.1 2.5;
 }
 
-.arena-bubble {
-  fill: none;
-  stroke: #9cc7ee;
-  stroke-opacity: 0.35;
-  stroke-width: 0.25;
-  animation: arena-rise 9s linear infinite;
-}
-
-.arena-ripple {
-  fill: none;
-  stroke: #9cc7ee;
-  stroke-width: 0.25;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: arena-ripple 7s ease-out infinite;
-}
-
 .arena-head-pulse {
   transform-box: fill-box;
   transform-origin: 20% 50%;
@@ -1004,31 +987,6 @@ textarea {
   from {
     opacity: 0;
     scale: 0.3;
-  }
-}
-
-@keyframes arena-rise {
-  from {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-}
-
-@keyframes arena-ripple {
-  from {
-    transform: scale(0.3);
-    opacity: 0.5;
-  }
-  to {
-    transform: scale(2.2);
-    opacity: 0;
   }
 }
 

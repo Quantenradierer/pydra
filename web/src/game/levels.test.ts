@@ -41,6 +41,26 @@ const EXPECTED: Record<string, Outcome['kind'][]> = {
   'function-loop': ['success', 'missed', 'crash', 'missed'],
   swap: ['success', 'missed', 'missed', 'error'],
   spiral: ['success', 'missed', 'crash', 'missed'],
+  'two-variables': ['success', 'crash', 'missed', 'error'],
+  'size-plus': ['success', 'missed', 'crash', 'error'],
+  'loop-string': ['success', 'crash', 'missed', 'error'],
+  'list-length': ['success', 'crash', 'missed', 'error'],
+  'last-item': ['success', 'error', 'missed', 'missed'],
+  'double-return': ['success', 'missed', 'crash', 'error'],
+  'return-sum': ['success', 'crash', 'missed', 'missed'],
+  'int-division': ['success', 'crash', 'missed', 'error'],
+  'while-compare': ['success', 'missed', 'crash', 'missed'],
+  'not-equal': ['success', 'missed', 'crash', 'missed'],
+  'even-steps': ['success', 'crash', 'missed', 'error'],
+  'to-the-wall': ['success', 'missed', 'crash', 'error'],
+  'until-fish': ['success', 'missed', 'crash', 'crash'],
+  'follow-fish': ['success', 'missed', 'crash', 'error'],
+  'elif-turns': ['success', 'crash', 'crash', 'crash'],
+  'count-distance': ['success', 'missed', 'crash', 'error'],
+  'turn-times': ['success', 'crash', 'missed', 'missed'],
+  'rectangle-sides': ['success', 'missed', 'crash', 'missed'],
+  'reset-counter': ['success', 'missed', 'missed', 'crash'],
+  'step-function': ['success', 'crash', 'crash', 'missed'],
 };
 
 /** What the player sees of a run: the hydra's path and turns, the fish eaten, and how it ended. */
@@ -48,9 +68,9 @@ const behaviour = (trace: Trace) =>
   JSON.stringify([trace.steps.map((s) => [s.x, s.y, s.dir, s.eaten]), trace.outcome]);
 
 describe('game levels', () => {
-  it('has 5 to 40 levels with unique ids', () => {
+  it('has 5 to 60 levels with unique ids', () => {
     expect(LEVELS.length).toBeGreaterThanOrEqual(5);
-    expect(LEVELS.length).toBeLessThanOrEqual(40);
+    expect(LEVELS.length).toBeLessThanOrEqual(60);
     expect(new Set(LEVELS.map((l) => l.id)).size).toBe(LEVELS.length);
     expect(Object.keys(EXPECTED)).toEqual(LEVELS.map((l) => l.id));
   });

@@ -1286,4 +1286,824 @@ export const LEVELS: readonly GameLevel[] = [
     ],
     answerIndex: 0,
   },
+  {
+    id: 'two-variables',
+    title: { de: 'Zwei Variablen', en: 'Two variables' },
+    intro: {
+      de: 'Du kannst mit mehreren Variablen rechnen. `a + b` ergibt die Summe der beiden Werte, und das Ergebnis darf überall stehen, wo eine Zahl gebraucht wird.',
+      en: 'You can calculate with several variables. `a + b` gives the sum of the two values, and the result may stand anywhere a number is needed.',
+    },
+    map: ['>....F'],
+    code: 'a = 2\nb = 3\nfor i in range(___):\n    move()',
+    choices: [
+      {
+        code: 'a + b',
+        note: {
+          de: '`a + b` ist 2 + 3, also 5. Fünf Felder bringen die Hydra genau zum Fisch.',
+          en: '`a + b` is 2 + 3, which is 5. Five cells take the hydra exactly to the fish.',
+        },
+      },
+      {
+        code: 'a * b',
+        note: {
+          de: '`a * b` ist 6. Der Fisch liegt nach fünf Feldern, das sechste `move()` stößt an den Rand.',
+          en: '`a * b` is 6. The fish lies after five cells, and the sixth `move()` hits the edge.',
+        },
+      },
+      {
+        code: 'b',
+        note: {
+          de: '`b` ist nur 3. Die Hydra schwimmt drei Felder und bleibt zwei Felder vor dem Fisch stehen.',
+          en: '`b` is only 3. The hydra swims three cells and stops two cells short of the fish.',
+        },
+      },
+      {
+        code: 'c',
+        note: {
+          de: 'Eine Variable `c` gibt es nicht, nur `a` und `b`. Python meldet einen `NameError`.',
+          en: 'There is no variable `c`, only `a` and `b`. Python reports a `NameError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'size-plus',
+    title: { de: 'Eine Größe, zweimal benutzt', en: 'One size, used twice' },
+    intro: {
+      de: 'Dieselbe Variable kannst du an mehreren Stellen benutzen, auch mit einer Rechnung: `size + 1` ist immer eins mehr als `size`. Ändert sich `size`, ändern sich beide Seiten mit.',
+      en: 'You can use the same variable in several places, even with a calculation: `size + 1` is always one more than `size`. If `size` changes, both sides change with it.',
+    },
+    map: ['>..', '...', '...', '..F'],
+    code: 'size = 2\nfor i in range(size):\n    move()\nturn_right()\nfor i in range(size + ___):\n    move()',
+    choices: [
+      {
+        code: '1',
+        note: {
+          de: 'Zuerst zwei Felder nach rechts, dann `2 + 1` = 3 Felder nach unten. Genau bis zum Fisch in der Ecke.',
+          en: 'First two cells to the right, then `2 + 1` = 3 cells down. Exactly to the fish in the corner.',
+        },
+      },
+      {
+        code: '0',
+        note: {
+          de: 'Dann sind es nur `2 + 0` = 2 Felder nach unten. Der Fisch liegt noch ein Feld weiter.',
+          en: 'Then it is only `2 + 0` = 2 cells down. The fish is one cell further.',
+        },
+      },
+      {
+        code: '2',
+        note: {
+          de: 'Dann sind es 4 Felder nach unten, aber das Becken ist nur 4 Felder hoch. Das letzte `move()` stößt an den Rand.',
+          en: 'Then it is 4 cells down, but the pool is only 4 cells tall. The last `move()` hits the edge.',
+        },
+      },
+      {
+        code: 'step',
+        note: {
+          de: 'Eine Variable `step` gibt es nicht, sie heißt anders. Python meldet einen `NameError`.',
+          en: 'There is no variable `step`; it is named differently. Python reports a `NameError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'loop-string',
+    title: { de: 'Buchstaben zählen', en: 'Counting letters' },
+    intro: {
+      de: 'Eine `for`-Schleife kann auch über einen Text laufen: Sie läuft einmal pro Buchstabe. Mit `"fisch"` sind das fünf Durchläufe, mit `"fi"` nur zwei.',
+      en: 'A `for` loop can also run over a text: it runs once per letter. With `"fish"` that is four passes, with `"fi"` only two.',
+    },
+    map: ['>...F'],
+    code: 'word = "fish"\nfor c in ___:\n    move()',
+    choices: [
+      {
+        code: 'word',
+        note: {
+          de: '`word` hat vier Buchstaben, also läuft die Schleife viermal. Vier Felder bringen die Hydra zum Fisch.',
+          en: '`word` has four letters, so the loop runs four times. Four cells take the hydra to the fish.',
+        },
+      },
+      {
+        code: 'word + "s"',
+        note: {
+          de: 'Das ergibt `"fishs"` mit fünf Buchstaben. Beim fünften `move()` stößt die Hydra an den Rand.',
+          en: 'That makes `"fishs"` with five letters. On the fifth `move()` the hydra hits the edge.',
+        },
+      },
+      {
+        code: '"fi"',
+        note: {
+          de: 'Der Text `"fi"` hat nur zwei Buchstaben. Die Hydra schwimmt zwei Felder und bleibt stehen.',
+          en: 'The text `"fi"` has only two letters. The hydra swims two cells and stops.',
+        },
+      },
+      {
+        code: 'len(word)',
+        note: {
+          de: '`len(word)` ist die Zahl 4, und über eine Zahl kann eine `for`-Schleife nicht laufen. Python meldet einen `TypeError`. Dafür bräuchtest du `range(len(word))`.',
+          en: '`len(word)` is the number 4, and a `for` loop cannot run over a number. Python reports a `TypeError`. For that you would need `range(len(word))`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'list-length',
+    title: { de: 'Wie lang ist die Liste?', en: 'How long is the list?' },
+    intro: {
+      de: '`len(liste)` sagt dir, wie viele Einträge eine Liste hat. So musst du die Zahl nicht selbst zählen, und der Code passt sich an, wenn die Liste länger oder kürzer wird.',
+      en: '`len(list)` tells you how many items a list has. That way you do not have to count yourself, and the code adapts when the list gets longer or shorter.',
+    },
+    map: ['>...F'],
+    code: 'plan = [7, 8, 9, 5]\nfor i in range(___):\n    move()',
+    choices: [
+      {
+        code: 'len(plan)',
+        note: {
+          de: 'Die Liste hat vier Einträge, also ist `len(plan)` gleich 4. Vier Felder bringen die Hydra zum Fisch.',
+          en: 'The list has four items, so `len(plan)` is 4. Four cells take the hydra to the fish.',
+        },
+      },
+      {
+        code: 'len(plan) + 1',
+        note: {
+          de: 'Das sind 5 Felder, eines zu viel. Das letzte `move()` stößt an den Rand.',
+          en: 'That is 5 cells, one too many. The last `move()` hits the edge.',
+        },
+      },
+      {
+        code: 'len(plan) - 1',
+        note: {
+          de: 'Das sind nur 3 Felder. Die Hydra bleibt ein Feld vor dem Fisch stehen.',
+          en: 'That is only 3 cells. The hydra stops one cell before the fish.',
+        },
+      },
+      {
+        code: 'plan',
+        note: {
+          de: '`range` braucht eine Zahl, aber `plan` ist eine ganze Liste. Python meldet einen `TypeError`.',
+          en: '`range` needs a number, but `plan` is a whole list. Python reports a `TypeError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'last-item',
+    title: { de: 'Das letzte Element', en: 'The last item' },
+    intro: {
+      de: 'Mit `liste[0]` holst du das erste Element, mit `liste[-1]` das letzte. Negative Zahlen zählen von hinten, das ist praktisch, wenn du die Länge nicht kennst.',
+      en: 'With `list[0]` you get the first item, with `list[-1]` the last. Negative numbers count from the back, which is handy when you do not know the length.',
+    },
+    map: ['>..F'],
+    code: 'lengths = [1, 2, 3]\nfor i in range(lengths[___]):\n    move()',
+    choices: [
+      {
+        code: '-1',
+        note: {
+          de: '`lengths[-1]` ist das letzte Element, die 3. Drei Felder bringen die Hydra zum Fisch.',
+          en: '`lengths[-1]` is the last item, the 3. Three cells take the hydra to the fish.',
+        },
+      },
+      {
+        code: '3',
+        note: {
+          de: 'Die Liste hat nur die Plätze 0, 1 und 2. Platz 3 gibt es nicht, und Python meldet einen `IndexError`.',
+          en: 'The list only has places 0, 1 and 2. There is no place 3, and Python reports an `IndexError`.',
+        },
+      },
+      {
+        code: '1',
+        note: {
+          de: '`lengths[1]` ist die 2, das mittlere Element. Die Hydra schwimmt nur zwei Felder.',
+          en: '`lengths[1]` is the 2, the middle item. The hydra swims only two cells.',
+        },
+      },
+      {
+        code: '0',
+        note: {
+          de: '`lengths[0]` ist die 1, das erste Element. Die Hydra schwimmt nur ein Feld.',
+          en: '`lengths[0]` is the 1, the first item. The hydra swims only one cell.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'double-return',
+    title: { de: 'Verdoppeln mit return', en: 'Doubling with return' },
+    intro: {
+      de: 'Eine Funktion kann mit `return` ein Ergebnis zurückgeben. `double(3)` ruft sie auf und wird zu 6. Das Ergebnis kannst du direkt in `range(...)` benutzen.',
+      en: 'A function can give a result back with `return`. `double(3)` calls it and becomes 6. You can use the result directly in `range(...)`.',
+    },
+    map: ['>.....F'],
+    code: 'def double(n):\n    return n * 2\n\nfor i in range(double(___)):\n    move()',
+    choices: [
+      {
+        code: '3',
+        note: {
+          de: '`double(3)` ist 6. Sechs Felder bringen die Hydra genau zum Fisch.',
+          en: '`double(3)` is 6. Six cells take the hydra exactly to the fish.',
+        },
+      },
+      {
+        code: '2',
+        note: {
+          de: '`double(2)` ist 4. Die Hydra bleibt zwei Felder vor dem Fisch stehen.',
+          en: '`double(2)` is 4. The hydra stops two cells before the fish.',
+        },
+      },
+      {
+        code: '6',
+        note: {
+          de: '`double(6)` ist 12. Nach sechs Feldern stößt die Hydra an den Rand.',
+          en: '`double(6)` is 12. After six cells the hydra hits the edge.',
+        },
+      },
+      {
+        code: 'n',
+        note: {
+          de: 'Außerhalb der Funktion gibt es kein `n`, es gehört nur zur Funktion. Python meldet einen `NameError`.',
+          en: 'Outside the function there is no `n`; it belongs to the function only. Python reports a `NameError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'return-sum',
+    title: { de: 'Funktion mit zwei Zahlen', en: 'A function with two numbers' },
+    intro: {
+      de: 'Eine Funktion kann mehrere Parameter haben und aus ihnen etwas berechnen. Was hinter `return` steht, bekommt der Aufrufer zurück: Hier soll `add(2, 3)` die Zahl 5 liefern.',
+      en: 'A function can have several parameters and calculate something from them. Whatever stands after `return` goes back to the caller: here `add(2, 3)` should give the number 5.',
+    },
+    map: ['>....F'],
+    code: 'def add(a, b):\n    return ___\n\nfor i in range(add(2, 3)):\n    move()',
+    choices: [
+      {
+        code: 'a + b',
+        note: {
+          de: 'Die Funktion gibt 2 + 3 = 5 zurück. Fünf Felder bringen die Hydra zum Fisch.',
+          en: 'The function returns 2 + 3 = 5. Five cells take the hydra to the fish.',
+        },
+      },
+      {
+        code: 'a * b',
+        note: {
+          de: 'Das gibt 6 zurück. Nach fünf Feldern stößt die Hydra an den Rand.',
+          en: 'That returns 6. After five cells the hydra hits the edge.',
+        },
+      },
+      {
+        code: 'a - b',
+        note: {
+          de: 'Das gibt -1 zurück. `range(-1)` ist leer, und die Hydra bewegt sich gar nicht.',
+          en: 'That returns -1. `range(-1)` is empty, and the hydra does not move at all.',
+        },
+      },
+      {
+        code: 'a',
+        note: {
+          de: 'Das gibt nur 2 zurück. Die Hydra schwimmt zwei Felder und bleibt weit vor dem Fisch stehen.',
+          en: 'That returns only 2. The hydra swims two cells and stops far from the fish.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'int-division',
+    title: { de: 'Ganzzahlig teilen', en: 'Dividing whole numbers' },
+    intro: {
+      de: '`9 // 3` teilt ohne Nachkommastellen und ergibt 3. Mit `//` kannst du eine Zahl in gleich große Stücke aufteilen. Durch 0 teilen geht aber nie.',
+      en: '`9 // 3` divides without decimals and gives 3. With `//` you can split a number into equal pieces. Dividing by 0 never works, though.',
+    },
+    map: ['>..F'],
+    code: 'n = 9\nfor i in range(n // ___):\n    move()',
+    choices: [
+      {
+        code: '3',
+        note: {
+          de: '`9 // 3` ist 3. Drei Felder bringen die Hydra genau zum Fisch.',
+          en: '`9 // 3` is 3. Three cells take the hydra exactly to the fish.',
+        },
+      },
+      {
+        code: '2',
+        note: {
+          de: '`9 // 2` ist 4 (der Rest fällt weg). Nach drei Feldern stößt die Hydra an den Rand.',
+          en: '`9 // 2` is 4 (the remainder is dropped). After three cells the hydra hits the edge.',
+        },
+      },
+      {
+        code: '9',
+        note: {
+          de: '`9 // 9` ist 1. Die Hydra schwimmt nur ein Feld.',
+          en: '`9 // 9` is 1. The hydra swims only one cell.',
+        },
+      },
+      {
+        code: '0',
+        note: {
+          de: 'Durch 0 kann man nicht teilen. Python meldet einen `ZeroDivisionError`.',
+          en: 'You cannot divide by 0. Python reports a `ZeroDivisionError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'while-compare',
+    title: { de: 'Genau richtig vergleichen', en: 'Comparing just right' },
+    intro: {
+      de: 'Bei `n <= 4` läuft die Schleife auch noch, wenn `n` genau 4 ist. Bei `n < 4` hört sie schon vorher auf. Ob `<` oder `<=`, entscheidet um einen Durchlauf.',
+      en: 'With `n <= 4` the loop still runs when `n` is exactly 4. With `n < 4` it stops before. Whether `<` or `<=` makes a difference of one pass.',
+    },
+    map: ['>...F'],
+    code: 'n = 1\nwhile ___:\n    move()\n    n += 1',
+    choices: [
+      {
+        code: 'n <= 4',
+        note: {
+          de: '`n` ist 1, 2, 3 und 4: vier Durchläufe, vier Felder. Die Hydra frisst den Fisch.',
+          en: '`n` is 1, 2, 3 and 4: four passes, four cells. The hydra eats the fish.',
+        },
+      },
+      {
+        code: 'n < 4',
+        note: {
+          de: 'Bei `n` gleich 4 ist die Bedingung falsch. Das sind nur drei Durchläufe, und der Fisch bleibt liegen.',
+          en: 'When `n` is 4 the condition is false. That is only three passes, and the fish is left behind.',
+        },
+      },
+      {
+        code: 'n <= 6',
+        note: {
+          de: 'Das sind sechs Durchläufe. Nach vier Feldern stößt die Hydra an den Rand.',
+          en: 'That is six passes. After four cells the hydra hits the edge.',
+        },
+      },
+      {
+        code: 'n >= 4',
+        note: {
+          de: 'Schon am Anfang ist `n` gleich 1, und 1 ist nicht größer oder gleich 4. Die Schleife läuft nie.',
+          en: '`n` is 1 at the start, and 1 is not greater than or equal to 4. The loop never runs.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'not-equal',
+    title: { de: 'Ungleich und überspringen', en: 'Not equal and skipping' },
+    intro: {
+      de: '`n != 6` heißt: `n` ist nicht 6. Die Schleife läuft, bis `n` genau 6 ist. Zählt `n` aber in Zweierschritten, kann es eine ungerade Zahl ganz überspringen, und die Schleife hört nie auf.',
+      en: '`n != 6` means: `n` is not 6. The loop runs until `n` is exactly 6. But if `n` counts in twos, it can skip an odd number completely, and the loop never stops.',
+    },
+    map: ['>..F..'],
+    code: 'n = 0\nwhile n != ___:\n    move()\n    n += 2',
+    choices: [
+      {
+        code: '6',
+        note: {
+          de: '`n` ist 0, 2, 4 und dann 6: drei Durchläufe. Die Hydra frisst den Fisch.',
+          en: '`n` is 0, 2, 4 and then 6: three passes. The hydra eats the fish.',
+        },
+      },
+      {
+        code: '4',
+        note: {
+          de: 'Bei 4 ist Schluss, das sind nur zwei Durchläufe. Der Fisch ist noch ein Feld weg.',
+          en: 'It stops at 4, which is only two passes. The fish is still one cell away.',
+        },
+      },
+      {
+        code: '5',
+        note: {
+          de: '`n` springt von 4 auf 6 und ist nie genau 5. Die Schleife hört nicht auf, bis die Hydra an den Rand stößt.',
+          en: '`n` jumps from 4 to 6 and is never exactly 5. The loop does not stop until the hydra hits the edge.',
+        },
+      },
+      {
+        code: '0',
+        note: {
+          de: '`n` ist am Anfang schon 0, die Bedingung ist falsch. Die Schleife läuft nie.',
+          en: '`n` is already 0 at the start, so the condition is false. The loop never runs.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'even-steps',
+    title: { de: 'Nur bei geraden Zahlen', en: 'Only on even numbers' },
+    intro: {
+      de: 'Eine Schleife kann Zahlen durchlaufen, und ein `if` entscheidet bei jeder, ob etwas passiert. `n % 2 == 0` stimmt nur für gerade Zahlen. Die Hydra schwimmt also nur bei jeder zweiten Zahl.',
+      en: 'A loop can run through numbers, and an `if` decides for each one whether something happens. `n % 2 == 0` is true only for even numbers. So the hydra swims only on every second number.',
+    },
+    map: ['>.F'],
+    code: 'for n in range(1, 6):\n    if ___:\n        move()',
+    choices: [
+      {
+        code: 'n % 2 == 0',
+        note: {
+          de: '`n` ist 1, 2, 3, 4, 5. Gerade sind 2 und 4: zwei Schritte, und die Hydra frisst den Fisch.',
+          en: '`n` is 1, 2, 3, 4, 5. Even are 2 and 4: two steps, and the hydra eats the fish.',
+        },
+      },
+      {
+        code: 'n % 2 == 1',
+        note: {
+          de: 'Ungerade sind 1, 3 und 5: drei Schritte. Das dritte `move()` stößt an den Rand.',
+          en: 'Odd are 1, 3 and 5: three steps. The third `move()` hits the edge.',
+        },
+      },
+      {
+        code: 'n > 4',
+        note: {
+          de: 'Nur die 5 ist größer als 4. Die Hydra schwimmt ein einziges Feld.',
+          en: 'Only the 5 is greater than 4. The hydra swims a single cell.',
+        },
+      },
+      {
+        code: 'even',
+        note: {
+          de: 'Eine Variable `even` gibt es nicht. Python meldet einen `NameError`.',
+          en: 'There is no variable `even`. Python reports a `NameError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'to-the-wall',
+    title: { de: 'Bis zur Wand', en: 'Up to the wall' },
+    intro: {
+      de: '`wall_ahead()` ist wahr, wenn direkt vor der Hydra eine Wand liegt. `while not wall_ahead():` heißt also: schwimme, solange du noch weiter kannst. Danach steht die Hydra genau an der Wand.',
+      en: '`wall_ahead()` is true when a wall lies right in front of the hydra. So `while not wall_ahead():` means: swim as long as you can go on. Afterwards the hydra stands right at the wall.',
+    },
+    map: ['>...', '....', '...F'],
+    code: 'while ___:\n    move()\nturn_right()\nwhile not wall_ahead():\n    move()',
+    choices: [
+      {
+        code: 'not wall_ahead()',
+        note: {
+          de: 'Die Hydra schwimmt bis zur rechten Wand, dreht sich nach unten und schwimmt bis zur unteren Wand. Dort liegt der Fisch.',
+          en: 'The hydra swims to the right wall, turns down and swims to the bottom wall. The fish is there.',
+        },
+      },
+      {
+        code: 'wall_ahead()',
+        note: {
+          de: 'Am Anfang ist keine Wand vor der Hydra, die Bedingung ist falsch, und die erste Schleife läuft nie. Sie schwimmt dann in der falschen Spalte nach unten.',
+          en: 'At the start there is no wall ahead, so the condition is false and the first loop never runs. The hydra then swims down in the wrong column.',
+        },
+      },
+      {
+        code: 'not fish_ahead()',
+        note: {
+          de: 'Auf dieser Strecke liegt kein Fisch, die Bedingung bleibt wahr. Die Hydra schwimmt weiter und stößt an die Wand.',
+          en: 'There is no fish on this stretch, so the condition stays true. The hydra keeps swimming and bumps into the wall.',
+        },
+      },
+      {
+        code: 'steps < 3',
+        note: {
+          de: 'Eine Variable `steps` gibt es nicht. Python meldet einen `NameError`.',
+          en: 'There is no variable `steps`. Python reports a `NameError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'until-fish',
+    title: { de: 'Bis zum nächsten Fisch', en: 'Up to the next fish' },
+    intro: {
+      de: 'Mit `while not fish_ahead():` schwimmt die Hydra, bis direkt vor ihr ein Fisch liegt. Dann bleibt sie stehen, und du entscheidest, was als Nächstes kommt. Das Ganze steht in einer Schleife und passiert zweimal.',
+      en: 'With `while not fish_ahead():` the hydra swims until a fish lies right in front of it. Then it stops, and you decide what comes next. The whole thing sits in a loop and happens twice.',
+    },
+    map: ['>..F..F'],
+    code: 'for i in range(2):\n    while not fish_ahead():\n        move()\n    ___',
+    choices: [
+      {
+        code: 'move()',
+        note: {
+          de: 'Nach der Schleife liegt der Fisch direkt vor der Hydra, `move()` frisst ihn. Dann geht es zum zweiten Fisch weiter.',
+          en: 'After the loop the fish lies right in front of the hydra, and `move()` eats it. Then it goes on to the second fish.',
+        },
+      },
+      {
+        code: 'pass',
+        note: {
+          de: '`pass` tut nichts. Der erste Fisch bleibt liegen, die zweite Runde sieht ihn schon vor sich und tut nichts.',
+          en: '`pass` does nothing. The first fish stays, and the second round already sees it ahead and does nothing.',
+        },
+      },
+      {
+        code: 'turn_right()',
+        note: {
+          de: 'Die Hydra dreht sich nach unten. Dort ist sofort die Wand, und die Hydra stößt in der zweiten Runde an.',
+          en: 'The hydra turns down. The wall is right there, and the hydra bumps into it in the second round.',
+        },
+      },
+      {
+        code: 'turn_left()',
+        note: {
+          de: 'Die Hydra dreht sich nach oben. Dort ist sofort die Wand, und die Hydra stößt in der zweiten Runde an.',
+          en: 'The hydra turns up. The wall is right there, and the hydra bumps into it in the second round.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'follow-fish',
+    title: { de: 'Der Fischspur folgen', en: 'Following the fish trail' },
+    intro: {
+      de: 'Eine Spur aus Fischen kannst du mit `fish_ahead()` verfolgen: Liegt ein Fisch vorn, schwimmt die Hydra hin, sonst sucht sie die Richtung. Die Frage ist nur, in welche Richtung sie sich dreht.',
+      en: 'You can follow a trail of fish with `fish_ahead()`: if a fish lies ahead, the hydra swims to it, otherwise it looks for the direction. The only question is which way it turns.',
+    },
+    map: ['>FF', '..F', '..F'],
+    code: 'for i in range(5):\n    if fish_ahead():\n        move()\n    else:\n        ___',
+    choices: [
+      {
+        code: 'turn_right()',
+        note: {
+          de: 'Zwei Fische nach rechts, dann kein Fisch mehr vorn: Die Hydra dreht sich nach rechts und sieht den nächsten Fisch unter sich. Die Spur führt sie bis zum Ende.',
+          en: 'Two fish to the right, then no fish ahead: the hydra turns right and sees the next fish below. The trail leads it to the end.',
+        },
+      },
+      {
+        code: 'turn_left()',
+        note: {
+          de: 'Die Hydra dreht sich nach oben, dort liegt nichts, sie dreht sich weiter nach links und so fort. Sie findet die Spur nicht mehr.',
+          en: 'The hydra turns up, nothing lies there, so it keeps turning left and so on. It does not find the trail again.',
+        },
+      },
+      {
+        code: 'move()',
+        note: {
+          de: 'Die Hydra schwimmt einfach geradeaus, auch wenn kein Fisch dort liegt, und stößt an den Rand.',
+          en: 'The hydra simply swims straight ahead even though no fish lies there, and hits the edge.',
+        },
+      },
+      {
+        code: 'turn_around()',
+        note: {
+          de: 'Einen Befehl `turn_around()` gibt es nicht. Python meldet einen `NameError`.',
+          en: 'There is no command `turn_around()`. Python reports a `NameError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'elif-turns',
+    title: { de: 'Mehrere Fälle mit elif', en: 'Several cases with elif' },
+    intro: {
+      de: 'Mit `elif` prüfst du einen weiteren Fall, wenn der erste nicht gepasst hat. Jeder Durchlauf nimmt genau einen Zweig: Hier dreht die Hydra bei `i` gleich 2 und bei `i` gleich 4, sonst schwimmt sie.',
+      en: 'With `elif` you check another case if the first did not fit. Each pass takes exactly one branch: here the hydra turns when `i` is 2 and when `i` is 4, otherwise it swims.',
+    },
+    map: ['>..', '.F.'],
+    code: 'for i in range(6):\n    if i == 2:\n        turn_right()\n    elif i == 4:\n        ___\n    else:\n        move()',
+    choices: [
+      {
+        code: 'turn_right()',
+        note: {
+          de: 'Zwei Felder nach rechts, Drehung nach unten, ein Feld nach unten. Die zweite Drehung geht nach links, und das letzte `move()` führt zum Fisch.',
+          en: 'Two cells to the right, a turn down, one cell down. The second turn goes left, and the last `move()` leads to the fish.',
+        },
+      },
+      {
+        code: 'turn_left()',
+        note: {
+          de: 'Nach der zweiten Drehung schaut die Hydra nach rechts und stößt an den Rand.',
+          en: 'After the second turn the hydra faces right and hits the edge.',
+        },
+      },
+      {
+        code: 'pass',
+        note: {
+          de: 'Bei `i` gleich 4 passiert nichts, und die Hydra schwimmt weiter nach unten. Dort ist der Boden, und sie stößt an.',
+          en: 'Nothing happens when `i` is 4, and the hydra keeps swimming down. The floor is there, and it bumps into it.',
+        },
+      },
+      {
+        code: 'move()',
+        note: {
+          de: 'Dann schwimmt die Hydra auch bei `i` gleich 4 nach unten und stößt sofort an den Boden.',
+          en: 'Then the hydra swims down on `i` equal to 4 as well and bumps into the floor at once.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'count-distance',
+    title: { de: 'Die Strecke merken', en: 'Remembering the distance' },
+    intro: {
+      de: 'Eine Variable kann mitzählen, während die Hydra schwimmt: Bei jedem Schritt wird `distance` um 1 größer. Danach weißt du, wie weit sie gekommen ist, und kannst genauso weit in eine andere Richtung schwimmen.',
+      en: 'A variable can count along while the hydra swims: with every step `distance` grows by 1. Afterwards you know how far it got, and can swim just as far in another direction.',
+    },
+    map: ['>...', '....', '....', '...F'],
+    code: 'distance = 0\nwhile not wall_ahead():\n    move()\n    distance += 1\nturn_right()\nfor i in range(___):\n    move()',
+    choices: [
+      {
+        code: 'distance',
+        note: {
+          de: 'Die Hydra schwimmt drei Felder nach rechts, `distance` ist 3. Dann schwimmt sie drei Felder nach unten, zum Fisch in der Ecke.',
+          en: 'The hydra swims three cells to the right, so `distance` is 3. Then it swims three cells down, to the fish in the corner.',
+        },
+      },
+      {
+        code: 'distance - 1',
+        note: {
+          de: 'Das sind nur zwei Felder nach unten. Der Fisch liegt noch ein Feld weiter.',
+          en: 'That is only two cells down. The fish is one cell further.',
+        },
+      },
+      {
+        code: 'distance + 1',
+        note: {
+          de: 'Das sind vier Felder nach unten, aber das Becken ist nicht so hoch. Das letzte `move()` stößt an den Rand.',
+          en: 'That is four cells down, but the pool is not that tall. The last `move()` hits the edge.',
+        },
+      },
+      {
+        code: 'dist',
+        note: {
+          de: 'Eine Variable `dist` gibt es nicht, sie heißt anders. Python meldet einen `NameError`.',
+          en: 'There is no variable `dist`; it is named differently. Python reports a `NameError`.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'turn-times',
+    title: { de: 'Mehrfach drehen', en: 'Turning several times' },
+    intro: {
+      de: 'Eine Funktion mit Parameter kann eine Schleife enthalten: `turn(3)` dreht dreimal nach rechts. Drei Rechtsdrehungen sind dasselbe wie eine Linksdrehung, vier bringen dich wieder zurück.',
+      en: 'A function with a parameter can contain a loop: `turn(3)` turns right three times. Three right turns are the same as one left turn, and four bring you back.',
+    },
+    map: ['.F.', '.>.'],
+    code: 'def turn(times):\n    for i in range(times):\n        turn_right()\n\nturn(___)\nmove()',
+    choices: [
+      {
+        code: '3',
+        note: {
+          de: 'Dreimal nach rechts ist einmal nach links: Die Hydra schaut nach oben, und `move()` frisst den Fisch.',
+          en: 'Three times right is once left: the hydra faces up, and `move()` eats the fish.',
+        },
+      },
+      {
+        code: '1',
+        note: {
+          de: 'Einmal nach rechts: Die Hydra schaut nach unten, und das `move()` stößt an den Boden.',
+          en: 'Once right: the hydra faces down, and the `move()` bumps into the floor.',
+        },
+      },
+      {
+        code: '2',
+        note: {
+          de: 'Zweimal nach rechts: Die Hydra schaut nach links und schwimmt am Fisch vorbei.',
+          en: 'Twice right: the hydra faces left and swims past the fish.',
+        },
+      },
+      {
+        code: '4',
+        note: {
+          de: 'Viermal nach rechts ist eine volle Runde: Die Hydra schaut wieder nach rechts und schwimmt vom Fisch weg.',
+          en: 'Four times right is a full circle: the hydra faces right again and swims away from the fish.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'rectangle-sides',
+    title: { de: 'Ein Rechteck', en: 'A rectangle' },
+    intro: {
+      de: 'Eine Funktion kann mehrere Parameter haben: `rectangle(3, 2)` bekommt die Breite 3 und die Höhe 2. Die Reihenfolge ist wichtig, die erste Zahl gehört zu `w`, die zweite zu `h`.',
+      en: 'A function can have several parameters: `rectangle(3, 2)` gets the width 3 and the height 2. The order matters: the first number goes to `w`, the second to `h`.',
+    },
+    map: ['>...', '....', '...F'],
+    code: 'def rectangle(w, h):\n    for i in range(w):\n        move()\n    turn_right()\n    for i in range(h):\n        move()\n    turn_right()\n\nrectangle(3, ___)',
+    choices: [
+      {
+        code: '2',
+        note: {
+          de: 'Drei Felder nach rechts, zwei nach unten: Die Hydra erreicht die Ecke mit dem Fisch.',
+          en: 'Three cells to the right, two down: the hydra reaches the corner with the fish.',
+        },
+      },
+      {
+        code: '1',
+        note: {
+          de: 'Nur ein Feld nach unten. Der Fisch liegt noch ein Feld weiter.',
+          en: 'Only one cell down. The fish is one cell further.',
+        },
+      },
+      {
+        code: '3',
+        note: {
+          de: 'Drei Felder nach unten, aber das Becken hat nur drei Zeilen. Das letzte `move()` stößt an den Boden.',
+          en: 'Three cells down, but the pool has only three rows. The last `move()` bumps into the floor.',
+        },
+      },
+      {
+        code: '0',
+        note: {
+          de: 'Mit der Höhe 0 schwimmt die Hydra nicht nach unten. Der Fisch bleibt liegen.',
+          en: 'With a height of 0 the hydra does not swim down. The fish is left behind.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'reset-counter',
+    title: { de: 'Zähler zurücksetzen', en: 'Resetting a counter' },
+    intro: {
+      de: 'Ein Zähler muss nach getaner Arbeit wieder auf den Anfangswert zurück, sonst stimmt die nächste Runde nicht mehr. Hier dreht sich die Hydra nach jeweils drei Schritten, und danach muss `count` wieder bei 0 anfangen.',
+      en: 'A counter has to go back to its starting value when the work is done, or the next round goes wrong. Here the hydra turns after every three steps, and afterwards `count` has to start from 0 again.',
+    },
+    map: ['>...', '....', '...F', '.F..'],
+    code: 'count = 0\nfor i in range(9):\n    move()\n    count += 1\n    if count == 3:\n        turn_right()\n        count = ___',
+    choices: [
+      {
+        code: '0',
+        note: {
+          de: 'Nach jeder Drehung zählt `count` wieder ab 0. Alle Seiten sind drei Felder lang: rechts, unten und links. Beide Fische liegen auf dem Weg.',
+          en: 'After every turn `count` counts from 0 again. All sides are three cells long: right, down and left. Both fish lie on the way.',
+        },
+      },
+      {
+        code: '1',
+        note: {
+          de: 'Dann reichen schon zwei Schritte bis zur nächsten Drehung. Die Seiten sind zu kurz, und der Fisch unten bleibt liegen.',
+          en: 'Then two steps are enough for the next turn. The sides are too short, and the fish at the bottom is left behind.',
+        },
+      },
+      {
+        code: '2',
+        note: {
+          de: 'Dann reicht schon ein Schritt bis zur nächsten Drehung. Die Hydra läuft eine Treppe und lässt beide Fische liegen.',
+          en: 'Then one step is enough for the next turn. The hydra walks a staircase and leaves both fish behind.',
+        },
+      },
+      {
+        code: '3',
+        note: {
+          de: 'Dann ist `count` danach 4, 5, 6 und nie wieder 3. Die Hydra dreht sich nicht mehr und stößt unten an den Rand.',
+          en: 'Then `count` is 4, 5, 6 afterwards and never 3 again. The hydra never turns again and hits the bottom edge.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'step-function',
+    title: { de: 'Ein Schritt als Funktion', en: 'One step as a function' },
+    intro: {
+      de: 'Eine kleine Funktion kann eine Entscheidung treffen: `step()` schwimmt einen Schritt oder dreht sich, wenn eine Wand im Weg ist. Dann reicht es, sie oft genug aufzurufen, und die Hydra läuft von selbst am Rand entlang.',
+      en: 'A small function can make a decision: `step()` swims one step or turns if a wall is in the way. Then it is enough to call it often enough, and the hydra walks along the edge on its own.',
+    },
+    map: ['>..', '...', 'F.F'],
+    code: 'def step():\n    if ___:\n        turn_right()\n    else:\n        move()\n\nfor i in range(8):\n    step()',
+    choices: [
+      {
+        code: 'wall_ahead()',
+        note: {
+          de: 'Ist eine Wand vor der Hydra, dreht sie sich, sonst schwimmt sie. So läuft sie am Rand entlang: rechts, unten, links.',
+          en: 'If a wall is ahead the hydra turns, otherwise it swims. So it walks along the edge: right, down, left.',
+        },
+      },
+      {
+        code: 'not wall_ahead()',
+        note: {
+          de: 'Das ist verkehrt herum: Die Hydra dreht sich, solange noch Platz ist, und schwimmt erst, wenn die Wand da ist. Dann stößt sie an.',
+          en: 'That is the wrong way round: the hydra turns as long as there is room, and swims only when the wall is there. Then it bumps into it.',
+        },
+      },
+      {
+        code: 'fish_ahead()',
+        note: {
+          de: 'Hier liegt kein Fisch vorn, also schwimmt die Hydra immer geradeaus, bis sie an die Wand stößt.',
+          en: 'Here no fish lies ahead, so the hydra always swims straight on until it bumps into the wall.',
+        },
+      },
+      {
+        code: 'True',
+        note: {
+          de: 'Die Bedingung ist immer wahr, die Hydra dreht sich nur noch auf der Stelle.',
+          en: 'The condition is always true, so the hydra only turns on the spot.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
 ];

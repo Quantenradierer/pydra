@@ -317,5 +317,100 @@
       "de": "`min(nums)` ist 1 und `max(nums)` ist 4. Schreibst du nach `return` mehrere Werte mit Komma, packt Python sie automatisch in ein Tupel (`tuple`), also eine unveränderliche Reihe in runden Klammern: `(1, 4)`.\n\n`print` zeigt das Tupel mit Klammern an. Eine Liste `[1, 4]` entsteht nur, wenn du eckige Klammern schreibst. Praktisch: Mit `lo, hi = min_max([3, 1, 4])` packst du das Tupel gleich wieder in zwei Variablen aus.",
       "en": "`min(nums)` is 1 and `max(nums)` is 4. When you write several values separated by commas after `return`, Python packs them into a tuple (`tuple`), an unchangeable sequence in round brackets: `(1, 4)`.\n\n`print` shows the tuple with its brackets. You only get a list `[1, 4]` if you write square brackets. Handy: `lo, hi = min_max([3, 1, 4])` unpacks the tuple straight into two variables."
     }
+  },
+  {
+    "id": "functions-11",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def show(x):\n    print(x)\n\nresult = show(3)\nprint(result)",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "3 und danach None",
+        "en": "3 and then None"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`print` zeigt nur etwas auf dem Bildschirm an, es gibt der Funktion aber keinen Wert zurück. Beim Aufruf `show(3)` wird zuerst `3` ausgegeben. Weil `show` kein `return` hat, ist `result` danach `None`, und das zweite `print` gibt `None` aus.\n\nMerkhilfe: `print` ist wie laut vorlesen, `return` ist wie etwas in die Hand geben. Nur was zurückgegeben wird, kannst du in einer Variablen speichern.",
+      "en": "`print` only shows something on the screen; it does not hand a value back from the function. The call `show(3)` first prints `3`. Because `show` has no `return`, `result` is `None` afterwards, and the second `print` prints `None`.\n\nMemory aid: `print` is like reading aloud, `return` is like handing something over. Only a returned value can be stored in a variable."
+    }
+  },
+  {
+    "id": "functions-12",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def say_hi():\n    print(\"Hi\")\n\nprint(\"Done\")",
+    "choices": [
+      {
+        "de": "Hi",
+        "en": "Hi"
+      },
+      {
+        "de": "Hi und Done",
+        "en": "Hi and Done"
+      },
+      {
+        "de": "Done",
+        "en": "Done"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`def say_hi():` legt die Funktion nur an, wie ein Rezept, das man aufschreibt. Der Code im Körper läuft erst, wenn du die Funktion mit `say_hi()` aufrufst. Das passiert hier nie, also läuft nur das letzte `print` und es erscheint `Done`.\n\nMerkhilfe: Ein Rezept aufschreiben ist noch kein Kochen.",
+      "en": "`def say_hi():` only defines the function, like writing down a recipe. The code in its body runs only when you call it with `say_hi()`. That never happens here, so only the last `print` runs and `Done` appears.\n\nMemory aid: writing down a recipe is not cooking yet."
+    }
+  },
+  {
+    "id": "functions-13",
+    "topic": "functions",
+    "prompt": {
+      "de": "Im Code `def square(n):` und dem Aufruf `square(5)`: Was ist `5`?",
+      "en": "In the code `def square(n):` and the call `square(5)`: what is `5`?"
+    },
+    "choices": [
+      {
+        "de": "Ein Argument",
+        "en": "An argument"
+      },
+      {
+        "de": "Ein Parameter",
+        "en": "A parameter"
+      },
+      {
+        "de": "Ein Rückgabewert",
+        "en": "A return value"
+      },
+      {
+        "de": "Ein Funktionsname",
+        "en": "A function name"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Beim Aufruf übergibst du den tatsächlichen Wert `5`, das ist das Argument. `n` in der Definition ist der Parameter, also der Platzhalter, der den Wert beim Aufruf bekommt. Der Rückgabewert wäre dagegen das, was `return` zurückgibt, hier `25`, falls die Funktion `n * n` zurückgibt.\n\nMerkhilfe: Parameter = Platzhalter in der Definition, Argument = echter Wert beim Aufruf.",
+      "en": "In the call you pass the actual value `5`; that is the argument. `n` in the definition is the parameter, the placeholder that receives the value when the function is called. The return value would be whatever `return` hands back, here `25` if the function returns `n * n`.\n\nMemory aid: parameter = placeholder in the definition, argument = real value in the call."
+    }
   }
 ]

@@ -316,5 +316,101 @@
       "de": "Eine Methode ist eine Funktion, die zu einem Wert gehört und mit Punkt aufgerufen wird. Bei Listen heißt die Methode zum Anhängen `append()`: `items.append(\"x\")` setzt \"x\" ans Ende der Liste.\n\n`add()` gibt es nur bei Mengen (`set`), `push()` kommt aus anderen Sprachen wie JavaScript. Und `items + \"x\"` scheitert mit einem `TypeError`, weil `+` bei Listen nur eine andere Liste akzeptiert; `items + [\"x\"]` ginge, baut aber eine neue Liste, statt `items` zu ändern.",
       "en": "A method is a function that belongs to a value and is called with a dot. For lists, the method to add to the end is `append()`: `items.append(\"x\")` puts \"x\" at the end of the list.\n\n`add()` only exists on sets (`set`), and `push()` comes from other languages such as JavaScript. `items + \"x\"` fails with a `TypeError`, because `+` on a list only accepts another list; `items + [\"x\"]` would work, but it builds a new list instead of changing `items`."
     }
+  },
+  {
+    "id": "collections-11",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3]\nlast = nums.pop()\nprint(last, nums)",
+    "choices": [
+      {
+        "de": "3 [1, 2]",
+        "en": "3 [1, 2]"
+      },
+      {
+        "de": "1 [2, 3]",
+        "en": "1 [2, 3]"
+      },
+      {
+        "de": "None [1, 2]",
+        "en": "None [1, 2]"
+      },
+      {
+        "de": "3 [1, 2, 3]",
+        "en": "3 [1, 2, 3]"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`pop()` nimmt das letzte Element aus der Liste heraus und gibt es dir zurück. Die Liste wird dabei kürzer: `nums` ist danach `[1, 2]`, und `last` enthält die 3.\n\nDenk an einen Stapel Teller: Du nimmst den obersten ab und hältst ihn in der Hand. Mit `pop(0)` würdest du stattdessen das erste Element herausnehmen.",
+      "en": "`pop()` takes the last item out of the list and hands it back to you. The list gets shorter: afterwards `nums` is `[1, 2]`, and `last` holds the 3.\n\nThink of a stack of plates: you take the top one off and hold it in your hand. With `pop(0)` you would take out the first item instead."
+    }
+  },
+  {
+    "id": "collections-12",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "fruits = [\"apple\", \"pear\"]\nprint(\"pear\" in fruits)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Der Operator `in` fragt: „Ist dieser Wert in der Sammlung enthalten?“ Die Antwort ist ein Wahrheitswert (`bool`): `True` oder `False`. Da \"pear\" in der Liste steht, kommt `True` heraus.\n\nDas ist wie ein Blick in den Einkaufskorb, ob etwas schon drin liegt. Du musst die Liste dafür nicht selbst durchgehen.",
+      "en": "The `in` operator asks: “Is this value contained in the collection?” The answer is a boolean (`bool`): `True` or `False`. Since \"pear\" is in the list, you get `True`.\n\nIt is like glancing into your shopping basket to see whether something is already there. You do not have to walk through the list yourself."
+    }
+  },
+  {
+    "id": "collections-13",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print([\"a\"] * 3)",
+    "choices": [
+      {
+        "de": "[\"aaa\"]",
+        "en": "[\"aaa\"]"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "[\"a\", \"a\", \"a\"]",
+        "en": "[\"a\", \"a\", \"a\"]"
+      },
+      {
+        "de": "[\"a\", 3]",
+        "en": "[\"a\", 3]"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Bei einer Liste bedeutet `*` mit einer Zahl „wiederholen“: Python baut eine neue Liste, in der die Elemente so oft hintereinander stehen. Aus `[\"a\"]` und 3 wird `[\"a\", \"a\", \"a\"]`.\n\nDie Elemente werden nicht zu einem Text verschmolzen, es bleiben drei einzelne Elemente. Wie ein Stempel, der dasselbe Element mehrmals nebeneinander abdruckt.",
+      "en": "With a list, `*` and a number means “repeat”: Python builds a new list in which the items appear that many times in a row. `[\"a\"]` and 3 become `[\"a\", \"a\", \"a\"]`.\n\nThe items are not merged into one text; you get three separate items. Like a stamp that prints the same item several times side by side."
+    }
   }
 ]

@@ -4,10 +4,10 @@ import { QUESTIONS, QUESTIONS_BY_ID } from './questions.ts';
 import { TOPICS } from './types.ts';
 
 describe('question content', () => {
-  it('has 80 questions, 10 per topic', () => {
-    expect(QUESTIONS).toHaveLength(80);
+  it('has 104 questions, 13 per topic', () => {
+    expect(QUESTIONS).toHaveLength(104);
     for (const topic of TOPICS) {
-      expect(QUESTIONS.filter((q) => q.topic === topic), topic).toHaveLength(10);
+      expect(QUESTIONS.filter((q) => q.topic === topic), topic).toHaveLength(13);
     }
   });
 

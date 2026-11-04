@@ -318,5 +318,101 @@
       "de": "Zeichenketten (`str`) sind unveränderlich. `replace(\"a\", \"o\")` ändert `s` deshalb nicht, sondern baut eine neue Zeichenkette \"bonono\" und gibt sie zurück. Diese neue Zeichenkette wird hier aber nirgends gespeichert und geht verloren.\n\n`s` zeigt weiter auf das Original, also gibt `print(s)` \"banana\" aus. Richtig wäre `s = s.replace(\"a\", \"o\")`. Wie eine Fotokopie, auf der du etwas änderst: Das Original bleibt gleich, und wenn du die Kopie wegwirfst, ist die Änderung weg.",
       "en": "Strings (`str`) are immutable. So `replace(\"a\", \"o\")` does not change `s`; it builds a new string \"bonono\" and returns it. But that new string is not stored anywhere here and gets lost.\n\n`s` still points to the original, so `print(s)` prints \"banana\". The fix is `s = s.replace(\"a\", \"o\")`. Like editing a photocopy: the original stays the same, and if you throw the copy away, the change is gone."
     }
+  },
+  {
+    "id": "strings-11",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"-\".join([\"a\", \"b\", \"c\"]))",
+    "choices": [
+      {
+        "de": "abc",
+        "en": "abc"
+      },
+      {
+        "de": "a-b-c",
+        "en": "a-b-c"
+      },
+      {
+        "de": "-a-b-c-",
+        "en": "-a-b-c-"
+      },
+      {
+        "de": "['a', 'b', 'c']",
+        "en": "['a', 'b', 'c']"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`join` ist das Gegenstück zu `split`: Der Text vor dem Punkt (hier `\"-\"`) wird als Kleber zwischen die Elemente der Liste gesetzt. Aus `a`, `b`, `c` wird also \"a-b-c\". Der Kleber steht nur zwischen den Elementen, nicht am Anfang oder Ende. Merkhilfe: Der Kleber ruft `join`.",
+      "en": "`join` is the opposite of `split`: the text before the dot (here `\"-\"`) is used as glue between the list items. So `a`, `b`, `c` becomes \"a-b-c\". The glue goes only between items, not at the start or end. Memory aid: the glue calls `join`."
+    }
+  },
+  {
+    "id": "strings-12",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(len(\" hi \".strip()))",
+    "choices": [
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`strip()` schneidet Leerzeichen am Anfang und Ende ab: aus `\" hi \"` wird \"hi\". Das hat 2 Zeichen, also druckt `len` die 2. Ohne `strip()` wären es 4. Merkhilfe: `strip` wie Ränder abschneiden, die Mitte bleibt.",
+      "en": "`strip()` cuts off spaces at the start and end: `\" hi \"` becomes \"hi\". That has 2 characters, so `len` prints 2. Without `strip()` it would be 4. Memory aid: `strip` trims the edges, the middle stays."
+    }
+  },
+  {
+    "id": "strings-13",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "word = \"Python\"\nprint(word[2:])",
+    "choices": [
+      {
+        "de": "Py",
+        "en": "Py"
+      },
+      {
+        "de": "thon",
+        "en": "thon"
+      },
+      {
+        "de": "ython",
+        "en": "ython"
+      },
+      {
+        "de": "tho",
+        "en": "tho"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Ein Slice ohne Ende läuft bis zum Schluss. Index 2 ist das `t` (P=0, y=1, t=2), also bekommst du \"thon\". Wer \"ython\" wählt, hat bei 1 angefangen; \"Py\" wäre `word[:2]`, der Anfang bis Index 2.",
+      "en": "A slice without an end runs to the very end. Index 2 is the `t` (P=0, y=1, t=2), so you get \"thon\". Picking \"ython\" means starting at 1; \"Py\" would be `word[:2]`, the beginning up to index 2."
+    }
   }
 ]

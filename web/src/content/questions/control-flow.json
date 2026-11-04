@@ -316,5 +316,101 @@
       "de": "Das ist ein bedingter Ausdruck, ein `if`/`else` in einer Zeile: `A if Bedingung else B`. Ist die Bedingung wahr, ist das Ergebnis `A`, sonst `B`.\n\nHier: `x % 2` ist der Rest beim Teilen durch 2. `4 % 2` ist 0, also ist `0 == 0` wahr, und `result` bekommt \"even\". Wie eine Frage mit zwei vorbereiteten Antworten: Je nach Ja oder Nein wird eine davon genommen.",
       "en": "This is a conditional expression, an `if`/`else` on one line: `A if condition else B`. If the condition is true, the result is `A`, otherwise `B`.\n\nHere: `x % 2` is the remainder after dividing by 2. `4 % 2` is 0, so `0 == 0` is true, and `result` gets \"even\". Like a question with two prepared answers: depending on yes or no, one of them is picked."
     }
+  },
+  {
+    "id": "control-flow-11",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 8\nif x > 5:\n    print(\"A\")\nif x > 7:\n    print(\"B\")",
+    "choices": [
+      {
+        "de": "A",
+        "en": "A"
+      },
+      {
+        "de": "B",
+        "en": "B"
+      },
+      {
+        "de": "A und B (zwei Zeilen)",
+        "en": "A and B (two lines)"
+      },
+      {
+        "de": "Nichts",
+        "en": "Nothing"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Zwei getrennte `if` sind zwei unabhängige Fragen. Python prüft beide: `8 > 5` ist wahr, also \"A\"; `8 > 7` ist ebenfalls wahr, also \"B\". Nur bei `elif` würde nach dem ersten Treffer Schluss sein. Merkhilfe: Jedes `if` ist ein neuer Anfang, `elif` gehört zur Kette davor.",
+      "en": "Two separate `if` statements are two independent questions. Python checks both: `8 > 5` is true, so \"A\"; `8 > 7` is also true, so \"B\". Only with `elif` would it stop after the first match. Memory aid: every `if` is a fresh start, while `elif` belongs to the chain before it."
+    }
+  },
+  {
+    "id": "control-flow-12",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"10\" == 10)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`\"10\"` in Anführungszeichen ist Text, `10` ist eine Zahl. Python hält verschiedene Typen für ungleich, also ergibt `==` hier `False`. Einen Fehler gibt es nicht, der Vergleich ist erlaubt, er ist nur falsch. Merkhilfe: Der Text \"10\" und die Zahl 10 sehen ähnlich aus, sind aber verschiedene Dinge.",
+      "en": "`\"10\"` in quotes is text, `10` is a number. Python treats different types as unequal, so `==` gives `False` here. There is no error: the comparison is allowed, it is just false. Memory aid: the text \"10\" and the number 10 look alike but are different things."
+    }
+  },
+  {
+    "id": "control-flow-13",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "word = \"Python\"\nif \"th\" in word:\n    print(\"found\")\nelse:\n    print(\"missing\")",
+    "choices": [
+      {
+        "de": "missing",
+        "en": "missing"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "found",
+        "en": "found"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Der Operator `in` prüft, ob etwas darin enthalten ist, und liefert `True` oder `False`. In \"Python\" steckt \"th\" (Py**th**on), also ist die Bedingung wahr und \"found\" wird ausgegeben. Ausgegeben wird nur das `print`, nicht `True`. Merkhilfe: `in` fragt \"steckt das drin?\".",
+      "en": "The `in` operator checks whether something is contained and gives `True` or `False`. \"th\" is inside \"Python\" (Py**th**on), so the condition is true and \"found\" is printed. Only the `print` output appears, not `True`. Memory aid: `in` asks \"is it inside?\"."
+    }
   }
 ]

@@ -317,5 +317,101 @@
       "de": "Eine Menge (`set`) enthält jedes Element nur einmal; doppelte Werte fallen weg. Außerdem hat sie keine feste Reihenfolge und darum keine Indizes – `s[0]` gibt einen `TypeError`.\n\nVorsicht bei `{}`: Leere geschweifte Klammern sind ein leeres Wörterbuch (`dict`), keine Menge. Eine leere Menge erzeugst du mit `set()`. Denk an einen Beutel mit Murmeln in verschiedenen Farben: Jede Farbe ist da oder nicht, aber es gibt kein „erstes“ Fach.",
       "en": "A set (`set`) contains each item only once; duplicate values are dropped. It also has no fixed order and therefore no indexes – `s[0]` raises a `TypeError`.\n\nCareful with `{}`: empty curly braces are an empty dictionary (`dict`), not a set. You make an empty set with `set()`. Think of a bag of marbles in different colours: each colour is either in there or not, but there is no “first” slot."
     }
+  },
+  {
+    "id": "dicts-sets-11",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1, \"b\": 2, \"c\": 3}\ndel d[\"b\"]\nprint(d)",
+    "choices": [
+      {
+        "de": "{'a': 1, 'b': 2, 'c': 3}",
+        "en": "{'a': 1, 'b': 2, 'c': 3}"
+      },
+      {
+        "de": "{'a': 1, 'c': 3}",
+        "en": "{'a': 1, 'c': 3}"
+      },
+      {
+        "de": "{'b': 2}",
+        "en": "{'b': 2}"
+      },
+      {
+        "de": "KeyError",
+        "en": "KeyError"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`del d[\"b\"]` löscht den Eintrag mit dem Schlüssel `\"b\"` samt seinem Wert. Übrig bleiben `\"a\"` und `\"c\"`, also `{'a': 1, 'c': 3}`.\n\nMerkhilfe: `del` wirft etwas weg – hier das ganze Schlüssel-Wert-Paar. Einen `KeyError` gäbe es nur, wenn der Schlüssel gar nicht existierte.",
+      "en": "`del d[\"b\"]` deletes the entry with the key `\"b\"` together with its value. What remains are `\"a\"` and `\"c\"`, so `{'a': 1, 'c': 3}`.\n\nMemory aid: `del` throws something away – here the whole key-value pair. You would only get a `KeyError` if the key did not exist at all."
+    }
+  },
+  {
+    "id": "dicts-sets-12",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a - b)",
+    "choices": [
+      {
+        "de": "{4}",
+        "en": "{4}"
+      },
+      {
+        "de": "{2, 3}",
+        "en": "{2, 3}"
+      },
+      {
+        "de": "{1}",
+        "en": "{1}"
+      },
+      {
+        "de": "{1, 4}",
+        "en": "{1, 4}"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Bei Mengen bildet `-` die Differenz: alle Elemente aus `a`, die nicht in `b` vorkommen. 2 und 3 stehen auch in `b`, also bleibt nur die 1: `{1}`.\n\nMerkhilfe: „`a` ohne `b`“. Die Reihenfolge zählt: `b - a` wäre `{4}`.",
+      "en": "For sets, `-` builds the difference: all items of `a` that are not in `b`. 2 and 3 are also in `b`, so only 1 is left: `{1}`.\n\nMemory aid: “`a` without `b`”. Order matters: `b - a` would be `{4}`."
+    }
+  },
+  {
+    "id": "dicts-sets-13",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for k, v in {\"a\": 1, \"b\": 2}.items():\n    print(k, v)",
+    "choices": [
+      {
+        "de": "a b",
+        "en": "a b"
+      },
+      {
+        "de": "1 2",
+        "en": "1 2"
+      },
+      {
+        "de": "a 1 und b 2 (je eine Zeile)",
+        "en": "a 1 and b 2 (one per line)"
+      },
+      {
+        "de": "(\"a\", 1) (\"b\", 2)",
+        "en": "(\"a\", 1) (\"b\", 2)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`.items()` liefert Schlüssel-Wert-Paare, und `for k, v in ...` packt jedes Paar in `k` (Schlüssel) und `v` (Wert) aus. Es werden also zwei Zeilen ausgegeben: `a 1` und `b 2`.\n\nMerkhilfe: Ohne `.items()` bekommst du beim Durchlaufen nur die Schlüssel.",
+      "en": "`.items()` gives key-value pairs, and `for k, v in ...` unpacks each pair into `k` (key) and `v` (value). So two lines are printed: `a 1` and `b 2`.\n\nMemory aid: without `.items()` you only get the keys when looping."
+    }
   }
 ]

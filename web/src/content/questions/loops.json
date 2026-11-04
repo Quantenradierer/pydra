@@ -317,5 +317,101 @@
       "de": "`enumerate()` nummeriert die Elemente einer Folge durch und liefert bei jeder Runde ein Paar: (Index, Element). Der Index beginnt bei 0. Für \"hi\" sind das `(0, \"h\")` und `(1, \"i\")`.\n\n`for i, letter in ...` packt jedes Paar in zwei Variablen aus. `print(i, letter, end=\" \")` gibt erst die Nummer, dann den Buchstaben aus: `0 h 1 i`. Wie eine Warteschlange, in der jeder eine Nummer bekommt – nur fängt Python bei 0 an.",
       "en": "`enumerate()` numbers the items of a sequence and gives a pair each round: (index, item). The index starts at 0. For \"hi\" these are `(0, \"h\")` and `(1, \"i\")`.\n\n`for i, letter in ...` unpacks each pair into two variables. `print(i, letter, end=\" \")` prints the number first, then the letter: `0 h 1 i`. Like a queue where everyone gets a ticket number – except Python starts at 0."
     }
+  },
+  {
+    "id": "loops-11",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(list(range(5, 0, -1)))",
+    "choices": [
+      {
+        "de": "[5, 4, 3, 2, 1, 0]",
+        "en": "[5, 4, 3, 2, 1, 0]"
+      },
+      {
+        "de": "[4, 3, 2, 1, 0]",
+        "en": "[4, 3, 2, 1, 0]"
+      },
+      {
+        "de": "[5, 4, 3, 2, 1]",
+        "en": "[5, 4, 3, 2, 1]"
+      },
+      {
+        "de": "[]",
+        "en": "[]"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Der dritte Wert von `range` ist die Schrittweite. Mit `-1` zählt `range` rückwärts: 5, 4, 3, 2, 1. Die Endzahl 0 ist wie immer nicht dabei.\n\nOhne negative Schrittweite wäre `range(5, 0)` leer, weil `range` standardmäßig vorwärts zählt. Merkhilfe: Wie ein Countdown – Start, Ziel (nicht mehr dabei), Schritt.",
+      "en": "The third value of `range` is the step. With `-1`, `range` counts backwards: 5, 4, 3, 2, 1. The stop number 0 is not included, as always.\n\nWithout a negative step, `range(5, 0)` would be empty, because `range` counts upwards by default. Memory aid: like a countdown – start, goal (not included), step."
+    }
+  },
+  {
+    "id": "loops-12",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "n = 10\nwhile n < 5:\n    n += 1\nprint(n)",
+    "choices": [
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "11",
+        "en": "11"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eine `while`-Schleife prüft die Bedingung *vor* jedem Durchlauf. Hier ist `n < 5` schon am Anfang falsch (10 ist nicht kleiner als 5), also läuft der Block kein einziges Mal.\n\nDarum bleibt `n` bei 10. Merkhilfe: `while` heißt \"solange\" – ist es von Anfang an nicht wahr, passiert nichts.",
+      "en": "A `while` loop checks the condition *before* every round. Here `n < 5` is already false at the start (10 is not less than 5), so the block never runs at all.\n\nThat is why `n` stays 10. Memory aid: `while` means \"as long as\" – if it is not true from the start, nothing happens."
+    }
+  },
+  {
+    "id": "loops-13",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for word in [\"a\", \"bb\", \"ccc\"]:\n    print(len(word), end=\" \")",
+    "choices": [
+      {
+        "de": "1 2 3",
+        "en": "1 2 3"
+      },
+      {
+        "de": "3 2 1",
+        "en": "3 2 1"
+      },
+      {
+        "de": "a bb ccc",
+        "en": "a bb ccc"
+      },
+      {
+        "de": "3 3 3",
+        "en": "3 3 3"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine `for`-Schleife kann direkt über eine Liste laufen: `word` ist nacheinander \"a\", \"bb\" und \"ccc\". `len(word)` zählt die Zeichen: 1, 2, 3.\n\nDie Schleife gibt also die Längen aus, nicht die Wörter selbst. Merkhilfe: `len` fragt \"wie lang?\".",
+      "en": "A `for` loop can run directly over a list: `word` is \"a\", \"bb\" and \"ccc\" in turn. `len(word)` counts the characters: 1, 2, 3.\n\nSo the loop prints the lengths, not the words themselves. Memory aid: `len` asks \"how long?\"."
+    }
   }
 ]

@@ -317,5 +317,101 @@
       "de": "Python rechnet erst, dann vergleicht es: `%` kommt vor `==`. `10 % 2` ist der Rest von 10 geteilt durch 2, also 0. Dann wird `0 == 0` geprüft, und das ist wahr: `True`.\n\nEin Vergleich ergibt immer einen Wahrheitswert (`bool`), also `True` oder `False`, nie eine Zahl. Genau so prüfst du, ob eine Zahl gerade ist: Lässt sie beim Teilen durch 2 keinen Rest, ist sie gerade.",
       "en": "Python calculates first, then compares: `%` comes before `==`. `10 % 2` is the remainder of 10 divided by 2, which is 0. Then `0 == 0` is checked, and that is true: `True`.\n\nA comparison always gives a truth value (`bool`), `True` or `False`, never a number. This is exactly how you check whether a number is even: if dividing by 2 leaves no remainder, it is even."
     }
+  },
+  {
+    "id": "operators-11",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(17 % 5)",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "12",
+        "en": "12"
+      },
+      {
+        "de": "3.4",
+        "en": "3.4"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`%` liefert den Rest der Division. 17 geteilt durch 5 ist 3 mit Rest 2, denn 3 * 5 = 15 und 17 - 15 = 2.\n\nMerkhilfe: Du verteilst 17 Bonbons an Gruppen zu je 5. Drei Gruppen werden voll, 2 Bonbons bleiben übrig.",
+      "en": "`%` gives the remainder of a division. 17 divided by 5 is 3 with remainder 2, because 3 * 5 = 15 and 17 - 15 = 2.\n\nMemory aid: you hand out 17 sweets in groups of 5. Three groups get filled, and 2 sweets are left over."
+    }
+  },
+  {
+    "id": "operators-12",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(5 > 3 and 2 > 4)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`and` ist nur `True`, wenn beide Seiten wahr sind. `5 > 3` ist wahr, aber `2 > 4` ist falsch. Also ist das Ergebnis `False`.\n\nMerkhilfe: Bei `and` müssen beide Bedingungen erfüllt sein, wie bei einem Ticket, für das du Geld UND einen Ausweis brauchst.",
+      "en": "`and` is only `True` if both sides are true. `5 > 3` is true, but `2 > 4` is false. So the result is `False`.\n\nMemory aid: with `and` both conditions must be met, like a ticket where you need money AND an ID."
+    }
+  },
+  {
+    "id": "operators-13",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 4\nprint(not x == 4)",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "-4",
+        "en": "-4"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Erst wird `x == 4` ausgewertet, das ist `True`. Dann dreht `not` den Wert um: `not True` ist `False`.\n\nMerkhilfe: `not` ist wie ein Schalter, der Ja in Nein und Nein in Ja verwandelt.",
+      "en": "First `x == 4` is evaluated, which is `True`. Then `not` flips the value: `not True` is `False`.\n\nMemory aid: `not` is like a switch that turns yes into no and no into yes."
+    }
   }
 ]

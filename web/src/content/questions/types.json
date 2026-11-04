@@ -317,5 +317,101 @@
       "de": "`bool()` wandelt einen Wert in einen Wahrheitswert (`bool`) um, also `True` oder `False`. Die Regel: Leere Dinge sind falsch, alles andere ist wahr. `\"\"` ist eine leere Zeichenkette (`str`), darum ergibt `bool(\"\")` `False`.\n\nAchtung, der Inhalt zählt nicht, nur ob etwas drinsteht: Sogar `bool(\"False\")` ist `True`, weil der Text nicht leer ist. Wie ein Briefumschlag: Liegt irgendein Zettel drin, ist er nicht leer.",
       "en": "`bool()` converts a value into a truth value (`bool`), `True` or `False`. The rule: empty things are false, everything else is true. `\"\"` is an empty string (`str`), so `bool(\"\")` gives `False`.\n\nCareful, the content does not matter, only whether there is any: even `bool(\"False\")` is `True`, because the text is not empty. Like an envelope: if any note is inside, it is not empty."
     }
+  },
+  {
+    "id": "types-11",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type(2 + 1.5))",
+    "choices": [
+      {
+        "de": "<class 'int'>",
+        "en": "<class 'int'>"
+      },
+      {
+        "de": "<class 'str'>",
+        "en": "<class 'str'>"
+      },
+      {
+        "de": "<class 'float'>",
+        "en": "<class 'float'>"
+      },
+      {
+        "de": "<class 'bool'>",
+        "en": "<class 'bool'>"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Mischt man `int` und `float` in einer Rechnung, wird das Ergebnis ein `float`. `2 + 1.5` ergibt `3.5`, und das ist eine Kommazahl.\n\nMerkhilfe: Die Kommazahl ist \"stärker\" – sobald eine mitspielt, ist das Ergebnis auch eine.",
+      "en": "Mixing `int` and `float` in a calculation gives a `float`. `2 + 1.5` is `3.5`, which is a decimal number.\n\nMemory aid: the decimal number is \"stronger\" – as soon as one takes part, the result is one too."
+    }
+  },
+  {
+    "id": "types-12",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(str(12) + \"3\")",
+    "choices": [
+      {
+        "de": "15",
+        "en": "15"
+      },
+      {
+        "de": "123",
+        "en": "123"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "12 3",
+        "en": "12 3"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`str(12)` macht aus der Zahl den Text `\"12\"`. Zwei Texte mit `+` werden einfach aneinandergehängt: `\"12\" + \"3\"` ergibt `123`. Gerechnet wird hier nicht.\n\nMerkhilfe: Bei Text heißt `+` \"aneinanderkleben\", bei Zahlen \"addieren\".",
+      "en": "`str(12)` turns the number into the text `\"12\"`. Two texts joined with `+` are simply glued together: `\"12\" + \"3\"` gives `123`. No calculation happens.\n\nMemory aid: with text, `+` means \"glue together\", with numbers it means \"add\"."
+    }
+  },
+  {
+    "id": "types-13",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(float(\"2\") + 1)",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "21",
+        "en": "21"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "3.0",
+        "en": "3.0"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`float(\"2\")` wandelt den Text in die Kommazahl `2.0` um. Dann wird normal gerechnet: `2.0 + 1` ergibt `3.0`, ein `float`, deshalb steht die `.0` dabei.\n\nMerkhilfe: Wenn eine Kommazahl mitrechnet, ist das Ergebnis eine Kommazahl.",
+      "en": "`float(\"2\")` converts the text into the decimal number `2.0`. Then normal arithmetic applies: `2.0 + 1` is `3.0`, a `float`, which is why the `.0` is shown.\n\nMemory aid: if a decimal number takes part, the result is a decimal number."
+    }
   }
 ]

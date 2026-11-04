@@ -920,27 +920,53 @@ textarea {
   scale: 1.6;
 }
 
+/* The hydra's body, shared by both games: a tapered, outlined shape with a lighter stripe down the back. */
 .arena-body,
-.arena-scales {
-  fill: none;
-  stroke-linecap: round;
+.hunt-body {
+  fill: #3776ab;
+  stroke: #1d4f7c;
+  stroke-width: 0.7;
   stroke-linejoin: round;
 }
 
-.arena-body {
-  stroke: #3776ab;
-  stroke-width: 4;
-}
-
-.arena-scales {
-  stroke: var(--yellow);
-  stroke-width: 0.9;
-  stroke-dasharray: 0.1 2.5;
+.arena-belly,
+.hunt-belly {
+  fill: #7fb2e0;
+  stroke: none;
 }
 
 .arena-head-pulse {
   transform-box: fill-box;
   transform-origin: 20% 50%;
+  animation: hydra-nod 2.8s ease-in-out infinite alternate;
+}
+
+.arena-eye,
+.hunt-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hydra-blink 5s ease-in-out infinite;
+}
+
+/* Idle life of the heads in both games: a slow nod and an occasional blink. */
+@keyframes hydra-nod {
+  from {
+    rotate: -4deg;
+  }
+  to {
+    rotate: 4deg;
+  }
+}
+
+@keyframes hydra-blink {
+  0%,
+  92%,
+  100% {
+    scale: 1;
+  }
+  96% {
+    scale: 1 0.1;
+  }
 }
 
 .arena-fx {
@@ -968,7 +994,11 @@ textarea {
 .arena.crashed .arena-skull,
 .arena.crashed .arena-body {
   fill: #c0504a;
-  stroke: #c0504a;
+  stroke: #8a3430;
+}
+
+.arena.crashed .arena-belly {
+  fill: #e29a95;
 }
 
 .arena.crashed .arena-skull {
@@ -976,11 +1006,20 @@ textarea {
 }
 
 .arena.stuck .arena-body {
-  stroke: #2a5680;
+  fill: #2f6a9d;
 }
 
-.arena.fed .arena-scales {
-  stroke-width: 2;
+/* After a failed run the head hangs low and stops moving. */
+.arena.crashed .arena-head-pulse,
+.arena.stuck .arena-head-pulse {
+  animation: none;
+  rotate: 16deg;
+  transition: rotate 0.4s ease-out 0.4s;
+}
+
+.arena.crashed .arena-eye,
+.arena.stuck .arena-eye {
+  animation: none;
 }
 
 @keyframes arena-bump {
@@ -1516,28 +1555,6 @@ textarea {
   stroke-width: 0.35;
 }
 
-.hunt-body,
-.hunt-scales {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.hunt-body {
-  stroke: #3776ab;
-  stroke-width: 4;
-}
-
-.hunt-scales {
-  stroke: var(--yellow);
-  stroke-width: 0.9;
-  stroke-dasharray: 0.1 2.5;
-}
-
-.hunt-tail {
-  fill: #3776ab;
-}
-
 .hunt-skull {
   fill: #3776ab;
 }
@@ -1549,40 +1566,58 @@ textarea {
 .hunt-head-bite {
   transform-box: fill-box;
   transform-origin: 30% 50%;
+  animation: hydra-nod 2.4s ease-in-out infinite alternate;
+}
+
+.hunt-hydra:nth-of-type(even) .hunt-head-bite,
+.hunt-hydra:nth-of-type(even) .hunt-eye {
+  animation-delay: -1.3s;
+}
+
+.hunt-hydra:nth-of-type(3n) .hunt-eye {
+  animation-delay: -2.2s;
 }
 
 .hunt-hydra {
   transition: opacity 0.4s;
 }
 
-/* A slain hydra is cut in two: grey, no scales, and its head harmless. */
+/* A slain hydra is cut in two: grey, and its head harmless. */
 .hunt-hydra.slain {
   opacity: 0.45;
 }
 
-.hunt-hydra.slain .hunt-body,
-.hunt-hydra.slain .hunt-tail,
-.hunt-hydra.slain .hunt-skull {
-  stroke: #6b7885;
+.hunt-hydra.slain .hunt-body {
   fill: #6b7885;
+  stroke: #4d5865;
 }
 
-.hunt-hydra.slain .hunt-tail,
 .hunt-hydra.slain .hunt-skull {
+  fill: #6b7885;
   stroke: none;
 }
 
-.hunt-hydra.slain .hunt-body {
-  fill: none;
+.hunt-hydra.slain .hunt-belly {
+  fill: #93a0ac;
 }
 
-.hunt-hydra.slain .hunt-scales,
 .hunt-hydra.slain .hunt-eye {
   display: none;
 }
 
 .hunt-hydra.biting .hunt-skull {
   fill: #c0504a;
+}
+
+/* A slain hydra's head hangs down and is still; a biting one stops swaying to snap. */
+.hunt-hydra.slain .hunt-head-bite {
+  animation: none;
+  rotate: 28deg;
+  transition: rotate 0.5s ease-in 0.2s;
+}
+
+.hunt-hydra.biting .hunt-head-bite {
+  animation: none;
 }
 
 .hunt-coin {
@@ -1855,6 +1890,12 @@ textarea {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hunt-hydra.slain .hunt-head-bite,
+  .arena.crashed .arena-head-pulse,
+  .arena.stuck .arena-head-pulse {
+    transition: none;
+  }
+
   .hunt-arena.crashed .hunt-star {
     animation: none;
   }

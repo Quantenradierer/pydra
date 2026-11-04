@@ -1,5 +1,6 @@
 import { svg } from '../dom.ts';
 import { logoArt } from '../hydra/view.ts';
+import { bodyShapes, type BodyOptions } from './body.ts';
 import type { Outcome, Point, Snapshot, World } from './world.ts';
 
 /** Size of one grid cell in viewBox units. */
@@ -60,7 +61,7 @@ export function arena(world: World): Arena {
   ${rocks.join('')}
   ${fish}
   <path class="arena-body"/>
-  <path class="arena-scales"/>
+  <path class="arena-belly"/>
   <g class="arena-hydra"><g class="arena-head-turn"><g class="arena-head-pulse"><g transform="scale(0.095) translate(-38 3)"><use href="#hydra-head" class="arena-skull"/><use href="#hydra-eye" class="arena-eye"/></g></g></g></g>
   <g class="arena-fx"></g>
   <g class="arena-bump"><path d="M0-3.2 1-1 3.2-1.4 1.6.4 2.4 2.8 0 1.4-2.4 2.8-1.6.4-3.2-1.4-1-1Z"/></g>
@@ -68,7 +69,7 @@ export function arena(world: World): Arena {
   root.prepend(logoArt().querySelector('defs')!);
 
   const body = root.querySelector<SVGPathElement>('.arena-body')!;
-  const scales = root.querySelector<SVGPathElement>('.arena-scales')!;
+  const belly = root.querySelector<SVGPathElement>('.arena-belly')!;
   const hydra = root.querySelector<SVGGElement>('.arena-hydra')!;
   const turn = root.querySelector<SVGGElement>('.arena-head-turn')!;
   const pulse = root.querySelector<SVGGElement>('.arena-head-pulse')!;
@@ -85,15 +86,36 @@ export function arena(world: World): Arena {
   let lastStep: Snapshot | undefined;
   let lastOutcome: Outcome | undefined;
   let lastLength = 0;
+  /** The course of the body from the neck to the tail tip, as last drawn. */
+  let route: Point[] = [];
+  /** True while the glide between two steps redraws the body every frame. */
+  let gliding = false;
+  let idle = 0;
+  let lastPaint = 0;
+  /** When a meal started to travel down the body, in ms. */
+  let swallowed = -Infinity;
+  const SWALLOW_MS = 900;
 
-  /** A path from the first point to the last that rounds every corner in between. */
-  function smooth(pts: Point[]): string {
-    const at = (p: Point) => `${p.x} ${p.y}`;
-    const mid = (a: Point, b: Point) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
-    if (pts.length < 3) return `M${pts.map(at).join('L')}`;
-    let d = `M${at(pts[0]!)}L${at(mid(pts[0]!, pts[1]!))}`;
-    for (let i = 1; i < pts.length - 1; i++) d += `Q${at(pts[i]!)} ${at(mid(pts[i]!, pts[i + 1]!))}`;
-    return d + `L${at(pts.at(-1)!)}`;
+  /** Draws the body along its route; it slithers gently unless it is still or the person asked for less motion. */
+  function paint(now: number) {
+    if (route.length === 0) return;
+    const still = calm() || root.classList.contains('crashed') || root.classList.contains('stuck');
+    const opts: BodyOptions = { sway: still ? 0 : 0.5, phase: now / 450 };
+    const k = (now - swallowed) / SWALLOW_MS;
+    if (k >= 0 && k < 1) opts.bulge = { at: k, extra: 1.8 * Math.sin(k * Math.PI) };
+    const shapes = bodyShapes(route, opts);
+    body.setAttribute('d', shapes.body);
+    belly.setAttribute('d', shapes.stripe);
+    lastPaint = now;
+  }
+
+  /** Keeps the body slithering while the hydra waits; stops by itself once the arena has left the page. */
+  let seen = false;
+  function idleLoop(now: number) {
+    if (root.isConnected) seen = true;
+    else if (seen) return void (idle = 0);
+    if (!gliding && now - lastPaint > 40 && !calm()) paint(now);
+    idle = requestAnimationFrame(idleLoop);
   }
 
   /** Draws the snake through these points; the first one is the head. */
@@ -104,9 +126,8 @@ export function arena(world: World): Arena {
     // The head sits in the front half of its cell, looking at the cell it swims to next.
     const head = { x: points[0]!.x + Math.cos(rad) * AHEAD, y: points[0]!.y + Math.sin(rad) * AHEAD };
     const neck = { x: head.x - Math.cos(rad) * NECK, y: head.y - Math.sin(rad) * NECK };
-    const d = smooth([neck, ...points.slice(1)]);
-    body.setAttribute('d', d);
-    scales.setAttribute('d', d);
+    route = [neck, ...points.slice(1)];
+    paint(performance.now());
     hydra.setAttribute('transform', `translate(${head.x} ${head.y})`);
     turn.setAttribute('transform', `rotate(${deg})`);
   }
@@ -182,6 +203,8 @@ export function arena(world: World): Arena {
     root,
     show(step, outcome, ms = 0) {
       cancelAnimationFrame(frame);
+      gliding = false;
+      if (!idle && typeof requestAnimationFrame === 'function') idle = requestAnimationFrame(idleLoop);
       const to = [step, ...step.body].map(centre);
       const from = drawn;
       const animated = ms > 0 && from.length > 0 && !calm();
@@ -210,7 +233,9 @@ export function arena(world: World): Arena {
           });
           draw(points, deg);
           if (now - start < ms) frame = requestAnimationFrame(tick);
+          else gliding = false;
         };
+        gliding = true;
         tick(start);
       }
       const head = to[0]!;
@@ -228,7 +253,9 @@ export function arena(world: World): Arena {
         if (length > lastLength && lastLength > 0) {
           // Eating: the head swells a little and a ripple runs down the body.
           play(pulse, [{ transform: 'scale(1)' }, { transform: 'scale(1.35)', offset: 0.4 }, { transform: 'scale(1)' }], dur, ms * 0.7);
-          play(body, [{ strokeWidth: 4 }, { strokeWidth: 5.2, offset: 0.4 }, { strokeWidth: 4 }], dur * 1.2, ms * 0.7);
+          swallowed = performance.now() + ms * 0.7;
+          // The snap at the fish: the head flicks forwards, then settles.
+          play(pulse, [{ rotate: '0deg' }, { rotate: '-14deg', offset: 0.3 }, { rotate: '6deg', offset: 0.7 }, { rotate: '0deg' }], dur, ms * 0.5);
         }
       }
       lastLength = step.body.length;
@@ -246,6 +273,8 @@ export function arena(world: World): Arena {
         if (outcome.kind === 'success') {
           confetti(head, ms * 0.8);
           play(pulse, [{ transform: 'scale(1)' }, { transform: 'scale(1.4)', offset: 0.35 }, { transform: 'scale(1)' }], 700, ms * 0.8);
+          // A happy wiggle of the head.
+          play(pulse, [{ rotate: '0deg' }, { rotate: '-22deg', offset: 0.2 }, { rotate: '22deg', offset: 0.45 }, { rotate: '-14deg', offset: 0.7 }, { rotate: '0deg' }], 900, ms * 0.8);
         } else if (crashed) {
           play(root, jolt, 450, ms * 0.8);
           play(turn, [{ translate: '0 0' }, { translate: `${-DX[step.dir]! * 1.5}px ${-DY[step.dir]! * 1.5}px`, offset: 0.3 }, { translate: '0 0' }], 450, ms * 0.8);

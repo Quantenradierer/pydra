@@ -1,5 +1,6 @@
 import { svg } from '../dom.ts';
 import { logoArt } from '../hydra/view.ts';
+import { bodyShapes } from './body.ts';
 import { HERO_SVG, heroBump, heroCheer, heroEaten, heroStrike, heroWalk } from './hero.ts';
 import type { HuntOutcome, HuntSnapshot, HuntWorld } from './hunt.ts';
 import type { Point } from './world.ts';
@@ -21,28 +22,34 @@ const centre = (p: Point) => ({ x: p.x * CELL + CELL / 2, y: p.y * CELL + CELL /
 /** A small pile of gold coins, centred on the origin. */
 const GOLD = `<ellipse class="hunt-coin" cx="-1.4" cy="1.2" rx="1.9" ry="1.2"/><ellipse class="hunt-coin" cx="1.4" cy="1.4" rx="1.9" ry="1.2"/><ellipse class="hunt-coin" cx="0" cy="-0.4" rx="1.9" ry="1.2"/><path class="hunt-shine" d="M-0.8-0.8h1.2"/>`;
 
+/** Where a hydra's body runs, from the back of its head to the tip of its tail. */
+function routeOf(world: HuntWorld, index: number): Point[] {
+  const hydra = world.hydras[index]!;
+  const head = centre(hydra.head);
+  const neck = centre(hydra.body[0]!);
+  // The body ends at the back of the head.
+  const angle = Math.atan2(head.y - neck.y, head.x - neck.x);
+  const back = { x: head.x - Math.cos(angle) * 2.2, y: head.y - Math.sin(angle) * 2.2 };
+  return [back, ...hydra.body.map(centre)];
+}
+
 /**
- * One hydra: a snake whose body runs through its cells from the tail to the
- * neck, and a head on the last cell looking away from the body.
+ * One hydra: a snake whose tapered body runs through its cells from the tail
+ * to the neck, and a head on the last cell looking away from the body.
  */
 function hydraMarkup(world: HuntWorld, index: number): string {
   const hydra = world.hydras[index]!;
   const head = centre(hydra.head);
   const neck = centre(hydra.body[0]!);
-  const points = [...hydra.body].reverse().map(centre);
-  // The body ends at the back of the head.
   const angle = Math.atan2(head.y - neck.y, head.x - neck.x);
-  const back = { x: head.x - Math.cos(angle) * 2.2, y: head.y - Math.sin(angle) * 2.2 };
-  const d = `M${[...points, back].map((p) => `${p.x} ${p.y}`).join('L')}`;
+  const shapes = bodyShapes(routeOf(world, index));
   const deg = Math.round((angle * 180) / Math.PI);
   // The head art is a side view facing right: one looking left is mirrored, and one looking
   // up or down only tilts that way, so it never stands on its nose.
   const turn = Math.abs(deg) > 100 ? 'scale(-1 1)' : Math.abs(deg) < 80 ? '' : `rotate(${deg > 0 ? 35 : -35})`;
-  const tail = points[0]!;
   return `<g class="hunt-hydra" data-index="${index}">
-  <path class="hunt-body" d="${d}"/>
-  <path class="hunt-scales" d="${d}"/>
-  <circle class="hunt-tail" cx="${tail.x}" cy="${tail.y}" r="1.4"/>
+  <path class="hunt-body" d="${shapes.body}"/>
+  <path class="hunt-belly" d="${shapes.stripe}"/>
   <g class="hunt-head" transform="translate(${head.x} ${head.y}) ${turn}"><g class="hunt-head-bite"><g transform="scale(0.075) translate(-20 3)"><use href="#hydra-head" class="hunt-skull"/><use href="#hydra-eye" class="hunt-eye"/></g></g></g>
 </g>`;
 }
@@ -92,12 +99,35 @@ export function huntArena(world: HuntWorld): HuntArena {
   const goldEls = [...root.querySelectorAll<SVGGElement>('.hunt-gold')];
   let lastStep: HuntSnapshot | undefined;
   let lastOutcome: HuntOutcome | undefined;
+  const routes = hydraEls.map((_, i) => routeOf(world, i));
+  const bodies = hydraEls.map((el) => ({
+    body: el.querySelector<SVGPathElement>('.hunt-body')!,
+    belly: el.querySelector<SVGPathElement>('.hunt-belly')!,
+  }));
   const timers: ReturnType<typeof setTimeout>[] = [];
 
   const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   function play(el: Element, frames: Keyframe[], duration: number, delay = 0) {
     if (calm() || !el.animate) return;
     el.animate(frames, { duration, delay, easing: 'ease-out', fill: 'backwards' });
+  }
+  /** Every living hydra slithers gently, each out of step with the others; stops once the arena has left the page. */
+  let seen = false;
+  let idle = 0;
+  let lastPaint = 0;
+  function slither(now: number) {
+    if (root.isConnected) seen = true;
+    else if (seen) return void (idle = 0);
+    if (now - lastPaint > 40 && !calm()) {
+      lastPaint = now;
+      for (const [i, el] of hydraEls.entries()) {
+        if (el.classList.contains('slain') || el.classList.contains('biting')) continue;
+        const shapes = bodyShapes(routes[i]!, { sway: 0.5, phase: now / 450 + i * 2.1 });
+        bodies[i]!.body.setAttribute('d', shapes.body);
+        bodies[i]!.belly.setAttribute('d', shapes.stripe);
+      }
+    }
+    idle = requestAnimationFrame(slither);
   }
   function later(ms: number, fn: () => void) {
     timers.push(setTimeout(fn, ms));
@@ -130,6 +160,7 @@ export function huntArena(world: HuntWorld): HuntArena {
     ratio: (width + 2) / (height + 2),
     show(step, outcome, ms) {
       for (const t of timers.splice(0)) clearTimeout(t);
+      if (!idle && typeof requestAnimationFrame === 'function') idle = requestAnimationFrame(slither);
       const animated = ms > 0 && lastStep !== undefined && !calm();
       const changed = step !== lastStep;
       const at = centre(step);
@@ -138,7 +169,13 @@ export function huntArena(world: HuntWorld): HuntArena {
 
       for (const [i, el] of hydraEls.entries()) {
         const slain = step.slain[i]!;
-        if (slain && !el.classList.contains('slain') && changed && animated) sparks(at, 9, 5, '#ff8a80', ms * 0.3);
+        if (slain && !el.classList.contains('slain') && changed && animated) {
+          sparks(at, 9, 5, '#ff8a80', ms * 0.3);
+          // Hit reaction: the whole hydra flashes white, recoils and shudders, then goes grey.
+          const flash = el.querySelector('.hunt-skull');
+          if (flash) play(flash, [{ fill: '#ffffff' }, { fill: '#ffffff', offset: 0.5 }, { fill: '#6b7885' }], 450, ms * 0.3);
+          play(el, [{ translate: '0 0' }, { translate: '1.6px -0.6px', offset: 0.15 }, { translate: '-1.4px 0.4px', offset: 0.35 }, { translate: '1px 0', offset: 0.55 }, { translate: '-0.6px 0', offset: 0.75 }, { translate: '0 0' }], 600, ms * 0.3);
+        }
         el.classList.toggle('slain', slain);
       }
       for (const [i, el] of goldEls.entries()) {
@@ -163,10 +200,13 @@ export function huntArena(world: HuntWorld): HuntArena {
         const jolt = [{ translate: '0 0' }, { translate: '-1.2px 0', offset: 0.2 }, { translate: '1.2px 0', offset: 0.4 }, { translate: '-0.8px 0', offset: 0.6 }, { translate: '0 0' }];
         if (outcome.kind === 'success') {
           sparks({ x: at.x, y: at.y - 2 }, 14, 9, '#ffd43b', delay);
+          // The hydras do not get up again: a last little twitch from each fallen head.
+          for (const el of hydraEls) play(el.querySelector('.hunt-head-bite')!, [{ rotate: '28deg' }, { rotate: '40deg', offset: 0.4 }, { rotate: '28deg' }], 500, delay);
           later(delay, () => heroCheer(warrior, 900));
         } else if (outcome.kind === 'eaten') {
           const bite = hydraEls[biter]?.querySelector('.hunt-head-bite');
-          if (bite) play(bite, [{ scale: '1' }, { scale: '1.6', offset: 0.4 }, { scale: '1.2' }], 600, delay * 0.5);
+          // The biting head rears back, then lunges at the warrior.
+          if (bite) play(bite, [{ scale: '1', rotate: '0deg' }, { scale: '0.9', rotate: '-14deg', offset: 0.25 }, { scale: '1.7', rotate: '4deg', offset: 0.6 }, { scale: '1.25', rotate: '0deg' }], 700, delay * 0.5);
           play(art, [{ scale: '1', opacity: 1 }, { scale: '0.4', opacity: 0.2 }], 600, delay);
           later(delay, () => heroEaten(warrior, 600));
           play(root, jolt, 450, delay);

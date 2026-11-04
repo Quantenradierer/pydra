@@ -58,6 +58,6 @@ test('reads a function line by line, then asks about the whole function', async 
 
   await page.getByRole('button', { name: 'Beenden' }).click();
   const percent = Math.round((100 * (total - 1)) / total);
-  await expect(page.getByTestId('stats-functions')).toHaveText(`1 von 4 Funktionen gelesen · ${percent} % richtig`);
+  await expect(page.getByTestId('stats-functions')).toHaveText(`1 von 6 Funktionen gelesen · ${percent} % richtig`);
   await expect(page.getByTestId('stats-mixed')).toHaveText('Noch keine Runde gespielt. Leg los!');
 });

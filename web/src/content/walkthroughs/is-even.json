@@ -1,0 +1,161 @@
+{
+  "id": "is-even",
+  "code": "def is_even(number):\n    remainder = number % 2\n    if remainder == 0:\n        return True\n    return False",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion is_even, die eine Zahl als Parameter number bekommt",
+          "en": "Defines a function is_even that takes a number as the parameter number"
+        },
+        {
+          "de": "Prüft sofort, ob die Zahl im Programm gerade ist",
+          "en": "Immediately checks whether the number in the program is even"
+        },
+        {
+          "de": "Erstellt eine Variable is_even mit dem Wert number",
+          "en": "Creates a variable is_even with the value number"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion is_even auf",
+          "en": "Calls the built-in function is_even"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`def` legt die Funktion `is_even` an (englisch „is even“ heißt „ist gerade“). Beim Anlegen wird noch nichts geprüft: Der Körper läuft erst bei einem Aufruf wie `is_even(10)`.\n\n`number` ist der Parameter, ein Platzhalter für die Zahl, die man übergibt. Eine eingebaute Funktion `is_even` gibt es in Python nicht, deshalb schreiben wir sie selbst.",
+        "en": "`def` creates the function `is_even`. Nothing is checked yet: the body only runs on a call such as `is_even(10)`.\n\n`number` is the parameter, a placeholder for the number you pass in. Python has no built-in function called `is_even`, which is why we write it ourselves."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Teilt number durch 2 und speichert das Ergebnis, zum Beispiel 3.5",
+          "en": "Divides number by 2 and stores the result, for example 3.5"
+        },
+        {
+          "de": "Multipliziert number mit 2",
+          "en": "Multiplies number by 2"
+        },
+        {
+          "de": "Speichert in remainder den Rest, der bei der Division durch 2 übrig bleibt",
+          "en": "Stores in remainder what is left over when dividing by 2"
+        },
+        {
+          "de": "Prüft, ob number gleich 2 ist",
+          "en": "Checks whether number equals 2"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`%` heißt Modulo und liefert den Rest einer Division. `7 % 2` ist 1, weil 7 = 3 mal 2 plus 1. `10 % 2` ist 0, weil 10 genau aufgeht.\n\nDas Ergebnis landet in der Variable `remainder` (Rest). Bei der Division durch 2 kann der Rest nur 0 oder 1 sein.",
+        "en": "`%` is called modulo and gives the remainder of a division. `7 % 2` is 1, because 7 is 3 times 2 plus 1. `10 % 2` is 0, because 10 divides exactly.\n\nThe result is stored in the variable `remainder`. When dividing by 2, the remainder can only be 0 or 1."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Setzt remainder auf 0",
+          "en": "Sets remainder to 0"
+        },
+        {
+          "de": "Prüft, ob remainder gleich 0 ist; nur dann läuft die eingerückte Zeile darunter",
+          "en": "Checks whether remainder equals 0; only then does the indented line below run"
+        },
+        {
+          "de": "Prüft, ob remainder größer als 0 ist",
+          "en": "Checks whether remainder is greater than 0"
+        },
+        {
+          "de": "Gibt 0 zurück, wenn remainder leer ist",
+          "en": "Returns 0 if remainder is empty"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`==` vergleicht zwei Werte und liefert `True` oder `False`. Ein einzelnes `=` würde dagegen speichern, das ist hier der Unterschied.\n\nDer Doppelpunkt und die Einrückung zeigen: Zeile 4 gehört zum `if` und läuft nur, wenn der Rest 0 ist. Bei `10` stimmt das, bei `7` (Rest 1) wird Zeile 4 übersprungen.",
+        "en": "`==` compares two values and gives `True` or `False`. A single `=` would store a value instead, which is the difference here.\n\nThe colon and the indentation show that line 4 belongs to the `if` and only runs when the remainder is 0. For `10` that is the case, for `7` (remainder 1) line 4 is skipped."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt den Wahrheitswert True an den Aufrufer zurück und beendet die Funktion",
+          "en": "Returns the truth value True to the caller and ends the function"
+        },
+        {
+          "de": "Zeigt den Text \"True\" auf dem Bildschirm an",
+          "en": "Prints the text \"True\" on the screen"
+        },
+        {
+          "de": "Setzt remainder auf True",
+          "en": "Sets remainder to True"
+        },
+        {
+          "de": "Gibt immer True zurück, egal was vorher geprüft wurde",
+          "en": "Always returns True, no matter what was checked before"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`True` ist ein Wahrheitswert (bool), kein Text. Deshalb steht es ohne Anführungszeichen. `return` gibt ihn an den Aufrufer zurück und beendet die Funktion sofort, Zeile 5 wird dann nicht mehr erreicht.\n\nDie Zeile steht eingerückt unter dem `if`, also gilt sie nur, wenn der Rest 0 ist.",
+        "en": "`True` is a truth value (bool), not text, so it has no quotation marks. `return` hands it back to the caller and ends the function right away, so line 5 is never reached.\n\nThe line is indented under the `if`, so it only counts when the remainder is 0."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Läuft bei jeder Zahl zuerst und gibt dann True zurück",
+          "en": "Runs first for every number and then returns True"
+        },
+        {
+          "de": "Gibt False zurück, wenn die Zahl nicht gerade war",
+          "en": "Returns False when the number was not even"
+        },
+        {
+          "de": "Setzt die Zahl auf False",
+          "en": "Sets the number to False"
+        },
+        {
+          "de": "Wird bei einer geraden Zahl nach True noch ausgeführt",
+          "en": "Is still executed after True for an even number"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Diese Zeile ist nicht eingerückt, gehört also nicht zum `if`. Sie wird nur erreicht, wenn die Bedingung nicht stimmte, denn bei einer geraden Zahl hat `return True` die Funktion schon beendet.\n\nSo liefert `is_even(7)` am Ende `False`. Man braucht hier kein `else`.",
+        "en": "This line is not indented, so it does not belong to the `if`. It is only reached when the condition was false, because for an even number `return True` has already ended the function.\n\nSo `is_even(7)` ends up giving `False`. No `else` is needed here."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt True zurück, wenn die Zahl gerade ist, sonst False",
+        "en": "Returns True if the number is even, otherwise False"
+      },
+      {
+        "de": "Gibt True zurück, wenn die Zahl ungerade ist, sonst False",
+        "en": "Returns True if the number is odd, otherwise False"
+      },
+      {
+        "de": "Halbiert die Zahl und gibt sie zurück",
+        "en": "Halves the number and returns it"
+      },
+      {
+        "de": "Gibt den Rest der Zahl bei der Division durch 2 zurück",
+        "en": "Returns the remainder of the number when divided by 2"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine Zahl ist gerade, wenn sie sich durch 2 ohne Rest teilen lässt. `is_even(10)` gibt `True` zurück, `is_even(7)` gibt `False` zurück. Der Rest ist nur ein Zwischenschritt in `remainder`.\n\nSolche Funktionen, die mit `True` oder `False` antworten, benennt man gern mit `is_...`, damit man sie wie eine Frage liest: „Ist 7 gerade?“",
+      "en": "A number is even when it divides by 2 without a remainder. `is_even(10)` returns `True`, `is_even(7)` returns `False`. The remainder is only an in-between step in `remainder`.\n\nFunctions that answer with `True` or `False` are often named `is_...` so they read like a question: \"Is 7 even?\""
+    }
+  }
+}

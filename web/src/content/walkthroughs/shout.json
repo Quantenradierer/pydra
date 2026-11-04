@@ -1,0 +1,135 @@
+{
+  "id": "shout",
+  "code": "def shout(text):\n    loud = text.upper()\n    exclaim = loud + \"!\"\n    return exclaim",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Gibt den Text laut auf dem Bildschirm aus",
+          "en": "Prints the text loudly on the screen"
+        },
+        {
+          "de": "Definiert eine Funktion shout, die einen Text als Parameter text bekommt",
+          "en": "Defines a function shout that takes a piece of text as the parameter text"
+        },
+        {
+          "de": "Speichert den Text \"text\" in einer Variable shout",
+          "en": "Stores the text \"text\" in a variable shout"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion shout auf",
+          "en": "Calls the built-in function shout"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`def` legt die Funktion `shout` an (englisch „shout“ heißt „rufen, schreien“). Beim Anlegen passiert noch nichts: Der Körper läuft erst bei einem Aufruf wie `shout(\"hello\")`.\n\n`text` ist der Parameter, ein Platzhalter. Beim Aufruf steht er für das, was du übergibst, hier \"hello\". Ausgegeben wird nichts, die Funktion gibt später nur ein Ergebnis zurück.",
+        "en": "`def` creates the function `shout`. Nothing happens yet: the body only runs on a call such as `shout(\"hello\")`.\n\n`text` is the parameter, a placeholder. During a call it stands for whatever you pass in, here \"hello\". Nothing is printed; the function only hands back a result later."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Macht alle Buchstaben in text zu Großbuchstaben und speichert das Ergebnis in loud",
+          "en": "Turns all letters in text into capital letters and stores the result in loud"
+        },
+        {
+          "de": "Verändert text selbst, sodass er danach groß geschrieben ist",
+          "en": "Changes text itself so that it is in capitals afterwards"
+        },
+        {
+          "de": "Zählt, wie viele Großbuchstaben text hat",
+          "en": "Counts how many capital letters text has"
+        },
+        {
+          "de": "Macht nur den ersten Buchstaben von text groß",
+          "en": "Capitalizes only the first letter of text"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`.upper()` ist eine Methode von Texten und liefert eine Kopie, in der alle Buchstaben groß sind: aus \"hello\" wird \"HELLO\". Das Ergebnis speichert `=` in `loud` (laut).\n\nDer ursprüngliche `text` bleibt unverändert, denn Texte in Python lassen sich nicht ändern. Nur den ersten Buchstaben groß zu machen wäre `.capitalize()`.",
+        "en": "`.upper()` is a method of strings and gives back a copy in which all letters are capitals: \"hello\" becomes \"HELLO\". The `=` stores the result in `loud`.\n\nThe original `text` stays unchanged, because strings in Python cannot be modified. Capitalizing only the first letter would be `.capitalize()`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Addiert die Zahl 1 zu loud",
+          "en": "Adds the number 1 to loud"
+        },
+        {
+          "de": "Hängt ein Ausrufezeichen an loud an und speichert das Ergebnis in exclaim",
+          "en": "Appends an exclamation mark to loud and stores the result in exclaim"
+        },
+        {
+          "de": "Prüft, ob loud ein Ausrufezeichen enthält",
+          "en": "Checks whether loud contains an exclamation mark"
+        },
+        {
+          "de": "Ersetzt loud durch ein einzelnes Ausrufezeichen",
+          "en": "Replaces loud with a single exclamation mark"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Mit `+` werden bei Texten zwei Stücke aneinandergehängt (Verkettung): `\"HELLO\" + \"!\"` ergibt `\"HELLO!\"`. Bei Zahlen würde `+` dagegen addieren.\n\nDas Ergebnis kommt in die neue Variable `exclaim` (Ausruf). `loud` selbst bleibt \"HELLO\".",
+        "en": "With strings, `+` joins two pieces together (concatenation): `\"HELLO\" + \"!\"` gives `\"HELLO!\"`. With numbers, `+` would add instead.\n\nThe result goes into the new variable `exclaim`. `loud` itself stays \"HELLO\"."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Zeigt exclaim auf dem Bildschirm an",
+          "en": "Prints exclaim on the screen"
+        },
+        {
+          "de": "Gibt den Wert von exclaim an den Aufrufer zurück und beendet die Funktion",
+          "en": "Hands the value of exclaim back to the caller and ends the function"
+        },
+        {
+          "de": "Gibt den Text \"exclaim\" zurück",
+          "en": "Returns the text \"exclaim\""
+        },
+        {
+          "de": "Gibt den ursprünglichen text zurück",
+          "en": "Returns the original text"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`return` gibt den Wert von `exclaim` an den Aufrufer zurück und beendet die Funktion. Ohne Anführungszeichen ist `exclaim` ein Variablenname, es kommt also der Inhalt \"HELLO!\" zurück, nicht das Wort.\n\nAnzeigen würde `print()`. Mit dem Rückgabewert kann man weiterarbeiten, etwa `print(shout(\"hello\"))`.",
+        "en": "`return` hands the value of `exclaim` back to the caller and ends the function. Without quotation marks, `exclaim` is a variable name, so the content \"HELLO!\" comes back, not the word.\n\nShowing something would be `print()`. With the returned value you can keep working, for example `print(shout(\"hello\"))`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Macht einen Text groß und hängt ein Ausrufezeichen an: aus \"hello\" wird \"HELLO!\"",
+        "en": "Makes a text uppercase and appends an exclamation mark: \"hello\" becomes \"HELLO!\""
+      },
+      {
+        "de": "Gibt einen Text mit Ausrufezeichen am Bildschirm aus",
+        "en": "Prints a text with an exclamation mark on the screen"
+      },
+      {
+        "de": "Hängt nur ein Ausrufezeichen an den Text an, ohne ihn zu verändern",
+        "en": "Only appends an exclamation mark to the text without changing it"
+      },
+      {
+        "de": "Zählt die Buchstaben des Textes und gibt die Anzahl zurück",
+        "en": "Counts the letters of the text and returns the count"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`shout(\"hello\")` macht daraus erst \"HELLO\" und dann \"HELLO!\" und gibt das zurück. Wie jemand, der etwas laut ruft. `shout(\"Hi there\")` ergibt \"HI THERE!\".\n\nDie Variablen `loud` und `exclaim` sind nur Zwischenschritte. Ausgegeben wird nichts, das Ergebnis geht an den Aufrufer.",
+      "en": "`shout(\"hello\")` first makes \"HELLO\", then \"HELLO!\", and returns that. Like someone calling something out loud. `shout(\"Hi there\")` gives \"HI THERE!\".\n\nThe variables `loud` and `exclaim` are just in-between steps. Nothing is printed; the result goes to the caller."
+    }
+  }
+}

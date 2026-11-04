@@ -3,9 +3,11 @@ import average from './walkthroughs/average.json';
 import countVowels from './walkthroughs/count-vowels.json';
 import findMax from './walkthroughs/find-max.json';
 import greet from './walkthroughs/greet.json';
+import isEven from './walkthroughs/is-even.json';
+import shout from './walkthroughs/shout.json';
 
 /** The functions of the "read a function" lesson, easiest first. Checked by walkthroughs.test.ts. */
-export const WALKTHROUGHS = [greet, average, countVowels, findMax] as Walkthrough[];
+export const WALKTHROUGHS = [greet, shout, isEven, average, countVowels, findMax] as Walkthrough[];
 
 export function linePrompt(line: number): Localized {
   return { de: `Was macht die markierte Zeile ${line}?`, en: `What does the highlighted line ${line} do?` };

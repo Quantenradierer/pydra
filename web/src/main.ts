@@ -4,6 +4,7 @@ import { CONTENT } from './content/lessons.ts';
 import { FeedbackQueue } from './feedback/queue.ts';
 import { Game } from './game/game.ts';
 import { HUNT_LEVELS } from './game/hunt-levels.ts';
+import { OrderGame } from './game/order.ts';
 import { InstallPrompt } from './install.ts';
 import { AppStorage } from './storage.ts';
 import { Trainer } from './trainer.ts';
@@ -14,12 +15,13 @@ const storage = new AppStorage(localStorage, CONTENT);
 const trainer = new Trainer(storage, CONTENT);
 const game = Game.fishing(storage);
 const hunt = new Game(storage, HUNT_LEVELS, Math.random, 'hunt');
+const order = new OrderGame(storage);
 const feedback = new FeedbackQueue(storage);
 const install = new InstallPrompt(window);
 
 // A new version reloads the app at once, or when the running quiz or a hydra game is left.
 const updates = new UpdateManager(
-  () => trainer.isRunning() || location.hash === '#/game' || location.hash === '#/hunt',
+  () => trainer.isRunning() || location.hash === '#/game' || location.hash === '#/hunt' || location.hash === '#/order',
   () => void updateSW(true),
 );
 const updateSW = registerSW({
@@ -30,7 +32,7 @@ const updateSW = registerSW({
   },
 });
 
-new App(document.getElementById('app')!, { storage, trainer, game, hunt, feedback, install, updates }).start();
+new App(document.getElementById('app')!, { storage, trainer, game, hunt, order, feedback, install, updates }).start();
 
 // Deliver feedback written while offline.
 const flushFeedback = () => void feedback.flush();

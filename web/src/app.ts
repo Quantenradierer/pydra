@@ -1,6 +1,7 @@
 import type { FeedbackQueue } from './feedback/queue.ts';
 import type { Game } from './game/game.ts';
 import type { HuntLevel } from './game/hunt-levels.ts';
+import type { OrderGame } from './game/order.ts';
 import { translate, type Lang, type MessageKey, type Params } from './i18n.ts';
 import type { InstallPrompt } from './install.ts';
 import type { AppStorage } from './storage.ts';
@@ -9,12 +10,13 @@ import type { UpdateManager } from './update.ts';
 import { feedbackScreen } from './views/feedback.ts';
 import { gameScreen } from './views/game.ts';
 import { huntScreen } from './views/hunt.ts';
+import { orderScreen } from './views/order.ts';
 import { homeScreen } from './views/home.ts';
 import { quizScreen } from './views/quiz.ts';
 import { settingsScreen } from './views/settings.ts';
 import { summaryScreen } from './views/summary.ts';
 
-export const ROUTES = ['home', 'quiz', 'summary', 'settings', 'feedback', 'game', 'hunt'] as const;
+export const ROUTES = ['home', 'quiz', 'summary', 'settings', 'feedback', 'game', 'hunt', 'order'] as const;
 export type Route = (typeof ROUTES)[number];
 
 /** What a view renders; dispose() removes listeners when the screen is left. */
@@ -30,6 +32,7 @@ export interface Services {
   trainer: Trainer;
   game: Game;
   hunt: Game<HuntLevel>;
+  order: OrderGame;
   feedback: FeedbackQueue;
   install: InstallPrompt;
   updates: UpdateManager;
@@ -43,10 +46,11 @@ const VIEWS: Record<Route, (app: App) => Screen> = {
   feedback: feedbackScreen,
   game: gameScreen,
   hunt: huntScreen,
+  order: orderScreen,
 };
 
 /** The hydra games' screens. */
-export const isGame = (route: Route) => route === 'game' || route === 'hunt';
+export const isGame = (route: Route) => route === 'game' || route === 'hunt' || route === 'order';
 
 function routeFromHash(hash: string): Route {
   const name = hash.replace(/^#\/?/, '');

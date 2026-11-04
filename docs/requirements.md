@@ -13,7 +13,7 @@ when a requirement changes; the code, tests and the other docs follow it.
 
 ## Lessons
 
-Home offers three lessons and two games. The first two use the same quiz screen, answer feedback,
+Home offers three lessons and three games. The first two use the same quiz screen, answer feedback,
 explanations, hydra, resume and stats rules (below); they differ in which
 questions a session asks.
 
@@ -23,6 +23,7 @@ questions a session asks.
 | `functions` | Funktionen lesen / Reading functions | one function read line by line: one question per line, in order, then one about the whole function |
 | game      | Hydra auf Fischfang / Hydra goes fishing | the hydra game: its own screen and progress (see below) |
 | hunt      | Hydra-Jagd / Hydra hunt            | the warrior game: same screen, its own world, levels and progress (see below) |
+| order     | Code-Puzzle / Code puzzle          | the warrior's world, but the lines of the program are to be put in order (see below) |
 
 ### Reading functions (walkthroughs)
 
@@ -142,6 +143,29 @@ questions a session asks.
   parameter, `while not body_here()`, `if body_here()`, nested loops, a
   list of numbers, a growing variable. Every answer's outcome was checked
   against real Python running the same world.
+
+### Code puzzle (the third game)
+
+- The world, picture, commands and rules of Hydra hunt, but no gap and no
+  answers: every line of the program is there, shown in a shuffled order
+  that does not solve the level. Each line has ▲/▼ buttons (labelled
+  "Move line N up/down"); a line keeps its indentation when it moves.
+  "Run" runs the program as arranged, step by step with the same run
+  controls; moving a line ends the run shown. Any order that slays every
+  hydra and takes all the gold solves the level (not only the one in the
+  data).
+- After a failed run the outcome and a hint (which never gives the order
+  away); after a win a short explanation and "Next level".
+- Misplaced indentation fails like in Python, with its exact
+  `IndentationError` messages (unexpected indent, expected an indented
+  block after …, unindent does not match …).
+- 8 levels: order of commands, minding the head, round a corner, what
+  goes in a loop, order inside a loop, define before calling, `while not
+  body_here()`, and `if` in a loop. Both the shown order and the right one
+  were checked against real Python.
+- Progress (`order` in storage): levels solved, runs and winning runs, and
+  the current level with its arrangement (kept across reloads). Home shows
+  e.g. "1 of 8 levels solved · 5 runs". Reset progress wipes it.
 
 ## Content
 
@@ -284,7 +308,7 @@ defensively: corrupt or foreign data is ignored and never throws.
 - lifetime counters per lesson: sessions played, best score, total answers,
   total correct (`counters` for the quiz, `counters.functions` for reading
   functions);
-- the games' progress (`game` and `hunt`, see the games above);
+- the games' progress (`game`, `hunt` and `order`, see the games above);
 - the last result (lesson, score, total) for the summary;
 - per-question stats `{ seen, correct, lastSeen }` keyed by question id
   (collected now, not yet used to pick questions);

@@ -59,6 +59,7 @@ export type Stmt =
 
 type PyErrorType =
   | 'SyntaxError'
+  | 'IndentationError'
   | 'NameError'
   | 'UnboundLocalError'
   | 'TypeError'
@@ -298,8 +299,11 @@ export function parse(source: string): Stmt[] {
   function block(indent: number): Stmt[] {
     const stmts: Stmt[] = [];
     while (pos < lines.length && lines[pos]!.indent === indent) stmts.push(statement(indent));
-    if (pos < lines.length && lines[pos]!.indent > indent) {
-      throw new PyError('SyntaxError', 'unexpected indent', lines[pos]!.number);
+    const next = lines[pos];
+    if (next && next.indent > indent) {
+      // Coming back out of a deeper block to a depth no block has is not an indent but a bad unindent.
+      const unindent = pos > 0 && lines[pos - 1]!.indent > next.indent;
+      throw new PyError('IndentationError', unindent ? 'unindent does not match any outer indentation level' : 'unexpected indent', next.number);
     }
     return stmts;
   }
@@ -307,7 +311,11 @@ export function parse(source: string): Stmt[] {
   /** The indented block after a line ending in ':'. */
   function body(header: Line): Stmt[] {
     const next = lines[pos];
-    if (!next || next.indent <= header.indent) throw new PyError('SyntaxError', 'expected an indented block', header.number);
+    if (!next || next.indent <= header.indent) {
+      const keyword = header.tokens[0]!.text;
+      const what = keyword === 'def' ? 'function definition' : `'${keyword}' statement`;
+      throw new PyError('IndentationError', `expected an indented block after ${what} on line ${header.number}`, next?.number ?? header.number);
+    }
     return block(next.indent);
   }
 

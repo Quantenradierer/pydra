@@ -7,7 +7,9 @@ offline. Three lessons: a quiz of 10 random questions from 80 in 8 topics,
 then asks what the whole function does, and "Hydra goes fishing", a game:
 fill the gap in a small program and watch a hydra run it step by step. A
 second game, "Hydra hunt", works the same way with a warrior who slays
-snake-like hydras and collects gold. Every answer gets an explanation. Live at https://pydra.quantenradierer.de/.
+snake-like hydras and collects gold; in the third, "Code puzzle", the
+warrior's program is all there but shuffled, and the lines must be put in
+order. Every answer gets an explanation. Live at https://pydra.quantenradierer.de/.
 
 The agreed requirements are in [docs/requirements.md](docs/requirements.md);
 deployment is described in [DEPLOY.md](DEPLOY.md).
@@ -36,7 +38,7 @@ In `web/src`:
 | `update.ts`                     | Service worker update rule (never reload during a quiz)             |
 | `feedback/`                     | Feedback client and offline queue                                   |
 | `hydra/`                        | The quiz hydra: neck geometry, head states from the session, SVG; its animations are in `style.css` |
-| `game/`                         | The hydra games: Python-subset interpreter (`python.ts`), what every level has (`puzzle.ts`), progress (`progress.ts`, `game.ts`). Fishing: pool simulation (`world.ts`), levels (`levels.ts`), the pool SVG (`arena.ts`). Hunt: simulation (`hunt.ts`), levels (`hunt-levels.ts`), the map SVG (`hunt-arena.ts`) and the warrior (`hero.ts`). The shared screen is `views/puzzle.ts`, set up by `views/game.ts` and `views/hunt.ts` |
+| `game/`                         | The hydra games: Python-subset interpreter (`python.ts`), what every level has (`puzzle.ts`), progress (`progress.ts`, `game.ts`). Fishing: pool simulation (`world.ts`), levels (`levels.ts`), the pool SVG (`arena.ts`). Hunt: simulation (`hunt.ts`), levels (`hunt-levels.ts`), the map SVG (`hunt-arena.ts`) and the warrior (`hero.ts`). Code puzzle: levels (`order-levels.ts`) and progress (`order.ts`), screen `views/order.ts`. The shared screen is `views/puzzle.ts`, set up by `views/game.ts` and `views/hunt.ts` |
 | `i18n.ts`                       | UI texts in German and English                                      |
 | `icons/hydra.svg`, `scripts/icons.mjs` | Icon artwork (also inlined as the Home logo) and the PNG generator (`npm run icons -w web`) |
 
@@ -192,6 +194,15 @@ cells from the head, not touching another hydra). `simulateHunt()` in
 take all the gold; the same rules for wrong answers, notes and `EXPECTED`
 (in `hunt-levels.test.ts`) apply, and every answer must end the same way in
 real Python.
+
+## Code puzzle levels
+
+The levels live in `web/src/game/order-levels.ts`: a hunt map, the program's
+`lines` in a right order (indentation included, 4 spaces per level), the
+`start` order they are shown in (it must not solve the level), a `hint`
+for failed runs and an `explain` for the win. Add the outcome of the start
+order to `START` in `order-levels.test.ts`, and check both orders in real
+Python.
 
 ## Feedback API
 

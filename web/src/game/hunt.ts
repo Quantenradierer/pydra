@@ -219,6 +219,8 @@ export function simulateHunt(world: HuntWorld, source: string, maxSteps = MAX_HU
     finish();
     if (error instanceof Stop) return { steps, outcome: { kind: error.kind, line } };
     if (error instanceof PyError) {
+      // A program that does not even parse still shows the map, with the line at fault.
+      if (steps.length === 0) steps.push(snapshot(error.line));
       return { steps, outcome: { kind: 'error', line: error.line, message: error.message } };
     }
     throw error;

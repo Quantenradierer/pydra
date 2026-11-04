@@ -49,8 +49,15 @@ export function homeScreen(app: App): Screen {
     );
 
   /** The hydra games: not quiz lessons, each has its own screen and progress. */
-  const gameCard = (route: 'game' | 'hunt') => {
-    const stats = app.services[route].stats();
+  const gameCard = (route: 'game' | 'hunt' | 'order') => {
+    let statsText: string;
+    if (route === 'order') {
+      const stats = app.services.order.stats();
+      statsText = stats.runs === 0 ? t('home.order.noStats') : t(stats.runs === 1 ? 'home.order.stats.one' : 'home.order.stats.other', stats);
+    } else {
+      const stats = app.services[route].stats();
+      statsText = stats.picks === 0 ? t('home.game.noStats') : t('home.game.stats', stats);
+    }
     return h(
       'li',
       { class: 'lesson' },
@@ -68,7 +75,7 @@ export function homeScreen(app: App): Screen {
       h(
         'p',
         { class: 'stats', id: `stats-${route}`, 'data-testid': `stats-${route}` },
-        stats.picks === 0 ? t('home.game.noStats') : t('home.game.stats', stats),
+        statsText,
       ),
     );
   };
@@ -88,7 +95,7 @@ export function homeScreen(app: App): Screen {
     logoArt(),
     h('h1', { tabindex: -1 }, 'Pydra'),
     h('p', { class: 'tagline' }, t('app.tagline')),
-    h('ul', { class: 'lessons', 'aria-label': t('home.lessons') }, ...LESSONS.map(lessonCard), gameCard('game'), gameCard('hunt')),
+    h('ul', { class: 'lessons', 'aria-label': t('home.lessons') }, ...LESSONS.map(lessonCard), gameCard('game'), gameCard('hunt'), gameCard('order')),
   );
   return { root };
 }

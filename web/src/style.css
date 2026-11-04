@@ -1860,3 +1860,77 @@ textarea {
   }
 }
 /* ---- end Hero ---- */
+
+/*
+ * Code puzzle: the program's lines as a list; each line moves up and down
+ * with its buttons and keeps its indentation. The arena is a little smaller
+ * than in the other games, so the whole program fits below it.
+ */
+.game.order .arena-box {
+  max-width: calc(28dvh * var(--ratio));
+}
+
+.game .order-slot {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;
+  min-height: 5rem;
+}
+
+.game .order-lines {
+  flex: 0 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  overflow: auto;
+}
+
+.order-line {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.1rem 0.4rem 0.1rem 0;
+  border-left: 3px solid transparent;
+}
+
+.order-line.focus {
+  border-left-color: #ffd43b;
+  background: color-mix(in srgb, #ffd43b 22%, transparent);
+  font-weight: 600;
+}
+
+.order-number {
+  flex: none;
+  width: 1.4rem;
+  text-align: right;
+  color: var(--code-comment);
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.order-code {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: pre;
+  font-size: 0.9rem;
+  background: none;
+  padding: 0;
+}
+
+.game .order-move {
+  flex: none;
+  width: 2.3rem;
+  min-width: 2.3rem;
+  height: 1.55rem;
+  min-height: 0;
+  padding: 0;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.game .order-run {
+  width: 100%;
+  min-height: 2.4rem;
+}

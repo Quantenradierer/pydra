@@ -97,6 +97,22 @@ describe('python subset', () => {
     }
   });
 
+  it('words indentation errors like Python', () => {
+    const fail = (source: string) => {
+      try {
+        parse(source);
+      } catch (e) {
+        return [(e as PyError).line, (e as PyError).message];
+      }
+      return undefined;
+    };
+    expect(fail('for i in range(3):\nattack()')).toEqual([2, "IndentationError: expected an indented block after 'for' statement on line 1"]);
+    expect(fail('x = 1\ndef f():\nx = 2')).toEqual([3, 'IndentationError: expected an indented block after function definition on line 2']);
+    expect(fail('while x:')).toEqual([1, "IndentationError: expected an indented block after 'while' statement on line 1"]);
+    expect(fail('x = 1\n    y = 2')).toEqual([2, 'IndentationError: unexpected indent']);
+    expect(fail('for i in x:\n        x = 1\n    y = 1')).toEqual([3, 'IndentationError: unindent does not match any outer indentation level']);
+  });
+
   it('has strings: literals in either quotes, ==, +, len, indexing and looping over the letters', () => {
     const { printed } = run(
       "s = 'ab' + \"c\"\nprint(s)\nprint(len(s))\nprint(s[0])\nprint(s[-1])\nprint(s == 'abc')\nprint('R' == 'r')\nfor c in s:\n    print(c)\nprint('')\nprint(not '')\nprint(\"it's\")",

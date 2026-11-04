@@ -86,6 +86,16 @@ export function arena(world: World): Arena {
   let lastOutcome: Outcome | undefined;
   let lastLength = 0;
 
+  /** A path from the first point to the last that rounds every corner in between. */
+  function smooth(pts: Point[]): string {
+    const at = (p: Point) => `${p.x} ${p.y}`;
+    const mid = (a: Point, b: Point) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+    if (pts.length < 3) return `M${pts.map(at).join('L')}`;
+    let d = `M${at(pts[0]!)}L${at(mid(pts[0]!, pts[1]!))}`;
+    for (let i = 1; i < pts.length - 1; i++) d += `Q${at(pts[i]!)} ${at(mid(pts[i]!, pts[i + 1]!))}`;
+    return d + `L${at(pts.at(-1)!)}`;
+  }
+
   /** Draws the snake through these points; the first one is the head. */
   function draw(points: Point[], deg: number) {
     drawn = points;
@@ -94,7 +104,7 @@ export function arena(world: World): Arena {
     // The head sits in the front half of its cell, looking at the cell it swims to next.
     const head = { x: points[0]!.x + Math.cos(rad) * AHEAD, y: points[0]!.y + Math.sin(rad) * AHEAD };
     const neck = { x: head.x - Math.cos(rad) * NECK, y: head.y - Math.sin(rad) * NECK };
-    const d = `M${[neck, ...points.slice(1)].map((p) => `${p.x} ${p.y}`).join('L')}`;
+    const d = smooth([neck, ...points.slice(1)]);
     body.setAttribute('d', d);
     scales.setAttribute('d', d);
     hydra.setAttribute('transform', `translate(${head.x} ${head.y})`);
@@ -165,7 +175,8 @@ export function arena(world: World): Arena {
     }
   }
 
-  const ease = (k: number) => 0.5 * k + 0.5 * (k * k * (3 - 2 * k));
+  /** Mostly even speed, so steps that follow each other flow; a little easing at both ends. */
+  const ease = (k: number) => 0.7 * k + 0.3 * (k * k * (3 - 2 * k));
 
   return {
     root,
@@ -188,10 +199,13 @@ export function arena(world: World): Arena {
         // The head turns on the spot while it glides forwards, so it never backs up.
         const start = performance.now();
         const tick = (now: number) => {
-          const k = ease(Math.min(1, (now - start) / ms));
-          const deg = fromAngle + (toAngle - fromAngle) * k;
+          const t = Math.min(1, (now - start) / ms);
+          const deg = fromAngle + (toAngle - fromAngle) * ease(t);
           const points = to.map((p, i) => {
             const q = from[Math.min(i, from.length - 1)]!;
+            // Like a snake, each segment sets off a moment after the one in front and arrives with it.
+            const lag = Math.min(0.5, 0.07 * i);
+            const k = ease(Math.max(0, (t - lag) / (1 - lag)));
             return { x: q.x + (p.x - q.x) * k, y: q.y + (p.y - q.y) * k };
           });
           draw(points, deg);

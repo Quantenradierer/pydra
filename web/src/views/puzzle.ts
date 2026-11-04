@@ -233,15 +233,20 @@ export function puzzleScreen<L extends PuzzleLevel, S extends PuzzleStep, O exte
   let finishedShown = false;
   /** The choice whose run is showing, if any. */
   let running: number | undefined;
+  /** Milliseconds the hydra takes to swim back to the start before a new run. */
+  const REWIND_MS = 350;
   /** Whether the run showing is of a choice the player had not seen the outcome of: its verdict waits for the end. */
   let suspense = false;
   /** Milliseconds the hydra takes to glide to the next step. */
   let glide = 0;
 
+  /** While the arena swims back to the start picture before a new run, it is not told about steps. */
+  let rewinding: ReturnType<typeof setTimeout> | undefined;
+
   function render() {
     const snap = trace.steps[index]!;
     const last = index === trace.steps.length - 1;
-    pool.show(snap, last && running !== undefined ? trace.outcome : undefined, glide);
+    if (rewinding === undefined) pool.show(snap, last && running !== undefined ? trace.outcome : undefined, glide);
     for (const [i, line] of code.lines.entries()) line.classList.toggle('focus', running !== undefined && snap.line === i + 1);
     const focused = code.lines[(snap.line ?? 0) - 1];
     // Keep the running line visible inside a scrolling program, without moving the page.
@@ -303,6 +308,7 @@ export function puzzleScreen<L extends PuzzleLevel, S extends PuzzleStep, O exte
   /** Starts the run of a choice from the first step. */
   function run(choice: number, autoplay: boolean, hidden = false) {
     pause();
+    const hadRun = running !== undefined;
     running = choice;
     suspense = hidden;
     finishedShown = false;
@@ -313,7 +319,16 @@ export function puzzleScreen<L extends PuzzleLevel, S extends PuzzleStep, O exte
     feedback.replaceChildren();
     index = 0;
     // A step shows the world after its line, so a run starts from the start picture and the first line acts at once.
-    pool.show(mode.initial(level), undefined, 0);
+    clearTimeout(rewinding);
+    rewinding = undefined;
+    if (hadRun) {
+      // Back to the start picture by gliding, not by jumping, and only then the first line acts.
+      pool.show(mode.initial(level), undefined, REWIND_MS);
+      rewinding = setTimeout(() => {
+        rewinding = undefined;
+        render();
+      }, REWIND_MS);
+    } else pool.show(mode.initial(level), undefined, 0);
     glide = autoplay ? STEP_MS[app.services.storage.gameSpeed()] * 0.8 : 300;
     render();
     if (autoplay) play();

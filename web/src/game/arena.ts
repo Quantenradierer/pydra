@@ -6,6 +6,8 @@ import type { Outcome, Point, Snapshot, World } from './world.ts';
 const CELL = 10;
 /** Distance from the middle of the head to where the body joins it. */
 const NECK = 3.5;
+/** How far the head sits ahead of the middle of its cell. */
+const AHEAD = 2.5;
 const DX = [0, 1, 0, -1];
 const DY = [-1, 0, 1, 0];
 
@@ -89,11 +91,13 @@ export function arena(world: World): Arena {
     drawn = points;
     // The body ends at the back of the head (its neck), not in the middle of it.
     const rad = (deg * Math.PI) / 180;
-    const neck = { x: points[0]!.x - Math.cos(rad) * NECK, y: points[0]!.y - Math.sin(rad) * NECK };
+    // The head sits in the front half of its cell, looking at the cell it swims to next.
+    const head = { x: points[0]!.x + Math.cos(rad) * AHEAD, y: points[0]!.y + Math.sin(rad) * AHEAD };
+    const neck = { x: head.x - Math.cos(rad) * NECK, y: head.y - Math.sin(rad) * NECK };
     const d = `M${[neck, ...points.slice(1)].map((p) => `${p.x} ${p.y}`).join('L')}`;
     body.setAttribute('d', d);
     scales.setAttribute('d', d);
-    hydra.setAttribute('transform', `translate(${points[0]!.x} ${points[0]!.y})`);
+    hydra.setAttribute('transform', `translate(${head.x} ${head.y})`);
     turn.setAttribute('transform', `rotate(${deg})`);
   }
 
@@ -145,21 +149,15 @@ export function arena(world: World): Arena {
       else {
         // Every point glides from where it was to where it goes (a segment takes the
         // place of the one in front of it), so the body never lags behind the head.
-        // The head is not glided but swings round its neck, which glides like the body.
-        const neckFrom = { x: from[0]!.x - DX[fromDir]! * CELL, y: from[0]!.y - DY[fromDir]! * CELL };
-        const neckTo = { x: to[0]!.x - DX[step.dir]! * CELL, y: to[0]!.y - DY[step.dir]! * CELL };
+        // The head turns on the spot while it glides forwards, so it never backs up.
         const start = performance.now();
         const tick = (now: number) => {
           const k = ease(Math.min(1, (now - start) / ms));
           const deg = fromAngle + (toAngle - fromAngle) * k;
-          const rad = (deg * Math.PI) / 180;
-          const nx = neckFrom.x + (neckTo.x - neckFrom.x) * k;
-          const ny = neckFrom.y + (neckTo.y - neckFrom.y) * k;
           const points = to.map((p, i) => {
             const q = from[Math.min(i, from.length - 1)]!;
             return { x: q.x + (p.x - q.x) * k, y: q.y + (p.y - q.y) * k };
           });
-          points[0] = { x: nx + Math.cos(rad) * CELL, y: ny + Math.sin(rad) * CELL };
           draw(points, deg);
           if (now - start < ms) frame = requestAnimationFrame(tick);
         };

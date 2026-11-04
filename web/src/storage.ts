@@ -124,13 +124,13 @@ export class AppStorage {
     this.remove('lastResult');
   }
 
-  /** A hydra game's saved progress, raw: game/progress.ts parses it. */
-  gameData(key: 'game' | 'heads' = 'game'): unknown {
-    return this.read(key);
+  /** The hydra game's saved progress, raw: game/progress.ts parses it. */
+  gameData(): unknown {
+    return this.read('game');
   }
 
-  setGameData(progress: unknown, key: 'game' | 'heads' = 'game') {
-    this.write(key, progress);
+  setGameData(progress: unknown) {
+    this.write('game', progress);
   }
 
   /** How fast the game plays a run; a setting, so Reset progress keeps it. */
@@ -153,9 +153,9 @@ export class AppStorage {
     else this.write('feedbackQueue', queue);
   }
 
-  /** Wipes stats, counters, any session and both hydra games' progress; keeps the language and unsent feedback. */
+  /** Wipes stats, counters, any session and the game's progress; keeps the language and unsent feedback. */
   resetProgress() {
-    for (const key of ['session', ...LESSONS.map(countersKey), 'questionStats', 'lastResult', 'game', 'heads']) this.remove(key);
+    for (const key of ['session', ...LESSONS.map(countersKey), 'questionStats', 'lastResult', 'game']) this.remove(key);
   }
 }
 

@@ -1,6 +1,5 @@
 import type { FeedbackQueue } from './feedback/queue.ts';
 import type { Game } from './game/game.ts';
-import type { HeadsLevel } from './game/heads.ts';
 import { translate, type Lang, type MessageKey, type Params } from './i18n.ts';
 import type { InstallPrompt } from './install.ts';
 import type { AppStorage } from './storage.ts';
@@ -8,13 +7,12 @@ import type { Trainer } from './trainer.ts';
 import type { UpdateManager } from './update.ts';
 import { feedbackScreen } from './views/feedback.ts';
 import { gameScreen } from './views/game.ts';
-import { headsScreen } from './views/heads.ts';
 import { homeScreen } from './views/home.ts';
 import { quizScreen } from './views/quiz.ts';
 import { settingsScreen } from './views/settings.ts';
 import { summaryScreen } from './views/summary.ts';
 
-export const ROUTES = ['home', 'quiz', 'summary', 'settings', 'feedback', 'game', 'heads'] as const;
+export const ROUTES = ['home', 'quiz', 'summary', 'settings', 'feedback', 'game'] as const;
 export type Route = (typeof ROUTES)[number];
 
 /** What a view renders; dispose() removes listeners when the screen is left. */
@@ -29,7 +27,6 @@ export interface Services {
   storage: AppStorage;
   trainer: Trainer;
   game: Game;
-  heads: Game<HeadsLevel>;
   feedback: FeedbackQueue;
   install: InstallPrompt;
   updates: UpdateManager;
@@ -42,11 +39,7 @@ const VIEWS: Record<Route, (app: App) => Screen> = {
   settings: settingsScreen,
   feedback: feedbackScreen,
   game: gameScreen,
-  heads: headsScreen,
 };
-
-/** The hydra games' screens. */
-export const isGame = (route: Route) => route === 'game' || route === 'heads';
 
 function routeFromHash(hash: string): Route {
   const name = hash.replace(/^#\/?/, '');
@@ -75,12 +68,12 @@ export class App {
   }
 
   /**
-   * Settings, Feedback and the hydra games are pushed onto the history so the
+   * Settings, Feedback and the game are pushed onto the history so the
    * system back button returns home; quiz screens replace the entry.
    */
   navigate(route: Route) {
     const url = route === 'home' ? '#/' : `#/${route}`;
-    if (route === 'settings' || route === 'feedback' || isGame(route)) history.pushState({ fromHome: true }, '', url);
+    if (route === 'settings' || route === 'feedback' || route === 'game') history.pushState({ fromHome: true }, '', url);
     else history.replaceState(null, '', url);
     this.render();
   }
@@ -112,7 +105,7 @@ export class App {
     document.documentElement.lang = this.lang;
     document.title = this.t('app.title');
     (this.screen.focus ?? this.screen.root.querySelector<HTMLElement>('h1'))?.focus({ preventScroll: true });
-    // The hydra games count like a quiz: an update waits until the player leaves them.
-    if (route !== 'quiz' && !isGame(route)) updates.quizEnded();
+    // The game counts like a quiz: an update waits until the player leaves it.
+    if (route !== 'quiz' && route !== 'game') updates.quizEnded();
   }
 }

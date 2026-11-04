@@ -1,17 +1,43 @@
-import type { PuzzleChoice, PuzzleLevel } from './puzzle.ts';
-
-export { fill, GAP } from './puzzle.ts';
+import type { Localized } from '../content/types.ts';
 
 /** One answer for the gap: code (the same in every language) and what it does. */
-export type GameChoice = PuzzleChoice;
+export interface GameChoice {
+  /** Replaces the gap `___` in the level's code. */
+  code: string;
+  /**
+   * For the right answer: the explanation, shown once it is picked. For a
+   * wrong answer: why the hydra went wrong, shown after its run; it never
+   * names the right answer.
+   */
+  note: Localized;
+}
 
 /**
- * A level of the fishing game: a program with one gap, four answers for it
- * and the arena the hydra swims in. Only the right answer eats every fish.
+ * A level of the hydra game: a program with one gap, four answers for it
+ * and the arena the hydra swims in. Every answer is really run by the
+ * interpreter in python.ts; only the right one eats every fish.
  */
-export interface GameLevel extends PuzzleLevel {
+export interface GameLevel {
+  /** Stable, saved in the progress. */
+  id: string;
+  /** The concept the level practises, shown as its title. */
+  title: Localized;
+  /** One or two sentences that introduce the concept. */
+  intro: Localized;
   /** Arena rows: `#` rock, `.` water, `F` fish, the hydra's start `^ > v <`. */
   map: string[];
+  /** The program with exactly one gap `___`. */
+  code: string;
+  choices: GameChoice[];
+  answerIndex: 0 | 1 | 2 | 3;
+}
+
+/** The gap in a level's code. */
+export const GAP = '___';
+
+/** The level's program with the gap filled by a choice. */
+export function fill(level: GameLevel, choice: number): string {
+  return level.code.replace(GAP, level.choices[choice]!.code);
 }
 
 export const LEVELS: readonly GameLevel[] = [

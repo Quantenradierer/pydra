@@ -438,8 +438,6 @@ export interface Pause {
 }
 
 interface Frame {
-  /** The call that made this frame: the function and its arguments (none for the globals). */
-  call?: { name: string; args: Value[] };
   vars: Map<string, Value>;
   /** Hidden loop state (each running `for`: its items and the current index), part of the loop-detection key. */
   loops: [Value[] | string, number][];
@@ -467,21 +465,6 @@ export function truthy(v: Value): boolean {
   return Boolean(v);
 }
 
-/** A function call that is running: one head of the hydra in the heads game. */
-export interface CallFrame {
-  name: string;
-  args: Value[];
-  /** Its local variables (parameters first), without functions. */
-  vars: [string, Value][];
-}
-
-const isData = (v: Value) => typeof v !== 'object' || v === null || Array.isArray(v);
-
-/** What print() shows for a value (Python's str): text without quotes, everything else as repr. */
-export function str(v: Value): string {
-  return typeof v === 'string' ? v : repr(v);
-}
-
 /** How Python prints a value (repr), for the variables panel. */
 export function repr(v: Value): string {
   if (v === null) return 'None';
@@ -498,8 +481,6 @@ export class Interpreter {
   readonly globals: Frame = { vars: new Map(), loops: [] };
   private frames: Frame[] = [this.globals];
   private calls: number[] = [];
-  /** The last function call that finished, with its return value, until takeReturn() picks it up. */
-  private returned?: { name: string; value: Value };
 
   constructor(builtins: readonly Builtin[]) {
     const range: Builtin = {
@@ -534,31 +515,14 @@ export class Interpreter {
     const visible = new Map(this.globals.vars);
     const top = this.frames.at(-1)!;
     if (top !== this.globals) for (const [k, v] of top.vars) visible.set(k, v);
-    return [...visible].filter(([, v]) => isData(v));
-  }
-
-  /** The global variables only, without functions. */
-  globalVariables(): [string, Value][] {
-    return [...this.globals.vars].filter(([, v]) => isData(v));
-  }
-
-  /** The function calls running now, the oldest first. */
-  stack(): CallFrame[] {
-    return this.frames.slice(1).map((f) => ({ name: f.call!.name, args: f.call!.args, vars: [...f.vars].filter(([, v]) => isData(v)) }));
-  }
-
-  /** The call that finished since the last time this was asked, and what it returned. */
-  takeReturn(): { name: string; value: Value } | undefined {
-    const returned = this.returned;
-    this.returned = undefined;
-    return returned;
+    return [...visible].filter(([, v]) => typeof v !== 'object' || v === null || Array.isArray(v));
   }
 
   /** A fingerprint of the whole program state (without the world). Equal fingerprints at the same line mean an endless loop. */
   fingerprint(): string {
     return JSON.stringify([
       this.calls,
-      this.frames.map((f) => [f.loops, [...f.vars].filter(([, v]) => isData(v))]),
+      this.frames.map((f) => [f.loops, [...f.vars].filter(([, v]) => typeof v !== 'object' || v === null || Array.isArray(v))]),
     ]);
   }
 
@@ -725,7 +689,7 @@ export class Interpreter {
         }
         if (callee.kind === 'builtin') {
           if (callee.arity >= 0 && args.length !== callee.arity) {
-            throw new PyError('TypeError', tooMany(callee.name, `${callee.arity}`, callee.arity, args.length), line);
+            throw new PyError('TypeError', `${callee.name}() takes ${callee.arity} arguments but ${args.length} were given`, line);
           }
           try {
             return callee.call(args);
@@ -737,31 +701,24 @@ export class Interpreter {
           }
         }
         const required = callee.params.length - callee.defaults.length;
-        if (args.length < required) {
-          const missing = callee.params.slice(args.length, required).map((p) => `'${p}'`);
-          const names = missing.length === 1 ? missing[0] : `${missing.slice(0, -1).join(', ')} and ${missing.at(-1)}`;
-          throw new PyError('TypeError', `${callee.name}() missing ${plural(missing.length, 'required positional argument')}: ${names}`, line);
-        }
-        if (args.length > callee.params.length) {
-          const takes = required === callee.params.length ? `${required}` : `from ${required} to ${callee.params.length}`;
-          throw new PyError('TypeError', tooMany(callee.name, takes, callee.params.length, args.length), line);
+        if (args.length < required || args.length > callee.params.length) {
+          const takes = required === callee.params.length ? `${required}` : `${required} to ${callee.params.length}`;
+          throw new PyError('TypeError', `${callee.name}() takes ${takes} arguments but ${args.length} were given`, line);
         }
         if (this.frames.length > MAX_DEPTH) throw new PyError('RecursionError', 'maximum recursion depth exceeded', line);
         const values = [...args, ...callee.defaults.slice(args.length - required)];
-        this.frames.push({ call: { name: callee.name, args }, vars: new Map(callee.params.map((p, i) => [p, values[i]!])), loops: [] });
+        this.frames.push({ vars: new Map(callee.params.map((p, i) => [p, values[i]!])), loops: [] });
         this.calls.push(line);
-        let result: Value = null;
         try {
           yield* this.block(callee.body);
+          return null;
         } catch (error) {
-          if (!(error instanceof Return)) throw error;
-          result = error.value;
+          if (error instanceof Return) return error.value;
+          throw error;
         } finally {
           this.frames.pop();
           this.calls.pop();
         }
-        this.returned = { name: callee.name, value: result };
-        return result;
       }
     }
   }
@@ -772,7 +729,7 @@ export class Interpreter {
     if (op === '+' && typeof left === 'string' && typeof right === 'string') return left + right;
     if (op === '+' && Array.isArray(left) && Array.isArray(right)) return [...left, ...right];
     if (!isNumber(left) || !isNumber(right)) {
-      throw new PyError('TypeError', `unsupported operand type(s) for ${op}: '${typeName(left)}' and '${typeName(right)}'`, line);
+      throw new PyError('TypeError', `unsupported operand types for ${op}: '${typeName(left)}' and '${typeName(right)}'`, line);
     }
     const a = num(left);
     const b = num(right);
@@ -807,13 +764,6 @@ function equal(a: Value, b: Value): boolean {
   if (isNumber(a) && isNumber(b)) return num(a) === num(b);
   if (Array.isArray(a) && Array.isArray(b)) return a.length === b.length && a.every((x, i) => equal(x, b[i]!));
   return a === b;
-}
-
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
-
-/** Python's message for a call with too many arguments. */
-function tooMany(name: string, takes: string, most: number, given: number): string {
-  return `${name}() takes ${takes} positional argument${most === 1 && !takes.startsWith('from') ? '' : 's'} but ${given} ${given === 1 ? 'was' : 'were'} given`;
 }
 
 /** Python's name for the type of a value, for error messages. */

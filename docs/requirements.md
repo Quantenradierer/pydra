@@ -13,7 +13,7 @@ when a requirement changes; the code, tests and the other docs follow it.
 
 ## Lessons
 
-Home offers four lessons. The first two use the same quiz screen, answer feedback,
+Home offers three lessons. The first two use the same quiz screen, answer feedback,
 explanations, hydra, resume and stats rules (below); they differ in which
 questions a session asks.
 
@@ -22,7 +22,6 @@ questions a session asks.
 | `mixed`   | Quiz / Quiz                        | 10 random questions from the 80 (see Quiz session)                      |
 | `functions` | Funktionen lesen / Reading functions | one function read line by line: one question per line, in order, then one about the whole function |
 | game      | Hydra auf Fischfang / Hydra goes fishing | the hydra game: its own screen and progress (see below) |
-| heads     | Die Köpfe der Hydra / The hydra's heads | the second hydra game, about functions: its own screen and progress (see below) |
 
 ### Reading functions (walkthroughs)
 
@@ -104,12 +103,10 @@ questions a session asks.
   them that shows the task first, then verdict, explanation and "next"
   (scrolls inside itself if long).
 - The programs run in a small interpreter for a Python subset
-  (`web/src/game/python.ts`: ints, bools, strings, lists, indexing, `len`,
-  arithmetic, comparisons, `not`/`and`/`or`, assignment, `+=`/`-=`,
-  `if`/`elif`/`else`, `while`, `for` over `range(…)`, lists and strings,
-  `break`/`continue`, `def` with default values, `return`, `pass`);
-  anything else is a syntax error. Error messages are worded like
-  Python's. World commands: `move()`, `turn_left()`, `turn_right()`,
+  (`web/src/game/python.ts`: ints, bools, arithmetic, comparisons,
+  `not`/`and`/`or`, assignment, `+=`/`-=`, `if`/`elif`/`else`, `while`,
+  `for … in range(…)`, `def`, `return`, `pass`); anything else is a syntax
+  error. World commands: `move()`, `turn_left()`, `turn_right()`,
   `wall_ahead()`, `fish_ahead()`. The trace of every answer is computed from
   its code; a run that reaches exactly the same state twice (or 300 steps)
   ends as an endless loop. Every answer's outcome was checked against real
@@ -122,31 +119,6 @@ questions a session asks.
   level in progress with its answer order and the wrong answers tried. It
   is saved after every pick; opening the game continues that level, also
   after a reload. An app update waits while the game screen is open.
-
-### The hydra's heads (the second game)
-
-- The same screen, rules and progress handling as the fishing game (gap,
-  four shuffled answers, every answer always pickable and really run step
-  by step, the right one never shown before it is picked, level strip,
-  speed setting, layout), with its own levels and progress (`heads` in
-  storage). Only the stage differs.
-- The stage: the hydra's body at the bottom is the main program and holds
-  its variables; every running function call grows a head on top, labelled
-  with the call (`double(4)`) and holding its local variables. When a call
-  finishes, its head pulls back and the value it returned lands on the
-  caller ("double → 8"). With more than 4 heads the lowest fold into a
-  "+N Köpfe darunter" / "+N heads below" row. Beside it: the goal (a value
-  such as `result = 8`, or the lines to print) and the output so far.
-- A level is solved when the program ends with the goal reached. Outcomes:
-  goal reached; a variable with another value ("result ist 16 statt 8");
-  other output; a Python error (the head where it happened turns red;
-  endless recursion reads "Zu viele Köpfe!"); a program that would never
-  end.
-- 8 easy levels for beginners, in this order: calling a function, a
-  parameter, `return` vs `print`, using the returned value, local
-  variables, a function calling a function, two parameters, and a first
-  recursion (a countdown). Every answer was checked against real Python
-  (same output, values and error messages).
 
 ## Content
 
@@ -257,9 +229,8 @@ a way home.
     function read yet." before the first answer.
   - Hydra goes fishing: e.g. "3 of 19 levels solved · 60% correct" (share of
     right picks); "No level played yet." before the first pick.
-  - The hydra's heads: the same, e.g. "2 of 8 levels solved · 75% correct".
 - **Quiz:** as above.
-- **Games:** as above, each with a back button to Home (pushed onto the history
+- **Game:** as above, with a back button to Home (pushed onto the history
   like Settings).
 - **Summary:** as above.
 - **Settings:**
@@ -289,7 +260,7 @@ defensively: corrupt or foreign data is ignored and never throws.
 - lifetime counters per lesson: sessions played, best score, total answers,
   total correct (`counters` for the quiz, `counters.functions` for reading
   functions);
-- both hydra games' progress (see the games above);
+- the game's progress (see the game above);
 - the last result (lesson, score, total) for the summary;
 - per-question stats `{ seen, correct, lastSeen }` keyed by question id
   (collected now, not yet used to pick questions);
@@ -386,9 +357,6 @@ Hono on Node 24 with `node:sqlite`. API types and validation live in
   - **Playwright e2e,** against the built app served by the Node server:
     - a full 10-question run, including the hydra heads and the summary hydra;
     - slashed and regrown heads, restored after a reload without animation;
-    - the heads game: a call grows a head that disappears again, the
-      parameter and returned value are shown, wrong values are named,
-      endless recursion folds the heads; every level fits a phone;
     - a game level: wrong answers run and fail, the right answer is never
       marked before it is picked, tried answers survive a reload, every
       answer stays pickable and replays after solving change no score;

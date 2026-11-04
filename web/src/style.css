@@ -1208,9 +1208,9 @@ textarea {
 }
 
 /*
- * The game screen fills the visible viewport (dvh follows the mobile browser
- * chrome) and never scrolls: a slim bar, the arena, the run controls, the code
- * and the answers all stay in view. Everything else is minimal or collapsed.
+ * The game screen fills at least the visible viewport (dvh follows the mobile
+ * browser chrome): a slim bar, the arena, the run controls, the code and the
+ * answers. Longer feedback runs past the bottom and the whole page scrolls. Everything else is minimal or collapsed.
  */
 #app:has(.game) {
   max-width: 640px;
@@ -1221,7 +1221,6 @@ textarea {
 .game {
   height: calc(100dvh - max(0.35rem, env(safe-area-inset-top)) - max(0.4rem, env(safe-area-inset-bottom)));
   gap: 0.3rem;
-  overflow: hidden;
 }
 
 .game > * {
@@ -1469,10 +1468,16 @@ textarea {
 .game .feedback {
   flex: 1 1 0;
   min-height: 2.6rem;
-  overflow-y: auto;
   gap: 0.3rem;
   font-size: 0.85rem;
   line-height: 1.3;
+}
+
+/* Long feedback runs past the box and the whole page scrolls (no inner scrollbar). */
+.game .feedback:not(:empty)::after {
+  content: '';
+  flex: none;
+  height: 0.8rem;
 }
 
 .game .feedback:empty {

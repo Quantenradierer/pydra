@@ -910,13 +910,14 @@ textarea {
 
 .arena-fish {
   fill: var(--yellow);
-  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity 0.3s, scale 0.3s;
   transform-box: fill-box;
   transform-origin: center;
 }
 
 .arena-fish.eaten {
   opacity: 0;
+  scale: 1.6;
 }
 
 .arena-body,
@@ -937,8 +938,30 @@ textarea {
   stroke-dasharray: 0.1 2.5;
 }
 
-.arena-head-turn {
-  transition: transform 0.3s ease-in-out;
+.arena-bubble {
+  fill: none;
+  stroke: #9cc7ee;
+  stroke-opacity: 0.35;
+  stroke-width: 0.25;
+  animation: arena-rise 9s linear infinite;
+}
+
+.arena-ripple {
+  fill: none;
+  stroke: #9cc7ee;
+  stroke-width: 0.25;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: arena-ripple 7s ease-out infinite;
+}
+
+.arena-head-pulse {
+  transform-box: fill-box;
+  transform-origin: 20% 50%;
+}
+
+.arena-fx {
+  pointer-events: none;
 }
 
 .arena-skull {
@@ -969,10 +992,6 @@ textarea {
   stroke: none;
 }
 
-.arena.crashed .arena-head-turn {
-  animation: arena-shake 0.4s ease-in-out;
-}
-
 .arena.stuck .arena-body {
   stroke: #2a5680;
 }
@@ -988,12 +1007,28 @@ textarea {
   }
 }
 
-@keyframes arena-shake {
-  25% {
-    translate: -1px 0;
+@keyframes arena-rise {
+  from {
+    transform: translateY(0);
+    opacity: 0;
   }
-  75% {
-    translate: 1px 0;
+  15% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+}
+
+@keyframes arena-ripple {
+  from {
+    transform: scale(0.3);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(2.2);
+    opacity: 0;
   }
 }
 

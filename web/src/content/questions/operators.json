@@ -796,5 +796,421 @@
       "de": "In Python prüfst du mit `!=`, ob zwei Werte verschieden sind. Die anderen Schreibweisen gibt es in Python nicht.",
       "en": "In Python you use `!=` to check that two values differ. The other spellings do not exist in Python."
     }
+  },
+  {
+    "id": "operators-26",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(2 ** 3 ** 2)",
+    "choices": [
+      {
+        "de": "64",
+        "en": "64"
+      },
+      {
+        "de": "512",
+        "en": "512"
+      },
+      {
+        "de": "36",
+        "en": "36"
+      },
+      {
+        "de": "12",
+        "en": "12"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Potenzen werden von rechts nach links ausgewertet: `3 ** 2` ist 9, dann `2 ** 9` ist 512. Für 64 müsstest du `(2 ** 3) ** 2` schreiben.",
+      "en": "Powers are evaluated from right to left: `3 ** 2` is 9, then `2 ** 9` is 512. For 64 you would have to write `(2 ** 3) ** 2`."
+    }
+  },
+  {
+    "id": "operators-27",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(-7 // 2)",
+    "choices": [
+      {
+        "de": "-3",
+        "en": "-3"
+      },
+      {
+        "de": "-3.5",
+        "en": "-3.5"
+      },
+      {
+        "de": "-4",
+        "en": "-4"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`//` rundet immer nach unten ab, in Richtung des kleineren Werts. -3,5 wird also zu -4, nicht zu -3.",
+      "en": "`//` always rounds down, towards the smaller value. So -3.5 becomes -4, not -3."
+    }
+  },
+  {
+    "id": "operators-28",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 5\nx //= 2\nprint(x)",
+    "choices": [
+      {
+        "de": "2.5",
+        "en": "2.5"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`x //= 2` ist die Kurzform von `x = x // 2`. 5 geteilt durch 2 ergibt abgerundet 2.",
+      "en": "`x //= 2` is the short form of `x = x // 2`. 5 divided by 2 rounded down is 2."
+    }
+  },
+  {
+    "id": "operators-29",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(10 % 3 * 2)",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`%` und `*` haben denselben Rang und werden von links nach rechts gerechnet: `10 % 3` ist 1, dann `1 * 2` ist 2.",
+      "en": "`%` and `*` have the same rank and are calculated from left to right: `10 % 3` is 1, then `1 * 2` is 2."
+    }
+  },
+  {
+    "id": "operators-30",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(not True or True)",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`not` bindet stärker als `or`. Zuerst wird `not True` zu `False`, dann `False or True` zu `True`.",
+      "en": "`not` binds more tightly than `or`. First `not True` becomes `False`, then `False or True` becomes `True`."
+    }
+  },
+  {
+    "id": "operators-31",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = 5\nb = 3\nprint(a > b, a == b, a != b)",
+    "choices": [
+      {
+        "de": "False True False",
+        "en": "False True False"
+      },
+      {
+        "de": "True True True",
+        "en": "True True True"
+      },
+      {
+        "de": "True False True",
+        "en": "True False True"
+      },
+      {
+        "de": "True False False",
+        "en": "True False False"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "5 ist größer als 3 (wahr), nicht gleich 3 (falsch) und verschieden von 3 (wahr).",
+      "en": "5 is greater than 3 (true), not equal to 3 (false) and different from 3 (true)."
+    }
+  },
+  {
+    "id": "operators-32",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(1 + 2 * 3 ** 2)",
+    "choices": [
+      {
+        "de": "27",
+        "en": "27"
+      },
+      {
+        "de": "49",
+        "en": "49"
+      },
+      {
+        "de": "13",
+        "en": "13"
+      },
+      {
+        "de": "19",
+        "en": "19"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Reihenfolge: zuerst `**` (3 ** 2 = 9), dann `*` (2 * 9 = 18), zuletzt `+` (1 + 18 = 19).",
+      "en": "Order: first `**` (3 ** 2 = 9), then `*` (2 * 9 = 18), finally `+` (1 + 18 = 19)."
+    }
+  },
+  {
+    "id": "operators-33",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 3\nx *= x + 1\nprint(x)",
+    "choices": [
+      {
+        "de": "12",
+        "en": "12"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "9",
+        "en": "9"
+      },
+      {
+        "de": "7",
+        "en": "7"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`x *= x + 1` heißt `x = x * (x + 1)`. Erst wird die rechte Seite berechnet: 3 + 1 = 4, dann 3 * 4 = 12.",
+      "en": "`x *= x + 1` means `x = x * (x + 1)`. The right side is calculated first: 3 + 1 = 4, then 3 * 4 = 12."
+    }
+  },
+  {
+    "id": "operators-34",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(10 // 3 + 10 % 3)",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "13",
+        "en": "13"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`10 // 3` ist 3 (ganze Teile), `10 % 3` ist 1 (Rest). Zusammen 3 + 1 = 4.",
+      "en": "`10 // 3` is 3 (whole parts), `10 % 3` is 1 (remainder). Together 3 + 1 = 4."
+    }
+  },
+  {
+    "id": "operators-35",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = [1]\nb = a\nc = [1]\nprint(a is b, a is c)",
+    "choices": [
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "False False",
+        "en": "False False"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      },
+      {
+        "de": "False True",
+        "en": "False True"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`is` prüft, ob es dasselbe Objekt ist, nicht nur gleicher Inhalt. `b` zeigt auf dieselbe Liste wie `a`, `c` ist eine zweite Liste mit gleichem Inhalt. `a == c` wäre aber wahr.",
+      "en": "`is` checks whether it is the same object, not just equal content. `b` points to the same list as `a`, `c` is a second list with the same content. `a == c` would be true, though."
+    }
+  },
+  {
+    "id": "operators-36",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"ab\" * 2 + \"c\")",
+    "choices": [
+      {
+        "de": "abcabc",
+        "en": "abcabc"
+      },
+      {
+        "de": "ababcc",
+        "en": "ababcc"
+      },
+      {
+        "de": "abbc",
+        "en": "abbc"
+      },
+      {
+        "de": "ababc",
+        "en": "ababc"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`*` bindet stärker als `+`: Zuerst wird „ab“ verdoppelt zu „abab“, dann wird „c“ angehängt.",
+      "en": "`*` binds more tightly than `+`: first “ab” is doubled to “abab”, then “c” is appended."
+    }
+  },
+  {
+    "id": "operators-37",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(15 % 4, 15 % 5, 15 % 16)",
+    "choices": [
+      {
+        "de": "3 0 15",
+        "en": "3 0 15"
+      },
+      {
+        "de": "3 0 1",
+        "en": "3 0 1"
+      },
+      {
+        "de": "3 3 0",
+        "en": "3 3 0"
+      },
+      {
+        "de": "0 3 15",
+        "en": "0 3 15"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "15 durch 4 lässt Rest 3, durch 5 geht es auf (Rest 0). Ist die erste Zahl kleiner als die zweite (15 % 16), passt kein Ganzes hinein, der Rest ist die Zahl selbst: 15.",
+      "en": "15 divided by 4 leaves remainder 3, by 5 it divides evenly (remainder 0). If the first number is smaller than the second (15 % 16), nothing fits in, so the remainder is the number itself: 15."
+    }
+  },
+  {
+    "id": "operators-38",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(not 0, not 5)",
+    "choices": [
+      {
+        "de": "False True",
+        "en": "False True"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      },
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "0 5",
+        "en": "0 5"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "0 zählt als falsch, `not 0` ist also `True`. 5 zählt als wahr, `not 5` ist `False`. `not` liefert immer `True` oder `False`.",
+      "en": "0 counts as false, so `not 0` is `True`. 5 counts as true, so `not 5` is `False`. `not` always gives `True` or `False`."
+    }
   }
 ]

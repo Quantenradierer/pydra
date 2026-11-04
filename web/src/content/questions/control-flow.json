@@ -826,5 +826,388 @@
       "de": "`pass` tut nichts. Du brauchst es dort, wo Python einen Block erwartet, du aber noch keinen Code hast, zum Beispiel `if x > 3:` mit `pass` darunter.",
       "en": "`pass` does nothing. You need it where Python expects a block but you have no code yet, for example `if x > 3:` with `pass` below it."
     }
+  },
+  {
+    "id": "control-flow-27",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 7\nif x % 2:\n    print(\"odd\")\nelse:\n    print(\"even\")",
+    "choices": [
+      {
+        "de": "even",
+        "en": "even"
+      },
+      {
+        "de": "odd",
+        "en": "odd"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`7 % 2` ergibt 1, und 1 zählt als wahr. Deshalb läuft der `if`-Block. Bei einer geraden Zahl wäre der Rest 0 (falsch) und der `else`-Block käme dran.",
+      "en": "`7 % 2` gives 1, and 1 counts as true. So the `if` block runs. For an even number the remainder would be 0 (false) and the `else` block would run."
+    }
+  },
+  {
+    "id": "control-flow-28",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 5\nif x > 3:\n    print(\"A\", end=\" \")\nelse:\n    print(\"B\", end=\" \")\nprint(\"C\")",
+    "choices": [
+      {
+        "de": "A",
+        "en": "A"
+      },
+      {
+        "de": "B C",
+        "en": "B C"
+      },
+      {
+        "de": "A C",
+        "en": "A C"
+      },
+      {
+        "de": "A B C",
+        "en": "A B C"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Die Bedingung ist wahr, also läuft nur der `if`-Block und druckt „A“. Das letzte `print` ist nicht eingerückt, gehört also nicht zum `if` und läuft immer.",
+      "en": "The condition is true, so only the `if` block runs and prints “A”. The last `print` is not indented, so it does not belong to the `if` and always runs."
+    }
+  },
+  {
+    "id": "control-flow-29",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(True or False and False)",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`and` bindet stärker als `or`. Zuerst wird `False and False` zu `False` ausgewertet, dann `True or False`, und das ergibt `True`.",
+      "en": "`and` binds more tightly than `or`. First `False and False` becomes `False`, then `True or False` gives `True`."
+    }
+  },
+  {
+    "id": "control-flow-30",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "n = 0\nif n:\n    print(\"yes\")\nprint(\"end\")",
+    "choices": [
+      {
+        "de": "end",
+        "en": "end"
+      },
+      {
+        "de": "yes",
+        "en": "yes"
+      },
+      {
+        "de": "yes end",
+        "en": "yes end"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Die Zahl 0 zählt als falsch, also wird der eingerückte Block übersprungen. Das nicht eingerückte `print(\"end\")` läuft trotzdem.",
+      "en": "The number 0 counts as false, so the indented block is skipped. The unindented `print(\"end\")` still runs."
+    }
+  },
+  {
+    "id": "control-flow-31",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = None\nif x is None:\n    print(\"empty\")\nelse:\n    print(\"full\")",
+    "choices": [
+      {
+        "de": "full",
+        "en": "full"
+      },
+      {
+        "de": "empty",
+        "en": "empty"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`None` bedeutet „kein Wert“. Ob etwas `None` ist, prüfst du mit `is None`. Hier stimmt das, also läuft der `if`-Block.",
+      "en": "`None` means “no value”. You check whether something is `None` with `is None`. Here that is true, so the `if` block runs."
+    }
+  },
+  {
+    "id": "control-flow-32",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 12\nif x > 10:\n    print(\"a\")\nelif x > 5:\n    print(\"b\")",
+    "choices": [
+      {
+        "de": "b",
+        "en": "b"
+      },
+      {
+        "de": "a b",
+        "en": "a b"
+      },
+      {
+        "de": "a",
+        "en": "a"
+      },
+      {
+        "de": "Nichts",
+        "en": "Nothing"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Python prüft die Bedingungen von oben nach unten und nimmt den ersten Treffer. `x > 10` stimmt, also wird „a“ gedruckt, und das `elif` wird gar nicht mehr geprüft.",
+      "en": "Python checks the conditions from top to bottom and takes the first match. `x > 10` is true, so “a” is printed and the `elif` is not even checked."
+    }
+  },
+  {
+    "id": "control-flow-33",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"yes\" if \"a\" in \"cat\" else \"no\")",
+    "choices": [
+      {
+        "de": "no",
+        "en": "no"
+      },
+      {
+        "de": "a",
+        "en": "a"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "yes",
+        "en": "yes"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Der Ausdruck `A if Bedingung else B` liefert A, wenn die Bedingung stimmt. „a“ steckt in „cat“, also kommt „yes“ heraus.",
+      "en": "The expression `A if condition else B` gives A when the condition is true. “a” is inside “cat”, so the result is “yes”."
+    }
+  },
+  {
+    "id": "control-flow-34",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 15\nif x > 10:\n    if x > 20:\n        print(\"huge\")\n    else:\n        print(\"big\")\nelse:\n    print(\"small\")",
+    "choices": [
+      {
+        "de": "big",
+        "en": "big"
+      },
+      {
+        "de": "huge",
+        "en": "huge"
+      },
+      {
+        "de": "small",
+        "en": "small"
+      },
+      {
+        "de": "huge big",
+        "en": "huge big"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Die äußere Bedingung `x > 10` stimmt, also geht es in den Block hinein. Dort stimmt `x > 20` nicht, daher läuft das innere `else` und druckt „big“.",
+      "en": "The outer condition `x > 10` is true, so the block is entered. Inside, `x > 20` is false, so the inner `else` runs and prints “big”."
+    }
+  },
+  {
+    "id": "control-flow-35",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 7\nprint(x > 5 or x / 0)",
+    "choices": [
+      {
+        "de": "Fehler (ZeroDivisionError)",
+        "en": "Error (ZeroDivisionError)"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Bei `or` hört Python auf, sobald die linke Seite wahr ist (Kurzschluss). `x > 5` stimmt, also wird `x / 0` nie berechnet und es gibt keinen Fehler.",
+      "en": "With `or`, Python stops as soon as the left side is true (short-circuit). `x > 5` is true, so `x / 0` is never calculated and there is no error."
+    }
+  },
+  {
+    "id": "control-flow-36",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Wann läuft der `else`-Zweig einer `if`-Anweisung?",
+      "en": "When does the `else` branch of an `if` statement run?"
+    },
+    "choices": [
+      {
+        "de": "Immer, direkt nach dem `if`-Block",
+        "en": "Always, right after the `if` block"
+      },
+      {
+        "de": "Nur, wenn im `if`-Block ein Fehler passiert",
+        "en": "Only if an error happens in the `if` block"
+      },
+      {
+        "de": "Wenn keine der Bedingungen davor wahr war",
+        "en": "When none of the conditions before it was true"
+      },
+      {
+        "de": "Wenn die `if`-Bedingung wahr ist",
+        "en": "When the `if` condition is true"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Das `else` ist der „Sonst-Fall“: Er läuft nur, wenn alle `if`- und `elif`-Bedingungen davor falsch waren. Ist eine davon wahr, wird `else` übersprungen.",
+      "en": "The `else` is the “otherwise” case: it only runs if all the `if` and `elif` conditions before it were false. If one of them is true, `else` is skipped."
+    }
+  },
+  {
+    "id": "control-flow-37",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "score = 85\nif score >= 90:\n    print(\"A\")\nelif score >= 80:\n    print(\"B\")\nelif score >= 70:\n    print(\"C\")",
+    "choices": [
+      {
+        "de": "A",
+        "en": "A"
+      },
+      {
+        "de": "C",
+        "en": "C"
+      },
+      {
+        "de": "B C",
+        "en": "B C"
+      },
+      {
+        "de": "B",
+        "en": "B"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "85 ist nicht mindestens 90, aber mindestens 80. Der erste passende Zweig gewinnt, also „B“. Das `elif` für 70 wird nicht mehr geprüft, obwohl 85 auch dafür reichen würde.",
+      "en": "85 is not at least 90, but it is at least 80. The first matching branch wins, so “B”. The `elif` for 70 is no longer checked, even though 85 would qualify too."
+    }
+  },
+  {
+    "id": "control-flow-38",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = 5\nb = 8\nprint(a if a > b else b)",
+    "choices": [
+      {
+        "de": "8",
+        "en": "8"
+      },
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "5 8",
+        "en": "5 8"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`a > b` ist falsch, also liefert der Ausdruck den Wert nach dem `else`: `b`, also 8. So wählst du den größeren von zwei Werten aus.",
+      "en": "`a > b` is false, so the expression gives the value after `else`: `b`, which is 8. This is how you pick the larger of two values."
+    }
   }
 ]

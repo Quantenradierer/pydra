@@ -827,5 +827,388 @@
       "de": "Innerhalb der Funktion ist `x` nur eine eigene Kopie des Verweises auf die Zahl. Das `x = x + 1` ändert nur diese lokale Variable. Das äußere `n` bleibt 1.",
       "en": "Inside the function `x` is just its own local name for the number. `x = x + 1` only changes that local variable. The outer `n` stays 1."
     }
+  },
+  {
+    "id": "functions-27",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def add(a, b=10):\n    return a + b\n\nprint(add(1), add(1, 2))",
+    "choices": [
+      {
+        "de": "11 11",
+        "en": "11 11"
+      },
+      {
+        "de": "3 3",
+        "en": "3 3"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "11 3",
+        "en": "11 3"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Ohne zweites Argument gilt der Standardwert `b=10`, also `1 + 10 = 11`. Mit `add(1, 2)` wird der Standardwert überschrieben und es ergibt 3.",
+      "en": "Without a second argument the default `b=10` is used, so `1 + 10 = 11`. With `add(1, 2)` the default is overridden and the result is 3."
+    }
+  },
+  {
+    "id": "functions-28",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def f():\n    pass\n\nprint(f())",
+    "choices": [
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "Nichts",
+        "en": "Nothing"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`pass` tut nichts, und die Funktion hat kein `return`. Eine Funktion ohne `return` gibt automatisch `None` zurück. Die Ausgabe ist also „None“.",
+      "en": "`pass` does nothing, and the function has no `return`. A function without `return` automatically returns `None`. So the output is “None”."
+    }
+  },
+  {
+    "id": "functions-29",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def square(n):\n    return n * n\n\nprint(square(square(2)))",
+    "choices": [
+      {
+        "de": "8",
+        "en": "8"
+      },
+      {
+        "de": "16",
+        "en": "16"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "32",
+        "en": "32"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die innere Funktion wird zuerst berechnet: `square(2)` ist 4. Das Ergebnis geht an die äußere: `square(4)` ist 16.",
+      "en": "The inner call is evaluated first: `square(2)` is 4. That result goes to the outer one: `square(4)` is 16."
+    }
+  },
+  {
+    "id": "functions-30",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def total(nums):\n    s = 0\n    for n in nums:\n        s += n\n    return s\n\nprint(total([1, 2, 3]))",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Die Funktion startet mit `s = 0` und addiert jede Zahl der Liste dazu: 1, dann 3, dann 6. Das `return` steht außerhalb der Schleife und gibt die fertige Summe zurück.",
+      "en": "The function starts with `s = 0` and adds each number of the list: 1, then 3, then 6. The `return` is outside the loop and hands back the finished sum."
+    }
+  },
+  {
+    "id": "functions-31",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def greet(name, greeting=\"Hi\"):\n    return greeting + \", \" + name\n\nprint(greet(\"Ana\", \"Hello\"))",
+    "choices": [
+      {
+        "de": "Hi, Ana",
+        "en": "Hi, Ana"
+      },
+      {
+        "de": "Hello, Hi",
+        "en": "Hello, Hi"
+      },
+      {
+        "de": "Ana, Hello",
+        "en": "Ana, Hello"
+      },
+      {
+        "de": "Hello, Ana",
+        "en": "Hello, Ana"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Die Argumente werden der Reihe nach zugeordnet: `name=\"Ana\"` und `greeting=\"Hello\"`. Das übergebene „Hello“ ersetzt den Standardwert „Hi“.",
+      "en": "The arguments are matched in order: `name=\"Ana\"` and `greeting=\"Hello\"`. The passed “Hello” replaces the default “Hi”."
+    }
+  },
+  {
+    "id": "functions-32",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def pair(a, b):\n    return a, b\n\nprint(pair(1, 2))",
+    "choices": [
+      {
+        "de": "(1, 2)",
+        "en": "(1, 2)"
+      },
+      {
+        "de": "[1, 2]",
+        "en": "[1, 2]"
+      },
+      {
+        "de": "1 2",
+        "en": "1 2"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Mit `return a, b` gibt eine Funktion mehrere Werte als Tupel zurück. `print` zeigt dieses Tupel mit runden Klammern.",
+      "en": "With `return a, b` a function returns several values as a tuple. `print` shows that tuple with round brackets."
+    }
+  },
+  {
+    "id": "functions-33",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was passiert bei diesem Code?",
+      "en": "What happens with this code?"
+    },
+    "code": "def f(a, b):\n    return a + b\n\nprint(f(1, 2, 3))",
+    "choices": [
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Funktion erwartet genau zwei Argumente, bekommt aber drei. Python meldet einen `TypeError`, weil die Anzahl nicht passt.",
+      "en": "The function expects exactly two arguments but gets three. Python reports a `TypeError` because the number does not match."
+    }
+  },
+  {
+    "id": "functions-34",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def sign(n):\n    if n > 0:\n        return \"pos\"\n    return \"non-pos\"\n\nprint(sign(-1))",
+    "choices": [
+      {
+        "de": "pos",
+        "en": "pos"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "non-pos",
+        "en": "non-pos"
+      },
+      {
+        "de": "-1",
+        "en": "-1"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Bei -1 stimmt `n > 0` nicht, der `if`-Block wird übersprungen. Die Funktion läuft weiter bis zum zweiten `return` und gibt „non-pos“ zurück.",
+      "en": "For -1, `n > 0` is false and the `if` block is skipped. The function continues to the second `return` and returns “non-pos”."
+    }
+  },
+  {
+    "id": "functions-35",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def f():\n    print(\"a\")\n    return\n    print(\"b\")\n\nf()",
+    "choices": [
+      {
+        "de": "a b",
+        "en": "a b"
+      },
+      {
+        "de": "b",
+        "en": "b"
+      },
+      {
+        "de": "a None",
+        "en": "a None"
+      },
+      {
+        "de": "a",
+        "en": "a"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`return` beendet die Funktion sofort. Die Zeile danach wird nie erreicht. Weil `f()` nicht in einem `print` steht, wird auch der Rückgabewert `None` nicht angezeigt.",
+      "en": "`return` ends the function immediately. The line after it is never reached. Because `f()` is not inside a `print`, the return value `None` is not shown either."
+    }
+  },
+  {
+    "id": "functions-36",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "count = 0\n\ndef up():\n    global count\n    count += 1\n\nup()\nup()\nprint(count)",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "Fehler (UnboundLocalError)",
+        "en": "Error (UnboundLocalError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Mit `global count` sagst du der Funktion, dass sie die Variable von außerhalb ändern soll. Zwei Aufrufe erhöhen sie von 0 auf 2. Ohne `global` hätte `count += 1` einen Fehler ausgelöst.",
+      "en": "With `global count` you tell the function to change the variable from outside. Two calls raise it from 0 to 2. Without `global`, `count += 1` would raise an error."
+    }
+  },
+  {
+    "id": "functions-37",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def add_four(items):\n    items.append(4)\n\nnums = [1, 2, 3]\nadd_four(nums)\nprint(nums)",
+    "choices": [
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      },
+      {
+        "de": "[1, 2, 3, 4]",
+        "en": "[1, 2, 3, 4]"
+      },
+      {
+        "de": "[4]",
+        "en": "[4]"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Funktion bekommt dieselbe Liste, nicht eine Kopie. `append` verändert sie direkt, deshalb sieht man die 4 auch außerhalb. Bei Zahlen (`x = x + 1`) wäre das anders.",
+      "en": "The function receives the same list, not a copy. `append` changes it directly, so the 4 is also visible outside. With numbers (`x = x + 1`) it would be different."
+    }
+  },
+  {
+    "id": "functions-38",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht `return` in einer Funktion?",
+      "en": "What does `return` do in a function?"
+    },
+    "choices": [
+      {
+        "de": "Gibt den Wert auf dem Bildschirm aus",
+        "en": "Prints the value on the screen"
+      },
+      {
+        "de": "Speichert den Wert für immer in einer globalen Variable",
+        "en": "Stores the value in a global variable forever"
+      },
+      {
+        "de": "Beendet die Funktion und gibt einen Wert an den Aufrufer zurück",
+        "en": "Ends the function and hands a value back to the caller"
+      },
+      {
+        "de": "Startet die Funktion von vorn",
+        "en": "Starts the function again"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`return` liefert das Ergebnis an die Stelle, wo die Funktion aufgerufen wurde, und beendet sie. Anzeigen tut das erst `print`, wenn du den Rückgabewert dorthin gibst.",
+      "en": "`return` delivers the result to the place where the function was called and ends it. Only `print` shows something on screen, if you pass the return value to it."
+    }
   }
 ]

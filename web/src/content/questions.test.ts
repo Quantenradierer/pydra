@@ -4,12 +4,12 @@ import { QUESTIONS, QUESTIONS_BY_ID } from './questions.ts';
 import { TOPICS } from './types.ts';
 
 describe('question content', () => {
-  it('has 204 questions, 25 or 26 per topic', () => {
-    expect(QUESTIONS).toHaveLength(204);
+  it('has 304 questions, 37 or 38 per topic', () => {
+    expect(QUESTIONS).toHaveLength(304);
     for (const topic of TOPICS) {
       const count = QUESTIONS.filter((q) => q.topic === topic).length;
-      expect(count, topic).toBeGreaterThanOrEqual(25);
-      expect(count, topic).toBeLessThanOrEqual(26);
+      expect(count, topic).toBeGreaterThanOrEqual(37);
+      expect(count, topic).toBeLessThanOrEqual(38);
     }
   });
 

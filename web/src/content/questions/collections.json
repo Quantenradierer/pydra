@@ -827,5 +827,389 @@
       "de": "Eine Liste kann Listen enthalten. `matrix[1]` ist die zweite innere Liste `[3, 4]`, und davon ist `[0]` das erste Element: die 3.",
       "en": "A list can contain lists. `matrix[1]` is the second inner list `[3, 4]`, and `[0]` of that is the first element: the 3."
     }
+  },
+  {
+    "id": "collections-27",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3]\nnums.extend([4, 5])\nprint(nums)",
+    "choices": [
+      {
+        "de": "[1, 2, 3, 4, 5]",
+        "en": "[1, 2, 3, 4, 5]"
+      },
+      {
+        "de": "[1, 2, 3, [4, 5]]",
+        "en": "[1, 2, 3, [4, 5]]"
+      },
+      {
+        "de": "[4, 5]",
+        "en": "[4, 5]"
+      },
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`extend` nimmt jedes Element der übergebenen Liste einzeln und hängt es hinten an. Im Gegensatz dazu würde `append([4, 5])` die ganze Liste als ein einziges Element anfügen.",
+      "en": "`extend` takes every element of the given list one by one and adds it at the end. In contrast, `append([4, 5])` would add the whole list as one single element."
+    }
+  },
+  {
+    "id": "collections-28",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was passiert bei diesem Code?",
+      "en": "What happens with this code?"
+    },
+    "code": "nums = [1, 2, 3]\nprint(nums[3])",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "Fehler (IndexError)",
+        "en": "Error (IndexError)"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Liste hat drei Elemente mit den Positionen 0, 1 und 2. Position 3 gibt es nicht, daher meldet Python einen `IndexError` („Index außerhalb der Liste“). `KeyError` gehört zu Wörterbüchern.",
+      "en": "The list has three elements at positions 0, 1 and 2. There is no position 3, so Python reports an `IndexError` (“index out of range”). `KeyError` belongs to dictionaries."
+    }
+  },
+  {
+    "id": "collections-29",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3, 4]\nnums.reverse()\nprint(nums)",
+    "choices": [
+      {
+        "de": "[1, 2, 3, 4]",
+        "en": "[1, 2, 3, 4]"
+      },
+      {
+        "de": "[2, 1, 4, 3]",
+        "en": "[2, 1, 4, 3]"
+      },
+      {
+        "de": "[4, 3, 2, 1]",
+        "en": "[4, 3, 2, 1]"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`reverse()` dreht die Reihenfolge der Liste direkt um (in place). Danach zeigt `nums` die Elemente von hinten nach vorn.",
+      "en": "`reverse()` flips the order of the list directly (in place). Afterwards `nums` shows the elements from back to front."
+    }
+  },
+  {
+    "id": "collections-30",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [3, 1, 2]\nprint(nums.sort())",
+    "choices": [
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      },
+      {
+        "de": "[3, 1, 2]",
+        "en": "[3, 1, 2]"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`sort()` sortiert die Liste an Ort und Stelle und gibt selbst nichts zurück, also `None`. Wolltest du die sortierte Liste ausgeben, würdest du `print(sorted(nums))` schreiben.",
+      "en": "`sort()` sorts the list in place and returns nothing itself, so `None`. To print the sorted list you would write `print(sorted(nums))`."
+    }
+  },
+  {
+    "id": "collections-31",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type((5)), type((5,)))",
+    "choices": [
+      {
+        "de": "<class 'int'> <class 'tuple'>",
+        "en": "<class 'int'> <class 'tuple'>"
+      },
+      {
+        "de": "<class 'tuple'> <class 'tuple'>",
+        "en": "<class 'tuple'> <class 'tuple'>"
+      },
+      {
+        "de": "<class 'int'> <class 'int'>",
+        "en": "<class 'int'> <class 'int'>"
+      },
+      {
+        "de": "<class 'tuple'> <class 'int'>",
+        "en": "<class 'tuple'> <class 'int'>"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Runde Klammern allein sind nur eine Klammerung: `(5)` ist einfach die Zahl 5. Erst das Komma macht ein Tupel, daher heißt ein Tupel mit einem Element `(5,)`.",
+      "en": "Round brackets alone are just grouping: `(5)` is simply the number 5. The comma is what makes a tuple, which is why a one-element tuple is written `(5,)`."
+    }
+  },
+  {
+    "id": "collections-32",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3]\nnums.clear()\nprint(nums)",
+    "choices": [
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "[]",
+        "en": "[]"
+      },
+      {
+        "de": "[0]",
+        "en": "[0]"
+      },
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`clear()` entfernt alle Elemente, die Liste ist danach leer: `[]`. Die Liste selbst existiert weiter, sie hat nur keinen Inhalt mehr.",
+      "en": "`clear()` removes all elements, so the list is empty afterwards: `[]`. The list itself still exists, it just has no content any more."
+    }
+  },
+  {
+    "id": "collections-33",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [4, 9, 2]\nprint(max(nums), min(nums))",
+    "choices": [
+      {
+        "de": "4 2",
+        "en": "4 2"
+      },
+      {
+        "de": "2 9",
+        "en": "2 9"
+      },
+      {
+        "de": "9 2",
+        "en": "9 2"
+      },
+      {
+        "de": "9 4",
+        "en": "9 4"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`max` liefert den größten Wert (9), `min` den kleinsten (2). Die Reihenfolge der Ausgabe folgt der Reihenfolge im `print`, nicht der in der Liste.",
+      "en": "`max` returns the largest value (9), `min` the smallest (2). The output order follows the order in `print`, not the one in the list."
+    }
+  },
+  {
+    "id": "collections-34",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "words = [\"b\", \"a\", \"c\"]\nprint(sorted(words, reverse=True))",
+    "choices": [
+      {
+        "de": "['a', 'b', 'c']",
+        "en": "['a', 'b', 'c']"
+      },
+      {
+        "de": "['b', 'a', 'c']",
+        "en": "['b', 'a', 'c']"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "['c', 'b', 'a']",
+        "en": "['c', 'b', 'a']"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`sorted` sortiert alphabetisch und liefert eine neue Liste. Mit `reverse=True` kommt die Reihenfolge umgekehrt heraus: von „c“ bis „a“.",
+      "en": "`sorted` sorts alphabetically and returns a new list. With `reverse=True` the order is flipped: from “c” down to “a”."
+    }
+  },
+  {
+    "id": "collections-35",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = [1, 2]\nb = a\nb = b + [3]\nprint(a, b)",
+    "choices": [
+      {
+        "de": "[1, 2] [1, 2, 3]",
+        "en": "[1, 2] [1, 2, 3]"
+      },
+      {
+        "de": "[1, 2, 3] [1, 2, 3]",
+        "en": "[1, 2, 3] [1, 2, 3]"
+      },
+      {
+        "de": "[1, 2] [1, 2]",
+        "en": "[1, 2] [1, 2]"
+      },
+      {
+        "de": "[1, 2, 3] [1, 2]",
+        "en": "[1, 2, 3] [1, 2]"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`b = a` lässt zuerst beide Namen auf dieselbe Liste zeigen. Aber `b + [3]` baut eine neue Liste, und `b = ...` lässt nur `b` auf diese neue zeigen. `a` bleibt unverändert (anders als bei `b.append(3)`).",
+      "en": "`b = a` first makes both names point to the same list. But `b + [3]` builds a new list, and `b = ...` only points `b` at the new one. `a` stays unchanged (unlike with `b.append(3)`)."
+    }
+  },
+  {
+    "id": "collections-36",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3, 4, 5]\nprint(nums[1:-1])",
+    "choices": [
+      {
+        "de": "[2, 3, 4, 5]",
+        "en": "[2, 3, 4, 5]"
+      },
+      {
+        "de": "[2, 3, 4]",
+        "en": "[2, 3, 4]"
+      },
+      {
+        "de": "[1, 2, 3, 4]",
+        "en": "[1, 2, 3, 4]"
+      },
+      {
+        "de": "[2, 3]",
+        "en": "[2, 3]"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Der Ausschnitt beginnt bei Position 1 (der zweiten Zahl) und endet vor Position -1 (dem letzten Element). Erstes und letztes Element fallen also weg.",
+      "en": "The slice starts at position 1 (the second number) and stops before position -1 (the last element). So the first and the last element are left out."
+    }
+  },
+  {
+    "id": "collections-37",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 2, 3, 2]\nprint(nums.count(2))",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`count(2)` zählt, wie oft der Wert 2 in der Liste vorkommt: an drei Stellen.",
+      "en": "`count(2)` counts how often the value 2 appears in the list: in three places."
+    }
+  },
+  {
+    "id": "collections-38",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "t = (1, 2, 3)\nprint(t + (4,))",
+    "choices": [
+      {
+        "de": "[1, 2, 3, 4]",
+        "en": "[1, 2, 3, 4]"
+      },
+      {
+        "de": "(5, 2, 3)",
+        "en": "(5, 2, 3)"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "(1, 2, 3, 4)",
+        "en": "(1, 2, 3, 4)"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Tupel sind unveränderlich, aber mit `+` kannst du ein neues, längeres Tupel bauen. Das Ergebnis bleibt ein Tupel, also mit runden Klammern.",
+      "en": "Tuples are immutable, but with `+` you can build a new, longer tuple. The result stays a tuple, so it has round brackets."
+    }
   }
 ]

@@ -798,5 +798,421 @@
       "de": "`\\n` ist ein einzelnes Zeichen, nämlich der Zeilenumbruch. Der String besteht aus `a`, dem Zeilenumbruch und `b`, also aus 3 Zeichen.",
       "en": "`\\n` is a single character, the line break. The string consists of `a`, the line break and `b`, so 3 characters."
     }
+  },
+  {
+    "id": "strings-26",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "s = \"hello\"\nprint(s.upper(), s)",
+    "choices": [
+      {
+        "de": "HELLO HELLO",
+        "en": "HELLO HELLO"
+      },
+      {
+        "de": "hello hello",
+        "en": "hello hello"
+      },
+      {
+        "de": "HELLO hello",
+        "en": "HELLO hello"
+      },
+      {
+        "de": "hello HELLO",
+        "en": "hello HELLO"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`upper()` liefert eine neue Zeichenkette in Großbuchstaben. Das Original `s` bleibt unverändert, denn Zeichenketten sind unveränderlich.",
+      "en": "`upper()` returns a new string in capital letters. The original `s` stays unchanged, because strings are immutable."
+    }
+  },
+  {
+    "id": "strings-27",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"a-b-c\".replace(\"-\", \"\"))",
+    "choices": [
+      {
+        "de": "a-b-c",
+        "en": "a-b-c"
+      },
+      {
+        "de": "a b c",
+        "en": "a b c"
+      },
+      {
+        "de": "-",
+        "en": "-"
+      },
+      {
+        "de": "abc",
+        "en": "abc"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`replace(\"-\", \"\")` ersetzt jeden Bindestrich durch nichts, er verschwindet also. Übrig bleibt „abc“.",
+      "en": "`replace(\"-\", \"\")` replaces every hyphen with nothing, so it disappears. What is left is “abc”."
+    }
+  },
+  {
+    "id": "strings-28",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"Python\"[0], \"Python\"[-1])",
+    "choices": [
+      {
+        "de": "P n",
+        "en": "P n"
+      },
+      {
+        "de": "y n",
+        "en": "y n"
+      },
+      {
+        "de": "P P",
+        "en": "P P"
+      },
+      {
+        "de": "n P",
+        "en": "n P"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Position 0 ist das erste Zeichen („P“), Position -1 zählt von hinten und ist das letzte („n“).",
+      "en": "Position 0 is the first character (“P”), position -1 counts from the back and is the last one (“n”)."
+    }
+  },
+  {
+    "id": "strings-29",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"   hi   \".strip() + \"!\")",
+    "choices": [
+      {
+        "de": "   hi   !",
+        "en": "   hi   !"
+      },
+      {
+        "de": "hi!",
+        "en": "hi!"
+      },
+      {
+        "de": "hi   !",
+        "en": "hi   !"
+      },
+      {
+        "de": "   hi!",
+        "en": "   hi!"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`strip()` entfernt Leerzeichen am Anfang und Ende. Übrig bleibt „hi“, danach kommt das Ausrufezeichen direkt dran.",
+      "en": "`strip()` removes spaces at the start and end. “hi” is left, and the exclamation mark follows directly."
+    }
+  },
+  {
+    "id": "strings-30",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "text = \"one two three\"\nprint(len(text.split()))",
+    "choices": [
+      {
+        "de": "13",
+        "en": "13"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`split()` zerlegt den Text an den Leerzeichen in eine Liste mit drei Wörtern. `len` zählt dann die Listenelemente, nicht die Buchstaben.",
+      "en": "`split()` breaks the text at the spaces into a list of three words. `len` then counts the list elements, not the letters."
+    }
+  },
+  {
+    "id": "strings-31",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"Hello\".lower() == \"hello\")",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "hello",
+        "en": "hello"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`lower()` macht aus „Hello“ die Zeichenkette „hello“, und die ist gleich der rechten Seite. Beim Vergleich ohne `lower()` wäre das Ergebnis `False`.",
+      "en": "`lower()` turns “Hello” into the string “hello”, which equals the right side. Compared without `lower()`, the result would be `False`."
+    }
+  },
+  {
+    "id": "strings-32",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "name = \"Ada\"\nprint(\"Hi \" + name * 2)",
+    "choices": [
+      {
+        "de": "Hi AdaAda",
+        "en": "Hi AdaAda"
+      },
+      {
+        "de": "Hi Ada Ada",
+        "en": "Hi Ada Ada"
+      },
+      {
+        "de": "Hi Hi AdaAda",
+        "en": "Hi Hi AdaAda"
+      },
+      {
+        "de": "Hi Ada2",
+        "en": "Hi Ada2"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`*` wird vor `+` gerechnet: `name * 2` ergibt „AdaAda“ ohne Leerzeichen dazwischen, dann kommt „Hi “ davor.",
+      "en": "`*` is calculated before `+`: `name * 2` gives “AdaAda” with no space in between, then “Hi ” goes in front."
+    }
+  },
+  {
+    "id": "strings-33",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"5\" + \"5\", 5 + 5)",
+    "choices": [
+      {
+        "de": "10 10",
+        "en": "10 10"
+      },
+      {
+        "de": "55 10",
+        "en": "55 10"
+      },
+      {
+        "de": "55 55",
+        "en": "55 55"
+      },
+      {
+        "de": "10 55",
+        "en": "10 55"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Bei Zeichenketten klebt `+` die Texte aneinander: „55“. Bei Zahlen rechnet `+`: 10.",
+      "en": "With strings `+` glues the texts together: “55”. With numbers `+` calculates: 10."
+    }
+  },
+  {
+    "id": "strings-34",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"hello\"[:2])",
+    "choices": [
+      {
+        "de": "hel",
+        "en": "hel"
+      },
+      {
+        "de": "el",
+        "en": "el"
+      },
+      {
+        "de": "he",
+        "en": "he"
+      },
+      {
+        "de": "llo",
+        "en": "llo"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Ein Ausschnitt ohne Startwert beginnt ganz vorn und endet vor Position 2. Es sind also die Zeichen an Position 0 und 1: „he“.",
+      "en": "A slice without a start value begins at the very front and stops before position 2. So it is the characters at positions 0 and 1: “he”."
+    }
+  },
+  {
+    "id": "strings-35",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"She said \\\"hi\\\"\")",
+    "choices": [
+      {
+        "de": "She said \\\"hi\\\"",
+        "en": "She said \\\"hi\\\""
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      },
+      {
+        "de": "She said hi",
+        "en": "She said hi"
+      },
+      {
+        "de": "She said \"hi\"",
+        "en": "She said \"hi\""
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Ein Backslash vor dem Anführungszeichen („Escape“) sagt Python: Das gehört zum Text und beendet ihn nicht. Beim Ausgeben erscheint nur das Anführungszeichen.",
+      "en": "A backslash before the quotation mark (an “escape”) tells Python: this belongs to the text and does not end it. When printing, only the quotation mark appears."
+    }
+  },
+  {
+    "id": "strings-36",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 3.14159\nprint(f\"{x:.2f}\")",
+    "choices": [
+      {
+        "de": "3.14",
+        "en": "3.14"
+      },
+      {
+        "de": "3.1",
+        "en": "3.1"
+      },
+      {
+        "de": "3.15",
+        "en": "3.15"
+      },
+      {
+        "de": ".2f",
+        "en": ".2f"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "In einem f-String formatiert `:.2f` die Zahl mit genau zwei Nachkommastellen. 3.14159 wird auf 3.14 gerundet.",
+      "en": "In an f-string `:.2f` formats the number with exactly two decimal places. 3.14159 is rounded to 3.14."
+    }
+  },
+  {
+    "id": "strings-37",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"abc\".isupper(), \"ABC\".isupper())",
+    "choices": [
+      {
+        "de": "True False",
+        "en": "True False"
+      },
+      {
+        "de": "False True",
+        "en": "False True"
+      },
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "False False",
+        "en": "False False"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`isupper()` fragt, ob alle Buchstaben groß sind. Bei „abc“ stimmt das nicht, bei „ABC“ schon.",
+      "en": "`isupper()` asks whether all letters are uppercase. That is not the case for “abc” but it is for “ABC”."
+    }
+  },
+  {
+    "id": "strings-38",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"hello world\".split()[1])",
+    "choices": [
+      {
+        "de": "hello",
+        "en": "hello"
+      },
+      {
+        "de": "o",
+        "en": "o"
+      },
+      {
+        "de": "world",
+        "en": "world"
+      },
+      {
+        "de": "Fehler (IndexError)",
+        "en": "Error (IndexError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`split()` ergibt die Liste `[\"hello\", \"world\"]`. Mit `[1]` greifst du auf das zweite Element zu: „world“.",
+      "en": "`split()` gives the list `[\"hello\", \"world\"]`. With `[1]` you pick the second element: “world”."
+    }
   }
 ]

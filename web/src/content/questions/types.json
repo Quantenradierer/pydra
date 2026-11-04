@@ -797,5 +797,421 @@
       "de": "Kommazahlen werden im Computer nur ungefähr gespeichert. `0.1 + 0.2` ergibt `0.30000000000000004`, und das ist nicht genau gleich `0.3`. Deshalb vergleicht man Kommazahlen nicht mit `==`.",
       "en": "Computers store floats only approximately. `0.1 + 0.2` gives `0.30000000000000004`, which is not exactly equal to `0.3`. That is why you do not compare floats with `==`."
     }
+  },
+  {
+    "id": "types-26",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type(\"5\"), type(5))",
+    "choices": [
+      {
+        "de": "<class 'int'> <class 'str'>",
+        "en": "<class 'int'> <class 'str'>"
+      },
+      {
+        "de": "<class 'int'> <class 'int'>",
+        "en": "<class 'int'> <class 'int'>"
+      },
+      {
+        "de": "<class 'str'> <class 'str'>",
+        "en": "<class 'str'> <class 'str'>"
+      },
+      {
+        "de": "<class 'str'> <class 'int'>",
+        "en": "<class 'str'> <class 'int'>"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Anführungszeichen machen aus der 5 einen Text (`str`). Ohne Anführungszeichen ist sie eine ganze Zahl (`int`).",
+      "en": "Quotation marks turn the 5 into text (`str`). Without quotation marks it is a whole number (`int`)."
+    }
+  },
+  {
+    "id": "types-27",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"12\" * 2)",
+    "choices": [
+      {
+        "de": "1212",
+        "en": "1212"
+      },
+      {
+        "de": "24",
+        "en": "24"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "12 12",
+        "en": "12 12"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine Zeichenkette mal eine Zahl wiederholt den Text: „12“ zweimal hintereinander ergibt „1212“. Gerechnet wird nicht.",
+      "en": "A string times a number repeats the text: “12” twice in a row gives “1212”. No calculation takes place."
+    }
+  },
+  {
+    "id": "types-28",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(float(\"3.5\") + 1)",
+    "choices": [
+      {
+        "de": "3.51",
+        "en": "3.51"
+      },
+      {
+        "de": "4.5",
+        "en": "4.5"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`float(\"3.5\")` macht aus dem Text die Kommazahl 3.5. Dann kann Python normal rechnen: 3.5 + 1 = 4.5.",
+      "en": "`float(\"3.5\")` turns the text into the decimal number 3.5. Then Python can calculate normally: 3.5 + 1 = 4.5."
+    }
+  },
+  {
+    "id": "types-29",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type(3 // 2), type(3 / 2))",
+    "choices": [
+      {
+        "de": "<class 'float'> <class 'float'>",
+        "en": "<class 'float'> <class 'float'>"
+      },
+      {
+        "de": "<class 'int'> <class 'int'>",
+        "en": "<class 'int'> <class 'int'>"
+      },
+      {
+        "de": "<class 'int'> <class 'float'>",
+        "en": "<class 'int'> <class 'float'>"
+      },
+      {
+        "de": "<class 'float'> <class 'int'>",
+        "en": "<class 'float'> <class 'int'>"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`//` ergibt zwei ganze Zahlen geteilt eine ganze Zahl (`int`, hier 1). `/` ergibt immer eine Kommazahl (`float`, hier 1.5).",
+      "en": "`//` with two whole numbers gives a whole number (`int`, here 1). `/` always gives a decimal number (`float`, here 1.5)."
+    }
+  },
+  {
+    "id": "types-30",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(round(2.6), int(2.6))",
+    "choices": [
+      {
+        "de": "2 2",
+        "en": "2 2"
+      },
+      {
+        "de": "3 3",
+        "en": "3 3"
+      },
+      {
+        "de": "2 3",
+        "en": "2 3"
+      },
+      {
+        "de": "3 2",
+        "en": "3 2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`round` rundet zur nächsten ganzen Zahl: 3. `int` schneidet die Nachkommastellen einfach ab: 2.",
+      "en": "`round` rounds to the nearest whole number: 3. `int` simply cuts off the decimals: 2."
+    }
+  },
+  {
+    "id": "types-31",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(str(True) + \"!\")",
+    "choices": [
+      {
+        "de": "True!",
+        "en": "True!"
+      },
+      {
+        "de": "true!",
+        "en": "true!"
+      },
+      {
+        "de": "1!",
+        "en": "1!"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`str(True)` macht aus dem Wahrheitswert den Text „True“ (mit großem T). Zwei Texte lassen sich mit `+` zusammenkleben.",
+      "en": "`str(True)` turns the truth value into the text “True” (with a capital T). Two texts can be glued together with `+`."
+    }
+  },
+  {
+    "id": "types-32",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(isinstance(5, int), isinstance(5, str))",
+    "choices": [
+      {
+        "de": "False True",
+        "en": "False True"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      },
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "False False",
+        "en": "False False"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`isinstance(wert, typ)` prüft, ob ein Wert von diesem Typ ist. 5 ist ein `int`, aber kein `str`.",
+      "en": "`isinstance(value, type)` checks whether a value is of that type. 5 is an `int` but not a `str`."
+    }
+  },
+  {
+    "id": "types-33",
+    "topic": "types",
+    "prompt": {
+      "de": "Was passiert bei diesem Code?",
+      "en": "What happens with this code?"
+    },
+    "code": "print(int(\"3.5\"))",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "Fehler (ValueError)",
+        "en": "Error (ValueError)"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`int` kann nur Text umwandeln, der wie eine ganze Zahl aussieht. „3.5“ hat einen Punkt, also gibt es einen `ValueError` (Wert passt nicht). Der Umweg: `int(float(\"3.5\"))` ergibt 3.",
+      "en": "`int` can only convert text that looks like a whole number. “3.5” has a dot, so you get a `ValueError` (value does not fit). The detour `int(float(\"3.5\"))` gives 3."
+    }
+  },
+  {
+    "id": "types-34",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(10 == 10.0, type(10) == type(10.0))",
+    "choices": [
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "False False",
+        "en": "False False"
+      },
+      {
+        "de": "False True",
+        "en": "False True"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Die Werte 10 und 10.0 sind gleich groß, also `True`. Aber `int` und `float` sind verschiedene Typen, also `False`.",
+      "en": "The values 10 and 10.0 are equal, so `True`. But `int` and `float` are different types, so `False`."
+    }
+  },
+  {
+    "id": "types-35",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = \"3\"\nb = 4\nprint(int(a) + b)",
+    "choices": [
+      {
+        "de": "7",
+        "en": "7"
+      },
+      {
+        "de": "34",
+        "en": "34"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "3 4",
+        "en": "3 4"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`int(a)` macht aus dem Text „3“ die Zahl 3, danach funktioniert die Addition: 3 + 4 = 7. Ohne `int` gäbe es einen `TypeError`.",
+      "en": "`int(a)` turns the text “3” into the number 3, after which the addition works: 3 + 4 = 7. Without `int` you would get a `TypeError`."
+    }
+  },
+  {
+    "id": "types-36",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(bool([0]), bool([]))",
+    "choices": [
+      {
+        "de": "False True",
+        "en": "False True"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      },
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "False False",
+        "en": "False False"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eine leere Liste zählt als falsch. Eine Liste mit irgendeinem Element – auch mit einer 0 – zählt als wahr.",
+      "en": "An empty list counts as false. A list with any element – even a 0 – counts as true."
+    }
+  },
+  {
+    "id": "types-37",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type((1, 2)), type({1, 2}), type({}))",
+    "choices": [
+      {
+        "de": "<class 'list'> <class 'set'> <class 'dict'>",
+        "en": "<class 'list'> <class 'set'> <class 'dict'>"
+      },
+      {
+        "de": "<class 'tuple'> <class 'set'> <class 'set'>",
+        "en": "<class 'tuple'> <class 'set'> <class 'set'>"
+      },
+      {
+        "de": "<class 'tuple'> <class 'set'> <class 'dict'>",
+        "en": "<class 'tuple'> <class 'set'> <class 'dict'>"
+      },
+      {
+        "de": "<class 'tuple'> <class 'dict'> <class 'dict'>",
+        "en": "<class 'tuple'> <class 'dict'> <class 'dict'>"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Runde Klammern mit Komma: Tupel. Geschweifte Klammern mit Werten: Menge. Leere geschweifte Klammern `{}` sind ein Wörterbuch.",
+      "en": "Round brackets with a comma: tuple. Curly brackets with values: set. Empty curly brackets `{}` are a dictionary."
+    }
+  },
+  {
+    "id": "types-38",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(True + True)",
+    "choices": [
+      {
+        "de": "TrueTrue",
+        "en": "TrueTrue"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`True` verhält sich in Rechnungen wie 1 und `False` wie 0. Also ist `True + True` gleich 1 + 1 = 2.",
+      "en": "`True` behaves like 1 in calculations and `False` like 0. So `True + True` equals 1 + 1 = 2."
+    }
   }
 ]

@@ -797,5 +797,420 @@
       "de": "Die Schleife multipliziert 1 · 1 · 2 · 3 · 4 = 24. Die Startzahl muss 1 sein, mit 0 käme immer 0 heraus.",
       "en": "The loop multiplies 1 · 1 · 2 · 3 · 4 = 24. The starting number must be 1; with 0 the result would always be 0."
     }
+  },
+  {
+    "id": "loops-26",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for i in range(1, 6, 2):\n    print(i, end=\" \")",
+    "choices": [
+      {
+        "de": "1 3 5",
+        "en": "1 3 5"
+      },
+      {
+        "de": "2 4",
+        "en": "2 4"
+      },
+      {
+        "de": "1 2 3 4 5",
+        "en": "1 2 3 4 5"
+      },
+      {
+        "de": "1 3",
+        "en": "1 3"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Das dritte Argument von `range` ist die Schrittweite. Von 1 aus geht es in Zweierschritten: 1, 3, 5. Die 7 wäre schon hinter dem Ende (6).",
+      "en": "The third argument of `range` is the step size. Starting at 1 it goes in steps of two: 1, 3, 5. The 7 would already be beyond the end (6)."
+    }
+  },
+  {
+    "id": "loops-27",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "n = 5\nwhile n > 0:\n    n -= 2\nprint(n)",
+    "choices": [
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "-1",
+        "en": "-1"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "-2",
+        "en": "-2"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "n wird 5, 3, 1 und dann -1. Erst bei -1 stimmt `n > 0` nicht mehr, die Schleife endet, und genau dieser Wert wird gedruckt.",
+      "en": "n becomes 5, 3, 1 and then -1. Only at -1 is `n > 0` false, the loop ends, and exactly that value is printed."
+    }
+  },
+  {
+    "id": "loops-28",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for i in range(3):\n    pass\nprint(i)",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Die Laufvariable `i` verschwindet nach der Schleife nicht. Sie behält den letzten Wert, und das ist bei `range(3)` die 2.",
+      "en": "The loop variable `i` does not disappear after the loop. It keeps its last value, which is 2 for `range(3)`."
+    }
+  },
+  {
+    "id": "loops-29",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for letter in \"cat\":\n    print(letter * 2, end=\" \")",
+    "choices": [
+      {
+        "de": "ccaatt",
+        "en": "ccaatt"
+      },
+      {
+        "de": "cat cat",
+        "en": "cat cat"
+      },
+      {
+        "de": "c a t",
+        "en": "c a t"
+      },
+      {
+        "de": "cc aa tt",
+        "en": "cc aa tt"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Die Schleife nimmt nacheinander jeden Buchstaben. `letter * 2` verdoppelt ihn, und `end=\" \"` trennt die Ausgaben durch Leerzeichen.",
+      "en": "The loop takes each letter in turn. `letter * 2` doubles it, and `end=\" \"` separates the outputs with spaces."
+    }
+  },
+  {
+    "id": "loops-30",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3]\nfor n in nums:\n    n = n * 2\nprint(nums)",
+    "choices": [
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      },
+      {
+        "de": "[2, 4, 6]",
+        "en": "[2, 4, 6]"
+      },
+      {
+        "de": "[2]",
+        "en": "[2]"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`n` ist nur eine Kopie des jeweiligen Zahlenwerts. Mit `n = n * 2` änderst du die Variable `n`, nicht die Liste. Um die Liste zu ändern, müsstest du `nums[i]` zuweisen.",
+      "en": "`n` is only a copy of the respective number. With `n = n * 2` you change the variable `n`, not the list. To change the list you would have to assign to `nums[i]`."
+    }
+  },
+  {
+    "id": "loops-31",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "result = []\nfor i in range(3):\n    result.append(i * 10)\nprint(result)",
+    "choices": [
+      {
+        "de": "[10, 20, 30]",
+        "en": "[10, 20, 30]"
+      },
+      {
+        "de": "[0, 10, 20]",
+        "en": "[0, 10, 20]"
+      },
+      {
+        "de": "[0, 10, 20, 30]",
+        "en": "[0, 10, 20, 30]"
+      },
+      {
+        "de": "30",
+        "en": "30"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`i` ist 0, 1 und 2. Jedes Mal wird `i * 10` an die Liste gehängt: 0, 10, 20.",
+      "en": "`i` is 0, 1 and 2. Each time `i * 10` is appended to the list: 0, 10, 20."
+    }
+  },
+  {
+    "id": "loops-32",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for n in [1, 2, 3, 4]:\n    if n > 2:\n        break\n    print(n, end=\" \")",
+    "choices": [
+      {
+        "de": "1 2 3",
+        "en": "1 2 3"
+      },
+      {
+        "de": "3 4",
+        "en": "3 4"
+      },
+      {
+        "de": "1 2",
+        "en": "1 2"
+      },
+      {
+        "de": "1 2 3 4",
+        "en": "1 2 3 4"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Bei 1 und 2 wird gedruckt. Bei 3 stimmt `n > 2`, `break` beendet die Schleife sofort, und die 3 wird nicht mehr gedruckt.",
+      "en": "At 1 and 2 it prints. At 3, `n > 2` is true, `break` ends the loop immediately, and the 3 is no longer printed."
+    }
+  },
+  {
+    "id": "loops-33",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "i = 10\nwhile i > 0:\n    print(i, end=\" \")\n    i -= 4",
+    "choices": [
+      {
+        "de": "10 6 2 -2",
+        "en": "10 6 2 -2"
+      },
+      {
+        "de": "6 2",
+        "en": "6 2"
+      },
+      {
+        "de": "10 4",
+        "en": "10 4"
+      },
+      {
+        "de": "10 6 2",
+        "en": "10 6 2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "i läuft 10, 6, 2 und danach -2. Weil -2 nicht mehr größer als 0 ist, wird es nicht mehr gedruckt.",
+      "en": "i goes 10, 6, 2 and then -2. Since -2 is no longer greater than 0, it is not printed."
+    }
+  },
+  {
+    "id": "loops-34",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for i in range(len(\"abc\")):\n    print(i, end=\" \")",
+    "choices": [
+      {
+        "de": "0 1 2",
+        "en": "0 1 2"
+      },
+      {
+        "de": "1 2 3",
+        "en": "1 2 3"
+      },
+      {
+        "de": "a b c",
+        "en": "a b c"
+      },
+      {
+        "de": "0 1 2 3",
+        "en": "0 1 2 3"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`len(\"abc\")` ist 3, also läuft `range(3)` und liefert die Positionen 0, 1 und 2. Die Buchstaben selbst bekommst du damit nicht, nur ihre Positionen.",
+      "en": "`len(\"abc\")` is 3, so `range(3)` runs and gives the positions 0, 1 and 2. This does not give the letters themselves, only their positions."
+    }
+  },
+  {
+    "id": "loops-35",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "count = 0\nfor i in range(10):\n    if i % 3 == 0:\n        count += 1\nprint(count)",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "5",
+        "en": "5"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Durch 3 teilbar sind 0, 3, 6 und 9 – das sind vier Zahlen. Die 0 wird oft vergessen, sie ist aber auch durch 3 teilbar.",
+      "en": "Divisible by 3 are 0, 3, 6 and 9 – that is four numbers. The 0 is often forgotten, but it is divisible by 3 too."
+    }
+  },
+  {
+    "id": "loops-36",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "words = [\"hi\", \"yo\"]\nfor i, w in enumerate(words, 1):\n    print(i, w, end=\" \")",
+    "choices": [
+      {
+        "de": "0 hi 1 yo",
+        "en": "0 hi 1 yo"
+      },
+      {
+        "de": "hi 1 yo 2",
+        "en": "hi 1 yo 2"
+      },
+      {
+        "de": "1 hi 2 yo",
+        "en": "1 hi 2 yo"
+      },
+      {
+        "de": "1 hi 1 yo",
+        "en": "1 hi 1 yo"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`enumerate` liefert Paare aus Zähler und Element. Mit dem zweiten Argument 1 beginnt das Zählen bei 1 statt bei 0.",
+      "en": "`enumerate` gives pairs of counter and element. With the second argument 1, counting starts at 1 instead of 0."
+    }
+  },
+  {
+    "id": "loops-37",
+    "topic": "loops",
+    "prompt": {
+      "de": "Wann nimmst du eher eine `while`-Schleife als eine `for`-Schleife?",
+      "en": "When would you rather use a `while` loop than a `for` loop?"
+    },
+    "choices": [
+      {
+        "de": "Wenn du eine Liste durchgehen willst",
+        "en": "When you want to go through a list"
+      },
+      {
+        "de": "Wenn der Code nur einmal laufen soll",
+        "en": "When the code should only run once"
+      },
+      {
+        "de": "Wenn du Buchstaben eines Textes brauchst",
+        "en": "When you need the letters of a text"
+      },
+      {
+        "de": "Wenn du vorher nicht weißt, wie oft wiederholt werden muss",
+        "en": "When you do not know in advance how many repetitions are needed"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`for` passt, wenn es eine feste Folge gibt (Liste, Text, `range`). `while` läuft, solange eine Bedingung gilt, z. B. bis eine Eingabe stimmt oder ein Zähler eine Grenze erreicht.",
+      "en": "`for` fits when there is a fixed sequence (list, text, `range`). `while` runs as long as a condition holds, e.g. until an input is valid or a counter reaches a limit."
+    }
+  },
+  {
+    "id": "loops-38",
+    "topic": "loops",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "for a, b in [(1, 2), (3, 4)]:\n    print(a + b, end=\" \")",
+    "choices": [
+      {
+        "de": "3 7",
+        "en": "3 7"
+      },
+      {
+        "de": "1 2 3 4",
+        "en": "1 2 3 4"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "(1, 2) (3, 4)",
+        "en": "(1, 2) (3, 4)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Jedes Element der Liste ist ein Paar, das auf `a` und `b` aufgeteilt wird. Erst 1 + 2 = 3, dann 3 + 4 = 7.",
+      "en": "Each element of the list is a pair that is split into `a` and `b`. First 1 + 2 = 3, then 3 + 4 = 7."
+    }
   }
 ]

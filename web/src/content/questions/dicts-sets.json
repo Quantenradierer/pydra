@@ -827,5 +827,389 @@
       "de": "Ein Schlüssel kann nur einmal vorkommen. Wird er mehrfach angegeben, gewinnt der letzte Wert. Es gibt keinen Fehler, aber der Eintrag lautet `{'a': 2}`.",
       "en": "A key can only exist once. If it is given several times, the last value wins. There is no error, but the entry is `{'a': 2}`."
     }
+  },
+  {
+    "id": "dicts-sets-27",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1}\nprint(\"a\" in d, \"b\" in d)",
+    "choices": [
+      {
+        "de": "1 None",
+        "en": "1 None"
+      },
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      },
+      {
+        "de": "False True",
+        "en": "False True"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Mit `in` prüfst du bei einem Wörterbuch, ob ein Schlüssel vorhanden ist. „a“ ist ein Schlüssel, „b“ nicht.",
+      "en": "With `in` you check whether a key exists in a dictionary. “a” is a key, “b” is not."
+    }
+  },
+  {
+    "id": "dicts-sets-28",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"x\": 1, \"y\": 2}\nprint(list(d.values()))",
+    "choices": [
+      {
+        "de": "['x', 'y']",
+        "en": "['x', 'y']"
+      },
+      {
+        "de": "[('x', 1), ('y', 2)]",
+        "en": "[('x', 1), ('y', 2)]"
+      },
+      {
+        "de": "{1, 2}",
+        "en": "{1, 2}"
+      },
+      {
+        "de": "[1, 2]",
+        "en": "[1, 2]"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`values()` liefert nur die Werte, ohne Schlüssel. `list(...)` macht daraus eine normale Liste.",
+      "en": "`values()` returns only the values, without the keys. `list(...)` turns them into a normal list."
+    }
+  },
+  {
+    "id": "dicts-sets-29",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1, \"b\": 2}\nfor k in d:\n    print(k, d[k], end=\" \")",
+    "choices": [
+      {
+        "de": "a 1 b 2",
+        "en": "a 1 b 2"
+      },
+      {
+        "de": "a b 1 2",
+        "en": "a b 1 2"
+      },
+      {
+        "de": "1 a 2 b",
+        "en": "1 a 2 b"
+      },
+      {
+        "de": "a b",
+        "en": "a b"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine `for`-Schleife über ein Wörterbuch geht durch die Schlüssel. Mit `d[k]` holst du dazu jeweils den Wert. Die Einträge erscheinen in der Reihenfolge, in der sie angelegt wurden.",
+      "en": "A `for` loop over a dictionary goes through the keys. With `d[k]` you get the matching value each time. The entries appear in the order they were created."
+    }
+  },
+  {
+    "id": "dicts-sets-30",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(len(set(\"hello\")))",
+    "choices": [
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eine Menge (`set`) behält jedes Element nur einmal. Aus „hello“ werden die Buchstaben h, e, l und o, denn das doppelte „l“ zählt nur einmal.",
+      "en": "A set keeps each element only once. “hello” becomes the letters h, e, l and o, because the double “l” counts only once."
+    }
+  },
+  {
+    "id": "dicts-sets-31",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1}\nprint(d.get(\"a\", 0) + d.get(\"b\", 0))",
+    "choices": [
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`get(\"a\", 0)` findet den Wert 1. `get(\"b\", 0)` findet nichts und nimmt den Ersatzwert 0. Also ist die Summe 1 – ohne Fehler, anders als bei `d[\"b\"]`.",
+      "en": "`get(\"a\", 0)` finds the value 1. `get(\"b\", 0)` finds nothing and uses the fallback 0. So the sum is 1 – with no error, unlike `d[\"b\"]`."
+    }
+  },
+  {
+    "id": "dicts-sets-32",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {2: \"a\", 0: \"b\"}\nprint(d[0])",
+    "choices": [
+      {
+        "de": "a",
+        "en": "a"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      },
+      {
+        "de": "b",
+        "en": "b"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "In einem Wörterbuch ist die Zahl in den eckigen Klammern ein Schlüssel, keine Position. Der Schlüssel 0 gehört zum Wert „b“.",
+      "en": "In a dictionary the number in the square brackets is a key, not a position. The key 0 belongs to the value “b”."
+    }
+  },
+  {
+    "id": "dicts-sets-33",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1}\nd[\"a\"] += 1\nprint(d)",
+    "choices": [
+      {
+        "de": "{'a': 2}",
+        "en": "{'a': 2}"
+      },
+      {
+        "de": "{'a': 1}",
+        "en": "{'a': 1}"
+      },
+      {
+        "de": "{'a': 2, 'a': 1}",
+        "en": "{'a': 2, 'a': 1}"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`d[\"a\"] += 1` rechnet mit dem vorhandenen Wert und speichert das Ergebnis unter demselben Schlüssel. Ein Schlüssel kommt nur einmal vor.",
+      "en": "`d[\"a\"] += 1` calculates with the existing value and stores the result under the same key. A key only exists once."
+    }
+  },
+  {
+    "id": "dicts-sets-34",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "s = {1, 2, 3}\ns.discard(5)\nprint(s)",
+    "choices": [
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      },
+      {
+        "de": "{1, 2, 3}",
+        "en": "{1, 2, 3}"
+      },
+      {
+        "de": "{1, 2, 3, 5}",
+        "en": "{1, 2, 3, 5}"
+      },
+      {
+        "de": "{5}",
+        "en": "{5}"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`discard` entfernt ein Element, falls es da ist, und tut sonst einfach nichts. `remove(5)` dagegen würde einen `KeyError` auslösen.",
+      "en": "`discard` removes an element if it is there and otherwise does nothing. `remove(5)`, in contrast, would raise a `KeyError`."
+    }
+  },
+  {
+    "id": "dicts-sets-35",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type({\"a\": 1}), type({}), type(set()))",
+    "choices": [
+      {
+        "de": "<class 'dict'> <class 'set'> <class 'set'>",
+        "en": "<class 'dict'> <class 'set'> <class 'set'>"
+      },
+      {
+        "de": "<class 'set'> <class 'set'> <class 'set'>",
+        "en": "<class 'set'> <class 'set'> <class 'set'>"
+      },
+      {
+        "de": "<class 'dict'> <class 'dict'> <class 'set'>",
+        "en": "<class 'dict'> <class 'dict'> <class 'set'>"
+      },
+      {
+        "de": "<class 'dict'> <class 'dict'> <class 'dict'>",
+        "en": "<class 'dict'> <class 'dict'> <class 'dict'>"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Geschweifte Klammern mit `Schlüssel: Wert` sind ein Wörterbuch. Auch leere `{}` ergeben ein Wörterbuch, keine Menge. Eine leere Menge erzeugst du mit `set()`.",
+      "en": "Curly brackets with `key: value` make a dictionary. Empty `{}` also gives a dictionary, not a set. You create an empty set with `set()`."
+    }
+  },
+  {
+    "id": "dicts-sets-36",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1, \"b\": 2}\nd.update({\"a\": 9})\nprint(d)",
+    "choices": [
+      {
+        "de": "{'a': 1, 'b': 2}",
+        "en": "{'a': 1, 'b': 2}"
+      },
+      {
+        "de": "{'a': 9}",
+        "en": "{'a': 9}"
+      },
+      {
+        "de": "{'a': 10, 'b': 2}",
+        "en": "{'a': 10, 'b': 2}"
+      },
+      {
+        "de": "{'a': 9, 'b': 2}",
+        "en": "{'a': 9, 'b': 2}"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`update` übernimmt die Einträge des anderen Wörterbuchs. Ein vorhandener Schlüssel („a“) bekommt den neuen Wert, andere Einträge („b“) bleiben.",
+      "en": "`update` takes over the entries of the other dictionary. An existing key (“a”) gets the new value, other entries (“b”) stay."
+    }
+  },
+  {
+    "id": "dicts-sets-37",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": [1, 2]}\nd[\"a\"].append(3)\nprint(d)",
+    "choices": [
+      {
+        "de": "{'a': [1, 2, 3]}",
+        "en": "{'a': [1, 2, 3]}"
+      },
+      {
+        "de": "{'a': [1, 2]}",
+        "en": "{'a': [1, 2]}"
+      },
+      {
+        "de": "{'a': 3}",
+        "en": "{'a': 3}"
+      },
+      {
+        "de": "Fehler (AttributeError)",
+        "en": "Error (AttributeError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Der Wert zu „a“ ist eine Liste, und die darf man verändern. `d[\"a\"]` liefert diese Liste, `append(3)` hängt die 3 an. Das Wörterbuch enthält danach die erweiterte Liste.",
+      "en": "The value for “a” is a list, and lists can be changed. `d[\"a\"]` gives that list, `append(3)` adds the 3. The dictionary then holds the extended list."
+    }
+  },
+  {
+    "id": "dicts-sets-38",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "scores = {\"x\": 3, \"y\": 8, \"z\": 5}\nprint(max(scores.values()))",
+    "choices": [
+      {
+        "de": "y",
+        "en": "y"
+      },
+      {
+        "de": "8",
+        "en": "8"
+      },
+      {
+        "de": "z",
+        "en": "z"
+      },
+      {
+        "de": "16",
+        "en": "16"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`scores.values()` enthält die Werte 3, 8 und 5, der größte ist 8. Den Schlüssel dazu („y“) bekämen wir damit nicht, nur die Zahl selbst.",
+      "en": "`scores.values()` holds the values 3, 8 and 5, the largest is 8. This gives only the number itself, not its key (“y”)."
+    }
   }
 ]

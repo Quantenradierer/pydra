@@ -152,11 +152,15 @@ export function orderScreen(app: App): Screen {
   let finishedShown = false;
   let glide = 0;
 
+  /** While the arena swims back to the start picture before a new run, it is not told about steps. */
+  let rewinding: ReturnType<typeof setTimeout> | undefined;
+  const REWIND_MS = 350;
+
   function render() {
     const steps = trace?.steps ?? [start];
     const snap = steps[index]!;
     const last = index === steps.length - 1;
-    pool.show(snap, last && trace ? trace.outcome : undefined, glide);
+    if (rewinding === undefined) pool.show(snap, last && trace ? trace.outcome : undefined, glide);
     for (const [i, row] of rows.entries()) row.classList.toggle('focus', trace !== undefined && snap.line === i + 1);
     const counter = { n: index + 1, total: steps.length };
     position.textContent = !trace
@@ -183,7 +187,7 @@ export function orderScreen(app: App): Screen {
 
   function go(to: number, resume = false) {
     if (!trace) return;
-    glide = timer !== undefined ? STEP_MS[app.services.storage.gameSpeed()] * 0.8 : to === index + 1 ? 300 : 0;
+    glide = timer !== undefined || (resume && to === 0) ? STEP_MS[app.services.storage.gameSpeed()] * 0.8 : to === index + 1 ? 300 : 0;
     index = Math.max(0, Math.min(to, trace.steps.length - 1));
     if (index === trace.steps.length - 1) {
       pause();
@@ -207,6 +211,8 @@ export function orderScreen(app: App): Screen {
 
   /** Back to the level as it starts, e.g. after a line moved. */
   function stopRun() {
+    clearTimeout(rewinding);
+    rewinding = undefined;
     pause();
     trace = undefined;
     index = 0;
@@ -218,6 +224,7 @@ export function orderScreen(app: App): Screen {
 
   function runProgram() {
     pause();
+    const hadRun = trace !== undefined;
     trace = simulateHunt(world, arrange(level, order));
     game.ran(trace.outcome.kind === 'success');
     index = 0;
@@ -225,6 +232,16 @@ export function orderScreen(app: App): Screen {
     finishedShown = false;
     feedback.replaceChildren();
     root.querySelector('.info')?.removeAttribute('open');
+    // A step shows the world after its line: start from the start picture (swimming back, not jumping), then act.
+    clearTimeout(rewinding);
+    rewinding = undefined;
+    if (hadRun) {
+      pool.show(start, undefined, REWIND_MS);
+      rewinding = setTimeout(() => {
+        rewinding = undefined;
+        render();
+      }, REWIND_MS);
+    } else pool.show(start, undefined, 0);
     // Plays the run; one that stops at once (e.g. a Python error) shows its outcome straight away.
     go(0, true);
   }

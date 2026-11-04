@@ -1,0 +1,135 @@
+{
+  "id": "swap-pair",
+  "code": "def swap_pair(pair):\n    first, second = pair\n    swapped = (second, first)\n    return swapped",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion swap_pair mit dem Parameter pair",
+          "en": "Defines a function swap_pair with the parameter pair"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion swap_pair auf",
+          "en": "Calls the built-in function swap_pair"
+        },
+        {
+          "de": "Legt eine Variable swap_pair an, die pair enthält",
+          "en": "Creates a variable swap_pair that holds pair"
+        },
+        {
+          "de": "Führt swap_pair sofort aus und zeigt das Ergebnis an",
+          "en": "Runs swap_pair right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`swap_pair` heißt „Paar tauschen“. `pair` ist ein Paar von zwei Werten, etwa `(1, 2)`. Die Klammern machen daraus ein Tupel.\n\nEin Tupel ist wie eine Liste, lässt sich aber nicht verändern.",
+        "en": "`swap_pair` means \"swap a pair\". `pair` is a pair of two values, such as `(1, 2)`. The parentheses make it a tuple.\n\nA tuple is like a list, but it cannot be changed."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Setzt first und second beide auf pair",
+          "en": "Sets first and second both to pair"
+        },
+        {
+          "de": "Packt das Paar aus: first bekommt den ersten, second den zweiten Wert",
+          "en": "Unpacks the pair: first gets the first value, second the second"
+        },
+        {
+          "de": "Teilt pair durch second",
+          "en": "Divides pair by second"
+        },
+        {
+          "de": "Prüft, ob first gleich second ist",
+          "en": "Checks whether first equals second"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Mit zwei Namen links wird ein Paar aufgeteilt. Bei `(1, 2)` ist `first` gleich `1` und `second` gleich `2`.\n\nDas Paar muss genau zwei Werte haben, sonst gibt es einen Fehler.",
+        "en": "With two names on the left, a pair is split up. For `(1, 2)`, `first` is `1` and `second` is `2`.\n\nThe pair must have exactly two values, otherwise there is an error."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Ändert das ursprüngliche Paar pair an Ort und Stelle",
+          "en": "Changes the original pair pair in place"
+        },
+        {
+          "de": "Baut ein neues Paar mit first vorn und second hinten",
+          "en": "Builds a new pair with first at the front and second at the back"
+        },
+        {
+          "de": "Baut ein neues Paar mit second vorn und first hinten",
+          "en": "Builds a new pair with second at the front and first at the back"
+        },
+        {
+          "de": "Addiert second und first",
+          "en": "Adds second and first"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Klammern mit Komma bauen ein Tupel. Hier kommt die Reihenfolge umgedreht heraus: `(2, 1)`.\n\nDas alte `pair` bleibt, wie es war.",
+        "en": "The parentheses with a comma build a tuple. Here the order comes out reversed: `(2, 1)`.\n\nThe old `pair` stays as it was."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt nur den zweiten Wert zurück",
+          "en": "Returns only the second value"
+        },
+        {
+          "de": "Gibt das ursprüngliche Paar zurück",
+          "en": "Returns the original pair"
+        },
+        {
+          "de": "Gibt zwei einzelne Werte first und second zurück",
+          "en": "Returns two single values first and second"
+        },
+        {
+          "de": "Gibt das getauschte Paar zurück",
+          "en": "Returns the swapped pair"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`swapped` ist ein Tupel und wird als Ganzes zurückgegeben. `swap_pair((1, 2))` ergibt `(2, 1)`.\n\nBeim Aufruf stehen zwei Klammerpaare: die äußeren gehören zum Aufruf, die inneren zum Tupel.",
+        "en": "`swapped` is a tuple and is returned as a whole. `swap_pair((1, 2))` gives `(2, 1)`.\n\nA call has two pairs of parentheses: the outer ones belong to the call, the inner ones to the tuple."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt ein Paar mit vertauschter Reihenfolge zurück: swap_pair((1, 2)) ergibt (2, 1)",
+        "en": "Returns a pair with its order swapped: swap_pair((1, 2)) gives (2, 1)"
+      },
+      {
+        "de": "Gibt die Summe der beiden Werte zurück",
+        "en": "Returns the sum of the two values"
+      },
+      {
+        "de": "Gibt das Paar unverändert zurück",
+        "en": "Returns the pair unchanged"
+      },
+      {
+        "de": "Gibt nur den ersten Wert des Paares zurück",
+        "en": "Returns only the first value of the pair"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Auch mit Texten klappt es: `swap_pair((\"a\", \"b\"))` gibt `(\"b\", \"a\")` zurück. Aufteilen, neu zusammensetzen, zurückgeben.",
+      "en": "It works with texts too: `swap_pair((\"a\", \"b\"))` returns `(\"b\", \"a\")`. Split up, reassemble, return."
+    }
+  }
+}

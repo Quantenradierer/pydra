@@ -1,0 +1,135 @@
+{
+  "id": "top-three",
+  "code": "def top_three(numbers):\n    ordered = sorted(numbers, reverse=True)\n    best = ordered[:3]\n    return best",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion top_three auf",
+          "en": "Calls the built-in function top_three"
+        },
+        {
+          "de": "Legt eine Variable top_three an, die numbers enthält",
+          "en": "Creates a variable top_three that holds numbers"
+        },
+        {
+          "de": "Definiert eine Funktion top_three mit dem Parameter numbers",
+          "en": "Defines a function top_three with the parameter numbers"
+        },
+        {
+          "de": "Führt top_three sofort aus und zeigt das Ergebnis an",
+          "en": "Runs top_three right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`top_three` heißt „die besten drei“. `numbers` ist eine Liste von Zahlen, etwa `[5, 1, 9, 3, 7]`.",
+        "en": "`top_three` means \"the best three\". `numbers` is a list of numbers, such as `[5, 1, 9, 3, 7]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Sortiert die Zahlen aufsteigend",
+          "en": "Sorts the numbers in ascending order"
+        },
+        {
+          "de": "Sortiert die Liste numbers selbst um",
+          "en": "Re-sorts the list numbers itself"
+        },
+        {
+          "de": "Sucht die größte Zahl",
+          "en": "Finds the biggest number"
+        },
+        {
+          "de": "Sortiert die Zahlen absteigend, größte zuerst, und speichert das in ordered",
+          "en": "Sorts the numbers in descending order, biggest first, and stores that in ordered"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`sorted(...)` gibt eine neue sortierte Liste zurück, die ursprüngliche bleibt. Mit `reverse=True` steht die größte Zahl vorn.\n\nAus `[5, 1, 9, 3, 7]` wird `[9, 7, 5, 3, 1]`.",
+        "en": "`sorted(...)` returns a new sorted list, the original stays. With `reverse=True` the biggest number comes first.\n\n`[5, 1, 9, 3, 7]` becomes `[9, 7, 5, 3, 1]`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Nimmt die ersten drei Elemente der sortierten Liste",
+          "en": "Takes the first three items of the sorted list"
+        },
+        {
+          "de": "Nimmt die Elemente an den Positionen 1, 2, 3",
+          "en": "Takes the items at positions 1, 2, 3"
+        },
+        {
+          "de": "Nimmt die letzten drei Elemente",
+          "en": "Takes the last three items"
+        },
+        {
+          "de": "Nimmt das dritte Element",
+          "en": "Takes the third item"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`ordered[:3]` reicht von Anfang bis vor Position 3, das sind die Positionen 0, 1 und 2: `[9, 7, 5]`.\n\nHat die Liste weniger als drei Elemente, gibt es einfach alle, ohne Fehler.",
+        "en": "`ordered[:3]` runs from the start to before position 3, so positions 0, 1 and 2: `[9, 7, 5]`.\n\nIf the list has fewer than three items, you simply get all of them, with no error."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die drei kleinsten Zahlen zurück",
+          "en": "Returns the three smallest numbers"
+        },
+        {
+          "de": "Gibt die drei größten Zahlen zurück",
+          "en": "Returns the three biggest numbers"
+        },
+        {
+          "de": "Gibt die Summe der drei größten Zahlen zurück",
+          "en": "Returns the sum of the three biggest numbers"
+        },
+        {
+          "de": "Gibt die dritt-größte Zahl zurück",
+          "en": "Returns the third biggest number"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Zurück kommt eine Liste. `top_three([5, 1, 9, 3, 7])` ergibt `[9, 7, 5]`.\n\n`top_three([4, 2])` ergibt `[4, 2]`.",
+        "en": "A list comes back. `top_three([5, 1, 9, 3, 7])` gives `[9, 7, 5]`.\n\n`top_three([4, 2])` gives `[4, 2]`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die ersten drei Zahlen der Liste zurück: [5, 1, 9]",
+        "en": "Returns the first three numbers of the list: [5, 1, 9]"
+      },
+      {
+        "de": "Gibt die drei kleinsten Zahlen zurück",
+        "en": "Returns the three smallest numbers"
+      },
+      {
+        "de": "Gibt die drei größten Zahlen einer Liste zurück, die größte zuerst: top_three([5, 1, 9, 3, 7]) ergibt [9, 7, 5]",
+        "en": "Returns the three biggest numbers of a list, the biggest first: top_three([5, 1, 9, 3, 7]) gives [9, 7, 5]"
+      },
+      {
+        "de": "Sortiert die Liste numbers dauerhaft",
+        "en": "Sorts the list numbers for good"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Erst sortieren, dann ein Stück herausschneiden: das ist ein häufiges Muster.",
+      "en": "Sort first, then cut out a piece: a common pattern."
+    }
+  }
+}

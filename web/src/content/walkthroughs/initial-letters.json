@@ -1,0 +1,161 @@
+{
+  "id": "initial-letters",
+  "code": "def initial_letters(words):\n    result = \"\"\n    for word in words:\n        result += word[0]\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion initial_letters auf",
+          "en": "Calls the built-in function initial_letters"
+        },
+        {
+          "de": "Legt eine Variable initial_letters an, die words enthält",
+          "en": "Creates a variable initial_letters that holds words"
+        },
+        {
+          "de": "Führt initial_letters sofort aus und zeigt das Ergebnis an",
+          "en": "Runs initial_letters right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion initial_letters mit dem Parameter words",
+          "en": "Defines a function initial_letters with the parameter words"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`initial_letters` heißt „Anfangsbuchstaben“. `words` ist eine Liste von Wörtern, etwa `[\"Hello\", \"World\"]`.",
+        "en": "`initial_letters` means \"first letters\". `words` is a list of words, such as `[\"Hello\", \"World\"]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt einen leeren Text an, an den später Buchstaben angehängt werden",
+          "en": "Creates an empty text to which letters are appended later"
+        },
+        {
+          "de": "Legt eine leere Liste an",
+          "en": "Creates an empty list"
+        },
+        {
+          "de": "Legt den Text \"result\" an",
+          "en": "Creates the text \"result\""
+        },
+        {
+          "de": "Gibt einen leeren Text zurück",
+          "en": "Returns an empty text"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`\"\"` sind zwei Anführungszeichen ohne Inhalt: der leere Text. Er ist der Startwert für das Zusammenbauen.\n\nEine Liste wäre `[]`, nicht `\"\"`.",
+        "en": "`\"\"` is two quotes with nothing between them: the empty text. It is the start value for building up.\n\nA list would be `[]`, not `\"\"`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für jeden Buchstaben des ersten Wortes",
+          "en": "Repeats the indented part for each letter of the first word"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Wort der Liste",
+          "en": "Repeats the indented part for each word in the list"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für die Positionen der Wörter",
+          "en": "Repeats the indented part for the positions of the words"
+        },
+        {
+          "de": "Zählt die Wörter",
+          "en": "Counts the words"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Bei `[\"Hello\", \"World\"]` ist `word` zuerst `\"Hello\"`, dann `\"World\"`. Es ist das Wort selbst, nicht seine Position.\n\nDer Name `word` ist frei gewählt, passt aber zu dem, was drinsteckt.",
+        "en": "For `[\"Hello\", \"World\"]`, `word` is `\"Hello\"` first, then `\"World\"`. It is the word itself, not its position.\n\nThe name `word` is a free choice, but it fits what it holds."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Hängt das ganze Wort an result an",
+          "en": "Appends the whole word to result"
+        },
+        {
+          "de": "Hängt den letzten Buchstaben an result an",
+          "en": "Appends the last letter to result"
+        },
+        {
+          "de": "Hängt den ersten Buchstaben des Wortes hinten an result an",
+          "en": "Appends the first letter of the word to the end of result"
+        },
+        {
+          "de": "Ersetzt result durch den ersten Buchstaben",
+          "en": "Replaces result with the first letter"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`word[0]` ist das erste Zeichen, `+=` hängt es an den Text an. So wächst `result` von `\"\"` auf `\"H\"`, dann auf `\"HW\"`.\n\nMit Texten verhält sich `+=` wie ein Aneinanderhängen.",
+        "en": "`word[0]` is the first character, `+=` appends it to the text. So `result` grows from `\"\"` to `\"H\"`, then to `\"HW\"`.\n\nWith texts, `+=` behaves like joining."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt das erste Wort der Liste zurück",
+          "en": "Returns the first word of the list"
+        },
+        {
+          "de": "Gibt eine Liste der Anfangsbuchstaben zurück",
+          "en": "Returns a list of the first letters"
+        },
+        {
+          "de": "Gibt in jedem Durchlauf einen Buchstaben zurück",
+          "en": "Returns one letter in every pass"
+        },
+        {
+          "de": "Gibt den fertig zusammengebauten Text zurück, nachdem die Schleife durch ist",
+          "en": "Returns the finished text after the loop is done"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Das nicht eingerückte `return` kommt erst nach der Schleife. Ergebnis: `initial_letters([\"Hello\", \"World\"])` gibt `\"HW\"` zurück.\n\nZurück kommt ein Text, keine Liste. Bei `[]` bleibt es der leere Text.",
+        "en": "The `return` that is not indented only comes after the loop. Result: `initial_letters([\"Hello\", \"World\"])` returns `\"HW\"`.\n\nWhat comes back is a text, not a list. For `[]` it stays the empty text."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt einen Text aus den Anfangsbuchstaben aller Wörter zurück: initial_letters([\"Hello\", \"World\"]) ergibt \"HW\"",
+        "en": "Returns a text made of the first letters of all words: initial_letters([\"Hello\", \"World\"]) gives \"HW\""
+      },
+      {
+        "de": "Gibt eine Liste der Anfangsbuchstaben zurück",
+        "en": "Returns a list of the first letters"
+      },
+      {
+        "de": "Gibt die Wörter aneinandergehängt zurück",
+        "en": "Returns the words joined together"
+      },
+      {
+        "de": "Gibt den ersten Buchstaben des ersten Wortes zurück",
+        "en": "Returns the first letter of the first word"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Das Muster ist dasselbe wie beim Summieren, nur dass der Startwert ein leerer Text ist und `+=` Buchstaben anhängt.",
+      "en": "The pattern is the same as when summing, except that the start value is an empty text and `+=` appends letters."
+    }
+  }
+}

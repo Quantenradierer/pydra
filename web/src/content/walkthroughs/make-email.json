@@ -1,0 +1,135 @@
+{
+  "id": "make-email",
+  "code": "def make_email(name, domain=\"example.com\"):\n    clean = name.strip().lower()\n    user = clean.replace(\" \", \".\")\n    return user + \"@\" + domain",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion make_email auf",
+          "en": "Calls the built-in function make_email"
+        },
+        {
+          "de": "Definiert eine Funktion make_email mit den Parametern name und domain (domain hat den Standardwert \"example.com\")",
+          "en": "Defines a function make_email with the parameters name and domain (domain defaults to \"example.com\")"
+        },
+        {
+          "de": "Legt eine Variable make_email an, die name, domain enthält",
+          "en": "Creates a variable make_email that holds name, domain"
+        },
+        {
+          "de": "Führt make_email sofort aus und zeigt das Ergebnis an",
+          "en": "Runs make_email right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`domain=\"example.com\"` ist ein Standardwert für den Teil nach dem @. Mit `make_email(\"Tom\")` gilt er, mit `make_email(\"Tom\", \"web.de\")` nicht.\n\n`name` ist der Name der Person.",
+        "en": "`domain=\"example.com\"` is a default for the part after the @. With `make_email(\"Tom\")` it applies, with `make_email(\"Tom\", \"web.de\")` it does not.\n\n`name` is the name of the person."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Entfernt alle Leerzeichen im ganzen Namen",
+          "en": "Removes all spaces in the whole name"
+        },
+        {
+          "de": "Macht alles groß und entfernt den Rand",
+          "en": "Makes everything uppercase and removes the edge"
+        },
+        {
+          "de": "Entfernt Leerzeichen am Rand, macht alles klein und speichert das in clean",
+          "en": "Removes spaces at the edges, makes everything lowercase and stores that in clean"
+        },
+        {
+          "de": "Verändert den Parameter name selbst dauerhaft",
+          "en": "Changes the parameter name itself permanently"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Zwei Methoden stehen hintereinander und werden von links nach rechts ausgeführt: `strip()` schneidet Leerzeichen am Anfang und Ende ab, `lower()` macht klein. Aus `\" Anna Meier \"` wird `\"anna meier\"`.\n\nLeerzeichen in der Mitte bleiben.",
+        "en": "Two methods follow each other and run from left to right: `strip()` cuts spaces off the start and end, `lower()` makes lowercase. `\" Anna Meier \"` becomes `\"anna meier\"`.\n\nSpaces in the middle stay."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Ersetzt nur das erste Leerzeichen durch einen Punkt",
+          "en": "Replaces only the first space with a dot"
+        },
+        {
+          "de": "Hängt einen Punkt an clean an",
+          "en": "Appends a dot to clean"
+        },
+        {
+          "de": "Zählt die Leerzeichen in clean",
+          "en": "Counts the spaces in clean"
+        },
+        {
+          "de": "Ersetzt jedes Leerzeichen in clean durch einen Punkt",
+          "en": "Replaces every space in clean with a dot"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`replace(\" \", \".\")` tauscht alle Vorkommen aus. Aus `\"anna meier\"` wird `\"anna.meier\"`.\n\nDer Name `user` ist der Teil vor dem @.",
+        "en": "`replace(\" \", \".\")` swaps all occurrences. `\"anna meier\"` becomes `\"anna.meier\"`.\n\nThe name `user` is the part before the @."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Fügt user, ein @ und domain zu einem Text zusammen und gibt ihn zurück",
+          "en": "Joins user, an @ and domain into one text and returns it"
+        },
+        {
+          "de": "Gibt die Liste [user, domain] zurück",
+          "en": "Returns the list [user, domain]"
+        },
+        {
+          "de": "Gibt nur user zurück",
+          "en": "Returns only user"
+        },
+        {
+          "de": "Sendet eine E-Mail an user",
+          "en": "Sends an e-mail to user"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`+` hängt Texte aneinander, das `\"@\"` ist ein Text in der Mitte. Ergebnis: `\"anna.meier@example.com\"`.\n\nVerschickt wird nichts, es entsteht nur ein Text.",
+        "en": "`+` joins texts, and the `\"@\"` is a text in the middle. Result: `\"anna.meier@example.com\"`.\n\nNothing is sent, it only builds a text."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Schickt eine E-Mail an den Namen",
+        "en": "Sends an e-mail to the name"
+      },
+      {
+        "de": "Baut aus einem Namen eine E-Mail-Adresse: klein geschrieben, mit Punkt statt Leerzeichen, Standard-Domain example.com",
+        "en": "Builds an e-mail address from a name: lowercase, with a dot instead of spaces, default domain example.com"
+      },
+      {
+        "de": "Prüft, ob der Name eine gültige E-Mail-Adresse ist",
+        "en": "Checks whether the name is a valid e-mail address"
+      },
+      {
+        "de": "Gibt den Namen in Großbuchstaben zurück",
+        "en": "Returns the name in capital letters"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`make_email(\" Anna Meier \")` gibt `\"anna.meier@example.com\"` zurück, `make_email(\"Tom\", \"web.de\")` gibt `\"tom@web.de\"` zurück.",
+      "en": "`make_email(\" Anna Meier \")` returns `\"anna.meier@example.com\"`, `make_email(\"Tom\", \"web.de\")` returns `\"tom@web.de\"`."
+    }
+  }
+}

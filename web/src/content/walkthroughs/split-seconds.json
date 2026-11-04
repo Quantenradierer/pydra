@@ -1,0 +1,135 @@
+{
+  "id": "split-seconds",
+  "code": "def split_seconds(total):\n    minutes = total // 60\n    seconds = total % 60\n    return minutes, seconds",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion split_seconds auf",
+          "en": "Calls the built-in function split_seconds"
+        },
+        {
+          "de": "Definiert eine Funktion split_seconds mit dem Parameter total",
+          "en": "Defines a function split_seconds with the parameter total"
+        },
+        {
+          "de": "Legt eine Variable split_seconds an, die total enthält",
+          "en": "Creates a variable split_seconds that holds total"
+        },
+        {
+          "de": "Führt split_seconds sofort aus und zeigt das Ergebnis an",
+          "en": "Runs split_seconds right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`split_seconds` zerlegt Sekunden in Minuten und Sekunden. `total` (Gesamt) ist die Anzahl der Sekunden, etwa `135`.",
+        "en": "`split_seconds` breaks seconds into minutes and seconds. `total` is the number of seconds, such as `135`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Teilt total durch 60 und behält den Rest",
+          "en": "Divides total by 60 and keeps the remainder"
+        },
+        {
+          "de": "Teilt total durch 60 mit Nachkommastellen",
+          "en": "Divides total by 60 with decimal places"
+        },
+        {
+          "de": "Teilt total durch 60 und behält nur die ganzen Minuten",
+          "en": "Divides total by 60 and keeps only the whole minutes"
+        },
+        {
+          "de": "Multipliziert total mit 60",
+          "en": "Multiplies total by 60"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`//` ist die ganzzahlige Division und schneidet den Rest ab. `135 // 60` ist `2`, denn 60 passt zweimal in 135.\n\nDas normale `/` hätte `2.25` geliefert.",
+        "en": "`//` is whole-number division and drops the remainder. `135 // 60` is `2`, because 60 fits into 135 twice.\n\nThe normal `/` would have given `2.25`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Speichert 60 Prozent von total",
+          "en": "Stores 60 percent of total"
+        },
+        {
+          "de": "Speichert die ganzen Minuten",
+          "en": "Stores the whole minutes"
+        },
+        {
+          "de": "Speichert total geteilt durch 60",
+          "en": "Stores total divided by 60"
+        },
+        {
+          "de": "Speichert den Rest der Division durch 60 in seconds",
+          "en": "Stores the remainder of the division by 60 in seconds"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`%` (Modulo) liefert den Rest. `135 % 60` ist `15`, denn 135 minus 2 mal 60 bleibt 15.\n\nDas ist die Zahl der Sekunden, die noch übrig sind.",
+        "en": "`%` (modulo) gives the remainder. `135 % 60` is `15`, since 135 minus 2 times 60 leaves 15.\n\nThat is the number of seconds that are left over."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt beide Werte als Paar zurück: Minuten und Sekunden",
+          "en": "Returns both values as a pair: minutes and seconds"
+        },
+        {
+          "de": "Gibt nur die Minuten zurück",
+          "en": "Returns only the minutes"
+        },
+        {
+          "de": "Gibt die Summe von Minuten und Sekunden zurück",
+          "en": "Returns the sum of minutes and seconds"
+        },
+        {
+          "de": "Gibt zwei getrennte Ergebnisse in zwei Aufrufen zurück",
+          "en": "Returns two separate results in two calls"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Ein `return` mit Komma gibt ein Tupel zurück. `split_seconds(135)` ergibt `(2, 15)`.\n\nDen Rückgabewert kann man mit `m, s = split_seconds(135)` gleich aufteilen.",
+        "en": "A `return` with a comma returns a tuple. `split_seconds(135)` gives `(2, 15)`.\n\nThe return value can be split right away with `m, s = split_seconds(135)`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Rechnet Sekunden in Minuten mit Nachkommastellen um: 2.25",
+        "en": "Converts seconds to minutes with decimal places: 2.25"
+      },
+      {
+        "de": "Zerlegt eine Sekundenzahl in volle Minuten und restliche Sekunden: split_seconds(135) ergibt (2, 15)",
+        "en": "Splits a number of seconds into full minutes and remaining seconds: split_seconds(135) gives (2, 15)"
+      },
+      {
+        "de": "Gibt total mal 60 zurück",
+        "en": "Returns total times 60"
+      },
+      {
+        "de": "Gibt nur die restlichen Sekunden zurück",
+        "en": "Returns only the remaining seconds"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`split_seconds(59)` gibt `(0, 59)` zurück: noch keine volle Minute. `//` und `%` ergänzen sich, zusammen ergeben sie wieder die ursprüngliche Zahl.",
+      "en": "`split_seconds(59)` returns `(0, 59)`: not a full minute yet. `//` and `%` complement each other, together they rebuild the original number."
+    }
+  }
+}

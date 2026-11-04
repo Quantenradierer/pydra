@@ -1,0 +1,135 @@
+{
+  "id": "make-title",
+  "code": "def make_title(text, upper=False):\n    if upper:\n        return text.upper()\n    return text.title()",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion make_title auf",
+          "en": "Calls the built-in function make_title"
+        },
+        {
+          "de": "Legt eine Variable make_title an, die text, upper enthält",
+          "en": "Creates a variable make_title that holds text, upper"
+        },
+        {
+          "de": "Definiert eine Funktion make_title mit den Parametern text und upper (upper hat den Standardwert False)",
+          "en": "Defines a function make_title with the parameters text and upper (upper defaults to False)"
+        },
+        {
+          "de": "Führt make_title sofort aus und zeigt das Ergebnis an",
+          "en": "Runs make_title right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`upper=False` ist ein Standardwert: Ohne Angabe wird nicht in Großbuchstaben umgewandelt. Man kann aber `make_title(\"hi\", upper=True)` schreiben, also den Namen beim Aufruf mitgeben.\n\n`upper` ist hier ein Schalter mit True oder False.",
+        "en": "`upper=False` is a default value: without it nothing is turned into capitals. But you can write `make_title(\"hi\", upper=True)`, naming the parameter in the call.\n\n`upper` is a switch with True or False here."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Setzt upper auf True",
+          "en": "Sets upper to True"
+        },
+        {
+          "de": "Prüft, ob text in Großbuchstaben geschrieben ist",
+          "en": "Checks whether text is written in capital letters"
+        },
+        {
+          "de": "Macht text zu Großbuchstaben",
+          "en": "Turns text into capital letters"
+        },
+        {
+          "de": "Prüft, ob upper wahr ist; nur dann läuft die Zeile darunter",
+          "en": "Checks whether upper is true; only then does the line below run"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Ein Wahrheitswert reicht als Bedingung. Bei `upper=True` stimmt sie, bei `False` (dem Standard) nicht.\n\nGeprüft wird der Schalter, nicht der Text.",
+        "en": "A truth value is enough as a condition. With `upper=True` it holds, with `False` (the default) it does not.\n\nThe switch is checked, not the text."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt den Text komplett in Großbuchstaben zurück",
+          "en": "Returns the text entirely in capital letters"
+        },
+        {
+          "de": "Gibt den Text mit großem Anfangsbuchstaben pro Wort zurück",
+          "en": "Returns the text with a capital initial per word"
+        },
+        {
+          "de": "Gibt True zurück",
+          "en": "Returns True"
+        },
+        {
+          "de": "Gibt text unverändert zurück",
+          "en": "Returns text unchanged"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`upper()` macht aus `\"hello\"` den Text `\"HELLO\"`. Die Methode gibt einen neuen Text zurück, der alte bleibt, wie er war.\n\nDie Zeile läuft nur bei `upper=True`.",
+        "en": "`upper()` turns `\"hello\"` into `\"HELLO\"`. The method returns a new text, the old one stays as it was.\n\nThe line only runs with `upper=True`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt den Text komplett in Großbuchstaben zurück",
+          "en": "Returns the text entirely in capital letters"
+        },
+        {
+          "de": "Gibt den Text zurück, bei dem jedes Wort mit einem Großbuchstaben beginnt",
+          "en": "Returns the text with every word starting with a capital letter"
+        },
+        {
+          "de": "Gibt nur den ersten Buchstaben des Textes groß zurück",
+          "en": "Returns only the first letter of the text as a capital"
+        },
+        {
+          "de": "Gibt den Text in Kleinbuchstaben zurück",
+          "en": "Returns the text in lowercase"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`title()` macht den Anfang jedes Wortes groß, den Rest klein: aus `\"hello world\"` wird `\"Hello World\"`.\n\nHier kommt nur an, wer `upper` nicht eingeschaltet hat.",
+        "en": "`title()` capitalises the start of every word and lowercases the rest: `\"hello world\"` becomes `\"Hello World\"`.\n\nOnly those who did not switch `upper` on get here."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt den Text immer in Großbuchstaben zurück",
+        "en": "Always returns the text in capital letters"
+      },
+      {
+        "de": "Gibt True zurück, wenn der Text eine Überschrift ist",
+        "en": "Returns True if the text is a title"
+      },
+      {
+        "de": "Gibt den Text als Überschrift zurück (jedes Wort groß beginnend), oder komplett in Großbuchstaben, wenn upper=True",
+        "en": "Returns the text as a title (each word starting with a capital), or entirely in capitals if upper=True"
+      },
+      {
+        "de": "Gibt den Text in Kleinbuchstaben zurück",
+        "en": "Returns the text in lowercase"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`make_title(\"hello world\")` gibt `\"Hello World\"` zurück, `make_title(\"hello\", True)` gibt `\"HELLO\"` zurück.",
+      "en": "`make_title(\"hello world\")` returns `\"Hello World\"`, `make_title(\"hello\", True)` returns `\"HELLO\"`."
+    }
+  }
+}

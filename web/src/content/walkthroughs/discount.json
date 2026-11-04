@@ -1,0 +1,135 @@
+{
+  "id": "discount",
+  "code": "def discount(price, percent=10):\n    saved = price * percent / 100\n    new_price = price - saved\n    return new_price",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion discount auf",
+          "en": "Calls the built-in function discount"
+        },
+        {
+          "de": "Definiert eine Funktion discount mit den Parametern price und percent (percent hat den Standardwert 10)",
+          "en": "Defines a function discount with the parameters price and percent (percent defaults to 10)"
+        },
+        {
+          "de": "Legt eine Variable discount an, die price, percent enthält",
+          "en": "Creates a variable discount that holds price, percent"
+        },
+        {
+          "de": "Führt discount sofort aus und zeigt das Ergebnis an",
+          "en": "Runs discount right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`percent=10` ist ein Standardwert: Ohne zweites Argument gilt 10. `discount(200)` rechnet also mit 10 Prozent, `discount(50, 20)` mit 20.\n\n`discount` heißt „Rabatt“, `price` ist der Preis.",
+        "en": "`percent=10` is a default value: without a second argument 10 is used. So `discount(200)` works with 10 percent, `discount(50, 20)` with 20.\n\n`price` is the price before the discount."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Zieht percent von price ab",
+          "en": "Subtracts percent from price"
+        },
+        {
+          "de": "Rechnet den Preis nach dem Rabatt aus",
+          "en": "Works out the price after the discount"
+        },
+        {
+          "de": "Rechnet den Rabatt in Geld aus: price mal percent, geteilt durch 100",
+          "en": "Works out the discount as money: price times percent, divided by 100"
+        },
+        {
+          "de": "Teilt price durch percent und multipliziert mit 100",
+          "en": "Divides price by percent and multiplies by 100"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Für `discount(200)` ist das `200 * 10 / 100`, also `20.0`. Das ist der Betrag, der gespart wird.\n\n`/` liefert immer eine Dezimalzahl, daher die `.0`.",
+        "en": "For `discount(200)` this is `200 * 10 / 100`, which is `20.0`. That is the amount that is saved.\n\n`/` always gives a decimal number, hence the `.0`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Addiert den gesparten Betrag zum Preis",
+          "en": "Adds the saved amount to the price"
+        },
+        {
+          "de": "Ändert den Parameter price für alle späteren Aufrufe",
+          "en": "Changes the parameter price for all later calls"
+        },
+        {
+          "de": "Gibt den neuen Preis an den Aufrufer zurück",
+          "en": "Hands the new price back to the caller"
+        },
+        {
+          "de": "Zieht den gesparten Betrag vom Preis ab und speichert den neuen Preis",
+          "en": "Subtracts the saved amount from the price and stores the new price"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Aus `200 - 20.0` wird `180.0`. Das Ergebnis liegt in der neuen Variable `new_price`; `price` bleibt unverändert.\n\nDie Zeile speichert nur, zurückgegeben wird erst in der nächsten.",
+        "en": "`200 - 20.0` becomes `180.0`. The result sits in the new variable `new_price`; `price` stays unchanged.\n\nThis line only stores; the value is returned in the next one."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt den neuen Preis zurück",
+          "en": "Returns the new price"
+        },
+        {
+          "de": "Gibt den gesparten Betrag zurück",
+          "en": "Returns the saved amount"
+        },
+        {
+          "de": "Gibt den Prozentsatz zurück",
+          "en": "Returns the percentage"
+        },
+        {
+          "de": "Zeigt den neuen Preis auf dem Bildschirm an",
+          "en": "Prints the new price on the screen"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`return` gibt den Wert von `new_price` zurück und beendet die Funktion. `discount(50, 20)` rechnet `50 * 20 / 100 = 10.0` und gibt `40.0` zurück.",
+        "en": "`return` hands back the value of `new_price` and ends the function. `discount(50, 20)` works out `50 * 20 / 100 = 10.0` and returns `40.0`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt den Rabatt in Geld zurück, bei 200 also 20.0",
+        "en": "Returns the discount as money, so 20.0 for 200"
+      },
+      {
+        "de": "Gibt den Preis nach Abzug von percent Prozent zurück, ohne Angabe sind es 10 Prozent",
+        "en": "Returns the price after taking off percent percent, 10 percent if none is given"
+      },
+      {
+        "de": "Erhöht den Preis um percent Prozent",
+        "en": "Raises the price by percent percent"
+      },
+      {
+        "de": "Zieht immer genau 10 vom Preis ab",
+        "en": "Always takes exactly 10 off the price"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`discount(200)` gibt `180.0` zurück, `discount(50, 20)` gibt `40.0` zurück. Der Standardwert gilt nur, wenn kein zweites Argument übergeben wird.",
+      "en": "`discount(200)` returns `180.0`, `discount(50, 20)` returns `40.0`. The default value only applies when no second argument is passed."
+    }
+  }
+}

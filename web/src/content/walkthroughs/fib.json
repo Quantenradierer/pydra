@@ -1,0 +1,135 @@
+{
+  "id": "fib",
+  "code": "def fib(n):\n    if n < 2:\n        return n\n    return fib(n - 1) + fib(n - 2)",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion fib auf",
+          "en": "Calls the built-in function fib"
+        },
+        {
+          "de": "Definiert eine Funktion fib mit dem Parameter n",
+          "en": "Defines a function fib with the parameter n"
+        },
+        {
+          "de": "Legt eine Variable fib an, die n enthält",
+          "en": "Creates a variable fib that holds n"
+        },
+        {
+          "de": "Führt fib sofort aus und zeigt das Ergebnis an",
+          "en": "Runs fib right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`fib` ist die Abkürzung für Fibonacci. In dieser Reihe ist jede Zahl die Summe der beiden davor: 0, 1, 1, 2, 3, 5, 8, ... `n` ist die Position in der Reihe, gezählt ab 0.",
+        "en": "`fib` is short for Fibonacci. In this series each number is the sum of the two before it: 0, 1, 1, 2, 3, 5, 8, ... `n` is the position in the series, counted from 0."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob n gleich 2 ist",
+          "en": "Checks whether n equals 2"
+        },
+        {
+          "de": "Setzt n auf 2",
+          "en": "Sets n to 2"
+        },
+        {
+          "de": "Prüft, ob n kleiner als 2 ist, also 0 oder 1",
+          "en": "Checks whether n is less than 2, so 0 or 1"
+        },
+        {
+          "de": "Prüft, ob n größer als 2 ist",
+          "en": "Checks whether n is greater than 2"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die ersten beiden Zahlen der Reihe sind festgelegt: `fib(0)` ist 0 und `fib(1)` ist 1. Alle anderen werden aus ihnen berechnet.\n\nDieser Fall hört die Rekursion auf.",
+        "en": "The first two numbers of the series are fixed: `fib(0)` is 0 and `fib(1)` is 1. All others are calculated from them.\n\nThis case stops the recursion."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt immer 1 zurück",
+          "en": "Always returns 1"
+        },
+        {
+          "de": "Gibt n minus 1 zurück",
+          "en": "Returns n minus 1"
+        },
+        {
+          "de": "Ruft fib mit kleinerem n auf",
+          "en": "Calls fib with a smaller n"
+        },
+        {
+          "de": "Gibt n selbst zurück, ohne weiteren Aufruf: 0 für 0 und 1 für 1",
+          "en": "Returns n itself without another call: 0 for 0 and 1 for 1"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Für 0 und 1 trifft es zufällig zu, dass das Ergebnis gleich n ist. Deshalb braucht man hier keine zwei getrennten Fälle.\n\n`fib(1)` gibt `1` zurück, `fib(0)` gibt `0` zurück.",
+        "en": "For 0 and 1 it happens that the result equals n. So no two separate cases are needed here.\n\n`fib(1)` returns `1`, `fib(0)` returns `0`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Addiert die Ergebnisse von fib(n - 1) und fib(n - 2): die Funktion ruft sich zweimal selbst auf",
+          "en": "Adds the results of fib(n - 1) and fib(n - 2): the function calls itself twice"
+        },
+        {
+          "de": "Gibt fib(n - 1) mal fib(n - 2) zurück",
+          "en": "Returns fib(n - 1) times fib(n - 2)"
+        },
+        {
+          "de": "Addiert n - 1 und n - 2",
+          "en": "Adds n - 1 and n - 2"
+        },
+        {
+          "de": "Ruft fib genau einmal mit n - 1 auf",
+          "en": "Calls fib exactly once with n - 1"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Bei `fib(4)` heißt das `fib(3) + fib(2)`, und jeder dieser Aufrufe zerfällt weiter, bis nur noch `fib(0)` und `fib(1)` übrig sind.\n\nDa `fib(6) = fib(5) + fib(4) = 5 + 3`, ergibt sich 8.",
+        "en": "For `fib(4)` this means `fib(3) + fib(2)`, and each of those calls splits further until only `fib(0)` and `fib(1)` are left.\n\nSince `fib(6) = fib(5) + fib(4) = 5 + 3`, the result is 8."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt n mal 2 zurück",
+        "en": "Returns n times 2"
+      },
+      {
+        "de": "Gibt die n-te Fibonacci-Zahl zurück, jede ist die Summe der beiden davor: fib(6) ergibt 8",
+        "en": "Returns the n-th Fibonacci number, each being the sum of the two before it: fib(6) gives 8"
+      },
+      {
+        "de": "Gibt die Summe der Zahlen von 1 bis n zurück",
+        "en": "Returns the sum of the numbers from 1 to n"
+      },
+      {
+        "de": "Gibt n zurück",
+        "en": "Returns n"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Reihe lautet 0, 1, 1, 2, 3, 5, 8, also `fib(6)` gleich `8`. Für große `n` wird diese Fassung sehr langsam, weil dieselben Werte immer wieder neu berechnet werden.",
+      "en": "The series runs 0, 1, 1, 2, 3, 5, 8, so `fib(6)` is `8`. For big `n` this version becomes very slow, since the same values are recomputed again and again."
+    }
+  }
+}

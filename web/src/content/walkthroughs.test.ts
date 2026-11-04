@@ -5,9 +5,9 @@ import { QUESTIONS_BY_ID } from './questions.ts';
 import { WALKTHROUGHS, stepId, walkthroughQuestions } from './walkthroughs.ts';
 
 describe('walkthrough content', () => {
-  it('has 3 to 26 functions with unique ids', () => {
+  it('has 3 to 76 functions with unique ids', () => {
     expect(WALKTHROUGHS.length).toBeGreaterThanOrEqual(3);
-    expect(WALKTHROUGHS.length).toBeLessThanOrEqual(26);
+    expect(WALKTHROUGHS.length).toBeLessThanOrEqual(76);
     expect(new Set(WALKTHROUGHS.map((w) => w.id)).size).toBe(WALKTHROUGHS.length);
   });
 

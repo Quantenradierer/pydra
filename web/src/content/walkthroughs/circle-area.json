@@ -1,0 +1,135 @@
+{
+  "id": "circle-area",
+  "code": "def circle_area(radius):\n    pi = 3.14\n    area = pi * radius * radius\n    return round(area, 2)",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion circle_area mit dem Parameter radius",
+          "en": "Defines a function circle_area with the parameter radius"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion circle_area auf",
+          "en": "Calls the built-in function circle_area"
+        },
+        {
+          "de": "Legt eine Variable circle_area an, die radius enthält",
+          "en": "Creates a variable circle_area that holds radius"
+        },
+        {
+          "de": "Führt circle_area sofort aus und zeigt das Ergebnis an",
+          "en": "Runs circle_area right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`def` legt die Funktion `circle_area` („Kreisfläche“) an. Gerechnet wird erst bei einem Aufruf wie `circle_area(2)`.\n\n`radius` ist der Parameter, ein Platzhalter für den Radius des Kreises.",
+        "en": "`def` creates the function `circle_area`. The calculation only happens on a call such as `circle_area(2)`.\n\n`radius` is the parameter, a placeholder for the radius of the circle."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Ruft die Funktion pi auf",
+          "en": "Calls the function pi"
+        },
+        {
+          "de": "Speichert die Zahl 3.14 in der Variable pi",
+          "en": "Stores the number 3.14 in the variable pi"
+        },
+        {
+          "de": "Prüft, ob pi gleich 3.14 ist",
+          "en": "Checks whether pi equals 3.14"
+        },
+        {
+          "de": "Gibt 3.14 zurück und beendet die Funktion",
+          "en": "Returns 3.14 and ends the function"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Ein einzelnes `=` speichert einen Wert unter einem Namen. Dezimalzahlen schreibt man mit Punkt, nicht mit Komma.\n\n3.14 ist nur eine Näherung der Kreiszahl, reicht hier aber aus.",
+        "en": "A single `=` stores a value under a name. Decimal numbers are written with a dot, not a comma.\n\n3.14 is only an approximation of the circle number, but good enough here."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Addiert pi, radius und radius",
+          "en": "Adds pi, radius and radius"
+        },
+        {
+          "de": "Rechnet pi mal 2 mal radius",
+          "en": "Calculates pi times 2 times radius"
+        },
+        {
+          "de": "Rechnet pi mal radius mal radius und speichert das Ergebnis in area",
+          "en": "Calculates pi times radius times radius and stores the result in area"
+        },
+        {
+          "de": "Speichert den Text „pi * radius * radius“ in area",
+          "en": "Stores the text \"pi * radius * radius\" in area"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Das ist die Formel für die Kreisfläche: π mal Radius zum Quadrat. Für `circle_area(2)` wird `3.14 * 2 * 2`, also 12.56.\n\nDas `*` multipliziert, die Variablen werden dabei durch ihre Werte ersetzt.",
+        "en": "This is the formula for the area of a circle: π times radius squared. For `circle_area(2)` it becomes `3.14 * 2 * 2`, which is 12.56.\n\nThe `*` multiplies, and the variables are replaced by their values."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Rundet area auf die nächste ganze Zahl",
+          "en": "Rounds area to the nearest whole number"
+        },
+        {
+          "de": "Zeigt area gerundet auf dem Bildschirm an",
+          "en": "Prints area rounded on the screen"
+        },
+        {
+          "de": "Gibt area ungerundet und die Zahl 2 zurück",
+          "en": "Returns area unrounded together with the number 2"
+        },
+        {
+          "de": "Rundet area auf 2 Nachkommastellen und gibt das Ergebnis zurück",
+          "en": "Rounds area to 2 decimal places and returns the result"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`round(area, 2)` behält 2 Stellen nach dem Komma. Bei `circle_area(3)` rechnet der Computer `3.14 * 3 * 3` und rundet das Ergebnis auf 28.26.\n\nDas Ergebnis geht mit `return` an den Aufrufer zurück.",
+        "en": "`round(area, 2)` keeps 2 places after the point. For `circle_area(3)` the computer works out `3.14 * 3 * 3` and rounds the result to 28.26.\n\nThe result goes back to the caller with `return`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Fläche eines Kreises mit dem Radius radius zurück, auf 2 Nachkommastellen gerundet",
+        "en": "Returns the area of a circle with the given radius, rounded to 2 decimal places"
+      },
+      {
+        "de": "Gibt den Umfang des Kreises zurück",
+        "en": "Returns the circumference of the circle"
+      },
+      {
+        "de": "Gibt den Radius auf 2 Stellen gerundet zurück",
+        "en": "Returns the radius rounded to 2 places"
+      },
+      {
+        "de": "Gibt immer die Zahl 3.14 zurück",
+        "en": "Always returns the number 3.14"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`circle_area(2)` gibt `12.56` zurück, `circle_area(3)` gibt `28.26` zurück. Die Funktion rechnet in einer Variable und rundet erst ganz am Ende.",
+      "en": "`circle_area(2)` returns `12.56`, `circle_area(3)` returns `28.26`. The function calculates in a variable and rounds only at the very end."
+    }
+  }
+}

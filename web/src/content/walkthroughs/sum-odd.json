@@ -1,0 +1,213 @@
+{
+  "id": "sum-odd",
+  "code": "def sum_odd(numbers):\n    total = 0\n    for n in numbers:\n        if n % 2 == 0:\n            continue\n        total += n\n    return total",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion sum_odd mit dem Parameter numbers",
+          "en": "Defines a function sum_odd with the parameter numbers"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion sum_odd auf",
+          "en": "Calls the built-in function sum_odd"
+        },
+        {
+          "de": "Legt eine Variable sum_odd an, die numbers enthält",
+          "en": "Creates a variable sum_odd that holds numbers"
+        },
+        {
+          "de": "Führt sum_odd sofort aus und zeigt das Ergebnis an",
+          "en": "Runs sum_odd right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`sum_odd` addiert nur die ungeraden Zahlen einer Liste. `numbers` ist die Liste, etwa `[1, 2, 3, 4, 5]`.",
+        "en": "`sum_odd` adds only the odd numbers of a list. `numbers` is the list, such as `[1, 2, 3, 4, 5]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Legt total an und setzt es auf 0",
+          "en": "Creates total and sets it to 0"
+        },
+        {
+          "de": "Setzt total auf die erste Zahl der Liste",
+          "en": "Sets total to the first number of the list"
+        },
+        {
+          "de": "Prüft, ob total gleich 0 ist",
+          "en": "Checks whether total equals 0"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Der Startwert 0 ist neutral beim Addieren. Die Variable muss vor der Schleife entstehen.\n\nEine leere Liste bliebe bei `0`.",
+        "en": "The start value 0 is neutral for adding. The variable must be created before the loop.\n\nAn empty list would stay at `0`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil n-mal",
+          "en": "Repeats the indented part n times"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für die Positionen der Liste",
+          "en": "Repeats the indented part for the positions of the list"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Zahl der Liste; n ist die aktuelle Zahl",
+          "en": "Repeats the indented part for each number of the list; n is the current number"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil nur für die ungeraden Zahlen",
+          "en": "Repeats the indented part only for the odd numbers"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Schleife besucht jede Zahl, auch die geraden. Das Aussortieren geschieht erst in den Zeilen darunter.\n\nBei `[1, 2, 3, 4, 5]` ist `n` nacheinander 1, 2, 3, 4 und 5.",
+        "en": "The loop visits every number, even numbers too. The sorting out only happens in the lines below.\n\nFor `[1, 2, 3, 4, 5]`, `n` is 1, 2, 3, 4 and 5 in turn."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob n ungerade ist",
+          "en": "Checks whether n is odd"
+        },
+        {
+          "de": "Setzt n auf den Rest der Teilung durch 2",
+          "en": "Sets n to the remainder of dividing by 2"
+        },
+        {
+          "de": "Prüft, ob n gleich 2 ist",
+          "en": "Checks whether n equals 2"
+        },
+        {
+          "de": "Prüft, ob n gerade ist, also bei Teilung durch 2 kein Rest bleibt",
+          "en": "Checks whether n is even, meaning dividing by 2 leaves no remainder"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`n % 2` ist der Rest bei Teilung durch 2: 0 bei geraden, 1 bei ungeraden Zahlen. Bei 2 und 4 stimmt `== 0`.\n\nGerade Zahlen sollen hier übersprungen werden.",
+        "en": "`n % 2` is the remainder when dividing by 2: 0 for even, 1 for odd numbers. For 2 and 4, `== 0` is true.\n\nEven numbers are meant to be skipped here."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Springt sofort zum nächsten Durchlauf der Schleife, die Zeile darunter wird dann übersprungen",
+          "en": "Jumps right to the next pass of the loop, the line below is skipped then"
+        },
+        {
+          "de": "Beendet die Schleife ganz",
+          "en": "Ends the loop completely"
+        },
+        {
+          "de": "Beendet die Funktion und gibt n zurück",
+          "en": "Ends the function and returns n"
+        },
+        {
+          "de": "Tut nichts und läuft ganz normal weiter",
+          "en": "Does nothing and carries on as normal"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`continue` heißt „weitermachen mit der nächsten Runde“. Bei `n = 2` wird `total += n` nicht mehr ausgeführt.\n\nBeendet wird die Schleife damit nicht, das täte `break`.",
+        "en": "`continue` means \"go on with the next round\". For `n = 2`, `total += n` is no longer run.\n\nThe loop does not end this way, `break` would do that."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Addiert n zu total, aber nur für gerade Zahlen",
+          "en": "Adds n to total, but only for even numbers"
+        },
+        {
+          "de": "Addiert n zu total; die Zeile wird nur für ungerade Zahlen erreicht",
+          "en": "Adds n to total; the line is only reached for odd numbers"
+        },
+        {
+          "de": "Addiert n in jedem Durchlauf zu total, auch für gerade Zahlen",
+          "en": "Adds n to total in every pass, even numbers included"
+        },
+        {
+          "de": "Setzt total auf n",
+          "en": "Sets total to n"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Für gerade Zahlen hat `continue` die Runde schon beendet. Übrig bleiben 1, 3 und 5: `total` wächst auf 1, dann 4, dann 9.\n\nDie Zeile steht in der Schleife, aber nicht im `if`.",
+        "en": "For even numbers, `continue` has already ended the round. 1, 3 and 5 are left: `total` grows to 1, then 4, then 9.\n\nThe line is inside the loop, but not inside the `if`."
+      }
+    },
+    {
+      "line": 7,
+      "choices": [
+        {
+          "de": "Gibt die Summe zurück, aber schon in der ersten Runde",
+          "en": "Returns the sum, but already in the first pass"
+        },
+        {
+          "de": "Gibt die Anzahl der ungeraden Zahlen zurück",
+          "en": "Returns the number of odd numbers"
+        },
+        {
+          "de": "Gibt die fertige Summe zurück, nachdem die Schleife durch ist",
+          "en": "Returns the finished sum after the loop is done"
+        },
+        {
+          "de": "Gibt die letzte ungerade Zahl zurück",
+          "en": "Returns the last odd number"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile steht ganz links, also hinter der Schleife. `sum_odd([1, 2, 3, 4, 5])` gibt `9` zurück.\n\nGibt es keine ungeraden Zahlen, wie bei `[2, 4]`, bleibt es bei `0`.",
+        "en": "The line is at the far left, so after the loop. `sum_odd([1, 2, 3, 4, 5])` returns `9`.\n\nIf there are no odd numbers, as in `[2, 4]`, it stays at `0`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Summe der geraden Zahlen zurück",
+        "en": "Returns the sum of the even numbers"
+      },
+      {
+        "de": "Gibt die Summe aller Zahlen der Liste zurück",
+        "en": "Returns the sum of all numbers in the list"
+      },
+      {
+        "de": "Gibt die Anzahl der ungeraden Zahlen zurück",
+        "en": "Returns the number of odd numbers"
+      },
+      {
+        "de": "Gibt die Summe der ungeraden Zahlen der Liste zurück: sum_odd([1, 2, 3, 4, 5]) ergibt 9",
+        "en": "Returns the sum of the odd numbers in the list: sum_odd([1, 2, 3, 4, 5]) gives 9"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`continue` ist hier ein Filter: Gerade Zahlen werden übersprungen, nur die übrigen zählen mit.",
+      "en": "`continue` acts as a filter here: even numbers are skipped, only the rest count."
+    }
+  }
+}

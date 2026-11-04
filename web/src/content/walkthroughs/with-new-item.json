@@ -1,0 +1,135 @@
+{
+  "id": "with-new-item",
+  "code": "def with_new_item(items, item):\n    copy = items.copy()\n    copy.append(item)\n    return copy",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion with_new_item auf",
+          "en": "Calls the built-in function with_new_item"
+        },
+        {
+          "de": "Definiert eine Funktion with_new_item mit den Parametern items und item",
+          "en": "Defines a function with_new_item with the parameters items and item"
+        },
+        {
+          "de": "Legt eine Variable with_new_item an, die items, item enthält",
+          "en": "Creates a variable with_new_item that holds items, item"
+        },
+        {
+          "de": "Führt with_new_item sofort aus und zeigt das Ergebnis an",
+          "en": "Runs with_new_item right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`with_new_item` heißt „mit neuem Element“. `items` ist eine Liste, `item` das Element, das zusätzlich dazukommen soll, etwa `with_new_item([\"a\"], \"b\")`.",
+        "en": "`with_new_item` means \"with a new item\". `items` is a list, `item` the item to add on top, as in `with_new_item([\"a\"], \"b\")`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Gibt dieselbe Liste unter einem zweiten Namen frei",
+          "en": "Gives the same list a second name"
+        },
+        {
+          "de": "Löscht die Liste items",
+          "en": "Deletes the list items"
+        },
+        {
+          "de": "Legt eine Kopie der Liste an und nennt sie copy",
+          "en": "Makes a copy of the list and calls it copy"
+        },
+        {
+          "de": "Kopiert nur das erste Element",
+          "en": "Copies only the first item"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`copy()` baut eine neue Liste mit denselben Elementen. `copy = items` dagegen gäbe der gleichen Liste nur einen zweiten Namen.\n\nWürde man ohne Kopie weiterarbeiten, änderte man auch die Liste des Aufrufers.",
+        "en": "`copy()` builds a new list with the same items. `copy = items` would instead just give the same list a second name.\n\nIf you carried on without a copy, you would change the caller's list as well."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Hängt item hinten an die ursprüngliche Liste items an",
+          "en": "Appends item to the end of the original list items"
+        },
+        {
+          "de": "Setzt die Kopie auf item",
+          "en": "Sets the copy to item"
+        },
+        {
+          "de": "Fügt item vorn in die Kopie ein",
+          "en": "Inserts item at the front of the copy"
+        },
+        {
+          "de": "Hängt item hinten an die Kopie an",
+          "en": "Appends item to the end of the copy"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`append` ändert die Liste, mit der man es aufruft, und gibt selbst nichts zurück. Hier ist das die Kopie, die Originalliste bleibt unberührt.\n\nBei `[\"a\"]` und `\"b\"` wird `copy` zu `[\"a\", \"b\"]`.",
+        "en": "`append` changes the list it is called on and returns nothing itself. Here that is the copy, the original list stays untouched.\n\nWith `[\"a\"]` and `\"b\"` the `copy` becomes `[\"a\", \"b\"]`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die Kopie mit dem neuen Element zurück",
+          "en": "Returns the copy with the new item"
+        },
+        {
+          "de": "Gibt die ursprüngliche Liste unverändert zurück",
+          "en": "Returns the original list unchanged"
+        },
+        {
+          "de": "Gibt nur das neue Element zurück",
+          "en": "Returns only the new item"
+        },
+        {
+          "de": "Gibt None zurück, weil append nichts zurückgibt",
+          "en": "Returns None because append returns nothing"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Zurück kommt die erweiterte Kopie: `with_new_item([\"a\"], \"b\")` ergibt `[\"a\", \"b\"]`.\n\nDie Liste `[\"a\"]` des Aufrufers bleibt, wie sie war.",
+        "en": "The extended copy comes back: `with_new_item([\"a\"], \"b\")` gives `[\"a\", \"b\"]`.\n\nThe caller's list `[\"a\"]` stays as it was."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Hängt item an die ursprüngliche Liste an und gibt sie zurück",
+        "en": "Appends item to the original list and returns it"
+      },
+      {
+        "de": "Gibt eine neue Liste mit dem Element am Ende zurück, ohne die ursprüngliche Liste zu verändern",
+        "en": "Returns a new list with the item at the end, without changing the original list"
+      },
+      {
+        "de": "Gibt nur das neue Element in einer Liste zurück",
+        "en": "Returns only the new item in a list"
+      },
+      {
+        "de": "Gibt die ursprüngliche Liste unverändert zurück",
+        "en": "Returns the original list unchanged"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`with_new_item([], 1)` gibt `[1]` zurück. Wer eine Liste nicht verändern will, arbeitet auf einer Kopie.",
+      "en": "`with_new_item([], 1)` returns `[1]`. If you do not want to change a list, you work on a copy."
+    }
+  }
+}

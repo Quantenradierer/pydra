@@ -1,0 +1,187 @@
+{
+  "id": "divisibility",
+  "code": "def divisibility(n):\n    if n % 2 == 0 and n % 3 == 0:\n        return \"both\"\n    if n % 2 == 0 or n % 3 == 0:\n        return \"one\"\n    return \"none\"",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion divisibility mit dem Parameter n",
+          "en": "Defines a function divisibility with the parameter n"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion divisibility auf",
+          "en": "Calls the built-in function divisibility"
+        },
+        {
+          "de": "Legt eine Variable divisibility an, die n enthält",
+          "en": "Creates a variable divisibility that holds n"
+        },
+        {
+          "de": "Führt divisibility sofort aus und zeigt das Ergebnis an",
+          "en": "Runs divisibility right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`divisibility` („Teilbarkeit“) fragt, durch wie viele der Zahlen 2 und 3 sich `n` teilen lässt. `n` ist die Zahl, die geprüft wird.",
+        "en": "`divisibility` asks by how many of the numbers 2 and 3 `n` can be divided. `n` is the number being checked."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob n durch 2 oder durch 3 teilbar ist",
+          "en": "Checks whether n is divisible by 2 or by 3"
+        },
+        {
+          "de": "Prüft, ob n sowohl durch 2 als auch durch 3 teilbar ist",
+          "en": "Checks whether n is divisible by both 2 and 3"
+        },
+        {
+          "de": "Prüft, ob n durch 5 teilbar ist",
+          "en": "Checks whether n is divisible by 5"
+        },
+        {
+          "de": "Prüft, ob n gleich 2 und gleich 3 ist",
+          "en": "Checks whether n equals 2 and equals 3"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`n % 2 == 0` heißt „bei Teilung durch 2 bleibt kein Rest“. `and` verlangt, dass beide Hälften stimmen.\n\nBei 6 stimmen beide, bei 4 nur die erste, daher läuft das `if` nur für 6, 12, 18 und so weiter.",
+        "en": "`n % 2 == 0` means \"dividing by 2 leaves no remainder\". `and` demands that both halves are true.\n\nFor 6 both are true, for 4 only the first, so the `if` runs only for 6, 12, 18 and so on."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt \"one\" zurück",
+          "en": "Returns \"one\""
+        },
+        {
+          "de": "Gibt True zurück",
+          "en": "Returns True"
+        },
+        {
+          "de": "Gibt \"both\" zurück",
+          "en": "Returns \"both\""
+        },
+        {
+          "de": "Gibt \"both\" für jede gerade Zahl zurück",
+          "en": "Returns \"both\" for every even number"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile läuft nur, wenn beide Teilungen aufgehen: `divisibility(6)` gibt `\"both\"` zurück.\n\nGerade Zahlen wie 4 gehören nicht dazu.",
+        "en": "The line only runs if both divisions come out even: `divisibility(6)` returns `\"both\"`.\n\nEven numbers like 4 do not belong here."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob n durch 2 und durch 3 teilbar ist",
+          "en": "Checks whether n is divisible by 2 and by 3"
+        },
+        {
+          "de": "Prüft, ob n durch 2 teilbar ist, sonst nichts",
+          "en": "Checks whether n is divisible by 2, nothing else"
+        },
+        {
+          "de": "Prüft, ob n entweder 2 oder 3 ist",
+          "en": "Checks whether n is either 2 or 3"
+        },
+        {
+          "de": "Prüft, ob n durch 2 oder durch 3 teilbar ist; es genügt eines von beiden",
+          "en": "Checks whether n is divisible by 2 or by 3; one of them is enough"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`or` genügt, wenn mindestens eine Seite stimmt. Bei 4 gilt `4 % 2 == 0`, bei 9 gilt `9 % 3 == 0`.\n\nDer Fall „beide“ wurde schon oben abgefangen, hier bleibt also genau „eines“.",
+        "en": "`or` is enough if at least one side is true. For 4, `4 % 2 == 0` holds, for 9 `9 % 3 == 0` holds.\n\nThe case \"both\" was caught above already, so exactly \"one\" remains here."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt \"one\" zurück",
+          "en": "Returns \"one\""
+        },
+        {
+          "de": "Gibt \"both\" zurück",
+          "en": "Returns \"both\""
+        },
+        {
+          "de": "Gibt \"none\" zurück",
+          "en": "Returns \"none\""
+        },
+        {
+          "de": "Gibt die Zahl 1 zurück",
+          "en": "Returns the number 1"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`divisibility(4)` und `divisibility(9)` enden beide hier mit `\"one\"`.\n\nWelche der beiden Zahlen es war, verrät das Ergebnis nicht.",
+        "en": "`divisibility(4)` and `divisibility(9)` both end here with `\"one\"`.\n\nThe result does not tell which of the two numbers it was."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt \"none\" zurück, wenn n gerade ist",
+          "en": "Returns \"none\" if n is even"
+        },
+        {
+          "de": "Gibt \"none\" zurück; die Zeile wird erreicht, wenn n durch keine der beiden Zahlen teilbar ist",
+          "en": "Returns \"none\"; the line is reached if n is divisible by neither of the two numbers"
+        },
+        {
+          "de": "Gibt None zurück",
+          "en": "Returns None"
+        },
+        {
+          "de": "Gibt \"none\" zurück, auch wenn n durch 2 teilbar ist",
+          "en": "Returns \"none\" even when n is divisible by 2"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Alles, was oben nicht hängen blieb, landet hier: `divisibility(5)` gibt `\"none\"` zurück.\n\nDer Text `\"none\"` in Anführungszeichen ist etwas anderes als der Wert `None`.",
+        "en": "Everything that did not get caught above ends up here: `divisibility(5)` returns `\"none\"`.\n\nThe text `\"none\"` in quotes is something different from the value `None`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt \"both\" zurück, wenn n durch 2 oder 3 teilbar ist",
+        "en": "Returns \"both\" if n is divisible by 2 or 3"
+      },
+      {
+        "de": "Gibt die Zahl der Teiler von n zurück",
+        "en": "Returns the number of divisors of n"
+      },
+      {
+        "de": "Gibt \"both\" zurück, wenn n durch 2 und 3 teilbar ist, \"one\" bei genau einer von beiden und sonst \"none\"",
+        "en": "Returns \"both\" if n is divisible by 2 and 3, \"one\" for exactly one of them and otherwise \"none\""
+      },
+      {
+        "de": "Gibt True zurück, wenn n durch 6 teilbar ist",
+        "en": "Returns True if n is divisible by 6"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`divisibility(6)` ist `\"both\"`, `divisibility(4)` ist `\"one\"`, `divisibility(9)` ist `\"one\"`, `divisibility(5)` ist `\"none\"`. Das strengere `and` steht oben, das lockerere `or` darunter.",
+      "en": "`divisibility(6)` is `\"both\"`, `divisibility(4)` is `\"one\"`, `divisibility(9)` is `\"one\"`, `divisibility(5)` is `\"none\"`. The stricter `and` comes first, the looser `or` below it."
+    }
+  }
+}

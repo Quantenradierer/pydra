@@ -1,0 +1,135 @@
+{
+  "id": "common-items",
+  "code": "def common_items(a, b):\n    shared = set(a) & set(b)\n    ordered = sorted(shared)\n    return ordered",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion common_items auf",
+          "en": "Calls the built-in function common_items"
+        },
+        {
+          "de": "Definiert eine Funktion common_items mit den Parametern a und b",
+          "en": "Defines a function common_items with the parameters a and b"
+        },
+        {
+          "de": "Legt eine Variable common_items an, die a, b enthält",
+          "en": "Creates a variable common_items that holds a, b"
+        },
+        {
+          "de": "Führt common_items sofort aus und zeigt das Ergebnis an",
+          "en": "Runs common_items right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`common_items` heißt „gemeinsame Elemente“. `a` und `b` sind zwei Listen, etwa `[1, 2, 3]` und `[2, 3, 4]`.",
+        "en": "`common_items` means \"shared items\". `a` and `b` are two lists, such as `[1, 2, 3]` and `[2, 3, 4]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Bildet die Vereinigung: alle Werte aus beiden Listen",
+          "en": "Forms the union: all values from both lists"
+        },
+        {
+          "de": "Hängt die Liste b hinten an die Liste a an",
+          "en": "Appends the list b to the end of the list a"
+        },
+        {
+          "de": "Bildet die Schnittmenge: alle Werte, die in beiden Listen vorkommen",
+          "en": "Forms the intersection: all values that occur in both lists"
+        },
+        {
+          "de": "Prüft, ob a und b gleich sind",
+          "en": "Checks whether a and b are the same"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`set(a)` und `set(b)` machen Mengen aus den Listen. Das `&` behält nur, was in beiden steckt: `{1, 2, 3} & {2, 3, 4}` ist `{2, 3}`.\n\nDas ist die „Schnittmenge“.",
+        "en": "`set(a)` and `set(b)` turn the lists into sets. The `&` keeps only what is in both: `{1, 2, 3} & {2, 3, 4}` is `{2, 3}`.\n\nThat is the \"intersection\"."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt die Menge in einer festen Reihenfolge zurück, ohne sie zu sortieren",
+          "en": "Returns the set in a fixed order without sorting"
+        },
+        {
+          "de": "Sortiert die Liste a",
+          "en": "Sorts the list a"
+        },
+        {
+          "de": "Zählt die Werte der Menge",
+          "en": "Counts the values of the set"
+        },
+        {
+          "de": "Sortiert die Werte der Menge und macht daraus eine Liste",
+          "en": "Sorts the values of the set and makes a list of them"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Mengen haben keine feste Reihenfolge, `sorted` liefert immer eine Liste und bringt Ordnung hinein. Aus `{2, 3}` wird `[2, 3]`.\n\nSo ist das Ergebnis jedes Mal gleich und gut vergleichbar.",
+        "en": "Sets have no fixed order, `sorted` always gives a list and brings order into it. `{2, 3}` becomes `[2, 3]`.\n\nSo the result is the same every time and easy to compare."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die sortierte Liste der gemeinsamen Werte zurück",
+          "en": "Returns the sorted list of the shared values"
+        },
+        {
+          "de": "Gibt die Menge der gemeinsamen Werte zurück",
+          "en": "Returns the set of the shared values"
+        },
+        {
+          "de": "Gibt die Anzahl der gemeinsamen Werte zurück",
+          "en": "Returns the number of shared values"
+        },
+        {
+          "de": "Gibt alle Werte beider Listen zurück",
+          "en": "Returns all values of both lists"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`common_items([1, 2, 3], [2, 3, 4])` gibt `[2, 3]` zurück, `common_items([1], [2])` gibt `[]` zurück.\n\nHaben die Listen nichts gemeinsam, bleibt die Liste leer.",
+        "en": "`common_items([1, 2, 3], [2, 3, 4])` returns `[2, 3]`, `common_items([1], [2])` returns `[]`.\n\nIf the lists have nothing in common, the list stays empty."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt alle Werte beider Listen zurück",
+        "en": "Returns all values from both lists"
+      },
+      {
+        "de": "Gibt die Werte zurück, die in beiden Listen vorkommen, sortiert und ohne Doppelte: common_items([1, 2, 3], [2, 3, 4]) ergibt [2, 3]",
+        "en": "Returns the values that occur in both lists, sorted and without repeats: common_items([1, 2, 3], [2, 3, 4]) gives [2, 3]"
+      },
+      {
+        "de": "Gibt die Werte zurück, die nur in einer der Listen vorkommen",
+        "en": "Returns the values that occur in only one of the lists"
+      },
+      {
+        "de": "Gibt True zurück, wenn die Listen gleich sind",
+        "en": "Returns True if the lists are the same"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Mengen sind für solche Fragen gemacht: `&` bildet die Schnittmenge, ganz ohne Schleife.",
+      "en": "Sets are made for such questions: `&` forms the intersection, with no loop at all."
+    }
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "id": "digit-sum",
+  "code": "def digit_sum(number):\n    total = 0\n    while number > 0:\n        total += number % 10\n        number //= 10\n    return total",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion digit_sum auf",
+          "en": "Calls the built-in function digit_sum"
+        },
+        {
+          "de": "Legt eine Variable digit_sum an, die number enthält",
+          "en": "Creates a variable digit_sum that holds number"
+        },
+        {
+          "de": "Definiert eine Funktion digit_sum mit dem Parameter number",
+          "en": "Defines a function digit_sum with the parameter number"
+        },
+        {
+          "de": "Führt digit_sum sofort aus und zeigt das Ergebnis an",
+          "en": "Runs digit_sum right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`digit_sum` heißt „Quersumme“. `number` ist eine ganze Zahl, etwa `123`.",
+        "en": "`digit_sum` computes the sum of a number's digits. `number` is a whole number, such as `123`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Setzt total auf die Zahl number",
+          "en": "Sets total to the number number"
+        },
+        {
+          "de": "Zählt die Ziffern von number",
+          "en": "Counts the digits of number"
+        },
+        {
+          "de": "Legt total an und setzt es auf 0",
+          "en": "Creates total and sets it to 0"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`total` sammelt die Ziffern und beginnt bei 0, wie bei jeder Summe.\n\nDie Variable entsteht vor der Schleife.",
+        "en": "`total` collects the digits and starts at 0, as with every sum.\n\nThe variable is created before the loop."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil, solange number größer als 0 ist",
+          "en": "Repeats the indented part as long as number is greater than 0"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Ziffer von number",
+          "en": "Repeats the indented part for each digit of number"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil genau number-mal",
+          "en": "Repeats the indented part exactly number times"
+        },
+        {
+          "de": "Prüft einmal, ob number größer als 0 ist",
+          "en": "Checks once whether number is greater than 0"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Weil number im Rumpf schrumpft, endet die Schleife irgendwann: Aus `123` wird 12, dann 1, dann 0.\n\nIst die Bedingung dann nicht mehr wahr, geht es hinter der Schleife weiter.",
+        "en": "Because number shrinks in the body, the loop ends at some point: `123` becomes 12, then 1, then 0.\n\nOnce the condition is no longer true, it carries on after the loop."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Addiert die erste Ziffer von number zu total",
+          "en": "Adds the first digit of number to total"
+        },
+        {
+          "de": "Addiert die letzte Ziffer von number zu total",
+          "en": "Adds the last digit of number to total"
+        },
+        {
+          "de": "Addiert number geteilt durch 10 zu total",
+          "en": "Adds number divided by 10 to total"
+        },
+        {
+          "de": "Addiert 10 zu total",
+          "en": "Adds 10 to total"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`number % 10` ist der Rest bei Teilung durch 10, also die letzte Ziffer: bei `123` die `3`.\n\nDie Ziffern werden also von hinten nach vorn abgeholt.",
+        "en": "`number % 10` is the remainder when dividing by 10, so the last digit: the `3` for `123`.\n\nSo the digits are picked up from back to front."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Teilt number durch 10 mit Nachkommastellen",
+          "en": "Divides number by 10 with decimal places"
+        },
+        {
+          "de": "Setzt number auf 10",
+          "en": "Sets number to 10"
+        },
+        {
+          "de": "Teilt number ganzzahlig durch 10 und schneidet damit die letzte Ziffer ab",
+          "en": "Divides number by 10 as a whole number and so cuts off the last digit"
+        },
+        {
+          "de": "Zieht 10 von number ab",
+          "en": "Subtracts 10 from number"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`//=` ist die Kurzform von `number = number // 10`. Aus `123` wird `12`, denn der Rest wird abgeschnitten.\n\nOhne diese Zeile bliebe `number` immer gleich und die Schleife endlos.",
+        "en": "`//=` is the short form of `number = number // 10`. `123` becomes `12`, since the remainder is cut off.\n\nWithout this line `number` would never change and the loop would be endless."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt number zurück, das jetzt 0 ist",
+          "en": "Returns number, which is 0 now"
+        },
+        {
+          "de": "Gibt die letzte Ziffer zurück",
+          "en": "Returns the last digit"
+        },
+        {
+          "de": "Gibt in jeder Runde einen Zwischenstand zurück",
+          "en": "Returns a partial result in every pass"
+        },
+        {
+          "de": "Gibt die fertige Quersumme zurück, nachdem die Schleife durch ist",
+          "en": "Returns the finished digit sum after the loop is done"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Nach dem Ende der Schleife ist `total` fertig: 3, dann 3+2=5, dann 5+1=6. `digit_sum(123)` gibt `6` zurück.\n\n`digit_sum(0)` gibt `0` zurück, weil die Schleife gar nicht läuft.",
+        "en": "When the loop ends, `total` is ready: 3, then 3+2=5, then 5+1=6. `digit_sum(123)` returns `6`.\n\n`digit_sum(0)` returns `0`, because the loop does not run at all."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Quersumme einer Zahl zurück: digit_sum(123) ergibt 6",
+        "en": "Returns the sum of the digits of a number: digit_sum(123) gives 6"
+      },
+      {
+        "de": "Gibt die Anzahl der Ziffern der Zahl zurück",
+        "en": "Returns the number of digits of the number"
+      },
+      {
+        "de": "Gibt die Zahl rückwärts zurück: 321",
+        "en": "Returns the number backwards: 321"
+      },
+      {
+        "de": "Gibt die größte Ziffer der Zahl zurück",
+        "en": "Returns the biggest digit of the number"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`% 10` holt die letzte Ziffer, `// 10` wirft sie weg. Beides zusammen in einer `while`-Schleife zerlegt jede Zahl in ihre Ziffern.",
+      "en": "`% 10` fetches the last digit, `// 10` throws it away. Both together in a `while` loop break any number into its digits."
+    }
+  }
+}

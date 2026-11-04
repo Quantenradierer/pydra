@@ -1,0 +1,135 @@
+{
+  "id": "parse-and-add",
+  "code": "def parse_and_add(a_text, b_text):\n    a = int(a_text)\n    b = int(b_text)\n    return a + b",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion parse_and_add auf",
+          "en": "Calls the built-in function parse_and_add"
+        },
+        {
+          "de": "Legt eine Variable parse_and_add an, die a_text, b_text enthält",
+          "en": "Creates a variable parse_and_add that holds a_text, b_text"
+        },
+        {
+          "de": "Führt parse_and_add sofort aus und zeigt das Ergebnis an",
+          "en": "Runs parse_and_add right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion parse_and_add mit den Parametern a_text und b_text",
+          "en": "Defines a function parse_and_add with the parameters a_text and b_text"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`parse` heißt „einlesen“: Aus Text wird eine Zahl. Beide Parameter sind hier Texte, etwa `parse_and_add(\"3\", \"4\")`.\n\nDas `_text` im Namen erinnert daran, dass es noch keine Zahlen sind.",
+        "en": "`parse` means \"read in\": text becomes a number. Both parameters are texts here, as in `parse_and_add(\"3\", \"4\")`.\n\nThe `_text` in the name is a reminder that they are not numbers yet."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Wandelt den Text a_text in eine ganze Zahl um und speichert sie in a",
+          "en": "Converts the text a_text into a whole number and stores it in a"
+        },
+        {
+          "de": "Wandelt a_text in einen Text um",
+          "en": "Converts a_text into a text"
+        },
+        {
+          "de": "Prüft, ob a_text eine ganze Zahl ist, und gibt True oder False",
+          "en": "Checks whether a_text is a whole number and gives True or False"
+        },
+        {
+          "de": "Rundet a_text auf eine ganze Zahl",
+          "en": "Rounds a_text to a whole number"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`int(\"3\")` macht aus dem Text `\"3\"` die Zahl `3`. Ohne diese Umwandlung wäre `\"3\" + \"4\"` der Text `\"34\"`.\n\nGeht der Text nicht als Zahl (zum Beispiel `\"abc\"`), gibt es einen Fehler.",
+        "en": "`int(\"3\")` turns the text `\"3\"` into the number `3`. Without this conversion `\"3\" + \"4\"` would be the text `\"34\"`.\n\nIf the text is not a number (such as `\"abc\"`), there is an error."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Hängt b_text an a an",
+          "en": "Appends b_text to a"
+        },
+        {
+          "de": "Wandelt den Text b_text in eine ganze Zahl um und speichert sie in b",
+          "en": "Converts the text b_text into a whole number and stores it in b"
+        },
+        {
+          "de": "Speichert b_text unverändert in b",
+          "en": "Stores b_text unchanged in b"
+        },
+        {
+          "de": "Vergleicht b_text mit b",
+          "en": "Compares b_text with b"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Genau dasselbe für den zweiten Text: aus `\"4\"` wird `4`. Nach den beiden Zeilen sind `a` und `b` echte Zahlen.\n\nDie Parameter `a_text` und `b_text` selbst bleiben Texte.",
+        "en": "Exactly the same for the second text: `\"4\"` becomes `4`. After the two lines `a` and `b` are real numbers.\n\nThe parameters `a_text` and `b_text` themselves stay texts."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die beiden Texte hintereinander zurück",
+          "en": "Returns the two texts one after the other"
+        },
+        {
+          "de": "Gibt die beiden Zahlen als Liste zurück",
+          "en": "Returns the two numbers as a list"
+        },
+        {
+          "de": "Gibt die Summe der beiden Zahlen zurück",
+          "en": "Returns the sum of the two numbers"
+        },
+        {
+          "de": "Zeigt die Summe auf dem Bildschirm an",
+          "en": "Prints the sum on the screen"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Weil `a` und `b` Zahlen sind, rechnet `+` hier wirklich: `3 + 4` ist `7`. Bei Texten würde `+` dagegen aneinanderhängen.\n\nDie Summe kommt per `return` an den Aufrufer.",
+        "en": "Because `a` and `b` are numbers, `+` really adds here: `3 + 4` is `7`. With texts, `+` would join them instead.\n\nThe sum goes back to the caller via `return`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Hängt die beiden Texte aneinander: \"34\"",
+        "en": "Joins the two texts together: \"34\""
+      },
+      {
+        "de": "Gibt die größere der beiden Zahlen zurück",
+        "en": "Returns the bigger of the two numbers"
+      },
+      {
+        "de": "Gibt True zurück, wenn beide Texte Zahlen sind",
+        "en": "Returns True if both texts are numbers"
+      },
+      {
+        "de": "Wandelt zwei Texte in Zahlen um und gibt ihre Summe zurück: parse_and_add(\"3\", \"4\") ergibt 7",
+        "en": "Converts two texts to numbers and returns their sum: parse_and_add(\"3\", \"4\") gives 7"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Eingaben von Nutzern kommen oft als Text. Erst mit `int(...)` kann man damit rechnen: `parse_and_add(\"10\", \"5\")` gibt `15` zurück.",
+      "en": "Input from users often arrives as text. Only with `int(...)` can you calculate with it: `parse_and_add(\"10\", \"5\")` returns `15`."
+    }
+  }
+}

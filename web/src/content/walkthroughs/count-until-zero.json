@@ -1,0 +1,213 @@
+{
+  "id": "count-until-zero",
+  "code": "def count_until_zero(numbers):\n    count = 0\n    for n in numbers:\n        if n == 0:\n            break\n        count += 1\n    return count",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion count_until_zero auf",
+          "en": "Calls the built-in function count_until_zero"
+        },
+        {
+          "de": "Definiert eine Funktion count_until_zero mit dem Parameter numbers",
+          "en": "Defines a function count_until_zero with the parameter numbers"
+        },
+        {
+          "de": "Legt eine Variable count_until_zero an, die numbers enthält",
+          "en": "Creates a variable count_until_zero that holds numbers"
+        },
+        {
+          "de": "Führt count_until_zero sofort aus und zeigt das Ergebnis an",
+          "en": "Runs count_until_zero right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`count_until_zero` zählt die Zahlen vor der ersten Null. `numbers` ist die Liste, etwa `[5, 3, 0, 7]`.",
+        "en": "`count_until_zero` counts the numbers before the first zero. `numbers` is the list, such as `[5, 3, 0, 7]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Zählt die Nullen in der Liste",
+          "en": "Counts the zeros in the list"
+        },
+        {
+          "de": "Legt den Zähler count an und setzt ihn auf 0",
+          "en": "Creates the counter count and sets it to 0"
+        },
+        {
+          "de": "Setzt count auf die Länge der Liste",
+          "en": "Sets count to the length of the list"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Ein Zähler beginnt bei 0, noch wurde nichts gezählt. Die Variable muss vor der Schleife entstehen.\n\nSpäter wird sie bei jeder gültigen Zahl um 1 erhöht.",
+        "en": "A counter starts at 0, nothing has been counted yet. The variable must be created before the loop.\n\nLater it is raised by 1 for every valid number."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Null der Liste",
+          "en": "Repeats the indented part for each zero in the list"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil genau count-mal",
+          "en": "Repeats the indented part exactly count times"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil nur bis zur ersten Null, bevor es losgeht",
+          "en": "Repeats the indented part only up to the first zero, decided before it begins"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Zahl der Liste, von vorn nach hinten",
+          "en": "Repeats the indented part for each number of the list, from front to back"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Schleife nimmt die Zahlen in der Reihenfolge der Liste. Wann sie aufhört, entscheiden die Zeilen darin, nicht die erste Zeile.\n\nBei `[5, 3, 0, 7]` wäre `n` zuerst 5, dann 3, dann 0.",
+        "en": "The loop takes the numbers in the order of the list. When it stops is decided by the lines inside it, not the first line.\n\nFor `[5, 3, 0, 7]`, `n` would be 5 first, then 3, then 0."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob die aktuelle Zahl 0 ist",
+          "en": "Checks whether the current number is 0"
+        },
+        {
+          "de": "Setzt n auf 0",
+          "en": "Sets n to 0"
+        },
+        {
+          "de": "Prüft, ob count gleich 0 ist",
+          "en": "Checks whether count equals 0"
+        },
+        {
+          "de": "Prüft, ob die Liste leer ist",
+          "en": "Checks whether the list is empty"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Der Vergleich `n == 0` betrifft die aktuelle Zahl. Bei 5 und 3 stimmt er nicht, bei der 0 stimmt er.\n\nDann läuft die Zeile darunter.",
+        "en": "The comparison `n == 0` concerns the current number. For 5 and 3 it is not true, for the 0 it is.\n\nThen the line below runs."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Springt zum nächsten Durchlauf der Schleife",
+          "en": "Jumps to the next pass of the loop"
+        },
+        {
+          "de": "Bricht die Schleife sofort ganz ab und macht hinter der Schleife weiter",
+          "en": "Stops the loop completely right away and carries on after the loop"
+        },
+        {
+          "de": "Beendet die Funktion und gibt 0 zurück",
+          "en": "Ends the function and returns 0"
+        },
+        {
+          "de": "Setzt count auf 0 zurück",
+          "en": "Resets count to 0"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`break` verlässt die Schleife, auch wenn noch Zahlen übrig wären. Die 7 in `[5, 3, 0, 7]` wird nie angesehen.\n\nDie Funktion läuft weiter bis zum `return` unten.",
+        "en": "`break` leaves the loop even though numbers would be left. The 7 in `[5, 3, 0, 7]` is never looked at.\n\nThe function carries on to the `return` at the bottom."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Erhöht count um n",
+          "en": "Raises count by n"
+        },
+        {
+          "de": "Erhöht count in jeder Runde um 1, auch für die Null",
+          "en": "Raises count by 1 in every pass, the zero included"
+        },
+        {
+          "de": "Erhöht count um 1; die Zeile wird nur für Zahlen erreicht, die nicht 0 sind",
+          "en": "Raises count by 1; the line is only reached for numbers that are not 0"
+        },
+        {
+          "de": "Setzt count auf 1",
+          "en": "Sets count to 1"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`count += 1` zählt eins weiter. Die Null selbst wird nicht mitgezählt, weil `break` vorher zugeschlagen hat.\n\nBei `[5, 3, 0, 7]` wird so zweimal gezählt.",
+        "en": "`count += 1` counts one more. The zero itself is not counted, because `break` struck before.\n\nFor `[5, 3, 0, 7]` it counts twice this way."
+      }
+    },
+    {
+      "line": 7,
+      "choices": [
+        {
+          "de": "Gibt die Position der ersten Null zurück",
+          "en": "Returns the position of the first zero"
+        },
+        {
+          "de": "Gibt die Zahl 0 zurück",
+          "en": "Returns the number 0"
+        },
+        {
+          "de": "Gibt die Summe der Zahlen vor der Null zurück",
+          "en": "Returns the sum of the numbers before the zero"
+        },
+        {
+          "de": "Gibt den Zählerstand zurück, nachdem die Schleife zu Ende ist oder abgebrochen wurde",
+          "en": "Returns the counter value after the loop has finished or was stopped"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Beide Wege, regulär oder per `break`, enden hier. `count_until_zero([5, 3, 0, 7])` gibt `2` zurück, `count_until_zero([1, 2])` gibt `2` zurück.\n\nGibt es keine Null, werden alle Zahlen gezählt.",
+        "en": "Both paths, regular and via `break`, end here. `count_until_zero([5, 3, 0, 7])` returns `2`, `count_until_zero([1, 2])` returns `2`.\n\nIf there is no zero, all the numbers are counted."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Zählt, wie viele Zahlen vor der ersten 0 stehen: count_until_zero([5, 3, 0, 7]) ergibt 2",
+        "en": "Counts how many numbers come before the first 0: count_until_zero([5, 3, 0, 7]) gives 2"
+      },
+      {
+        "de": "Zählt, wie viele Nullen in der Liste sind",
+        "en": "Counts how many zeros are in the list"
+      },
+      {
+        "de": "Gibt die Länge der Liste zurück",
+        "en": "Returns the length of the list"
+      },
+      {
+        "de": "Gibt die Position der ersten Null zurück oder -1",
+        "en": "Returns the position of the first zero or -1"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Mit `break` bricht man eine Schleife vorzeitig ab. Alles, was hinter der ersten 0 steht, interessiert die Funktion nicht mehr.",
+      "en": "With `break` you stop a loop early. Anything after the first 0 no longer matters to the function."
+    }
+  }
+}

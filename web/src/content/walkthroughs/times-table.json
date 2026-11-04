@@ -1,0 +1,161 @@
+{
+  "id": "times-table",
+  "code": "def times_table(n):\n    result = []\n    for i in range(1, 6):\n        result.append(n * i)\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion times_table auf",
+          "en": "Calls the built-in function times_table"
+        },
+        {
+          "de": "Legt eine Variable times_table an, die n enthält",
+          "en": "Creates a variable times_table that holds n"
+        },
+        {
+          "de": "Definiert eine Funktion times_table mit dem Parameter n",
+          "en": "Defines a function times_table with the parameter n"
+        },
+        {
+          "de": "Führt times_table sofort aus und zeigt das Ergebnis an",
+          "en": "Runs times_table right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`times_table` heißt „Einmaleins-Reihe“. `n` ist die Zahl, deren Reihe berechnet wird, etwa `3`.",
+        "en": "`times_table` means \"multiplication table\". `n` is the number whose table is calculated, such as `3`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Liste mit dem Wert n an",
+          "en": "Creates a list holding the value n"
+        },
+        {
+          "de": "Setzt result auf 0",
+          "en": "Sets result to 0"
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Legt eine leere Liste result an",
+          "en": "Creates an empty list result"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Liste ist zunächst leer und wird in der Schleife gefüllt. Danach wird sie mit `return` abgegeben.\n\nDas Muster „leere Liste, Schleife, `append`, `return`“ kommt immer wieder vor.",
+        "en": "The list is empty at first and filled in the loop. Afterwards it is handed back with `return`.\n\nThe pattern \"empty list, loop, `append`, `return`\" comes up again and again."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für i gleich 1, 2, 3, 4 und 5",
+          "en": "Repeats the indented part for i equal to 1, 2, 3, 4 and 5"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für i gleich 1, 2, 3, 4, 5 und 6",
+          "en": "Repeats the indented part for i equal to 1, 2, 3, 4, 5 and 6"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für i gleich 0, 1, 2, 3, 4 und 5",
+          "en": "Repeats the indented part for i equal to 0, 1, 2, 3, 4 and 5"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil genau 6-mal",
+          "en": "Repeats the indented part exactly 6 times"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`range(1, 6)` beginnt bei 1 und hört vor 6 auf, liefert also genau 5 Zahlen.\n\nDer Endwert gehört nie dazu: das ist die wichtigste Regel bei `range`.",
+        "en": "`range(1, 6)` starts at 1 and stops before 6, so it gives exactly 5 numbers.\n\nThe end value is never included: that is the most important rule of `range`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Hängt n und i als Paar an die Liste an",
+          "en": "Appends n and i as a pair to the list"
+        },
+        {
+          "de": "Hängt das Produkt n mal i an die Liste an",
+          "en": "Appends the product n times i to the list"
+        },
+        {
+          "de": "Hängt nur i an die Liste an",
+          "en": "Appends only i to the list"
+        },
+        {
+          "de": "Ersetzt n durch n mal i",
+          "en": "Replaces n with n times i"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Das Produkt wird ausgerechnet und dann angehängt. Bei `n = 3` kommen nacheinander `3 * 1`, `3 * 2`, ... `3 * 5` in die Liste.\n\nAlso 3, 6, 9, 12 und 15.",
+        "en": "The product is worked out and then appended. With `n = 3`, `3 * 1`, `3 * 2`, ... `3 * 5` go into the list one after another.\n\nThat is 3, 6, 9, 12 and 15."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt in jedem Durchlauf die Liste zurück",
+          "en": "Returns the list in every pass"
+        },
+        {
+          "de": "Gibt die letzte Zahl der Reihe zurück",
+          "en": "Returns the last number of the series"
+        },
+        {
+          "de": "Gibt die fertige Liste zurück, nachdem die Schleife durch ist",
+          "en": "Returns the finished list after the loop is done"
+        },
+        {
+          "de": "Gibt die Summe der Liste zurück",
+          "en": "Returns the sum of the list"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile steht außerhalb der Schleife und läuft erst, wenn alle fünf Werte in der Liste sind.\n\n`times_table(3)` gibt `[3, 6, 9, 12, 15]` zurück.",
+        "en": "The line is outside the loop and only runs once all five values are in the list.\n\n`times_table(3)` returns `[3, 6, 9, 12, 15]`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Zahl n mal 5 zurück",
+        "en": "Returns the number n times 5"
+      },
+      {
+        "de": "Gibt die Summe der ersten fünf Vielfachen zurück",
+        "en": "Returns the sum of the first five multiples"
+      },
+      {
+        "de": "Gibt n mit den Zahlen 1 bis 6 als Liste zurück",
+        "en": "Returns n together with the numbers 1 to 6 as a list"
+      },
+      {
+        "de": "Gibt die ersten fünf Vielfachen von n als Liste zurück: times_table(3) ergibt [3, 6, 9, 12, 15]",
+        "en": "Returns the first five multiples of n as a list: times_table(3) gives [3, 6, 9, 12, 15]"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`times_table(10)` gibt `[10, 20, 30, 40, 50]` zurück. Die Schleifenvariable `i` zählt mit, `n` bleibt in allen Durchläufen gleich.",
+      "en": "`times_table(10)` returns `[10, 20, 30, 40, 50]`. The loop variable `i` counts along, `n` stays the same in all passes."
+    }
+  }
+}

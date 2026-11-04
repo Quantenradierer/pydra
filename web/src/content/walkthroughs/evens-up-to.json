@@ -1,0 +1,161 @@
+{
+  "id": "evens-up-to",
+  "code": "def evens_up_to(limit):\n    result = []\n    for n in range(0, limit + 1, 2):\n        result.append(n)\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion evens_up_to auf",
+          "en": "Calls the built-in function evens_up_to"
+        },
+        {
+          "de": "Definiert eine Funktion evens_up_to mit dem Parameter limit",
+          "en": "Defines a function evens_up_to with the parameter limit"
+        },
+        {
+          "de": "Legt eine Variable evens_up_to an, die limit enthält",
+          "en": "Creates a variable evens_up_to that holds limit"
+        },
+        {
+          "de": "Führt evens_up_to sofort aus und zeigt das Ergebnis an",
+          "en": "Runs evens_up_to right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`evens_up_to` heißt „gerade Zahlen bis“. `limit` ist die Obergrenze, die noch dazugehört, etwa `6`.",
+        "en": "`evens_up_to` means \"even numbers up to\". `limit` is the upper bound, which is still included, such as `6`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Liste mit dem Wert limit an",
+          "en": "Creates a list holding the value limit"
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Legt eine leere Liste result an, in der die Zahlen gesammelt werden",
+          "en": "Creates an empty list result in which the numbers are collected"
+        },
+        {
+          "de": "Legt die Zahl 0 in result ab",
+          "en": "Stores the number 0 in result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Wie oft bei Sammelfunktionen beginnt man mit `[]`. Die Zahlen kommen erst in der Schleife dazu.\n\nSo bleibt das Ergebnis auch bei kleinem `limit` eine Liste.",
+        "en": "As so often with collecting functions, you begin with `[]`. The numbers are only added in the loop.\n\nThis way the result is a list even for a small `limit`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Läuft von 0 bis limit in Einerschritten",
+          "en": "Runs from 0 to limit in steps of one"
+        },
+        {
+          "de": "Läuft von 2 bis limit, jeweils 2 Mal",
+          "en": "Runs from 2 to limit, 2 times each"
+        },
+        {
+          "de": "Läuft von 0 bis limit minus 1",
+          "en": "Runs from 0 to limit minus 1"
+        },
+        {
+          "de": "Läuft von 0 bis limit in Zweierschritten: 0, 2, 4, ...",
+          "en": "Runs from 0 to limit in steps of two: 0, 2, 4, ..."
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`range(start, stop, step)` hört vor `stop` auf. Damit `limit` selbst noch dabei ist, steht `limit + 1` da. Das dritte Argument `2` ist die Schrittweite.\n\nBei `limit = 6` läuft `n` also durch 0, 2, 4 und 6.",
+        "en": "`range(start, stop, step)` stops before `stop`. To keep `limit` itself, it says `limit + 1`. The third argument `2` is the step size.\n\nWith `limit = 6`, `n` runs through 0, 2, 4 and 6."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Hängt die aktuelle Zahl n an die Liste an",
+          "en": "Appends the current number n to the list"
+        },
+        {
+          "de": "Hängt das Wort \"n\" an die Liste an",
+          "en": "Appends the word \"n\" to the list"
+        },
+        {
+          "de": "Ersetzt die Liste durch n",
+          "en": "Replaces the list with n"
+        },
+        {
+          "de": "Zählt n zur Liste dazu",
+          "en": "Adds n to the sum of the list"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Jede Zahl der Schleife landet hinten in `result`. Eine Prüfung auf gerade Zahlen braucht es nicht, `range` liefert nur gerade Werte.\n\nOhne Anführungszeichen ist `n` die Variable.",
+        "en": "Each number from the loop ends up at the back of `result`. No check for evenness is needed, `range` only produces even values.\n\nWithout quotes, `n` is the variable."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt in jedem Durchlauf eine Liste zurück",
+          "en": "Returns a list in every pass"
+        },
+        {
+          "de": "Gibt die fertige Liste zurück, nachdem die Schleife durch ist",
+          "en": "Returns the finished list after the loop is done"
+        },
+        {
+          "de": "Gibt die letzte Zahl der Liste zurück",
+          "en": "Returns the last number of the list"
+        },
+        {
+          "de": "Gibt die Anzahl der geraden Zahlen zurück",
+          "en": "Returns the number of even numbers"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Das `return` steht außerhalb der Schleife. `evens_up_to(6)` gibt `[0, 2, 4, 6]` zurück, `evens_up_to(5)` gibt `[0, 2, 4]` zurück.\n\nBei 5 wird die 6 nicht erreicht, die größte gerade Zahl bis 5 ist 4.",
+        "en": "The `return` is outside the loop. `evens_up_to(6)` returns `[0, 2, 4, 6]`, `evens_up_to(5)` returns `[0, 2, 4]`.\n\nFor 5 the 6 is not reached, the biggest even number up to 5 is 4."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt eine Liste aller Zahlen von 0 bis limit zurück",
+        "en": "Returns a list of all numbers from 0 to limit"
+      },
+      {
+        "de": "Gibt die Anzahl der geraden Zahlen bis limit zurück",
+        "en": "Returns how many even numbers there are up to limit"
+      },
+      {
+        "de": "Gibt eine Liste aller geraden Zahlen von 0 bis limit zurück: evens_up_to(6) ergibt [0, 2, 4, 6]",
+        "en": "Returns a list of all even numbers from 0 to limit: evens_up_to(6) gives [0, 2, 4, 6]"
+      },
+      {
+        "de": "Gibt die größte gerade Zahl unter limit zurück",
+        "en": "Returns the biggest even number below limit"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Der Trick liegt im dritten Argument von `range`: Schrittweite 2 spart die Prüfung auf Teilbarkeit.",
+      "en": "The trick is the third argument of `range`: step size 2 saves checking for divisibility."
+    }
+  }
+}

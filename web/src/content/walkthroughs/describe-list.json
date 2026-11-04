@@ -1,0 +1,187 @@
+{
+  "id": "describe-list",
+  "code": "def describe_list(items):\n    if len(items) == 0:\n        return \"empty\"\n    if len(items) == 1:\n        return \"one item\"\n    return \"many items\"",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion describe_list auf",
+          "en": "Calls the built-in function describe_list"
+        },
+        {
+          "de": "Legt eine Variable describe_list an, die items enthält",
+          "en": "Creates a variable describe_list that holds items"
+        },
+        {
+          "de": "Definiert eine Funktion describe_list mit dem Parameter items",
+          "en": "Defines a function describe_list with the parameter items"
+        },
+        {
+          "de": "Führt describe_list sofort aus und zeigt das Ergebnis an",
+          "en": "Runs describe_list right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`describe_list` heißt „Liste beschreiben“. `items` ist eine Liste, die auch leer sein kann: `[]`.",
+        "en": "`describe_list` means \"describe a list\". `items` is a list that may also be empty: `[]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob die Liste genau ein Element hat",
+          "en": "Checks whether the list has exactly one item"
+        },
+        {
+          "de": "Setzt die Länge der Liste auf 0",
+          "en": "Sets the length of the list to 0"
+        },
+        {
+          "de": "Prüft, ob das erste Element 0 ist",
+          "en": "Checks whether the first item is 0"
+        },
+        {
+          "de": "Prüft, ob die Liste keine Elemente hat",
+          "en": "Checks whether the list has no items"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`len(items)` ist die Anzahl der Elemente, bei `[]` also 0. Die Prüfung `== 0` ist wahr, nur wenn die Liste leer ist.\n\nEine Liste `[0]` ist dagegen nicht leer, sie hat 1 Element.",
+        "en": "`len(items)` is the number of items, so 0 for `[]`. The check `== 0` is only true if the list is empty.\n\nA list `[0]`, by contrast, is not empty, it has 1 item."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt den Text \"empty\" zurück",
+          "en": "Returns the text \"empty\""
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Gibt die Liste unverändert zurück",
+          "en": "Returns the list unchanged"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Die Zeile läuft nur bei einer leeren Liste und beendet die Funktion: `describe_list([])` gibt `\"empty\"` zurück.\n\nDas Wort steht in Anführungszeichen, ist also ein Text.",
+        "en": "The line only runs for an empty list and ends the function: `describe_list([])` returns `\"empty\"`.\n\nThe word is in quotes, so it is a text."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob die Liste mindestens ein Element hat",
+          "en": "Checks whether the list has at least one item"
+        },
+        {
+          "de": "Prüft, ob die Liste genau ein Element hat",
+          "en": "Checks whether the list has exactly one item"
+        },
+        {
+          "de": "Prüft, ob das erste Element 1 ist",
+          "en": "Checks whether the first item is 1"
+        },
+        {
+          "de": "Prüft, ob die Liste leer ist",
+          "en": "Checks whether the list is empty"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Wieder `len(items)`, nun mit `== 1`. Leere Listen sind schon oben abgehandelt.\n\n`describe_list([\"a\"])` besteht diese Prüfung.",
+        "en": "`len(items)` again, now with `== 1`. Empty lists were dealt with above.\n\n`describe_list([\"a\"])` passes this check."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt das einzige Element zurück",
+          "en": "Returns the only item"
+        },
+        {
+          "de": "Gibt 1 zurück",
+          "en": "Returns 1"
+        },
+        {
+          "de": "Gibt den Text \"one item\" zurück",
+          "en": "Returns the text \"one item\""
+        },
+        {
+          "de": "Gibt \"one item\" für jede nichtleere Liste zurück",
+          "en": "Returns \"one item\" for every non-empty list"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Diese Zeile gehört zum zweiten `if` und läuft nur bei Listen mit einem Element: `\"one item\"`.\n\nZurück kommt eine Beschreibung, nicht das Element selbst.",
+        "en": "This line belongs to the second `if` and only runs for lists with one item: `\"one item\"`.\n\nWhat comes back is a description, not the item itself."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt die Anzahl der Elemente zurück",
+          "en": "Returns the number of items"
+        },
+        {
+          "de": "Gibt \"many items\" für jede Liste zurück",
+          "en": "Returns \"many items\" for every list"
+        },
+        {
+          "de": "Gibt \"many items\" nur für leere Listen zurück",
+          "en": "Returns \"many items\" only for empty lists"
+        },
+        {
+          "de": "Gibt \"many items\" zurück; die Zeile wird erreicht, wenn die Liste mehr als ein Element hat",
+          "en": "Returns \"many items\"; the line is reached if the list has more than one item"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Wer weder leer noch einelementig ist, hat mehrere Elemente. `describe_list([1, 2, 3])` gibt `\"many items\"` zurück.\n\nDas ist der Rest, der in keinem `if` hängen blieb.",
+        "en": "Whoever is neither empty nor single-item has several items. `describe_list([1, 2, 3])` returns `\"many items\"`.\n\nThat is the remainder that got stuck in no `if`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Beschreibt eine Liste nach ihrer Länge: \"empty\" bei keinem, \"one item\" bei einem, sonst \"many items\"",
+        "en": "Describes a list by its length: \"empty\" for none, \"one item\" for one, otherwise \"many items\""
+      },
+      {
+        "de": "Gibt die Länge der Liste zurück",
+        "en": "Returns the length of the list"
+      },
+      {
+        "de": "Gibt das erste Element der Liste zurück",
+        "en": "Returns the first item of the list"
+      },
+      {
+        "de": "Gibt True zurück, wenn die Liste Elemente hat",
+        "en": "Returns True if the list has items"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`describe_list([])` ist `\"empty\"`, `describe_list([\"a\"])` ist `\"one item\"`, `describe_list([1, 2, 3])` ist `\"many items\"`.",
+      "en": "`describe_list([])` is `\"empty\"`, `describe_list([\"a\"])` is `\"one item\"`, `describe_list([1, 2, 3])` is `\"many items\"`."
+    }
+  }
+}

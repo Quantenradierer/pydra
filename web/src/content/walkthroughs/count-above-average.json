@@ -1,0 +1,213 @@
+{
+  "id": "count-above-average",
+  "code": "def count_above_average(numbers):\n    average = sum(numbers) / len(numbers)\n    count = 0\n    for n in numbers:\n        if n > average:\n            count += 1\n    return count",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion count_above_average auf",
+          "en": "Calls the built-in function count_above_average"
+        },
+        {
+          "de": "Legt eine Variable count_above_average an, die numbers enthält",
+          "en": "Creates a variable count_above_average that holds numbers"
+        },
+        {
+          "de": "Führt count_above_average sofort aus und zeigt das Ergebnis an",
+          "en": "Runs count_above_average right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion count_above_average mit dem Parameter numbers",
+          "en": "Defines a function count_above_average with the parameter numbers"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`count_above_average` zählt die Zahlen über dem Durchschnitt. `numbers` ist eine nichtleere Liste, etwa `[1, 2, 3, 10]`.",
+        "en": "`count_above_average` counts the numbers above the average. `numbers` is a non-empty list, such as `[1, 2, 3, 10]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Berechnet den Durchschnitt: Summe geteilt durch Anzahl",
+          "en": "Works out the average: the sum divided by the count"
+        },
+        {
+          "de": "Berechnet die Summe der Liste",
+          "en": "Works out the sum of the list"
+        },
+        {
+          "de": "Berechnet die Anzahl der Zahlen über dem Durchschnitt",
+          "en": "Works out how many numbers are above the average"
+        },
+        {
+          "de": "Berechnet den Durchschnitt als Ganzzahl",
+          "en": "Works out the average as a whole number"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`sum(numbers)` ist 16, `len(numbers)` ist 4. `16 / 4` ergibt `4.0`.\n\nBei leerer Liste wäre das ein Fehler (Teilen durch 0), deshalb die nichtleere Liste.",
+        "en": "`sum(numbers)` is 16, `len(numbers)` is 4. `16 / 4` gives `4.0`.\n\nFor an empty list this would be an error (dividing by 0), hence the non-empty list."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Legt den Zähler count an und setzt ihn auf 0",
+          "en": "Creates the counter count and sets it to 0"
+        },
+        {
+          "de": "Setzt count auf den Durchschnitt",
+          "en": "Sets count to the average"
+        },
+        {
+          "de": "Zählt die Elemente der Liste",
+          "en": "Counts the items of the list"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Der Zähler startet bei 0. Er wird in der Schleife nur dann erhöht, wenn eine Zahl über dem Durchschnitt liegt.\n\nDie Variable muss vor der Schleife entstehen.",
+        "en": "The counter starts at 0. In the loop it is only raised when a number is above the average.\n\nThe variable must be created before the loop."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil n-mal",
+          "en": "Repeats the indented part n times"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für die Positionen der Liste",
+          "en": "Repeats the indented part for the positions of the list"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Zahl der Liste; n ist die aktuelle Zahl",
+          "en": "Repeats the indented part for each number of the list; n is the current number"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil nur für Zahlen über dem Durchschnitt",
+          "en": "Repeats the indented part only for numbers above the average"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Liste wird hier ein zweites Mal durchlaufen: Erst brauchte man alle Zahlen für den Durchschnitt, jetzt vergleicht man jede einzelne.\n\n`n` ist nacheinander 1, 2, 3 und 10.",
+        "en": "The list is walked through a second time here: first all the numbers were needed for the average, now each one is compared.\n\n`n` is 1, 2, 3 and 10 in turn."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Prüft, ob die aktuelle Zahl gleich dem Durchschnitt ist",
+          "en": "Checks whether the current number equals the average"
+        },
+        {
+          "de": "Prüft, ob die aktuelle Zahl kleiner als der Durchschnitt ist",
+          "en": "Checks whether the current number is less than the average"
+        },
+        {
+          "de": "Setzt n auf den Durchschnitt",
+          "en": "Sets n to the average"
+        },
+        {
+          "de": "Prüft, ob die aktuelle Zahl größer als der Durchschnitt ist",
+          "en": "Checks whether the current number is greater than the average"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Verglichen wird mit dem schon berechneten Durchschnitt `4.0`. Nur `10` ist größer.\n\nZahlen genau auf dem Durchschnitt zählen nicht mit, denn es steht `>` und nicht `>=`.",
+        "en": "The comparison is with the average `4.0` already calculated. Only `10` is greater.\n\nNumbers exactly at the average do not count, since it is `>` and not `>=`."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Erhöht den Zähler um 1; die Zeile läuft nur für Zahlen über dem Durchschnitt",
+          "en": "Raises the counter by 1; the line only runs for numbers above the average"
+        },
+        {
+          "de": "Erhöht den Zähler bei jeder Zahl um 1",
+          "en": "Raises the counter by 1 for every number"
+        },
+        {
+          "de": "Addiert n zum Zähler",
+          "en": "Adds n to the counter"
+        },
+        {
+          "de": "Setzt den Zähler auf 1",
+          "en": "Sets the counter to 1"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Hier wird nur gezählt, nicht addiert: `count += 1` unabhängig von der Größe von `n`.\n\nBei `[1, 2, 3, 10]` wird einmal gezählt, bei der 10.",
+        "en": "This only counts, it does not add: `count += 1` regardless of how big `n` is.\n\nFor `[1, 2, 3, 10]` it counts once, at the 10."
+      }
+    },
+    {
+      "line": 7,
+      "choices": [
+        {
+          "de": "Gibt den Durchschnitt zurück",
+          "en": "Returns the average"
+        },
+        {
+          "de": "Gibt den fertigen Zählerstand zurück, nachdem die Schleife durch ist",
+          "en": "Returns the finished counter value after the loop is done"
+        },
+        {
+          "de": "Gibt die größte Zahl über dem Durchschnitt zurück",
+          "en": "Returns the biggest number above the average"
+        },
+        {
+          "de": "Gibt in der ersten Runde den Zählerstand zurück",
+          "en": "Returns the counter value in the first pass"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`count_above_average([1, 2, 3, 10])` gibt `1` zurück, `count_above_average([2, 2])` gibt `0` zurück (der Durchschnitt ist 2.0, nichts liegt darüber).\n\nDas `return` steht hinter der Schleife.",
+        "en": "`count_above_average([1, 2, 3, 10])` returns `1`, `count_above_average([2, 2])` returns `0` (the average is 2.0, nothing is above it).\n\nThe `return` comes after the loop."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt den Durchschnitt der Liste zurück",
+        "en": "Returns the average of the list"
+      },
+      {
+        "de": "Gibt die Zahlen über dem Durchschnitt als Liste zurück",
+        "en": "Returns the numbers above the average as a list"
+      },
+      {
+        "de": "Gibt zurück, wie viele Zahlen der Liste über deren Durchschnitt liegen: count_above_average([1, 2, 3, 10]) ergibt 1",
+        "en": "Returns how many numbers of the list are above their average: count_above_average([1, 2, 3, 10]) gives 1"
+      },
+      {
+        "de": "Gibt die Anzahl aller Zahlen der Liste zurück",
+        "en": "Returns the number of all numbers in the list"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Hier folgen zwei Schritte aufeinander: erst eine Größe aus der ganzen Liste berechnen, dann jedes Element damit vergleichen.",
+      "en": "Two steps follow each other here: first work out a value from the whole list, then compare every item with it."
+    }
+  }
+}

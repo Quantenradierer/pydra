@@ -1,0 +1,187 @@
+{
+  "id": "remove-duplicates",
+  "code": "def remove_duplicates(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion remove_duplicates auf",
+          "en": "Calls the built-in function remove_duplicates"
+        },
+        {
+          "de": "Legt eine Variable remove_duplicates an, die items enthält",
+          "en": "Creates a variable remove_duplicates that holds items"
+        },
+        {
+          "de": "Definiert eine Funktion remove_duplicates mit dem Parameter items",
+          "en": "Defines a function remove_duplicates with the parameter items"
+        },
+        {
+          "de": "Führt remove_duplicates sofort aus und zeigt das Ergebnis an",
+          "en": "Runs remove_duplicates right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`remove_duplicates` heißt „Doppelte entfernen“. `items` ist eine Liste, in der Elemente mehrfach vorkommen können, etwa `[1, 2, 1, 3, 2]`.",
+        "en": "`remove_duplicates` removes repeats. `items` is a list in which items can occur more than once, such as `[1, 2, 1, 3, 2]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Kopie der Liste an",
+          "en": "Creates a copy of the list"
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Setzt result auf 0",
+          "en": "Sets result to 0"
+        },
+        {
+          "de": "Legt eine leere Liste result an, die später die Elemente ohne Doppelte sammelt",
+          "en": "Creates an empty list result that will later collect the items without repeats"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die neue Liste startet leer und füllt sich in der Schleife. Die Originalliste bleibt unverändert.\n\nErst hinten wird `result` zurückgegeben.",
+        "en": "The new list starts empty and fills in the loop. The original list stays unchanged.\n\n`result` is only returned at the end."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Element der Liste items",
+          "en": "Repeats the indented part for each item of the list items"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Element von result",
+          "en": "Repeats the indented part for each item of result"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil, solange items nicht leer ist",
+          "en": "Repeats the indented part while items is not empty"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil nur für das erste Element",
+          "en": "Repeats the indented part only for the first item"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Gelesen wird von items, geschrieben wird in result. `item` ist nacheinander 1, 2, 1, 3, 2.\n\nDer Name `item` (Element) ist ein anderes Wort als `items`, das nur durch das s getrennt ist. Man verwechselt es leicht.",
+        "en": "Reading is from items, writing goes to result. `item` is 1, 2, 1, 3, 2 in turn.\n\nThe name `item` differs from `items` only by the s. It is easy to mix up."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob item in items steht",
+          "en": "Checks whether item is in items"
+        },
+        {
+          "de": "Prüft, ob item noch nicht in result steht",
+          "en": "Checks whether item is not yet in result"
+        },
+        {
+          "de": "Prüft, ob item nicht gleich result ist",
+          "en": "Checks whether item is not equal to result"
+        },
+        {
+          "de": "Prüft, ob result leer ist",
+          "en": "Checks whether result is empty"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`in` fragt, ob ein Wert in einer Liste vorkommt, `not in` dreht die Frage um. Beim ersten `1` ist `result` noch leer, die Bedingung stimmt.\n\nBeim zweiten `1` steckt die `1` schon drin, die Bedingung stimmt nicht mehr.",
+        "en": "`in` asks whether a value occurs in a list, `not in` turns the question around. At the first `1`, `result` is still empty and the condition is true.\n\nAt the second `1` the `1` is already in there and the condition is no longer true."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Hängt jedes item an result an",
+          "en": "Appends every item to result"
+        },
+        {
+          "de": "Entfernt item aus result",
+          "en": "Removes item from result"
+        },
+        {
+          "de": "Hängt item hinten an result an; nur wenn es noch nicht vorkam",
+          "en": "Appends item to the end of result; only if it has not occurred yet"
+        },
+        {
+          "de": "Zählt, wie oft item vorkommt",
+          "en": "Counts how often item occurs"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile gehört zum `if`. So entsteht nacheinander `[1]`, `[1, 2]`, dann `[1, 2, 3]`. Die späteren `1` und `2` werden übersprungen.\n\nDie Reihenfolge des ersten Auftretens bleibt erhalten.",
+        "en": "The line belongs to the `if`. So `[1]`, `[1, 2]`, then `[1, 2, 3]` appear in turn. The later `1` and `2` are skipped.\n\nThe order of first appearance is kept."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt die ursprüngliche Liste items zurück",
+          "en": "Returns the original list items"
+        },
+        {
+          "de": "Gibt die Anzahl der Doppelten zurück",
+          "en": "Returns the number of repeats"
+        },
+        {
+          "de": "Gibt in jeder Runde das aktuelle result zurück",
+          "en": "Returns the current result in every pass"
+        },
+        {
+          "de": "Gibt die Liste ohne Doppelte zurück, nachdem die Schleife durch ist",
+          "en": "Returns the list without repeats after the loop is done"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Das nicht eingerückte `return` kommt erst nach der Schleife. `remove_duplicates([1, 2, 1, 3, 2])` gibt `[1, 2, 3]` zurück.\n\nBei `[]` kommt `[]` zurück.",
+        "en": "The `return` that is not indented only comes after the loop. `remove_duplicates([1, 2, 1, 3, 2])` returns `[1, 2, 3]`.\n\nFor `[]`, `[]` comes back."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt eine Liste ohne mehrfach vorkommende Elemente zurück, in der Reihenfolge des ersten Auftretens: remove_duplicates([1, 2, 1, 3, 2]) ergibt [1, 2, 3]",
+        "en": "Returns a list without repeated items, in order of first appearance: remove_duplicates([1, 2, 1, 3, 2]) gives [1, 2, 3]"
+      },
+      {
+        "de": "Gibt nur die Elemente zurück, die mehrfach vorkommen",
+        "en": "Returns only the items that occur more than once"
+      },
+      {
+        "de": "Gibt die Anzahl der verschiedenen Elemente zurück",
+        "en": "Returns the number of different items"
+      },
+      {
+        "de": "Gibt die Liste sortiert zurück",
+        "en": "Returns the list sorted"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Für das Prüfen auf „schon dabei“ ist `in` / `not in` genau das richtige Werkzeug. Eine Menge (`set`) wäre kürzer, würde aber die Reihenfolge nicht garantieren.",
+      "en": "For checking \"already there\", `in` / `not in` is exactly the right tool. A set would be shorter, but would not guarantee the order."
+    }
+  }
+}

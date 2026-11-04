@@ -1,0 +1,187 @@
+{
+  "id": "pair-up",
+  "code": "def pair_up(names, ages):\n    result = []\n    for name, age in zip(names, ages):\n        text = name + \" is \" + str(age)\n        result.append(text)\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion pair_up mit den Parametern names und ages",
+          "en": "Defines a function pair_up with the parameters names and ages"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion pair_up auf",
+          "en": "Calls the built-in function pair_up"
+        },
+        {
+          "de": "Legt eine Variable pair_up an, die names, ages enthält",
+          "en": "Creates a variable pair_up that holds names, ages"
+        },
+        {
+          "de": "Führt pair_up sofort aus und zeigt das Ergebnis an",
+          "en": "Runs pair_up right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`pair_up` heißt „paarweise zusammenfügen“. `names` ist eine Liste von Namen, `ages` eine Liste von Altern, etwa `pair_up([\"Ann\", \"Bob\"], [30, 25])`.",
+        "en": "`pair_up` means \"join in pairs\". `names` is a list of names, `ages` a list of ages, as in `pair_up([\"Ann\", \"Bob\"], [30, 25])`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Liste mit den Namen an",
+          "en": "Creates a list holding the names"
+        },
+        {
+          "de": "Legt eine leere Liste result an",
+          "en": "Creates an empty list result"
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Setzt result auf 0",
+          "en": "Sets result to 0"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "In `result` werden die fertigen Sätze gesammelt. Zunächst ist die Liste leer.\n\nWie bei vielen Funktionen mit Schleife kommt das `return` erst am Ende.",
+        "en": "The finished sentences are collected in `result`. At first the list is empty.\n\nAs in many functions with a loop, the `return` only comes at the end."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Geht erst alle Namen durch und dann alle Alter",
+          "en": "Goes through all names first and then all ages"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Kombination aus Name und Alter",
+          "en": "Repeats the indented part for every combination of name and age"
+        },
+        {
+          "de": "Geht beide Listen gleichzeitig durch: name und age sind jeweils die Werte an derselben Position",
+          "en": "Walks through both lists at once: name and age are the values at the same position each time"
+        },
+        {
+          "de": "Verbindet die Listen zu einer langen Liste",
+          "en": "Joins the lists into one long list"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`zip` legt die Listen Position für Position nebeneinander: zuerst `\"Ann\"` und `30`, dann `\"Bob\"` und `25`.\n\nDas Auspacken in `name, age` wirkt wie bei einem Tupel. Es werden nur so viele Paare gebildet, wie die kürzere Liste hat.",
+        "en": "`zip` lays the lists side by side position by position: first `\"Ann\"` and `30`, then `\"Bob\"` and `25`.\n\nUnpacking into `name, age` works as with a tuple. Only as many pairs are formed as the shorter list has."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Rechnet Name plus Alter zusammen",
+          "en": "Adds name plus age together"
+        },
+        {
+          "de": "Hängt den Namen an eine Liste an und ignoriert das Alter",
+          "en": "Appends the name to a list and ignores the age"
+        },
+        {
+          "de": "Hängt Name und Alter als Zahl aneinander",
+          "en": "Joins name and age as a number"
+        },
+        {
+          "de": "Baut aus Name, \" is \" und dem Alter als Text einen Satz und speichert ihn in text",
+          "en": "Builds a sentence from name, \" is \" and the age as text and stores it in text"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`str(age)` macht die Zahl zum Text. Ohne das gäbe `+` einen Fehler, denn Text und Zahl lassen sich nicht addieren.\n\nSo entsteht `\"Ann is 30\"`.",
+        "en": "`str(age)` makes the number a text. Without it `+` would give an error, since a text and a number cannot be added.\n\nThis gives `\"Ann is 30\"`."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Hängt den Satz text hinten an result an",
+          "en": "Appends the sentence text to the end of result"
+        },
+        {
+          "de": "Ersetzt result durch text",
+          "en": "Replaces result with text"
+        },
+        {
+          "de": "Hängt text vorn an result an",
+          "en": "Appends text to the front of result"
+        },
+        {
+          "de": "Gibt text zurück",
+          "en": "Returns text"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Pro Paar kommt ein Satz in die Liste: zuerst `\"Ann is 30\"`, dann `\"Bob is 25\"`.\n\n`append` ändert `result` und gibt selbst nichts zurück.",
+        "en": "One sentence per pair goes into the list: first `\"Ann is 30\"`, then `\"Bob is 25\"`.\n\n`append` changes `result` and returns nothing itself."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt den letzten Satz zurück",
+          "en": "Returns the last sentence"
+        },
+        {
+          "de": "Gibt die Liste der Sätze zurück, nachdem die Schleife durch ist",
+          "en": "Returns the list of sentences after the loop is done"
+        },
+        {
+          "de": "Gibt in jedem Durchlauf eine Liste zurück",
+          "en": "Returns a list in every pass"
+        },
+        {
+          "de": "Gibt die beiden Eingabelisten zurück",
+          "en": "Returns the two input lists"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`pair_up([\"Ann\", \"Bob\"], [30, 25])` gibt `[\"Ann is 30\", \"Bob is 25\"]` zurück.\n\nDas `return` steht hinter der Schleife.",
+        "en": "`pair_up([\"Ann\", \"Bob\"], [30, 25])` returns `[\"Ann is 30\", \"Bob is 25\"]`.\n\nThe `return` comes after the loop."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt alle Namen und dann alle Alter in einer Liste zurück",
+        "en": "Returns all names and then all ages in one list"
+      },
+      {
+        "de": "Gibt eine Liste mit jeder Kombination aus Name und Alter zurück",
+        "en": "Returns a list with every combination of name and age"
+      },
+      {
+        "de": "Verbindet zwei gleich lange Listen zu Sätzen der Form \"Name is Alter\": pair_up([\"Ann\", \"Bob\"], [30, 25]) ergibt [\"Ann is 30\", \"Bob is 25\"]",
+        "en": "Joins two lists of equal length into sentences of the form \"name is age\": pair_up([\"Ann\", \"Bob\"], [30, 25]) gives [\"Ann is 30\", \"Bob is 25\"]"
+      },
+      {
+        "de": "Gibt nur den ersten Satz zurück",
+        "en": "Returns only the first sentence"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Mit `zip` geht man zwei Listen im Gleichschritt durch. Das ist übersichtlicher als Positionen mit `range(len(...))` zu zählen.",
+      "en": "With `zip` you walk through two lists in step. It is clearer than counting positions with `range(len(...))`."
+    }
+  }
+}

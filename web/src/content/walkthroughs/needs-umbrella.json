@@ -1,0 +1,187 @@
+{
+  "id": "needs-umbrella",
+  "code": "def needs_umbrella(raining, windy):\n    if raining and not windy:\n        return \"umbrella\"\n    if raining:\n        return \"raincoat\"\n    return \"nothing\"",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion needs_umbrella auf",
+          "en": "Calls the built-in function needs_umbrella"
+        },
+        {
+          "de": "Definiert eine Funktion needs_umbrella mit den Parametern raining und windy",
+          "en": "Defines a function needs_umbrella with the parameters raining and windy"
+        },
+        {
+          "de": "Legt eine Variable needs_umbrella an, die raining, windy enthält",
+          "en": "Creates a variable needs_umbrella that holds raining, windy"
+        },
+        {
+          "de": "Führt needs_umbrella sofort aus und zeigt das Ergebnis an",
+          "en": "Runs needs_umbrella right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`needs_umbrella` heißt „braucht einen Regenschirm“. `raining` (es regnet) und `windy` (es ist windig) sind Wahrheitswerte: `True` oder `False`.",
+        "en": "`needs_umbrella` asks whether an umbrella is needed. `raining` and `windy` are truth values: `True` or `False`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob es regnet oder nicht windig ist",
+          "en": "Checks whether it is raining or not windy"
+        },
+        {
+          "de": "Prüft, ob es weder regnet noch windig ist",
+          "en": "Checks whether it is neither raining nor windy"
+        },
+        {
+          "de": "Prüft, ob es regnet und es nicht windig ist",
+          "en": "Checks whether it is raining and it is not windy"
+        },
+        {
+          "de": "Setzt windy auf False",
+          "en": "Sets windy to False"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`and` verlangt, dass beide Seiten stimmen. `not windy` ist wahr, wenn `windy` falsch ist.\n\nBei `needs_umbrella(True, False)` ist `True and not False` also `True`.",
+        "en": "`and` demands that both sides are true. `not windy` is true when `windy` is false.\n\nFor `needs_umbrella(True, False)`, `True and not False` is therefore `True`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt \"umbrella\" bei jedem Regen zurück",
+          "en": "Returns \"umbrella\" for any rain"
+        },
+        {
+          "de": "Gibt \"umbrella\" zurück, wenn es windig ist",
+          "en": "Returns \"umbrella\" if it is windy"
+        },
+        {
+          "de": "Zeigt einen Schirm auf dem Bildschirm an",
+          "en": "Shows an umbrella on the screen"
+        },
+        {
+          "de": "Gibt \"umbrella\" zurück; nur bei Regen ohne Wind",
+          "en": "Returns \"umbrella\"; only for rain without wind"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Bei Wind taugt ein Schirm nichts, daher die zusätzliche Bedingung. Trifft sie zu, endet die Funktion mit `\"umbrella\"`.\n\nAlle anderen Fälle gehen weiter nach unten.",
+        "en": "An umbrella is no use in wind, hence the extra condition. If it applies, the function ends with `\"umbrella\"`.\n\nAll other cases move on downwards."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob es regnet; hier kommt man nur noch an, wenn es dabei windig ist",
+          "en": "Checks whether it is raining; you only get here if it is windy as well"
+        },
+        {
+          "de": "Prüft, ob es nicht regnet",
+          "en": "Checks whether it is not raining"
+        },
+        {
+          "de": "Prüft, ob es windig ist",
+          "en": "Checks whether it is windy"
+        },
+        {
+          "de": "Prüft, ob raining gleich windy ist",
+          "en": "Checks whether raining equals windy"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Eine Variable mit einem Wahrheitswert kann man direkt als Bedingung nehmen, ohne `== True`. Der Regen-Fall ohne Wind ist schon erledigt.\n\nBleibt Regen mit Wind: dann passt der Regenmantel.",
+        "en": "A variable holding a truth value can be used as a condition directly, without `== True`. The rain case without wind is already dealt with.\n\nWhat remains is rain with wind: then the raincoat fits."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt \"raincoat\" zurück, wenn es nicht regnet",
+          "en": "Returns \"raincoat\" if it is not raining"
+        },
+        {
+          "de": "Gibt \"raincoat\" zurück; nur bei Regen und Wind",
+          "en": "Returns \"raincoat\"; only for rain with wind"
+        },
+        {
+          "de": "Gibt \"raincoat\" bei jedem Wetter zurück",
+          "en": "Returns \"raincoat\" in any weather"
+        },
+        {
+          "de": "Gibt \"umbrella\" und \"raincoat\" zugleich zurück",
+          "en": "Returns \"umbrella\" and \"raincoat\" at the same time"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`needs_umbrella(True, True)` kommt bis hierher und gibt `\"raincoat\"` zurück. Die Zeile gehört zum zweiten `if`, nur dessen Bedingung muss dafür stimmen.\n\nEin `return` gibt nur einen Wert zurück.",
+        "en": "`needs_umbrella(True, True)` gets this far and returns `\"raincoat\"`. The line belongs to the second `if`, only its condition has to be true.\n\nA `return` gives back only one value."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt \"nothing\" auch bei Regen zurück",
+          "en": "Returns \"nothing\" even for rain"
+        },
+        {
+          "de": "Gibt None zurück",
+          "en": "Returns None"
+        },
+        {
+          "de": "Gibt \"nothing\" zurück; die Zeile wird erreicht, wenn es nicht regnet",
+          "en": "Returns \"nothing\"; the line is reached when it is not raining"
+        },
+        {
+          "de": "Gibt \"nothing\" nur bei Windstille zurück",
+          "en": "Returns \"nothing\" only when there is no wind"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Wenn keines der beiden `if` gegriffen hat, bleibt nur Trockenheit übrig: `needs_umbrella(False, True)` gibt `\"nothing\"` zurück.\n\nDer Wind spielt dann keine Rolle.",
+        "en": "If neither `if` applied, only dry weather is left: `needs_umbrella(False, True)` returns `\"nothing\"`.\n\nThe wind does not matter then."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt \"umbrella\" zurück, sobald es regnet",
+        "en": "Returns \"umbrella\" as soon as it rains"
+      },
+      {
+        "de": "Gibt \"nothing\" zurück, wenn es regnet",
+        "en": "Returns \"nothing\" if it rains"
+      },
+      {
+        "de": "Gibt True zurück, wenn es regnet und windig ist",
+        "en": "Returns True if it is raining and windy"
+      },
+      {
+        "de": "Gibt \"umbrella\" bei Regen ohne Wind, \"raincoat\" bei Regen mit Wind und sonst \"nothing\" zurück",
+        "en": "Returns \"umbrella\" for rain without wind, \"raincoat\" for rain with wind and otherwise \"nothing\""
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`needs_umbrella(True, False)` ergibt `\"umbrella\"`, `needs_umbrella(True, True)` ergibt `\"raincoat\"`, `needs_umbrella(False, True)` ergibt `\"nothing\"`.",
+      "en": "`needs_umbrella(True, False)` gives `\"umbrella\"`, `needs_umbrella(True, True)` gives `\"raincoat\"`, `needs_umbrella(False, True)` gives `\"nothing\"`."
+    }
+  }
+}

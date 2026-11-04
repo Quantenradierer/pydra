@@ -1,0 +1,161 @@
+{
+  "id": "two-digits",
+  "code": "def two_digits(number):\n    text = str(number)\n    if len(text) < 2:\n        text = \"0\" + text\n    return text",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion two_digits auf",
+          "en": "Calls the built-in function two_digits"
+        },
+        {
+          "de": "Legt eine Variable two_digits an, die number enthält",
+          "en": "Creates a variable two_digits that holds number"
+        },
+        {
+          "de": "Führt two_digits sofort aus und zeigt das Ergebnis an",
+          "en": "Runs two_digits right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion two_digits mit dem Parameter number",
+          "en": "Defines a function two_digits with the parameter number"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`two_digits` („zweistellig“) macht aus einer Zahl einen Text mit mindestens zwei Ziffern, wie bei Uhrzeiten. `number` ist die Zahl, etwa `7`.",
+        "en": "`two_digits` turns a number into a text with at least two digits, like in clock times. `number` is the number, such as `7`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Wandelt die Zahl in einen Text um und speichert ihn in text",
+          "en": "Converts the number into a text and stores it in text"
+        },
+        {
+          "de": "Wandelt den Text in eine Zahl um",
+          "en": "Converts the text into a number"
+        },
+        {
+          "de": "Rundet die Zahl auf zwei Stellen",
+          "en": "Rounds the number to two places"
+        },
+        {
+          "de": "Prüft, ob number ein Text ist",
+          "en": "Checks whether number is a text"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`str(7)` ergibt den Text `\"7\"`. Mit Texten kann man Zeichen davorsetzen, mit Zahlen nicht.\n\n`number` selbst bleibt eine Zahl.",
+        "en": "`str(7)` gives the text `\"7\"`. You can put characters in front of a text, but not of a number.\n\n`number` itself stays a number."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Prüft, ob die Zahl kleiner als 2 ist",
+          "en": "Checks whether the number is less than 2"
+        },
+        {
+          "de": "Prüft, ob der Text kürzer als 2 Zeichen ist",
+          "en": "Checks whether the text is shorter than 2 characters"
+        },
+        {
+          "de": "Prüft, ob der Text genau 2 Zeichen hat",
+          "en": "Checks whether the text has exactly 2 characters"
+        },
+        {
+          "de": "Setzt die Länge des Textes auf 2",
+          "en": "Sets the length of the text to 2"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`len(text)` ist die Anzahl der Zeichen. `\"7\"` hat 1 Zeichen, `1 < 2` stimmt. Bei `\"12\"` ist es 2, die eingerückte Zeile wird übersprungen.\n\nGeprüft wird die Länge, nicht der Wert der Zahl.",
+        "en": "`len(text)` is the number of characters. `\"7\"` has 1 character, `1 < 2` is true. For `\"12\"` it is 2 and the indented line is skipped.\n\nThe length is checked, not the value of the number."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Hängt eine \"0\" hinten an den Text",
+          "en": "Appends a \"0\" to the end of the text"
+        },
+        {
+          "de": "Addiert 0 zur Zahl",
+          "en": "Adds 0 to the number"
+        },
+        {
+          "de": "Setzt eine \"0\" vor den Text und speichert das wieder in text",
+          "en": "Puts a \"0\" in front of the text and stores it back in text"
+        },
+        {
+          "de": "Gibt \"0\" zurück und beendet die Funktion",
+          "en": "Returns \"0\" and ends the function"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Aus `\"7\"` wird `\"07\"`. Die Variable `text` bekommt dabei einen neuen Wert, der alte wird überschrieben.\n\nDie Zeile läuft nur bei einstelligen Zahlen.",
+        "en": "`\"7\"` becomes `\"07\"`. The variable `text` gets a new value this way, the old one is overwritten.\n\nThe line only runs for one-digit numbers."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt immer \"0\" plus den Text zurück",
+          "en": "Always returns \"0\" plus the text"
+        },
+        {
+          "de": "Gibt die Zahl number zurück",
+          "en": "Returns the number number"
+        },
+        {
+          "de": "Gibt die Länge des Textes zurück",
+          "en": "Returns the length of the text"
+        },
+        {
+          "de": "Gibt den Text zurück, der zweistellig ist, falls nötig mit führender 0",
+          "en": "Returns the text, which has two digits, with a leading 0 if needed"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Zeile steht nicht eingerückt, läuft also immer. `two_digits(7)` gibt `\"07\"` zurück, `two_digits(12)` gibt `\"12\"` zurück.\n\nZurück kommt ein Text, keine Zahl.",
+        "en": "The line is not indented, so it always runs. `two_digits(7)` returns `\"07\"`, `two_digits(12)` returns `\"12\"`.\n\nWhat comes back is a text, not a number."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Zahl als Text mit mindestens zwei Stellen zurück: two_digits(7) ergibt \"07\"",
+        "en": "Returns the number as a text with at least two digits: two_digits(7) gives \"07\""
+      },
+      {
+        "de": "Gibt jede Zahl mit einer 0 davor zurück",
+        "en": "Returns every number with a 0 in front"
+      },
+      {
+        "de": "Rundet die Zahl auf zwei Stellen",
+        "en": "Rounds the number to two places"
+      },
+      {
+        "de": "Gibt True zurück, wenn die Zahl zweistellig ist",
+        "en": "Returns True if the number has two digits"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Nur kurze Zahlen bekommen eine 0 davor: `two_digits(12)` bleibt `\"12\"`. Das braucht man etwa, um Uhrzeiten wie 07:05 zu schreiben.",
+      "en": "Only short numbers get a 0 in front: `two_digits(12)` stays `\"12\"`. You need this, for example, to write clock times like 07:05."
+    }
+  }
+}

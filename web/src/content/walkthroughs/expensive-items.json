@@ -1,0 +1,187 @@
+{
+  "id": "expensive-items",
+  "code": "def expensive_items(prices, limit):\n    result = []\n    for name, price in prices.items():\n        if price > limit:\n            result.append(name)\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion expensive_items auf",
+          "en": "Calls the built-in function expensive_items"
+        },
+        {
+          "de": "Legt eine Variable expensive_items an, die prices, limit enthält",
+          "en": "Creates a variable expensive_items that holds prices, limit"
+        },
+        {
+          "de": "Führt expensive_items sofort aus und zeigt das Ergebnis an",
+          "en": "Runs expensive_items right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion expensive_items mit den Parametern prices und limit",
+          "en": "Defines a function expensive_items with the parameters prices and limit"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`expensive_items` heißt „teure Artikel“. `prices` ist ein Wörterbuch von Namen zu Preisen, etwa `{\"tea\": 3, \"cake\": 6}`, `limit` die Preisgrenze.",
+        "en": "`expensive_items` means \"expensive items\". `prices` is a dictionary from names to prices, such as `{\"tea\": 3, \"cake\": 6}`, `limit` the price limit."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine leere Liste result für die Namen der teuren Artikel an",
+          "en": "Creates an empty list result for the names of the expensive items"
+        },
+        {
+          "de": "Legt ein leeres Wörterbuch result an",
+          "en": "Creates an empty dictionary result"
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Setzt result auf die Preisgrenze",
+          "en": "Sets result to the price limit"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Gesammelt werden nur die Namen, nicht die Preise. Darum reicht eine Liste, kein Wörterbuch.\n\nSie startet leer.",
+        "en": "Only the names are collected, not the prices. So a list is enough, no dictionary.\n\nIt starts empty."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Geht nur die Schlüssel durch, price ist die Anzahl der Einträge",
+          "en": "Goes through the keys only, price is the number of entries"
+        },
+        {
+          "de": "Geht alle Einträge durch: name ist der Schlüssel, price der zugehörige Wert",
+          "en": "Goes through all entries: name is the key, price the matching value"
+        },
+        {
+          "de": "Geht alle Preise durch und sucht ihre Namen",
+          "en": "Goes through all prices and looks for their names"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil nur für den ersten Eintrag",
+          "en": "Repeats the indented part only for the first entry"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`prices.items()` liefert Paare aus Schlüssel und Wert. Beim Durchlaufen werden sie gleich in `name, price` aufgeteilt, wie bei einem Tupel.\n\nZuerst ist das `\"tea\"` und `3`, dann `\"cake\"` und `6`, dann `\"pie\"` und `8`.",
+        "en": "`prices.items()` gives pairs of key and value. While looping they are split into `name, price` right away, as with a tuple.\n\nFirst that is `\"tea\"` and `3`, then `\"cake\"` and `6`, then `\"pie\"` and `8`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob der Name länger als die Grenze ist",
+          "en": "Checks whether the name is longer than the limit"
+        },
+        {
+          "de": "Prüft, ob der Preis höchstens die Grenze ist",
+          "en": "Checks whether the price is at most the limit"
+        },
+        {
+          "de": "Prüft, ob der Preis über der Grenze liegt",
+          "en": "Checks whether the price is above the limit"
+        },
+        {
+          "de": "Setzt price auf limit",
+          "en": "Sets price to limit"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Bei `limit = 5` stimmt `6 > 5` und `8 > 5`, aber nicht `3 > 5`.\n\nEin Preis genau auf der Grenze gilt nicht als teuer.",
+        "en": "With `limit = 5`, `6 > 5` and `8 > 5` are true, but not `3 > 5`.\n\nA price exactly on the limit does not count as expensive."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Hängt den Preis an result an",
+          "en": "Appends the price to result"
+        },
+        {
+          "de": "Hängt Name und Preis als Paar an result an",
+          "en": "Appends name and price as a pair to result"
+        },
+        {
+          "de": "Hängt alle Namen an result an",
+          "en": "Appends all names to result"
+        },
+        {
+          "de": "Hängt den Namen des Artikels an result an; nur bei teuren Artikeln",
+          "en": "Appends the name of the item to result; only for expensive items"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Von den Paaren wird nur der Name notiert. Nacheinander kommen `\"cake\"` und `\"pie\"` hinein.\n\nDie Zeile gehört zum `if`.",
+        "en": "Of the pairs only the name is noted. `\"cake\"` and `\"pie\"` go in one after the other.\n\nThe line belongs to the `if`."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt die Liste der teuren Artikel zurück, nachdem die Schleife durch ist",
+          "en": "Returns the list of expensive items after the loop is done"
+        },
+        {
+          "de": "Gibt das Wörterbuch prices zurück",
+          "en": "Returns the dictionary prices"
+        },
+        {
+          "de": "Gibt den teuersten Artikel zurück",
+          "en": "Returns the most expensive item"
+        },
+        {
+          "de": "Gibt die Preise der teuren Artikel zurück",
+          "en": "Returns the prices of the expensive items"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`expensive_items({\"tea\": 3, \"cake\": 6, \"pie\": 8}, 5)` gibt `[\"cake\", \"pie\"]` zurück.\n\nGibt es keinen teuren Artikel, bleibt die Liste leer.",
+        "en": "`expensive_items({\"tea\": 3, \"cake\": 6, \"pie\": 8}, 5)` returns `[\"cake\", \"pie\"]`.\n\nIf there is no expensive item, the list stays empty."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Preise aller teuren Artikel zurück: [6, 8]",
+        "en": "Returns the prices of all expensive items: [6, 8]"
+      },
+      {
+        "de": "Gibt die Namen aller Artikel zurück, deren Preis über der Grenze liegt: expensive_items({\"tea\": 3, \"cake\": 6, \"pie\": 8}, 5) ergibt [\"cake\", \"pie\"]",
+        "en": "Returns the names of all items whose price is above the limit: expensive_items({\"tea\": 3, \"cake\": 6, \"pie\": 8}, 5) gives [\"cake\", \"pie\"]"
+      },
+      {
+        "de": "Gibt ein Wörterbuch nur mit den teuren Artikeln zurück",
+        "en": "Returns a dictionary with only the expensive items"
+      },
+      {
+        "de": "Gibt den Namen des teuersten Artikels zurück",
+        "en": "Returns the name of the most expensive item"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Mit `.items()` bekommt man Schlüssel und Wert zugleich, praktisch, wenn man nach dem Wert filtert, aber den Schlüssel haben will.",
+      "en": "With `.items()` you get key and value at the same time, handy when you filter by the value but want the key."
+    }
+  }
+}

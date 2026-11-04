@@ -1,0 +1,135 @@
+{
+  "id": "is-palindrome",
+  "code": "def is_palindrome(text):\n    cleaned = text.lower()\n    backwards = cleaned[::-1]\n    return cleaned == backwards",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion is_palindrome auf",
+          "en": "Calls the built-in function is_palindrome"
+        },
+        {
+          "de": "Definiert eine Funktion is_palindrome mit dem Parameter text",
+          "en": "Defines a function is_palindrome with the parameter text"
+        },
+        {
+          "de": "Legt eine Variable is_palindrome an, die text enthält",
+          "en": "Creates a variable is_palindrome that holds text"
+        },
+        {
+          "de": "Führt is_palindrome sofort aus und zeigt das Ergebnis an",
+          "en": "Runs is_palindrome right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Ein Palindrom ist ein Wort, das von vorn und hinten gleich gelesen wird, wie „Anna“. `text` ist das Wort, das geprüft wird.",
+        "en": "A palindrome is a word that reads the same forwards and backwards, like \"Anna\". `text` is the word being checked."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Macht alle Buchstaben groß",
+          "en": "Makes all letters capital"
+        },
+        {
+          "de": "Entfernt alle Leerzeichen aus dem Text",
+          "en": "Removes all spaces from the text"
+        },
+        {
+          "de": "Macht alle Buchstaben klein und speichert das in cleaned",
+          "en": "Makes all letters lowercase and stores that in cleaned"
+        },
+        {
+          "de": "Prüft, ob der Text klein geschrieben ist",
+          "en": "Checks whether the text is in lowercase"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`lower()` vereinheitlicht die Schreibung: `\"Anna\"` wird `\"anna\"`. Sonst wären `\"A\"` und `\"a\"` verschiedene Zeichen.\n\nDer Parameter `text` bleibt unverändert, `cleaned` ist ein neuer Text.",
+        "en": "`lower()` evens out the spelling: `\"Anna\"` becomes `\"anna\"`. Otherwise `\"A\"` and `\"a\"` would be different characters.\n\nThe parameter `text` stays unchanged, `cleaned` is a new text."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt nur das letzte Zeichen von cleaned zurück",
+          "en": "Takes only the last character of cleaned"
+        },
+        {
+          "de": "Entfernt jedes zweite Zeichen",
+          "en": "Removes every second character"
+        },
+        {
+          "de": "Sortiert die Buchstaben von cleaned",
+          "en": "Sorts the letters of cleaned"
+        },
+        {
+          "de": "Kehrt den Text um und speichert das in backwards",
+          "en": "Reverses the text and stores that in backwards"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`[::-1]` ist ein Ausschnitt mit Schrittweite -1: Man läuft von hinten nach vorn. Aus `\"anna\"` wird `\"anna\"`, aus `\"python\"` wird `\"nohtyp\"`.\n\nDie Schreibweise sollte man sich als Muster merken.",
+        "en": "`[::-1]` is a slice with step -1: you walk from the back to the front. `\"anna\"` becomes `\"anna\"`, `\"python\"` becomes `\"nohtyp\"`.\n\nIt is worth remembering the notation as a pattern."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt True zurück, wenn der Text und sein Gegenstück gleich sind, sonst False",
+          "en": "Returns True if the text and its reverse are the same, otherwise False"
+        },
+        {
+          "de": "Gibt immer den umgedrehten Text zurück",
+          "en": "Always returns the reversed text"
+        },
+        {
+          "de": "Weist cleaned den Wert backwards zu und gibt ihn zurück",
+          "en": "Assigns backwards to cleaned and returns it"
+        },
+        {
+          "de": "Gibt die Anzahl der gleichen Zeichen zurück",
+          "en": "Returns the number of identical characters"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`==` vergleicht und liefert `True` oder `False`. Das Ergebnis des Vergleichs wird direkt zurückgegeben, ein `if` braucht es nicht.\n\n`\"anna\" == \"anna\"` ist `True`, `\"python\" == \"nohtyp\"` ist `False`.",
+        "en": "`==` compares and gives `True` or `False`. The result of the comparison is returned directly, no `if` is needed.\n\n`\"anna\" == \"anna\"` is `True`, `\"python\" == \"nohtyp\"` is `False`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt den Text rückwärts zurück",
+        "en": "Returns the text backwards"
+      },
+      {
+        "de": "Gibt True zurück, wenn der Text vorwärts und rückwärts gleich ist (ohne Beachtung der Groß-/Kleinschreibung)",
+        "en": "Returns True if the text is the same forwards and backwards (ignoring upper/lower case)"
+      },
+      {
+        "de": "Gibt True zurück, wenn der Text nur aus Kleinbuchstaben besteht",
+        "en": "Returns True if the text consists only of lowercase letters"
+      },
+      {
+        "de": "Gibt die Länge des Textes zurück",
+        "en": "Returns the length of the text"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`is_palindrome(\"Anna\")` ist `True`, `is_palindrome(\"Python\")` ist `False`. Das Kleinmachen am Anfang sorgt dafür, dass das große A am Wortanfang nicht stört.",
+      "en": "`is_palindrome(\"Anna\")` is `True`, `is_palindrome(\"Python\")` is `False`. Lowercasing at the start makes sure the capital A at the beginning does not get in the way."
+    }
+  }
+}

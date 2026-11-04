@@ -1,0 +1,187 @@
+{
+  "id": "clamp",
+  "code": "def clamp(value, low, high):\n    if value < low:\n        return low\n    if value > high:\n        return high\n    return value",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion clamp auf",
+          "en": "Calls the built-in function clamp"
+        },
+        {
+          "de": "Definiert eine Funktion clamp mit den Parametern value, low und high",
+          "en": "Defines a function clamp with the parameters value, low and high"
+        },
+        {
+          "de": "Legt eine Variable clamp an, die value, low, high enthält",
+          "en": "Creates a variable clamp that holds value, low, high"
+        },
+        {
+          "de": "Führt clamp sofort aus und zeigt das Ergebnis an",
+          "en": "Runs clamp right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`clamp` heißt „einklemmen“. Der Wert `value` soll zwischen `low` (unten) und `high` (oben) bleiben, zum Beispiel `clamp(15, 0, 10)`.",
+        "en": "`clamp` means to hold a value between limits. The value `value` should stay between `low` (bottom) and `high` (top), for example `clamp(15, 0, 10)`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob value über der unteren Grenze liegt",
+          "en": "Checks whether value is above the lower limit"
+        },
+        {
+          "de": "Setzt value auf low",
+          "en": "Sets value to low"
+        },
+        {
+          "de": "Prüft, ob value unter der unteren Grenze liegt",
+          "en": "Checks whether value is below the lower limit"
+        },
+        {
+          "de": "Prüft, ob value gleich low ist",
+          "en": "Checks whether value equals low"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Der Test ist `value < low`. Bei `clamp(-3, 0, 10)` stimmt `-3 < 0`.\n\nWer genau `low` ist, liegt noch im erlaubten Bereich und fällt hier nicht hinein.",
+        "en": "The test is `value < low`. For `clamp(-3, 0, 10)`, `-3 < 0` is true.\n\nA value exactly equal to `low` is still in the allowed range and does not fall in here."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt value zurück",
+          "en": "Returns value"
+        },
+        {
+          "de": "Gibt die obere Grenze zurück",
+          "en": "Returns the upper limit"
+        },
+        {
+          "de": "Gibt value minus low zurück",
+          "en": "Returns value minus low"
+        },
+        {
+          "de": "Gibt die untere Grenze zurück",
+          "en": "Returns the lower limit"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Ein zu kleiner Wert wird durch die Grenze ersetzt: `clamp(-3, 0, 10)` gibt `0` zurück.\n\nDanach ist die Funktion zu Ende, die Zeilen darunter laufen nicht mehr.",
+        "en": "A value that is too small is replaced by the limit: `clamp(-3, 0, 10)` returns `0`.\n\nAfter that the function is over, the lines below no longer run."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob value über der oberen Grenze liegt",
+          "en": "Checks whether value is above the upper limit"
+        },
+        {
+          "de": "Prüft, ob value unter der oberen Grenze liegt",
+          "en": "Checks whether value is below the upper limit"
+        },
+        {
+          "de": "Prüft, ob value zwischen low und high liegt",
+          "en": "Checks whether value is between low and high"
+        },
+        {
+          "de": "Setzt value auf high",
+          "en": "Sets value to high"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Dies ist ein zweites, eigenes `if`. Hier kommt nur an, wer nicht zu klein war.\n\nBei `clamp(15, 0, 10)` stimmt `15 > 10`.",
+        "en": "This is a second `if` of its own. Only values that were not too small get here.\n\nFor `clamp(15, 0, 10)`, `15 > 10` is true."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt value zurück",
+          "en": "Returns value"
+        },
+        {
+          "de": "Gibt die obere Grenze zurück",
+          "en": "Returns the upper limit"
+        },
+        {
+          "de": "Gibt die untere Grenze zurück",
+          "en": "Returns the lower limit"
+        },
+        {
+          "de": "Gibt value minus high zurück",
+          "en": "Returns value minus high"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Ein zu großer Wert wird auf die Grenze gestutzt: `clamp(15, 0, 10)` gibt `10` zurück.\n\nGeschrieben ist nichts davon als `else`, es genügt das frühe Beenden.",
+        "en": "A value that is too big is trimmed to the limit: `clamp(15, 0, 10)` returns `10`.\n\nNone of it is written as `else`, ending early is enough."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt immer die obere Grenze zurück",
+          "en": "Always returns the upper limit"
+        },
+        {
+          "de": "Gibt value nur dann zurück, wenn es zu klein war",
+          "en": "Returns value only if it was too small"
+        },
+        {
+          "de": "Gibt value unverändert zurück, weil es im erlaubten Bereich liegt",
+          "en": "Returns value unchanged because it lies in the allowed range"
+        },
+        {
+          "de": "Gibt None zurück",
+          "en": "Returns None"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile läuft nur, wenn keines der beiden `if` zugeschlagen hat. `clamp(5, 0, 10)` gibt `5` zurück.\n\nSie ist nicht eingerückt, gehört also zu keinem `if`.",
+        "en": "The line only runs if neither `if` applied. `clamp(5, 0, 10)` returns `5`.\n\nIt is not indented, so it belongs to no `if`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt immer den größten der drei Werte zurück",
+        "en": "Always returns the biggest of the three values"
+      },
+      {
+        "de": "Gibt True zurück, wenn value im Bereich liegt",
+        "en": "Returns True if value is in the range"
+      },
+      {
+        "de": "Rechnet value plus low plus high zusammen",
+        "en": "Adds value plus low plus high together"
+      },
+      {
+        "de": "Hält value im Bereich von low bis high: zu kleine Werte werden low, zu große high, alle anderen bleiben",
+        "en": "Keeps value in the range from low to high: too small values become low, too big ones high, all others stay"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`clamp(15, 0, 10)` gibt `10` zurück, `clamp(-3, 0, 10)` gibt `0` zurück, `clamp(5, 0, 10)` gibt `5` zurück. Beliebt für Lautstärke, Lebenspunkte oder Farbwerte.",
+      "en": "`clamp(15, 0, 10)` returns `10`, `clamp(-3, 0, 10)` returns `0`, `clamp(5, 0, 10)` returns `5`. Popular for volume, health points or colour values."
+    }
+  }
+}

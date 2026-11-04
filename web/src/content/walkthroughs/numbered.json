@@ -1,0 +1,161 @@
+{
+  "id": "numbered",
+  "code": "def numbered(items):\n    result = []\n    for i, item in enumerate(items, 1):\n        result.append(f\"{i}. {item}\")\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion numbered auf",
+          "en": "Calls the built-in function numbered"
+        },
+        {
+          "de": "Definiert eine Funktion numbered mit dem Parameter items",
+          "en": "Defines a function numbered with the parameter items"
+        },
+        {
+          "de": "Legt eine Variable numbered an, die items enthält",
+          "en": "Creates a variable numbered that holds items"
+        },
+        {
+          "de": "Führt numbered sofort aus und zeigt das Ergebnis an",
+          "en": "Runs numbered right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`numbered` heißt „nummeriert“. `items` ist eine Liste von Texten, etwa `[\"tea\", \"milk\"]`.",
+        "en": "`numbered` means \"numbered\". `items` is a list of texts, such as `[\"tea\", \"milk\"]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Liste mit den Elementen von items an",
+          "en": "Creates a list holding the items of items"
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Legt eine leere Liste result an",
+          "en": "Creates an empty list result"
+        },
+        {
+          "de": "Zählt die Elemente von items",
+          "en": "Counts the items of items"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die nummerierten Zeilen werden hier nach und nach gesammelt.\n\nDie Originalliste `items` bleibt unverändert.",
+        "en": "The numbered lines are collected here bit by bit.\n\nThe original list `items` stays unchanged."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Geht die Liste durch, i ist die Position ab 0",
+          "en": "Walks through the list, i is the position starting at 0"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil items-mal",
+          "en": "Repeats the indented part items times"
+        },
+        {
+          "de": "Zählt die Elemente der Liste",
+          "en": "Counts the items of the list"
+        },
+        {
+          "de": "Geht die Liste durch und liefert zu jedem Element die laufende Nummer ab 1: i ist die Nummer, item das Element",
+          "en": "Walks through the list and gives each item its running number starting at 1: i is the number, item the item"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`enumerate` zählt beim Durchlaufen mit. Das zweite Argument `1` ist der Startwert; ohne es finge die Zählung bei 0 an.\n\nBei `[\"tea\", \"milk\"]` ist `i` zuerst 1 mit `\"tea\"`, dann 2 mit `\"milk\"`.",
+        "en": "`enumerate` counts along while looping. The second argument `1` is the starting value; without it counting would begin at 0.\n\nFor `[\"tea\", \"milk\"]`, `i` is 1 with `\"tea\"` first, then 2 with `\"milk\"`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Baut aus Nummer, Punkt und Element einen Text und hängt ihn an result an",
+          "en": "Builds a text from number, dot and item and appends it to result"
+        },
+        {
+          "de": "Hängt nur die Nummer i an result an",
+          "en": "Appends only the number i to result"
+        },
+        {
+          "de": "Hängt i und item als zwei Werte an result an",
+          "en": "Appends i and item as two values to result"
+        },
+        {
+          "de": "Rechnet i plus item zusammen",
+          "en": "Adds i plus item together"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Das `f` vor dem Text macht daraus einen f-String: Was in `{ }` steht, wird durch den Wert ersetzt. `f\"{i}. {item}\"` wird zu `\"1. tea\"`.\n\nDer Punkt und das Leerzeichen sind ganz normaler Text.",
+        "en": "The `f` before the text makes it an f-string: whatever is in `{ }` is replaced by its value. `f\"{i}. {item}\"` becomes `\"1. tea\"`.\n\nThe dot and the space are ordinary text."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt die ursprüngliche Liste zurück",
+          "en": "Returns the original list"
+        },
+        {
+          "de": "Gibt die Liste der nummerierten Texte zurück, nachdem die Schleife durch ist",
+          "en": "Returns the list of numbered texts after the loop is done"
+        },
+        {
+          "de": "Gibt nur den letzten Text zurück",
+          "en": "Returns only the last text"
+        },
+        {
+          "de": "Gibt die Anzahl der Texte zurück",
+          "en": "Returns the number of texts"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`numbered([\"tea\", \"milk\"])` gibt `[\"1. tea\", \"2. milk\"]` zurück.\n\nDas `return` ist nicht eingerückt und läuft erst, wenn die Schleife fertig ist.",
+        "en": "`numbered([\"tea\", \"milk\"])` returns `[\"1. tea\", \"2. milk\"]`.\n\nThe `return` is not indented and only runs when the loop is finished."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt eine Liste mit den Nummern 1, 2, ... zurück",
+        "en": "Returns a list with the numbers 1, 2, ..."
+      },
+      {
+        "de": "Gibt eine Liste ab Nummer 0 zurück: \"0. tea\", \"1. milk\"",
+        "en": "Returns a list from number 0: \"0. tea\", \"1. milk\""
+      },
+      {
+        "de": "Gibt die Liste mit vorangestellter Nummer ab 1 zurück: numbered([\"tea\", \"milk\"]) ergibt [\"1. tea\", \"2. milk\"]",
+        "en": "Returns the list with a number from 1 in front of each item: numbered([\"tea\", \"milk\"]) gives [\"1. tea\", \"2. milk\"]"
+      },
+      {
+        "de": "Gibt die Liste unverändert zurück",
+        "en": "Returns the list unchanged"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`enumerate(items, 1)` ist die bequeme Art, Zähler und Element gemeinsam zu bekommen, ohne selbst mit einer Variablen mitzuzählen.",
+      "en": "`enumerate(items, 1)` is the convenient way to get the counter and the item together, without counting along with a variable yourself."
+    }
+  }
+}

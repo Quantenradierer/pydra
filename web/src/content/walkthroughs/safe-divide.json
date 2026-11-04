@@ -1,0 +1,135 @@
+{
+  "id": "safe-divide",
+  "code": "def safe_divide(a, b):\n    if b == 0:\n        return None\n    return a / b",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion safe_divide auf",
+          "en": "Calls the built-in function safe_divide"
+        },
+        {
+          "de": "Legt eine Variable safe_divide an, die a, b enthält",
+          "en": "Creates a variable safe_divide that holds a, b"
+        },
+        {
+          "de": "Führt safe_divide sofort aus und zeigt das Ergebnis an",
+          "en": "Runs safe_divide right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion safe_divide mit den Parametern a und b",
+          "en": "Defines a function safe_divide with the parameters a and b"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`safe_divide` heißt „sicher teilen“. Die Funktion teilt `a` durch `b`, aber sie schützt vor dem Teilen durch null.",
+        "en": "`safe_divide` means \"divide safely\". The function divides `a` by `b`, but protects against dividing by zero."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob der Teiler b gleich 0 ist",
+          "en": "Checks whether the divisor b equals 0"
+        },
+        {
+          "de": "Setzt b auf 0",
+          "en": "Sets b to 0"
+        },
+        {
+          "de": "Prüft, ob a gleich 0 ist",
+          "en": "Checks whether a equals 0"
+        },
+        {
+          "de": "Prüft, ob b ungleich 0 ist",
+          "en": "Checks whether b is not 0"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Durch 0 darf man nicht teilen: Python würde mit einem Fehler (`ZeroDivisionError`) abbrechen. Darum wird der Fall vorher abgefangen.\n\nDas Zeichen `==` vergleicht, ein einzelnes `=` würde `b` überschreiben.",
+        "en": "You may not divide by 0: Python would stop with an error (`ZeroDivisionError`). So the case is caught beforehand.\n\nThe sign `==` compares, a single `=` would overwrite `b`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Gibt None zurück, den Wert für „kein Ergebnis“",
+          "en": "Returns None, the value for \"no result\""
+        },
+        {
+          "de": "Gibt den Text \"None\" zurück",
+          "en": "Returns the text \"None\""
+        },
+        {
+          "de": "Gibt den Fehler ZeroDivisionError zurück",
+          "en": "Returns the error ZeroDivisionError"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`None` ist ein eigener Wert in Python und heißt „nichts“. Er ist kein Text und keine Zahl.\n\nDer Aufrufer kann ihn prüfen, etwa mit `if result is None:`.",
+        "en": "`None` is a value of its own in Python and means \"nothing\". It is neither a text nor a number.\n\nThe caller can check for it, for example with `if result is None:`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Teilt a durch b und gibt nur den ganzen Teil zurück",
+          "en": "Divides a by b and returns only the whole part"
+        },
+        {
+          "de": "Gibt den Rest von a geteilt durch b zurück",
+          "en": "Returns the remainder of a divided by b"
+        },
+        {
+          "de": "Teilt a durch b und gibt das Ergebnis zurück",
+          "en": "Divides a by b and returns the result"
+        },
+        {
+          "de": "Gibt a mal b zurück",
+          "en": "Returns a times b"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Hierher kommt man nur, wenn `b` nicht 0 ist. `/` liefert eine Dezimalzahl: `safe_divide(10, 4)` ergibt `2.5`.\n\nOhne `//` wird nichts abgeschnitten.",
+        "en": "You only get here if `b` is not 0. `/` gives a decimal number: `safe_divide(10, 4)` gives `2.5`.\n\nWithout `//` nothing gets cut off."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt bei b gleich 0 die Zahl 0 zurück",
+        "en": "Returns the number 0 if b is 0"
+      },
+      {
+        "de": "Gibt immer a durch b ohne Prüfung zurück",
+        "en": "Always returns a divided by b with no check"
+      },
+      {
+        "de": "Gibt den Rest der Division zurück",
+        "en": "Returns the remainder of the division"
+      },
+      {
+        "de": "Teilt a durch b, gibt aber None zurück, wenn b gleich 0 ist: safe_divide(10, 4) ergibt 2.5",
+        "en": "Divides a by b, but returns None if b is 0: safe_divide(10, 4) gives 2.5"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`safe_divide(1, 0)` gibt `None` zurück statt eines Fehlers. So kann das Programm weiterlaufen und den Sonderfall selbst behandeln.",
+      "en": "`safe_divide(1, 0)` returns `None` instead of an error. This way the program can keep going and deal with the special case itself."
+    }
+  }
+}

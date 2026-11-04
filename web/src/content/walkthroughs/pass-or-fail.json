@@ -1,0 +1,135 @@
+{
+  "id": "pass-or-fail",
+  "code": "def pass_or_fail(score, limit=50):\n    if score >= limit:\n        return \"pass\"\n    return \"fail\"",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion pass_or_fail mit den Parametern score und limit (limit hat den Standardwert 50)",
+          "en": "Defines a function pass_or_fail with the parameters score and limit (limit defaults to 50)"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion pass_or_fail auf",
+          "en": "Calls the built-in function pass_or_fail"
+        },
+        {
+          "de": "Legt eine Variable pass_or_fail an, die score, limit enthält",
+          "en": "Creates a variable pass_or_fail that holds score, limit"
+        },
+        {
+          "de": "Führt pass_or_fail sofort aus und zeigt das Ergebnis an",
+          "en": "Runs pass_or_fail right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`score` sind die erreichten Punkte, `limit` die nötige Mindestpunktzahl. Mit `limit=50` gilt 50, wenn man kein zweites Argument angibt.\n\n`pass_or_fail(7, 5)` ersetzt den Standardwert durch 5.",
+        "en": "`score` is the points reached, `limit` the points needed. With `limit=50`, 50 applies if you give no second argument.\n\n`pass_or_fail(7, 5)` replaces the default with 5."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob score größer als limit ist",
+          "en": "Checks whether score is greater than limit"
+        },
+        {
+          "de": "Prüft, ob score mindestens so groß wie limit ist; nur dann läuft die Zeile darunter",
+          "en": "Checks whether score is at least as big as limit; only then does the line below run"
+        },
+        {
+          "de": "Setzt score auf limit",
+          "en": "Sets score to limit"
+        },
+        {
+          "de": "Prüft, ob score kleiner als limit ist",
+          "en": "Checks whether score is less than limit"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`>=` heißt „größer oder gleich“. Genau 50 Punkte reichen also: `50 >= 50` stimmt. Mit nur `>` wäre 50 durchgefallen.\n\nOb eine Grenze dazugehört, entscheidet das Gleichheitszeichen.",
+        "en": "`>=` means \"greater than or equal\". So exactly 50 points are enough: `50 >= 50` is true. With only `>`, 50 would fail.\n\nWhether a limit itself counts is decided by the equals sign."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt \"pass\" für jede Punktzahl zurück",
+          "en": "Returns \"pass\" for every score"
+        },
+        {
+          "de": "Zeigt „pass“ auf dem Bildschirm an",
+          "en": "Prints \"pass\" on the screen"
+        },
+        {
+          "de": "Gibt den Text \"pass\" zurück und beendet die Funktion",
+          "en": "Returns the text \"pass\" and ends the function"
+        },
+        {
+          "de": "Gibt die Punktzahl zurück",
+          "en": "Returns the score"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile läuft nur, wenn die Bedingung stimmt. Danach ist die Funktion zu Ende: `pass_or_fail(50)` gibt `\"pass\"` zurück.\n\nDie Anführungszeichen zeigen, dass es ein Text ist.",
+        "en": "The line only runs if the condition is true. After that the function is over: `pass_or_fail(50)` returns `\"pass\"`.\n\nThe quotes show that it is a text."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt immer \"fail\" zurück, auch nach \"pass\"",
+          "en": "Always returns \"fail\", even after \"pass\""
+        },
+        {
+          "de": "Gibt \"fail\" zurück, wenn score größer als limit ist",
+          "en": "Returns \"fail\" if score is greater than limit"
+        },
+        {
+          "de": "Gibt False zurück",
+          "en": "Returns False"
+        },
+        {
+          "de": "Gibt \"fail\" zurück; die Zeile wird nur erreicht, wenn score unter limit liegt",
+          "en": "Returns \"fail\"; the line is only reached if score is below limit"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Wer die Bedingung schafft, ist durch das erste `return` schon weg. Alle anderen landen hier: `pass_or_fail(49)` gibt `\"fail\"` zurück.\n\nEin `else` ist nicht nötig.",
+        "en": "Anyone who meets the condition is gone through the first `return`. All others end up here: `pass_or_fail(49)` returns `\"fail\"`.\n\nAn `else` is not needed."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt \"pass\" zurück, wenn score mindestens limit erreicht, sonst \"fail\"; ohne Angabe liegt die Grenze bei 50",
+        "en": "Returns \"pass\" if score reaches at least limit, otherwise \"fail\"; without one the limit is 50"
+      },
+      {
+        "de": "Gibt \"pass\" nur zurück, wenn score größer als limit ist",
+        "en": "Returns \"pass\" only if score is greater than limit"
+      },
+      {
+        "de": "Gibt die Punktzahl minus limit zurück",
+        "en": "Returns the score minus limit"
+      },
+      {
+        "de": "Gibt immer \"fail\" zurück, außer limit ist 0",
+        "en": "Always returns \"fail\" unless limit is 0"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`pass_or_fail(50)` gibt `\"pass\"` zurück, `pass_or_fail(49)` gibt `\"fail\"` zurück, `pass_or_fail(7, 5)` gibt `\"pass\"` zurück.",
+      "en": "`pass_or_fail(50)` returns `\"pass\"`, `pass_or_fail(49)` returns `\"fail\"`, `pass_or_fail(7, 5)` returns `\"pass\"`."
+    }
+  }
+}

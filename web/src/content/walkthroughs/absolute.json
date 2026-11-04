@@ -1,0 +1,135 @@
+{
+  "id": "absolute",
+  "code": "def absolute(number):\n    if number < 0:\n        return -number\n    return number",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion absolute auf",
+          "en": "Calls the built-in function absolute"
+        },
+        {
+          "de": "Legt eine Variable absolute an, die number enthält",
+          "en": "Creates a variable absolute that holds number"
+        },
+        {
+          "de": "Führt absolute sofort aus und zeigt das Ergebnis an",
+          "en": "Runs absolute right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion absolute mit dem Parameter number",
+          "en": "Defines a function absolute with the parameter number"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`absolute` bildet den Betrag einer Zahl: Das Vorzeichen fällt weg. `number` ist die Zahl, etwa `-5`.",
+        "en": "`absolute` gives the absolute value of a number: the sign goes away. `number` is the number, such as `-5`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob number negativ ist; nur dann läuft die eingerückte Zeile",
+          "en": "Checks whether number is negative; only then does the indented line run"
+        },
+        {
+          "de": "Prüft, ob number gleich 0 ist",
+          "en": "Checks whether number equals 0"
+        },
+        {
+          "de": "Prüft, ob number positiv ist",
+          "en": "Checks whether number is positive"
+        },
+        {
+          "de": "Macht number negativ",
+          "en": "Makes number negative"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`number < 0` stimmt für alle Zahlen unter null, etwa `-5`. Für `3` und für `0` stimmt es nicht.\n\nNull bleibt also unverändert, was auch richtig ist.",
+        "en": "`number < 0` is true for all numbers below zero, such as `-5`. It is not true for `3` or for `0`.\n\nSo zero stays unchanged, which is also correct."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt immer eine negative Zahl zurück",
+          "en": "Always returns a negative number"
+        },
+        {
+          "de": "Gibt die Zahl mit umgekehrtem Vorzeichen zurück",
+          "en": "Returns the number with its sign reversed"
+        },
+        {
+          "de": "Gibt number minus 1 zurück",
+          "en": "Returns number minus 1"
+        },
+        {
+          "de": "Gibt den Text \"-number\" zurück",
+          "en": "Returns the text \"-number\""
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Ein Minus vor einer Zahl dreht ihr Vorzeichen um. Aus `-5` wird `-(-5)`, also `5`.\n\nDie Zeile läuft nur für negative Zahlen, also ist das Ergebnis immer positiv.",
+        "en": "A minus in front of a number reverses its sign. `-5` becomes `-(-5)`, which is `5`.\n\nThe line only runs for negative numbers, so the result is always positive."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Gibt number zurück, aber auch bei negativen Zahlen noch zusätzlich -number",
+          "en": "Returns number, and for negative numbers also -number as well"
+        },
+        {
+          "de": "Gibt die Zahl unverändert zurück; die Zeile wird erreicht, wenn sie nicht negativ ist",
+          "en": "Returns the number unchanged; the line is reached if it is not negative"
+        },
+        {
+          "de": "Gibt die Zahl immer mit umgekehrtem Vorzeichen zurück",
+          "en": "Always returns the number with its sign reversed"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Für negative Zahlen hat das erste `return` die Funktion schon beendet. Alle anderen kommen hierher: `absolute(3)` gibt `3` zurück.\n\nEin `else` braucht es dafür nicht.",
+        "en": "For negative numbers, the first `return` has already ended the function. All others get here: `absolute(3)` returns `3`.\n\nNo `else` is needed for that."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt jede Zahl negativ zurück",
+        "en": "Returns every number as negative"
+      },
+      {
+        "de": "Gibt True zurück, wenn die Zahl negativ ist",
+        "en": "Returns True if the number is negative"
+      },
+      {
+        "de": "Gibt immer die Zahl 0 zurück",
+        "en": "Always returns the number 0"
+      },
+      {
+        "de": "Gibt den Betrag einer Zahl zurück, also ohne Minus: absolute(-5) ergibt 5",
+        "en": "Returns the absolute value of a number, without a minus: absolute(-5) gives 5"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`absolute(-5)` gibt `5` zurück, `absolute(3)` gibt `3` zurück. Python hat das als `abs(...)` eingebaut, hier sieht man, wie es von Hand geht.",
+      "en": "`absolute(-5)` returns `5`, `absolute(3)` returns `3`. Python has this built in as `abs(...)`, here you see how it works by hand."
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "id": "power-of-two-above",
+  "code": "def power_of_two_above(n):\n    value = 1\n    while value <= n:\n        value *= 2\n    return value",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion power_of_two_above auf",
+          "en": "Calls the built-in function power_of_two_above"
+        },
+        {
+          "de": "Legt eine Variable power_of_two_above an, die n enthält",
+          "en": "Creates a variable power_of_two_above that holds n"
+        },
+        {
+          "de": "Führt power_of_two_above sofort aus und zeigt das Ergebnis an",
+          "en": "Runs power_of_two_above right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion power_of_two_above mit dem Parameter n",
+          "en": "Defines a function power_of_two_above with the parameter n"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`power_of_two_above` sucht die erste Zweierpotenz (1, 2, 4, 8, ...), die größer als `n` ist. `n` ist die Vergleichszahl, etwa `5`.",
+        "en": "`power_of_two_above` looks for the first power of two (1, 2, 4, 8, ...) that is bigger than `n`. `n` is the number to compare with, such as `5`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Setzt value als Startwert auf 1",
+          "en": "Sets value to 1 as a starting point"
+        },
+        {
+          "de": "Setzt value auf n",
+          "en": "Sets value to n"
+        },
+        {
+          "de": "Gibt 1 zurück",
+          "en": "Returns 1"
+        },
+        {
+          "de": "Prüft, ob value gleich 1 ist",
+          "en": "Checks whether value equals 1"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Mit 1 beginnt die Reihe der Zweierpotenzen. In der Schleife wird `value` immer wieder verdoppelt.\n\nDie Variable `n` bleibt dabei unverändert.",
+        "en": "The series of powers of two begins with 1. In the loop `value` is doubled again and again.\n\nThe variable `n` stays unchanged."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil, solange value kleiner als n ist",
+          "en": "Repeats the indented part as long as value is less than n"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil, solange value höchstens so groß wie n ist",
+          "en": "Repeats the indented part as long as value is at most as big as n"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil n-mal",
+          "en": "Repeats the indented part n times"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil, solange value größer als n ist",
+          "en": "Repeats the indented part as long as value is greater than n"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`<=` schließt die Gleichheit ein: Auch wenn `value` genau `n` ist, wird weitergemacht. Darum ergibt `power_of_two_above(8)` nicht 8, sondern 16.\n\nErst wenn `value` echt größer als `n` ist, hört die Schleife auf.",
+        "en": "`<=` includes equality: even if `value` is exactly `n`, the loop goes on. That is why `power_of_two_above(8)` gives 16, not 8.\n\nOnly once `value` is truly bigger than `n` does the loop stop."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Verdoppelt n",
+          "en": "Doubles n"
+        },
+        {
+          "de": "Addiert 2 zu value",
+          "en": "Adds 2 to value"
+        },
+        {
+          "de": "Verdoppelt value",
+          "en": "Doubles value"
+        },
+        {
+          "de": "Setzt value auf 2",
+          "en": "Sets value to 2"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`value *= 2` ist die Kurzform von `value = value * 2`. Bei `n = 5` entstehen 1, 2, 4, 8.\n\nBei 8 ist `8 <= 5` falsch, die Schleife endet.",
+        "en": "`value *= 2` is the short form of `value = value * 2`. With `n = 5`, 1, 2, 4, 8 appear.\n\nAt 8, `8 <= 5` is false and the loop ends."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt n zurück",
+          "en": "Returns n"
+        },
+        {
+          "de": "Gibt die letzte Zweierpotenz zurück, die kleiner als n ist",
+          "en": "Returns the last power of two that is less than n"
+        },
+        {
+          "de": "Gibt die Anzahl der Verdopplungen zurück",
+          "en": "Returns the number of doublings"
+        },
+        {
+          "de": "Gibt die erste Zweierpotenz zurück, die größer als n ist",
+          "en": "Returns the first power of two that is greater than n"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Nach der Schleife gilt `value > n`. `power_of_two_above(5)` gibt `8` zurück.\n\nBei `n = 0` läuft die Schleife nie, das Ergebnis ist 1.",
+        "en": "After the loop `value > n` holds. `power_of_two_above(5)` returns `8`.\n\nWith `n = 0` the loop never runs and the result is 1."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die kleinste Zweierpotenz zurück, die größer als n ist: power_of_two_above(5) ergibt 8",
+        "en": "Returns the smallest power of two that is greater than n: power_of_two_above(5) gives 8"
+      },
+      {
+        "de": "Gibt n verdoppelt zurück",
+        "en": "Returns n doubled"
+      },
+      {
+        "de": "Gibt die größte Zweierpotenz zurück, die höchstens n ist",
+        "en": "Returns the biggest power of two that is at most n"
+      },
+      {
+        "de": "Gibt zurück, wie oft man n halbieren kann",
+        "en": "Returns how often n can be halved"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`power_of_two_above(5)` gibt `8` zurück, `power_of_two_above(8)` gibt `16` zurück, `power_of_two_above(0)` gibt `1` zurück. Eine `while`-Schleife, die eine Variable in Schritten wachsen lässt, bis eine Grenze überschritten ist.",
+      "en": "`power_of_two_above(5)` returns `8`, `power_of_two_above(8)` returns `16`, `power_of_two_above(0)` returns `1`. A `while` loop that lets a variable grow in steps until a limit is exceeded."
+    }
+  }
+}

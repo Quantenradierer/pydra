@@ -1,0 +1,187 @@
+{
+  "id": "leap-year",
+  "code": "def leap_year(year):\n    if year % 400 == 0:\n        return True\n    if year % 100 == 0:\n        return False\n    return year % 4 == 0",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion leap_year auf",
+          "en": "Calls the built-in function leap_year"
+        },
+        {
+          "de": "Legt eine Variable leap_year an, die year enthält",
+          "en": "Creates a variable leap_year that holds year"
+        },
+        {
+          "de": "Führt leap_year sofort aus und zeigt das Ergebnis an",
+          "en": "Runs leap_year right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion leap_year mit dem Parameter year",
+          "en": "Defines a function leap_year with the parameter year"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`leap_year` heißt „Schaltjahr“. `year` ist die Jahreszahl, etwa `2024`. Die Funktion antwortet mit True oder False.",
+        "en": "`leap_year` asks whether a year is a leap year. `year` is the year number, such as `2024`. The function answers with True or False."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob das Jahr durch 400 teilbar ist (kein Rest bleibt)",
+          "en": "Checks whether the year is divisible by 400 (no remainder is left)"
+        },
+        {
+          "de": "Prüft, ob das Jahr kleiner als 400 ist",
+          "en": "Checks whether the year is less than 400"
+        },
+        {
+          "de": "Teilt das Jahr durch 400 und speichert den Rest",
+          "en": "Divides the year by 400 and stores the remainder"
+        },
+        {
+          "de": "Prüft, ob das Jahr genau 400 ist",
+          "en": "Checks whether the year is exactly 400"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`year % 400` ist der Rest der Division. Ist er 0, geht die Teilung auf: Bei 2000 stimmt das, bei 1900 nicht.\n\nDas ist die Ausnahme von der Ausnahme: Jahre wie 2000 sind trotz 100 Schaltjahre.",
+        "en": "`year % 400` is the remainder of the division. If it is 0, the division comes out even: true for 2000, not for 1900.\n\nThis is the exception to the exception: years like 2000 are leap years despite being divisible by 100."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt False zurück",
+          "en": "Returns False"
+        },
+        {
+          "de": "Gibt True zurück und beendet die Funktion",
+          "en": "Returns True and ends the function"
+        },
+        {
+          "de": "Gibt den Text \"True\" zurück",
+          "en": "Returns the text \"True\""
+        },
+        {
+          "de": "Gibt 400 zurück",
+          "en": "Returns 400"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Die Zeile läuft nur bei Jahren wie 2000 oder 1600. `leap_year(2000)` gibt `True` zurück.\n\n`True` ohne Anführungszeichen ist ein Wahrheitswert, kein Text.",
+        "en": "The line only runs for years like 2000 or 1600. `leap_year(2000)` returns `True`.\n\n`True` without quotes is a truth value, not a text."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob das Jahr 100 Jahre alt ist",
+          "en": "Checks whether the year is 100 years old"
+        },
+        {
+          "de": "Prüft, ob das Jahr größer als 100 ist",
+          "en": "Checks whether the year is greater than 100"
+        },
+        {
+          "de": "Prüft, ob das Jahr durch 100 teilbar ist; hier kommt man nur, wenn es nicht durch 400 teilbar ist",
+          "en": "Checks whether the year is divisible by 100; you only get here if it is not divisible by 400"
+        },
+        {
+          "de": "Prüft, ob das Jahr durch 4 teilbar ist",
+          "en": "Checks whether the year is divisible by 4"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Zu den Jahrhundertjahren gehören 1900, 2100 und so weiter. Sie sind keine Schaltjahre, außer sie sind durch 400 teilbar. Letzteres ist darüber schon erledigt.\n\nBei 1900 stimmt `1900 % 100 == 0`.",
+        "en": "The century years include 1900, 2100 and so on. They are not leap years unless divisible by 400, which was dealt with above.\n\nFor 1900, `1900 % 100 == 0` is true."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt True zurück",
+          "en": "Returns True"
+        },
+        {
+          "de": "Gibt False für alle Jahre zurück",
+          "en": "Returns False for all years"
+        },
+        {
+          "de": "Gibt die Zahl 100 zurück",
+          "en": "Returns the number 100"
+        },
+        {
+          "de": "Gibt False zurück, weil Jahrhundertjahre ohne 400er-Teilung kein Schaltjahr sind",
+          "en": "Returns False, because century years not divisible by 400 are not leap years"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`leap_year(1900)` endet hier mit `False`. Die Reihenfolge der Prüfungen ist wichtig: Die Ausnahme 400 steht ganz oben.\n\nSonst würde 2000 zu früh als „kein Schaltjahr“ gelten.",
+        "en": "`leap_year(1900)` ends here with `False`. The order of the checks matters: the 400 exception is at the top.\n\nOtherwise 2000 would be called \"not a leap year\" too early."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt True oder False zurück, je nachdem, ob das Jahr durch 4 teilbar ist",
+          "en": "Returns True or False depending on whether the year is divisible by 4"
+        },
+        {
+          "de": "Gibt immer den Rest der Division durch 4 zurück",
+          "en": "Always returns the remainder of the division by 4"
+        },
+        {
+          "de": "Gibt immer True zurück",
+          "en": "Always returns True"
+        },
+        {
+          "de": "Gibt das Jahr geteilt durch 4 zurück",
+          "en": "Returns the year divided by 4"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`year % 4 == 0` ist selbst ein Wahrheitswert, den man direkt zurückgeben kann. `leap_year(2024)` gibt `True` zurück, `leap_year(2023)` gibt `False` zurück.\n\nSo spart man ein weiteres `if`.",
+        "en": "`year % 4 == 0` is a truth value in itself that can be returned directly. `leap_year(2024)` returns `True`, `leap_year(2023)` returns `False`.\n\nThis saves another `if`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt True zurück, wenn das Jahr durch 100 teilbar ist",
+        "en": "Returns True if the year is divisible by 100"
+      },
+      {
+        "de": "Gibt True zurück, wenn das Jahr ein Schaltjahr ist: durch 4 teilbar, aber Jahrhunderte nur, wenn durch 400 teilbar",
+        "en": "Returns True if the year is a leap year: divisible by 4, but century years only if divisible by 400"
+      },
+      {
+        "de": "Gibt True für jedes Jahr zurück, das durch 4 teilbar ist",
+        "en": "Returns True for every year that is divisible by 4"
+      },
+      {
+        "de": "Gibt die Anzahl der Tage des Jahres zurück",
+        "en": "Returns the number of days in the year"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`leap_year(2000)` ist `True`, `leap_year(1900)` ist `False`, `leap_year(2024)` ist `True`, `leap_year(2023)` ist `False`.",
+      "en": "`leap_year(2000)` is `True`, `leap_year(1900)` is `False`, `leap_year(2024)` is `True`, `leap_year(2023)` is `False`."
+    }
+  }
+}

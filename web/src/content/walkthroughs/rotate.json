@@ -1,0 +1,135 @@
+{
+  "id": "rotate",
+  "code": "def rotate(items):\n    if len(items) == 0:\n        return items\n    return items[1:] + items[:1]",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion rotate auf",
+          "en": "Calls the built-in function rotate"
+        },
+        {
+          "de": "Definiert eine Funktion rotate mit dem Parameter items",
+          "en": "Defines a function rotate with the parameter items"
+        },
+        {
+          "de": "Legt eine Variable rotate an, die items enthält",
+          "en": "Creates a variable rotate that holds items"
+        },
+        {
+          "de": "Führt rotate sofort aus und zeigt das Ergebnis an",
+          "en": "Runs rotate right away and prints the result"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`rotate` heißt „drehen“. `items` ist eine Liste, deren erstes Element ans Ende wandern soll, etwa `[1, 2, 3]`.",
+        "en": "`rotate` means \"turn\". `items` is a list whose first item should move to the end, such as `[1, 2, 3]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob die Liste genau ein Element hat",
+          "en": "Checks whether the list has exactly one item"
+        },
+        {
+          "de": "Setzt die Länge der Liste auf 0",
+          "en": "Sets the length of the list to 0"
+        },
+        {
+          "de": "Prüft, ob die Liste leer ist",
+          "en": "Checks whether the list is empty"
+        },
+        {
+          "de": "Prüft, ob das erste Element 0 ist",
+          "en": "Checks whether the first item is 0"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Eine leere Liste hat kein erstes Element, das man ans Ende stellen könnte. Darum wird dieser Sonderfall vorweg behandelt.\n\n`len(items)` ist die Anzahl der Elemente.",
+        "en": "An empty list has no first item that could be moved to the end. So this special case is handled up front.\n\n`len(items)` is the number of items."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Gibt None zurück",
+          "en": "Returns None"
+        },
+        {
+          "de": "Gibt eine Liste mit dem Element 0 zurück",
+          "en": "Returns a list with the item 0"
+        },
+        {
+          "de": "Gibt die leere Liste unverändert zurück",
+          "en": "Returns the empty list unchanged"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Zeile läuft nur bei einer leeren Liste. `rotate([])` gibt `[]` zurück.\n\nGedreht wird dann nichts, es gibt ja nichts zu drehen.",
+        "en": "The line only runs for an empty list. `rotate([])` returns `[]`.\n\nNothing is turned then, as there is nothing to turn."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Hängt das erste Element hinten an: Die Liste ohne das erste Element plus eine Liste mit nur dem ersten",
+          "en": "Moves the first item to the back: the list without the first item plus a list with only the first"
+        },
+        {
+          "de": "Verschiebt das letzte Element nach vorn",
+          "en": "Moves the last item to the front"
+        },
+        {
+          "de": "Sortiert die Liste",
+          "en": "Sorts the list"
+        },
+        {
+          "de": "Verdoppelt die Liste",
+          "en": "Doubles the list"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`items[1:]` ist alles ab Position 1, bei `[1, 2, 3]` also `[2, 3]`. `items[:1]` ist alles vor Position 1, also `[1]`.\n\n`+` hängt die Listen aneinander: `[2, 3, 1]`.",
+        "en": "`items[1:]` is everything from position 1, so `[2, 3]` for `[1, 2, 3]`. `items[:1]` is everything before position 1, so `[1]`.\n\n`+` joins the lists: `[2, 3, 1]`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Liste umgekehrt zurück: [3, 2, 1]",
+        "en": "Returns the list reversed: [3, 2, 1]"
+      },
+      {
+        "de": "Gibt eine neue Liste zurück, in der das erste Element ans Ende gerückt ist: rotate([1, 2, 3]) ergibt [2, 3, 1]",
+        "en": "Returns a new list in which the first item has moved to the end: rotate([1, 2, 3]) gives [2, 3, 1]"
+      },
+      {
+        "de": "Gibt das letzte Element nach vorn gerückt zurück: [3, 1, 2]",
+        "en": "Returns the list with the last item moved to the front: [3, 1, 2]"
+      },
+      {
+        "de": "Gibt das erste Element der Liste zurück",
+        "en": "Returns the first item of the list"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Original-Liste bleibt unverändert, denn `+` und Ausschnitte bauen eine neue. Der leere Fall `rotate([])` gibt `[]` zurück.",
+      "en": "The original list stays unchanged, since `+` and slices build a new one. The empty case `rotate([])` returns `[]`."
+    }
+  }
+}

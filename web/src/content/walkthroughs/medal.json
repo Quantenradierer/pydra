@@ -1,0 +1,135 @@
+{
+  "id": "medal",
+  "code": "def medal(place):\n    medals = {1: \"gold\", 2: \"silver\"}\n    name = medals.get(place, \"no medal\")\n    return name",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion medal auf",
+          "en": "Calls the built-in function medal"
+        },
+        {
+          "de": "Legt eine Variable medal an, die place enthält",
+          "en": "Creates a variable medal that holds place"
+        },
+        {
+          "de": "Führt medal sofort aus und zeigt das Ergebnis an",
+          "en": "Runs medal right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion medal mit dem Parameter place",
+          "en": "Defines a function medal with the parameter place"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`medal` heißt „Medaille“. `place` ist der Platz, den jemand erreicht hat, etwa `1`.",
+        "en": "`medal` means \"medal\". `place` is the place someone reached, such as `1`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt ein Wörterbuch an, das Plätzen die Medaillennamen zuordnet",
+          "en": "Creates a dictionary that matches places to medal names"
+        },
+        {
+          "de": "Legt eine Liste mit zwei Texten an",
+          "en": "Creates a list with two texts"
+        },
+        {
+          "de": "Legt die Zahl 1 unter dem Namen medals ab",
+          "en": "Stores the number 1 under the name medals"
+        },
+        {
+          "de": "Prüft, ob place 1 oder 2 ist",
+          "en": "Checks whether place is 1 or 2"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Ein Wörterbuch besteht aus Paaren `Schlüssel: Wert`. Hier sind die Schlüssel die Zahlen 1 und 2 und die Werte die Namen der Medaillen.\n\nSchlüssel müssen nicht Texte sein, auch Zahlen sind erlaubt.",
+        "en": "A dictionary consists of `key: value` pairs. Here the keys are the numbers 1 and 2 and the values are the names of the medals.\n\nKeys do not have to be texts, numbers are allowed too."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Schlägt place nach und gibt einen Fehler, wenn der Schlüssel fehlt",
+          "en": "Looks up place and gives an error if the key is missing"
+        },
+        {
+          "de": "Schlägt place im Wörterbuch nach; fehlt der Schlüssel, kommt \"no medal\" heraus",
+          "en": "Looks up place in the dictionary; if the key is missing, \"no medal\" comes out"
+        },
+        {
+          "de": "Fügt place als neuen Schlüssel ein",
+          "en": "Adds place as a new key"
+        },
+        {
+          "de": "Gibt immer \"no medal\" zurück",
+          "en": "Always returns \"no medal\""
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`medals.get(place, \"no medal\")` hat einen Ersatzwert als zweites Argument. Bei `1` kommt `\"gold\"` heraus, bei `5` der Ersatzwert.\n\nMit `medals[5]` gäbe es einen `KeyError`, `get` vermeidet ihn.",
+        "en": "`medals.get(place, \"no medal\")` has a fallback as its second argument. For `1` you get `\"gold\"`, for `5` the fallback.\n\nWith `medals[5]` there would be a `KeyError`, `get` avoids it."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt immer den Text \"name\" zurück",
+          "en": "Always returns the text \"name\""
+        },
+        {
+          "de": "Gibt den Platz place zurück",
+          "en": "Returns the place place"
+        },
+        {
+          "de": "Gibt den gefundenen Namen oder den Ersatztext zurück",
+          "en": "Returns the name that was found or the fallback text"
+        },
+        {
+          "de": "Gibt das ganze Wörterbuch zurück",
+          "en": "Returns the whole dictionary"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`medal(1)` gibt `\"gold\"` zurück, `medal(2)` gibt `\"silver\"` zurück, `medal(5)` gibt `\"no medal\"` zurück.\n\nOhne Anführungszeichen ist `name` der Name einer Variable.",
+        "en": "`medal(1)` returns `\"gold\"`, `medal(2)` returns `\"silver\"`, `medal(5)` returns `\"no medal\"`.\n\nWithout quotes, `name` is the name of a variable."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt den Platz als Text zurück",
+        "en": "Returns the place as a text"
+      },
+      {
+        "de": "Gibt \"gold\" für alle Plätze zurück",
+        "en": "Returns \"gold\" for all places"
+      },
+      {
+        "de": "Gibt einen Fehler zurück, wenn der Platz höher als 2 ist",
+        "en": "Gives an error if the place is higher than 2"
+      },
+      {
+        "de": "Gibt zum Platz die Medaille zurück: 1 \"gold\", 2 \"silver\", sonst \"no medal\"",
+        "en": "Returns the medal for a place: 1 \"gold\", 2 \"silver\", otherwise \"no medal\""
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Ein Wörterbuch ersetzt hier eine lange `if`/`elif`-Kette. Für Zuordnungen wie „Wert A gehört zu Wert B“ ist es die kürzere Lösung.",
+      "en": "A dictionary replaces a long `if`/`elif` chain here. For matchings like \"value A belongs to value B\" it is the shorter solution."
+    }
+  }
+}

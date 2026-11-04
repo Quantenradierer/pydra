@@ -1,0 +1,135 @@
+{
+  "id": "is-sorted",
+  "code": "def is_sorted(numbers):\n    ordered = sorted(numbers)\n    same = numbers == ordered\n    return same",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion is_sorted mit dem Parameter numbers",
+          "en": "Defines a function is_sorted with the parameter numbers"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion is_sorted auf",
+          "en": "Calls the built-in function is_sorted"
+        },
+        {
+          "de": "Legt eine Variable is_sorted an, die numbers enthält",
+          "en": "Creates a variable is_sorted that holds numbers"
+        },
+        {
+          "de": "Führt is_sorted sofort aus und zeigt das Ergebnis an",
+          "en": "Runs is_sorted right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`is_sorted` fragt, ob eine Liste schon aufsteigend sortiert ist. `numbers` ist die Liste, etwa `[1, 2, 3]`.",
+        "en": "`is_sorted` asks whether a list is already sorted in ascending order. `numbers` is the list, such as `[1, 2, 3]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Sortiert die Liste numbers selbst",
+          "en": "Sorts the list numbers itself"
+        },
+        {
+          "de": "Legt eine sortierte Kopie der Zahlen in ordered an",
+          "en": "Creates a sorted copy of the numbers in ordered"
+        },
+        {
+          "de": "Prüft, ob die Liste sortiert ist",
+          "en": "Checks whether the list is sorted"
+        },
+        {
+          "de": "Gibt die sortierte Liste zurück",
+          "en": "Returns the sorted list"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`sorted(...)` verändert die Originalliste nicht, es entsteht eine neue. Aus `[3, 1, 2]` wird `[1, 2, 3]`.\n\nDie Kopie dient nur zum Vergleich.",
+        "en": "`sorted(...)` does not change the original list, a new one is created. `[3, 1, 2]` becomes `[1, 2, 3]`.\n\nThe copy is only used for comparing."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Setzt numbers auf die sortierte Liste",
+          "en": "Sets numbers to the sorted list"
+        },
+        {
+          "de": "Prüft, ob die Listen gleich lang sind",
+          "en": "Checks whether the lists are the same length"
+        },
+        {
+          "de": "Vergleicht die Liste mit ihrer sortierten Kopie und speichert True oder False in same",
+          "en": "Compares the list with its sorted copy and stores True or False in same"
+        },
+        {
+          "de": "Speichert beide Listen in same",
+          "en": "Stores both lists in same"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`==` vergleicht Listen Element für Element in der Reihenfolge. `[1, 2, 3] == [1, 2, 3]` ist `True`, `[3, 1, 2] == [1, 2, 3]` ist `False`.\n\nDas Ergebnis ist ein Wahrheitswert, der in `same` gespeichert wird.",
+        "en": "`==` compares lists item by item in order. `[1, 2, 3] == [1, 2, 3]` is `True`, `[3, 1, 2] == [1, 2, 3]` is `False`.\n\nThe result is a truth value, stored in `same`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die sortierte Liste zurück",
+          "en": "Returns the sorted list"
+        },
+        {
+          "de": "Gibt immer True zurück",
+          "en": "Always returns True"
+        },
+        {
+          "de": "Gibt die Anzahl der vertauschten Elemente zurück",
+          "en": "Returns the number of swapped items"
+        },
+        {
+          "de": "Gibt den Wahrheitswert zurück: True, wenn die Liste schon sortiert war",
+          "en": "Returns the truth value: True if the list was already sorted"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`is_sorted([1, 2, 3])` gibt `True` zurück, `is_sorted([3, 1, 2])` gibt `False` zurück.\n\nFunktionen mit dem Namen `is_...` geben üblicherweise True oder False zurück.",
+        "en": "`is_sorted([1, 2, 3])` returns `True`, `is_sorted([3, 1, 2])` returns `False`.\n\nFunctions named `is_...` usually return True or False."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt True zurück, wenn die Zahlen schon aufsteigend sortiert sind, sonst False",
+        "en": "Returns True if the numbers are already in ascending order, otherwise False"
+      },
+      {
+        "de": "Gibt die Liste sortiert zurück",
+        "en": "Returns the list sorted"
+      },
+      {
+        "de": "Sortiert die Liste numbers dauerhaft",
+        "en": "Sorts the list numbers for good"
+      },
+      {
+        "de": "Gibt True zurück, wenn die Liste keine doppelten Zahlen enthält",
+        "en": "Returns True if the list has no duplicate numbers"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Der Trick: Eine Liste ist genau dann sortiert, wenn sie gleich ihrer sortierten Kopie ist. So spart man sich eine Schleife über Nachbarpaare.",
+      "en": "The trick: a list is sorted exactly when it equals its sorted copy. This saves a loop over neighbouring pairs."
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "id": "count-letters",
+  "code": "def count_letters(text):\n    counts = {}\n    for ch in text:\n        counts[ch] = counts.get(ch, 0) + 1\n    return counts",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion count_letters auf",
+          "en": "Calls the built-in function count_letters"
+        },
+        {
+          "de": "Legt eine Variable count_letters an, die text enthält",
+          "en": "Creates a variable count_letters that holds text"
+        },
+        {
+          "de": "Definiert eine Funktion count_letters mit dem Parameter text",
+          "en": "Defines a function count_letters with the parameter text"
+        },
+        {
+          "de": "Führt count_letters sofort aus und zeigt das Ergebnis an",
+          "en": "Runs count_letters right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`count_letters` heißt „Buchstaben zählen“. `text` ist der Text, dessen Buchstaben gezählt werden, etwa `\"aab\"`.",
+        "en": "`count_letters` counts letters. `text` is the text whose letters are counted, such as `\"aab\"`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine leere Liste counts an",
+          "en": "Creates an empty list counts"
+        },
+        {
+          "de": "Legt einen leeren Text counts an",
+          "en": "Creates an empty text counts"
+        },
+        {
+          "de": "Legt eine Menge counts an",
+          "en": "Creates a set counts"
+        },
+        {
+          "de": "Legt ein leeres Wörterbuch (dict) counts an",
+          "en": "Creates an empty dictionary (dict) counts"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`{}` ist ein leeres Wörterbuch. Es speichert Paare aus Schlüssel und Wert, hier Buchstabe und Anzahl.\n\nEine leere Liste wäre `[]`.",
+        "en": "`{}` is an empty dictionary. It stores pairs of key and value, here letter and count.\n\nAn empty list would be `[]`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für jeden Buchstaben des Textes",
+          "en": "Repeats the indented part for each letter of the text"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Wort des Textes",
+          "en": "Repeats the indented part for each word of the text"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jeden Eintrag von counts",
+          "en": "Repeats the indented part for each entry of counts"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jeden verschiedenen Buchstaben einmal",
+          "en": "Repeats the indented part once for each different letter"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Ein Text lässt sich wie eine Liste von Zeichen durchlaufen. Bei `\"aab\"` ist `letter` nacheinander `\"a\"`, `\"a\"` und `\"b\"`.\n\nDer gleiche Buchstabe kommt also mehrfach dran.",
+        "en": "A text can be walked through like a list of characters. For `\"aab\"`, `ch` is `\"a\"`, `\"a\"` and `\"b\"` in turn.\n\nSo the same letter comes up several times."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Setzt den Zählerstand des Buchstabens auf 1",
+          "en": "Sets the letter's count to 1"
+        },
+        {
+          "de": "Holt den bisherigen Zählerstand des Buchstabens (oder 0, wenn er neu ist), addiert 1 und speichert das",
+          "en": "Fetches the letter's count so far (or 0 if it is new), adds 1 and stores that"
+        },
+        {
+          "de": "Gibt einen Fehler, wenn der Buchstabe noch nicht in counts ist",
+          "en": "Gives an error if the letter is not in counts yet"
+        },
+        {
+          "de": "Fügt den Buchstaben ein weiteres Mal in counts ein",
+          "en": "Inserts the letter into counts one more time"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`counts.get(ch, 0)` gibt den Wert zum Schlüssel zurück, und `0`, wenn es ihn noch nicht gibt. Das vermeidet den Fehler, den `counts[ch]` bei einem fehlenden Schlüssel machen würde.\n\nLinks von `=` wird das Ergebnis unter demselben Schlüssel gespeichert. Aus `\"aab\"` entsteht `{\"a\": 1}`, dann `{\"a\": 2}`, dann `{\"a\": 2, \"b\": 1}`.",
+        "en": "`counts.get(ch, 0)` returns the value for the key, and `0` if it does not exist yet. This avoids the error that `counts[ch]` would give for a missing key.\n\nLeft of `=` the result is stored under the same key. `\"aab\"` gives `{\"a\": 1}`, then `{\"a\": 2}`, then `{\"a\": 2, \"b\": 1}`."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt die Anzahl der verschiedenen Buchstaben zurück",
+          "en": "Returns the number of different letters"
+        },
+        {
+          "de": "Gibt den häufigsten Buchstaben zurück",
+          "en": "Returns the most frequent letter"
+        },
+        {
+          "de": "Gibt das fertige Wörterbuch zurück, nachdem die Schleife durch ist",
+          "en": "Returns the finished dictionary after the loop is done"
+        },
+        {
+          "de": "Gibt in jeder Runde das Wörterbuch zurück",
+          "en": "Returns the dictionary in every pass"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`count_letters(\"aab\")` gibt `{\"a\": 2, \"b\": 1}` zurück, `count_letters(\"\")` gibt `{}` zurück.\n\nDas `return` ist nicht eingerückt, gehört also nicht zur Schleife.",
+        "en": "`count_letters(\"aab\")` returns `{\"a\": 2, \"b\": 1}`, `count_letters(\"\")` returns `{}`.\n\nThe `return` is not indented, so it does not belong to the loop."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Länge des Textes zurück",
+        "en": "Returns the length of the text"
+      },
+      {
+        "de": "Gibt eine Liste aller Buchstaben ohne Doppelte zurück",
+        "en": "Returns a list of all letters without repeats"
+      },
+      {
+        "de": "Gibt den Buchstaben zurück, der am häufigsten vorkommt",
+        "en": "Returns the letter that occurs most often"
+      },
+      {
+        "de": "Gibt ein Wörterbuch zurück, das zu jedem Buchstaben des Textes die Anzahl enthält: count_letters(\"aab\") ergibt {\"a\": 2, \"b\": 1}",
+        "en": "Returns a dictionary holding the count of each letter of the text: count_letters(\"aab\") gives {\"a\": 2, \"b\": 1}"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Das ist das Standardmuster zum Zählen mit einem Wörterbuch: `counts[key] = counts.get(key, 0) + 1`.",
+      "en": "This is the standard pattern for counting with a dictionary: `counts[key] = counts.get(key, 0) + 1`."
+    }
+  }
+}

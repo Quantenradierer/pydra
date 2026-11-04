@@ -1,0 +1,187 @@
+{
+  "id": "count-down",
+  "code": "def count_down(n):\n    result = []\n    while n > 0:\n        result.append(n)\n        n -= 1\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion count_down mit dem Parameter n",
+          "en": "Defines a function count_down with the parameter n"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion count_down auf",
+          "en": "Calls the built-in function count_down"
+        },
+        {
+          "de": "Legt eine Variable count_down an, die n enthält",
+          "en": "Creates a variable count_down that holds n"
+        },
+        {
+          "de": "Führt count_down sofort aus und zeigt das Ergebnis an",
+          "en": "Runs count_down right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`count_down` heißt „herunterzählen“. `n` ist die Zahl, bei der gestartet wird, etwa `3`.",
+        "en": "`count_down` means \"count down\". `n` is the number to start at, such as `3`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Liste mit dem Wert 0 an",
+          "en": "Creates a list holding the value 0"
+        },
+        {
+          "de": "Legt eine leere Liste an und nennt sie result",
+          "en": "Creates an empty list and calls it result"
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Legt einen leeren Text an",
+          "en": "Creates an empty text"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`[]` ist die leere Liste. Sie wird in der Schleife nach und nach gefüllt.\n\nDie Liste muss vor der Schleife entstehen, damit sie in jedem Durchlauf da ist.",
+        "en": "`[]` is the empty list. It is filled bit by bit inside the loop.\n\nThe list must be created before the loop so that it is there in every pass."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil genau n-mal",
+          "en": "Repeats the indented part exactly n times"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Element von n",
+          "en": "Repeats the indented part for each item of n"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil, solange n größer als 0 ist",
+          "en": "Repeats the indented part as long as n is greater than 0"
+        },
+        {
+          "de": "Prüft nur einmal, ob n größer als 0 ist",
+          "en": "Checks only once whether n is greater than 0"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`while` prüft die Bedingung vor jedem Durchlauf neu. Bei `n = 3` läuft die Schleife für 3, 2 und 1; bei 0 stimmt die Bedingung nicht mehr.\n\nBei `count_down(0)` läuft sie gar nicht.",
+        "en": "`while` checks the condition anew before each pass. With `n = 3` the loop runs for 3, 2 and 1; at 0 the condition is no longer true.\n\nFor `count_down(0)` it does not run at all."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Hängt die Zahl 1 an die Liste an",
+          "en": "Appends the number 1 to the list"
+        },
+        {
+          "de": "Setzt n auf den Wert der Liste",
+          "en": "Sets n to the value of the list"
+        },
+        {
+          "de": "Fügt n vorn in die Liste ein",
+          "en": "Inserts n at the front of the list"
+        },
+        {
+          "de": "Hängt den aktuellen Wert von n hinten an die Liste an",
+          "en": "Appends the current value of n to the end of the list"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`append` fügt am Ende an. Nacheinander kommen 3, 2 und 1 in die Liste, in genau dieser Reihenfolge.\n\nDie Liste wird verändert, ohne dass man sie neu zuweist.",
+        "en": "`append` adds at the end. 3, 2 and 1 go into the list one after another, in exactly that order.\n\nThe list is changed without being reassigned."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Verringert n um 1",
+          "en": "Decreases n by 1"
+        },
+        {
+          "de": "Setzt n auf -1",
+          "en": "Sets n to -1"
+        },
+        {
+          "de": "Erhöht n um 1",
+          "en": "Increases n by 1"
+        },
+        {
+          "de": "Entfernt das letzte Element der Liste",
+          "en": "Removes the last item of the list"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`n -= 1` ist die Kurzform von `n = n - 1`. Ohne diese Zeile würde `n` immer 3 bleiben und die Schleife nie enden.\n\nSo nähert sich `n` der 0, bei der die Schleife stoppt.",
+        "en": "`n -= 1` is the short form of `n = n - 1`. Without this line `n` would stay 3 forever and the loop would never end.\n\nThis way `n` approaches 0, where the loop stops."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt die Zahl n zurück, die nach der Schleife 0 ist",
+          "en": "Returns the number n, which is 0 after the loop"
+        },
+        {
+          "de": "Gibt die fertige Liste zurück, nachdem die Schleife zu Ende ist",
+          "en": "Returns the finished list after the loop is over"
+        },
+        {
+          "de": "Gibt in jedem Durchlauf die Liste zurück",
+          "en": "Returns the list in every pass"
+        },
+        {
+          "de": "Gibt nur das letzte Element der Liste zurück",
+          "en": "Returns only the last item of the list"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Das `return` ist nicht eingerückt und läuft daher erst nach der Schleife. `count_down(3)` gibt `[3, 2, 1]` zurück.\n\nDie Liste enthält die 0 nicht, denn bei 0 ist die Schleife schon beendet.",
+        "en": "The `return` is not indented, so it runs only after the loop. `count_down(3)` returns `[3, 2, 1]`.\n\nThe list does not contain 0, since the loop is already over at 0."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt eine Liste von 0 bis n zurück",
+        "en": "Returns a list from 0 to n"
+      },
+      {
+        "de": "Gibt eine Liste von n bis 0 zurück",
+        "en": "Returns a list from n down to 0"
+      },
+      {
+        "de": "Gibt eine Liste zurück, die von n bis 1 herunterzählt: count_down(3) ergibt [3, 2, 1]",
+        "en": "Returns a list counting down from n to 1: count_down(3) gives [3, 2, 1]"
+      },
+      {
+        "de": "Gibt die Zahl n zurück, die auf 0 heruntergezählt wurde",
+        "en": "Returns the number n counted down to 0"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`count_down(3)` ergibt `[3, 2, 1]`, `count_down(0)` ergibt `[]`. Die `while`-Schleife passt, wenn man die Anzahl der Durchläufe nicht vorher kennt, sondern von einer Bedingung abhängig macht.",
+      "en": "`count_down(3)` gives `[3, 2, 1]`, `count_down(0)` gives `[]`. A `while` loop fits when the number of passes is not known beforehand but depends on a condition."
+    }
+  }
+}

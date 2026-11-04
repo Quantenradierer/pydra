@@ -1,0 +1,135 @@
+{
+  "id": "power",
+  "code": "def power(base, exponent):\n    if exponent == 0:\n        return 1\n    return base * power(base, exponent - 1)",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion power mit den Parametern base und exponent",
+          "en": "Defines a function power with the parameters base and exponent"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion power auf",
+          "en": "Calls the built-in function power"
+        },
+        {
+          "de": "Legt eine Variable power an, die base, exponent enthält",
+          "en": "Creates a variable power that holds base, exponent"
+        },
+        {
+          "de": "Führt power sofort aus und zeigt das Ergebnis an",
+          "en": "Runs power right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`power` heißt „Potenz“. `power(2, 3)` soll `2 * 2 * 2` ausrechnen. `base` ist die Grundzahl, `exponent` sagt, wie oft sie mit sich selbst multipliziert wird.",
+        "en": "`power` means \"raised to a power\". `power(2, 3)` should work out `2 * 2 * 2`. `base` is the base number, `exponent` says how often it is multiplied by itself."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob die Grundzahl 0 ist",
+          "en": "Checks whether the base is 0"
+        },
+        {
+          "de": "Prüft, ob der Exponent 0 ist",
+          "en": "Checks whether the exponent is 0"
+        },
+        {
+          "de": "Setzt den Exponenten auf 0",
+          "en": "Sets the exponent to 0"
+        },
+        {
+          "de": "Prüft, ob der Exponent kleiner als 1 ist und nur dann 1 ist",
+          "en": "Checks whether the exponent is less than 1 and only then is 1"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Das ist der Abbruchfall, der Fall ohne weiteren Aufruf. Jede Zahl hoch 0 ist 1, das ist mathematisch so festgelegt.\n\nJede rekursive Funktion braucht so einen Fall, sonst ruft sie sich endlos selbst auf.",
+        "en": "This is the base case, the case with no further call. Any number to the power of 0 is 1, that is how maths defines it.\n\nEvery recursive function needs such a case, otherwise it calls itself forever."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt base zurück",
+          "en": "Returns base"
+        },
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        },
+        {
+          "de": "Gibt 1 zurück und beendet die Funktion ohne weiteren Aufruf",
+          "en": "Returns 1 and ends the function without another call"
+        },
+        {
+          "de": "Ruft power noch einmal mit kleinerem Exponenten auf",
+          "en": "Calls power once more with a smaller exponent"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Bei `power(5, 0)` ist das schon das Ergebnis: `1`.\n\nBei `power(2, 3)` wird dieser Fall erst nach drei weiteren Aufrufen erreicht.",
+        "en": "For `power(5, 0)` this is already the result: `1`.\n\nFor `power(2, 3)` this case is only reached after three more calls."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Multipliziert base mit exponent",
+          "en": "Multiplies base by exponent"
+        },
+        {
+          "de": "Ruft power endlos mit demselben Exponenten auf",
+          "en": "Calls power endlessly with the same exponent"
+        },
+        {
+          "de": "Rechnet base hoch exponent mit der eingebauten Funktion pow",
+          "en": "Works out base to the power of exponent with the built-in pow"
+        },
+        {
+          "de": "Multipliziert base mit dem Ergebnis des Aufrufs power(base, exponent - 1): die Funktion ruft sich selbst auf",
+          "en": "Multiplies base by the result of the call power(base, exponent - 1): the function calls itself"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`power(2, 3)` ist `2 * power(2, 2)`, das ist `2 * (2 * power(2, 1))`, das ist `2 * (2 * (2 * power(2, 0)))`.\n\nMit `power(2, 0)` gleich `1` ergibt sich von innen nach außen `2 * 2 * 2 * 1`, also `8`. Mit jedem Aufruf wird der Exponent kleiner und erreicht schließlich 0.",
+        "en": "`power(2, 3)` is `2 * power(2, 2)`, which is `2 * (2 * power(2, 1))`, which is `2 * (2 * (2 * power(2, 0)))`.\n\nWith `power(2, 0)` equal to `1`, working from the inside out gives `2 * 2 * 2 * 1`, which is `8`. With every call the exponent gets smaller and finally reaches 0."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt base hoch exponent zurück, indem sie sich selbst mit kleinerem Exponenten aufruft: power(2, 3) ergibt 8",
+        "en": "Returns base to the power of exponent by calling itself with a smaller exponent: power(2, 3) gives 8"
+      },
+      {
+        "de": "Gibt base mal exponent zurück: 6",
+        "en": "Returns base times exponent: 6"
+      },
+      {
+        "de": "Gibt immer 1 zurück",
+        "en": "Always returns 1"
+      },
+      {
+        "de": "Gibt base plus exponent zurück: 5",
+        "en": "Returns base plus exponent: 5"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Rekursion bedeutet: Eine Funktion löst ein Problem, indem sie ein kleineres Problem derselben Art löst. Der Abbruchfall (`exponent == 0`) sorgt dafür, dass es ein Ende gibt.",
+      "en": "Recursion means: a function solves a problem by solving a smaller problem of the same kind. The base case (`exponent == 0`) makes sure there is an end."
+    }
+  }
+}

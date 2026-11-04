@@ -1,0 +1,161 @@
+{
+  "id": "sum-list",
+  "code": "def sum_list(numbers):\n    total = 0\n    for n in numbers:\n        total += n\n    return total",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion sum_list auf",
+          "en": "Calls the built-in function sum_list"
+        },
+        {
+          "de": "Legt eine Variable sum_list an, die numbers enthält",
+          "en": "Creates a variable sum_list that holds numbers"
+        },
+        {
+          "de": "Führt sum_list sofort aus und zeigt das Ergebnis an",
+          "en": "Runs sum_list right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion sum_list mit dem Parameter numbers",
+          "en": "Defines a function sum_list with the parameter numbers"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`sum_list` addiert die Zahlen einer Liste. `numbers` ist die Liste, etwa `[1, 2, 3]`.\n\nPython hat dafür auch `sum(...)`. Hier sieht man, wie es mit einer Schleife geht.",
+        "en": "`sum_list` adds up the numbers of a list. `numbers` is the list, such as `[1, 2, 3]`.\n\nPython also has `sum(...)` for this. Here you see how it works with a loop."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt die Variable total an und setzt sie auf 0",
+          "en": "Creates the variable total and sets it to 0"
+        },
+        {
+          "de": "Gibt 0 zurück und beendet die Funktion",
+          "en": "Returns 0 and ends the function"
+        },
+        {
+          "de": "Prüft, ob total gleich 0 ist",
+          "en": "Checks whether total equals 0"
+        },
+        {
+          "de": "Zählt die Elemente der Liste",
+          "en": "Counts the items of the list"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`total` ist der Zwischenstand der Summe und startet bei 0, denn 0 ändert beim Addieren nichts.\n\nDie Variable muss vor der Schleife angelegt werden, sonst gäbe es sie in der ersten Runde noch nicht.",
+        "en": "`total` holds the running sum and starts at 0, since 0 changes nothing when adding.\n\nThe variable must be created before the loop, otherwise it would not exist yet in the first pass."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil n-mal",
+          "en": "Repeats the indented part n times"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Element der Liste; n ist das jeweilige Element",
+          "en": "Repeats the indented part for each item of the list; n is the current item"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für die Positionen 0, 1, 2, ...",
+          "en": "Repeats the indented part for the positions 0, 1, 2, ..."
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil, solange n kleiner als total ist",
+          "en": "Repeats the indented part while n is less than total"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Bei `[1, 2, 3]` ist `n` nacheinander `1`, dann `2`, dann `3`. Es ist das Element selbst, nicht seine Position.\n\nNach dem letzten Element endet die Schleife von selbst.",
+        "en": "For `[1, 2, 3]`, `n` is `1`, then `2`, then `3`. It is the item itself, not its position.\n\nAfter the last item the loop ends by itself."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Setzt total auf n",
+          "en": "Sets total to n"
+        },
+        {
+          "de": "Hängt n an eine Liste an",
+          "en": "Appends n to a list"
+        },
+        {
+          "de": "Addiert n zu total und speichert das Ergebnis wieder in total",
+          "en": "Adds n to total and stores the result back in total"
+        },
+        {
+          "de": "Prüft, ob total größer als n ist",
+          "en": "Checks whether total is greater than n"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`total += n` ist die Kurzform von `total = total + n`. Bei `[1, 2, 3]` wächst `total` von 0 auf 1, dann auf 3, dann auf 6.\n\nDas ist das Muster „Zwischenstand sammeln“.",
+        "en": "`total += n` is the short form of `total = total + n`. For `[1, 2, 3]`, `total` grows from 0 to 1, then to 3, then to 6.\n\nThis is the pattern \"collect a running total\"."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt in jedem Durchlauf der Schleife die Summe zurück",
+          "en": "Returns the sum in every pass of the loop"
+        },
+        {
+          "de": "Gibt das letzte Element der Liste zurück",
+          "en": "Returns the last item of the list"
+        },
+        {
+          "de": "Gibt die Anzahl der Elemente zurück",
+          "en": "Returns the number of items"
+        },
+        {
+          "de": "Gibt die fertige Summe zurück; die Zeile steht außerhalb der Schleife und läuft erst danach",
+          "en": "Returns the finished sum; the line is outside the loop and only runs afterwards"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Weil das `return` nicht eingerückt ist, gehört es nicht zur Schleife. Würde es drinstehen, endete die Funktion schon nach dem ersten Element.\n\n`sum_list([1, 2, 3])` gibt `6` zurück, bei `[]` bleibt es bei `0`.",
+        "en": "Because the `return` is not indented, it does not belong to the loop. If it were inside, the function would end after the first item.\n\n`sum_list([1, 2, 3])` returns `6`, for `[]` it stays at `0`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Summe aller Zahlen der Liste zurück: sum_list([1, 2, 3]) ergibt 6",
+        "en": "Returns the sum of all numbers in the list: sum_list([1, 2, 3]) gives 6"
+      },
+      {
+        "de": "Gibt die Anzahl der Zahlen in der Liste zurück",
+        "en": "Returns the number of numbers in the list"
+      },
+      {
+        "de": "Gibt das größte Element der Liste zurück",
+        "en": "Returns the biggest item of the list"
+      },
+      {
+        "de": "Gibt den Durchschnitt der Liste zurück",
+        "en": "Returns the average of the list"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine leere Liste ergibt `0`, weil die Schleife nie läuft. Für größere Aufgaben ist die eingebaute Funktion `sum(numbers)` bequemer.",
+      "en": "An empty list gives `0`, because the loop never runs. For real work the built-in function `sum(numbers)` is more convenient."
+    }
+  }
+}

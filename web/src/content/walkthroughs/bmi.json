@@ -1,0 +1,135 @@
+{
+  "id": "bmi",
+  "code": "def bmi(weight, height):\n    square = height * height\n    value = weight / square\n    return round(value, 1)",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion bmi auf",
+          "en": "Calls the built-in function bmi"
+        },
+        {
+          "de": "Legt eine Variable bmi an, die weight, height enthält",
+          "en": "Creates a variable bmi that holds weight, height"
+        },
+        {
+          "de": "Definiert eine Funktion bmi mit den Parametern weight und height",
+          "en": "Defines a function bmi with the parameters weight and height"
+        },
+        {
+          "de": "Führt bmi sofort aus und zeigt das Ergebnis an",
+          "en": "Runs bmi right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`bmi` ist der Body-Mass-Index. `weight` ist das Gewicht in kg, `height` die Größe in Metern, zum Beispiel `bmi(70, 1.75)`.\n\nWie immer rechnet `def` noch nichts, es legt nur die Funktion an.",
+        "en": "`bmi` is the body mass index. `weight` is the weight in kg, `height` the height in metres, for example `bmi(70, 1.75)`.\n\nAs always, `def` calculates nothing yet, it only creates the function."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Verdoppelt die Größe",
+          "en": "Doubles the height"
+        },
+        {
+          "de": "Multipliziert Gewicht und Größe",
+          "en": "Multiplies weight and height"
+        },
+        {
+          "de": "Zieht die Größe von sich selbst ab",
+          "en": "Subtracts the height from itself"
+        },
+        {
+          "de": "Multipliziert die Größe mit sich selbst und speichert das Ergebnis in square",
+          "en": "Multiplies the height by itself and stores the result in square"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Eine Zahl mal sich selbst ist ihr Quadrat. Für `1.75` ergibt das `3.0625`.\n\nDer Name `square` (Quadrat) sagt, was in der Variable steckt.",
+        "en": "A number times itself is its square. For `1.75` that gives `3.0625`.\n\nThe name `square` says what is in the variable."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Teilt das Gewicht durch das Quadrat der Größe",
+          "en": "Divides the weight by the square of the height"
+        },
+        {
+          "de": "Teilt das Quadrat durch das Gewicht",
+          "en": "Divides the square by the weight"
+        },
+        {
+          "de": "Multipliziert das Gewicht mit square",
+          "en": "Multiplies the weight by square"
+        },
+        {
+          "de": "Prüft, ob weight gleich square ist",
+          "en": "Checks whether weight equals square"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Das ist die BMI-Formel. Für `bmi(70, 1.75)` wird `70 / 3.0625`, also etwa `22.857142857142858`.\n\nDie Reihenfolge zählt: Gewicht oben, Größe im Quadrat unten.",
+        "en": "This is the BMI formula. For `bmi(70, 1.75)` it becomes `70 / 3.0625`, roughly `22.857142857142858`.\n\nThe order matters: weight on top, height squared at the bottom."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Rundet value auf die nächste ganze Zahl",
+          "en": "Rounds value to the nearest whole number"
+        },
+        {
+          "de": "Rundet value auf eine Nachkommastelle und gibt es zurück",
+          "en": "Rounds value to one decimal place and returns it"
+        },
+        {
+          "de": "Gibt value ungerundet zurück",
+          "en": "Returns value unrounded"
+        },
+        {
+          "de": "Rundet die Größe auf eine Stelle",
+          "en": "Rounds the height to one place"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`round(value, 1)` behält eine Stelle nach dem Komma: aus `22.857142857142858` wird `22.9`.\n\nSo bekommt man eine Zahl, die man gut lesen kann.",
+        "en": "`round(value, 1)` keeps one place after the point: `22.857142857142858` becomes `22.9`.\n\nThis gives a number that is easy to read."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt das Gewicht geteilt durch die Größe zurück",
+        "en": "Returns the weight divided by the height"
+      },
+      {
+        "de": "Gibt die Größe im Quadrat zurück",
+        "en": "Returns the height squared"
+      },
+      {
+        "de": "Gibt den BMI aus Gewicht in kg und Größe in m zurück, auf eine Nachkommastelle gerundet",
+        "en": "Returns the BMI from weight in kg and height in m, rounded to one decimal place"
+      },
+      {
+        "de": "Gibt Gewicht mal Größe zurück",
+        "en": "Returns weight times height"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`bmi(70, 1.75)` gibt `22.9` zurück, `bmi(80, 2)` gibt `20.0` zurück. Wichtig ist, dass durch das Quadrat der Größe geteilt wird, nicht durch die Größe selbst.",
+      "en": "`bmi(70, 1.75)` returns `22.9`, `bmi(80, 2)` returns `20.0`. What matters is that the division is by the square of the height, not by the height itself."
+    }
+  }
+}

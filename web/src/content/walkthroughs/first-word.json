@@ -1,0 +1,161 @@
+{
+  "id": "first-word",
+  "code": "def first_word(sentence):\n    index = sentence.find(\" \")\n    if index == -1:\n        return sentence\n    return sentence[:index]",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion first_word mit dem Parameter sentence",
+          "en": "Defines a function first_word with the parameter sentence"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion first_word auf",
+          "en": "Calls the built-in function first_word"
+        },
+        {
+          "de": "Legt eine Variable first_word an, die sentence enthält",
+          "en": "Creates a variable first_word that holds sentence"
+        },
+        {
+          "de": "Führt first_word sofort aus und zeigt das Ergebnis an",
+          "en": "Runs first_word right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`first_word` heißt „erstes Wort“. `sentence` (Satz) ist der Text, aus dem es geschnitten wird, etwa `first_word(\"hello big world\")`.\n\nDie Funktion rechnet erst beim Aufruf.",
+        "en": "`first_word` means \"the first word\". `sentence` is the text it is cut from, as in `first_word(\"hello big world\")`.\n\nThe function only works on a call."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Ersetzt jedes Leerzeichen im Satz",
+          "en": "Replaces every space in the sentence"
+        },
+        {
+          "de": "Sucht das erste Leerzeichen und speichert dessen Position in index",
+          "en": "Looks for the first space and stores its position in index"
+        },
+        {
+          "de": "Zählt die Leerzeichen im Satz",
+          "en": "Counts the spaces in the sentence"
+        },
+        {
+          "de": "Prüft, ob der Satz ein Leerzeichen enthält, und speichert True oder False",
+          "en": "Checks whether the sentence contains a space and stores True or False"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`find` liefert die Position des ersten Treffers, gezählt ab 0. In `\"hello big world\"` steht das Leerzeichen an Position 5.\n\nGibt es keines, liefert `find` die Zahl `-1`.",
+        "en": "`find` gives the position of the first match, counting from 0. In `\"hello big world\"` the space is at position 5.\n\nIf there is none, `find` gives the number `-1`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Setzt index auf -1",
+          "en": "Sets index to -1"
+        },
+        {
+          "de": "Prüft, ob der Satz leer ist",
+          "en": "Checks whether the sentence is empty"
+        },
+        {
+          "de": "Prüft, ob find nichts gefunden hat, also kein Leerzeichen da ist",
+          "en": "Checks whether find found nothing, meaning there is no space"
+        },
+        {
+          "de": "Prüft, ob index die Länge des Satzes ist",
+          "en": "Checks whether index is the length of the sentence"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`-1` ist das Zeichen für „nicht gefunden“. Es ist der Fall, in dem der Satz nur aus einem Wort besteht, wie bei `\"hi\"`.\n\nHier steht `==` für den Vergleich, nicht `=`.",
+        "en": "`-1` is the sign for \"not found\". That is the case where the sentence is just one word, as with `\"hi\"`.\n\nIt is `==` for comparing here, not `=`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt -1 zurück",
+          "en": "Returns -1"
+        },
+        {
+          "de": "Gibt einen leeren Text zurück",
+          "en": "Returns an empty text"
+        },
+        {
+          "de": "Gibt die Position des Leerzeichens zurück",
+          "en": "Returns the position of the space"
+        },
+        {
+          "de": "Gibt den ganzen Satz zurück, weil er nur ein Wort ist",
+          "en": "Returns the whole sentence, since it is only one word"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Zeile läuft nur, wenn die Bedingung darüber stimmt. `first_word(\"hi\")` endet hier mit `\"hi\"`.\n\nSo vermeidet die Funktion, bei einem einzigen Wort ein Stück abzuschneiden.",
+        "en": "The line only runs if the condition above is true. `first_word(\"hi\")` ends here with `\"hi\"`.\n\nThis way the function does not cut a piece off a single word."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt den Teil des Satzes vor dem ersten Leerzeichen zurück",
+          "en": "Returns the part of the sentence before the first space"
+        },
+        {
+          "de": "Gibt den Teil ab dem ersten Leerzeichen zurück",
+          "en": "Returns the part from the first space onward"
+        },
+        {
+          "de": "Gibt nur das Zeichen an Position index zurück",
+          "en": "Returns only the character at position index"
+        },
+        {
+          "de": "Gibt den Satz ohne das erste Zeichen zurück",
+          "en": "Returns the sentence without its first character"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`sentence[:index]` nimmt alles von Anfang bis vor Position `index`. Bei `\"hello big world\"` ist das `\"hello\"` (Positionen 0 bis 4).\n\nDas Zeichen an Position `index` selbst, das Leerzeichen, ist nicht dabei.",
+        "en": "`sentence[:index]` takes everything from the start up to before position `index`. For `\"hello big world\"` that is `\"hello\"` (positions 0 to 4).\n\nThe character at position `index` itself, the space, is not included."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt das letzte Wort des Satzes zurück",
+        "en": "Returns the last word of the sentence"
+      },
+      {
+        "de": "Gibt das erste Wort eines Satzes zurück: first_word(\"hello big world\") ergibt \"hello\"",
+        "en": "Returns the first word of a sentence: first_word(\"hello big world\") gives \"hello\""
+      },
+      {
+        "de": "Gibt die Position des ersten Leerzeichens zurück",
+        "en": "Returns the position of the first space"
+      },
+      {
+        "de": "Gibt den Satz ohne das erste Wort zurück",
+        "en": "Returns the sentence without the first word"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Steht ein Leerzeichen im Satz, wird davor abgeschnitten. Sonst ist der ganze Satz das eine Wort: `first_word(\"hi\")` gibt `\"hi\"` zurück.",
+      "en": "If the sentence has a space, it is cut off before it. Otherwise the whole sentence is the one word: `first_word(\"hi\")` returns `\"hi\"`."
+    }
+  }
+}

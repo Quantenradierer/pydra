@@ -1,0 +1,135 @@
+{
+  "id": "starts-with-capital",
+  "code": "def starts_with_capital(word):\n    first = word[0]\n    result = first.isupper()\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion starts_with_capital auf",
+          "en": "Calls the built-in function starts_with_capital"
+        },
+        {
+          "de": "Legt eine Variable starts_with_capital an, die word enthält",
+          "en": "Creates a variable starts_with_capital that holds word"
+        },
+        {
+          "de": "Definiert eine Funktion starts_with_capital mit dem Parameter word",
+          "en": "Defines a function starts_with_capital with the parameter word"
+        },
+        {
+          "de": "Führt starts_with_capital sofort aus und zeigt das Ergebnis an",
+          "en": "Runs starts_with_capital right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`starts_with_capital` heißt „beginnt mit Großbuchstaben“. `word` ist das Wort, das geprüft wird, zum Beispiel `\"Paris\"`.",
+        "en": "`starts_with_capital` asks whether the word starts with a capital letter. `word` is the word that is checked, for example `\"Paris\"`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Holt das ganze Wort in einen Text first",
+          "en": "Copies the whole word into a text first"
+        },
+        {
+          "de": "Holt das letzte Zeichen des Wortes",
+          "en": "Takes the last character of the word"
+        },
+        {
+          "de": "Prüft, ob das Wort aus nur einem Zeichen besteht",
+          "en": "Checks whether the word is only one character long"
+        },
+        {
+          "de": "Holt das erste Zeichen des Wortes und speichert es in first",
+          "en": "Takes the first character of the word and stores it in first"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Gezählt wird ab 0, daher ist `word[0]` das erste Zeichen. Bei `\"Paris\"` ist das `\"P\"`.\n\nDas letzte Zeichen wäre `word[-1]`.",
+        "en": "Counting starts at 0, so `word[0]` is the first character. For `\"Paris\"` that is `\"P\"`.\n\nThe last character would be `word[-1]`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Prüft, ob first ein Großbuchstabe ist, und speichert True oder False",
+          "en": "Checks whether first is a capital letter and stores True or False"
+        },
+        {
+          "de": "Macht first zu einem Großbuchstaben",
+          "en": "Turns first into a capital letter"
+        },
+        {
+          "de": "Prüft, ob das ganze Wort großgeschrieben ist",
+          "en": "Checks whether the whole word is in capitals"
+        },
+        {
+          "de": "Zählt die Großbuchstaben in first",
+          "en": "Counts the capital letters in first"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`isupper()` fragt nur, es ändert nichts. Das Ergebnis ist ein Wahrheitswert: `\"P\".isupper()` ist `True`, `\"p\".isupper()` ist `False`.\n\nMethoden, die mit `is` beginnen, liefern meist True oder False.",
+        "en": "`isupper()` only asks, it changes nothing. The result is a truth value: `\"P\".isupper()` is `True`, `\"p\".isupper()` is `False`.\n\nMethods that start with `is` usually give True or False."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt immer True zurück",
+          "en": "Always returns True"
+        },
+        {
+          "de": "Gibt den Wahrheitswert aus result zurück",
+          "en": "Returns the truth value from result"
+        },
+        {
+          "de": "Gibt den Buchstaben first zurück",
+          "en": "Returns the letter first"
+        },
+        {
+          "de": "Gibt den Text \"result\" zurück",
+          "en": "Returns the text \"result\""
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Der Wert von `result` wandert zum Aufrufer. `starts_with_capital(\"Paris\")` gibt `True` zurück, `starts_with_capital(\"paris\")` gibt `False` zurück.\n\nOhne Anführungszeichen ist `result` der Name der Variable, nicht ein Text.",
+        "en": "The value of `result` goes to the caller. `starts_with_capital(\"Paris\")` returns `True`, `starts_with_capital(\"paris\")` returns `False`.\n\nWithout quotes, `result` is the name of the variable, not a text."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Macht den ersten Buchstaben des Wortes groß",
+        "en": "Makes the first letter of the word a capital"
+      },
+      {
+        "de": "Gibt True zurück, wenn das ganze Wort großgeschrieben ist",
+        "en": "Returns True if the whole word is in capitals"
+      },
+      {
+        "de": "Gibt True zurück, wenn das Wort mit einem Großbuchstaben beginnt, sonst False",
+        "en": "Returns True if the word starts with a capital letter, otherwise False"
+      },
+      {
+        "de": "Gibt den ersten Buchstaben des Wortes zurück",
+        "en": "Returns the first letter of the word"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`starts_with_capital(\"Paris\")` ist `True`, `starts_with_capital(\"paris\")` ist `False`. Es wird nur das erste Zeichen geprüft.",
+      "en": "`starts_with_capital(\"Paris\")` is `True`, `starts_with_capital(\"paris\")` is `False`. Only the first character is checked."
+    }
+  }
+}

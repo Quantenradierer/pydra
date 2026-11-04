@@ -1,0 +1,135 @@
+{
+  "id": "middle-value",
+  "code": "def middle_value(numbers):\n    ordered = sorted(numbers)\n    middle = len(ordered) // 2\n    return ordered[middle]",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion middle_value auf",
+          "en": "Calls the built-in function middle_value"
+        },
+        {
+          "de": "Legt eine Variable middle_value an, die numbers enthält",
+          "en": "Creates a variable middle_value that holds numbers"
+        },
+        {
+          "de": "Führt middle_value sofort aus und zeigt das Ergebnis an",
+          "en": "Runs middle_value right away and prints the result"
+        },
+        {
+          "de": "Definiert eine Funktion middle_value mit dem Parameter numbers",
+          "en": "Defines a function middle_value with the parameter numbers"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`middle_value` sucht den mittleren Wert nach der Größe, also den Median. `numbers` ist die Liste, am besten mit ungerader Länge.",
+        "en": "`middle_value` looks for the middle value by size, the median. `numbers` is the list, best with an odd length."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Sortiert die Zahlen aufsteigend und speichert das in ordered",
+          "en": "Sorts the numbers in ascending order and stores that in ordered"
+        },
+        {
+          "de": "Sortiert die Zahlen absteigend",
+          "en": "Sorts the numbers in descending order"
+        },
+        {
+          "de": "Sortiert die Liste numbers selbst um",
+          "en": "Re-sorts the list numbers itself"
+        },
+        {
+          "de": "Gibt die Zahlen sortiert zurück",
+          "en": "Returns the numbers sorted"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`sorted(numbers)` ist eine neue Liste, die ursprüngliche bleibt. Aus `[5, 1, 9]` wird `[1, 5, 9]`.\n\nMittig steht jetzt der Wert, der der Größe nach in der Mitte liegt.",
+        "en": "`sorted(numbers)` is a new list, the original stays. `[5, 1, 9]` becomes `[1, 5, 9]`.\n\nThe value in the middle by size now sits in the middle."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Berechnet die Hälfte der Liste als Dezimalzahl",
+          "en": "Works out half of the list as a decimal number"
+        },
+        {
+          "de": "Berechnet die Position in der Mitte: die halbe Länge, ganzzahlig geteilt",
+          "en": "Works out the position in the middle: half the length, divided as a whole number"
+        },
+        {
+          "de": "Holt das mittlere Element der Liste",
+          "en": "Fetches the middle item of the list"
+        },
+        {
+          "de": "Teilt die Liste in zwei Hälften",
+          "en": "Splits the list in two halves"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`len(ordered)` ist 3, `3 // 2` ist 1. Das ist die Position in der Mitte, denn die Positionen sind 0, 1 und 2.\n\nMit `/` käme `1.5` heraus, was als Position nicht geht.",
+        "en": "`len(ordered)` is 3, `3 // 2` is 1. That is the position in the middle, since the positions are 0, 1 and 2.\n\nWith `/` you would get `1.5`, which does not work as a position."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die mittlere Position selbst zurück",
+          "en": "Returns the middle position itself"
+        },
+        {
+          "de": "Gibt das mittlere Element der ursprünglichen Liste zurück",
+          "en": "Returns the middle item of the original list"
+        },
+        {
+          "de": "Gibt das Element an der mittleren Position der sortierten Liste zurück",
+          "en": "Returns the item at the middle position of the sorted list"
+        },
+        {
+          "de": "Gibt den Durchschnitt der Liste zurück",
+          "en": "Returns the average of the list"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`ordered[middle]` holt den Wert an dieser Position: bei `[1, 5, 9]` die `5`. Bei der unsortierten Liste `[5, 1, 9]` wäre das die `1`, deswegen wird erst sortiert.\n\n`middle_value([3, 1, 2, 10, 7])` sortiert zu `[1, 2, 3, 7, 10]` und gibt `3` zurück.",
+        "en": "`ordered[middle]` fetches the value at that position: the `5` for `[1, 5, 9]`. In the unsorted list `[5, 1, 9]` that would be the `1`, which is why sorting comes first.\n\n`middle_value([3, 1, 2, 10, 7])` sorts to `[1, 2, 3, 7, 10]` and returns `3`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt das mittlere Element der Liste in ihrer ursprünglichen Reihenfolge zurück",
+        "en": "Returns the middle item of the list in its original order"
+      },
+      {
+        "de": "Gibt den Durchschnitt aller Zahlen zurück",
+        "en": "Returns the average of all the numbers"
+      },
+      {
+        "de": "Gibt die Mitte zwischen kleinster und größter Zahl zurück",
+        "en": "Returns the midpoint between the smallest and biggest number"
+      },
+      {
+        "de": "Gibt den Wert zurück, der nach dem Sortieren in der Mitte der Liste steht (Median): middle_value([5, 1, 9]) ergibt 5",
+        "en": "Returns the value that stands in the middle of the list after sorting (the median): middle_value([5, 1, 9]) gives 5"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Der Median ist nicht der Durchschnitt: `middle_value([3, 1, 2, 10, 7])` ist `3`, der Durchschnitt wäre `4.6`. Reißt ein Ausreißer wie 10 etwas mit, zeigt der Median das robuster.",
+      "en": "The median is not the average: `middle_value([3, 1, 2, 10, 7])` is `3`, the average would be `4.6`. When an outlier like 10 pulls things along, the median shows it more robustly."
+    }
+  }
+}

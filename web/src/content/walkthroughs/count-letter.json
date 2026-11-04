@@ -1,0 +1,135 @@
+{
+  "id": "count-letter",
+  "code": "def count_letter(text, letter):\n    lowered = text.lower()\n    wanted = letter.lower()\n    return lowered.count(wanted)",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion count_letter auf",
+          "en": "Calls the built-in function count_letter"
+        },
+        {
+          "de": "Legt eine Variable count_letter an, die text, letter enthält",
+          "en": "Creates a variable count_letter that holds text, letter"
+        },
+        {
+          "de": "Definiert eine Funktion count_letter mit den Parametern text und letter",
+          "en": "Defines a function count_letter with the parameters text and letter"
+        },
+        {
+          "de": "Führt count_letter sofort aus und zeigt das Ergebnis an",
+          "en": "Runs count_letter right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`count_letter` zählt, wie oft ein Buchstabe vorkommt. `text` ist der Text, `letter` der gesuchte Buchstabe, etwa `count_letter(\"Banana\", \"a\")`.",
+        "en": "`count_letter` counts how often a letter occurs. `text` is the text, `letter` the wanted letter, as in `count_letter(\"Banana\", \"a\")`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Zählt die Kleinbuchstaben im Text",
+          "en": "Counts the lowercase letters in the text"
+        },
+        {
+          "de": "Wandelt den Text in Großbuchstaben um",
+          "en": "Converts the text to capital letters"
+        },
+        {
+          "de": "Prüft, ob der Text klein geschrieben ist",
+          "en": "Checks whether the text is in lowercase"
+        },
+        {
+          "de": "Wandelt den Text in Kleinbuchstaben um und speichert ihn in lowered",
+          "en": "Converts the text to lowercase and stores it in lowered"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`lower()` gibt einen neuen Text zurück, der Originaltext bleibt. Aus `\"Banana\"` wird `\"banana\"`.\n\nSo zählt später das große `B` genauso wie ein kleines.",
+        "en": "`lower()` returns a new text, the original stays. `\"Banana\"` becomes `\"banana\"`.\n\nThis way a capital `B` counts the same as a small one later on."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wandelt den gesuchten Buchstaben in einen Kleinbuchstaben um",
+          "en": "Converts the wanted letter to lowercase"
+        },
+        {
+          "de": "Wandelt den Text in einen Kleinbuchstaben um",
+          "en": "Converts the text to a lowercase letter"
+        },
+        {
+          "de": "Prüft, ob der Buchstabe klein ist",
+          "en": "Checks whether the letter is lowercase"
+        },
+        {
+          "de": "Sucht den Buchstaben im Text",
+          "en": "Searches for the letter in the text"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Damit beide Seiten gleich behandelt werden, bekommt auch der gesuchte Buchstabe kleine Schrift. `count_letter(\"Banana\", \"B\")` sucht dann nach `\"b\"`.\n\nSo gibt es keine Unterschiede, egal wie man den Buchstaben eintippt.",
+        "en": "So that both sides are treated alike, the wanted letter is lowercased as well. `count_letter(\"Banana\", \"B\")` then looks for `\"b\"`.\n\nThis way it makes no difference how the letter is typed."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die Position von wanted in lowered zurück",
+          "en": "Returns the position of wanted in lowered"
+        },
+        {
+          "de": "Gibt zurück, wie oft wanted in lowered vorkommt",
+          "en": "Returns how often wanted occurs in lowered"
+        },
+        {
+          "de": "Gibt True zurück, wenn wanted in lowered vorkommt",
+          "en": "Returns True if wanted occurs in lowered"
+        },
+        {
+          "de": "Gibt die Länge von lowered zurück",
+          "en": "Returns the length of lowered"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`count(...)` zählt die Treffer: In `\"banana\"` ist `\"a\"` dreimal zu finden, also kommt `3` zurück.\n\nDie Methode zählt, ohne dass man eine Schleife schreiben muss.",
+        "en": "`count(...)` counts the matches: in `\"banana\"` there are three `\"a\"`, so `3` comes back.\n\nThe method counts without you having to write a loop."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Position des ersten Treffers zurück",
+        "en": "Returns the position of the first match"
+      },
+      {
+        "de": "Zählt nur kleine Buchstaben im Text",
+        "en": "Counts only lowercase letters in the text"
+      },
+      {
+        "de": "Zählt, wie oft ein Buchstabe im Text vorkommt, ohne auf Groß-/Kleinschreibung zu achten: count_letter(\"Banana\", \"a\") ergibt 3",
+        "en": "Counts how often a letter occurs in the text, ignoring upper/lower case: count_letter(\"Banana\", \"a\") gives 3"
+      },
+      {
+        "de": "Gibt True zurück, wenn der Buchstabe vorkommt",
+        "en": "Returns True if the letter occurs"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`count_letter(\"Banana\", \"B\")` gibt `1` zurück. Ohne die zwei `lower()`-Zeilen wäre das Ergebnis 0 oder 1, je nach Schreibweise der Eingabe.",
+      "en": "`count_letter(\"Banana\", \"B\")` returns `1`. Without the two `lower()` lines the result would be 0 or 1 depending on how the input is written."
+    }
+  }
+}

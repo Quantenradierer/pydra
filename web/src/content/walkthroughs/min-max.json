@@ -1,0 +1,135 @@
+{
+  "id": "min-max",
+  "code": "def min_max(numbers):\n    low = min(numbers)\n    high = max(numbers)\n    return low, high",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ruft die eingebaute Funktion min_max auf",
+          "en": "Calls the built-in function min_max"
+        },
+        {
+          "de": "Legt eine Variable min_max an, die numbers enthält",
+          "en": "Creates a variable min_max that holds numbers"
+        },
+        {
+          "de": "Definiert eine Funktion min_max mit dem Parameter numbers",
+          "en": "Defines a function min_max with the parameter numbers"
+        },
+        {
+          "de": "Führt min_max sofort aus und zeigt das Ergebnis an",
+          "en": "Runs min_max right away and prints the result"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`min_max` heißt „kleinster und größter Wert“. `numbers` ist eine Liste von Zahlen, etwa `[4, 9, 2]`.",
+        "en": "`min_max` means \"smallest and biggest value\". `numbers` is a list of numbers, such as `[4, 9, 2]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Sucht den größten Wert der Liste",
+          "en": "Finds the biggest value of the list"
+        },
+        {
+          "de": "Sucht die Position des kleinsten Wertes",
+          "en": "Finds the position of the smallest value"
+        },
+        {
+          "de": "Sortiert die Liste von klein nach groß",
+          "en": "Sorts the list from small to big"
+        },
+        {
+          "de": "Sucht den kleinsten Wert der Liste und speichert ihn in low",
+          "en": "Finds the smallest value of the list and stores it in low"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`min` ist eine eingebaute Funktion: Sie schaut die ganze Liste an und liefert den kleinsten Wert. Bei `[4, 9, 2]` ist das `2`.\n\nEine eigene Schleife ist dafür nicht nötig.",
+        "en": "`min` is a built-in function: it looks at the whole list and gives the smallest value. For `[4, 9, 2]` that is `2`.\n\nYou do not need a loop of your own for this."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Sucht den größten Wert der Liste und speichert ihn in high",
+          "en": "Finds the biggest value of the list and stores it in high"
+        },
+        {
+          "de": "Sucht den kleinsten Wert der Liste",
+          "en": "Finds the smallest value of the list"
+        },
+        {
+          "de": "Zählt, wie oft der größte Wert vorkommt",
+          "en": "Counts how often the biggest value occurs"
+        },
+        {
+          "de": "Addiert alle Werte der Liste",
+          "en": "Adds all values of the list"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`max` ist das Gegenstück zu `min`. Bei `[4, 9, 2]` ist das Ergebnis `9`.\n\nZwei Zeilen, zwei Variablen: Die Namen `low` und `high` sagen, was drinsteckt.",
+        "en": "`max` is the counterpart of `min`. For `[4, 9, 2]` the result is `9`.\n\nTwo lines, two variables: the names `low` and `high` say what is in them."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt zuerst den größten, dann den kleinsten Wert zurück",
+          "en": "Returns first the biggest, then the smallest value"
+        },
+        {
+          "de": "Gibt beide Werte als Paar zurück: zuerst den kleinsten, dann den größten",
+          "en": "Returns both values as a pair: first the smallest, then the biggest"
+        },
+        {
+          "de": "Gibt den Unterschied zwischen beiden zurück",
+          "en": "Returns the difference between the two"
+        },
+        {
+          "de": "Gibt nur den größten Wert zurück",
+          "en": "Returns only the biggest value"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Das Komma macht aus zwei Werten ein Paar (Tupel). `min_max([4, 9, 2])` ergibt `(2, 9)`.\n\nDie Reihenfolge im `return` bestimmt die Reihenfolge im Ergebnis.",
+        "en": "The comma turns two values into a pair (tuple). `min_max([4, 9, 2])` gives `(2, 9)`.\n\nThe order in the `return` decides the order in the result."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Liste sortiert zurück",
+        "en": "Returns the list sorted"
+      },
+      {
+        "de": "Gibt die Differenz von größtem und kleinstem Wert zurück",
+        "en": "Returns the difference of the biggest and smallest value"
+      },
+      {
+        "de": "Gibt den kleinsten und den größten Wert einer Liste als Paar zurück: min_max([4, 9, 2]) ergibt (2, 9)",
+        "en": "Returns the smallest and the biggest value of a list as a pair: min_max([4, 9, 2]) gives (2, 9)"
+      },
+      {
+        "de": "Gibt die ersten beiden Werte der Liste zurück",
+        "en": "Returns the first two values of the list"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Bei einer Liste mit nur einem Wert sind beide gleich: `min_max([5])` ergibt `(5, 5)`. Für eine leere Liste gäbe es einen Fehler.",
+      "en": "With a one-item list both are the same: `min_max([5])` gives `(5, 5)`. For an empty list there would be an error."
+    }
+  }
+}

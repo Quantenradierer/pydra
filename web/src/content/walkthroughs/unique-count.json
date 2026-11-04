@@ -1,0 +1,135 @@
+{
+  "id": "unique-count",
+  "code": "def unique_count(items):\n    unique = set(items)\n    count = len(unique)\n    return count",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion unique_count mit dem Parameter items",
+          "en": "Defines a function unique_count with the parameter items"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion unique_count auf",
+          "en": "Calls the built-in function unique_count"
+        },
+        {
+          "de": "Legt eine Variable unique_count an, die items enthält",
+          "en": "Creates a variable unique_count that holds items"
+        },
+        {
+          "de": "Führt unique_count sofort aus und zeigt das Ergebnis an",
+          "en": "Runs unique_count right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`unique_count` heißt „Anzahl der verschiedenen“. `items` ist eine Liste, in der Werte mehrfach vorkommen können, etwa `[1, 2, 2, 3, 3, 3]`.",
+        "en": "`unique_count` counts the different values. `items` is a list in which values can occur more than once, such as `[1, 2, 2, 3, 3, 3]`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Sortiert die Liste",
+          "en": "Sorts the list"
+        },
+        {
+          "de": "Macht aus der Liste eine Menge, in der jeder Wert nur einmal vorkommt",
+          "en": "Turns the list into a set in which each value occurs only once"
+        },
+        {
+          "de": "Zählt die Elemente der Liste",
+          "en": "Counts the items of the list"
+        },
+        {
+          "de": "Entfernt das erste Element der Liste",
+          "en": "Removes the first item of the list"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Eine Menge (`set`) vergisst Doppelte: Aus `[1, 2, 2, 3, 3, 3]` wird `{1, 2, 3}`.\n\nDie Reihenfolge ist in einer Menge nicht festgelegt.",
+        "en": "A set (`set`) forgets repeats: `[1, 2, 2, 3, 3, 3]` becomes `{1, 2, 3}`.\n\nThe order in a set is not fixed."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Zählt die Elemente der ursprünglichen Liste",
+          "en": "Counts the items of the original list"
+        },
+        {
+          "de": "Zählt, wie oft die erste Zahl vorkommt",
+          "en": "Counts how often the first number occurs"
+        },
+        {
+          "de": "Zählt die Elemente der Menge und speichert die Anzahl in count",
+          "en": "Counts the items of the set and stores the number in count"
+        },
+        {
+          "de": "Gibt die Menge als Liste zurück",
+          "en": "Returns the set as a list"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`len(unique)` ist hier 3, weil die Menge nur noch die Werte 1, 2 und 3 enthält. Die Liste selbst hat 6 Elemente.\n\nDas Ergebnis ist eine einfache Zahl.",
+        "en": "`len(unique)` is 3 here, because the set now only holds the values 1, 2 and 3. The list itself has 6 items.\n\nThe result is a plain number."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die Anzahl aller Elemente zurück",
+          "en": "Returns the number of all items"
+        },
+        {
+          "de": "Gibt die Menge zurück",
+          "en": "Returns the set"
+        },
+        {
+          "de": "Gibt die Anzahl der Doppelten zurück",
+          "en": "Returns the number of repeats"
+        },
+        {
+          "de": "Gibt die Anzahl der verschiedenen Werte zurück",
+          "en": "Returns the number of different values"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`unique_count([1, 2, 2, 3, 3, 3])` gibt `3` zurück, `unique_count([])` gibt `0` zurück.\n\nZurück kommt die Zahl, nicht die Menge.",
+        "en": "`unique_count([1, 2, 2, 3, 3, 3])` returns `3`, `unique_count([])` returns `0`.\n\nThe number comes back, not the set."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt zurück, wie viele verschiedene Werte in der Liste vorkommen: unique_count([1, 2, 2, 3, 3, 3]) ergibt 3",
+        "en": "Returns how many different values occur in the list: unique_count([1, 2, 2, 3, 3, 3]) gives 3"
+      },
+      {
+        "de": "Gibt die Länge der Liste zurück: 6",
+        "en": "Returns the length of the list: 6"
+      },
+      {
+        "de": "Gibt die Liste ohne Doppelte zurück",
+        "en": "Returns the list without repeats"
+      },
+      {
+        "de": "Gibt den Wert zurück, der am häufigsten vorkommt",
+        "en": "Returns the value that occurs most often"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Für „wie viele verschiedene?“ ist eine Menge das passende Werkzeug: Sie hält jeden Wert nur einmal.",
+      "en": "For \"how many different ones?\" a set is the right tool: it keeps each value only once."
+    }
+  }
+}

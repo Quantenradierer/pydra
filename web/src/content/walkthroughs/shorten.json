@@ -1,0 +1,135 @@
+{
+  "id": "shorten",
+  "code": "def shorten(text, limit):\n    if len(text) <= limit:\n        return text\n    return text[:limit] + \"...\"",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion shorten mit den Parametern text und limit",
+          "en": "Defines a function shorten with the parameters text and limit"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion shorten auf",
+          "en": "Calls the built-in function shorten"
+        },
+        {
+          "de": "Legt eine Variable shorten an, die text, limit enthält",
+          "en": "Creates a variable shorten that holds text, limit"
+        },
+        {
+          "de": "Führt shorten sofort aus und zeigt das Ergebnis an",
+          "en": "Runs shorten right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`shorten` heißt „kürzen“. `limit` ist die größte erlaubte Länge, zum Beispiel `shorten(\"Hello world\", 5)`.",
+        "en": "`shorten` means \"make shorter\". `limit` is the greatest allowed length, for example `shorten(\"Hello world\", 5)`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob der Text länger als limit ist",
+          "en": "Checks whether the text is longer than limit"
+        },
+        {
+          "de": "Prüft, ob der Text höchstens limit Zeichen lang ist",
+          "en": "Checks whether the text is at most limit characters long"
+        },
+        {
+          "de": "Setzt die Länge des Textes auf limit",
+          "en": "Sets the length of the text to limit"
+        },
+        {
+          "de": "Prüft, ob der Text genau limit Zeichen hat",
+          "en": "Checks whether the text has exactly limit characters"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`len(text)` zählt die Zeichen, `<=` heißt „kleiner oder gleich“. `\"Hi\"` hat 2 Zeichen: `2 <= 5` stimmt.\n\nAuch ein Text mit genau `limit` Zeichen passt noch.",
+        "en": "`len(text)` counts the characters, `<=` means \"less than or equal\". `\"Hi\"` has 2 characters: `2 <= 5` is true.\n\nA text with exactly `limit` characters still fits as well."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt den Text gekürzt auf limit Zeichen zurück",
+          "en": "Returns the text cut to limit characters"
+        },
+        {
+          "de": "Gibt die Länge des Textes zurück",
+          "en": "Returns the length of the text"
+        },
+        {
+          "de": "Gibt den Text unverändert zurück",
+          "en": "Returns the text unchanged"
+        },
+        {
+          "de": "Gibt \"...\" zurück",
+          "en": "Returns \"...\""
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Ein kurzer Text braucht keine Kürzung. `shorten(\"Hi\", 5)` endet hier mit `\"Hi\"`.\n\nDie Zeile läuft nur, wenn die Bedingung darüber stimmt.",
+        "en": "A short text needs no cutting. `shorten(\"Hi\", 5)` ends here with `\"Hi\"`.\n\nThe line only runs if the condition above is true."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die letzten limit Zeichen zurück",
+          "en": "Returns the last limit characters"
+        },
+        {
+          "de": "Gibt alles ab Position limit zurück",
+          "en": "Returns everything from position limit onward"
+        },
+        {
+          "de": "Gibt den ganzen Text zurück und hängt \"...\" an",
+          "en": "Returns the whole text and appends \"...\""
+        },
+        {
+          "de": "Gibt die ersten limit Zeichen zurück und hängt \"...\" an",
+          "en": "Returns the first limit characters and appends \"...\""
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`text[:limit]` nimmt alles vom Anfang bis vor Position `limit`. Bei `\"Hello world\"` und 5 ist das `\"Hello\"`, danach folgt `\"...\"`.\n\nSo sieht man, dass etwas fehlt.",
+        "en": "`text[:limit]` takes everything from the start up to before position `limit`. For `\"Hello world\"` and 5 that is `\"Hello\"`, followed by `\"...\"`.\n\nThis shows that something is missing."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt den Text zurück, bei zu langem Text nur die ersten limit Zeichen mit \"...\" dahinter",
+        "en": "Returns the text, for a text that is too long only the first limit characters with \"...\" after them"
+      },
+      {
+        "de": "Gibt immer die ersten limit Zeichen zurück",
+        "en": "Always returns the first limit characters"
+      },
+      {
+        "de": "Gibt True zurück, wenn der Text zu lang ist",
+        "en": "Returns True if the text is too long"
+      },
+      {
+        "de": "Hängt \"...\" immer an den Text an",
+        "en": "Always appends \"...\" to the text"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`shorten(\"Hello world\", 5)` gibt `\"Hello...\"` zurück, `shorten(\"Hi\", 5)` gibt `\"Hi\"` zurück. Das braucht man für Vorschautexte.",
+      "en": "`shorten(\"Hello world\", 5)` returns `\"Hello...\"`, `shorten(\"Hi\", 5)` returns `\"Hi\"`. This is useful for preview texts."
+    }
+  }
+}

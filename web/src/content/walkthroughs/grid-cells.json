@@ -1,0 +1,187 @@
+{
+  "id": "grid-cells",
+  "code": "def grid_cells(rows, cols):\n    cells = []\n    for r in range(rows):\n        for c in range(cols):\n            cells.append((r, c))\n    return cells",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion grid_cells mit den Parametern rows und cols",
+          "en": "Defines a function grid_cells with the parameters rows and cols"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion grid_cells auf",
+          "en": "Calls the built-in function grid_cells"
+        },
+        {
+          "de": "Legt eine Variable grid_cells an, die rows, cols enthält",
+          "en": "Creates a variable grid_cells that holds rows, cols"
+        },
+        {
+          "de": "Führt grid_cells sofort aus und zeigt das Ergebnis an",
+          "en": "Runs grid_cells right away and prints the result"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`grid_cells` heißt „Gitterzellen“. `rows` ist die Zahl der Zeilen, `cols` die Zahl der Spalten, etwa `grid_cells(2, 2)`.",
+        "en": "`grid_cells` means \"cells of a grid\". `rows` is the number of rows, `cols` the number of columns, as in `grid_cells(2, 2)`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Liste mit rows und cols an",
+          "en": "Creates a list holding rows and cols"
+        },
+        {
+          "de": "Legt eine leere Liste cells an",
+          "en": "Creates an empty list cells"
+        },
+        {
+          "de": "Gibt eine leere Liste zurück",
+          "en": "Returns an empty list"
+        },
+        {
+          "de": "Setzt cells auf 0",
+          "en": "Sets cells to 0"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "In `cells` werden die Zellen gesammelt, jede Zelle ist ein Paar aus Zeile und Spalte.\n\nZuerst ist die Liste leer.",
+        "en": "The cells are collected in `cells`, each cell is a pair of row and column.\n\nThe list is empty at first."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil rows-mal und cols-mal",
+          "en": "Repeats the indented part rows times and cols times"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Spalte",
+          "en": "Repeats the indented part for each column"
+        },
+        {
+          "de": "Äußere Schleife: Wiederholt den eingerückten Teil für jede Zeile r von 0 bis rows - 1",
+          "en": "Outer loop: repeats the indented part for each row r from 0 to rows - 1"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für r von 1 bis rows",
+          "en": "Repeats the indented part for r from 1 to rows"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`range(rows)` liefert 0 bis `rows - 1`. Für `rows = 2` ist `r` also 0 und 1.\n\nDie Schleife darin läuft bei jedem `r` komplett einmal durch.",
+        "en": "`range(rows)` gives 0 up to `rows - 1`. For `rows = 2`, `r` is therefore 0 and 1.\n\nThe loop inside runs through completely once for each `r`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Läuft nur einmal, nach der äußeren Schleife",
+          "en": "Runs only once, after the outer loop"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Zeile",
+          "en": "Repeats the indented part for each row"
+        },
+        {
+          "de": "Ersetzt die äußere Schleife",
+          "en": "Replaces the outer loop"
+        },
+        {
+          "de": "Innere Schleife: Wiederholt den eingerückten Teil für jede Spalte c von 0 bis cols - 1, bei jeder Zeile neu",
+          "en": "Inner loop: repeats the indented part for each column c from 0 to cols - 1, anew for every row"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die innere Schleife startet für jedes `r` von vorn. Bei `grid_cells(2, 2)` läuft `c` zweimal durch 0 und 1.\n\nGesamt gibt es `rows * cols` Durchläufe, hier also 4.",
+        "en": "The inner loop starts afresh for every `r`. For `grid_cells(2, 2)`, `c` runs through 0 and 1 twice.\n\nIn total there are `rows * cols` passes, so 4 here."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Hängt die Zelle (r, c) als Paar an die Liste an",
+          "en": "Appends the cell (r, c) as a pair to the list"
+        },
+        {
+          "de": "Hängt r und c als zwei einzelne Zahlen an die Liste an",
+          "en": "Appends r and c as two separate numbers to the list"
+        },
+        {
+          "de": "Hängt nur c an die Liste an",
+          "en": "Appends only c to the list"
+        },
+        {
+          "de": "Hängt die Summe von r und c an die Liste an",
+          "en": "Appends the sum of r and c to the list"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Die doppelten Klammern sind Absicht: Die äußeren gehören zu `append`, die inneren bauen das Paar `(r, c)`.\n\nSo entsteht eine Liste aus Paaren: `(0, 0)`, `(0, 1)`, `(1, 0)`, `(1, 1)`.",
+        "en": "The double parentheses are intended: the outer ones belong to `append`, the inner ones build the pair `(r, c)`.\n\nThis gives a list of pairs: `(0, 0)`, `(0, 1)`, `(1, 0)`, `(1, 1)`."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt in jedem Durchlauf die Liste zurück",
+          "en": "Returns the list in every pass"
+        },
+        {
+          "de": "Gibt die fertige Liste zurück, nachdem beide Schleifen durch sind",
+          "en": "Returns the finished list after both loops are done"
+        },
+        {
+          "de": "Gibt nur die letzte Zelle zurück",
+          "en": "Returns only the last cell"
+        },
+        {
+          "de": "Gibt die Anzahl der Zellen zurück",
+          "en": "Returns the number of cells"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Das `return` steht ganz links, hinter beiden Schleifen. `grid_cells(2, 2)` gibt `[(0, 0), (0, 1), (1, 0), (1, 1)]` zurück.\n\nZeile für Zeile, innerhalb einer Zeile Spalte für Spalte.",
+        "en": "The `return` is at the far left, after both loops. `grid_cells(2, 2)` returns `[(0, 0), (0, 1), (1, 0), (1, 1)]`.\n\nRow by row, and within a row column by column."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Zahl der Zellen zurück: rows mal cols",
+        "en": "Returns the number of cells: rows times cols"
+      },
+      {
+        "de": "Gibt eine Liste mit den Zahlen von 0 bis rows * cols zurück",
+        "en": "Returns a list with the numbers from 0 to rows * cols"
+      },
+      {
+        "de": "Gibt alle Zellen eines Gitters als Liste von (Zeile, Spalte)-Paaren zurück: grid_cells(1, 3) ergibt [(0, 0), (0, 1), (0, 2)]",
+        "en": "Returns all cells of a grid as a list of (row, column) pairs: grid_cells(1, 3) gives [(0, 0), (0, 1), (0, 2)]"
+      },
+      {
+        "de": "Gibt eine Liste der Zeilen und eine Liste der Spalten zurück",
+        "en": "Returns a list of rows and a list of columns"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Bei verschachtelten Schleifen läuft die innere in jeder Runde der äußeren komplett durch. So kommt man an alle Kombinationen.",
+      "en": "With nested loops, the inner one runs through completely in every round of the outer one. That is how you reach all combinations."
+    }
+  }
+}

@@ -35,21 +35,23 @@ describe('simulateHunt', () => {
   it('walks in all four directions and picks up gold on the way', () => {
     const trace = run(['...', '.@G', '...'], 'move_north()\nmove_east()\nmove_south()\nmove_south()\nmove_west()');
     expect(trace.outcome).toEqual({ kind: 'success' });
+    // A step shows the world after its line.
     expect(trace.steps.map((s) => [s.x, s.y])).toEqual([
-      [1, 1],
       [1, 0],
       [2, 0],
       [2, 1],
       [2, 2],
       [1, 2],
+      [1, 2],
     ]);
-    expect(trace.steps.map((s) => s.taken[0])).toEqual([false, false, false, true, true, true]);
+    expect(trace.steps.map((s) => s.line)).toEqual([1, 2, 3, 4, 5, null]);
+    expect(trace.steps.map((s) => s.taken[0])).toEqual([false, false, true, true, true, true]);
   });
 
   it('slays a hydra with one blow on any cell of its body; then its head is harmless', () => {
     const trace = run(['@ooH'], 'move_east()\nattack()\nmove_east()\nmove_east()');
-    expect(trace.steps.map((s) => s.slain[0])).toEqual([false, false, true, true, true]);
-    expect(trace.steps.map((s) => s.action)).toEqual([null, 'move', 'attack', 'move', 'move']);
+    expect(trace.steps.map((s) => s.slain[0])).toEqual([false, true, true, true, true]);
+    expect(trace.steps.map((s) => s.action)).toEqual(['move', 'attack', 'move', 'move', null]);
     expect(trace.outcome).toEqual({ kind: 'success' });
   });
 

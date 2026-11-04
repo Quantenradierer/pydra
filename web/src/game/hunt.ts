@@ -80,7 +80,7 @@ export function parseHuntMap(rows: readonly string[]): HuntWorld {
 export type HuntAction = 'move' | 'attack' | null;
 
 export interface HuntSnapshot {
-  /** The line about to run, highlighted; null once the program has ended. */
+  /** The line highlighted, whose effect the picture already shows; null once the program has ended. */
   line: number | null;
   x: number;
   y: number;
@@ -190,25 +190,34 @@ export function simulateHunt(world: HuntWorld, source: string, maxSteps = MAX_HU
     vars: interpreter.variables().map(([name, value]) => [name, repr(value)]),
   });
   const seen = new Set<string>();
+  /** The line that is running: a step shows the world after it, so the warrior acts when his line is reached. */
   let line = 0;
+  let running = false;
+  const finish = () => {
+    if (running) steps.push(snapshot(line));
+    running = false;
+    action = null;
+  };
 
   try {
     const program = parse(source);
     for (const pause of interpreter.run(program)) {
+      finish();
       line = pause.line;
-      steps.push(snapshot(line));
-      action = null;
+      running = true;
       const key = JSON.stringify([line, x, y, slain, taken, interpreter.fingerprint()]);
-      if (seen.has(key) || steps.length >= maxSteps) return { steps, outcome: { kind: 'loop', line } };
+      if (seen.has(key) || steps.length >= maxSteps) {
+        if (steps.length < maxSteps) finish();
+        return { steps, outcome: { kind: 'loop', line } };
+      }
       seen.add(key);
     }
+    finish();
   } catch (error) {
-    if (error instanceof Stop) {
-      // The last step shows the moment it went wrong: the swing into the air, or the warrior on the head.
-      if (error.kind === 'air') steps[steps.length - 1]!.action = 'attack';
-      if (error.kind === 'eaten') steps.push(snapshot(line));
-      return { steps, outcome: { kind: error.kind, line } };
-    }
+    // A swing into the air is drawn on the step of its line; a warrior who is eaten already stands on the head.
+    if (error instanceof Stop && error.kind === 'air') action = 'attack';
+    finish();
+    if (error instanceof Stop) return { steps, outcome: { kind: error.kind, line } };
     if (error instanceof PyError) {
       return { steps, outcome: { kind: 'error', line: error.line, message: error.message } };
     }

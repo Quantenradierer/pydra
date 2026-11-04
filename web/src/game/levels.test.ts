@@ -18,6 +18,17 @@ const EXPECTED: Record<string, Outcome['kind'][]> = {
   variables: ['success', 'missed', 'crash', 'missed'],
   'function-parameter': ['success', 'crash', 'missed', 'crash'],
   return: ['success', 'crash', 'error', 'missed'],
+  'nested-loops': ['success', 'missed', 'crash', 'missed'],
+  'strings-elif': ['success', 'missed', 'error', 'missed'],
+  'for-list': ['success', 'missed', 'crash', 'error'],
+  'list-index': ['success', 'error', 'crash', 'missed'],
+  sum: ['success', 'missed', 'missed', 'crash'],
+  'range-step': ['success', 'crash', 'missed', 'error'],
+  break: ['success', 'loop', 'crash', 'loop'],
+  'and-or': ['success', 'crash', 'missed', 'crash'],
+  'function-calls': ['success', 'missed', 'crash', 'error'],
+  'default-args': ['success', 'missed', 'crash', 'error'],
+  'while-index': ['success', 'missed', 'error', 'missed'],
 };
 
 /** What the player sees of a run: the hydra's path and turns, the fish eaten, and how it ended. */
@@ -25,9 +36,9 @@ const behaviour = (trace: Trace) =>
   JSON.stringify([trace.steps.map((s) => [s.x, s.y, s.dir, s.eaten]), trace.outcome]);
 
 describe('game levels', () => {
-  it('has 5 to 8 levels with unique ids', () => {
+  it('has 5 to 24 levels with unique ids', () => {
     expect(LEVELS.length).toBeGreaterThanOrEqual(5);
-    expect(LEVELS.length).toBeLessThanOrEqual(8);
+    expect(LEVELS.length).toBeLessThanOrEqual(24);
     expect(new Set(LEVELS.map((l) => l.id)).size).toBe(LEVELS.length);
     expect(Object.keys(EXPECTED)).toEqual(LEVELS.map((l) => l.id));
   });

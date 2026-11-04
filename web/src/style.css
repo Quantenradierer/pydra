@@ -1397,7 +1397,14 @@ textarea {
 }
 
 .game .stage {
+  /* Shrinks (through the program box) so the answers and the feedback line always fit. */
+  flex: 0 1 auto;
+  min-height: 0;
   gap: 0.3rem;
+}
+
+.game .stage > * {
+  flex: none;
 }
 
 .game .arena {
@@ -1436,9 +1443,14 @@ textarea {
 .game .program-slot {
   display: flex;
   flex-direction: column;
+  /* A long program gives way first: its box scrolls and follows the running line. */
+  flex: 0 1 auto;
+  min-height: 4rem;
 }
 
 .game .program {
+  flex: 0 1 auto;
+  min-height: 0;
   max-height: 28dvh;
   margin: 0;
   padding: 0.3rem 0;

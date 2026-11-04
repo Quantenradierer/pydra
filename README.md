@@ -174,6 +174,10 @@ The levels live in `web/src/game/levels.ts` (TypeScript, in play order):
   answer's note explains what went wrong without naming the right answer.
 - Add the expected outcomes of a new level to `EXPECTED` in
   `levels.test.ts`, then run `npm test`.
+- Check every answer in real Python too: run the filled program with
+  `move`, `turn_left`, `turn_right`, `wall_ahead` and `fish_ahead` defined
+  over the same map, and compare outcome, error type and final position
+  with `simulate()`.
 
 ## Feedback API
 

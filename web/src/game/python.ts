@@ -4,20 +4,24 @@
  * statement (and at every loop or branch check), so the view can highlight
  * the line and show the variables.
  *
- * Supported: int and bool literals, names, calls, `+ - * // %`, unary `-`,
+ * Supported: int, bool and string literals (no escapes), list literals,
+ * names, calls, indexing `x[i]` (also negative), `+ - * // %`, unary `-`,
  * comparisons, `not`/`and`/`or`, parentheses; `x = …`, `x += …`, `x -= …`,
- * `if`/`elif`/`else`, `while`, `for name in range(…)`, `def` with
- * parameters, `return`, `pass`, comments and blank lines. Indentation is
- * spaces only. Everything else is a syntax error, so a level can only use
+ * `if`/`elif`/`else`, `while`, `for name in …` over `range(…)` (1 to 3
+ * arguments), a list or a string, `break`, `continue`, `def` with
+ * parameters and default values, `return`, `pass`, the builtin `len`,
+ * comments and blank lines. Indentation is spaces only. Everything else is a syntax error, so a level can only use
  * what this file implements and real Python would run the same way.
  */
 
-export type Value = number | boolean | null | PyFunction | Builtin | number[];
+export type Value = number | boolean | null | string | PyFunction | Builtin | Value[];
 
 export interface PyFunction {
   kind: 'function';
   name: string;
   params: string[];
+  /** Values of the last parameters' defaults, evaluated once when `def` runs (like Python). */
+  defaults: Value[];
   body: Stmt[];
 }
 
@@ -31,6 +35,9 @@ export interface Builtin {
 export type Expr =
   | { kind: 'num'; value: number }
   | { kind: 'bool'; value: boolean }
+  | { kind: 'str'; value: string }
+  | { kind: 'list'; items: Expr[] }
+  | { kind: 'index'; target: Expr; index: Expr }
   | { kind: 'name'; name: string }
   | { kind: 'call'; name: string; args: Expr[] }
   | { kind: 'unary'; op: '-' | 'not'; operand: Expr }
@@ -44,11 +51,21 @@ export type Stmt =
   | { kind: 'if'; branches: { line: number; cond: Expr; body: Stmt[] }[]; orelse: Stmt[] }
   | { kind: 'while'; line: number; cond: Expr; body: Stmt[] }
   | { kind: 'for'; line: number; name: string; iter: Expr; body: Stmt[] }
-  | { kind: 'def'; line: number; name: string; params: string[]; body: Stmt[] }
+  | { kind: 'def'; line: number; name: string; params: string[]; defaults: Expr[]; body: Stmt[] }
+  | { kind: 'break'; line: number }
+  | { kind: 'continue'; line: number }
   | { kind: 'return'; line: number; expr?: Expr }
   | { kind: 'pass'; line: number };
 
-type PyErrorType = 'SyntaxError' | 'NameError' | 'UnboundLocalError' | 'TypeError' | 'ZeroDivisionError' | 'RecursionError';
+type PyErrorType =
+  | 'SyntaxError'
+  | 'NameError'
+  | 'UnboundLocalError'
+  | 'TypeError'
+  | 'ValueError'
+  | 'IndexError'
+  | 'ZeroDivisionError'
+  | 'RecursionError';
 
 /** A syntax or runtime error, with the 1-based line it happened in. */
 export class PyError extends Error {
@@ -64,10 +81,27 @@ export class PyError extends Error {
 
 // ---------------------------------------------------------------- tokens
 
-type Token = { type: 'name' | 'num' | 'op'; text: string };
+type Token = { type: 'name' | 'num' | 'str' | 'op'; text: string };
 
-const KEYWORDS = new Set(['def', 'if', 'elif', 'else', 'while', 'for', 'in', 'return', 'pass', 'and', 'or', 'not', 'True', 'False']);
-const OPERATORS = ['//', '==', '!=', '<=', '>=', '+=', '-=', '+', '-', '*', '%', '<', '>', '=', '(', ')', ',', ':'];
+const KEYWORDS = new Set([
+  'def',
+  'if',
+  'elif',
+  'else',
+  'while',
+  'for',
+  'in',
+  'break',
+  'continue',
+  'return',
+  'pass',
+  'and',
+  'or',
+  'not',
+  'True',
+  'False',
+]);
+const OPERATORS = ['//', '==', '!=', '<=', '>=', '+=', '-=', '+', '-', '*', '%', '<', '>', '=', '(', ')', '[', ']', ',', ':'];
 
 function tokenize(text: string, line: number): Token[] {
   const tokens: Token[] = [];
@@ -80,6 +114,14 @@ function tokenize(text: string, line: number): Token[] {
       continue;
     }
     if (rest.startsWith('#')) break;
+    // A string in double or single quotes, on one line, without backslash escapes.
+    const quoted = /^"([^"\\]*)"|^'([^'\\]*)'/.exec(rest);
+    if (quoted) {
+      tokens.push({ type: 'str', text: quoted[1] ?? quoted[2]! });
+      i += quoted[0].length;
+      continue;
+    }
+    if (rest[0] === '"' || rest[0] === "'") throw new PyError('SyntaxError', 'unterminated string', line);
     const word = /^[A-Za-z_]\w*/.exec(rest);
     const num = /^\d+/.exec(rest);
     const op = OPERATORS.find((o) => rest.startsWith(o));
@@ -114,7 +156,7 @@ class ExprParser {
     return this.tokens[this.pos];
   }
 
-  private fail(message: string): never {
+  fail(message: string): never {
     throw new PyError('SyntaxError', message, this.line);
   }
 
@@ -196,7 +238,24 @@ class ExprParser {
 
   private unary(): Expr {
     if (this.accept('-')) return { kind: 'unary', op: '-', operand: this.unary() };
-    return this.atom();
+    let expr = this.atom();
+    while (this.accept('[')) {
+      const index = this.expression();
+      this.expect(']');
+      expr = { kind: 'index', target: expr, index };
+    }
+    return expr;
+  }
+
+  /** Comma-separated expressions up to the closing bracket. */
+  private items(close: string): Expr[] {
+    const items: Expr[] = [];
+    if (!this.accept(close)) {
+      do items.push(this.expression());
+      while (this.accept(','));
+      this.expect(close);
+    }
+    return items;
   }
 
   private atom(): Expr {
@@ -206,6 +265,11 @@ class ExprParser {
       this.pos++;
       return { kind: 'num', value: Number(token.text) };
     }
+    if (token.type === 'str') {
+      this.pos++;
+      return { kind: 'str', value: token.text };
+    }
+    if (this.accept('[')) return { kind: 'list', items: this.items(']') };
     if (this.accept('True')) return { kind: 'bool', value: true };
     if (this.accept('False')) return { kind: 'bool', value: false };
     if (this.accept('(')) {
@@ -215,13 +279,7 @@ class ExprParser {
     }
     const name = this.identifier();
     if (!this.accept('(')) return { kind: 'name', name };
-    const args: Expr[] = [];
-    if (!this.accept(')')) {
-      do args.push(this.expression());
-      while (this.accept(','));
-      this.expect(')');
-    }
-    return { kind: 'call', name, args };
+    return { kind: 'call', name, args: this.items(')') };
   }
 }
 
@@ -234,6 +292,8 @@ export function parse(source: string): Stmt[] {
     if (tokens.length > 0) lines.push({ number: i + 1, indent: /^ */.exec(text)![0].length, tokens });
   }
   let pos = 0;
+  /** How many loops the statement being parsed is in (a `def` starts again at 0): `break` needs one. */
+  let loops = 0;
 
   function block(indent: number): Stmt[] {
     const stmts: Stmt[] = [];
@@ -249,6 +309,15 @@ export function parse(source: string): Stmt[] {
     const next = lines[pos];
     if (!next || next.indent <= header.indent) throw new PyError('SyntaxError', 'expected an indented block', header.number);
     return block(next.indent);
+  }
+
+  function loopBody(header: Line): Stmt[] {
+    loops++;
+    try {
+      return body(header);
+    } finally {
+      loops--;
+    }
   }
 
   /** Parses `<keyword> <expr>:` and returns the expression. */
@@ -293,28 +362,42 @@ export function parse(source: string): Stmt[] {
       case 'while': {
         skip();
         const cond = headerExpr(p);
-        return { kind: 'while', line: at, cond, body: body(line) };
+        return { kind: 'while', line: at, cond, body: loopBody(line) };
       }
       case 'for': {
         skip();
         const name = p.identifier();
         p.expect('in');
         const iter = headerExpr(p);
-        return { kind: 'for', line: at, name, iter, body: body(line) };
+        return { kind: 'for', line: at, name, iter, body: loopBody(line) };
       }
+      case 'break':
+      case 'continue':
+        skip();
+        p.end();
+        if (loops === 0) throw new PyError('SyntaxError', `'${first}' outside loop`, at);
+        return { kind: first, line: at };
       case 'def': {
         skip();
         const name = p.identifier();
         p.expect('(');
         const params: string[] = [];
+        const defaults: Expr[] = [];
         if (!p.accept(')')) {
-          do params.push(p.identifier());
-          while (p.accept(','));
+          do {
+            params.push(p.identifier());
+            if (p.accept('=')) defaults.push(p.expression());
+            else if (defaults.length > 0) p.fail('parameter without a default follows parameter with a default');
+          } while (p.accept(','));
           p.expect(')');
         }
         p.expect(':');
         p.end();
-        return { kind: 'def', line: at, name, params, body: body(line) };
+        const outer = loops;
+        loops = 0;
+        const stmts = body(line);
+        loops = outer;
+        return { kind: 'def', line: at, name, params, defaults, body: stmts };
       }
       case 'return': {
         skip();
@@ -357,8 +440,11 @@ export interface Pause {
 interface Frame {
   vars: Map<string, Value>;
   /** Hidden loop state (each running `for`: its items and the current index), part of the loop-detection key. */
-  loops: [number[], number][];
+  loops: [Value[] | string, number][];
 }
+
+class Break {}
+class Continue {}
 
 class Return {
   readonly value: Value;
@@ -373,7 +459,7 @@ const isNumber = (v: Value): v is number => typeof v === 'number' || typeof v ==
 const num = (v: Value): number => Number(v);
 
 export function truthy(v: Value): boolean {
-  if (Array.isArray(v)) return v.length > 0;
+  if (Array.isArray(v) || typeof v === 'string') return v.length > 0;
   if (v === null) return false;
   if (typeof v === 'object') return true;
   return Boolean(v);
@@ -384,7 +470,8 @@ export function repr(v: Value): string {
   if (v === null) return 'None';
   if (v === true) return 'True';
   if (v === false) return 'False';
-  if (Array.isArray(v)) return `[${v.join(', ')}]`;
+  if (typeof v === 'string') return v.includes("'") && !v.includes('"') ? `"${v}"` : `'${v}'`;
+  if (Array.isArray(v)) return `[${v.map(repr).join(', ')}]`;
   if (typeof v === 'object') return `<function ${v.name}>`;
   return String(v);
 }
@@ -401,12 +488,24 @@ export class Interpreter {
       name: 'range',
       arity: -1,
       call: (args) => {
-        if (args.length < 1 || args.length > 2 || !args.every(isNumber)) throw new TypeError('range() takes 1 or 2 integers');
-        const [start, stop] = args.length === 1 ? [0, num(args[0]!)] : [num(args[0]!), num(args[1]!)];
-        return Array.from({ length: Math.max(0, stop - start) }, (_, i) => start + i);
+        if (args.length < 1 || args.length > 3 || !args.every(isNumber)) throw new TypeError('range() takes 1 to 3 integers');
+        const [start, stop, step] = args.length === 1 ? [0, num(args[0]!), 1] : [num(args[0]!), num(args[1]!), num(args[2] ?? 1)];
+        if (step === 0) throw new PyError('ValueError', 'range() arg 3 must not be zero', 0);
+        const items: number[] = [];
+        for (let i = start; step > 0 ? i < stop : i > stop; i += step) items.push(i);
+        return items;
       },
     };
-    this.builtins = new Map([range, ...builtins].map((b) => [b.name, b]));
+    const len: Builtin = {
+      kind: 'builtin',
+      name: 'len',
+      arity: 1,
+      call: ([v]) => {
+        if (typeof v === 'string' || Array.isArray(v)) return v.length;
+        throw new TypeError(`object of type '${typeName(v!)}' has no len()`);
+      },
+    };
+    this.builtins = new Map([range, len, ...builtins].map((b) => [b.name, b]));
   }
 
   private builtins: Map<string, Builtin>;
@@ -475,28 +574,42 @@ export class Interpreter {
         for (;;) {
           yield { line: stmt.line };
           if (!truthy(yield* this.eval(stmt.cond, stmt.line))) return;
-          yield* this.block(stmt.body);
+          if ((yield* this.loopBody(stmt.body)) === 'break') return;
         }
       case 'for': {
         yield { line: stmt.line };
         const items = yield* this.eval(stmt.iter, stmt.line);
-        if (!Array.isArray(items)) throw new PyError('TypeError', `'${repr(items)}' is not iterable`, stmt.line);
-        const loops = this.frame().loops;
-        const state: [number[], number] = [items, 0];
-        loops.push(state);
-        for (const [i, item] of items.entries()) {
-          if (i > 0) yield { line: stmt.line };
-          state[1] = i;
-          this.frame().vars.set(stmt.name, item);
-          yield* this.block(stmt.body);
+        if (!Array.isArray(items) && typeof items !== 'string') {
+          throw new PyError('TypeError', `'${typeName(items)}' object is not iterable`, stmt.line);
         }
-        loops.pop();
+        const loops = this.frame().loops;
+        const state: [Value[] | string, number] = [items, 0];
+        loops.push(state);
+        try {
+          for (const [i, item] of [...items].entries()) {
+            if (i > 0) yield { line: stmt.line };
+            state[1] = i;
+            this.frame().vars.set(stmt.name, item);
+            if ((yield* this.loopBody(stmt.body)) === 'break') return;
+          }
+        } finally {
+          loops.pop();
+        }
         return;
       }
-      case 'def':
+      case 'break':
         yield { line: stmt.line };
-        this.frame().vars.set(stmt.name, { kind: 'function', name: stmt.name, params: stmt.params, body: stmt.body });
+        throw new Break();
+      case 'continue':
+        yield { line: stmt.line };
+        throw new Continue();
+      case 'def': {
+        yield { line: stmt.line };
+        const defaults: Value[] = [];
+        for (const d of stmt.defaults) defaults.push(yield* this.eval(d, stmt.line));
+        this.frame().vars.set(stmt.name, { kind: 'function', name: stmt.name, params: stmt.params, defaults, body: stmt.body });
         return;
+      }
       case 'return': {
         yield { line: stmt.line };
         if (this.frames.length === 1) throw new PyError('SyntaxError', "'return' outside function", stmt.line);
@@ -506,6 +619,17 @@ export class Interpreter {
         yield { line: stmt.line };
         return;
     }
+  }
+
+  /** Runs one pass of a loop body; tells whether it ended with `break`. */
+  private *loopBody(stmts: Stmt[]): Generator<Pause, 'break' | undefined> {
+    try {
+      yield* this.block(stmts);
+    } catch (error) {
+      if (error instanceof Break) return 'break';
+      if (!(error instanceof Continue)) throw error;
+    }
+    return undefined;
   }
 
   private lookup(name: string, line: number): Value {
@@ -521,7 +645,25 @@ export class Interpreter {
     switch (expr.kind) {
       case 'num':
       case 'bool':
+      case 'str':
         return expr.value;
+      case 'list': {
+        const items: Value[] = [];
+        for (const item of expr.items) items.push(yield* this.eval(item, line));
+        return items;
+      }
+      case 'index': {
+        const target = yield* this.eval(expr.target, line);
+        const index = yield* this.eval(expr.index, line);
+        if (typeof target !== 'string' && !Array.isArray(target)) {
+          throw new PyError('TypeError', `'${typeName(target)}' object is not subscriptable`, line);
+        }
+        const what = typeof target === 'string' ? 'string' : 'list';
+        if (!isNumber(index)) throw new PyError('TypeError', `${what} indices must be integers`, line);
+        const i = num(index) < 0 ? target.length + num(index) : num(index);
+        if (i < 0 || i >= target.length) throw new PyError('IndexError', `${what} index out of range`, line);
+        return target[i]!;
+      }
       case 'name':
         return this.lookup(expr.name, line);
       case 'unary': {
@@ -553,14 +695,19 @@ export class Interpreter {
             return callee.call(args);
           } catch (error) {
             if (error instanceof TypeError) throw new PyError('TypeError', error.message, line);
+            // Builtins do not know the line they are called from.
+            if (error instanceof PyError && error.line === 0) throw new PyError(error.type, error.message.replace(/^\w+: /, ''), line);
             throw error;
           }
         }
-        if (args.length !== callee.params.length) {
-          throw new PyError('TypeError', `${callee.name}() takes ${callee.params.length} arguments but ${args.length} were given`, line);
+        const required = callee.params.length - callee.defaults.length;
+        if (args.length < required || args.length > callee.params.length) {
+          const takes = required === callee.params.length ? `${required}` : `${required} to ${callee.params.length}`;
+          throw new PyError('TypeError', `${callee.name}() takes ${takes} arguments but ${args.length} were given`, line);
         }
         if (this.frames.length > MAX_DEPTH) throw new PyError('RecursionError', 'maximum recursion depth exceeded', line);
-        this.frames.push({ vars: new Map(callee.params.map((p, i) => [p, args[i]!])), loops: [] });
+        const values = [...args, ...callee.defaults.slice(args.length - required)];
+        this.frames.push({ vars: new Map(callee.params.map((p, i) => [p, values[i]!])), loops: [] });
         this.calls.push(line);
         try {
           yield* this.block(callee.body);
@@ -579,8 +726,10 @@ export class Interpreter {
   private binary(op: BinaryOp, left: Value, right: Value, line: number): Value {
     if (op === '==') return equal(left, right);
     if (op === '!=') return !equal(left, right);
+    if (op === '+' && typeof left === 'string' && typeof right === 'string') return left + right;
+    if (op === '+' && Array.isArray(left) && Array.isArray(right)) return [...left, ...right];
     if (!isNumber(left) || !isNumber(right)) {
-      throw new PyError('TypeError', `unsupported operand types for ${op}: '${repr(left)}' and '${repr(right)}'`, line);
+      throw new PyError('TypeError', `unsupported operand types for ${op}: '${typeName(left)}' and '${typeName(right)}'`, line);
     }
     const a = num(left);
     const b = num(right);
@@ -613,6 +762,16 @@ export class Interpreter {
 
 function equal(a: Value, b: Value): boolean {
   if (isNumber(a) && isNumber(b)) return num(a) === num(b);
-  if (Array.isArray(a) && Array.isArray(b)) return a.length === b.length && a.every((x, i) => x === b[i]);
+  if (Array.isArray(a) && Array.isArray(b)) return a.length === b.length && a.every((x, i) => equal(x, b[i]!));
   return a === b;
+}
+
+/** Python's name for the type of a value, for error messages. */
+function typeName(v: Value): string {
+  if (v === null) return 'NoneType';
+  if (typeof v === 'boolean') return 'bool';
+  if (typeof v === 'number') return 'int';
+  if (typeof v === 'string') return 'str';
+  if (Array.isArray(v)) return 'list';
+  return v.kind === 'builtin' ? 'builtin_function_or_method' : 'function';
 }

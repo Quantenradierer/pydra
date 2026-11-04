@@ -81,9 +81,14 @@ questions a session asks.
 - The right answer shows ✓, "Satt! Die Hydra hat alle Fische gefressen.",
   the explanation and "Nächstes Level" / "Next level" (on the last level:
   a closing line and a way home).
-- 8 levels in this order, one concept each: sequence, `for` with `range`,
-  the loop body, `while`, `if`, variables, functions with a parameter,
-  return values. A strip of level buttons on the game screen (always one line, scrolling
+- 19 levels in this order, one concept each, getting harder: sequence,
+  `for` with `range`, the loop body, `while`, `if`, variables, functions
+  with a parameter, return values, nested loops, strings with
+  `if`/`elif`/`else`, `for` over a list, list indexes, adding up with `+=`,
+  `range` with a step, leaving a loop (`break` vs `continue`), `and`/`or`,
+  functions calling functions, default values, and `while` with a counter
+  and `len` through a list. Every program also runs the same way in real
+  Python (checked for every answer when levels change). A strip of level buttons on the game screen (always one line, scrolling
   sideways with the current level in view) opens every solved level and the
   first unsolved one; a solved level replays from
   scratch. The level title is a small pill on the arena's corner; tapping it
@@ -222,7 +227,7 @@ a way home.
     no session has been played yet.
   - Reading functions: e.g. "2 of 4 functions read · 80% correct"; "No
     function read yet." before the first answer.
-  - Hydra goes fishing: e.g. "3 of 8 levels solved · 60% correct" (share of
+  - Hydra goes fishing: e.g. "3 of 19 levels solved · 60% correct" (share of
     right picks); "No level played yet." before the first pick.
 - **Quiz:** as above.
 - **Game:** as above, with a back button to Home (pushed onto the history

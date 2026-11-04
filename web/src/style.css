@@ -1495,3 +1495,363 @@ textarea {
 .game .next {
   min-height: 2.4rem;
 }
+
+/*
+ * Hydra hunt: a warrior on a grassy map slays snake-like hydras and picks
+ * up gold. The grid, rocks and layout are the fishing arena's.
+ */
+.hunt-grass {
+  fill: #1c2a1f;
+}
+
+.hunt-grid {
+  fill: none;
+  stroke: #8fbf8a;
+  stroke-opacity: 0.22;
+  stroke-width: 0.35;
+}
+
+.hunt-body,
+.hunt-scales {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hunt-body {
+  stroke: #3776ab;
+  stroke-width: 4;
+}
+
+.hunt-scales {
+  stroke: var(--yellow);
+  stroke-width: 0.9;
+  stroke-dasharray: 0.1 2.5;
+}
+
+.hunt-tail {
+  fill: #3776ab;
+}
+
+.hunt-skull {
+  fill: #3776ab;
+}
+
+.hunt-eye {
+  fill: var(--yellow);
+}
+
+.hunt-head-bite {
+  transform-box: fill-box;
+  transform-origin: 30% 50%;
+}
+
+.hunt-hydra {
+  transition: opacity 0.4s;
+}
+
+/* A slain hydra is cut in two: grey, no scales, and its head harmless. */
+.hunt-hydra.slain {
+  opacity: 0.45;
+}
+
+.hunt-hydra.slain .hunt-body,
+.hunt-hydra.slain .hunt-tail,
+.hunt-hydra.slain .hunt-skull {
+  stroke: #6b7885;
+  fill: #6b7885;
+}
+
+.hunt-hydra.slain .hunt-tail,
+.hunt-hydra.slain .hunt-skull {
+  stroke: none;
+}
+
+.hunt-hydra.slain .hunt-body {
+  fill: none;
+}
+
+.hunt-hydra.slain .hunt-scales,
+.hunt-hydra.slain .hunt-eye {
+  display: none;
+}
+
+.hunt-hydra.biting .hunt-skull {
+  fill: #c0504a;
+}
+
+.hunt-coin {
+  fill: var(--yellow);
+  stroke: #a07d10;
+  stroke-width: 0.35;
+}
+
+.hunt-shine {
+  stroke: #fff;
+  stroke-width: 0.4;
+  stroke-linecap: round;
+}
+
+.hunt-gold-pile {
+  transition: opacity 0.3s, scale 0.3s;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.hunt-gold.taken .hunt-gold-pile {
+  opacity: 0;
+  scale: 1.6;
+}
+
+.hunt-arena.eaten .hunt-warrior-art {
+  opacity: 0.25;
+  scale: 0.5;
+}
+
+.info-rule {
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+/* ---- Hero: the warrior of "Hydra hunt" (game/hero.ts) ---- */
+.hunt-warrior-art {
+  transform-box: fill-box;
+  transform-origin: 50% 80%;
+}
+
+.hunt-hero-pose {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+/* Joints: the origin of each pivot group is its hip or shoulder. */
+.hunt-pivot {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+.hunt-hero-shadow {
+  fill: rgb(0 0 0 / 0.35);
+}
+
+.hunt-shin,
+.hunt-boot,
+.hunt-belt,
+.hunt-blade,
+.hunt-blade-edge,
+.hunt-arm,
+.hunt-grip,
+.hunt-hilt,
+.hunt-smile,
+.hunt-helmet-rim,
+.hunt-swoosh {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.hunt-shin {
+  stroke: #5a3b1e;
+  stroke-width: 0.85;
+}
+
+.hunt-boot {
+  stroke: #3b2612;
+  stroke-width: 0.75;
+}
+
+.hunt-tunic {
+  fill: #d9483b;
+  stroke: #8e2a22;
+  stroke-width: 0.3;
+  stroke-linejoin: round;
+}
+
+.hunt-belt {
+  stroke: #6b4b2a;
+  stroke-width: 0.55;
+}
+
+.hunt-buckle {
+  fill: var(--yellow);
+}
+
+.hunt-plume {
+  fill: #ff5a4e;
+  stroke: #b8322a;
+  stroke-width: 0.2;
+  stroke-linejoin: round;
+}
+
+.hunt-face {
+  fill: #f2c39b;
+  stroke: #b57f5a;
+  stroke-width: 0.22;
+}
+
+.hunt-helmet {
+  fill: #cfd8e0;
+  stroke: #5f6c78;
+  stroke-width: 0.25;
+  stroke-linejoin: round;
+}
+
+.hunt-helmet-rim {
+  stroke: #8a96a3;
+  stroke-width: 0.55;
+}
+
+.hunt-eye {
+  fill: #14202e;
+}
+
+.hunt-eye-shine {
+  fill: #fff;
+}
+
+.hunt-smile {
+  stroke: #7a3b22;
+  stroke-width: 0.2;
+}
+
+.hunt-shield-plate {
+  fill: var(--yellow);
+  stroke: #9a7408;
+  stroke-width: 0.35;
+}
+
+.hunt-shield-boss {
+  fill: #3776ab;
+  stroke: #234e74;
+  stroke-width: 0.2;
+}
+
+.hunt-blade-edge {
+  stroke: #3c4650;
+  stroke-width: 1.05;
+}
+
+.hunt-blade {
+  stroke: #f4f8fb;
+  stroke-width: 0.6;
+}
+
+.hunt-arm {
+  stroke: #f2c39b;
+  stroke-width: 0.75;
+}
+
+.hunt-grip {
+  stroke: #5a3b1e;
+  stroke-width: 0.45;
+}
+
+.hunt-hilt {
+  stroke: #c79a12;
+  stroke-width: 0.55;
+}
+
+.hunt-pommel {
+  fill: #c79a12;
+}
+
+.hunt-fist {
+  fill: #f2c39b;
+  stroke: #b57f5a;
+  stroke-width: 0.18;
+}
+
+/* The white arc of a sword stroke, only seen during heroStrike. */
+.hunt-swoosh {
+  stroke: #fff;
+  stroke-width: 0.8;
+  stroke-dasharray: 11 11;
+  opacity: 0;
+}
+
+.hunt-dizzy,
+.hunt-puzzled {
+  display: none;
+}
+
+.hunt-dizzy {
+  fill: var(--yellow);
+  stroke: #9a7408;
+  stroke-width: 0.12;
+}
+
+.hunt-star:first-child {
+  translate: -1.6px 0;
+}
+
+.hunt-star:last-child {
+  translate: 1.6px 0;
+}
+
+.hunt-puzzled {
+  fill: var(--yellow);
+  stroke: #1c2a1f;
+  stroke-width: 0.25;
+  paint-order: stroke;
+  font: 800 2.6px system-ui, sans-serif;
+}
+
+/* Solved: he holds his sword up high. */
+.hunt-arena.won .hunt-sword {
+  rotate: -35deg;
+}
+
+/* Walked into a rock: stars circle over his head. */
+.hunt-arena.crashed .hunt-dizzy {
+  display: inline;
+}
+
+.hunt-arena.crashed .hunt-star {
+  animation: hunt-dizzy 1.2s linear infinite;
+}
+
+.hunt-arena.crashed .hunt-star:last-child {
+  animation-delay: -0.6s;
+}
+
+.hunt-arena.crashed .hunt-hero-pose {
+  rotate: -8deg;
+}
+
+/* Other failures: a puzzled question mark. */
+.hunt-arena.stuck .hunt-puzzled {
+  display: inline;
+}
+
+.hunt-arena.stuck .hunt-sword {
+  rotate: 100deg;
+}
+
+/* Stars orbit his head on a flat ellipse. */
+@keyframes hunt-dizzy {
+  0% {
+    translate: -1.6px 0;
+  }
+
+  25% {
+    translate: 0 0.5px;
+  }
+
+  50% {
+    translate: 1.6px 0;
+  }
+
+  75% {
+    translate: 0 -0.5px;
+  }
+
+  100% {
+    translate: -1.6px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hunt-arena.crashed .hunt-star {
+    animation: none;
+  }
+}
+/* ---- end Hero ---- */

@@ -13,7 +13,7 @@ when a requirement changes; the code, tests and the other docs follow it.
 
 ## Lessons
 
-Home offers three lessons. The first two use the same quiz screen, answer feedback,
+Home offers three lessons and two games. The first two use the same quiz screen, answer feedback,
 explanations, hydra, resume and stats rules (below); they differ in which
 questions a session asks.
 
@@ -22,6 +22,7 @@ questions a session asks.
 | `mixed`   | Quiz / Quiz                        | 10 random questions from the 80 (see Quiz session)                      |
 | `functions` | Funktionen lesen / Reading functions | one function read line by line: one question per line, in order, then one about the whole function |
 | game      | Hydra auf Fischfang / Hydra goes fishing | the hydra game: its own screen and progress (see below) |
+| hunt      | Hydra-Jagd / Hydra hunt            | the warrior game: same screen, its own world, levels and progress (see below) |
 
 ### Reading functions (walkthroughs)
 
@@ -119,6 +120,28 @@ questions a session asks.
   level in progress with its answer order and the wrong answers tried. It
   is saved after every pick; opening the game continues that level, also
   after a reload. An app update waits while the game screen is open.
+
+### Hydra hunt (the second game)
+
+- The same screen, rules for answers, progress and layout as Hydra goes
+  fishing (one gap, four answers that really run step by step, level
+  strip, speed); only the world, the picture and the levels differ.
+  Progress is saved as `hunt`; Reset progress wipes it too.
+- The player guides a warrior on a grass grid with rocks, gold and
+  hydras. A hydra is a snake: a head and a body a few cells long. Commands:
+  `move_north()`, `move_east()`, `move_south()`, `move_west()` (one cell),
+  `attack()` and `body_here()`.
+- Rules: the warrior may walk on a hydra's body; `attack()` there slays the
+  hydra with one blow. Stepping onto the head of a living hydra gets him
+  eaten (a slain hydra's head is harmless). `attack()` where there is no
+  living body strikes the air and ends the run. Walking onto gold picks it
+  up. Walking into a rock or off the map ends the run. A level is solved
+  when the program ends with every hydra slain and all gold taken.
+- 11 levels for beginners: commands one after another, minding the head
+  (and gold), `for` with `range`, two lines in a loop body, a function, a
+  parameter, `while not body_here()`, `if body_here()`, nested loops, a
+  list of numbers, a growing variable. Every answer's outcome was checked
+  against real Python running the same world.
 
 ## Content
 
@@ -227,8 +250,9 @@ a way home.
     no session has been played yet.
   - Reading functions: e.g. "2 of 4 functions read · 80% correct"; "No
     function read yet." before the first answer.
-  - Hydra goes fishing: e.g. "3 of 19 levels solved · 60% correct" (share of
-    right picks); "No level played yet." before the first pick.
+  - Hydra goes fishing and Hydra hunt: e.g. "3 of 19 levels solved · 60%
+    correct" (share of right picks); "No level played yet." before the
+    first pick.
 - **Quiz:** as above.
 - **Game:** as above, with a back button to Home (pushed onto the history
   like Settings).
@@ -238,7 +262,7 @@ a way home.
   - hydra game speed: slow (default) / normal / fast, saved as `gameSpeed`
     and kept by Reset progress;
   - "Reset progress" with a confirm dialog: wipes stats, counters, any
-    saved session and the game's progress, keeps the language;
+    saved session and both games' progress, keeps the language;
   - "Install app" button, shown only when the browser fires
     `beforeinstallprompt`, hidden after install or when unavailable (so never
     on iOS).
@@ -260,7 +284,7 @@ defensively: corrupt or foreign data is ignored and never throws.
 - lifetime counters per lesson: sessions played, best score, total answers,
   total correct (`counters` for the quiz, `counters.functions` for reading
   functions);
-- the game's progress (see the game above);
+- the games' progress (`game` and `hunt`, see the games above);
 - the last result (lesson, score, total) for the summary;
 - per-question stats `{ seen, correct, lastSeen }` keyed by question id
   (collected now, not yet used to pick questions);

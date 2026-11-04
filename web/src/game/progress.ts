@@ -1,5 +1,5 @@
 import { shuffle, type Rng } from '../session.ts';
-import type { GameLevel } from './levels.ts';
+import type { PuzzleLevel } from './puzzle.ts';
 
 /** The level being played. */
 export interface LevelState {
@@ -27,7 +27,7 @@ export const EMPTY_PROGRESS: GameProgress = { solved: [], picks: 0, correctPicks
 /** What a choice slot shows. The right answer shows only once it has been picked. */
 export type ChoiceState = 'open' | 'wrong' | 'right';
 
-export function choiceStates(level: GameLevel, state: LevelState): ChoiceState[] {
+export function choiceStates(level: PuzzleLevel, state: LevelState): ChoiceState[] {
   return state.order.map((choice) => {
     if (state.tried.includes(choice)) return 'wrong';
     if (state.solved && choice === level.answerIndex) return 'right';
@@ -36,20 +36,20 @@ export function choiceStates(level: GameLevel, state: LevelState): ChoiceState[]
 }
 
 /** Levels that can be opened: every solved one and the first unsolved one. */
-export function unlocked(progress: GameProgress, levels: readonly GameLevel[]): boolean[] {
+export function unlocked(progress: GameProgress, levels: readonly PuzzleLevel[]): boolean[] {
   const firstOpen = levels.findIndex((l) => !progress.solved.includes(l.id));
   return levels.map((l, i) => progress.solved.includes(l.id) || i === firstOpen);
 }
 
 /** The level to show when the game opens: the one in progress, else the first unsolved, else the first. */
-export function levelToShow(progress: GameProgress, levels: readonly GameLevel[]): GameLevel {
+export function levelToShow<L extends PuzzleLevel>(progress: GameProgress, levels: readonly L[]): L {
   return (
     levels.find((l) => l.id === progress.current?.level) ?? levels.find((l) => !progress.solved.includes(l.id)) ?? levels[0]!
   );
 }
 
 /** Starts (or keeps) a level as the current one; a new start shuffles its choices. */
-export function openLevel(progress: GameProgress, level: GameLevel, rng: Rng = Math.random): GameProgress {
+export function openLevel(progress: GameProgress, level: PuzzleLevel, rng: Rng = Math.random): GameProgress {
   if (progress.current?.level === level.id) return progress;
   const order = shuffle(
     level.choices.map((_, i) => i),
@@ -69,7 +69,7 @@ export function openLevel(progress: GameProgress, level: GameLevel, rng: Rng = M
  *   their outcome stays visible;
  * - picking a tried choice again, or an unknown slot, changes nothing.
  */
-export function pick(progress: GameProgress, level: GameLevel, slot: number): GameProgress {
+export function pick(progress: GameProgress, level: PuzzleLevel, slot: number): GameProgress {
   const current = progress.current;
   if (!current || current.level !== level.id) return progress;
   const choice = current.order[slot];
@@ -90,7 +90,7 @@ export function pick(progress: GameProgress, level: GameLevel, slot: number): Ga
 const isCount = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 0;
 
 /** Reads saved progress defensively: unknown levels and malformed parts are dropped. */
-export function parseGameProgress(raw: unknown, levels: readonly GameLevel[]): GameProgress {
+export function parseGameProgress(raw: unknown, levels: readonly PuzzleLevel[]): GameProgress {
   if (typeof raw !== 'object' || raw === null) return EMPTY_PROGRESS;
   const r = raw as Record<string, unknown>;
   if (!isCount(r.picks) || !isCount(r.correctPicks) || r.correctPicks > r.picks) return EMPTY_PROGRESS;
@@ -101,7 +101,7 @@ export function parseGameProgress(raw: unknown, levels: readonly GameLevel[]): G
   return current ? { ...progress, current } : progress;
 }
 
-function parseLevelState(raw: unknown, levels: readonly GameLevel[]): LevelState | undefined {
+function parseLevelState(raw: unknown, levels: readonly PuzzleLevel[]): LevelState | undefined {
   if (typeof raw !== 'object' || raw === null) return undefined;
   const { level: id, order, tried, solved } = raw as Record<string, unknown>;
   const level = levels.find((l) => l.id === id);

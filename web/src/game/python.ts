@@ -488,7 +488,9 @@ export class Interpreter {
       name: 'range',
       arity: -1,
       call: (args) => {
-        if (args.length < 1 || args.length > 3 || !args.every(isNumber)) throw new TypeError('range() takes 1 to 3 integers');
+        if (args.length < 1 || args.length > 3) throw new TypeError('range() takes 1 to 3 integers');
+        const bad = args.find((a) => !isNumber(a));
+        if (bad !== undefined) throw new TypeError(`'${typeName(bad)}' object cannot be interpreted as an integer`);
         const [start, stop, step] = args.length === 1 ? [0, num(args[0]!), 1] : [num(args[0]!), num(args[1]!), num(args[2] ?? 1)];
         if (step === 0) throw new PyError('ValueError', 'range() arg 3 must not be zero', 0);
         const items: number[] = [];

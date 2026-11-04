@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CONTENT } from '../content/lessons.ts';
 import { AppStorage, MemoryKeyValue, NAMESPACE } from '../storage.ts';
 import { Game } from './game.ts';
+import { HUNT_LEVELS } from './hunt-levels.ts';
 import { LEVELS } from './levels.ts';
 
 function setup(kv = new MemoryKeyValue()) {
@@ -29,6 +30,20 @@ describe('Game', () => {
     expect(game.stats()).toMatchObject({ done: 1, picks: 1, percent: 100 });
     expect(game.open(LEVELS[1]!.id).level).toBe(LEVELS[1]);
     expect(game.open().level).toBe(LEVELS[1]);
+  });
+
+  it('keeps the hunt game apart: its own levels and saved progress', () => {
+    const { kv, storage, game } = setup();
+    const hunt = new Game(storage, HUNT_LEVELS, () => 0.42, 'hunt');
+    const { level, state } = hunt.open();
+    expect(level).toBe(HUNT_LEVELS[0]);
+    hunt.pick(state.order.indexOf(level.answerIndex));
+    expect(hunt.stats()).toMatchObject({ done: 1, total: HUNT_LEVELS.length, picks: 1 });
+    expect(game.stats().picks).toBe(0);
+    expect(JSON.parse(kv.getItem(NAMESPACE + 'hunt')!)).toMatchObject({ solved: [HUNT_LEVELS[0]!.id] });
+    storage.resetProgress();
+    expect(kv.getItem(NAMESPACE + 'hunt')).toBeNull();
+    expect(hunt.stats().picks).toBe(0);
   });
 
   it('is wiped by Reset progress', () => {

@@ -124,6 +124,7 @@ describe('python subset', () => {
     const { printed } = run('for i in range(1, 8, 3):\n    print(i)\nfor i in range(3, 0, -1):\n    print(i)\nfor i in range(0, 3, -1):\n    print(i)');
     expect(printed).toEqual(['1', '4', '7', '3', '2', '1']);
     expect(error('x = 1\nfor i in range(0, 5, 0):\n    pass')).toMatchObject({ type: 'ValueError', line: 2 });
+    expect(error('for i in range("4"):\n    pass')).toMatchObject({ type: 'TypeError', message: "TypeError: 'str' object cannot be interpreted as an integer" });
   });
 
   it('leaves the innermost loop with break and skips to its next pass with continue', () => {

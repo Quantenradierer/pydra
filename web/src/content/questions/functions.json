@@ -412,5 +412,420 @@
       "de": "Beim Aufruf übergibst du den tatsächlichen Wert `5`, das ist das Argument. `n` in der Definition ist der Parameter, also der Platzhalter, der den Wert beim Aufruf bekommt. Der Rückgabewert wäre dagegen das, was `return` zurückgibt, hier `25`, falls die Funktion `n * n` zurückgibt.\n\nMerkhilfe: Parameter = Platzhalter in der Definition, Argument = echter Wert beim Aufruf.",
       "en": "In the call you pass the actual value `5`; that is the argument. `n` in the definition is the parameter, the placeholder that receives the value when the function is called. The return value would be whatever `return` hands back, here `25` if the function returns `n * n`.\n\nMemory aid: parameter = placeholder in the definition, argument = real value in the call."
     }
+  },
+  {
+    "id": "functions-14",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def square(n):\n    return n * n\n\nprint(square(3) + 1)",
+    "choices": [
+      {
+        "de": "9",
+        "en": "9"
+      },
+      {
+        "de": "16",
+        "en": "16"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "square(3) + 1",
+        "en": "square(3) + 1"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`square(3)` gibt 9 zurück. Dieser Wert wird sofort weiterverwendet: 9 + 1 = 10. Ein Funktionsaufruf kann überall stehen, wo ein Wert stehen darf.",
+      "en": "`square(3)` returns 9. That value is used right away: 9 + 1 = 10. A function call can appear anywhere a value can."
+    }
+  },
+  {
+    "id": "functions-15",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def greet(name):\n    print(\"Hi\", name)\n\ngreet(\"Ana\")",
+    "choices": [
+      {
+        "de": "Hi Ana",
+        "en": "Hi Ana"
+      },
+      {
+        "de": "Hi name",
+        "en": "Hi name"
+      },
+      {
+        "de": "Hi",
+        "en": "Hi"
+      },
+      {
+        "de": "Ana",
+        "en": "Ana"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Beim Aufruf wird `\"Ana\"` dem Parameter `name` zugewiesen. `print(\"Hi\", name)` gibt die beiden Teile mit einem Leerzeichen dazwischen aus: `Hi Ana`.",
+      "en": "On the call, `\"Ana\"` is assigned to the parameter `name`. `print(\"Hi\", name)` prints both parts with a space between: `Hi Ana`."
+    }
+  },
+  {
+    "id": "functions-16",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def add(a, b):\n    return a + b\n\nprint(add(\"a\", \"b\"))",
+    "choices": [
+      {
+        "de": "a b",
+        "en": "a b"
+      },
+      {
+        "de": "ab ab",
+        "en": "ab ab"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "ab",
+        "en": "ab"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Die Funktion weiß nicht, welche Typen sie bekommt. `+` setzt bei Strings einfach zusammen, also wird `\"a\" + \"b\"` zu `\"ab\"`. Dieselbe Funktion rechnet mit Zahlen.",
+      "en": "The function does not care which types it receives. `+` simply joins strings, so `\"a\" + \"b\"` becomes `\"ab\"`. The same function does arithmetic with numbers."
+    }
+  },
+  {
+    "id": "functions-17",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def f(x):\n    return x + 1\n\nprint(f(f(1)))",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "11",
+        "en": "11"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Es wird von innen nach außen gerechnet: `f(1)` ist 2, danach `f(2)` ist 3.",
+      "en": "It is evaluated from the inside out: `f(1)` is 2, then `f(2)` is 3."
+    }
+  },
+  {
+    "id": "functions-18",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def sub(a, b):\n    return a - b\n\nprint(sub(b=1, a=5))",
+    "choices": [
+      {
+        "de": "-4",
+        "en": "-4"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Bei Schlüsselwort-Argumenten zählt der Name, nicht die Reihenfolge. Also ist `a` gleich 5 und `b` gleich 1, und 5 - 1 = 4.",
+      "en": "With keyword arguments the name counts, not the order. So `a` is 5 and `b` is 1, and 5 - 1 = 4."
+    }
+  },
+  {
+    "id": "functions-19",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(4))",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`4 % 2` ist 0, und `0 == 0` ist wahr. Die Funktion gibt also den Wahrheitswert `True` zurück. Solche Funktionen eignen sich gut als Bedingung in einem `if`.",
+      "en": "`4 % 2` is 0, and `0 == 0` is true. So the function returns the truth value `True`. Functions like this work well as a condition in an `if`."
+    }
+  },
+  {
+    "id": "functions-20",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was passiert mit diesem Code?",
+      "en": "What happens with this code?"
+    },
+    "code": "def f():\n    y = 1\n    return y\n\nprint(f())\nprint(y)",
+    "choices": [
+      {
+        "de": "1 und dann 1",
+        "en": "1 und dann 1"
+      },
+      {
+        "de": "1 und dann None",
+        "en": "1 und dann None"
+      },
+      {
+        "de": "Sofort ein Fehler (SyntaxError)",
+        "en": "An error right away (SyntaxError)"
+      },
+      {
+        "de": "1 und dann ein Fehler (NameError)",
+        "en": "1, then an error (NameError)"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Die Variable `y` gibt es nur innerhalb der Funktion. `print(f())` gibt 1 aus, aber `print(y)` außerhalb kennt `y` nicht und löst einen `NameError` aus.",
+      "en": "The variable `y` exists only inside the function. `print(f())` prints 1, but `print(y)` outside does not know `y` and raises a `NameError`."
+    }
+  },
+  {
+    "id": "functions-21",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def shout(text):\n    return text.upper() + \"!\"\n\nprint(shout(\"hi\"))",
+    "choices": [
+      {
+        "de": "hi!",
+        "en": "hi!"
+      },
+      {
+        "de": "HI!",
+        "en": "HI!"
+      },
+      {
+        "de": "HI",
+        "en": "HI"
+      },
+      {
+        "de": "Hi!",
+        "en": "Hi!"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "In der Funktion wird der Text erst in Großbuchstaben umgewandelt und dann `\"!\"` angehängt. `return` gibt das Ergebnis `HI!` zurück.",
+      "en": "Inside the function the text is first converted to upper case and then `\"!\"` is appended. `return` hands back the result `HI!`."
+    }
+  },
+  {
+    "id": "functions-22",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 10\n\ndef show():\n    print(x)\n\nshow()",
+    "choices": [
+      {
+        "de": "x",
+        "en": "x"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Eine Funktion kann Variablen von außerhalb lesen. Weil es in `show` kein eigenes `x` gibt, nimmt Python das äußere `x` und gibt 10 aus.",
+      "en": "A function can read variables from outside. Since `show` has no `x` of its own, Python uses the outer `x` and prints 10."
+    }
+  },
+  {
+    "id": "functions-23",
+    "topic": "functions",
+    "prompt": {
+      "de": "Welche Zeile definiert korrekt eine Funktion?",
+      "en": "Which line correctly defines a function?"
+    },
+    "choices": [
+      {
+        "de": "`def add(a, b):`",
+        "en": "`def add(a, b):`"
+      },
+      {
+        "de": "`function add(a, b):`",
+        "en": "`function add(a, b):`"
+      },
+      {
+        "de": "`def add(a, b)`",
+        "en": "`def add(a, b)`"
+      },
+      {
+        "de": "`add(a, b) = def:`",
+        "en": "`add(a, b) = def:`"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine Funktion beginnt mit `def`, dann kommen Name, Parameter in Klammern und ein Doppelpunkt. Der Körper wird eingerückt.",
+      "en": "A function starts with `def`, followed by the name, parameters in parentheses and a colon. The body is indented."
+    }
+  },
+  {
+    "id": "functions-24",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def pair():\n    return 1, 2\n\na, b = pair()\nprint(a + b)",
+    "choices": [
+      {
+        "de": "12",
+        "en": "12"
+      },
+      {
+        "de": "(1, 2)",
+        "en": "(1, 2)"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`return 1, 2` gibt ein Tupel zurück. Mit `a, b = pair()` wird es ausgepackt, `a` ist 1 und `b` ist 2. Dann ist `a + b` gleich 3.",
+      "en": "`return 1, 2` returns a tuple. `a, b = pair()` unpacks it, so `a` is 1 and `b` is 2. Then `a + b` is 3."
+    }
+  },
+  {
+    "id": "functions-25",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def f(n=3):\n    return n * 2\n\nprint(f(), f(5))",
+    "choices": [
+      {
+        "de": "6 6",
+        "en": "6 6"
+      },
+      {
+        "de": "6 10",
+        "en": "6 10"
+      },
+      {
+        "de": "3 5",
+        "en": "3 5"
+      },
+      {
+        "de": "10 10",
+        "en": "10 10"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Ohne Argument gilt der Standardwert: `f()` rechnet mit `n = 3`, also 6. Mit `f(5)` wird der Standardwert ersetzt, das Ergebnis ist 10.",
+      "en": "Without an argument the default applies: `f()` uses `n = 3`, so 6. With `f(5)` the default is replaced and the result is 10."
+    }
+  },
+  {
+    "id": "functions-26",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "def inc(x):\n    x = x + 1\n\nn = 1\ninc(n)\nprint(n)",
+    "choices": [
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler (NameError)",
+        "en": "Error (NameError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Innerhalb der Funktion ist `x` nur eine eigene Kopie des Verweises auf die Zahl. Das `x = x + 1` ändert nur diese lokale Variable. Das äußere `n` bleibt 1.",
+      "en": "Inside the function `x` is just its own local name for the number. `x = x + 1` only changes that local variable. The outer `n` stays 1."
+    }
   }
 ]

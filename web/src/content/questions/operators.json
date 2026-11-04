@@ -413,5 +413,388 @@
       "de": "Erst wird `x == 4` ausgewertet, das ist `True`. Dann dreht `not` den Wert um: `not True` ist `False`.\n\nMerkhilfe: `not` ist wie ein Schalter, der Ja in Nein und Nein in Ja verwandelt.",
       "en": "First `x == 4` is evaluated, which is `True`. Then `not` flips the value: `not True` is `False`.\n\nMemory aid: `not` is like a switch that turns yes into no and no into yes."
     }
+  },
+  {
+    "id": "operators-14",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(10 - 2 * 3)",
+    "choices": [
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "24",
+        "en": "24"
+      },
+      {
+        "de": "16",
+        "en": "16"
+      },
+      {
+        "de": "6",
+        "en": "6"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Punkt vor Strich: Erst wird `2 * 3` gerechnet, das ist 6, dann `10 - 6 = 4`.",
+      "en": "Multiplication comes before subtraction: first `2 * 3` is 6, then `10 - 6 = 4`."
+    }
+  },
+  {
+    "id": "operators-15",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(9 // 2, 9 % 2)",
+    "choices": [
+      {
+        "de": "4.5 1",
+        "en": "4.5 1"
+      },
+      {
+        "de": "5 1",
+        "en": "5 1"
+      },
+      {
+        "de": "4 4",
+        "en": "4 4"
+      },
+      {
+        "de": "4 1",
+        "en": "4 1"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`//` ist die ganzzahlige Division (9 passt viermal in 2), `%` ist der Rest. Wie viele ganze Male 2 in 9 passt, ist 4, und es bleibt 1 übrig.",
+      "en": "`//` is integer division and `%` is the remainder. 2 fits into 9 four whole times, with 1 left over."
+    }
+  },
+  {
+    "id": "operators-16",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(3 == 3.0)",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Python vergleicht den Wert, nicht den Typ. Die Ganzzahl 3 und die Kommazahl 3.0 sind gleich, also ist das Ergebnis `True`.",
+      "en": "Python compares the value, not the type. The integer 3 and the float 3.0 are equal, so the result is `True`."
+    }
+  },
+  {
+    "id": "operators-17",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(5 != 5)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`!=` bedeutet \"ist ungleich\". 5 ist gleich 5, die Aussage \"ungleich\" stimmt also nicht: `False`.",
+      "en": "`!=` means \"is not equal\". 5 equals 5, so the statement \"not equal\" is wrong: `False`."
+    }
+  },
+  {
+    "id": "operators-18",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 7\nx -= 3\nprint(x)",
+    "choices": [
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "7",
+        "en": "7"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`x -= 3` ist die Kurzform von `x = x - 3`. Aus 7 wird 4.",
+      "en": "`x -= 3` is the short form of `x = x - 3`. 7 becomes 4."
+    }
+  },
+  {
+    "id": "operators-19",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(True and not False)",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`not False` ist `True`. Dann bleibt `True and True`, und das ist `True`.",
+      "en": "`not False` is `True`. What is left is `True and True`, which is `True`."
+    }
+  },
+  {
+    "id": "operators-20",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(1 < 2 < 3)",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "Fehler (SyntaxError)",
+        "en": "Error (SyntaxError)"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Python erlaubt verkettete Vergleiche. `1 < 2 < 3` bedeutet \"1 < 2 und 2 < 3\", und beides stimmt.",
+      "en": "Python allows chained comparisons. `1 < 2 < 3` means \"1 < 2 and 2 < 3\", and both are true."
+    }
+  },
+  {
+    "id": "operators-21",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"a\" < \"b\")",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "a",
+        "en": "a"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Strings lassen sich nach der Reihenfolge im Alphabet vergleichen. `\"a\"` kommt vor `\"b\"`, also ist `\"a\" < \"b\"` wahr.",
+      "en": "Strings can be compared by alphabetical order. `\"a\"` comes before `\"b\"`, so `\"a\" < \"b\"` is true."
+    }
+  },
+  {
+    "id": "operators-22",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(5 % 5)",
+    "choices": [
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "5",
+        "en": "5"
+      },
+      {
+        "de": "25",
+        "en": "25"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "5 geht genau einmal in 5, es bleibt kein Rest. Darum ist `5 % 5` gleich 0. Dasselbe gilt für jede Zahl, die durch die andere teilbar ist.",
+      "en": "5 fits into 5 exactly once, so there is no remainder. That is why `5 % 5` is 0. The same holds for any number divisible by the other."
+    }
+  },
+  {
+    "id": "operators-23",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(False or True and False)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "None",
+        "en": "None"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`and` bindet stärker als `or`. Erst wird `True and False` zu `False` ausgewertet, dann bleibt `False or False`, also `False`.",
+      "en": "`and` binds more strongly than `or`. First `True and False` becomes `False`, then `False or False` remains, which is `False`."
+    }
+  },
+  {
+    "id": "operators-24",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 3\ny = x\nx += 1\nprint(x, y)",
+    "choices": [
+      {
+        "de": "4 4",
+        "en": "4 4"
+      },
+      {
+        "de": "4 3",
+        "en": "4 3"
+      },
+      {
+        "de": "3 4",
+        "en": "3 4"
+      },
+      {
+        "de": "3 3",
+        "en": "3 3"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`y = x` kopiert den Wert 3. Danach ändert nur `x += 1` das `x`. `y` bleibt bei 3.",
+      "en": "`y = x` copies the value 3. After that only `x += 1` changes `x`. `y` stays at 3."
+    }
+  },
+  {
+    "id": "operators-25",
+    "topic": "operators",
+    "prompt": {
+      "de": "Welcher Operator prüft, ob zwei Werte verschieden sind?",
+      "en": "Which operator checks whether two values are different?"
+    },
+    "choices": [
+      {
+        "de": "`<>`",
+        "en": "`<>`"
+      },
+      {
+        "de": "`=/=`",
+        "en": "`=/=`"
+      },
+      {
+        "de": "`!=`",
+        "en": "`!=`"
+      },
+      {
+        "de": "`!==`",
+        "en": "`!==`"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "In Python prüfst du mit `!=`, ob zwei Werte verschieden sind. Die anderen Schreibweisen gibt es in Python nicht.",
+      "en": "In Python you use `!=` to check that two values differ. The other spellings do not exist in Python."
+    }
   }
 ]

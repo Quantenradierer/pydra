@@ -412,5 +412,420 @@
       "de": "Bei einer Liste bedeutet `*` mit einer Zahl „wiederholen“: Python baut eine neue Liste, in der die Elemente so oft hintereinander stehen. Aus `[\"a\"]` und 3 wird `[\"a\", \"a\", \"a\"]`.\n\nDie Elemente werden nicht zu einem Text verschmolzen, es bleiben drei einzelne Elemente. Wie ein Stempel, der dasselbe Element mehrmals nebeneinander abdruckt.",
       "en": "With a list, `*` and a number means “repeat”: Python builds a new list in which the items appear that many times in a row. `[\"a\"]` and 3 become `[\"a\", \"a\", \"a\"]`.\n\nThe items are not merged into one text; you get three separate items. Like a stamp that prints the same item several times side by side."
     }
+  },
+  {
+    "id": "collections-14",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [5, 6, 7]\nnums.insert(0, 4)\nprint(nums)",
+    "choices": [
+      {
+        "de": "[5, 6, 7, 4]",
+        "en": "[5, 6, 7, 4]"
+      },
+      {
+        "de": "[4, 6, 7]",
+        "en": "[4, 6, 7]"
+      },
+      {
+        "de": "[4, 5, 6, 7]",
+        "en": "[4, 5, 6, 7]"
+      },
+      {
+        "de": "[5, 6, 7]",
+        "en": "[5, 6, 7]"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`insert(index, wert)` fügt einen Wert an einer bestimmten Stelle ein und schiebt alle anderen nach hinten. Mit Index 0 landet die 4 ganz vorne. Zum Anhängen am Ende nimmst du dagegen `append`.",
+      "en": "`insert(index, value)` puts a value at a given position and shifts the others back. With index 0 the 4 ends up at the very front. To add at the end you use `append` instead."
+    }
+  },
+  {
+    "id": "collections-15",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3, 4, 5]\nprint(nums[::2])",
+    "choices": [
+      {
+        "de": "[1, 2]",
+        "en": "[1, 2]"
+      },
+      {
+        "de": "[1, 3, 5]",
+        "en": "[1, 3, 5]"
+      },
+      {
+        "de": "[2, 4]",
+        "en": "[2, 4]"
+      },
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Bei einem Slice `[start:stop:schritt]` gibt der dritte Wert die Schrittweite an. `[::2]` nimmt von vorne bis hinten jedes zweite Element: Index 0, 2 und 4, also 1, 3 und 5.",
+      "en": "In a slice `[start:stop:step]` the third value is the step size. `[::2]` goes from the front to the back and takes every second element: indexes 0, 2 and 4, so 1, 3 and 5."
+    }
+  },
+  {
+    "id": "collections-16",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a, b = (1, 2)\nprint(b, a)",
+    "choices": [
+      {
+        "de": "1 2",
+        "en": "1 2"
+      },
+      {
+        "de": "(2, 1)",
+        "en": "(2, 1)"
+      },
+      {
+        "de": "Fehler (ValueError)",
+        "en": "Error (ValueError)"
+      },
+      {
+        "de": "2 1",
+        "en": "2 1"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Ein Tupel lässt sich auspacken: `a, b = (1, 2)` gibt `a` den ersten und `b` den zweiten Wert. Danach ist `a` gleich 1 und `b` gleich 2. `print(b, a)` gibt sie in dieser Reihenfolge aus, also `2 1`.",
+      "en": "A tuple can be unpacked: `a, b = (1, 2)` gives `a` the first and `b` the second value. Afterwards `a` is 1 and `b` is 2. `print(b, a)` prints them in that order, so `2 1`."
+    }
+  },
+  {
+    "id": "collections-17",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3]\nnums.remove(2)\nprint(nums)",
+    "choices": [
+      {
+        "de": "[1, 3]",
+        "en": "[1, 3]"
+      },
+      {
+        "de": "[1, 2]",
+        "en": "[1, 2]"
+      },
+      {
+        "de": "[2, 3]",
+        "en": "[2, 3]"
+      },
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`remove(wert)` löscht das erste Element, das diesem Wert entspricht, hier die 2. Es geht also um den Wert, nicht um den Index. Übrig bleibt `[1, 3]`.",
+      "en": "`remove(value)` deletes the first element equal to that value, here the 2. So it works on the value, not the index. What remains is `[1, 3]`."
+    }
+  },
+  {
+    "id": "collections-18",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(sum([1, 2, 3, 4]))",
+    "choices": [
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "24",
+        "en": "24"
+      },
+      {
+        "de": "10",
+        "en": "10"
+      },
+      {
+        "de": "[1, 2, 3, 4]",
+        "en": "[1, 2, 3, 4]"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`sum` zählt alle Zahlen einer Liste zusammen: 1 + 2 + 3 + 4 = 10. Mit `len` würdest du dagegen die Anzahl der Elemente (4) bekommen.",
+      "en": "`sum` adds up all the numbers in a list: 1 + 2 + 3 + 4 = 10. With `len` you would get the number of elements (4) instead."
+    }
+  },
+  {
+    "id": "collections-19",
+    "topic": "collections",
+    "prompt": {
+      "de": "Welche Zeile erzeugt eine leere Liste?",
+      "en": "Which line creates an empty list?"
+    },
+    "choices": [
+      {
+        "de": "`items = {}`",
+        "en": "`items = {}`"
+      },
+      {
+        "de": "`items = []`",
+        "en": "`items = []`"
+      },
+      {
+        "de": "`items = ()`",
+        "en": "`items = ()`"
+      },
+      {
+        "de": "`items = \"\"`",
+        "en": "`items = \"\"`"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eckige Klammern `[]` stehen für eine Liste, und ohne Inhalt ist sie leer. `{}` ist ein leeres Dictionary, `()` ein leeres Tupel und `\"\"` ein leerer String.",
+      "en": "Square brackets `[]` stand for a list, and with nothing inside it is empty. `{}` is an empty dictionary, `()` an empty tuple and `\"\"` an empty string."
+    }
+  },
+  {
+    "id": "collections-20",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3]\ncopy = nums.copy()\ncopy.append(4)\nprint(nums)",
+    "choices": [
+      {
+        "de": "[1, 2, 3, 4]",
+        "en": "[1, 2, 3, 4]"
+      },
+      {
+        "de": "[4]",
+        "en": "[4]"
+      },
+      {
+        "de": "[]",
+        "en": "[]"
+      },
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`nums.copy()` erstellt eine neue, unabhängige Liste mit denselben Elementen. Das `append(4)` ändert nur die Kopie. Die ursprüngliche Liste bleibt `[1, 2, 3]`. Bei `b = a` wäre es dagegen dieselbe Liste.",
+      "en": "`nums.copy()` creates a new, independent list with the same elements. The `append(4)` only changes the copy. The original list stays `[1, 2, 3]`. With `b = a` it would be the same list instead."
+    }
+  },
+  {
+    "id": "collections-21",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3]\nprint(nums.index(3))",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "Fehler (ValueError)",
+        "en": "Error (ValueError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`index(wert)` gibt die Position zurück, an der der Wert zum ersten Mal steht. Die 3 steht ganz hinten auf Position 2, weil das Zählen bei 0 beginnt.",
+      "en": "`index(value)` returns the position where the value first appears. The 3 is at the very end, at position 2, because counting starts at 0."
+    }
+  },
+  {
+    "id": "collections-22",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3]\nnums[1] = 20\nprint(nums)",
+    "choices": [
+      {
+        "de": "[1, 2, 3, 20]",
+        "en": "[1, 2, 3, 20]"
+      },
+      {
+        "de": "[20, 2, 3]",
+        "en": "[20, 2, 3]"
+      },
+      {
+        "de": "[1, 20, 3]",
+        "en": "[1, 20, 3]"
+      },
+      {
+        "de": "[1, 2, 20]",
+        "en": "[1, 2, 20]"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Listen sind veränderbar: Mit `nums[1] = 20` ersetzt du das Element an Index 1 (das zweite). Aus der 2 wird eine 20. Bei einem Tupel würde das einen Fehler geben.",
+      "en": "Lists are mutable: `nums[1] = 20` replaces the element at index 1 (the second one). The 2 becomes a 20. With a tuple this would cause an error."
+    }
+  },
+  {
+    "id": "collections-23",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(list(\"abc\"))",
+    "choices": [
+      {
+        "de": "['abc']",
+        "en": "['abc']"
+      },
+      {
+        "de": "['a', 'b', 'c']",
+        "en": "['a', 'b', 'c']"
+      },
+      {
+        "de": "abc",
+        "en": "abc"
+      },
+      {
+        "de": "('a', 'b', 'c')",
+        "en": "('a', 'b', 'c')"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`list(...)` macht aus allem, worüber man laufen kann, eine Liste. Ein String besteht aus Zeichen, also wird jedes Zeichen ein eigenes Element: `['a', 'b', 'c']`.",
+      "en": "`list(...)` turns anything you can loop over into a list. A string is made of characters, so each character becomes its own element: `['a', 'b', 'c']`."
+    }
+  },
+  {
+    "id": "collections-24",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [3, 1, 2]\nprint(sorted(nums), nums)",
+    "choices": [
+      {
+        "de": "[1, 2, 3] [1, 2, 3]",
+        "en": "[1, 2, 3] [1, 2, 3]"
+      },
+      {
+        "de": "[3, 1, 2] [1, 2, 3]",
+        "en": "[3, 1, 2] [1, 2, 3]"
+      },
+      {
+        "de": "None [1, 2, 3]",
+        "en": "None [1, 2, 3]"
+      },
+      {
+        "de": "[1, 2, 3] [3, 1, 2]",
+        "en": "[1, 2, 3] [3, 1, 2]"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`sorted(nums)` gibt eine neue, sortierte Liste zurück und lässt `nums` unverändert. Anders als `nums.sort()`, das die Liste selbst ändert und `None` zurückgibt.",
+      "en": "`sorted(nums)` returns a new, sorted list and leaves `nums` unchanged. Unlike `nums.sort()`, which changes the list itself and returns `None`."
+    }
+  },
+  {
+    "id": "collections-25",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "nums = [1, 2, 3, 4]\nprint(nums[-2:])",
+    "choices": [
+      {
+        "de": "[3, 4]",
+        "en": "[3, 4]"
+      },
+      {
+        "de": "[2, 3]",
+        "en": "[2, 3]"
+      },
+      {
+        "de": "[1, 2]",
+        "en": "[1, 2]"
+      },
+      {
+        "de": "[4]",
+        "en": "[4]"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`-2` bedeutet: zwei Plätze vor dem Ende anfangen. Da nach dem Doppelpunkt nichts steht, geht der Slice bis zum Schluss. Das sind die letzten zwei Elemente: `[3, 4]`.",
+      "en": "`-2` means: start two places before the end. Since nothing follows the colon, the slice goes to the very end. That gives the last two elements: `[3, 4]`."
+    }
+  },
+  {
+    "id": "collections-26",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "matrix = [[1, 2], [3, 4]]\nprint(matrix[1][0])",
+    "choices": [
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Eine Liste kann Listen enthalten. `matrix[1]` ist die zweite innere Liste `[3, 4]`, und davon ist `[0]` das erste Element: die 3.",
+      "en": "A list can contain lists. `matrix[1]` is the second inner list `[3, 4]`, and `[0]` of that is the first element: the 3."
+    }
   }
 ]

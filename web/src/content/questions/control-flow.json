@@ -412,5 +412,419 @@
       "de": "Der Operator `in` prüft, ob etwas darin enthalten ist, und liefert `True` oder `False`. In \"Python\" steckt \"th\" (Py**th**on), also ist die Bedingung wahr und \"found\" wird ausgegeben. Ausgegeben wird nur das `print`, nicht `True`. Merkhilfe: `in` fragt \"steckt das drin?\".",
       "en": "The `in` operator checks whether something is contained and gives `True` or `False`. \"th\" is inside \"Python\" (Py**th**on), so the condition is true and \"found\" is printed. Only the `print` output appears, not `True`. Memory aid: `in` asks \"is it inside?\"."
     }
+  },
+  {
+    "id": "control-flow-14",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "age = 15\nif age < 13:\n    print(\"child\")\nelif age < 18:\n    print(\"teen\")\nelse:\n    print(\"adult\")",
+    "choices": [
+      {
+        "de": "child",
+        "en": "child"
+      },
+      {
+        "de": "adult",
+        "en": "adult"
+      },
+      {
+        "de": "nichts",
+        "en": "nothing"
+      },
+      {
+        "de": "teen",
+        "en": "teen"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Python prüft die Bedingungen von oben nach unten. `15 < 13` ist falsch, `15 < 18` ist wahr, also wird `teen` ausgegeben. Der `else`-Zweig wird dann übersprungen.",
+      "en": "Python checks the conditions from top to bottom. `15 < 13` is false, `15 < 18` is true, so `teen` is printed. The `else` branch is then skipped."
+    }
+  },
+  {
+    "id": "control-flow-15",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(bool([]))",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "[]",
+        "en": "[]"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Leere Dinge (leere Liste, leerer String, 0) zählen als falsch. `bool([])` ist deshalb `False`. Eine Liste mit mindestens einem Element wäre `True`.",
+      "en": "Empty things (empty list, empty string, 0) count as false. So `bool([])` is `False`. A list with at least one element would be `True`."
+    }
+  },
+  {
+    "id": "control-flow-16",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 2\nprint(x < 0 or x > 1)",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Bei `or` reicht es, wenn eine Seite wahr ist. `x < 0` ist falsch, aber `x > 1` ist wahr. Damit ist der ganze Ausdruck `True`.",
+      "en": "With `or` it is enough if one side is true. `x < 0` is false, but `x > 1` is true. So the whole expression is `True`."
+    }
+  },
+  {
+    "id": "control-flow-17",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Welche Zeile ist in Python eine korrekte if-Zeile?",
+      "en": "Which line is a correct if line in Python?"
+    },
+    "choices": [
+      {
+        "de": "`if x > 3`",
+        "en": "`if x > 3`"
+      },
+      {
+        "de": "`if x > 3:`",
+        "en": "`if x > 3:`"
+      },
+      {
+        "de": "`if (x > 3) then`",
+        "en": "`if (x > 3) then`"
+      },
+      {
+        "de": "`if x > 3 {`",
+        "en": "`if x > 3 {`"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eine `if`-Zeile endet in Python mit einem Doppelpunkt. Der Block darunter wird eingerückt. Es gibt kein `then` und keine geschweiften Klammern.",
+      "en": "In Python an `if` line ends with a colon. The block below it is indented. There is no `then` and there are no curly braces."
+    }
+  },
+  {
+    "id": "control-flow-18",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 3\nif x > 1:\n    print(\"a\")\nelif x > 2:\n    print(\"b\")\nelse:\n    print(\"c\")",
+    "choices": [
+      {
+        "de": "a",
+        "en": "a"
+      },
+      {
+        "de": "b",
+        "en": "b"
+      },
+      {
+        "de": "c",
+        "en": "c"
+      },
+      {
+        "de": "a b",
+        "en": "a b"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Sobald eine Bedingung in einer `if`/`elif`/`else`-Kette wahr ist, läuft nur dieser Block, und der Rest wird übersprungen. `x > 1` ist schon wahr, also wird nur `a` ausgegeben, obwohl `x > 2` auch stimmen würde.",
+      "en": "As soon as one condition in an `if`/`elif`/`else` chain is true, only that block runs and the rest is skipped. `x > 1` is already true, so only `a` is printed, even though `x > 2` would be true as well."
+    }
+  },
+  {
+    "id": "control-flow-19",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "n = 15\nif n % 3 == 0 and n % 5 == 0:\n    print(\"FizzBuzz\")\nelif n % 3 == 0:\n    print(\"Fizz\")\nelse:\n    print(n)",
+    "choices": [
+      {
+        "de": "Fizz",
+        "en": "Fizz"
+      },
+      {
+        "de": "15",
+        "en": "15"
+      },
+      {
+        "de": "Buzz",
+        "en": "Buzz"
+      },
+      {
+        "de": "FizzBuzz",
+        "en": "FizzBuzz"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "15 lässt sich ohne Rest durch 3 und durch 5 teilen. Beide Teile des `and` sind wahr, also läuft der erste Zweig. Deshalb steht die schärfere Bedingung oben.",
+      "en": "15 is divisible by both 3 and 5 with no remainder. Both parts of the `and` are true, so the first branch runs. That is why the stricter condition goes first."
+    }
+  },
+  {
+    "id": "control-flow-20",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was passiert mit diesem Code?",
+      "en": "What happens with this code?"
+    },
+    "code": "x = 1\nif x == 1:\nprint(\"one\")",
+    "choices": [
+      {
+        "de": "one",
+        "en": "one"
+      },
+      {
+        "de": "IndentationError",
+        "en": "IndentationError"
+      },
+      {
+        "de": "nichts",
+        "en": "nothing"
+      },
+      {
+        "de": "NameError",
+        "en": "NameError"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Nach dem Doppelpunkt muss der Block eingerückt sein. Fehlt die Einrückung, bricht Python schon vor dem Start mit einem `IndentationError` ab.",
+      "en": "After the colon the block must be indented. If the indentation is missing, Python stops with an `IndentationError` before running anything."
+    }
+  },
+  {
+    "id": "control-flow-21",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(not (1 > 2))",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`1 > 2` ist `False`. Das `not` davor dreht es um, also ist das Ergebnis `True`. Die Klammern sorgen dafür, dass `not` auf den ganzen Vergleich wirkt.",
+      "en": "`1 > 2` is `False`. The `not` in front flips it, so the result is `True`. The parentheses make `not` apply to the whole comparison."
+    }
+  },
+  {
+    "id": "control-flow-22",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "name = \"Ana\"\nif name == \"ana\":\n    print(\"match\")\nelse:\n    print(\"no match\")",
+    "choices": [
+      {
+        "de": "no match",
+        "en": "no match"
+      },
+      {
+        "de": "match",
+        "en": "match"
+      },
+      {
+        "de": "Ana",
+        "en": "Ana"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Strings werden Zeichen für Zeichen verglichen, und dabei zählt die Groß- und Kleinschreibung. `\"Ana\"` und `\"ana\"` sind nicht gleich, also läuft der `else`-Zweig.",
+      "en": "Strings are compared character by character, and upper and lower case matter. `\"Ana\"` and `\"ana\"` are not equal, so the `else` branch runs."
+    }
+  },
+  {
+    "id": "control-flow-23",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 1\nif x > 3:\n    print(\"big\")\nprint(\"done\")",
+    "choices": [
+      {
+        "de": "big",
+        "en": "big"
+      },
+      {
+        "de": "big und done",
+        "en": "big and done"
+      },
+      {
+        "de": "nichts",
+        "en": "nothing"
+      },
+      {
+        "de": "done",
+        "en": "done"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Nur die eingerückte Zeile gehört zum `if`. `x > 3` ist falsch, also wird `big` übersprungen. `print(\"done\")` ist nicht eingerückt und läuft immer.",
+      "en": "Only the indented line belongs to the `if`. `x > 3` is false, so `big` is skipped. `print(\"done\")` is not indented and always runs."
+    }
+  },
+  {
+    "id": "control-flow-24",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"a\" if 3 > 5 else \"b\")",
+    "choices": [
+      {
+        "de": "a",
+        "en": "a"
+      },
+      {
+        "de": "b",
+        "en": "b"
+      },
+      {
+        "de": "3 > 5",
+        "en": "3 > 5"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Der Ausdruck `A if Bedingung else B` ergibt A, wenn die Bedingung wahr ist, sonst B. `3 > 5` ist falsch, also kommt `b` heraus.",
+      "en": "The expression `A if condition else B` gives A if the condition is true, otherwise B. `3 > 5` is false, so the result is `b`."
+    }
+  },
+  {
+    "id": "control-flow-25",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "temp = 25\nif 20 <= temp <= 30:\n    print(\"nice\")\nelse:\n    print(\"meh\")",
+    "choices": [
+      {
+        "de": "meh",
+        "en": "meh"
+      },
+      {
+        "de": "25",
+        "en": "25"
+      },
+      {
+        "de": "nice",
+        "en": "nice"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Python erlaubt verkettete Vergleiche: `20 <= temp <= 30` prüft, ob `temp` zwischen 20 und 30 liegt. 25 liegt dazwischen, also wird `nice` ausgegeben.",
+      "en": "Python allows chained comparisons: `20 <= temp <= 30` checks whether `temp` is between 20 and 30. 25 is in between, so `nice` is printed."
+    }
+  },
+  {
+    "id": "control-flow-26",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht das Schlüsselwort `pass`?",
+      "en": "What does the keyword `pass` do?"
+    },
+    "choices": [
+      {
+        "de": "Nichts, sie ist ein Platzhalter",
+        "en": "Nothing, it is a placeholder"
+      },
+      {
+        "de": "Sie beendet das Programm",
+        "en": "It ends the program"
+      },
+      {
+        "de": "Sie springt zum nächsten Schleifendurchlauf",
+        "en": "It jumps to the next loop iteration"
+      },
+      {
+        "de": "Sie löst einen Fehler aus",
+        "en": "It raises an error"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`pass` tut nichts. Du brauchst es dort, wo Python einen Block erwartet, du aber noch keinen Code hast, zum Beispiel `if x > 3:` mit `pass` darunter.",
+      "en": "`pass` does nothing. You need it where Python expects a block but you have no code yet, for example `if x > 3:` with `pass` below it."
+    }
   }
 ]

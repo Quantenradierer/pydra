@@ -413,5 +413,419 @@
       "de": "`.items()` liefert Schlüssel-Wert-Paare, und `for k, v in ...` packt jedes Paar in `k` (Schlüssel) und `v` (Wert) aus. Es werden also zwei Zeilen ausgegeben: `a 1` und `b 2`.\n\nMerkhilfe: Ohne `.items()` bekommst du beim Durchlaufen nur die Schlüssel.",
       "en": "`.items()` gives key-value pairs, and `for k, v in ...` unpacks each pair into `k` (key) and `v` (value). So two lines are printed: `a 1` and `b 2`.\n\nMemory aid: without `.items()` you only get the keys when looping."
     }
+  },
+  {
+    "id": "dicts-sets-14",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1}\nd[\"b\"] = 2\nprint(len(d))",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Wenn du einem neuen Schlüssel einen Wert zuweist, wird er einfach hinzugefügt. Danach hat das Dictionary die Einträge `\"a\"` und `\"b\"`, `len` ist also 2.",
+      "en": "If you assign a value to a new key, it is simply added. Afterwards the dictionary has the entries `\"a\"` and `\"b\"`, so `len` is 2."
+    }
+  },
+  {
+    "id": "dicts-sets-15",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"x\": 1, \"y\": 2}\nprint(list(d.keys()))",
+    "choices": [
+      {
+        "de": "[1, 2]",
+        "en": "[1, 2]"
+      },
+      {
+        "de": "[('x', 1), ('y', 2)]",
+        "en": "[('x', 1), ('y', 2)]"
+      },
+      {
+        "de": "['x', 'y']",
+        "en": "['x', 'y']"
+      },
+      {
+        "de": "['x']",
+        "en": "['x']"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`d.keys()` liefert alle Schlüssel. Mit `list(...)` wird daraus eine normale Liste: `['x', 'y']`. Die Werte bekämst du mit `d.values()`.",
+      "en": "`d.keys()` gives all the keys. With `list(...)` this becomes a normal list: `['x', 'y']`. You would get the values with `d.values()`."
+    }
+  },
+  {
+    "id": "dicts-sets-16",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 3, \"b\": 4}\nprint(sum(d.values()))",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "7",
+        "en": "7"
+      },
+      {
+        "de": "34",
+        "en": "34"
+      },
+      {
+        "de": "ab",
+        "en": "ab"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`d.values()` enthält die Werte 3 und 4. `sum` zählt sie zusammen, das Ergebnis ist 7. Die Schlüssel spielen dabei keine Rolle.",
+      "en": "`d.values()` holds the values 3 and 4. `sum` adds them up, giving 7. The keys play no role here."
+    }
+  },
+  {
+    "id": "dicts-sets-17",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "s = set()\ns.add(1)\ns.add(1)\nprint(s)",
+    "choices": [
+      {
+        "de": "{1, 1}",
+        "en": "{1, 1}"
+      },
+      {
+        "de": "[1]",
+        "en": "[1]"
+      },
+      {
+        "de": "set()",
+        "en": "set()"
+      },
+      {
+        "de": "{1}",
+        "en": "{1}"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Ein Set speichert jeden Wert nur einmal. Das zweite `add(1)` ändert nichts mehr. Übrig bleibt `{1}`. Beachte: Ein leeres Set legst du mit `set()` an, nicht mit `{}`.",
+      "en": "A set stores each value only once. The second `add(1)` changes nothing. What remains is `{1}`. Note: you create an empty set with `set()`, not with `{}`."
+    }
+  },
+  {
+    "id": "dicts-sets-18",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "s = {1, 2, 3}\ns.remove(2)\nprint(s)",
+    "choices": [
+      {
+        "de": "{1, 2}",
+        "en": "{1, 2}"
+      },
+      {
+        "de": "{2}",
+        "en": "{2}"
+      },
+      {
+        "de": "{1, 3}",
+        "en": "{1, 3}"
+      },
+      {
+        "de": "{1, 2, 3}",
+        "en": "{1, 2, 3}"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`remove(wert)` entfernt den Wert aus dem Set, hier die 2. Übrig bleiben `{1, 3}`.",
+      "en": "`remove(value)` takes the value out of the set, here the 2. What remains is `{1, 3}`."
+    }
+  },
+  {
+    "id": "dicts-sets-19",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(sorted({3, 1, 2}))",
+    "choices": [
+      {
+        "de": "[1, 2, 3]",
+        "en": "[1, 2, 3]"
+      },
+      {
+        "de": "{1, 2, 3}",
+        "en": "{1, 2, 3}"
+      },
+      {
+        "de": "[3, 1, 2]",
+        "en": "[3, 1, 2]"
+      },
+      {
+        "de": "(1, 2, 3)",
+        "en": "(1, 2, 3)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Ein Set hat keine feste Reihenfolge. `sorted` macht daraus eine sortierte Liste, deshalb sind eckige Klammern zu sehen: `[1, 2, 3]`.",
+      "en": "A set has no fixed order. `sorted` turns it into a sorted list, which is why you see square brackets: `[1, 2, 3]`."
+    }
+  },
+  {
+    "id": "dicts-sets-20",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1}\nd.update({\"b\": 2})\nprint(d)",
+    "choices": [
+      {
+        "de": "{'b': 2}",
+        "en": "{'b': 2}"
+      },
+      {
+        "de": "{'a': 1}",
+        "en": "{'a': 1}"
+      },
+      {
+        "de": "{'a': 1, 'b': 2, 'c': 3}",
+        "en": "{'a': 1, 'b': 2, 'c': 3}"
+      },
+      {
+        "de": "{'a': 1, 'b': 2}",
+        "en": "{'a': 1, 'b': 2}"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`update` fügt die Einträge eines anderen Dictionarys hinzu. Schon vorhandene Schlüssel würden überschrieben. Hier kommt `\"b\"` neu dazu.",
+      "en": "`update` adds the entries of another dictionary. Keys that already exist would be overwritten. Here `\"b\"` is new."
+    }
+  },
+  {
+    "id": "dicts-sets-21",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Welche Zeile erzeugt ein leeres Dictionary?",
+      "en": "Which line creates an empty dictionary?"
+    },
+    "choices": [
+      {
+        "de": "`d = []`",
+        "en": "`d = []`"
+      },
+      {
+        "de": "`d = {}`",
+        "en": "`d = {}`"
+      },
+      {
+        "de": "`d = ()`",
+        "en": "`d = ()`"
+      },
+      {
+        "de": "`d = dict[]`",
+        "en": "`d = dict[]`"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Geschweifte Klammern ohne Inhalt `{}` ergeben ein leeres Dictionary. Alternativ geht auch `dict()`. `[]` wäre eine Liste und `()` ein Tupel.",
+      "en": "Curly braces with nothing inside `{}` give an empty dictionary. `dict()` works too. `[]` would be a list and `()` a tuple."
+    }
+  },
+  {
+    "id": "dicts-sets-22",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1, \"b\": 2}\nprint(d.pop(\"a\"), d)",
+    "choices": [
+      {
+        "de": "1 {'b': 2}",
+        "en": "1 {'b': 2}"
+      },
+      {
+        "de": "a {'b': 2}",
+        "en": "a {'b': 2}"
+      },
+      {
+        "de": "1 {'a': 1, 'b': 2}",
+        "en": "1 {'a': 1, 'b': 2}"
+      },
+      {
+        "de": "{'b': 2}",
+        "en": "{'b': 2}"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`pop(schluessel)` entfernt den Eintrag und gibt dessen Wert zurück, hier 1. Im Dictionary bleibt nur `{'b': 2}`.",
+      "en": "`pop(key)` removes the entry and returns its value, here 1. Only `{'b': 2}` is left in the dictionary."
+    }
+  },
+  {
+    "id": "dicts-sets-23",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "words = [\"a\", \"b\", \"a\"]\ncounts = {}\nfor w in words:\n    counts[w] = counts.get(w, 0) + 1\nprint(counts)",
+    "choices": [
+      {
+        "de": "{'a': 1, 'b': 1}",
+        "en": "{'a': 1, 'b': 1}"
+      },
+      {
+        "de": "{'a': 3, 'b': 0}",
+        "en": "{'a': 3, 'b': 0}"
+      },
+      {
+        "de": "{'a': 2, 'b': 1}",
+        "en": "{'a': 2, 'b': 1}"
+      },
+      {
+        "de": "{'a': 2}",
+        "en": "{'a': 2}"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`counts.get(w, 0)` liefert den bisherigen Zähler oder 0, falls das Wort neu ist. Dann wird 1 addiert. Das `\"a\"` kommt zweimal vor, `\"b\"` einmal. So zählt man in Python typischerweise.",
+      "en": "`counts.get(w, 0)` gives the count so far, or 0 if the word is new. Then 1 is added. `\"a\"` appears twice, `\"b\"` once. This is the typical way to count in Python."
+    }
+  },
+  {
+    "id": "dicts-sets-24",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "a = {1, 2}\nb = {2, 3}\nprint(a | b)",
+    "choices": [
+      {
+        "de": "{2}",
+        "en": "{2}"
+      },
+      {
+        "de": "{1, 2, 3}",
+        "en": "{1, 2, 3}"
+      },
+      {
+        "de": "{1, 3}",
+        "en": "{1, 3}"
+      },
+      {
+        "de": "{1, 2, 2, 3}",
+        "en": "{1, 2, 2, 3}"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Der Operator `|` bildet die Vereinigung: alle Werte, die in `a` oder `b` vorkommen, aber jeder nur einmal. Das ergibt `{1, 2, 3}`.",
+      "en": "The `|` operator forms the union: all values that appear in `a` or `b`, but each only once. That gives `{1, 2, 3}`."
+    }
+  },
+  {
+    "id": "dicts-sets-25",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was kann in einem Dictionary NICHT als Schlüssel dienen?",
+      "en": "What can NOT be used as a key in a dictionary?"
+    },
+    "choices": [
+      {
+        "de": "Ein Tupel wie `(1, 2)`",
+        "en": "A tuple like `(1, 2)`"
+      },
+      {
+        "de": "Ein String wie `\"ab\"`",
+        "en": "A string like `\"ab\"`"
+      },
+      {
+        "de": "Eine Zahl wie `42`",
+        "en": "A number like `42`"
+      },
+      {
+        "de": "Eine Liste wie `[1, 2]`",
+        "en": "A list like `[1, 2]`"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Schlüssel müssen unveränderlich sein. Zahlen, Strings und Tupel sind das, Listen nicht. Mit einer Liste als Schlüssel bekommst du einen `TypeError`.",
+      "en": "Keys must be immutable. Numbers, strings and tuples are, lists are not. Using a list as a key gives a `TypeError`."
+    }
+  },
+  {
+    "id": "dicts-sets-26",
+    "topic": "dicts-sets",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "d = {\"a\": 1, \"a\": 2}\nprint(d)",
+    "choices": [
+      {
+        "de": "{'a': 2}",
+        "en": "{'a': 2}"
+      },
+      {
+        "de": "{'a': 1}",
+        "en": "{'a': 1}"
+      },
+      {
+        "de": "{'a': 1, 'a': 2}",
+        "en": "{'a': 1, 'a': 2}"
+      },
+      {
+        "de": "Fehler (KeyError)",
+        "en": "Error (KeyError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Ein Schlüssel kann nur einmal vorkommen. Wird er mehrfach angegeben, gewinnt der letzte Wert. Es gibt keinen Fehler, aber der Eintrag lautet `{'a': 2}`.",
+      "en": "A key can only exist once. If it is given several times, the last value wins. There is no error, but the entry is `{'a': 2}`."
+    }
   }
 ]

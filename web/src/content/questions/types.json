@@ -413,5 +413,389 @@
       "de": "`float(\"2\")` wandelt den Text in die Kommazahl `2.0` um. Dann wird normal gerechnet: `2.0 + 1` ergibt `3.0`, ein `float`, deshalb steht die `.0` dabei.\n\nMerkhilfe: Wenn eine Kommazahl mitrechnet, ist das Ergebnis eine Kommazahl.",
       "en": "`float(\"2\")` converts the text into the decimal number `2.0`. Then normal arithmetic applies: `2.0 + 1` is `3.0`, a `float`, which is why the `.0` is shown.\n\nMemory aid: if a decimal number takes part, the result is a decimal number."
     }
+  },
+  {
+    "id": "types-14",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type(5))",
+    "choices": [
+      {
+        "de": "<class 'float'>",
+        "en": "<class 'float'>"
+      },
+      {
+        "de": "<class 'int'>",
+        "en": "<class 'int'>"
+      },
+      {
+        "de": "<class 'str'>",
+        "en": "<class 'str'>"
+      },
+      {
+        "de": "<class 'number'>",
+        "en": "<class 'number'>"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`5` ist eine Ganzzahl, auf Englisch integer, kurz `int`. Eine Zahl mit Komma wie `5.0` wäre ein `float`.",
+      "en": "`5` is a whole number, an integer, `int` for short. A number with a decimal point like `5.0` would be a `float`."
+    }
+  },
+  {
+    "id": "types-15",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type([1]))",
+    "choices": [
+      {
+        "de": "<class 'int'>",
+        "en": "<class 'int'>"
+      },
+      {
+        "de": "<class 'tuple'>",
+        "en": "<class 'tuple'>"
+      },
+      {
+        "de": "<class 'array'>",
+        "en": "<class 'array'>"
+      },
+      {
+        "de": "<class 'list'>",
+        "en": "<class 'list'>"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Eckige Klammern erzeugen eine Liste. Der Typ heißt `list`, auch wenn nur ein Element darin steckt.",
+      "en": "Square brackets create a list. The type is `list`, even if there is only one element inside."
+    }
+  },
+  {
+    "id": "types-16",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(float(3))",
+    "choices": [
+      {
+        "de": "3.0",
+        "en": "3.0"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "3.00",
+        "en": "3.00"
+      },
+      {
+        "de": "Three",
+        "en": "Three"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`float(3)` wandelt die Ganzzahl in eine Kommazahl um. Python schreibt sie mit Nachkommastelle: `3.0`.",
+      "en": "`float(3)` converts the integer into a float. Python writes it with a decimal part: `3.0`."
+    }
+  },
+  {
+    "id": "types-17",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(str(3.5) + \"!\")",
+    "choices": [
+      {
+        "de": "4!",
+        "en": "4!"
+      },
+      {
+        "de": "3.5 !",
+        "en": "3.5 !"
+      },
+      {
+        "de": "3.5!",
+        "en": "3.5!"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`str(3.5)` macht aus der Zahl den Text `\"3.5\"`. Zwei Strings lassen sich mit `+` zusammensetzen, das Ergebnis ist `3.5!`.",
+      "en": "`str(3.5)` turns the number into the text `\"3.5\"`. Two strings can be joined with `+`, giving `3.5!`."
+    }
+  },
+  {
+    "id": "types-18",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(bool(0), bool(5))",
+    "choices": [
+      {
+        "de": "False False",
+        "en": "False False"
+      },
+      {
+        "de": "False True",
+        "en": "False True"
+      },
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Zahl 0 zählt als falsch, jede andere Zahl als wahr. Darum ist `bool(0)` gleich `False` und `bool(5)` gleich `True`.",
+      "en": "The number 0 counts as false, every other number as true. So `bool(0)` is `False` and `bool(5)` is `True`."
+    }
+  },
+  {
+    "id": "types-19",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type(None))",
+    "choices": [
+      {
+        "de": "<class 'None'>",
+        "en": "<class 'None'>"
+      },
+      {
+        "de": "<class 'bool'>",
+        "en": "<class 'bool'>"
+      },
+      {
+        "de": "<class 'null'>",
+        "en": "<class 'null'>"
+      },
+      {
+        "de": "<class 'NoneType'>",
+        "en": "<class 'NoneType'>"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`None` steht für \"kein Wert\" und hat einen eigenen Typ, `NoneType`. Es ist weder `False` noch 0.",
+      "en": "`None` stands for \"no value\" and has a type of its own, `NoneType`. It is neither `False` nor 0."
+    }
+  },
+  {
+    "id": "types-20",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(int(\"abc\"))",
+    "choices": [
+      {
+        "de": "Fehler (ValueError)",
+        "en": "Error (ValueError)"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "abc",
+        "en": "abc"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`int(...)` kann nur Texte umwandeln, die wie eine Ganzzahl aussehen, zum Beispiel `\"42\"`. Bei `\"abc\"` gibt es einen `ValueError`.",
+      "en": "`int(...)` can only convert text that looks like a whole number, for example `\"42\"`. With `\"abc\"` you get a `ValueError`."
+    }
+  },
+  {
+    "id": "types-21",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(type(6 / 3))",
+    "choices": [
+      {
+        "de": "<class 'int'>",
+        "en": "<class 'int'>"
+      },
+      {
+        "de": "<class 'str'>",
+        "en": "<class 'str'>"
+      },
+      {
+        "de": "<class 'float'>",
+        "en": "<class 'float'>"
+      },
+      {
+        "de": "<class 'number'>",
+        "en": "<class 'number'>"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Die normale Division `/` gibt immer eine Kommazahl zurück, auch wenn sie aufgeht: `6 / 3` ist `2.0`. Für eine Ganzzahl nimmst du `//`.",
+      "en": "The normal division `/` always returns a float, even if it divides evenly: `6 / 3` is `2.0`. For an integer you use `//`."
+    }
+  },
+  {
+    "id": "types-22",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(bool(\"False\"))",
+    "choices": [
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "\"False\"",
+        "en": "\"False\""
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Nur der leere String ist falsch. `\"False\"` ist ein Text mit Inhalt, daher ist `bool(\"False\")` gleich `True`.",
+      "en": "Only the empty string is false. `\"False\"` is text with content, so `bool(\"False\")` is `True`."
+    }
+  },
+  {
+    "id": "types-23",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(int(True) + 1)",
+    "choices": [
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "True1",
+        "en": "True1"
+      },
+      {
+        "de": "Fehler (TypeError)",
+        "en": "Error (TypeError)"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`True` verhält sich wie die Zahl 1 (und `False` wie 0). `int(True)` ist 1, und 1 + 1 = 2.",
+      "en": "`True` behaves like the number 1 (and `False` like 0). `int(True)` is 1, and 1 + 1 = 2."
+    }
+  },
+  {
+    "id": "types-24",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(len(str(1000)))",
+    "choices": [
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "1000",
+        "en": "1000"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`len` funktioniert nicht bei Zahlen, aber bei Texten. Mit `str(1000)` wird die Zahl zum Text `\"1000\"`, und der hat 4 Zeichen.",
+      "en": "`len` does not work on numbers, but it does on text. `str(1000)` turns the number into the text `\"1000\"`, which has 4 characters."
+    }
+  },
+  {
+    "id": "types-25",
+    "topic": "types",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(0.1 + 0.2 == 0.3)",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "0.3",
+        "en": "0.3"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Kommazahlen werden im Computer nur ungefähr gespeichert. `0.1 + 0.2` ergibt `0.30000000000000004`, und das ist nicht genau gleich `0.3`. Deshalb vergleicht man Kommazahlen nicht mit `==`.",
+      "en": "Computers store floats only approximately. `0.1 + 0.2` gives `0.30000000000000004`, which is not exactly equal to `0.3`. That is why you do not compare floats with `==`."
+    }
   }
 ]

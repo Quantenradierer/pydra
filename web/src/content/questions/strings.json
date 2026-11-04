@@ -414,5 +414,389 @@
       "de": "Ein Slice ohne Ende läuft bis zum Schluss. Index 2 ist das `t` (P=0, y=1, t=2), also bekommst du \"thon\". Wer \"ython\" wählt, hat bei 1 angefangen; \"Py\" wäre `word[:2]`, der Anfang bis Index 2.",
       "en": "A slice without an end runs to the very end. Index 2 is the `t` (P=0, y=1, t=2), so you get \"thon\". Picking \"ython\" means starting at 1; \"Py\" would be `word[:2]`, the beginning up to index 2."
     }
+  },
+  {
+    "id": "strings-14",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"py\" + \"thon\")",
+    "choices": [
+      {
+        "de": "py thon",
+        "en": "py thon"
+      },
+      {
+        "de": "pything",
+        "en": "pything"
+      },
+      {
+        "de": "python",
+        "en": "python"
+      },
+      {
+        "de": "py+thon",
+        "en": "py+thon"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`+` setzt zwei Strings direkt aneinander, ohne Leerzeichen dazwischen. Aus `\"py\"` und `\"thon\"` wird `python`.",
+      "en": "`+` joins two strings directly, with no space in between. `\"py\"` and `\"thon\"` become `python`."
+    }
+  },
+  {
+    "id": "strings-15",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"hello\".capitalize())",
+    "choices": [
+      {
+        "de": "Hello",
+        "en": "Hello"
+      },
+      {
+        "de": "HELLO",
+        "en": "HELLO"
+      },
+      {
+        "de": "hello",
+        "en": "hello"
+      },
+      {
+        "de": "hELLO",
+        "en": "hELLO"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`capitalize()` macht den ersten Buchstaben groß und den Rest klein. Aus `hello` wird `Hello`.",
+      "en": "`capitalize()` makes the first letter upper case and the rest lower case. `hello` becomes `Hello`."
+    }
+  },
+  {
+    "id": "strings-16",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"Hello World\".count(\"o\"))",
+    "choices": [
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "0",
+        "en": "0"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`count(...)` zählt, wie oft ein Teilstring vorkommt. In `Hello World` steckt das `o` zweimal, je einmal pro Wort. Das große `W` zählt nicht.",
+      "en": "`count(...)` counts how often a substring appears. `Hello World` contains `o` twice, once in each word."
+    }
+  },
+  {
+    "id": "strings-17",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"python\".find(\"t\"))",
+    "choices": [
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      },
+      {
+        "de": "-1",
+        "en": "-1"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`find` gibt den Index zurück, an dem der Teilstring zum ersten Mal steht. In `python` ist `t` der dritte Buchstabe, also Index 2. Wird nichts gefunden, ist das Ergebnis -1.",
+      "en": "`find` returns the index where the substring first appears. In `python` the `t` is the third letter, so index 2. If nothing is found, the result is -1."
+    }
+  },
+  {
+    "id": "strings-18",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"hello\".startswith(\"he\"))",
+    "choices": [
+      {
+        "de": "True",
+        "en": "True"
+      },
+      {
+        "de": "False",
+        "en": "False"
+      },
+      {
+        "de": "he",
+        "en": "he"
+      },
+      {
+        "de": "Fehler",
+        "en": "Error"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`startswith` prüft, ob der String mit dem angegebenen Teil beginnt. `hello` beginnt mit `he`, also `True`.",
+      "en": "`startswith` checks whether the string begins with the given part. `hello` begins with `he`, so `True`."
+    }
+  },
+  {
+    "id": "strings-19",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"a b c\".split())",
+    "choices": [
+      {
+        "de": "['a b c']",
+        "en": "['a b c']"
+      },
+      {
+        "de": "['a', ' ', 'b', ' ', 'c']",
+        "en": "['a', ' ', 'b', ' ', 'c']"
+      },
+      {
+        "de": "abc",
+        "en": "abc"
+      },
+      {
+        "de": "['a', 'b', 'c']",
+        "en": "['a', 'b', 'c']"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Ohne Angabe trennt `split()` an Leerzeichen (und anderen Lücken). So entsteht eine Liste mit den drei Teilen `'a'`, `'b'` und `'c'`.",
+      "en": "With no argument `split()` splits at whitespace. This gives a list with the three parts `'a'`, `'b'` and `'c'`."
+    }
+  },
+  {
+    "id": "strings-20",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "name = \"Bo\"\nprint(\"Hi, \" + name + \"!\")",
+    "choices": [
+      {
+        "de": "Hi, name!",
+        "en": "Hi, name!"
+      },
+      {
+        "de": "Hi,Bo!",
+        "en": "Hi,Bo!"
+      },
+      {
+        "de": "Hi, Bo!",
+        "en": "Hi, Bo!"
+      },
+      {
+        "de": "Hi, + Bo + !",
+        "en": "Hi, + Bo + !"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`name` ist eine Variable und wird durch ihren Inhalt `\"Bo\"` ersetzt. Die Teile werden mit `+` zusammengesetzt: `Hi, Bo!`.",
+      "en": "`name` is a variable and is replaced by its content `\"Bo\"`. The parts are joined with `+`: `Hi, Bo!`."
+    }
+  },
+  {
+    "id": "strings-21",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "x = 5\nprint(f\"{x} + {x} = {x + x}\")",
+    "choices": [
+      {
+        "de": "x + x = x + x",
+        "en": "x + x = x + x"
+      },
+      {
+        "de": "5 + 5 = 10",
+        "en": "5 + 5 = 10"
+      },
+      {
+        "de": "5 + 5 = 5 + 5",
+        "en": "5 + 5 = 5 + 5"
+      },
+      {
+        "de": "5 + 5 = 55",
+        "en": "5 + 5 = 55"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "In einem f-String wird alles in geschweiften Klammern ausgewertet, auch Rechnungen. `{x + x}` ergibt 10. Der Text außerhalb der Klammern bleibt, wie er ist.",
+      "en": "In an f-string everything in curly braces is evaluated, including calculations. `{x + x}` gives 10. The text outside the braces stays as it is."
+    }
+  },
+  {
+    "id": "strings-22",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"hello world\".title())",
+    "choices": [
+      {
+        "de": "Hello World",
+        "en": "Hello World"
+      },
+      {
+        "de": "Hello world",
+        "en": "Hello world"
+      },
+      {
+        "de": "HELLO WORLD",
+        "en": "HELLO WORLD"
+      },
+      {
+        "de": "hello world",
+        "en": "hello world"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`title()` schreibt jedes Wort mit einem Großbuchstaben am Anfang. Aus `hello world` wird `Hello World`. `capitalize()` würde nur das allererste Wort ändern.",
+      "en": "`title()` capitalizes the start of every word. `hello world` becomes `Hello World`. `capitalize()` would change only the very first word."
+    }
+  },
+  {
+    "id": "strings-23",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"123\".isdigit(), \"12a\".isdigit())",
+    "choices": [
+      {
+        "de": "True True",
+        "en": "True True"
+      },
+      {
+        "de": "False False",
+        "en": "False False"
+      },
+      {
+        "de": "False True",
+        "en": "False True"
+      },
+      {
+        "de": "True False",
+        "en": "True False"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`isdigit()` ist nur wahr, wenn der String ausschließlich aus Ziffern besteht. `\"123\"` erfüllt das, `\"12a\"` wegen des Buchstabens nicht.",
+      "en": "`isdigit()` is only true if the string consists solely of digits. `\"123\"` does, `\"12a\"` does not because of the letter."
+    }
+  },
+  {
+    "id": "strings-24",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(\"abc\"[::-1])",
+    "choices": [
+      {
+        "de": "abc",
+        "en": "abc"
+      },
+      {
+        "de": "cba",
+        "en": "cba"
+      },
+      {
+        "de": "bca",
+        "en": "bca"
+      },
+      {
+        "de": "cab",
+        "en": "cab"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Ein Schritt von `-1` läuft rückwärts durch den String. So wird `\"abc\"` umgedreht zu `cba`.",
+      "en": "A step of `-1` runs backwards through the string. This reverses `\"abc\"` into `cba`."
+    }
+  },
+  {
+    "id": "strings-25",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was gibt dieser Code aus?",
+      "en": "What does this code print?"
+    },
+    "code": "print(len(\"a\\nb\"))",
+    "choices": [
+      {
+        "de": "2",
+        "en": "2"
+      },
+      {
+        "de": "4",
+        "en": "4"
+      },
+      {
+        "de": "3",
+        "en": "3"
+      },
+      {
+        "de": "1",
+        "en": "1"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`\\n` ist ein einzelnes Zeichen, nämlich der Zeilenumbruch. Der String besteht aus `a`, dem Zeilenumbruch und `b`, also aus 3 Zeichen.",
+      "en": "`\\n` is a single character, the line break. The string consists of `a`, the line break and `b`, so 3 characters."
+    }
   }
 ]

@@ -13,7 +13,7 @@ async function expectInStrip(page: Page, testId: string) {
     .toBe(true);
 }
 
-const choice = (page: Page, code: string) => page.locator('.choice').filter({ has: page.getByText(code, { exact: true }) });
+const choice = (page: Page, code: string) => page.locator('.choice').filter({ has: page.locator('.text', { hasText: new RegExp(`^${code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`) }) });
 
 test('fills the gap, watches the hydra run it, and never sees the right answer before picking it', async ({ page }) => {
   await page.goto('/');

@@ -13,6 +13,7 @@ import { parseHuntMap as parseMap, simulateHunt as simulate, type HuntOutcome as
 const EXPECTED: Record<string, Outcome['kind'][]> = {
   'hunt-steps': ['success', 'air', 'air', 'crash'],
   'hunt-head': ['success', 'eaten', 'eaten', 'error'],
+  'hunt-west': ['success', 'crash', 'missed', 'error'],
   'hunt-for': ['success', 'air', 'eaten', 'error'],
   'hunt-loop-body': ['success', 'crash', 'crash', 'missed'],
   'hunt-function': ['success', 'missed', 'air', 'error'],
@@ -22,6 +23,18 @@ const EXPECTED: Record<string, Outcome['kind'][]> = {
   'hunt-nested': ['success', 'crash', 'crash', 'missed'],
   'hunt-list': ['success', 'air', 'missed', 'crash'],
   'hunt-variable': ['success', 'air', 'air', 'crash'],
+  'hunt-else': ['success', 'missed', 'crash', 'air'],
+  'hunt-break': ['success', 'crash', 'crash', 'error'],
+  'hunt-countdown': ['success', 'air', 'air', 'eaten'],
+  'hunt-index': ['success', 'air', 'eaten', 'air'],
+  'hunt-guard': ['success', 'loop', 'air', 'crash'],
+  'hunt-call': ['success', 'missed', 'missed', 'error'],
+  'hunt-range-two': ['success', 'air', 'eaten', 'air'],
+  'hunt-stairs': ['success', 'crash', 'missed', 'air'],
+  'hunt-turn': ['success', 'crash', 'missed', 'air'],
+  'hunt-break-count': ['success', 'missed', 'missed', 'crash'],
+  'hunt-corner': ['success', 'crash', 'missed', 'air'],
+  'hunt-hit-twice': ['success', 'missed', 'crash', 'missed'],
 };
 
 /** What the player sees of a run: the warrior's path, the hydras slain, the gold taken and how it ended. */

@@ -17,6 +17,18 @@ const START: Record<string, HuntOutcome['kind']> = {
   'order-function': 'error',
   'order-while': 'eaten',
   'order-if': 'missed',
+  'order-west': 'eaten',
+  'order-two': 'eaten',
+  'order-rock': 'crash',
+  'order-down': 'eaten',
+  'order-over': 'air',
+  'order-gold-row': 'missed',
+  'order-two-loops': 'crash',
+  'order-count': 'error',
+  'order-hop': 'error',
+  'order-else': 'error',
+  'order-def-loop': 'error',
+  'order-hit-twice': 'error',
 };
 
 describe('code puzzle levels', () => {

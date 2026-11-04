@@ -183,4 +183,232 @@ export const ORDER_LEVELS: readonly OrderLevel[] = [
       en: 'In every round first a step, then the question whether there is a hydra here. That way the last cell gets checked too.',
     },
   },
+  {
+    id: 'order-west',
+    title: { de: 'Der andere Weg', en: 'The other way' },
+    intro: {
+      de: '`move_west()` geht nach links. Die Hydra liegt diesmal links vom Krieger, der Kopf hinten.',
+      en: '`move_west()` goes left. This time the hydra lies to the left of the warrior, its head at the far end.',
+    },
+    map: ['GHo@'],
+    lines: ['move_west()', 'attack()', 'move_west()', 'move_west()'],
+    start: [0, 2, 1, 3],
+    hint: {
+      de: 'Der Krieger trifft zuerst den Körper. Erst wenn die Hydra besiegt ist, darf er über den Kopf gehen.',
+      en: 'The warrior meets the body first. Only once the hydra is defeated may he walk over the head.',
+    },
+    explain: {
+      de: 'Ein Schritt nach links auf den Körper, zuschlagen, dann zwei Schritte nach links über den Kopf zum Gold.',
+      en: 'One step left onto the body, strike, then two steps left over the head to the gold.',
+    },
+  },
+  {
+    id: 'order-two',
+    title: { de: 'Zwei Hydras', en: 'Two hydras' },
+    intro: {
+      de: 'Zwei Hydras, ein Weg. Eine Schleife zählt die Schritte zwischen den Schlägen.',
+      en: 'Two hydras, one path. A loop counts the steps between the blows.',
+    },
+    map: ['@oH.oH'],
+    lines: ['move_east()', 'attack()', 'for i in range(3):', '    move_east()', 'attack()'],
+    start: [0, 2, 3, 4, 1],
+    hint: {
+      de: 'Zuerst die erste Hydra besiegen. Dann bringt die Schleife den Krieger zur zweiten. Welche Zeile gehört nicht in die Schleife?',
+      en: 'Defeat the first hydra first. Then the loop takes the warrior to the second. Which line is not part of the loop?',
+    },
+    explain: {
+      de: 'Ein Schritt und Schlag für die erste Hydra, danach läuft die Schleife dreimal weiter bis auf den zweiten Körper, und der letzte Schlag steht außerhalb der Schleife.',
+      en: 'One step and blow for the first hydra, then the loop walks three times to the second body, and the last blow stands outside the loop.',
+    },
+  },
+  {
+    id: 'order-rock',
+    title: { de: 'Um den Felsen', en: 'Round the rock' },
+    intro: {
+      de: 'Ein `#` ist ein Fels. Der Krieger kann nicht hindurch, er muss darum herum gehen.',
+      en: 'A `#` is a rock. The warrior cannot pass through it, he has to go round it.',
+    },
+    map: ['@#G', '...'],
+    lines: ['move_south()', 'move_east()', 'move_east()', 'move_north()'],
+    start: [1, 0, 3, 2],
+    hint: {
+      de: 'Rechts vom Krieger liegt ein Fels. In welche Richtung muss er also zuerst gehen?',
+      en: 'There is a rock right of the warrior. So which way must he go first?',
+    },
+    explain: {
+      de: 'Erst nach unten, unter dem Felsen durch zwei Schritte nach rechts, und dann hinauf zum Gold.',
+      en: 'First down, two steps right beneath the rock, and then up to the gold.',
+    },
+  },
+  {
+    id: 'order-down',
+    title: { de: 'Nach unten', en: 'Downwards' },
+    intro: {
+      de: 'Diesmal liegt die Hydra unter dem Krieger: Ihr Kopf ist unten, das Gold noch weiter unten.',
+      en: 'This time the hydra lies below the warrior: its head is further down, the gold even further.',
+    },
+    map: ['@', 'o', 'H', 'G'],
+    lines: ['move_south()', 'attack()', 'move_south()', 'move_south()'],
+    start: [0, 2, 1, 3],
+    hint: {
+      de: 'Der Krieger trifft zuerst den Körper. Wann darf er auf den Kopf treten?',
+      en: 'The warrior meets the body first. When may he step on the head?',
+    },
+    explain: {
+      de: 'Ein Schritt nach unten auf den Körper, zuschlagen, dann zwei Schritte nach unten über den Kopf zum Gold.',
+      en: 'One step down onto the body, strike, then two steps down over the head to the gold.',
+    },
+  },
+  {
+    id: 'order-over',
+    title: { de: 'Erst schlagen, dann hinauf', en: 'Strike, then climb' },
+    intro: {
+      de: 'Das Gold liegt oben rechts, die Hydra unten. Der Krieger muss sie besiegen, bevor er das Gold holt.',
+      en: 'The gold lies at the top right, the hydra below. The warrior has to defeat it before he fetches the gold.',
+    },
+    map: ['..G', '@oH'],
+    lines: ['move_east()', 'attack()', 'move_north()', 'move_east()'],
+    start: [0, 2, 3, 1],
+    hint: {
+      de: 'Zuschlagen geht nur auf dem Körper. Wo steht der Krieger, wenn er nach oben gegangen ist?',
+      en: 'Striking only works on the body. Where does the warrior stand once he has gone up?',
+    },
+    explain: {
+      de: 'Ein Schritt auf den Körper, zuschlagen, dann hinauf und nach rechts zum Gold.',
+      en: 'One step onto the body, strike, then up and right to the gold.',
+    },
+  },
+  {
+    id: 'order-gold-row',
+    title: { de: 'Gold in einer Reihe', en: 'A row of gold' },
+    intro: {
+      de: 'Die Schleife läuft die Gold-Reihe ab. Eine Zeile ohne Einrückung gehört nicht zur Schleife.',
+      en: 'The loop walks along the row of gold. A line without indentation is not part of the loop.',
+    },
+    map: ['@GGG', '...G'],
+    lines: ['for i in range(3):', '    move_east()', 'move_south()'],
+    start: [2, 0, 1],
+    hint: {
+      de: 'Das Gold unten liegt am Ende der Reihe. Was soll zuerst geschehen: laufen oder nach unten gehen?',
+      en: 'The gold below lies at the end of the row. What should happen first: walking or going down?',
+    },
+    explain: {
+      de: 'Die Schleife sammelt das Gold der oberen Reihe in drei Schritten ein, dann geht es einmal nach unten zum letzten Gold.',
+      en: 'The loop collects the gold of the top row in three steps, then one step down to the last gold.',
+    },
+  },
+  {
+    id: 'order-two-loops',
+    title: { de: 'Zwei Schleifen', en: 'Two loops' },
+    intro: {
+      de: 'Ein Programm darf mehrere Schleifen hintereinander haben. Jede nimmt nur ihre eigene eingerückte Zeile mit.',
+      en: 'A program may have several loops one after another. Each takes only its own indented line.',
+    },
+    map: ['@..', '##.', '..G'],
+    lines: ['for i in range(2):', '    move_east()', 'for i in range(2):', '    move_south()'],
+    start: [2, 3, 0, 1],
+    hint: {
+      de: 'Unter dem Krieger liegen Felsen. Welche Schleife muss zuerst laufen?',
+      en: 'There are rocks below the warrior. Which loop has to run first?',
+    },
+    explain: {
+      de: 'Erst zwei Schritte nach rechts über den Felsen hinweg, dann zwei nach unten bis zum Gold.',
+      en: 'First two steps right, past the rocks, then two down to the gold.',
+    },
+  },
+  {
+    id: 'order-count',
+    title: { de: 'Mitzählen', en: 'Keep count' },
+    intro: {
+      de: '`x = 0` legt eine Zahl ab, `x = x + 1` zählt eins hoch. `while x < 3:` läuft, solange x kleiner als 3 ist.',
+      en: '`x = 0` stores a number, `x = x + 1` counts one up. `while x < 3:` runs as long as x is less than 3.',
+    },
+    map: ['@..G'],
+    lines: ['x = 0', 'while x < 3:', '    move_east()', '    x = x + 1'],
+    start: [1, 0, 2, 3],
+    hint: {
+      de: 'Python muss `x` kennen, bevor die Schleife es prüft. Und gezählt wird in jeder Runde.',
+      en: 'Python has to know `x` before the loop checks it. And the counting happens in every round.',
+    },
+    explain: {
+      de: 'Zuerst bekommt x den Wert 0. Dann geht der Krieger in jeder Runde einen Schritt und zählt hoch, bis x 3 erreicht hat.',
+      en: 'First x gets the value 0. Then in every round the warrior takes a step and counts up, until x reaches 3.',
+    },
+  },
+  {
+    id: 'order-hop',
+    title: { de: 'Ein Sprung, zweimal', en: 'One hop, twice' },
+    intro: {
+      de: 'Eine Funktion fasst Zeilen unter einem Namen zusammen. Jeder Aufruf führt sie noch einmal aus.',
+      en: 'A function bundles lines under one name. Every call runs them once more.',
+    },
+    map: ['@...oH'],
+    lines: ['def hop():', '    move_east()', '    move_east()', 'hop()', 'hop()', 'attack()'],
+    start: [3, 0, 1, 2, 4, 5],
+    hint: {
+      de: 'Zuerst kommt die Definition mit ihren eingerückten Zeilen. Zwei Aufrufe bringen den Krieger vier Felder weit.',
+      en: 'The definition with its indented lines comes first. Two calls take the warrior four cells.',
+    },
+    explain: {
+      de: 'Erst `def hop()`, dann zwei Aufrufe: zusammen vier Schritte bis auf den Körper. Dort folgt der Schlag.',
+      en: 'First `def hop()`, then two calls: four steps together, onto the body. There comes the blow.',
+    },
+  },
+  {
+    id: 'order-else',
+    title: { de: 'Sonst weitergehen', en: 'Otherwise keep walking' },
+    intro: {
+      de: '`else:` gehört zu dem `if` darüber und steht genauso weit eingerückt. Es läuft, wenn die Bedingung nicht stimmt.',
+      en: '`else:` belongs to the `if` above it and is indented just as far. It runs when the condition is not true.',
+    },
+    map: ['@.oHG'],
+    lines: ['for i in range(5):', '    if body_here():', '        attack()', '    else:', '        move_east()'],
+    start: [0, 3, 4, 1, 2],
+    hint: {
+      de: 'Erst die Frage `if`, mit ihrer Antwort darunter, dann `else:` mit seiner. Wie tief steht jede Zeile?',
+      en: 'First the question `if`, with its answer below it, then `else:` with its own. How deep is each line?',
+    },
+    explain: {
+      de: 'In jeder Runde gilt: Steht der Krieger auf einem Körper, schlägt er zu, sonst geht er einen Schritt weiter.',
+      en: 'In every round: if the warrior stands on a body he strikes, otherwise he takes a step.',
+    },
+  },
+  {
+    id: 'order-def-loop',
+    title: { de: 'Schleife in der Funktion', en: 'A loop in a function' },
+    intro: {
+      de: 'Eine Funktion kann eine Schleife enthalten. Dann ist die Schleifenzeile doppelt eingerückt.',
+      en: 'A function can contain a loop. Then the loop body is indented twice.',
+    },
+    map: ['@..oH'],
+    lines: ['def walk():', '    for i in range(3):', '        move_east()', 'walk()', 'attack()'],
+    start: [3, 0, 1, 2, 4],
+    hint: {
+      de: 'Die Funktion muss stehen, bevor man sie aufruft. Danach braucht der Krieger den Körper unter den Füßen.',
+      en: 'The function has to exist before it is called. After that the warrior needs the body under his feet.',
+    },
+    explain: {
+      de: '`def walk()` mit seiner Schleife steht oben. Der Aufruf läuft drei Schritte bis auf den Körper, danach kommt der Schlag.',
+      en: '`def walk()` with its loop stands at the top. The call walks three steps onto the body, after that comes the blow.',
+    },
+  },
+  {
+    id: 'order-hit-twice',
+    title: { de: 'Zweimal zuschlagen', en: 'Strike twice' },
+    intro: {
+      de: 'Zwei Hydras, eine Funktion für Schritt und Schlag. Sie wird für jede Hydra einmal aufgerufen.',
+      en: 'Two hydras, one function for step and blow. It is called once for each hydra.',
+    },
+    map: ['@oH.oH'],
+    lines: ['def hit():', '    move_east()', '    attack()', 'hit()', 'move_east()', 'move_east()', 'hit()'],
+    start: [3, 4, 5, 6, 0, 1, 2],
+    hint: {
+      de: 'Zuerst die Definition. Zwischen den beiden Aufrufen muss der Krieger über Kopf und Lücke zur nächsten Hydra gehen.',
+      en: 'The definition first. Between the two calls the warrior must cross the head and the gap to the next hydra.',
+    },
+    explain: {
+      de: 'Nach `def hit()` schlägt der erste Aufruf die erste Hydra. Zwei Schritte bringen den Krieger zur zweiten, und der zweite Aufruf erledigt sie.',
+      en: 'After `def hit()` the first call defeats the first hydra. Two steps take the warrior to the second, and the second call finishes it.',
+    },
+  },
 ];

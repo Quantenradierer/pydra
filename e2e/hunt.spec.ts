@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { HUNT_LEVELS } from '../web/src/game/hunt-levels.ts';
 
-const choice = (page: Page, code: string) => page.locator('.choice').filter({ has: page.getByText(code, { exact: true }) });
+const choice = (page: Page, code: string) => page.locator('.choice').filter({ has: page.locator('.text', { hasText: new RegExp(`^${code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`) }) });
 
 test('the warrior gets eaten stepping on a head, then slays the hydra and takes the gold', async ({ page }) => {
   await page.goto('/');

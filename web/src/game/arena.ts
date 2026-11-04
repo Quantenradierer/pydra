@@ -5,9 +5,9 @@ import type { Outcome, Point, Snapshot, World } from './world.ts';
 /** Size of one grid cell in viewBox units. */
 const CELL = 10;
 /** Distance from the middle of the head to where the body joins it. */
-const NECK = 3.5;
+const NECK = 3;
 /** How far the head sits ahead of the middle of its cell. */
-const AHEAD = 2.5;
+const AHEAD = 3.5;
 const DX = [0, 1, 0, -1];
 const DY = [-1, 0, 1, 0];
 
@@ -61,7 +61,7 @@ export function arena(world: World): Arena {
   ${fish}
   <path class="arena-body"/>
   <path class="arena-scales"/>
-  <g class="arena-hydra"><g class="arena-head-turn"><g class="arena-head-pulse"><g transform="scale(0.11) translate(-38 3)"><use href="#hydra-head" class="arena-skull"/><use href="#hydra-eye" class="arena-eye"/></g></g></g></g>
+  <g class="arena-hydra"><g class="arena-head-turn"><g class="arena-head-pulse"><g transform="scale(0.095) translate(-38 3)"><use href="#hydra-head" class="arena-skull"/><use href="#hydra-eye" class="arena-eye"/></g></g></g></g>
   <g class="arena-fx"></g>
   <g class="arena-bump"><path d="M0-3.2 1-1 3.2-1.4 1.6.4 2.4 2.8 0 1.4-2.4 2.8-1.6.4-3.2-1.4-1-1Z"/></g>
 </svg>`);
@@ -107,17 +107,24 @@ export function arena(world: World): Arena {
     if (calm() || !el.animate) return;
     el.animate(frames, { duration, delay, easing: 'ease-out', fill: 'backwards' });
   }
+  /** Adds a piece of decoration at a point; it sits in a group so that it spins around its own middle. */
+  function piece(at: Point, shape: SVGElement): SVGGElement {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('transform', `translate(${at.x} ${at.y})`);
+    g.append(shape);
+    fx.append(g);
+    return g;
+  }
+  const NS = 'http://www.w3.org/2000/svg';
   /** A burst of small bubbles that pop outwards from a point and fade. */
   function burst(at: Point, count: number, reach: number, duration: number, delay: number, colour: string) {
     if (calm()) return;
     for (let i = 0; i < count; i++) {
       const a = (i / count) * Math.PI * 2 + at.x;
-      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      const c = document.createElementNS(NS, 'circle');
       c.setAttribute('r', '0.9');
       c.setAttribute('fill', colour);
-      c.setAttribute('cx', String(at.x));
-      c.setAttribute('cy', String(at.y));
-      fx.append(c);
+      const g = piece(at, c);
       const anim = c.animate(
         [
           { transform: 'translate(0,0) scale(0.4)', opacity: 0.9 },
@@ -125,7 +132,36 @@ export function arena(world: World): Arena {
         ],
         { duration, delay, easing: 'ease-out', fill: 'backwards' },
       );
-      anim.onfinish = () => c.remove();
+      anim.onfinish = () => g.remove();
+    }
+  }
+  const CONFETTI = ['#ffd43b', '#3776ab', '#ff6b6b', '#51cf66', '#f783ac', '#ffffff', '#74c0fc'];
+  /** Confetti shot out of a point: it flies up and outwards, spins, then flutters down. */
+  function confetti(at: Point, delay: number) {
+    if (calm()) return;
+    for (let i = 0; i < 48; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const speed = 8 + Math.random() * 22;
+      const dx = Math.cos(a) * speed;
+      const dy = Math.sin(a) * speed - 8;
+      const r = document.createElementNS(NS, 'rect');
+      const w = 0.9 + Math.random() * 0.9;
+      r.setAttribute('x', String(-w / 2));
+      r.setAttribute('y', String(-w / 4));
+      r.setAttribute('width', String(w));
+      r.setAttribute('height', String(w / 2));
+      r.setAttribute('fill', CONFETTI[i % CONFETTI.length]!);
+      const g = piece(at, r);
+      const spin = (Math.random() < 0.5 ? -1 : 1) * (360 + Math.random() * 720);
+      const anim = r.animate(
+        [
+          { transform: 'translate(0px,0px) rotate(0deg) scale(0.5)', opacity: 1 },
+          { transform: `translate(${dx}px,${dy}px) rotate(${spin / 2}deg) scale(1)`, opacity: 1, offset: 0.4, easing: 'ease-in' },
+          { transform: `translate(${dx * 1.25}px,${dy + 22}px) rotate(${spin}deg) scale(1)`, opacity: 0 },
+        ],
+        { duration: 1500 + Math.random() * 700, delay: delay + Math.random() * 120, easing: 'cubic-bezier(.1,.7,.3,1)', fill: 'backwards' },
+      );
+      anim.onfinish = () => g.remove();
     }
   }
 
@@ -194,7 +230,7 @@ export function arena(world: World): Arena {
       if (outcome !== undefined && (outcome !== lastOutcome || changed) && animated) {
         const jolt = [{ translate: '0 0' }, { translate: '-1.2px 0', offset: 0.2 }, { translate: '1.2px 0', offset: 0.4 }, { translate: '-0.8px 0', offset: 0.6 }, { translate: '0.5px 0', offset: 0.8 }, { translate: '0 0' }];
         if (outcome.kind === 'success') {
-          burst(head, 10, 14, 1000, ms * 0.8, '#ffd43b');
+          confetti(head, ms * 0.8);
           play(pulse, [{ transform: 'scale(1)' }, { transform: 'scale(1.4)', offset: 0.35 }, { transform: 'scale(1)' }], 700, ms * 0.8);
         } else if (crashed) {
           play(root, jolt, 450, ms * 0.8);

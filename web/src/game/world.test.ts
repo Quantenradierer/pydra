@@ -31,11 +31,11 @@ describe('simulate', () => {
     expect(trace.steps.map((s) => s.line)).toEqual([1, 2, 3, null]);
   });
 
-  it('shows the state before each line runs', () => {
+  it('shows the state after each line, so the hydra acts as its line is reached', () => {
     const trace = simulate(corridor, 'move()\nturn_left()');
     expect(trace.steps.map((s) => [s.line, s.x, s.dir])).toEqual([
-      [1, 0, 1],
-      [2, 1, 1],
+      [1, 1, 1],
+      [2, 1, 0],
       [null, 1, 0],
     ]);
   });

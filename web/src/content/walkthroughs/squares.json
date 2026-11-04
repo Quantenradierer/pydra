@@ -1,0 +1,161 @@
+{
+  "id": "squares",
+  "code": "def squares(numbers):\n    result = []\n    for number in numbers:\n        result.append(number * number)\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion squares mit dem Parameter numbers, einer Liste von Zahlen",
+          "en": "Defines a function squares with the parameter numbers, a list of numbers"
+        },
+        {
+          "de": "Quadriert sofort eine Zahl",
+          "en": "Immediately squares a number"
+        },
+        {
+          "de": "Erstellt eine Liste namens squares",
+          "en": "Creates a list called squares"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion squares auf",
+          "en": "Calls the built-in function squares"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`def` legt die Funktion `squares` („Quadrate“) an. Gerechnet wird erst beim Aufruf, etwa `squares([1, 2, 3])`.\n\n`numbers` ist der Parameter, ein Platzhalter für die Liste. Der Plural im Namen erinnert daran, dass es mehrere Zahlen sind.",
+        "en": "`def` creates the function `squares`. Calculating only happens on a call, such as `squares([1, 2, 3])`.\n\n`numbers` is the parameter, a placeholder for the list. The plural in the name is a reminder that there are several numbers."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Liste mit einer Null an",
+          "en": "Creates a list with one zero"
+        },
+        {
+          "de": "Legt eine leere Liste an und speichert sie in result",
+          "en": "Creates an empty list and stores it in result"
+        },
+        {
+          "de": "Setzt result auf 0",
+          "en": "Sets result to 0"
+        },
+        {
+          "de": "Leert die Liste numbers",
+          "en": "Empties the list numbers"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`[]` ist eine leere Liste, bereit zum Sammeln. Gefüllt wird sie in der Schleife.\n\nDie Liste muss vor der Schleife entstehen, damit alle Durchläufe in dieselbe Liste schreiben. `numbers` bleibt davon unberührt.",
+        "en": "`[]` is an empty list, ready for collecting. It is filled in the loop.\n\nThe list must be created before the loop so that all passes write into the same list. `numbers` is not touched."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil genau einmal für die ganze Liste",
+          "en": "Repeats the indented part exactly once for the whole list"
+        },
+        {
+          "de": "Prüft, ob number in numbers vorkommt",
+          "en": "Checks whether number occurs in numbers"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Element von numbers; number ist jeweils das aktuelle",
+          "en": "Repeats the indented part for every item of numbers; number is the current one each time"
+        },
+        {
+          "de": "Legt eine neue Liste namens number an",
+          "en": "Creates a new list called number"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`for number in numbers:` geht die Liste Element für Element durch. Bei `[1, 2, 3]` ist `number` nacheinander 1, 2 und 3.\n\n`number` ist nur ein Name für das aktuelle Element, der Name ist frei wählbar. Der eingerückte Teil läuft einmal pro Element.",
+        "en": "`for number in numbers:` walks through the list item by item. With `[1, 2, 3]`, `number` is 1, then 2, then 3.\n\n`number` is just a name for the current item and can be chosen freely. The indented part runs once per item."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Ersetzt result durch das Quadrat der aktuellen Zahl",
+          "en": "Replaces result with the square of the current number"
+        },
+        {
+          "de": "Verdoppelt die aktuelle Zahl in numbers",
+          "en": "Doubles the current number in numbers"
+        },
+        {
+          "de": "Fügt die Zahl number zweimal an result an",
+          "en": "Appends the number number to result twice"
+        },
+        {
+          "de": "Hängt das Quadrat der aktuellen Zahl hinten an result an",
+          "en": "Appends the square of the current number to the end of result"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`.append(x)` hängt `x` ans Ende einer Liste an. `number * number` wird vorher ausgerechnet: Für 3 ist es 9.\n\nNach drei Durchläufen mit `[1, 2, 3]` ist `result` gleich `[1, 4, 9]`. Die Liste verändert `.append` direkt, deshalb braucht es hier kein `=`.",
+        "en": "`.append(x)` adds `x` to the end of a list. `number * number` is calculated first: for 3 it is 9.\n\nAfter three passes with `[1, 2, 3]`, `result` is `[1, 4, 9]`. `.append` changes the list in place, which is why no `=` is needed here."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt die fertige Liste result zurück, sobald die Schleife durch ist",
+          "en": "Returns the finished list result as soon as the loop is done"
+        },
+        {
+          "de": "Gibt result schon nach dem ersten Element zurück",
+          "en": "Returns result after the first item already"
+        },
+        {
+          "de": "Gibt die ursprüngliche Liste numbers zurück",
+          "en": "Returns the original list numbers"
+        },
+        {
+          "de": "Zeigt result auf dem Bildschirm an",
+          "en": "Prints result on the screen"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt, gehört also nicht zur Schleife. Erst nach allen Elementen kommt die volle Liste zurück: `squares([1, 2, 3])` ergibt `[1, 4, 9]`.\n\nDie Eingabeliste `numbers` bleibt unverändert, `result` ist eine neue.",
+        "en": "The line is not indented, so it is not part of the loop. Only after all items does the full list come back: `squares([1, 2, 3])` gives `[1, 4, 9]`.\n\nThe input list `numbers` stays unchanged; `result` is a new one."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Summe der Quadrate zurück: `squares([1, 2, 3])` ergibt 14",
+        "en": "Returns the sum of the squares: `squares([1, 2, 3])` gives 14"
+      },
+      {
+        "de": "Gibt eine neue Liste mit den Quadraten aller Zahlen zurück: `squares([1, 2, 3])` ergibt [1, 4, 9]",
+        "en": "Returns a new list with the squares of all numbers: `squares([1, 2, 3])` gives [1, 4, 9]"
+      },
+      {
+        "de": "Quadriert die Zahlen in der übergebenen Liste selbst und gibt nichts zurück",
+        "en": "Squares the numbers in the passed list itself and returns nothing"
+      },
+      {
+        "de": "Gibt das Quadrat der letzten Zahl zurück: `squares([1, 2, 3])` ergibt 9",
+        "en": "Returns the square of the last number: `squares([1, 2, 3])` gives 9"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Für jede Zahl wird das Quadrat berechnet und in eine neue Liste gelegt. `squares([2, 5])` gibt `[4, 25]` zurück, `squares([])` gibt `[]` zurück.\n\nDas Muster „leere Liste, in der Schleife `.append`, danach zurückgeben“ baut aus einer Liste eine neue.",
+      "en": "For each number the square is calculated and put into a new list. `squares([2, 5])` returns `[4, 25]`, `squares([])` returns `[]`.\n\nThe pattern \"empty list, `.append` in the loop, return afterwards\" builds a new list from a list."
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "id": "is-weekend",
+  "code": "def is_weekend(day):\n    if day == \"Saturday\" or day == \"Sunday\":\n        return True\n    return False",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Setzt day auf das Wochenende",
+          "en": "Sets day to the weekend"
+        },
+        {
+          "de": "Prüft sofort, welcher Tag heute ist",
+          "en": "Immediately checks which day it is today"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion is_weekend auf",
+          "en": "Calls the built-in function is_weekend"
+        },
+        {
+          "de": "Definiert eine Funktion is_weekend mit dem Parameter day",
+          "en": "Defines a function is_weekend with the parameter day"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`def` legt die Funktion `is_weekend` („ist Wochenende“) an. Der Körper läuft erst bei einem Aufruf wie `is_weekend(\"Sunday\")`.\n\n`day` (Tag) ist der Parameter, hier ein Text mit dem Namen des Wochentags. Die Funktion weiß nicht, welcher Tag heute ist, nur was man ihr übergibt.",
+        "en": "`def` creates the function `is_weekend`. The body only runs on a call such as `is_weekend(\"Sunday\")`.\n\n`day` is the parameter, here a piece of text with the name of the weekday. The function does not know what day it is today, only what you pass in."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob day gleich \"Saturday\" oder gleich \"Sunday\" ist; nur dann läuft die Zeile darunter",
+          "en": "Checks whether day equals \"Saturday\" or equals \"Sunday\"; only then does the line below run"
+        },
+        {
+          "de": "Prüft, ob day beide Werte gleichzeitig hat",
+          "en": "Checks whether day has both values at once"
+        },
+        {
+          "de": "Setzt day auf \"Saturday\" und dann auf \"Sunday\"",
+          "en": "Sets day to \"Saturday\" and then to \"Sunday\""
+        },
+        {
+          "de": "Prüft, ob in day die Buchstaben von \"Saturday\" vorkommen",
+          "en": "Checks whether the letters of \"Saturday\" occur in day"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`==` vergleicht zwei Werte. `or` verbindet zwei Bedingungen: Es genügt, wenn eine davon stimmt. Bei `\"Sunday\"` stimmt die zweite, bei `\"Monday\"` keine.\n\nBeide Vergleiche müssen ausgeschrieben werden. `day == \"Saturday\" or \"Sunday\"` wäre ein häufiger Fehler und würde immer als wahr gelten.",
+        "en": "`==` compares two values. `or` combines two conditions: it is enough if one of them is true. For `\"Sunday\"` the second is true, for `\"Monday\"` neither.\n\nBoth comparisons must be written out. `day == \"Saturday\" or \"Sunday\"` would be a common mistake and would always count as true."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt True zurück, egal welcher Tag es ist",
+          "en": "Returns True whatever the day is"
+        },
+        {
+          "de": "Gibt True zurück und beendet die Funktion; die Zeile läuft nur bei Samstag oder Sonntag",
+          "en": "Returns True and ends the function; the line only runs on Saturday or Sunday"
+        },
+        {
+          "de": "Zeigt \"Weekend\" auf dem Bildschirm an",
+          "en": "Prints \"Weekend\" on the screen"
+        },
+        {
+          "de": "Gibt den Text day zurück",
+          "en": "Returns the text day"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Die eingerückte Zeile gehört zum `if`. Stimmt eine der Bedingungen, gibt `return` den Wahrheitswert `True` zurück und beendet die Funktion.\n\nWahrheitswerte schreibt man ohne Anführungszeichen und mit großem Anfangsbuchstaben: `True`, nicht `true`.",
+        "en": "The indented line belongs to the `if`. If one of the conditions is true, `return` hands back the truth value `True` and ends the function.\n\nTruth values are written without quotation marks and with a capital first letter: `True`, not `true`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt False auch am Wochenende zurück, nachdem True zurückgegeben wurde",
+          "en": "Returns False on the weekend as well, after True has been returned"
+        },
+        {
+          "de": "Gibt den Text \"False\" zurück",
+          "en": "Returns the text \"False\""
+        },
+        {
+          "de": "Gibt False zurück; die Zeile wird nur erreicht, wenn der Tag kein Wochenende ist",
+          "en": "Returns False; the line is only reached when the day is not on the weekend"
+        },
+        {
+          "de": "Setzt day auf False",
+          "en": "Sets day to False"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt und gehört nicht zum `if`. Am Wochenende hat `return True` die Funktion schon beendet. Alle anderen Tage kommen hierher.\n\nDeshalb liefert `is_weekend(\"Monday\")` am Ende `False`. Auch `\"saturday\"` klein geschrieben ergäbe `False`, denn Texte werden genau verglichen.",
+        "en": "The line is not indented and does not belong to the `if`. On the weekend `return True` has already ended the function. All other days get here.\n\nThat is why `is_weekend(\"Monday\")` ends up giving `False`. Even `\"saturday\"` in lowercase would give `False`, because strings are compared exactly."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt True zurück, wenn der Wochentag weder Saturday noch Sunday ist",
+        "en": "Returns True if the weekday is neither Saturday nor Sunday"
+      },
+      {
+        "de": "Gibt True nur zurück, wenn der Tag Saturday ist",
+        "en": "Returns True only if the day is Saturday"
+      },
+      {
+        "de": "Gibt den Namen des nächsten Wochenendtags zurück",
+        "en": "Returns the name of the next weekend day"
+      },
+      {
+        "de": "Gibt True zurück, wenn der Wochentag Saturday oder Sunday ist, sonst False",
+        "en": "Returns True if the weekday is Saturday or Sunday, otherwise False"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`is_weekend(\"Sunday\")` gibt `True` zurück, `is_weekend(\"Friday\")` gibt `False` zurück. Mit `or` genügt es, wenn einer der beiden Tage passt.\n\nIm Gegensatz zu `and` (beide müssen stimmen) ist `or` großzügig: Eine stimmende Seite reicht.",
+      "en": "`is_weekend(\"Sunday\")` returns `True`, `is_weekend(\"Friday\")` returns `False`. With `or`, it is enough if one of the two days matches.\n\nUnlike `and` (both must be true), `or` is generous: one true side is enough."
+    }
+  }
+}

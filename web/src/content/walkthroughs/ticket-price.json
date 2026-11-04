@@ -1,0 +1,213 @@
+{
+  "id": "ticket-price",
+  "code": "def ticket_price(age):\n    if age < 12:\n        return 5\n    elif age < 65:\n        return 10\n    else:\n        return 7",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion ticket_price mit dem Parameter age",
+          "en": "Defines a function ticket_price with the parameter age"
+        },
+        {
+          "de": "Setzt das Alter fest auf einen Preis",
+          "en": "Sets the age to a fixed price"
+        },
+        {
+          "de": "Gibt sofort den Preis eines Tickets aus",
+          "en": "Immediately prints the price of a ticket"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion ticket_price auf",
+          "en": "Calls the built-in function ticket_price"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`def` legt die Funktion `ticket_price` („Ticketpreis“) an. Der Preis wird erst bei einem Aufruf wie `ticket_price(30)` bestimmt.\n\n`age` (Alter) ist der Parameter, ein Platzhalter für das Alter in Jahren.",
+        "en": "`def` creates the function `ticket_price`. The price is only worked out on a call such as `ticket_price(30)`.\n\n`age` is the parameter, a placeholder for the age in years."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Setzt age auf 12",
+          "en": "Sets age to 12"
+        },
+        {
+          "de": "Prüft, ob age kleiner als 12 ist; nur dann läuft die eingerückte Zeile darunter",
+          "en": "Checks whether age is less than 12; only then does the indented line below run"
+        },
+        {
+          "de": "Prüft, ob age höchstens 12 ist",
+          "en": "Checks whether age is at most 12"
+        },
+        {
+          "de": "Prüft, ob age größer als 12 ist",
+          "en": "Checks whether age is greater than 12"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`<` heißt „kleiner als“. Für 8 stimmt `8 < 12`. Für 12 stimmt es nicht, denn 12 ist nicht kleiner als 12.\n\nDie Prüfung steht ganz oben, also wird sie zuerst gemacht. Alle weiteren Zweige kommen nur dran, wenn diese hier nicht stimmt.",
+        "en": "`<` means \"less than\". For 8, `8 < 12` is true. For 12 it is not, because 12 is not less than 12.\n\nThe check is at the top, so it is made first. All further branches only come into play if this one is false."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt 5 für jedes Alter zurück",
+          "en": "Returns 5 for every age"
+        },
+        {
+          "de": "Zeigt die Zahl 5 auf dem Bildschirm an",
+          "en": "Prints the number 5 on the screen"
+        },
+        {
+          "de": "Gibt 5 zurück und beendet die Funktion; die Zeile läuft nur für Kinder unter 12",
+          "en": "Returns 5 and ends the function; the line only runs for children under 12"
+        },
+        {
+          "de": "Zieht 5 vom Alter ab",
+          "en": "Subtracts 5 from the age"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile gehört zum `if` darüber. `return 5` gibt die Zahl 5 (keinen Text) zurück. Damit endet die Funktion und die Zeilen darunter werden nicht mehr gebraucht.\n\n`ticket_price(8)` liefert also 5.",
+        "en": "The line belongs to the `if` above. `return 5` hands back the number 5 (not text). That ends the function and the lines below are not needed any more.\n\nSo `ticket_price(8)` gives 5."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft bei jedem Alter, ob es unter 65 ist, auch bei Kindern",
+          "en": "Checks whether the age is under 65 for every age, children included"
+        },
+        {
+          "de": "Prüft, ob age zwischen 12 und 65 liegt, und gibt dann beide Grenzen zurück",
+          "en": "Checks whether age is between 12 and 65 and then returns both limits"
+        },
+        {
+          "de": "Setzt age auf 65",
+          "en": "Sets age to 65"
+        },
+        {
+          "de": "Prüft, ob age kleiner als 65 ist, aber nur, wenn die erste Bedingung nicht gestimmt hat",
+          "en": "Checks whether age is less than 65, but only if the first condition was not true"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`elif` (kurz für „else if“, „sonst wenn“) ist die zweite Prüfung in der Kette. Sie wird nur gemacht, wenn die erste nicht stimmte, also für Alter ab 12.\n\nDeshalb reicht `age < 65`: Kinder sind schon abgehandelt, hier geht es um 12 bis 64.",
+        "en": "`elif` (short for \"else if\") is the second check in the chain. It is only made if the first one was not true, so for ages from 12 up.\n\nThat is why `age < 65` is enough: children are already dealt with, this is about 12 to 64."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt 10 zurück; die Zeile läuft nur, wenn age mindestens 12 und kleiner als 65 ist",
+          "en": "Returns 10; the line only runs if age is at least 12 and less than 65"
+        },
+        {
+          "de": "Gibt 10 für jedes Alter zurück",
+          "en": "Returns 10 for every age"
+        },
+        {
+          "de": "Gibt 10 zurück, wenn age kleiner als 12 ist",
+          "en": "Returns 10 if age is less than 12"
+        },
+        {
+          "de": "Addiert 10 zu age",
+          "en": "Adds 10 to age"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Die Zeile gehört zum `elif`. Bei `ticket_price(30)` ist `30 < 12` falsch, aber `30 < 65` stimmt, also kommt 10 zurück.\n\nVon einer Kette aus `if`, `elif` und `else` läuft immer höchstens ein Zweig.",
+        "en": "The line belongs to the `elif`. For `ticket_price(30)`, `30 < 12` is false but `30 < 65` is true, so 10 comes back.\n\nOf a chain of `if`, `elif` and `else`, at most one branch ever runs."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Prüft, ob age gleich 65 ist",
+          "en": "Checks whether age equals 65"
+        },
+        {
+          "de": "Fängt alle übrigen Fälle ab: Es läuft nur, wenn keine der Bedingungen darüber gestimmt hat",
+          "en": "Catches all remaining cases: it only runs if none of the conditions above were true"
+        },
+        {
+          "de": "Läuft immer als erstes",
+          "en": "Always runs first"
+        },
+        {
+          "de": "Prüft noch eine dritte Bedingung ohne Vergleich",
+          "en": "Checks a third condition without any comparison"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`else` (sonst) hat keine Bedingung. Es steht für „alles andere“ und ist der letzte Zweig der Kette. Ein Doppelpunkt am Ende gehört dazu.\n\nHier bedeutet „alles andere“: Alter 65 und älter. Das ist, was weder unter 12 noch unter 65 ist.",
+        "en": "`else` has no condition. It stands for \"everything else\" and is the last branch of the chain. It also takes a colon at the end.\n\nHere \"everything else\" means: age 65 and older. That is whatever is neither under 12 nor under 65."
+      }
+    },
+    {
+      "line": 7,
+      "choices": [
+        {
+          "de": "Gibt 7 für Kinder zurück",
+          "en": "Returns 7 for children"
+        },
+        {
+          "de": "Gibt 7 für jedes Alter zurück",
+          "en": "Returns 7 for every age"
+        },
+        {
+          "de": "Gibt 7 zurück; die Zeile läuft nur für Alter 65 und älter",
+          "en": "Returns 7; the line only runs for age 65 and older"
+        },
+        {
+          "de": "Gibt age minus 7 zurück",
+          "en": "Returns age minus 7"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile gehört zum `else`. Für `ticket_price(70)` sind beide Bedingungen falsch, also kommt 7 zurück. Mit Alter 65 genau ebenso, denn `65 < 65` ist falsch.\n\nJeder Zweig gibt eine feste Zahl zurück, die Preisstufe.",
+        "en": "The line belongs to the `else`. For `ticket_price(70)` both conditions are false, so 7 comes back. The same with exactly 65, since `65 < 65` is false.\n\nEvery branch returns a fixed number, the price tier."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt den Preis 10 für alle Altersgruppen zurück",
+        "en": "Returns the price 10 for all age groups"
+      },
+      {
+        "de": "Gibt das Alter des Kunden plus 5 zurück",
+        "en": "Returns the customer's age plus 5"
+      },
+      {
+        "de": "Gibt für Kinder 10 und für Senioren 5 zurück",
+        "en": "Returns 10 for children and 5 for seniors"
+      },
+      {
+        "de": "Gibt den Ticketpreis nach Alter zurück: unter 12 kostet es 5, bis 64 kostet es 10, ab 65 kostet es 7",
+        "en": "Returns the ticket price by age: under 12 costs 5, up to 64 costs 10, from 65 costs 7"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`ticket_price(8)` gibt `5` zurück, `ticket_price(30)` gibt `10` zurück, `ticket_price(70)` gibt `7` zurück. Die Kette `if`/`elif`/`else` wählt genau einen der drei Fälle.\n\nDie Reihenfolge ist wichtig: Würde man zuerst `age < 65` prüfen, bekäme jedes Kind den Preis 10.",
+      "en": "`ticket_price(8)` returns `5`, `ticket_price(30)` returns `10`, `ticket_price(70)` returns `7`. The `if`/`elif`/`else` chain picks exactly one of the three cases.\n\nThe order matters: if you checked `age < 65` first, every child would get the price 10."
+    }
+  }
+}

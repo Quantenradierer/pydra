@@ -1,0 +1,187 @@
+{
+  "id": "sign",
+  "code": "def sign(number):\n    if number > 0:\n        return \"positive\"\n    if number < 0:\n        return \"negative\"\n    return \"zero\"",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Ändert das Vorzeichen von number",
+          "en": "Changes the sign of number"
+        },
+        {
+          "de": "Definiert eine Funktion sign mit dem Parameter number",
+          "en": "Defines a function sign with the parameter number"
+        },
+        {
+          "de": "Unterschreibt number mit einem Zeichen",
+          "en": "Signs number with a mark"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion sign auf",
+          "en": "Calls the built-in function sign"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`def` legt die Funktion `sign` an. Englisch bedeutet „sign“ hier das Vorzeichen einer Zahl: plus oder minus. Geprüft wird erst bei einem Aufruf wie `sign(-4)`.\n\n`number` ist der Parameter, ein Platzhalter für die Zahl.",
+        "en": "`def` creates the function `sign`. In maths, the \"sign\" of a number is whether it is plus or minus. Checking only happens on a call such as `sign(-4)`.\n\n`number` is the parameter, a placeholder for the number."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob number gleich 0 ist",
+          "en": "Checks whether number equals 0"
+        },
+        {
+          "de": "Setzt number auf 0",
+          "en": "Sets number to 0"
+        },
+        {
+          "de": "Prüft, ob number größer als 0 ist; nur dann läuft die eingerückte Zeile darunter",
+          "en": "Checks whether number is greater than 0; only then does the indented line below run"
+        },
+        {
+          "de": "Prüft, ob number mindestens 0 ist",
+          "en": "Checks whether number is at least 0"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`>` heißt „größer als“. Für 5 stimmt `5 > 0`, für 0 und für -3 nicht. Genau 0 ist also nicht größer als 0.\n\nWürde man `>=` schreiben, wäre auch 0 dabei.",
+        "en": "`>` means \"greater than\". For 5, `5 > 0` is true; for 0 and -3 it is not. Exactly 0 is not greater than 0.\n\nWith `>=` the 0 would be included as well."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt \"positive\" immer zurück",
+          "en": "Always returns \"positive\""
+        },
+        {
+          "de": "Zeigt \"positive\" auf dem Bildschirm an",
+          "en": "Prints \"positive\" on the screen"
+        },
+        {
+          "de": "Gibt die Variable positive zurück",
+          "en": "Returns the variable positive"
+        },
+        {
+          "de": "Gibt den Text \"positive\" zurück und beendet die Funktion, wenn die Zahl größer als 0 ist",
+          "en": "Returns the text \"positive\" and ends the function if the number is greater than 0"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`\"positive\"` steht in Anführungszeichen und ist deshalb ein Text. Ohne Anführungszeichen suchte Python eine Variable `positive` und gäbe einen Fehler.\n\nDie Zeile ist unter dem `if` eingerückt. Sie läuft nur für positive Zahlen, und `return` beendet die Funktion sofort.",
+        "en": "`\"positive\"` is in quotation marks and therefore text. Without quotation marks Python would look for a variable `positive` and give an error.\n\nThe line is indented under the `if`. It only runs for positive numbers, and `return` ends the function right away."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob number kleiner als 0 ist; nur dann läuft die eingerückte Zeile darunter",
+          "en": "Checks whether number is less than 0; only then does the indented line below run"
+        },
+        {
+          "de": "Prüft, ob number negativ geschrieben wurde, also mit Minus als Text",
+          "en": "Checks whether number was written as text with a minus"
+        },
+        {
+          "de": "Läuft nur, wenn die Zeile 2 stimmte",
+          "en": "Only runs if line 2 was true"
+        },
+        {
+          "de": "Setzt number auf eine negative Zahl",
+          "en": "Sets number to a negative number"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Das ist ein zweites, eigenständiges `if`. Es wird nur erreicht, wenn Zeile 3 nicht schon zurückgegeben hat, also bei 0 und negativen Zahlen.\n\n`<` heißt „kleiner als“. Für -3 stimmt `-3 < 0`, für 0 nicht.",
+        "en": "This is a second, independent `if`. It is only reached if line 3 has not already returned, so for 0 and negative numbers.\n\n`<` means \"less than\". For -3, `-3 < 0` is true; for 0 it is not."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt den Text \"negative\" zurück, wenn die Zahl größer als 0 ist",
+          "en": "Returns the text \"negative\" if the number is greater than 0"
+        },
+        {
+          "de": "Gibt \"negative\" zurück, wenn die Zahl kleiner als 0 ist",
+          "en": "Returns \"negative\" if the number is less than 0"
+        },
+        {
+          "de": "Gibt die Zahl number mit Minus davor zurück",
+          "en": "Returns number with a minus in front"
+        },
+        {
+          "de": "Zeigt \"negative\" auf dem Bildschirm an",
+          "en": "Prints \"negative\" on the screen"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Die Zeile ist unter dem zweiten `if` eingerückt, läuft also nur für Zahlen kleiner als 0. Dort wird der Text `\"negative\"` zurückgegeben.\n\nFür 0 wird die Zeile übersprungen. Dann geht es mit Zeile 6 weiter.",
+        "en": "The line is indented under the second `if`, so it only runs for numbers less than 0. There the text `\"negative\"` is returned.\n\nFor 0 the line is skipped. Then execution continues with line 6."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt \"zero\" bei jeder Zahl zurück, zusätzlich zu den anderen Texten",
+          "en": "Returns \"zero\" for every number, in addition to the other texts"
+        },
+        {
+          "de": "Setzt number auf 0",
+          "en": "Sets number to 0"
+        },
+        {
+          "de": "Gibt \"zero\" zurück; die Zeile wird nur erreicht, wenn die Zahl weder positiv noch negativ ist",
+          "en": "Returns \"zero\"; the line is only reached when the number is neither positive nor negative"
+        },
+        {
+          "de": "Gibt die Zahl 0 zurück",
+          "en": "Returns the number 0"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt und gehört zu keinem `if`. Sie läuft nur, wenn keine der beiden Bedingungen gestimmt hat, also nur für 0.\n\nDer Rückgabewert ist der Text `\"zero\"` (mit Anführungszeichen), nicht die Zahl 0.",
+        "en": "The line is not indented and belongs to no `if`. It only runs when neither condition was true, so only for 0.\n\nThe return value is the text `\"zero\"` (with quotation marks), not the number 0."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Zahl ohne ihr Vorzeichen zurück: `sign(-3)` ergibt 3",
+        "en": "Returns the number without its sign: `sign(-3)` gives 3"
+      },
+      {
+        "de": "Gibt immer \"positive\" zurück",
+        "en": "Always returns \"positive\""
+      },
+      {
+        "de": "Gibt True zurück, wenn die Zahl positiv ist, sonst False",
+        "en": "Returns True if the number is positive, otherwise False"
+      },
+      {
+        "de": "Sagt, ob eine Zahl positiv, negativ oder null ist: `sign(5)` ergibt \"positive\", `sign(-3)` \"negative\", `sign(0)` \"zero\"",
+        "en": "Says whether a number is positive, negative or zero: `sign(5)` gives \"positive\", `sign(-3)` \"negative\", `sign(0)` \"zero\""
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Die drei Fälle werden nacheinander geprüft. `sign(5)` endet in Zeile 3, `sign(-3)` in Zeile 5, und `sign(0)` fällt durch beide Prüfungen bis Zeile 6.\n\nDie letzte Zeile braucht keine eigene Bedingung: Was übrig bleibt, kann nur 0 sein. Vorzeichen-Funktionen gibt es auch in anderen Sprachen.",
+      "en": "The three cases are checked one after another. `sign(5)` ends in line 3, `sign(-3)` in line 5, and `sign(0)` falls through both checks to line 6.\n\nThe last line needs no condition of its own: what is left can only be 0. Sign functions exist in other languages too."
+    }
+  }
+}

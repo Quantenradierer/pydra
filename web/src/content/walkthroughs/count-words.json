@@ -1,0 +1,135 @@
+{
+  "id": "count-words",
+  "code": "def count_words(sentence):\n    words = sentence.split()\n    count = len(words)\n    return count",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Zählt sofort die Wörter eines Satzes",
+          "en": "Immediately counts the words of a sentence"
+        },
+        {
+          "de": "Speichert den Satz in einer Variable count_words",
+          "en": "Stores the sentence in a variable count_words"
+        },
+        {
+          "de": "Definiert eine Funktion count_words mit dem Parameter sentence",
+          "en": "Defines a function count_words with the parameter sentence"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion count_words auf",
+          "en": "Calls the built-in function count_words"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`def` legt die Funktion `count_words` („Wörter zählen“) an. Gezählt wird erst bei einem Aufruf wie `count_words(\"I like Python\")`.\n\n`sentence` (Satz) ist der Parameter, ein Platzhalter für den Text, den man übergibt.",
+        "en": "`def` creates the function `count_words`. Counting only happens on a call such as `count_words(\"I like Python\")`.\n\n`sentence` is the parameter, a placeholder for the text you pass in."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Zählt die Leerzeichen im Satz",
+          "en": "Counts the spaces in the sentence"
+        },
+        {
+          "de": "Teilt den Satz in einzelne Buchstaben",
+          "en": "Splits the sentence into single letters"
+        },
+        {
+          "de": "Macht aus dem Satz ein einziges langes Wort",
+          "en": "Turns the sentence into one single long word"
+        },
+        {
+          "de": "Teilt den Satz an den Leerzeichen in eine Liste von Wörtern und speichert sie in words",
+          "en": "Splits the sentence at the spaces into a list of words and stores it in words"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`.split()` zerlegt einen Text an den Leerzeichen und gibt eine Liste zurück: aus `\"I like Python\"` wird `[\"I\", \"like\", \"Python\"]`.\n\nDie Liste speichert `=` in `words` (Wörter). Einzelne Buchstaben würde man mit `list(sentence)` bekommen.",
+        "en": "`.split()` cuts a string at the spaces and returns a list: `\"I like Python\"` becomes `[\"I\", \"like\", \"Python\"]`.\n\nThe `=` stores the list in `words`. Single letters would come from `list(sentence)`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Zählt, wie viele Einträge die Liste words hat, und speichert die Zahl in count",
+          "en": "Counts how many entries the list words has and stores the number in count"
+        },
+        {
+          "de": "Zählt die Buchstaben in allen Wörtern",
+          "en": "Counts the letters in all words"
+        },
+        {
+          "de": "Gibt das letzte Wort der Liste zurück",
+          "en": "Gets the last word of the list"
+        },
+        {
+          "de": "Zählt die Wörter und gibt sie auf dem Bildschirm aus",
+          "en": "Counts the words and prints them on the screen"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`len()` liefert die Länge, bei einer Liste die Anzahl der Einträge. Bei drei Wörtern ist `len(words)` gleich 3.\n\nDie Buchstaben zu zählen wäre `len(sentence)`. Hier wird die Liste gezählt, deshalb zählt jedes Wort einmal, egal wie lang es ist.",
+        "en": "`len()` gives the length, for a list the number of entries. With three words, `len(words)` is 3.\n\nCounting the letters would be `len(sentence)`. Here the list is counted, so every word counts once, however long it is."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Zeigt count auf dem Bildschirm an",
+          "en": "Prints count on the screen"
+        },
+        {
+          "de": "Gibt die Zahl in count an den Aufrufer zurück",
+          "en": "Hands the number in count back to the caller"
+        },
+        {
+          "de": "Gibt die Liste words zurück",
+          "en": "Returns the list words"
+        },
+        {
+          "de": "Zählt count um 1 hoch und gibt es zurück",
+          "en": "Increases count by 1 and returns it"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`return count` gibt die gespeicherte Zahl zurück, hier 3. Verändert wird dabei nichts, `count` wird nicht um 1 erhöht.\n\nDie Liste `words` bleibt in der Funktion: Sie war nur ein Zwischenschritt.",
+        "en": "`return count` hands back the stored number, here 3. Nothing is changed; `count` is not increased by 1.\n\nThe list `words` stays inside the function: it was only an in-between step."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Anzahl der Buchstaben zurück: `count_words(\"I like Python\")` ergibt 11",
+        "en": "Returns the number of letters: `count_words(\"I like Python\")` gives 11"
+      },
+      {
+        "de": "Gibt die Wörter als Liste zurück",
+        "en": "Returns the words as a list"
+      },
+      {
+        "de": "Gibt die Anzahl der Wörter eines Satzes zurück: `count_words(\"I like Python\")` ergibt 3",
+        "en": "Returns the number of words in a sentence: `count_words(\"I like Python\")` gives 3"
+      },
+      {
+        "de": "Gibt das längste Wort des Satzes zurück",
+        "en": "Returns the longest word of the sentence"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Der Satz wird in eine Liste von Wörtern zerlegt und die Länge dieser Liste ist die Antwort. `count_words(\"one two\")` gibt `2` zurück, `count_words(\"Hello\")` gibt `1` zurück.\n\nAuch ein leerer Satz funktioniert: `\"\".split()` ist eine leere Liste, also kommt `0` heraus.",
+      "en": "The sentence is split into a list of words and the length of that list is the answer. `count_words(\"one two\")` returns `2`, `count_words(\"Hello\")` returns `1`.\n\nAn empty sentence works too: `\"\".split()` is an empty list, so `0` comes out."
+    }
+  }
+}

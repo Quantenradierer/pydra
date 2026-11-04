@@ -1,0 +1,135 @@
+{
+  "id": "full-name",
+  "code": "def full_name(first, last):\n    name = first + \" \" + last\n    nice = name.title()\n    return nice",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Speichert den Namen \"first last\" in full_name",
+          "en": "Stores the name \"first last\" in full_name"
+        },
+        {
+          "de": "Gibt den vollen Namen auf dem Bildschirm aus",
+          "en": "Prints the full name on the screen"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion full_name auf",
+          "en": "Calls the built-in function full_name"
+        },
+        {
+          "de": "Definiert eine Funktion full_name mit den Parametern first und last",
+          "en": "Defines a function full_name with the parameters first and last"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`def` legt die Funktion `full_name` (voller Name) an. Der Körper läuft erst bei einem Aufruf wie `full_name(\"ada\", \"lovelace\")`.\n\n`first` (Vorname) und `last` (Nachname) sind Parameter, also Platzhalter für die zwei Texte, die man übergibt. Eine eingebaute Funktion `full_name` gibt es nicht.",
+        "en": "`def` creates the function `full_name`. The body only runs on a call such as `full_name(\"ada\", \"lovelace\")`.\n\n`first` and `last` are parameters, placeholders for the two pieces of text you pass in. Python has no built-in function `full_name`."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Hängt first, ein Leerzeichen und last aneinander und speichert den Text in name",
+          "en": "Joins first, a space and last together and stores the text in name"
+        },
+        {
+          "de": "Addiert die Zahlen first und last",
+          "en": "Adds the numbers first and last"
+        },
+        {
+          "de": "Hängt first und last ohne Leerzeichen aneinander",
+          "en": "Joins first and last without a space"
+        },
+        {
+          "de": "Speichert nur das Leerzeichen in name",
+          "en": "Stores only the space in name"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Bei Texten hängt `+` die Stücke aneinander (Verkettung). Das Leerzeichen \" \" steht in Anführungszeichen und kommt als eigenes Stück dazwischen: `\"ada\" + \" \" + \"lovelace\"` ergibt `\"ada lovelace\"`.\n\nOhne das mittlere Stück würde der Name zusammenkleben: `\"adalovelace\"`.",
+        "en": "With strings, `+` joins the pieces together (concatenation). The space \" \" is in quotation marks and goes in between as a piece of its own: `\"ada\" + \" \" + \"lovelace\"` gives `\"ada lovelace\"`.\n\nWithout the middle piece the name would stick together: `\"adalovelace\"`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Macht alle Buchstaben in name zu Großbuchstaben",
+          "en": "Turns all letters in name into capitals"
+        },
+        {
+          "de": "Lässt in name jedes Wort mit einem Großbuchstaben beginnen und speichert den Text in nice",
+          "en": "Makes every word in name start with a capital letter and stores the text in nice"
+        },
+        {
+          "de": "Macht nur den allerersten Buchstaben in name groß",
+          "en": "Capitalizes only the very first letter in name"
+        },
+        {
+          "de": "Gibt name einen Titel wie „Dr.“",
+          "en": "Gives name a title such as \"Dr.\""
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`.title()` ist eine Methode von Texten und liefert eine Kopie, in der jedes Wort mit einem Großbuchstaben anfängt: aus `\"ada lovelace\"` wird `\"Ada Lovelace\"`.\n\nAlle Buchstaben groß wäre `.upper()`. `name` selbst bleibt unverändert, `nice` (hübsch) ist die neue Kopie.",
+        "en": "`.title()` is a method of strings and gives back a copy in which every word starts with a capital letter: `\"ada lovelace\"` becomes `\"Ada Lovelace\"`.\n\nAll letters in capitals would be `.upper()`. `name` itself stays unchanged; `nice` is the new copy."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Zeigt nice auf dem Bildschirm an",
+          "en": "Prints nice on the screen"
+        },
+        {
+          "de": "Gibt den Text \"nice\" zurück",
+          "en": "Returns the text \"nice\""
+        },
+        {
+          "de": "Gibt den Text in nice an den Aufrufer zurück",
+          "en": "Hands the text in nice back to the caller"
+        },
+        {
+          "de": "Gibt den Text in name zurück",
+          "en": "Returns the text in name"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`return nice` gibt den Wert der Variable zurück, hier `\"Ada Lovelace\"`. Das Wort `nice` ohne Anführungszeichen ist ein Variablenname.\n\nDer Aufrufer kann das Ergebnis weiterverwenden, zum Beispiel `print(full_name(\"ada\", \"lovelace\"))`.",
+        "en": "`return nice` hands back the value of the variable, here `\"Ada Lovelace\"`. The word `nice` without quotation marks is a variable name.\n\nThe caller can keep using the result, for example `print(full_name(\"ada\", \"lovelace\"))`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt nur den Nachnamen groß geschrieben zurück",
+        "en": "Returns only the last name, capitalized"
+      },
+      {
+        "de": "Macht beide Namen komplett groß: \"ADA LOVELACE\"",
+        "en": "Makes both names fully uppercase: \"ADA LOVELACE\""
+      },
+      {
+        "de": "Gibt Vor- und Nachname als Liste zurück",
+        "en": "Returns first and last name as a list"
+      },
+      {
+        "de": "Setzt Vor- und Nachname mit Leerzeichen zusammen und schreibt beide groß: aus \"ada\" und \"lovelace\" wird \"Ada Lovelace\"",
+        "en": "Puts first and last name together with a space and capitalizes both: \"ada\" and \"lovelace\" become \"Ada Lovelace\""
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`full_name(\"ada\", \"lovelace\")` verkettet zu `\"ada lovelace\"`, macht daraus `\"Ada Lovelace\"` und gibt das zurück. Auch `\"GRACE\"` und `\"hopper\"` würden bei `.title()` zu `\"Grace Hopper\"`.\n\nAusgegeben wird nichts. Wer das Ergebnis sehen will, ruft die Funktion in `print()` auf.",
+      "en": "`full_name(\"ada\", \"lovelace\")` joins to `\"ada lovelace\"`, turns that into `\"Ada Lovelace\"` and returns it. Even `\"GRACE\"` and `\"hopper\"` become `\"Grace Hopper\"` with `.title()`.\n\nNothing is printed. To see the result, call the function inside `print()`."
+    }
+  }
+}

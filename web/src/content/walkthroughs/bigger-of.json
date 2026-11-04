@@ -1,0 +1,135 @@
+{
+  "id": "bigger-of",
+  "code": "def bigger_of(a, b):\n    if a > b:\n        return a\n    return b",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion bigger_of mit den Parametern a und b",
+          "en": "Defines a function bigger_of with the parameters a and b"
+        },
+        {
+          "de": "Vergleicht sofort die Variablen a und b",
+          "en": "Immediately compares the variables a and b"
+        },
+        {
+          "de": "Erstellt eine Variable bigger_of aus a und b",
+          "en": "Creates a variable bigger_of from a and b"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion bigger_of auf",
+          "en": "Calls the built-in function bigger_of"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`def` legt die Funktion `bigger_of` („größere von“) an. Verglichen wird erst bei einem Aufruf wie `bigger_of(7, 3)`.\n\n`a` und `b` sind die Parameter, Platzhalter für die zwei Zahlen. Ein kurzer Name ist hier in Ordnung, weil beide Zahlen gleichberechtigt sind.",
+        "en": "`def` creates the function `bigger_of`. Comparing only happens on a call such as `bigger_of(7, 3)`.\n\n`a` and `b` are the parameters, placeholders for the two numbers. Short names are fine here because both numbers are equal in rank."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Setzt a auf den Wert von b",
+          "en": "Sets a to the value of b"
+        },
+        {
+          "de": "Prüft, ob a größer als b ist; nur dann läuft die eingerückte Zeile darunter",
+          "en": "Checks whether a is greater than b; only then does the indented line below run"
+        },
+        {
+          "de": "Prüft, ob a gleich b ist",
+          "en": "Checks whether a equals b"
+        },
+        {
+          "de": "Gibt a zurück, wenn a kleiner als b ist",
+          "en": "Returns a if a is smaller than b"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`>` vergleicht und liefert `True` oder `False`. Bei `a = 7` und `b = 3` stimmt `7 > 3`, der Körper darunter läuft. Bei `a = 2` und `b = 9` stimmt es nicht, die Zeile wird übersprungen.\n\nDer Doppelpunkt am Ende und die Einrückung der nächsten Zeile zeigen, was zum `if` gehört.",
+        "en": "`>` compares and gives `True` or `False`. With `a = 7` and `b = 3`, `7 > 3` is true and the body below runs. With `a = 2` and `b = 9` it is not, and the line is skipped.\n\nThe colon at the end and the indentation of the next line show what belongs to the `if`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt a immer zurück",
+          "en": "Always returns a"
+        },
+        {
+          "de": "Gibt a zurück, wenn b größer ist",
+          "en": "Returns a when b is bigger"
+        },
+        {
+          "de": "Gibt a zurück und beendet die Funktion; die Zeile läuft nur, wenn a größer als b ist",
+          "en": "Returns a and ends the function; the line only runs if a is greater than b"
+        },
+        {
+          "de": "Zeigt a auf dem Bildschirm an",
+          "en": "Prints a on the screen"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile ist unter dem `if` eingerückt, gehört also dazu. Stimmt `a > b`, wird `a` zurückgegeben und die Funktion endet sofort. Zeile 4 wird dann nicht mehr erreicht.\n\nStimmt die Bedingung nicht, wird die Zeile übersprungen.",
+        "en": "The line is indented under the `if`, so it belongs to it. If `a > b` is true, `a` is returned and the function ends right away. Line 4 is then never reached.\n\nIf the condition is false, the line is skipped."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt b zurück, auch wenn a größer war und schon zurückgegeben wurde",
+          "en": "Returns b even if a was bigger and has already been returned"
+        },
+        {
+          "de": "Gibt b nur zurück, wenn b gleich a ist",
+          "en": "Returns b only if b equals a"
+        },
+        {
+          "de": "Setzt b auf a",
+          "en": "Sets b to a"
+        },
+        {
+          "de": "Gibt b zurück; die Zeile wird nur erreicht, wenn a nicht größer als b ist",
+          "en": "Returns b; the line is only reached if a is not greater than b"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt, gehört also nicht zum `if`. Sie läuft nur, wenn zuvor nicht zurückgegeben wurde, also bei `a <= b`.\n\nBei `bigger_of(5, 5)` kommt auch `b` zurück: Bei gleichen Zahlen ist egal, welche man nimmt. Ein `else` ist nicht nötig.",
+        "en": "The line is not indented, so it does not belong to the `if`. It only runs if nothing was returned before, that is when `a <= b`.\n\nWith `bigger_of(5, 5)`, `b` comes back too: with equal numbers it does not matter which one you take. An `else` is not needed."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die größere von zwei Zahlen zurück: `bigger_of(7, 3)` ergibt 7, `bigger_of(2, 9)` ergibt 9",
+        "en": "Returns the bigger of two numbers: `bigger_of(7, 3)` gives 7, `bigger_of(2, 9)` gives 9"
+      },
+      {
+        "de": "Gibt immer die erste Zahl zurück",
+        "en": "Always returns the first number"
+      },
+      {
+        "de": "Gibt die kleinere von zwei Zahlen zurück",
+        "en": "Returns the smaller of two numbers"
+      },
+      {
+        "de": "Gibt True zurück, wenn a größer als b ist, sonst False",
+        "en": "Returns True if a is greater than b, otherwise False"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Ist `a` größer, kommt `a` zurück, sonst `b`. `bigger_of(7, 3)` gibt `7` zurück, `bigger_of(2, 9)` gibt `9` zurück.\n\nZurück kommt eine der Zahlen selbst, kein `True` oder `False`. Python hat dafür auch die eingebaute Funktion `max()`.",
+      "en": "If `a` is bigger, `a` comes back, otherwise `b`. `bigger_of(7, 3)` returns `7`, `bigger_of(2, 9)` returns `9`.\n\nWhat comes back is one of the numbers itself, not `True` or `False`. Python also has the built-in function `max()` for this."
+    }
+  }
+}

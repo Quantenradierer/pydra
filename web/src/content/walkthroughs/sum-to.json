@@ -1,0 +1,161 @@
+{
+  "id": "sum-to",
+  "code": "def sum_to(n):\n    total = 0\n    for number in range(1, n + 1):\n        total = total + number\n    return total",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Addiert sofort alle Zahlen bis n",
+          "en": "Immediately adds up all numbers up to n"
+        },
+        {
+          "de": "Definiert eine Funktion sum_to mit dem Parameter n",
+          "en": "Defines a function sum_to with the parameter n"
+        },
+        {
+          "de": "Erstellt eine Variable sum_to mit dem Wert n",
+          "en": "Creates a variable sum_to with the value n"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion sum_to auf",
+          "en": "Calls the built-in function sum_to"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`def` legt die Funktion `sum_to` („Summe bis“) an. Gerechnet wird erst bei einem Aufruf wie `sum_to(4)`.\n\n`n` ist der Parameter, ein Platzhalter für die Zahl, bis zu der addiert wird. Kurze Namen wie `n` sind für Zahlen üblich.",
+        "en": "`def` creates the function `sum_to`. Calculating only happens on a call such as `sum_to(4)`.\n\n`n` is the parameter, a placeholder for the number up to which we add. Short names like `n` are common for numbers."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Vergleicht total mit 0",
+          "en": "Compares total with 0"
+        },
+        {
+          "de": "Setzt n auf 0",
+          "en": "Sets n to 0"
+        },
+        {
+          "de": "Legt die Variable total an und setzt sie auf 0 als Startwert der Summe",
+          "en": "Creates the variable total and sets it to 0 as the starting value of the sum"
+        },
+        {
+          "de": "Gibt total mit dem Wert 0 zurück",
+          "en": "Returns total with the value 0"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Eine Summe braucht einen Startwert, bei dem noch nichts addiert ist: 0. `total` (Gesamtsumme) sammelt später die Ergebnisse.\n\nDas einfache `=` speichert, es vergleicht nicht. Der Startwert muss vor der Schleife stehen, sonst würde er in jedem Durchlauf zurückgesetzt.",
+        "en": "A sum needs a starting value where nothing has been added yet: 0. `total` collects the results later.\n\nThe single `=` stores; it does not compare. The starting value must be before the loop, otherwise it would be reset in every pass."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Zahl von 1 bis n - 1",
+          "en": "Repeats the indented part for every number from 1 to n - 1"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil genau n Mal, number bleibt immer 1",
+          "en": "Repeats the indented part exactly n times, number always stays 1"
+        },
+        {
+          "de": "Prüft, ob number zwischen 1 und n liegt",
+          "en": "Checks whether number lies between 1 and n"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Zahl von 1 bis n; number ist dabei jeweils die aktuelle Zahl",
+          "en": "Repeats the indented part for every number from 1 to n; number is the current number each time"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`range(1, n + 1)` erzeugt die Zahlen von 1 bis n. Das Ende ist bei `range` nie dabei, deshalb `n + 1`. Für `n = 4` sind das 1, 2, 3, 4.\n\n`for number in ...` führt den eingerückten Teil einmal pro Zahl aus, `number` hat bei jedem Durchlauf die nächste Zahl.",
+        "en": "`range(1, n + 1)` produces the numbers from 1 to n. The end of a `range` is never included, which is why it is `n + 1`. For `n = 4` that is 1, 2, 3, 4.\n\n`for number in ...` runs the indented part once per number, and `number` holds the next number in each pass."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Addiert number zu total und speichert das Ergebnis wieder in total",
+          "en": "Adds number to total and stores the result in total again"
+        },
+        {
+          "de": "Setzt total auf number",
+          "en": "Sets total to number"
+        },
+        {
+          "de": "Vergleicht total mit number",
+          "en": "Compares total with number"
+        },
+        {
+          "de": "Addiert total und number und gibt sie zurück",
+          "en": "Adds total and number and returns them"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Rechts wird zuerst gerechnet, dann gespeichert: `total + number` mit dem alten Wert von `total`, das Ergebnis ersetzt ihn.\n\nBei `n = 4` wächst `total` so: 0, 1, 3, 6, 10. Die Zeile ist eingerückt, läuft also in jedem Durchlauf der Schleife.",
+        "en": "The right-hand side is calculated first, then stored: `total + number` with the old value of `total`, and the result replaces it.\n\nFor `n = 4`, `total` grows like this: 0, 1, 3, 6, 10. The line is indented, so it runs in every pass of the loop."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt total schon nach dem ersten Durchlauf der Schleife zurück",
+          "en": "Returns total after the first pass of the loop already"
+        },
+        {
+          "de": "Gibt total zurück; die Zeile steht nach der Schleife und läuft erst, wenn alle Zahlen addiert sind",
+          "en": "Returns total; the line is after the loop and only runs once all numbers have been added"
+        },
+        {
+          "de": "Zeigt total in jedem Durchlauf auf dem Bildschirm an",
+          "en": "Prints total on the screen in every pass"
+        },
+        {
+          "de": "Gibt die Zahl n zurück",
+          "en": "Returns the number n"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt, gehört also nicht zur Schleife. Erst wenn die Schleife durch ist, wird `total` zurückgegeben: `sum_to(4)` ergibt 10.\n\nHätte `return` innerhalb der Schleife gestanden, wäre die Funktion schon nach der ersten Zahl zu Ende gewesen.",
+        "en": "The line is not indented, so it is not part of the loop. Only once the loop is finished is `total` returned: `sum_to(4)` gives 10.\n\nIf `return` had been inside the loop, the function would have ended after the first number."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Zahl n zurück: `sum_to(4)` ergibt 4",
+        "en": "Returns the number n: `sum_to(4)` gives 4"
+      },
+      {
+        "de": "Multipliziert alle Zahlen von 1 bis n: `sum_to(4)` ergibt 24",
+        "en": "Multiplies all numbers from 1 to n: `sum_to(4)` gives 24"
+      },
+      {
+        "de": "Addiert alle ganzen Zahlen von 1 bis n: `sum_to(4)` ergibt 10",
+        "en": "Adds up all whole numbers from 1 to n: `sum_to(4)` gives 10"
+      },
+      {
+        "de": "Zählt, wie viele Zahlen bis n gehen: `sum_to(4)` ergibt 4",
+        "en": "Counts how many numbers there are up to n: `sum_to(4)` gives 4"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`sum_to(4)` rechnet 1 + 2 + 3 + 4 und gibt `10` zurück, `sum_to(1)` gibt `1` zurück. Bei `sum_to(0)` ist die Schleife leer und die Antwort ist der Startwert `0`.\n\nDas Muster „Startwert vor der Schleife, in der Schleife sammeln, danach zurückgeben“ kommt in vielen Funktionen vor.",
+      "en": "`sum_to(4)` calculates 1 + 2 + 3 + 4 and returns `10`, `sum_to(1)` returns `1`. With `sum_to(0)` the loop is empty and the answer is the starting value `0`.\n\nThe pattern \"starting value before the loop, collect inside the loop, return afterwards\" appears in many functions."
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "id": "find-index",
+  "code": "def find_index(items, target):\n    for index in range(len(items)):\n        if items[index] == target:\n            return index\n    return -1",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Sucht sofort target in items",
+          "en": "Immediately searches for target in items"
+        },
+        {
+          "de": "Erstellt eine Variable find_index aus items und target",
+          "en": "Creates a variable find_index from items and target"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion find_index auf",
+          "en": "Calls the built-in function find_index"
+        },
+        {
+          "de": "Definiert eine Funktion find_index mit den Parametern items und target",
+          "en": "Defines a function find_index with the parameters items and target"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`def` legt die Funktion `find_index` („Position finden“) an. Gesucht wird erst beim Aufruf, etwa `find_index([\"a\", \"b\", \"c\"], \"b\")`.\n\n`items` ist die Liste, in der gesucht wird, `target` (Ziel) der gesuchte Wert.",
+        "en": "`def` creates the function `find_index` (\"find the position\"). Searching only happens on a call, such as `find_index([\"a\", \"b\", \"c\"], \"b\")`.\n\n`items` is the list to search in, `target` the value we look for."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Position 0, 1, 2, ... bis zum Ende der Liste",
+          "en": "Repeats the indented part for every position 0, 1, 2, ... up to the end of the list"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Element von items, index ist das Element selbst",
+          "en": "Repeats the indented part for every item of items, index being the item itself"
+        },
+        {
+          "de": "Zählt die Elemente von items",
+          "en": "Counts the items of items"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für die Positionen 1 bis len(items)",
+          "en": "Repeats the indented part for the positions 1 to len(items)"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`len(items)` ist die Länge der Liste, hier 3. `range(3)` liefert die Zahlen 0, 1, 2: genau die Positionen der Elemente, denn gezählt wird ab 0.\n\n`index` ist also bei jedem Durchlauf eine Position, nicht das Element. Das Element holt man mit `items[index]`.",
+        "en": "`len(items)` is the length of the list, here 3. `range(3)` gives the numbers 0, 1, 2: exactly the positions of the items, since counting starts at 0.\n\nSo `index` is a position in each pass, not the item. The item is fetched with `items[index]`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Setzt das Element an der Position index auf target",
+          "en": "Sets the item at position index to target"
+        },
+        {
+          "de": "Prüft, ob das Element an der Position index gleich target ist",
+          "en": "Checks whether the item at position index equals target"
+        },
+        {
+          "de": "Prüft, ob index gleich target ist",
+          "en": "Checks whether index equals target"
+        },
+        {
+          "de": "Prüft, ob target irgendwo in items vorkommt",
+          "en": "Checks whether target occurs anywhere in items"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`items[index]` holt das Element an der aktuellen Position, `==` vergleicht es mit dem gesuchten Wert. Ein einzelnes `=` würde dagegen speichern.\n\nBei `[\"a\", \"b\", \"c\"]` und `\"b\"` stimmt der Vergleich bei Position 1. Bei den anderen Positionen wird die Zeile darunter übersprungen.",
+        "en": "`items[index]` fetches the item at the current position, and `==` compares it with the wanted value. A single `=` would store instead.\n\nWith `[\"a\", \"b\", \"c\"]` and `\"b\"` the comparison is true at position 1. At the other positions the line below is skipped."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt das gefundene Element zurück",
+          "en": "Returns the item that was found"
+        },
+        {
+          "de": "Springt zum nächsten Durchlauf der Schleife",
+          "en": "Jumps to the next pass of the loop"
+        },
+        {
+          "de": "Gibt die aktuelle Position zurück und beendet die Funktion sofort, auch mitten in der Schleife",
+          "en": "Returns the current position and ends the function right away, even in the middle of the loop"
+        },
+        {
+          "de": "Zeigt die Position auf dem Bildschirm an",
+          "en": "Prints the position on the screen"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`return` beendet die ganze Funktion, auch wenn die Schleife noch weiterlaufen könnte. `find_index([\"a\", \"b\", \"c\"], \"b\")` gibt also 1 zurück, ohne die Position 2 noch anzusehen.\n\nZurück kommt die Position (`index`), nicht das Element. Und gibt es das Ziel mehrmals, zählt der erste Treffer.",
+        "en": "`return` ends the whole function, even though the loop could carry on. So `find_index([\"a\", \"b\", \"c\"], \"b\")` returns 1 without looking at position 2.\n\nWhat comes back is the position (`index`), not the item. And if the target is there several times, the first hit counts."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt -1 zurück, auch wenn das Ziel gefunden wurde",
+          "en": "Returns -1 even when the target was found"
+        },
+        {
+          "de": "Gibt das letzte Element zurück",
+          "en": "Returns the last item"
+        },
+        {
+          "de": "Läuft in jedem Durchlauf der Schleife",
+          "en": "Runs in every pass of the loop"
+        },
+        {
+          "de": "Gibt -1 zurück; die Zeile wird nur erreicht, wenn die Schleife nichts gefunden hat",
+          "en": "Returns -1; the line is only reached if the loop found nothing"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt und liegt hinter der Schleife. Beim Fund hat `return index` die Funktion schon beendet. Nur wenn kein Element passte, kommt die Schleife zu Ende und diese Zeile dran.\n\n`-1` ist eine übliche Antwort für „nicht gefunden“, denn es gibt keine Position -1 beim Suchen von vorn. Aus `find_index([\"a\", \"b\", \"c\"], \"z\")` wird deshalb -1.",
+        "en": "The line is not indented and sits after the loop. On a find, `return index` has already ended the function. Only if no item matched does the loop finish and this line run.\n\n`-1` is a common answer for \"not found\", since there is no position -1 when searching from the front. So `find_index([\"a\", \"b\", \"c\"], \"z\")` gives -1."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Position des ersten Treffers zurück, oder -1, wenn der Wert nicht in der Liste ist: `find_index([\"a\", \"b\", \"c\"], \"b\")` ergibt 1",
+        "en": "Returns the position of the first match, or -1 if the value is not in the list: `find_index([\"a\", \"b\", \"c\"], \"b\")` gives 1"
+      },
+      {
+        "de": "Gibt das gesuchte Element selbst zurück: \"b\"",
+        "en": "Returns the wanted item itself: \"b\""
+      },
+      {
+        "de": "Gibt die Position des letzten Treffers zurück",
+        "en": "Returns the position of the last match"
+      },
+      {
+        "de": "Gibt True zurück, wenn das Ziel in der Liste ist, sonst False",
+        "en": "Returns True if the target is in the list, otherwise False"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Die Liste wird von vorn durchsucht. Beim ersten Treffer endet die Funktion mit der Position: `find_index([\"a\", \"b\", \"c\"], \"b\")` gibt `1` zurück. Gibt es keinen, kommt `-1` zurück.\n\nDas Muster „in der Schleife früh mit `return` beenden, am Ende ein Standardergebnis“ ist bei Suchfunktionen üblich. Python hat dafür auch `items.index(target)`.",
+      "en": "The list is searched from the front. At the first match the function ends with the position: `find_index([\"a\", \"b\", \"c\"], \"b\")` returns `1`. If there is none, `-1` comes back.\n\nThe pattern \"end early with `return` inside the loop, a default result at the end\" is common for search functions. Python also has `items.index(target)` for this."
+    }
+  }
+}

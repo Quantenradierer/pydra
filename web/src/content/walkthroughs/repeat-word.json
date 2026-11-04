@@ -1,0 +1,135 @@
+{
+  "id": "repeat-word",
+  "code": "def repeat_word(word, times):\n    spaced = word + \" \"\n    line = spaced * times\n    return line.strip()",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Wiederholt das Wort sofort mehrmals",
+          "en": "Immediately repeats the word several times"
+        },
+        {
+          "de": "Definiert eine Funktion repeat_word mit den Parametern word und times",
+          "en": "Defines a function repeat_word with the parameters word and times"
+        },
+        {
+          "de": "Speichert word und times in einer Variable repeat_word",
+          "en": "Stores word and times in a variable repeat_word"
+        },
+        {
+          "de": "Ruft eine eingebaute Funktion repeat_word auf",
+          "en": "Calls a built-in function repeat_word"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`def` legt die Funktion `repeat_word` an („Wort wiederholen“). Wiederholt wird erst bei einem Aufruf wie `repeat_word(\"ha\", 3)`.\n\n`word` ist ein Text, `times` (englisch „mal“) eine Zahl. Beide sind Parameter, also Platzhalter.",
+        "en": "`def` creates the function `repeat_word`. Repeating only happens on a call such as `repeat_word(\"ha\", 3)`.\n\n`word` is a piece of text, `times` is a number. Both are parameters, so placeholders."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Ersetzt word durch ein Leerzeichen",
+          "en": "Replaces word with a space"
+        },
+        {
+          "de": "Entfernt alle Leerzeichen aus word",
+          "en": "Removes all spaces from word"
+        },
+        {
+          "de": "Hängt ein Leerzeichen an word an und speichert das Ergebnis in spaced",
+          "en": "Appends a space to word and stores the result in spaced"
+        },
+        {
+          "de": "Zählt die Leerzeichen in word",
+          "en": "Counts the spaces in word"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`+` verkettet bei Texten: `\"ha\" + \" \"` ergibt `\"ha \"`, das Wort mit einem Leerzeichen dahinter. `spaced` heißt „mit Abstand“.\n\nDieses Leerzeichen sorgt dafür, dass die Wörter später nicht zusammenkleben.",
+        "en": "With strings, `+` joins: `\"ha\" + \" \"` gives `\"ha \"`, the word with a space after it. `spaced` means \"with spacing\".\n\nThat space makes sure the words do not stick together later."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Multipliziert spaced als Zahl mit times",
+          "en": "Multiplies spaced as a number by times"
+        },
+        {
+          "de": "Hängt die Zahl times an spaced an",
+          "en": "Appends the number times to spaced"
+        },
+        {
+          "de": "Wiederholt spaced genau zweimal",
+          "en": "Repeats spaced exactly twice"
+        },
+        {
+          "de": "Wiederholt spaced so oft, wie times angibt, und speichert den langen Text in line",
+          "en": "Repeats spaced as often as times says and stores the long text in line"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Ein Text mal eine ganze Zahl wiederholt den Text: `\"ha \" * 3` ergibt `\"ha ha ha \"`. Bei einer Zahl als Faktor würde `*` dagegen rechnen.\n\nAm Ende steht noch ein Leerzeichen, denn jede Wiederholung bringt ihres mit.",
+        "en": "A string times a whole number repeats the string: `\"ha \" * 3` gives `\"ha ha ha \"`. With numbers on both sides, `*` would calculate instead.\n\nThere is still a space at the end, because every repetition brings its own."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Entfernt Leerzeichen am Anfang und Ende von line und gibt den Rest zurück",
+          "en": "Removes spaces at the start and end of line and returns the rest"
+        },
+        {
+          "de": "Entfernt alle Leerzeichen, auch die in der Mitte",
+          "en": "Removes all spaces, including those in the middle"
+        },
+        {
+          "de": "Zeigt line ohne Leerzeichen auf dem Bildschirm an",
+          "en": "Prints line without spaces on the screen"
+        },
+        {
+          "de": "Gibt line unverändert zurück",
+          "en": "Returns line unchanged"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`.strip()` schneidet Leerzeichen nur an den Rändern ab. Aus `\"ha ha ha \"` wird `\"ha ha ha\"`, die Leerzeichen in der Mitte bleiben.\n\n`return` gibt das Ergebnis zurück. Der Text `line` selbst ändert sich nicht, `.strip()` liefert eine Kopie.",
+        "en": "`.strip()` cuts off spaces only at the edges. `\"ha ha ha \"` becomes `\"ha ha ha\"`, the spaces in the middle stay.\n\n`return` hands the result back. The text `line` itself does not change; `.strip()` gives a copy."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Wiederholt das Wort ohne Leerzeichen: `repeat_word(\"ha\", 3)` ergibt \"hahaha\"",
+        "en": "Repeats the word without spaces: `repeat_word(\"ha\", 3)` gives \"hahaha\""
+      },
+      {
+        "de": "Wiederholt ein Wort mit Leerzeichen dazwischen: `repeat_word(\"ha\", 3)` ergibt \"ha ha ha\"",
+        "en": "Repeats a word with spaces in between: `repeat_word(\"ha\", 3)` gives \"ha ha ha\""
+      },
+      {
+        "de": "Gibt das Wort dreimal auf dem Bildschirm aus",
+        "en": "Prints the word three times on the screen"
+      },
+      {
+        "de": "Zählt, wie oft das Wort vorkommt",
+        "en": "Counts how often the word occurs"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`repeat_word(\"ha\", 3)` baut `\"ha \"`, wiederholt es dreimal zu `\"ha ha ha \"` und schneidet das letzte Leerzeichen ab: `\"ha ha ha\"`.\n\nMit `times = 1` kommt einfach `\"ha\"` heraus. Mit `times = 0` kommt ein leerer Text heraus, denn null Wiederholungen sind nichts.",
+      "en": "`repeat_word(\"ha\", 3)` builds `\"ha \"`, repeats it three times to `\"ha ha ha \"` and cuts off the last space: `\"ha ha ha\"`.\n\nWith `times = 1` you simply get `\"ha\"`. With `times = 0` you get an empty string, because zero repetitions are nothing."
+    }
+  }
+}

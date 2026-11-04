@@ -1,0 +1,187 @@
+{
+  "id": "count-long-words",
+  "code": "def count_long_words(words):\n    count = 0\n    for word in words:\n        if len(word) > 4:\n            count += 1\n    return count",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Zählt sofort die langen Wörter",
+          "en": "Immediately counts the long words"
+        },
+        {
+          "de": "Definiert eine Funktion count_long_words mit dem Parameter words, einer Liste von Wörtern",
+          "en": "Defines a function count_long_words with the parameter words, a list of words"
+        },
+        {
+          "de": "Erstellt eine Variable count_long_words aus words",
+          "en": "Creates a variable count_long_words from words"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion count_long_words auf",
+          "en": "Calls the built-in function count_long_words"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`def` legt die Funktion `count_long_words` („lange Wörter zählen“) an. Der Körper läuft erst beim Aufruf, etwa `count_long_words([\"apple\", \"fig\", \"banana\"])`.\n\n`words` ist der Parameter, ein Platzhalter für die Liste mit Wörtern.",
+        "en": "`def` creates the function `count_long_words`. The body only runs on a call, such as `count_long_words([\"apple\", \"fig\", \"banana\"])`.\n\n`words` is the parameter, a placeholder for the list of words."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Vergleicht count mit 0",
+          "en": "Compares count with 0"
+        },
+        {
+          "de": "Zählt die Wörter in words",
+          "en": "Counts the words in words"
+        },
+        {
+          "de": "Legt den Zähler count an und setzt ihn auf 0",
+          "en": "Creates the counter count and sets it to 0"
+        },
+        {
+          "de": "Gibt 0 zurück",
+          "en": "Returns 0"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Ein Zähler beginnt bei 0, denn am Anfang wurde noch nichts gezählt. In der Schleife wird er hochgezählt.\n\nDie Zeile steht vor der Schleife. Stünde sie darin, würde der Zähler in jedem Durchlauf wieder auf 0 zurückgesetzt.",
+        "en": "A counter starts at 0, because nothing has been counted at the beginning. In the loop it gets counted up.\n\nThe line is before the loop. If it were inside, the counter would be reset to 0 in every pass."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil nur für das erste Wort",
+          "en": "Repeats the indented part only for the first word"
+        },
+        {
+          "de": "Prüft, ob word in words vorkommt",
+          "en": "Checks whether word occurs in words"
+        },
+        {
+          "de": "Teilt jedes Wort in Buchstaben",
+          "en": "Splits each word into letters"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Wort in words; word ist jeweils das aktuelle Wort",
+          "en": "Repeats the indented part for every word in words; word is the current word each time"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`for word in words:` geht die Liste durch. Bei `[\"apple\", \"fig\", \"banana\"]` ist `word` nacheinander `\"apple\"`, `\"fig\"` und `\"banana\"`.\n\nAlles, was darunter eingerückt ist, gehört zur Schleife und läuft einmal pro Wort.",
+        "en": "`for word in words:` goes through the list. With `[\"apple\", \"fig\", \"banana\"]`, `word` is `\"apple\"`, then `\"fig\"`, then `\"banana\"`.\n\nEverything indented below belongs to the loop and runs once per word."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob das aktuelle Wort mehr als 4 Buchstaben hat; nur dann läuft die Zeile darunter",
+          "en": "Checks whether the current word has more than 4 letters; only then does the line below run"
+        },
+        {
+          "de": "Prüft, ob das Wort höchstens 4 Buchstaben hat",
+          "en": "Checks whether the word has at most 4 letters"
+        },
+        {
+          "de": "Prüft, ob das Wort den Buchstaben 4 enthält",
+          "en": "Checks whether the word contains the letter 4"
+        },
+        {
+          "de": "Prüft, ob das Wort mindestens 4 Buchstaben hat",
+          "en": "Checks whether the word has at least 4 letters"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`len(word)` ist die Anzahl der Buchstaben. `\"apple\"` hat 5, also stimmt `5 > 4`. `\"fig\"` hat 3, das stimmt nicht.\n\n`>` bedeutet „größer als“. Ein Wort mit genau 4 Buchstaben zählt also nicht als lang.",
+        "en": "`len(word)` is the number of letters. `\"apple\"` has 5, so `5 > 4` is true. `\"fig\"` has 3, which is not.\n\n`>` means \"greater than\". A word with exactly 4 letters therefore does not count as long."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Setzt count auf 1",
+          "en": "Sets count to 1"
+        },
+        {
+          "de": "Erhöht count um 1; die Zeile läuft nur bei langen Wörtern",
+          "en": "Increases count by 1; the line only runs for long words"
+        },
+        {
+          "de": "Addiert 1 zu word",
+          "en": "Adds 1 to word"
+        },
+        {
+          "de": "Erhöht count bei jedem Wort um 1, egal wie lang es ist",
+          "en": "Increases count by 1 for every word, however long it is"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`count += 1` ist die Kurzform von `count = count + 1`. Der Zähler wird um eins größer.\n\nDie Zeile ist doppelt eingerückt: unter dem `if` in der Schleife. Sie läuft nur, wenn das aktuelle Wort lang ist.",
+        "en": "`count += 1` is the short form of `count = count + 1`. The counter goes up by one.\n\nThe line is indented twice: under the `if` inside the loop. It only runs when the current word is long."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt count nach dem ersten langen Wort zurück",
+          "en": "Returns count after the first long word"
+        },
+        {
+          "de": "Gibt die Liste der langen Wörter zurück",
+          "en": "Returns the list of long words"
+        },
+        {
+          "de": "Gibt count zurück; die Zeile läuft erst, wenn alle Wörter geprüft sind",
+          "en": "Returns count; the line only runs once all words have been checked"
+        },
+        {
+          "de": "Zeigt count auf dem Bildschirm an",
+          "en": "Prints count on the screen"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt und liegt hinter der Schleife. Erst nach allen Wörtern wird die Zahl zurückgegeben: `count_long_words([\"apple\", \"fig\", \"banana\"])` ergibt 2.\n\nZurück kommt die Anzahl, nicht die Wörter selbst.",
+        "en": "The line is not indented and sits after the loop. Only after all words is the number returned: `count_long_words([\"apple\", \"fig\", \"banana\"])` gives 2.\n\nWhat comes back is the number, not the words themselves."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Zählt die Buchstaben aller Wörter zusammen: 14",
+        "en": "Counts the letters of all words together: 14"
+      },
+      {
+        "de": "Gibt das längste Wort der Liste zurück",
+        "en": "Returns the longest word of the list"
+      },
+      {
+        "de": "Zählt die Wörter mit höchstens 4 Buchstaben: 1",
+        "en": "Counts the words with at most 4 letters: 1"
+      },
+      {
+        "de": "Zählt die Wörter in einer Liste, die mehr als 4 Buchstaben haben: `count_long_words([\"apple\", \"fig\", \"banana\"])` ergibt 2",
+        "en": "Counts the words in a list that have more than 4 letters: `count_long_words([\"apple\", \"fig\", \"banana\"])` gives 2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Für jedes Wort wird die Länge geprüft und bei mehr als 4 Buchstaben der Zähler erhöht. `\"apple\"` (5) und `\"banana\"` (6) zählen, `\"fig\"` (3) nicht: Ergebnis `2`.\n\nEin Wort mit genau 4 Buchstaben, etwa `\"pear\"`, zählt nicht mit, weil dort `>` und nicht `>=` steht.",
+      "en": "The length of every word is checked and the counter goes up for more than 4 letters. `\"apple\"` (5) and `\"banana\"` (6) count, `\"fig\"` (3) does not: result `2`.\n\nA word with exactly 4 letters, such as `\"pear\"`, does not count, because it says `>` and not `>=`."
+    }
+  }
+}

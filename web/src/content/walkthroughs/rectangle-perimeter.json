@@ -1,0 +1,135 @@
+{
+  "id": "rectangle-perimeter",
+  "code": "def rectangle_perimeter(width, height):\n    sides = width + height\n    perimeter = sides * 2\n    return perimeter",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion rectangle_perimeter mit den Parametern width und height",
+          "en": "Defines a function rectangle_perimeter with the parameters width and height"
+        },
+        {
+          "de": "Berechnet sofort den Umfang eines Rechtecks",
+          "en": "Immediately calculates the perimeter of a rectangle"
+        },
+        {
+          "de": "Speichert width und height in einer Liste namens rectangle_perimeter",
+          "en": "Stores width and height in a list called rectangle_perimeter"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion rectangle_perimeter auf",
+          "en": "Calls the built-in function rectangle_perimeter"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`def` legt die Funktion an (englisch „rectangle“ = Rechteck, „perimeter“ = Umfang). Es wird noch nichts gerechnet: Der Körper läuft erst bei einem Aufruf wie `rectangle_perimeter(3, 2)`.\n\n`width` (Breite) und `height` (Höhe) sind Parameter, Platzhalter für die Zahlen, die man übergibt. Mehrere Parameter trennt man mit einem Komma.",
+        "en": "`def` creates the function (\"rectangle\" is a four-sided shape, \"perimeter\" is the distance around it). Nothing is calculated yet: the body only runs on a call such as `rectangle_perimeter(3, 2)`.\n\n`width` and `height` are parameters, placeholders for the numbers you pass in. Several parameters are separated by a comma."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Multipliziert width mit height",
+          "en": "Multiplies width by height"
+        },
+        {
+          "de": "Addiert width und height und speichert die Summe in sides",
+          "en": "Adds width and height and stores the sum in sides"
+        },
+        {
+          "de": "Vergleicht, ob width und height gleich sind",
+          "en": "Compares whether width and height are equal"
+        },
+        {
+          "de": "Speichert nur width in sides",
+          "en": "Stores only width in sides"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`+` addiert zwei Zahlen. Bei `width = 3` und `height = 2` ist `sides` also 5: eine lange und eine kurze Seite zusammen.\n\nDas Ergebnis speichert `=` in der Variable `sides` (Seiten). Multiplizieren wäre `*` und würde die Fläche liefern, nicht den Umfang.",
+        "en": "`+` adds two numbers. With `width = 3` and `height = 2`, `sides` is therefore 5: one long and one short side together.\n\nThe `=` stores the result in the variable `sides`. Multiplying would be `*` and would give the area, not the perimeter."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Addiert 2 zu sides",
+          "en": "Adds 2 to sides"
+        },
+        {
+          "de": "Prüft, ob sides gleich 2 ist",
+          "en": "Checks whether sides equals 2"
+        },
+        {
+          "de": "Verdoppelt sides und speichert das Ergebnis in perimeter",
+          "en": "Doubles sides and stores the result in perimeter"
+        },
+        {
+          "de": "Teilt sides durch 2",
+          "en": "Divides sides by 2"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`*` multipliziert. Ein Rechteck hat zwei lange und zwei kurze Seiten, also zählt das Paar aus Zeile 2 doppelt: `5 * 2` ergibt 10.\n\nDas Ergebnis kommt in die Variable `perimeter`. Ein einzelnes `=` speichert hier, es vergleicht nicht.",
+        "en": "`*` multiplies. A rectangle has two long and two short sides, so the pair from line 2 counts twice: `5 * 2` gives 10.\n\nThe result goes into the variable `perimeter`. A single `=` stores here; it does not compare."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Zeigt perimeter auf dem Bildschirm an",
+          "en": "Prints perimeter on the screen"
+        },
+        {
+          "de": "Gibt das Wort \"perimeter\" als Text zurück",
+          "en": "Returns the word \"perimeter\" as text"
+        },
+        {
+          "de": "Gibt width und height zurück",
+          "en": "Returns width and height"
+        },
+        {
+          "de": "Gibt den Wert von perimeter an den Aufrufer zurück und beendet die Funktion",
+          "en": "Hands the value of perimeter back to the caller and ends the function"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`return` schickt den Wert von `perimeter` an den Aufrufer zurück. Mit `rectangle_perimeter(3, 2)` kommt also 10 zurück.\n\nAngezeigt wird dabei nichts, das wäre `print()`. Dafür kann man den Rückgabewert weiterverwenden, etwa `print(rectangle_perimeter(3, 2))`.",
+        "en": "`return` sends the value of `perimeter` back to the caller. So `rectangle_perimeter(3, 2)` hands back 10.\n\nNothing is shown, that would be `print()`. In return you can keep using the value, for example `print(rectangle_perimeter(3, 2))`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Berechnet den Umfang eines Rechtecks aus Breite und Höhe: `rectangle_perimeter(3, 2)` ergibt 10",
+        "en": "Calculates the perimeter of a rectangle from width and height: `rectangle_perimeter(3, 2)` gives 10"
+      },
+      {
+        "de": "Berechnet die Fläche eines Rechtecks: `rectangle_perimeter(3, 2)` ergibt 6",
+        "en": "Calculates the area of a rectangle: `rectangle_perimeter(3, 2)` gives 6"
+      },
+      {
+        "de": "Gibt den Umfang auf dem Bildschirm aus, liefert aber nichts zurück",
+        "en": "Prints the perimeter on the screen but returns nothing"
+      },
+      {
+        "de": "Addiert Breite und Höhe und gibt die Summe 5 zurück",
+        "en": "Adds width and height and returns the sum 5"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Breite plus Höhe ergibt zwei Seiten, mal 2 ergibt alle vier. `rectangle_perimeter(3, 2)` gibt `10` zurück. Die Fläche wäre `width * height`.\n\n`sides` und `perimeter` sind nur Zwischenschritte mit sprechenden Namen. Sie machen den Rechenweg lesbar.",
+      "en": "Width plus height gives two sides, times 2 gives all four. `rectangle_perimeter(3, 2)` returns `10`. The area would be `width * height`.\n\n`sides` and `perimeter` are just in-between steps with telling names. They make the calculation readable."
+    }
+  }
+}

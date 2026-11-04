@@ -1,0 +1,135 @@
+{
+  "id": "in-range",
+  "code": "def in_range(number, low, high):\n    if number >= low and number <= high:\n        return True\n    return False",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Erstellt einen Bereich von low bis high",
+          "en": "Creates a range from low to high"
+        },
+        {
+          "de": "Prüft sofort, ob number zwischen low und high liegt",
+          "en": "Immediately checks whether number lies between low and high"
+        },
+        {
+          "de": "Definiert eine Funktion in_range mit den Parametern number, low und high",
+          "en": "Defines a function in_range with the parameters number, low and high"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion in_range auf",
+          "en": "Calls the built-in function in_range"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`def` legt die Funktion `in_range` („im Bereich“) an. Geprüft wird erst bei einem Aufruf wie `in_range(5, 1, 10)`.\n\nDrei Parameter, durch Kommas getrennt: die zu prüfende Zahl, die untere Grenze `low` und die obere Grenze `high`. Beim Aufruf zählt die Reihenfolge.",
+        "en": "`def` creates the function `in_range`. Checking only happens on a call such as `in_range(5, 1, 10)`.\n\nThree parameters, separated by commas: the number to check, the lower limit `low` and the upper limit `high`. In a call the order matters."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Prüft, ob number größer als low oder kleiner als high ist",
+          "en": "Checks whether number is greater than low or smaller than high"
+        },
+        {
+          "de": "Prüft, ob number gleich low und gleich high ist",
+          "en": "Checks whether number equals low and equals high"
+        },
+        {
+          "de": "Prüft nur, ob number größer oder gleich low ist",
+          "en": "Checks only whether number is greater than or equal to low"
+        },
+        {
+          "de": "Prüft, ob number mindestens low und höchstens high ist; nur dann läuft die Zeile darunter",
+          "en": "Checks whether number is at least low and at most high; only then does the line below run"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`and` verbindet zwei Bedingungen: Beide müssen stimmen. `>=` heißt „größer oder gleich“, `<=` „kleiner oder gleich“. Die Grenzen selbst gehören also dazu.\n\nBei `in_range(5, 1, 10)` stimmen `5 >= 1` und `5 <= 10`. Bei 12 stimmt die zweite nicht, also läuft die Zeile darunter nicht.",
+        "en": "`and` combines two conditions: both must be true. `>=` means \"greater than or equal\", `<=` \"less than or equal\". The limits themselves are included.\n\nWith `in_range(5, 1, 10)`, both `5 >= 1` and `5 <= 10` are true. For 12 the second is false, so the line below does not run."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Gibt True zurück und beendet die Funktion; die Zeile läuft nur, wenn beide Bedingungen stimmen",
+          "en": "Returns True and ends the function; the line only runs if both conditions are true"
+        },
+        {
+          "de": "Gibt immer True zurück",
+          "en": "Always returns True"
+        },
+        {
+          "de": "Zeigt \"True\" auf dem Bildschirm an",
+          "en": "Prints \"True\" on the screen"
+        },
+        {
+          "de": "Gibt number zurück",
+          "en": "Returns number"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`True` ist ein Wahrheitswert, kein Text, deshalb ohne Anführungszeichen. Die eingerückte Zeile gehört zum `if` und läuft nur, wenn die Zahl im Bereich liegt.\n\n`return` beendet die Funktion sofort, Zeile 4 wird dann nicht mehr erreicht.",
+        "en": "`True` is a truth value, not text, so it has no quotation marks. The indented line belongs to the `if` and only runs when the number is in the range.\n\n`return` ends the function right away, so line 4 is not reached any more."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt False auch dann zurück, wenn die Zahl im Bereich liegt",
+          "en": "Returns False even when the number is in the range"
+        },
+        {
+          "de": "Gibt False zurück; die Zeile wird nur erreicht, wenn die Zahl nicht im Bereich liegt",
+          "en": "Returns False; the line is only reached when the number is not in the range"
+        },
+        {
+          "de": "Gibt den Text \"False\" zurück",
+          "en": "Returns the text \"False\""
+        },
+        {
+          "de": "Setzt number auf False",
+          "en": "Sets number to False"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt, gehört also nicht zum `if`. Wenn die Zahl im Bereich liegt, hat `return True` die Funktion schon beendet. Nur sonst kommt die Funktion hierher.\n\nSo gibt `in_range(12, 1, 10)` am Ende `False` zurück.",
+        "en": "The line is not indented, so it does not belong to the `if`. If the number is in the range, `return True` has already ended the function. Only otherwise does execution get here.\n\nSo `in_range(12, 1, 10)` ends up returning `False`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt True zurück, wenn die Zahl außerhalb der Grenzen liegt",
+        "en": "Returns True if the number lies outside the limits"
+      },
+      {
+        "de": "Gibt True zurück, wenn die Zahl echt zwischen den Grenzen liegt, die Grenzen selbst aber nicht",
+        "en": "Returns True if the number lies strictly between the limits, but not on them"
+      },
+      {
+        "de": "Gibt True zurück, wenn die Zahl zwischen den beiden Grenzen liegt (Grenzen eingeschlossen), sonst False",
+        "en": "Returns True if the number lies between the two limits (limits included), otherwise False"
+      },
+      {
+        "de": "Gibt die Zahl zurück, wenn sie im Bereich liegt, sonst 0",
+        "en": "Returns the number if it is in the range, otherwise 0"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`in_range(5, 1, 10)` gibt `True` zurück, ebenso `in_range(1, 1, 10)`, weil die Grenze mitzählt. `in_range(12, 1, 10)` gibt `False` zurück.\n\nSolche Ja-Nein-Funktionen nutzt man gern in einer Bedingung, etwa `if in_range(age, 18, 65):`.",
+      "en": "`in_range(5, 1, 10)` returns `True`, and so does `in_range(1, 1, 10)`, because the limit counts. `in_range(12, 1, 10)` returns `False`.\n\nSuch yes/no functions are handy in a condition, for example `if in_range(age, 18, 65):`."
+    }
+  }
+}

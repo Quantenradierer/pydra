@@ -1,0 +1,135 @@
+{
+  "id": "to-fahrenheit",
+  "code": "def to_fahrenheit(celsius):\n    scaled = celsius * 9 / 5\n    fahrenheit = scaled + 32\n    return fahrenheit",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Setzt die Variable celsius auf 32",
+          "en": "Sets the variable celsius to 32"
+        },
+        {
+          "de": "Wandelt sofort eine Temperatur um",
+          "en": "Converts a temperature immediately"
+        },
+        {
+          "de": "Definiert eine Funktion to_fahrenheit mit dem Parameter celsius",
+          "en": "Defines a function to_fahrenheit with the parameter celsius"
+        },
+        {
+          "de": "Ruft die Funktion to_fahrenheit mit celsius auf",
+          "en": "Calls the function to_fahrenheit with celsius"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`def` legt die Funktion an (englisch „to Fahrenheit“ = „nach Fahrenheit“). Umgewandelt wird erst bei einem Aufruf wie `to_fahrenheit(100)`.\n\n`celsius` ist der Parameter, ein Platzhalter für die Temperatur in Grad Celsius, die man übergibt.",
+        "en": "`def` creates the function (\"to Fahrenheit\" says what it converts to). The conversion only happens on a call such as `to_fahrenheit(100)`.\n\n`celsius` is the parameter, a placeholder for the temperature in degrees Celsius that you pass in."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Teilt celsius durch 9 und multipliziert mit 5",
+          "en": "Divides celsius by 9 and multiplies by 5"
+        },
+        {
+          "de": "Teilt celsius durch 45",
+          "en": "Divides celsius by 45"
+        },
+        {
+          "de": "Addiert 9 und 5 zu celsius",
+          "en": "Adds 9 and 5 to celsius"
+        },
+        {
+          "de": "Multipliziert celsius mit 9, teilt durch 5 und speichert das Ergebnis in scaled",
+          "en": "Multiplies celsius by 9, divides by 5 and stores the result in scaled"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Python rechnet von links nach rechts: erst `celsius * 9`, dann das Ergebnis `/ 5`. Bei 100 ist das `900 / 5`, also `180.0`.\n\n`/` ist die normale Division und liefert immer eine Kommazahl, auch wenn es aufgeht. Deshalb steht dort `180.0` und nicht `180`.",
+        "en": "Python calculates from left to right: first `celsius * 9`, then the result `/ 5`. For 100 that is `900 / 5`, so `180.0`.\n\n`/` is the normal division and always gives a decimal number, even when it divides evenly. That is why you get `180.0` and not `180`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Addiert 32 zu scaled und speichert das Ergebnis in fahrenheit",
+          "en": "Adds 32 to scaled and stores the result in fahrenheit"
+        },
+        {
+          "de": "Zieht 32 von scaled ab",
+          "en": "Subtracts 32 from scaled"
+        },
+        {
+          "de": "Setzt fahrenheit auf 32",
+          "en": "Sets fahrenheit to 32"
+        },
+        {
+          "de": "Prüft, ob scaled gleich 32 ist",
+          "en": "Checks whether scaled equals 32"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Die Skala von Fahrenheit beginnt bei einem anderen Nullpunkt: Wasser gefriert bei 32 statt bei 0. Darum wird 32 addiert: `180.0 + 32` ist `212.0`.\n\nDas Ergebnis kommt mit `=` in die Variable `fahrenheit`. Dass ein Wert verglichen wird, würde `==` bedeuten.",
+        "en": "The Fahrenheit scale starts at a different zero point: water freezes at 32 instead of 0. So 32 is added: `180.0 + 32` is `212.0`.\n\nThe `=` stores the result in the variable `fahrenheit`. Comparing values would be `==`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Zeigt fahrenheit auf dem Bildschirm an",
+          "en": "Prints fahrenheit on the screen"
+        },
+        {
+          "de": "Gibt den Wert von fahrenheit an den Aufrufer zurück",
+          "en": "Hands the value of fahrenheit back to the caller"
+        },
+        {
+          "de": "Gibt celsius unverändert zurück",
+          "en": "Returns celsius unchanged"
+        },
+        {
+          "de": "Gibt den Text \"fahrenheit\" zurück",
+          "en": "Returns the text \"fahrenheit\""
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`return` gibt den Inhalt von `fahrenheit` zurück und beendet die Funktion. `to_fahrenheit(100)` liefert also `212.0`.\n\nOhne Anführungszeichen ist `fahrenheit` ein Variablenname, es kommt der Wert zurück, nicht das Wort.",
+        "en": "`return` hands back the content of `fahrenheit` and ends the function. So `to_fahrenheit(100)` gives `212.0`.\n\nWithout quotation marks `fahrenheit` is a variable name, so the value comes back, not the word."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Rechnet von Fahrenheit nach Celsius um: `to_fahrenheit(100)` ergibt 37.8",
+        "en": "Converts from Fahrenheit to Celsius: `to_fahrenheit(100)` gives 37.8"
+      },
+      {
+        "de": "Addiert nur 32 zur Temperatur: `to_fahrenheit(100)` ergibt 132",
+        "en": "Only adds 32 to the temperature: `to_fahrenheit(100)` gives 132"
+      },
+      {
+        "de": "Rechnet eine Temperatur von Celsius in Fahrenheit um: `to_fahrenheit(100)` ergibt 212.0",
+        "en": "Converts a temperature from Celsius to Fahrenheit: `to_fahrenheit(100)` gives 212.0"
+      },
+      {
+        "de": "Gibt die Temperatur in Fahrenheit auf dem Bildschirm aus",
+        "en": "Prints the temperature in Fahrenheit on the screen"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Die Formel lautet „Celsius mal 9 durch 5, plus 32“. `to_fahrenheit(0)` gibt `32.0` zurück, `to_fahrenheit(100)` gibt `212.0` zurück.\n\nSo packt man eine Formel in eine Funktion: Einmal aufschreiben, danach mit beliebigen Zahlen aufrufen.",
+      "en": "The formula is \"Celsius times 9 divided by 5, plus 32\". `to_fahrenheit(0)` returns `32.0`, `to_fahrenheit(100)` returns `212.0`.\n\nThat is how you put a formula into a function: write it once, then call it with any number."
+    }
+  }
+}

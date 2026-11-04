@@ -1,0 +1,135 @@
+{
+  "id": "initials",
+  "code": "def initials(first, last):\n    a = first[0]\n    b = last[0]\n    return (a + b).upper()",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Definiert eine Funktion initials mit den Parametern first und last",
+          "en": "Defines a function initials with the parameters first and last"
+        },
+        {
+          "de": "Erstellt eine Variable initials mit zwei Werten",
+          "en": "Creates a variable initials with two values"
+        },
+        {
+          "de": "Gibt sofort die Initialen aus",
+          "en": "Prints the initials immediately"
+        },
+        {
+          "de": "Ruft initials mit first und last auf",
+          "en": "Calls initials with first and last"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`def` legt die Funktion `initials` (Initialen, die Anfangsbuchstaben eines Namens) an. Sie läuft erst bei einem Aufruf wie `initials(\"ada\", \"lovelace\")`.\n\n`first` und `last` sind die Parameter für Vor- und Nachname.",
+        "en": "`def` creates the function `initials` (the first letters of a name). It only runs on a call such as `initials(\"ada\", \"lovelace\")`.\n\n`first` and `last` are the parameters for first and last name."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Holt den zweiten Buchstaben von first",
+          "en": "Takes the second letter of first"
+        },
+        {
+          "de": "Holt den ersten Buchstaben von first und speichert ihn in a",
+          "en": "Takes the first letter of first and stores it in a"
+        },
+        {
+          "de": "Holt das erste Wort von first",
+          "en": "Takes the first word of first"
+        },
+        {
+          "de": "Setzt a auf die Zahl 0",
+          "en": "Sets a to the number 0"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Mit eckigen Klammern wählt man ein Zeichen aus. Gezählt wird ab 0: `first[0]` ist das erste Zeichen, `first[1]` das zweite. Bei `\"ada\"` ist `first[0]` also `\"a\"`.\n\nDas Ergebnis ist ein Text mit einem Buchstaben, den `=` in `a` speichert.",
+        "en": "Square brackets pick one character. Counting starts at 0: `first[0]` is the first character, `first[1]` the second. For `\"ada\"`, `first[0]` is `\"a\"`.\n\nThe result is a piece of text with one letter, which `=` stores in `a`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Holt den letzten Buchstaben von last",
+          "en": "Takes the last letter of last"
+        },
+        {
+          "de": "Zählt die Buchstaben von last",
+          "en": "Counts the letters of last"
+        },
+        {
+          "de": "Holt den ersten Buchstaben von last und speichert ihn in b",
+          "en": "Takes the first letter of last and stores it in b"
+        },
+        {
+          "de": "Holt den ersten Buchstaben von first noch einmal",
+          "en": "Takes the first letter of first again"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Genau wie in Zeile 2, nur mit `last`: Bei `\"lovelace\"` ist `last[0]` der Buchstabe `\"l\"`.\n\nDer letzte Buchstabe wäre `last[-1]`. Die Anzahl der Buchstaben ergäbe `len(last)`.",
+        "en": "Just like in line 2, but with `last`: for `\"lovelace\"`, `last[0]` is the letter `\"l\"`.\n\nThe last letter would be `last[-1]`. The number of letters would be `len(last)`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Addiert a und b als Zahlen und gibt die Summe zurück",
+          "en": "Adds a and b as numbers and returns the sum"
+        },
+        {
+          "de": "Gibt a und b getrennt als zwei Werte aus",
+          "en": "Prints a and b separately as two values"
+        },
+        {
+          "de": "Macht nur b groß und gibt es zurück",
+          "en": "Makes only b uppercase and returns it"
+        },
+        {
+          "de": "Hängt a und b zusammen, macht sie groß und gibt das Ergebnis zurück",
+          "en": "Joins a and b, makes them uppercase and returns the result"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "In der Klammer hängt `+` die zwei Buchstaben zu `\"al\"` zusammen. `.upper()` wirkt auf das ganze Ergebnis der Klammer und macht `\"AL\"` daraus. `return` gibt es zurück.\n\nOhne die Klammer würde `.upper()` nur zu `b` gehören, weil eine Methode immer am direkt davor stehenden Wert hängt.",
+        "en": "Inside the brackets, `+` joins the two letters into `\"al\"`. `.upper()` acts on the whole result of the bracket and makes `\"AL\"`. `return` hands it back.\n\nWithout the brackets, `.upper()` would only belong to `b`, because a method always attaches to the value right before it."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Anfangsbuchstaben von Vor- und Nachname als Großbuchstaben zurück: \"ada\" und \"lovelace\" ergeben \"AL\"",
+        "en": "Returns the first letters of first and last name as capitals: \"ada\" and \"lovelace\" give \"AL\""
+      },
+      {
+        "de": "Gibt den ersten Buchstaben des Vornamens und den letzten des Nachnamens zurück",
+        "en": "Returns the first letter of the first name and the last letter of the last name"
+      },
+      {
+        "de": "Zählt die Buchstaben beider Namen zusammen",
+        "en": "Counts the letters of both names together"
+      },
+      {
+        "de": "Gibt beide Namen komplett in Großbuchstaben zurück",
+        "en": "Returns both names fully in capitals"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`initials(\"ada\", \"lovelace\")` nimmt `\"a\"` und `\"l\"`, hängt sie zu `\"al\"` zusammen und macht `\"AL\"` daraus. So sehen Initialen aus.\n\nWichtig ist, dass `[0]` das erste Zeichen holt, nicht das zweite.",
+      "en": "`initials(\"ada\", \"lovelace\")` takes `\"a\"` and `\"l\"`, joins them to `\"al\"` and makes `\"AL\"`. That is what initials look like.\n\nThe important bit is that `[0]` gets the first character, not the second."
+    }
+  }
+}

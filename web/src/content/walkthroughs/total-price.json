@@ -1,0 +1,135 @@
+{
+  "id": "total-price",
+  "code": "def total_price(price, amount):\n    subtotal = price * amount\n    tax = subtotal * 0.2\n    return subtotal + tax",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Setzt price auf amount",
+          "en": "Sets price to amount"
+        },
+        {
+          "de": "Definiert eine Funktion total_price mit den Parametern price und amount",
+          "en": "Defines a function total_price with the parameters price and amount"
+        },
+        {
+          "de": "Gibt den Gesamtpreis sofort aus",
+          "en": "Prints the total price immediately"
+        },
+        {
+          "de": "Ruft total_price mit zwei Zahlen auf",
+          "en": "Calls total_price with two numbers"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`def` legt die Funktion `total_price` (Gesamtpreis) an. Beim Anlegen läuft nichts: Der Körper wird erst bei einem Aufruf wie `total_price(10, 3)` ausgeführt.\n\n`price` (Preis) und `amount` (Menge) sind die Parameter. Beim Aufruf steht `price` für die erste Zahl und `amount` für die zweite, hier 10 und 3.",
+        "en": "`def` creates the function `total_price`. Nothing runs while it is created: the body is only executed on a call such as `total_price(10, 3)`.\n\n`price` and `amount` are the parameters. During a call, `price` stands for the first number and `amount` for the second, here 10 and 3."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Addiert price und amount",
+          "en": "Adds price and amount"
+        },
+        {
+          "de": "Teilt price durch amount",
+          "en": "Divides price by amount"
+        },
+        {
+          "de": "Multipliziert den Preis mit der Menge und speichert das Ergebnis in subtotal",
+          "en": "Multiplies the price by the amount and stores the result in subtotal"
+        },
+        {
+          "de": "Speichert den Text \"price * amount\" in subtotal",
+          "en": "Stores the text \"price * amount\" in subtotal"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`price * amount` rechnet Preis mal Menge: Drei Stück zu je 10 kosten `10 * 3`, also 30. Das ist der Preis ohne Steuer, `subtotal` (Zwischensumme).\n\nOhne Anführungszeichen ist das eine Rechnung, kein Text. Python rechnet sie aus und speichert nur das Ergebnis.",
+        "en": "`price * amount` calculates price times quantity: three items at 10 each cost `10 * 3`, so 30. That is the price without tax, `subtotal`.\n\nWithout quotation marks this is a calculation, not text. Python works it out and stores only the result."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Multipliziert subtotal mit 20",
+          "en": "Multiplies subtotal by 20"
+        },
+        {
+          "de": "Zieht 0.2 von subtotal ab",
+          "en": "Subtracts 0.2 from subtotal"
+        },
+        {
+          "de": "Setzt tax auf den festen Wert 0.2",
+          "en": "Sets tax to the fixed value 0.2"
+        },
+        {
+          "de": "Berechnet 20 % von subtotal und speichert sie in tax",
+          "en": "Calculates 20 % of subtotal and stores it in tax"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`0.2` ist eine Kommazahl (in Python mit Punkt geschrieben) und bedeutet 20 %. `subtotal * 0.2` ist der Steueranteil: bei 30 genau 6.0.\n\nDas Ergebnis hat eine Nachkommastelle, weil eine Kommazahl im Spiel ist. `tax` (Steuer) ist also ein eigener Betrag, nicht der Endpreis.",
+        "en": "`0.2` is a decimal number and stands for 20 %. `subtotal * 0.2` is the tax part: for 30 exactly 6.0.\n\nThe result has a decimal point because a decimal number is involved. `tax` is therefore a separate amount, not the final price."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt die Summe aus subtotal und tax an den Aufrufer zurück",
+          "en": "Hands the sum of subtotal and tax back to the caller"
+        },
+        {
+          "de": "Gibt nur tax zurück",
+          "en": "Returns only tax"
+        },
+        {
+          "de": "Zeigt die Summe auf dem Bildschirm an",
+          "en": "Prints the sum on the screen"
+        },
+        {
+          "de": "Speichert die Summe in einer neuen Variable, gibt aber nichts zurück",
+          "en": "Stores the sum in a new variable but returns nothing"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Hinter `return` darf eine ganze Rechnung stehen. Python rechnet sie zuerst aus (`30 + 6.0` ist `36.0`) und gibt dann das Ergebnis zurück. Eine extra Variable ist nicht nötig.\n\nDie Funktion endet an dieser Zeile. Angezeigt wird nichts, das Ergebnis geht an den Aufrufer.",
+        "en": "After `return` there can be a whole calculation. Python works it out first (`30 + 6.0` is `36.0`) and then hands back the result. An extra variable is not needed.\n\nThe function ends at this line. Nothing is printed; the result goes to the caller."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Berechnet nur die Steuer: `total_price(10, 3)` ergibt 6.0",
+        "en": "Calculates only the tax: `total_price(10, 3)` gives 6.0"
+      },
+      {
+        "de": "Berechnet den Preis einer Menge samt 20 % Steuer: `total_price(10, 3)` ergibt 36.0",
+        "en": "Calculates the price of a quantity including 20 % tax: `total_price(10, 3)` gives 36.0"
+      },
+      {
+        "de": "Berechnet den Preis ohne Steuer: `total_price(10, 3)` ergibt 30",
+        "en": "Calculates the price without tax: `total_price(10, 3)` gives 30"
+      },
+      {
+        "de": "Addiert Preis und Menge und dann 20",
+        "en": "Adds price and amount and then 20"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Erst Preis mal Menge (30), dann 20 % davon als Steuer (6.0), am Ende beides zusammen: `36.0`. Das ist wie eine Rechnung an der Kasse.\n\nDie Zwischenschritte stehen in eigenen Variablen, damit man jeden Schritt einzeln lesen und prüfen kann.",
+      "en": "First price times quantity (30), then 20 % of that as tax (6.0), and in the end both together: `36.0`. Like a bill at the checkout.\n\nThe in-between steps live in their own variables so you can read and check each step separately."
+    }
+  }
+}

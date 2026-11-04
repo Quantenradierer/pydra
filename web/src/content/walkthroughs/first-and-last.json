@@ -1,0 +1,135 @@
+{
+  "id": "first-and-last",
+  "code": "def first_and_last(items):\n    first = items[0]\n    last = items[-1]\n    return [first, last]",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Erstellt eine Liste namens first_and_last",
+          "en": "Creates a list called first_and_last"
+        },
+        {
+          "de": "Gibt sofort das erste und letzte Element aus",
+          "en": "Immediately prints the first and last item"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion first_and_last auf",
+          "en": "Calls the built-in function first_and_last"
+        },
+        {
+          "de": "Definiert eine Funktion first_and_last mit dem Parameter items",
+          "en": "Defines a function first_and_last with the parameter items"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`def` legt die Funktion `first_and_last` („erstes und letztes“) an. Der Körper läuft erst beim Aufruf, etwa `first_and_last([\"a\", \"b\", \"c\"])`.\n\n`items` (Elemente) ist der Parameter, ein Platzhalter für die Liste, die man übergibt.",
+        "en": "`def` creates the function `first_and_last`. The body only runs on a call, such as `first_and_last([\"a\", \"b\", \"c\"])`.\n\n`items` is the parameter, a placeholder for the list you pass in."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Holt das erste Element der Liste und speichert es in first",
+          "en": "Takes the first item of the list and stores it in first"
+        },
+        {
+          "de": "Holt das zweite Element der Liste",
+          "en": "Takes the second item of the list"
+        },
+        {
+          "de": "Holt die gesamte Liste und nennt sie first",
+          "en": "Takes the whole list and calls it first"
+        },
+        {
+          "de": "Zählt die Elemente der Liste",
+          "en": "Counts the items of the list"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "Mit eckigen Klammern holt man ein Element. Gezählt wird ab 0: `items[0]` ist das erste Element, `items[1]` das zweite. Bei `[\"a\", \"b\", \"c\"]` ist es `\"a\"`.\n\nDie Liste selbst bleibt unverändert. Es wird nur eine Kopie des Wertes in `first` gespeichert.",
+        "en": "Square brackets pick one item. Counting starts at 0: `items[0]` is the first item, `items[1]` the second. For `[\"a\", \"b\", \"c\"]` it is `\"a\"`.\n\nThe list itself stays unchanged. Only the value is stored in `first`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Holt das vorletzte Element der Liste",
+          "en": "Takes the second-to-last item of the list"
+        },
+        {
+          "de": "Holt das letzte Element der Liste und speichert es in last",
+          "en": "Takes the last item of the list and stores it in last"
+        },
+        {
+          "de": "Holt das Element mit der Nummer -1 und gibt einen Fehler, weil es das nicht gibt",
+          "en": "Takes the item numbered -1 and gives an error because it does not exist"
+        },
+        {
+          "de": "Entfernt das letzte Element aus der Liste",
+          "en": "Removes the last item from the list"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Negative Zahlen zählen von hinten: `items[-1]` ist das letzte Element, `items[-2]` das vorletzte. Das ist bequemer, als die Länge der Liste zu berechnen.\n\nBei `[\"a\", \"b\", \"c\"]` ist `last` also `\"c\"`. Entfernt wird nichts, die Liste bleibt, wie sie ist.",
+        "en": "Negative numbers count from the back: `items[-1]` is the last item, `items[-2]` the second to last. That is more convenient than working out the length of the list.\n\nFor `[\"a\", \"b\", \"c\"]`, `last` is `\"c\"`. Nothing is removed; the list stays as it is."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Gibt nur first zurück",
+          "en": "Returns only first"
+        },
+        {
+          "de": "Gibt die Liste [first, last] auf dem Bildschirm aus",
+          "en": "Prints the list [first, last] on the screen"
+        },
+        {
+          "de": "Gibt eine neue Liste mit first und last zurück",
+          "en": "Returns a new list containing first and last"
+        },
+        {
+          "de": "Gibt die Wörter \"first\" und \"last\" in einer Liste zurück",
+          "en": "Returns the words \"first\" and \"last\" in a list"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Eckige Klammern mit Werten darin erzeugen eine Liste: `[first, last]` ist `[\"a\", \"c\"]`. Die Namen ohne Anführungszeichen stehen für ihre Werte.\n\nMit `return` kommt die Liste zum Aufrufer zurück. Auch zwei Dinge auf einmal kann eine Funktion so zurückgeben.",
+        "en": "Square brackets with values inside create a list: `[first, last]` is `[\"a\", \"c\"]`. The names without quotation marks stand for their values.\n\nWith `return` the list comes back to the caller. A function can hand back two things at once this way."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt die Liste rückwärts zurück: [\"c\", \"b\", \"a\"]",
+        "en": "Returns the list backwards: [\"c\", \"b\", \"a\"]"
+      },
+      {
+        "de": "Entfernt das erste und letzte Element: [\"b\"]",
+        "en": "Removes the first and last item: [\"b\"]"
+      },
+      {
+        "de": "Gibt die ersten zwei Elemente der Liste zurück: [\"a\", \"b\"]",
+        "en": "Returns the first two items of the list: [\"a\", \"b\"]"
+      },
+      {
+        "de": "Gibt eine Liste aus dem ersten und letzten Element zurück: `first_and_last([\"a\", \"b\", \"c\"])` ergibt [\"a\", \"c\"]",
+        "en": "Returns a list of the first and last item: `first_and_last([\"a\", \"b\", \"c\"])` gives [\"a\", \"c\"]"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Der Anfang und das Ende der Liste werden herausgepickt und zu einer neuen kleinen Liste. `first_and_last([\"a\", \"b\", \"c\"])` gibt `[\"a\", \"c\"]` zurück.\n\nBei nur einem Element sind beide gleich: `first_and_last([7])` gibt `[7, 7]` zurück. Eine leere Liste würde dagegen einen Fehler (IndexError) auslösen.",
+      "en": "The start and the end of the list are picked out and become a new small list. `first_and_last([\"a\", \"b\", \"c\"])` returns `[\"a\", \"c\"]`.\n\nWith only one item, both are the same: `first_and_last([7])` returns `[7, 7]`. An empty list, however, would cause an error (IndexError)."
+    }
+  }
+}

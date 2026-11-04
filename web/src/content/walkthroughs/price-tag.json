@@ -1,0 +1,135 @@
+{
+  "id": "price-tag",
+  "code": "def price_tag(price, currency=\"EUR\"):\n    rounded = round(price, 2)\n    text = str(rounded) + \" \" + currency\n    return text",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Setzt die Variable currency fest auf \"EUR\", man kann sie nicht ändern",
+          "en": "Sets the variable currency to \"EUR\" for good, it cannot be changed"
+        },
+        {
+          "de": "Prüft, ob currency gleich \"EUR\" ist",
+          "en": "Checks whether currency equals \"EUR\""
+        },
+        {
+          "de": "Ruft price_tag auf und gibt \"EUR\" aus",
+          "en": "Calls price_tag and prints \"EUR\""
+        },
+        {
+          "de": "Definiert price_tag mit den Parametern price und currency; currency ist \"EUR\", wenn man nichts angibt",
+          "en": "Defines price_tag with the parameters price and currency; currency is \"EUR\" unless you pass one"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`currency=\"EUR\"` ist ein Standardwert (default): Ruft man `price_tag(5)` auf, ist `currency` automatisch \"EUR\". Bei `price_tag(5, \"USD\")` gilt der übergebene Wert.\n\nDer Parameter mit Standardwert steht immer hinter denen ohne. Beim Anlegen passiert noch nichts, das Ergebnis kommt erst beim Aufruf.",
+        "en": "`currency=\"EUR\"` is a default value: with `price_tag(5)`, `currency` is automatically \"EUR\". With `price_tag(5, \"USD\")` the value you pass is used.\n\nParameters with a default value come after those without. Nothing happens when the function is created; a result only appears on a call."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Rundet price auf 2 Nachkommastellen und speichert das Ergebnis in rounded",
+          "en": "Rounds price to 2 decimal places and stores the result in rounded"
+        },
+        {
+          "de": "Rundet price auf die nächste ganze Zahl",
+          "en": "Rounds price to the nearest whole number"
+        },
+        {
+          "de": "Teilt price durch 2",
+          "en": "Divides price by 2"
+        },
+        {
+          "de": "Ändert price selbst auf 2 Nachkommastellen",
+          "en": "Changes price itself to 2 decimal places"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`round(zahl, stellen)` rundet auf die angegebene Zahl von Nachkommastellen. `round(3.14159, 2)` ist `3.14`. Ohne die 2 würde auf eine ganze Zahl gerundet.\n\nDas Ergebnis kommt in `rounded` (gerundet). `price` bleibt, wie es war.",
+        "en": "`round(number, places)` rounds to the given number of decimal places. `round(3.14159, 2)` is `3.14`. Without the 2 it would round to a whole number.\n\nThe result goes into `rounded`. `price` stays as it was."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Addiert die Zahl rounded zur Währung",
+          "en": "Adds the number rounded to the currency"
+        },
+        {
+          "de": "Macht die Zahl zu Text und hängt ein Leerzeichen und die Währung an",
+          "en": "Turns the number into text and appends a space and the currency"
+        },
+        {
+          "de": "Gibt rounded und currency auf dem Bildschirm aus",
+          "en": "Prints rounded and currency on the screen"
+        },
+        {
+          "de": "Speichert nur currency in text",
+          "en": "Stores only currency in text"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`+` kann nur Text mit Text verketten, deshalb macht `str()` aus der Zahl erst einen Text: `str(3.14)` ist `\"3.14\"`. Ohne `str()` gäbe es einen Fehler (TypeError), weil man Zahl und Text nicht addieren kann.\n\nHeraus kommt `\"3.14 EUR\"` in der Variable `text`.",
+        "en": "`+` can only join text with text, so `str()` first turns the number into text: `str(3.14)` is `\"3.14\"`. Without `str()` there would be an error (TypeError), because you cannot add a number and text.\n\nThe result is `\"3.14 EUR\"` in the variable `text`."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Zeigt den Text auf dem Bildschirm an",
+          "en": "Prints the text on the screen"
+        },
+        {
+          "de": "Gibt die Zahl rounded zurück",
+          "en": "Returns the number rounded"
+        },
+        {
+          "de": "Gibt den fertigen Text an den Aufrufer zurück",
+          "en": "Hands the finished text back to the caller"
+        },
+        {
+          "de": "Gibt nur die Währung zurück",
+          "en": "Returns only the currency"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`return text` gibt den Wert der Variable zurück, etwa `\"3.14 EUR\"`. Die Funktion endet damit.\n\nDen Text angezeigt bekommt man erst durch `print(price_tag(3.14159))`.",
+        "en": "`return text` hands back the value of the variable, for example `\"3.14 EUR\"`. The function ends here.\n\nYou only see the text with `print(price_tag(3.14159))`."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Rechnet den Preis in eine andere Währung um",
+        "en": "Converts the price into another currency"
+      },
+      {
+        "de": "Gibt den Preis als Zahl zurück, auf 2 Stellen gerundet",
+        "en": "Returns the price as a number rounded to 2 places"
+      },
+      {
+        "de": "Gibt immer \"EUR\" zurück, egal was man übergibt",
+        "en": "Always returns \"EUR\", no matter what you pass"
+      },
+      {
+        "de": "Formt einen Preis zu Text mit 2 Nachkommastellen und Währung: `price_tag(3.14159)` ergibt \"3.14 EUR\"",
+        "en": "Turns a price into text with 2 decimal places and a currency: `price_tag(3.14159)` gives \"3.14 EUR\""
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`price_tag(3.14159)` rundet auf `3.14` und gibt `\"3.14 EUR\"` zurück. `price_tag(2.5, \"USD\")` gibt `\"2.5 USD\"` zurück, denn dort ersetzt der übergebene Wert den Standardwert.\n\nZurück kommt ein Text, keine Zahl. Damit kann man nicht mehr rechnen, aber ihn gut anzeigen.",
+      "en": "`price_tag(3.14159)` rounds to `3.14` and returns `\"3.14 EUR\"`. `price_tag(2.5, \"USD\")` returns `\"2.5 USD\"`, because there the value you pass replaces the default.\n\nWhat comes back is text, not a number. You cannot calculate with it any more, but it is nice to display."
+    }
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "id": "keep-positive",
+  "code": "def keep_positive(numbers):\n    result = []\n    for number in numbers:\n        if number > 0:\n            result.append(number)\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Entfernt sofort die negativen Zahlen aus numbers",
+          "en": "Immediately removes the negative numbers from numbers"
+        },
+        {
+          "de": "Erstellt eine Liste namens keep_positive",
+          "en": "Creates a list called keep_positive"
+        },
+        {
+          "de": "Definiert eine Funktion keep_positive mit dem Parameter numbers, einer Liste von Zahlen",
+          "en": "Defines a function keep_positive with the parameter numbers, a list of numbers"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion keep_positive auf",
+          "en": "Calls the built-in function keep_positive"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`def` legt die Funktion `keep_positive` („behalte die positiven“) an. Der Körper läuft erst beim Aufruf, etwa `keep_positive([3, -1, 0, 5])`.\n\n`numbers` ist der Parameter, ein Platzhalter für die Liste.",
+        "en": "`def` creates the function `keep_positive` (\"keep the positive ones\"). The body only runs on a call, such as `keep_positive([3, -1, 0, 5])`.\n\n`numbers` is the parameter, a placeholder for the list."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Legt eine Liste mit der Zahl 0 an",
+          "en": "Creates a list with the number 0"
+        },
+        {
+          "de": "Kopiert die Liste numbers nach result",
+          "en": "Copies the list numbers into result"
+        },
+        {
+          "de": "Setzt result auf 0",
+          "en": "Sets result to 0"
+        },
+        {
+          "de": "Legt eine leere Liste an und speichert sie in result",
+          "en": "Creates an empty list and stores it in result"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "`[]` ist eine leere Liste. Hier werden später die Zahlen gesammelt, die behalten werden sollen.\n\nSie liegt vor der Schleife, damit alle Durchläufe in dieselbe Liste schreiben. Eine Kopie von `numbers` wäre `numbers.copy()`.",
+        "en": "`[]` is an empty list. The numbers to be kept are collected here later.\n\nIt is before the loop so that all passes write into the same list. A copy of `numbers` would be `numbers.copy()`."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für jedes Element von numbers; number ist jeweils das aktuelle",
+          "en": "Repeats the indented part for every item of numbers; number is the current one each time"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil nur für die erste Zahl",
+          "en": "Repeats the indented part only for the first number"
+        },
+        {
+          "de": "Prüft, ob number in numbers steht",
+          "en": "Checks whether number is in numbers"
+        },
+        {
+          "de": "Sortiert die Liste numbers",
+          "en": "Sorts the list numbers"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`for number in numbers:` geht die Liste Zahl für Zahl durch. Bei `[3, -1, 0, 5]` ist `number` nacheinander 3, -1, 0 und 5.\n\nDer eingerückte Teil darunter ist der Körper der Schleife und läuft einmal pro Zahl.",
+        "en": "`for number in numbers:` walks through the list number by number. With `[3, -1, 0, 5]`, `number` is 3, then -1, then 0, then 5.\n\nThe indented part below is the body of the loop and runs once per number."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Prüft, ob die aktuelle Zahl mindestens 0 ist",
+          "en": "Checks whether the current number is at least 0"
+        },
+        {
+          "de": "Prüft, ob die aktuelle Zahl größer als 0 ist; nur dann läuft die Zeile darunter",
+          "en": "Checks whether the current number is greater than 0; only then does the line below run"
+        },
+        {
+          "de": "Prüft, ob die aktuelle Zahl kleiner als 0 ist",
+          "en": "Checks whether the current number is less than 0"
+        },
+        {
+          "de": "Setzt die aktuelle Zahl auf 0",
+          "en": "Sets the current number to 0"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "`>` heißt „größer als“. Für 3 und 5 stimmt es, für -1 nicht. Auch für 0 stimmt es nicht, denn 0 ist nicht größer als 0.\n\nDarum bleibt 0 draußen. Wäre `>=` geschrieben, käme sie in die Liste.",
+        "en": "`>` means \"greater than\". For 3 and 5 it is true, for -1 it is not. For 0 it is not either, because 0 is not greater than 0.\n\nThat is why 0 stays out. With `>=` it would end up in the list."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Ersetzt result durch die aktuelle Zahl",
+          "en": "Replaces result with the current number"
+        },
+        {
+          "de": "Entfernt die aktuelle Zahl aus numbers",
+          "en": "Removes the current number from numbers"
+        },
+        {
+          "de": "Hängt die aktuelle Zahl hinten an result an; die Zeile läuft nur für positive Zahlen",
+          "en": "Appends the current number to the end of result; the line only runs for positive numbers"
+        },
+        {
+          "de": "Hängt die aktuelle Zahl für alle Elemente an result an",
+          "en": "Appends the current number to result for all items"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`.append(number)` hängt die Zahl ans Ende der Liste `result`. Die Zeile ist doppelt eingerückt (unter dem `if` in der Schleife), läuft also nur, wenn die Zahl positiv ist.\n\nAus `[3, -1, 0, 5]` werden so nach und nach `[3]` und dann `[3, 5]`.",
+        "en": "`.append(number)` adds the number to the end of the list `result`. The line is indented twice (under the `if` inside the loop), so it only runs when the number is positive.\n\nWith `[3, -1, 0, 5]` this gradually gives `[3]` and then `[3, 5]`."
+      }
+    },
+    {
+      "line": 6,
+      "choices": [
+        {
+          "de": "Gibt result schon nach der ersten positiven Zahl zurück",
+          "en": "Returns result after the first positive number already"
+        },
+        {
+          "de": "Gibt die ursprüngliche Liste numbers zurück",
+          "en": "Returns the original list numbers"
+        },
+        {
+          "de": "Zeigt result auf dem Bildschirm an",
+          "en": "Prints result on the screen"
+        },
+        {
+          "de": "Gibt die Liste result zurück; die Zeile läuft erst nach der Schleife",
+          "en": "Returns the list result; the line only runs after the loop"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt und liegt hinter der Schleife. Zurückgegeben wird die fertig gesammelte Liste: `keep_positive([3, -1, 0, 5])` ergibt `[3, 5]`.\n\nDie Eingabeliste `numbers` bleibt dabei unverändert.",
+        "en": "The line is not indented and sits after the loop. The finished collected list is returned: `keep_positive([3, -1, 0, 5])` gives `[3, 5]`.\n\nThe input list `numbers` stays unchanged."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Gibt eine neue Liste nur mit den Zahlen zurück, die größer als 0 sind: `keep_positive([3, -1, 0, 5])` ergibt [3, 5]",
+        "en": "Returns a new list with only the numbers greater than 0: `keep_positive([3, -1, 0, 5])` gives [3, 5]"
+      },
+      {
+        "de": "Gibt nur die negativen Zahlen zurück: [-1]",
+        "en": "Returns only the negative numbers: [-1]"
+      },
+      {
+        "de": "Gibt die Anzahl der positiven Zahlen zurück: 2",
+        "en": "Returns the number of positive numbers: 2"
+      },
+      {
+        "de": "Gibt die Liste unverändert zurück: [3, -1, 0, 5]",
+        "en": "Returns the list unchanged: [3, -1, 0, 5]"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Jede Zahl wird geprüft, und nur die positiven landen in der neuen Liste. `keep_positive([3, -1, 0, 5])` gibt `[3, 5]` zurück, `keep_positive([-2, -7])` gibt `[]` zurück.\n\nSolches „Filtern“ ist ein häufiges Muster: Schleife, `if`, `.append`.",
+      "en": "Every number is checked, and only the positive ones land in the new list. `keep_positive([3, -1, 0, 5])` returns `[3, 5]`, `keep_positive([-2, -7])` returns `[]`.\n\nSuch \"filtering\" is a common pattern: loop, `if`, `.append`."
+    }
+  }
+}

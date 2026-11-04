@@ -1,0 +1,161 @@
+{
+  "id": "factorial",
+  "code": "def factorial(n):\n    result = 1\n    for number in range(2, n + 1):\n        result = result * number\n    return result",
+  "lines": [
+    {
+      "line": 1,
+      "choices": [
+        {
+          "de": "Berechnet sofort die Fakultät von n",
+          "en": "Immediately calculates the factorial of n"
+        },
+        {
+          "de": "Setzt n auf die Fakultät",
+          "en": "Sets n to the factorial"
+        },
+        {
+          "de": "Definiert eine Funktion factorial mit dem Parameter n",
+          "en": "Defines a function factorial with the parameter n"
+        },
+        {
+          "de": "Ruft die eingebaute Funktion factorial auf",
+          "en": "Calls the built-in function factorial"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "`def` legt die Funktion `factorial` (Fakultät) an. Die Fakultät von 4 ist `4 * 3 * 2 * 1`. Gerechnet wird erst beim Aufruf, etwa `factorial(4)`.\n\n`n` ist der Parameter, ein Platzhalter für die Zahl.",
+        "en": "`def` creates the function `factorial`. The factorial of 4 is `4 * 3 * 2 * 1`. Calculating only happens on a call, such as `factorial(4)`.\n\n`n` is the parameter, a placeholder for the number."
+      }
+    },
+    {
+      "line": 2,
+      "choices": [
+        {
+          "de": "Setzt result auf 0 als Startwert",
+          "en": "Sets result to 0 as the starting value"
+        },
+        {
+          "de": "Vergleicht result mit 1",
+          "en": "Compares result with 1"
+        },
+        {
+          "de": "Gibt 1 zurück",
+          "en": "Returns 1"
+        },
+        {
+          "de": "Legt result an und setzt es auf 1 als Startwert des Produkts",
+          "en": "Creates result and sets it to 1 as the starting value of the product"
+        }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "de": "Beim Multiplizieren ist der neutrale Startwert 1: `1 * x` ist immer `x`. Mit 0 wäre jedes Produkt 0, denn `0 * x` ist 0.\n\n`result` (Ergebnis) sammelt später das Produkt. Der Startwert steht vor der Schleife, damit er nicht in jedem Durchlauf zurückgesetzt wird.",
+        "en": "When multiplying, the neutral starting value is 1: `1 * x` is always `x`. With 0 every product would be 0, because `0 * x` is 0.\n\n`result` collects the product later. The starting value is before the loop so that it is not reset in every pass."
+      }
+    },
+    {
+      "line": 3,
+      "choices": [
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Zahl von 2 bis n",
+          "en": "Repeats the indented part for every number from 2 to n"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für jede Zahl von 2 bis n - 1",
+          "en": "Repeats the indented part for every number from 2 to n - 1"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil für die Zahlen von 1 bis n",
+          "en": "Repeats the indented part for the numbers from 1 to n"
+        },
+        {
+          "de": "Wiederholt den eingerückten Teil n Mal, number bleibt immer 2",
+          "en": "Repeats the indented part n times, number always stays 2"
+        }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "de": "`range(2, n + 1)` liefert 2 bis n, denn das Ende gehört bei `range` nie dazu. Für `n = 4` sind das 2, 3, 4. Die 1 wird übersprungen, weil `* 1` nichts ändert.\n\nBei `n = 1` ist der Bereich leer: Die Schleife läuft gar nicht, und `result` bleibt 1.",
+        "en": "`range(2, n + 1)` gives 2 to n, because the end of a `range` is never included. For `n = 4` that is 2, 3, 4. The 1 is skipped because `* 1` changes nothing.\n\nFor `n = 1` the range is empty: the loop does not run at all, and `result` stays 1."
+      }
+    },
+    {
+      "line": 4,
+      "choices": [
+        {
+          "de": "Addiert number zu result",
+          "en": "Adds number to result"
+        },
+        {
+          "de": "Multipliziert result mit number und speichert das Ergebnis wieder in result",
+          "en": "Multiplies result by number and stores the result in result again"
+        },
+        {
+          "de": "Setzt result auf number",
+          "en": "Sets result to number"
+        },
+        {
+          "de": "Vergleicht result mit number",
+          "en": "Compares result with number"
+        }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "de": "Rechts wird mit dem alten Wert gerechnet, dann ersetzt das Ergebnis ihn. Bei `n = 4` wächst `result` so: 1, 2, 6, 24.\n\n`*` multipliziert. Mit `+` käme eine Summe heraus statt der Fakultät. Die Zeile ist eingerückt und läuft daher in jedem Durchlauf.",
+        "en": "On the right the old value is used, then the result replaces it. For `n = 4`, `result` grows like this: 1, 2, 6, 24.\n\n`*` multiplies. With `+` you would get a sum instead of the factorial. The line is indented and therefore runs in every pass."
+      }
+    },
+    {
+      "line": 5,
+      "choices": [
+        {
+          "de": "Gibt result schon im ersten Durchlauf zurück",
+          "en": "Returns result in the first pass already"
+        },
+        {
+          "de": "Zeigt result auf dem Bildschirm an",
+          "en": "Prints result on the screen"
+        },
+        {
+          "de": "Gibt result zurück; die Zeile läuft erst, wenn die Schleife durch ist",
+          "en": "Returns result; the line only runs once the loop is finished"
+        },
+        {
+          "de": "Gibt n zurück",
+          "en": "Returns n"
+        }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "de": "Die Zeile ist nicht eingerückt und liegt damit hinter der Schleife. Zurückgegeben wird das fertige Produkt: `factorial(4)` ergibt 24.\n\nWäre `return` eingerückt, würde die Funktion nach der ersten Zahl enden.",
+        "en": "The line is not indented and therefore sits after the loop. The finished product is returned: `factorial(4)` gives 24.\n\nIf `return` were indented, the function would end after the first number."
+      }
+    }
+  ],
+  "whole": {
+    "choices": [
+      {
+        "de": "Addiert alle Zahlen von 1 bis n: `factorial(4)` ergibt 10",
+        "en": "Adds all numbers from 1 to n: `factorial(4)` gives 10"
+      },
+      {
+        "de": "Multipliziert n mit sich selbst: `factorial(4)` ergibt 16",
+        "en": "Multiplies n by itself: `factorial(4)` gives 16"
+      },
+      {
+        "de": "Gibt immer 1 zurück",
+        "en": "Always returns 1"
+      },
+      {
+        "de": "Multipliziert alle ganzen Zahlen von 1 bis n: `factorial(4)` ergibt 24",
+        "en": "Multiplies all whole numbers from 1 to n: `factorial(4)` gives 24"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`factorial(4)` rechnet `1 * 2 * 3 * 4` und gibt `24` zurück. `factorial(5)` gibt `120` zurück, `factorial(1)` gibt `1` zurück.\n\nDas Muster ist wie bei einer Summe, nur mit `*` und dem Startwert 1 statt 0.",
+      "en": "`factorial(4)` calculates `1 * 2 * 3 * 4` and returns `24`. `factorial(5)` returns `120`, `factorial(1)` returns `1`.\n\nThe pattern is like a sum, just with `*` and the starting value 1 instead of 0."
+    }
+  }
+}

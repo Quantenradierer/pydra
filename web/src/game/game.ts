@@ -1,31 +1,42 @@
 import type { Rng } from '../session.ts';
 import type { AppStorage } from '../storage.ts';
 import { LEVELS, type GameLevel } from './levels.ts';
+import type { PuzzleLevel } from './puzzle.ts';
 import { levelToShow, openLevel, parseGameProgress, pick, type GameProgress, type LevelState } from './progress.ts';
 
-/** The hydra game on top of storage: every change is saved straight away. */
-export class Game {
-  private storage: AppStorage;
-  readonly levels: readonly GameLevel[];
-  private rng: Rng;
+/** Where a hydra game keeps its progress in storage. */
+export type GameKey = 'game' | 'heads';
 
-  constructor(storage: AppStorage, levels: readonly GameLevel[] = LEVELS, rng: Rng = Math.random) {
+/** A hydra game on top of storage: every change is saved straight away. */
+export class Game<L extends PuzzleLevel = GameLevel> {
+  private storage: AppStorage;
+  readonly levels: readonly L[];
+  private rng: Rng;
+  private key: GameKey;
+
+  constructor(storage: AppStorage, levels: readonly L[], rng: Rng = Math.random, key: GameKey = 'game') {
     this.storage = storage;
     this.levels = levels;
     this.rng = rng;
+    this.key = key;
+  }
+
+  /** The fishing game. */
+  static fishing(storage: AppStorage, rng?: Rng): Game<GameLevel> {
+    return new Game(storage, LEVELS, rng, 'game');
   }
 
   progress(): GameProgress {
-    return parseGameProgress(this.storage.gameData(), this.levels);
+    return parseGameProgress(this.storage.gameData(this.key), this.levels);
   }
 
   private save(progress: GameProgress): GameProgress {
-    this.storage.setGameData(progress);
+    this.storage.setGameData(progress, this.key);
     return progress;
   }
 
   /** The level to play and its state; opens it if needed (or the level with the given id). */
-  open(id?: string): { level: GameLevel; state: LevelState } {
+  open(id?: string): { level: L; state: LevelState } {
     const progress = this.progress();
     const level = this.levels.find((l) => l.id === id) ?? levelToShow(progress, this.levels);
     const next = openLevel(progress, level, this.rng);

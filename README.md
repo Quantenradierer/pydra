@@ -2,10 +2,12 @@
 
 Pydra (Py + Hydra) is a multiple-choice trainer for absolute Python beginners,
 in German (default) and English. It is an installable PWA that works fully
-offline. Three lessons: a quiz of 10 random questions from 80 in 8 topics,
+offline. Four lessons: a quiz of 10 random questions from 80 in 8 topics,
 "Reading functions", which walks through a short function line by line and
-then asks what the whole function does, and "Hydra goes fishing", a game:
-fill the gap in a small program and watch a hydra run it step by step. Every answer gets an explanation. Live at https://pydra.quantenradierer.de/.
+then asks what the whole function does, and two games: in "Hydra goes
+fishing" and "The hydra's heads" you fill the gap in a small program and
+watch a hydra run it step by step (in the second one, every function call
+grows the hydra a head). Every answer gets an explanation. Live at https://pydra.quantenradierer.de/.
 
 The agreed requirements are in [docs/requirements.md](docs/requirements.md);
 deployment is described in [DEPLOY.md](DEPLOY.md).
@@ -34,7 +36,7 @@ In `web/src`:
 | `update.ts`                     | Service worker update rule (never reload during a quiz)             |
 | `feedback/`                     | Feedback client and offline queue                                   |
 | `hydra/`                        | The quiz hydra: neck geometry, head states from the session, SVG; its animations are in `style.css` |
-| `game/`                         | The hydra game: Python-subset interpreter (`python.ts`), pool simulation and traces (`world.ts`), levels (`levels.ts`), progress, the pool SVG (`arena.ts`); the screen is `views/game.ts` |
+| `game/`                         | The hydra games: Python-subset interpreter (`python.ts`), shared level shape (`puzzle.ts`), progress (`game.ts`, `progress.ts`); fishing: pool simulation (`world.ts`), levels (`levels.ts`), the pool SVG (`arena.ts`); heads: call-stack simulation (`heads.ts`), levels (`heads-levels.ts`), the stage (`heads-view.ts`). The shared screen is `views/puzzle.ts`, configured by `views/game.ts` and `views/heads.ts` |
 | `i18n.ts`                       | UI texts in German and English                                      |
 | `icons/hydra.svg`, `scripts/icons.mjs` | Icon artwork (also inlined as the Home logo) and the PNG generator (`npm run icons -w web`) |
 
@@ -178,6 +180,31 @@ The levels live in `web/src/game/levels.ts` (TypeScript, in play order):
   `move`, `turn_left`, `turn_right`, `wall_ahead` and `fish_ahead` defined
   over the same map, and compare outcome, error type and final position
   with `simulate()`.
+
+## Game levels (The hydra's heads)
+
+The levels live in `web/src/game/heads-levels.ts`, in the same shape plus a
+goal instead of a map:
+
+```ts
+{
+  id: 'parameter',
+  …,
+  goal: { vars: { result: '8' } },            // values as Python repr; or output: ['3', '2', '1']
+  code: 'def double(x):\n    return x * 2\n\nresult = double(___)',
+  choices: [ … ],                              // 4, as above
+  answerIndex: 0,
+}
+```
+
+- `simulateHeads()` in `heads.ts` runs every choice and records, per step,
+  the running calls (one head each, with locals), the main program's
+  variables, the output and the value a finished call returned.
+- The same rules as for the fishing levels apply (only the right answer
+  reaches the goal, every answer behaves differently, notes never name the
+  right answer); expected outcomes go into `heads-levels.test.ts`.
+- Check every answer in real Python: run the program with stdout captured
+  and compare output, final variables and the error message.
 
 ## Feedback API
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Interpreter, parse, PyError, repr, type Builtin, type Value } from './python.ts';
+import { Interpreter, parse, PyError, repr, str, type Builtin, type Value } from './python.ts';
 
 /** Runs a program; returns the lines it paused on, the variables at the end and printed values. */
 function run(source: string) {
@@ -142,6 +142,34 @@ describe('python subset', () => {
     expect(error('def go(a, b=1):\n    pass\n\ngo()')).toMatchObject({ type: 'TypeError', line: 4 });
     expect(error('def go(a, b=1):\n    pass\n\ngo(1, 2, 3)')).toMatchObject({ type: 'TypeError' });
     expect(error('def go(n=steps):\n    pass')).toMatchObject({ type: 'NameError', line: 1 });
+  });
+
+  it('shows the running calls with their arguments and locals, and the call that just returned', () => {
+    const interpreter = new Interpreter([]);
+    const seen: string[] = [];
+    for (const pause of interpreter.run(parse('def f(a, b=2):\n    c = a + b\n    return c\n\nx = f(1)\ny = 0'))) {
+      const stack = interpreter.stack().map((s) => `${s.name}(${s.args.join(', ')}) ${s.vars.map(([k, v]) => `${k}=${repr(v)}`).join(' ')}`);
+      const back = interpreter.takeReturn();
+      seen.push(`${pause.line}: ${stack.join(' | ')}${back ? ` <- ${back.name} ${repr(back.value)}` : ''}`);
+    }
+    expect(seen).toEqual(['1: ', '5: ', '2: f(1) a=1 b=2', '3: f(1) a=1 b=2 c=3', '6:  <- f 3']);
+    expect(interpreter.globalVariables()).toEqual([
+      ['x', 3],
+      ['y', 0],
+    ]);
+  });
+
+  it('words argument errors like Python', () => {
+    expect(error('def f(a, b):\n    pass\n\nf(1)').message).toBe("TypeError: f() missing 1 required positional argument: 'b'");
+    expect(error('def f(a, b, c):\n    pass\n\nf()').message).toBe("TypeError: f() missing 3 required positional arguments: 'a', 'b' and 'c'");
+    expect(error('def f(a):\n    pass\n\nf(1, 2)').message).toBe('TypeError: f() takes 1 positional argument but 2 were given');
+    expect(error('def f():\n    pass\n\nf(1)').message).toBe('TypeError: f() takes 0 positional arguments but 1 was given');
+    expect(error('def f(a, b=1):\n    pass\n\nf(1, 2, 3)').message).toBe('TypeError: f() takes from 1 to 2 positional arguments but 3 were given');
+    expect(error('def f():\n    pass\n\nx = f + 1').message).toBe("TypeError: unsupported operand type(s) for +: 'function' and 'int'");
+  });
+
+  it('formats print output like str(): text without quotes', () => {
+    expect([str('a b'), str(3), str(['a']), str(null)]).toEqual(['a b', '3', "['a']", 'None']);
   });
 
   it('ignores comments and blank lines', () => {

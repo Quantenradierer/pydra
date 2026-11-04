@@ -7,7 +7,7 @@ import { percentCorrect } from '../stats.ts';
 
 export function homeScreen(app: App): Screen {
   const { t } = app;
-  const { storage, trainer, game } = app.services;
+  const { storage, trainer } = app.services;
 
   /** One stats line per lesson, in the active language. */
   function stats(lesson: LessonId): string {
@@ -48,28 +48,30 @@ export function homeScreen(app: App): Screen {
       h('p', { class: 'stats', id: `stats-${lesson}`, 'data-testid': `stats-${lesson}` }, stats(lesson)),
     );
 
-  /** The hydra game: not a quiz lesson, it has its own screen and progress. */
-  const gameStats = game.stats();
-  const gameCard = h(
-    'li',
-    { class: 'lesson' },
-    h(
-      'button',
-      {
-        class: 'primary start',
-        'data-testid': 'start-game',
-        'aria-describedby': 'stats-game',
-        onclick: () => app.navigate('game'),
-      },
-      h('span', { class: 'lesson-title' }, t('lesson.game.title')),
-      h('span', { class: 'lesson-description' }, t('lesson.game.description')),
-    ),
-    h(
-      'p',
-      { class: 'stats', id: 'stats-game', 'data-testid': 'stats-game' },
-      gameStats.picks === 0 ? t('home.game.noStats') : t('home.game.stats', gameStats),
-    ),
-  );
+  /** The hydra games: not quiz lessons, each has its own screen and progress. */
+  const gameCard = (route: 'game' | 'heads') => {
+    const stats = app.services[route].stats();
+    return h(
+      'li',
+      { class: 'lesson' },
+      h(
+        'button',
+        {
+          class: 'primary start',
+          'data-testid': `start-${route}`,
+          'aria-describedby': `stats-${route}`,
+          onclick: () => app.navigate(route),
+        },
+        h('span', { class: 'lesson-title' }, t(`lesson.${route}.title`)),
+        h('span', { class: 'lesson-description' }, t(`lesson.${route}.description`)),
+      ),
+      h(
+        'p',
+        { class: 'stats', id: `stats-${route}`, 'data-testid': `stats-${route}` },
+        stats.picks === 0 ? t('home.game.noStats') : t('home.game.stats', stats),
+      ),
+    );
+  };
 
   const iconButton = (label: string, icon: string, onclick: () => void, testId: string) =>
     h('button', { class: 'icon-button', 'aria-label': label, title: label, 'data-testid': testId, onclick }, svg(icon));
@@ -86,7 +88,7 @@ export function homeScreen(app: App): Screen {
     logoArt(),
     h('h1', { tabindex: -1 }, 'Pydra'),
     h('p', { class: 'tagline' }, t('app.tagline')),
-    h('ul', { class: 'lessons', 'aria-label': t('home.lessons') }, ...LESSONS.map(lessonCard), gameCard),
+    h('ul', { class: 'lessons', 'aria-label': t('home.lessons') }, ...LESSONS.map(lessonCard), gameCard('game'), gameCard('heads')),
   );
   return { root };
 }

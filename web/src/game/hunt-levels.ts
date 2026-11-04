@@ -995,4 +995,824 @@ export const HUNT_LEVELS: readonly HuntLevel[] = [
     ],
     answerIndex: 0,
   },
+  {
+    id: 'hunt-hydra-then-gold',
+    title: { de: 'Erst die Hydra, dann das Gold', en: 'Hydra first, then the gold' },
+    intro: {
+      de: 'Ein Programm läuft Zeile für Zeile. Nach dem Schlag geht es einfach mit der nächsten Zeile weiter.',
+      en: 'A program runs line by line. After the blow it simply carries on with the next line.',
+    },
+    map: ['@.oH', '..G.'],
+    code: 'for i in range(2):\n    move_east()\nattack()\n___',
+    choices: [
+      {
+        code: 'move_south()',
+        note: {
+          de: 'Nach dem Schlag geht der Krieger einen Schritt nach unten und steht auf dem Gold.',
+          en: 'After the blow the warrior takes one step down and stands on the gold.',
+        },
+      },
+      {
+        code: 'move_east()',
+        note: {
+          de: 'Der Krieger geht auf den Kopf der besiegten Hydra. Der ist harmlos, aber das Gold bleibt liegen.',
+          en: 'The warrior steps on the head of the defeated hydra. It is harmless, but the gold stays where it is.',
+        },
+      },
+      {
+        code: 'move_north()',
+        note: {
+          de: 'Über der Karte ist nichts mehr: Der Krieger läuft gegen den Rand.',
+          en: 'There is nothing above the map: the warrior walks into the edge.',
+        },
+      },
+      {
+        code: 'move_west()',
+        note: {
+          de: 'Der Krieger geht zurück auf das Gras neben dem Körper. Das Gold liegt noch unten.',
+          en: 'The warrior walks back onto the grass beside the body. The gold still lies below.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-rock',
+    title: { de: 'Ein Felsen im Weg', en: 'A rock in the way' },
+    intro: {
+      de: 'Ein `#` ist ein Felsen. Wer gegen einen Felsen läuft, kommt nicht durch: Das Programm bricht ab, wie am Rand der Karte.',
+      en: 'A `#` is a rock. Walking into a rock gets you nowhere: the program stops, just as at the edge of the map.',
+    },
+    map: ['@#G', '...'],
+    code: 'move_south()\nfor i in range(2):\n    move_east()\n___',
+    choices: [
+      {
+        code: 'move_north()',
+        note: {
+          de: 'Unter dem Felsen vorbei, dann hinauf: Der Krieger steht auf dem Gold.',
+          en: 'Past underneath the rock, then up: the warrior stands on the gold.',
+        },
+      },
+      {
+        code: 'move_south()',
+        note: {
+          de: 'Der Krieger steht schon in der untersten Reihe und läuft gegen den Rand.',
+          en: 'The warrior is already in the bottom row and walks into the edge.',
+        },
+      },
+      {
+        code: 'move_west()',
+        note: {
+          de: 'Der Krieger geht einen Schritt zurück. Das Gold ist weiter oben und bleibt liegen.',
+          en: 'The warrior takes a step back. The gold is further up and stays where it is.',
+        },
+      },
+      {
+        code: 'attack()',
+        note: {
+          de: 'Der Krieger schlägt zu, aber auf seinem Feld ist keine Hydra: Der Schlag geht ins Leere.',
+          en: 'The warrior strikes, but there is no hydra on his cell: the blow hits only air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-last-round',
+    title: { de: 'Erst am Ende zuschlagen', en: 'Strike only at the end' },
+    intro: {
+      de: 'Mit `if` und `else` entscheidet jede Runde neu. Hier gilt `i == 3` nur in der letzten Runde, in allen anderen Runden läuft der `else`-Teil.',
+      en: 'With `if` and `else` every round decides afresh. Here `i == 3` holds only in the last round; in all the other rounds the `else` part runs.',
+    },
+    map: ['@..oH'],
+    code: 'for i in range(4):\n    if i == 3:\n        attack()\n    else:\n        ___',
+    choices: [
+      {
+        code: 'move_east()',
+        note: {
+          de: 'Drei Schritte in den Runden 0 bis 2, dann steht der Krieger auf dem Körper, und in Runde 3 schlägt er zu.',
+          en: 'Three steps in rounds 0 to 2, then the warrior stands on the body, and in round 3 he strikes.',
+        },
+      },
+      {
+        code: 'pass',
+        note: {
+          de: 'In den ersten Runden passiert nichts. Der Krieger steht noch am Start, als er in Runde 3 zuschlägt: ins Leere.',
+          en: 'Nothing happens in the first rounds. The warrior still stands at the start when he strikes in round 3: into air.',
+        },
+      },
+      {
+        code: 'move_west()',
+        note: {
+          de: 'Der Krieger steht am linken Rand und läuft schon in der ersten Runde dagegen.',
+          en: 'The warrior stands at the left edge and walks into it in the very first round.',
+        },
+      },
+      {
+        code: 'attack()',
+        note: {
+          de: 'In Runde 0 schlägt der Krieger zu, schon am Start. Dort ist keine Hydra: Der Schlag geht ins Leere.',
+          en: 'In round 0 the warrior strikes, right at the start. There is no hydra there, so the blow hits only air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-not',
+    title: { de: 'Nicht auf dem Körper', en: 'Not on the body' },
+    intro: {
+      de: '`not` dreht eine Bedingung um: `not body_here()` ist wahr, solange der Krieger auf keinem Hydrakörper steht.',
+      en: '`not` flips a condition: `not body_here()` is true as long as the warrior does not stand on a hydra body.',
+    },
+    map: ['@..oH.'],
+    code: 'for i in range(5):\n    if ___:\n        move_east()\n    else:\n        attack()',
+    choices: [
+      {
+        code: 'not body_here()',
+        note: {
+          de: 'Der Krieger geht, bis er auf dem Körper steht, schlägt dann zu und geht danach über den besiegten Kopf weiter.',
+          en: 'The warrior walks until he stands on the body, then strikes, and afterwards walks on over the defeated head.',
+        },
+      },
+      {
+        code: 'body_here()',
+        note: {
+          de: 'Am Start steht der Krieger auf keinem Körper, also läuft der `else`-Teil: Er schlägt gleich zu, ins Leere.',
+          en: 'At the start the warrior stands on no body, so the `else` part runs: he strikes at once, into air.',
+        },
+      },
+      {
+        code: 'True',
+        note: {
+          de: 'Die Bedingung ist immer wahr, der Krieger geht nur weiter und tritt auf den Kopf der lebenden Hydra: Die frisst ihn.',
+          en: 'The condition is always true, so the warrior only keeps walking and steps on the living hydra\'s head: it eats him.',
+        },
+      },
+      {
+        code: 'i < 3',
+        note: {
+          de: 'Nach drei Schritten steht der Krieger auf dem Körper und schlägt zu. In Runde 4 schlägt er noch einmal, aber die Hydra ist schon besiegt: ins Leere.',
+          en: 'After three steps the warrior stands on the body and strikes. In round 4 he strikes once more, but the hydra is already defeated: into air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-elif',
+    title: { de: 'Ein Fall nach dem anderen', en: 'One case after another' },
+    intro: {
+      de: '`elif` heißt "sonst, wenn": Es prüft eine zweite Bedingung, aber nur, wenn die erste nicht gilt. So hat jede Runde ihren eigenen Fall.',
+      en: '`elif` means "otherwise, if": it checks a second condition, but only when the first one does not hold. That gives every round its own case.',
+    },
+    map: ['@.', '.o', '.H'],
+    code: 'for i in range(3):\n    if i == 0:\n        move_east()\n    elif i == 1:\n        ___\n    else:\n        attack()',
+    choices: [
+      {
+        code: 'move_south()',
+        note: {
+          de: 'Erst nach rechts, dann nach unten auf den Körper, und in Runde 2 kommt der Schlag.',
+          en: 'First right, then down onto the body, and in round 2 comes the blow.',
+        },
+      },
+      {
+        code: 'move_east()',
+        note: {
+          de: 'Der Krieger steht schon am rechten Rand und läuft dagegen.',
+          en: 'The warrior is already at the right edge and walks into it.',
+        },
+      },
+      {
+        code: 'move_west()',
+        note: {
+          de: 'Der Krieger geht zurück an den Start. Dort schlägt er zu, aber da ist keine Hydra: ins Leere.',
+          en: 'The warrior goes back to the start. He strikes there, but there is no hydra: into air.',
+        },
+      },
+      {
+        code: 'pass',
+        note: {
+          de: 'Der Krieger bleibt oben rechts stehen und schlägt dort zu. Das Feld ist nur Gras: Der Schlag geht ins Leere.',
+          en: 'The warrior stays in the top right and strikes there. The cell is only grass: the blow hits only air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-two-functions',
+    title: { de: 'Zwei Funktionen', en: 'Two functions' },
+    intro: {
+      de: 'Man kann mehrere Funktionen anlegen. Jede hat ihren Namen, und nur ein Name, den es gibt, lässt sich aufrufen.',
+      en: 'You can set up several functions. Each has its own name, and only a name that exists can be called.',
+    },
+    map: ['@G', '.G'],
+    code: 'def right():\n    move_east()\n\ndef down():\n    move_south()\n\nright()\n___',
+    choices: [
+      {
+        code: 'down()',
+        note: {
+          de: 'Erst nach rechts aufs erste Gold, dann nach unten aufs zweite.',
+          en: 'First right onto the first gold, then down onto the second.',
+        },
+      },
+      {
+        code: 'right()',
+        note: {
+          de: 'Der Krieger steht schon am rechten Rand und läuft dagegen.',
+          en: 'The warrior is already at the right edge and walks into it.',
+        },
+      },
+      {
+        code: 'up()',
+        note: {
+          de: 'Eine Funktion `up` hat niemand angelegt: Python meldet einen Fehler.',
+          en: 'Nobody has set up a function `up`: Python reports an error.',
+        },
+      },
+      {
+        code: 'down',
+        note: {
+          de: 'Ohne Klammern wird `down` nur genannt, nicht aufgerufen. Der Krieger bleibt stehen, das zweite Gold bleibt liegen.',
+          en: 'Without parentheses `down` is only named, not called. The warrior stays put, and the second gold stays where it is.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-hop',
+    title: { de: 'Hüpfen', en: 'Hopping' },
+    intro: {
+      de: 'Alles, was in einer Funktion steht, läuft bei jedem Aufruf noch einmal. Hier macht jeder Aufruf `hop()` zwei Dinge.',
+      en: 'Everything inside a function runs again with every call. Here each call of `hop()` does two things.',
+    },
+    map: ['@.G.G.G'],
+    code: 'def hop():\n    move_east()\n    ___\n\nhop()\nhop()\nhop()',
+    choices: [
+      {
+        code: 'move_east()',
+        note: {
+          de: 'Jeder Hüpfer sind zwei Schritte: Der Krieger landet dreimal auf Gold.',
+          en: 'Each hop is two steps: the warrior lands on gold three times.',
+        },
+      },
+      {
+        code: 'pass',
+        note: {
+          de: 'Jeder Hüpfer ist nur ein Schritt. Das erste Gold wird mitgenommen, die anderen bleiben liegen.',
+          en: 'Each hop is only one step. The first gold is picked up, the others stay where they are.',
+        },
+      },
+      {
+        code: 'attack()',
+        note: {
+          de: 'Der Krieger schlägt nach dem ersten Schritt zu, aber da ist keine Hydra: ins Leere.',
+          en: 'The warrior strikes after the first step, but there is no hydra: into air.',
+        },
+      },
+      {
+        code: 'move_north()',
+        note: {
+          de: 'Die Karte hat nur eine Reihe: Der Krieger läuft nach oben gegen den Rand.',
+          en: 'The map has only one row: the warrior walks up into the edge.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-count-up',
+    title: { de: 'Hochzählen', en: 'Counting up' },
+    intro: {
+      de: 'Eine Schleife kann selbst mitzählen: `i` startet bei 0 und wird in jeder Runde größer. `while i < 3:` läuft dann genau dreimal.',
+      en: 'A loop can keep count itself: `i` starts at 0 and grows in every round. `while i < 3:` then runs exactly three times.',
+    },
+    map: ['@..oH.'],
+    code: 'i = 0\nwhile i < ___:\n    move_east()\n    i = i + 1\nattack()',
+    choices: [
+      {
+        code: '3',
+        note: {
+          de: '`i` ist 0, 1, 2: drei Runden, drei Schritte. Der Krieger steht auf dem Körper, und `attack()` trifft.',
+          en: '`i` is 0, 1, 2: three rounds, three steps. The warrior stands on the body, and `attack()` hits.',
+        },
+      },
+      {
+        code: '2',
+        note: {
+          de: 'Nur zwei Runden, also zwei Schritte. Der Krieger steht noch auf Gras, und der Schlag geht ins Leere.',
+          en: 'Only two rounds, so two steps. The warrior still stands on grass, and the blow hits only air.',
+        },
+      },
+      {
+        code: '4',
+        note: {
+          de: 'Vier Runden: Der vierte Schritt führt auf den Kopf der Hydra, und die frisst den Krieger.',
+          en: 'Four rounds: the fourth step leads onto the hydra\'s head, and it eats the warrior.',
+        },
+      },
+      {
+        code: '0',
+        note: {
+          de: '`0 < 0` stimmt nicht, die Schleife läuft nie. Der Krieger schlägt am Start ins Leere.',
+          en: '`0 < 0` is not true, so the loop never runs. The warrior strikes at the start, into air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-plus-equals',
+    title: { de: 'Die Kurzform', en: 'The short form' },
+    intro: {
+      de: '`n += 1` ist die Kurzform von `n = n + 1`, und `n -= 1` die von `n = n - 1`. `n += 2` zählt in Zweierschritten.',
+      en: '`n += 1` is the short form of `n = n + 1`, and `n -= 1` that of `n = n - 1`. `n += 2` counts in steps of two.',
+    },
+    map: ['@..G'],
+    code: 'n = 0\nwhile n < 3:\n    move_east()\n    ___',
+    choices: [
+      {
+        code: 'n += 1',
+        note: {
+          de: '`n` zählt 1, 2, 3: drei Schritte, und der Krieger bleibt genau auf dem Gold stehen.',
+          en: '`n` counts 1, 2, 3: three steps, and the warrior stops right on the gold.',
+        },
+      },
+      {
+        code: 'n += 2',
+        note: {
+          de: '`n` wird 2 und dann 4: Nach zwei Schritten ist Schluss, ein Feld vor dem Gold.',
+          en: '`n` becomes 2 and then 4: it is over after two steps, one cell short of the gold.',
+        },
+      },
+      {
+        code: 'n -= 1',
+        note: {
+          de: '`n` wird kleiner und bleibt unter 3. Die Schleife endet nie, und der Krieger läuft hinter dem Gold gegen den Rand.',
+          en: '`n` gets smaller and stays below 3. The loop never ends, and the warrior walks into the edge behind the gold.',
+        },
+      },
+      {
+        code: 'n += 3',
+        note: {
+          de: 'Schon nach dem ersten Schritt ist `n` 3. Das Gold ist noch zwei Felder entfernt.',
+          en: 'After the first step `n` is already 3. The gold is still two cells away.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-arithmetic',
+    title: { de: 'Rechnen in range', en: 'Sums inside range' },
+    intro: {
+      de: '`//` teilt und lässt den Rest weg: `7 // 2` ist 3. `%` gibt den Rest: `7 % 2` ist 1. In `range(…)` darf auch eine Rechnung stehen.',
+      en: '`//` divides and drops the remainder: `7 // 2` is 3. `%` gives the remainder: `7 % 2` is 1. A sum may stand inside `range(…)` too.',
+    },
+    map: ['@....oH'],
+    code: 'for i in range(___):\n    move_east()\nattack()',
+    choices: [
+      {
+        code: '10 // 2',
+        note: {
+          de: 'Das sind 5: fünf Schritte bis auf den Körper, und `attack()` besiegt die Hydra.',
+          en: 'That is 5: five steps onto the body, and `attack()` defeats the hydra.',
+        },
+      },
+      {
+        code: '10 % 3',
+        note: {
+          de: 'Das ist 1: Ein Schritt, und der Schlag geht ins Leere.',
+          en: 'That is 1: one step, and the blow hits only air.',
+        },
+      },
+      {
+        code: '10 - 2',
+        note: {
+          de: 'Das sind 8 Schritte: Der sechste führt auf den Kopf der Hydra, und die frisst den Krieger.',
+          en: 'That is 8 steps: the sixth leads onto the hydra\'s head, and it eats the warrior.',
+        },
+      },
+      {
+        code: '10 // 3',
+        note: {
+          de: 'Das ist 3: Drei Schritte, der Krieger steht noch auf Gras, und der Schlag geht ins Leere.',
+          en: 'That is 3: three steps, the warrior still stands on grass, and the blow hits only air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-down-to-hydra',
+    title: { de: 'Nach unten', en: 'Heading down' },
+    intro: {
+      de: '`while not body_here():` läuft, bis der Krieger auf einem Körper steht. Die Schleife kann auch nach unten führen.',
+      en: '`while not body_here():` runs until the warrior stands on a body. The loop can lead downwards just as well.',
+    },
+    map: ['@.', '..', '..', 'o.', 'H.'],
+    code: 'while not body_here():\n    ___\nattack()',
+    choices: [
+      {
+        code: 'move_south()',
+        note: {
+          de: 'Der Krieger geht nach unten, bis er auf dem Körper steht, und schlägt zu.',
+          en: 'The warrior walks down until he stands on the body, and strikes.',
+        },
+      },
+      {
+        code: 'move_north()',
+        note: {
+          de: 'Über dem Start ist nichts mehr: Der Krieger läuft sofort gegen den Rand.',
+          en: 'There is nothing above the start: the warrior walks into the edge at once.',
+        },
+      },
+      {
+        code: 'move_east()',
+        note: {
+          de: 'Ein Schritt nach rechts geht noch, der nächste läuft gegen den Rand.',
+          en: 'One step right still works, the next walks into the edge.',
+        },
+      },
+      {
+        code: 'pass',
+        note: {
+          de: 'Nichts bewegt sich, die Bedingung bleibt wahr: Die Schleife dreht sich endlos im Kreis.',
+          en: 'Nothing moves, the condition stays true: the loop goes round and round forever.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-and-back',
+    title: { de: 'Hin und zurück', en: 'There and back' },
+    intro: {
+      de: 'Zwei Schleifen können zwei Wege laufen: Erst geht es in die eine Richtung, dann in die andere. Wie weit, sagt jeweils die Zahl in `range`.',
+      en: 'Two loops can walk two paths: first one direction, then the other. How far is told by the number in each `range`.',
+    },
+    map: ['G..@..G'],
+    code: 'for i in range(3):\n    move_east()\nfor i in range(___):\n    move_west()',
+    choices: [
+      {
+        code: '6',
+        note: {
+          de: 'Drei Schritte nach rechts aufs erste Gold, dann sechs nach links bis aufs zweite.',
+          en: 'Three steps right onto the first gold, then six left onto the second.',
+        },
+      },
+      {
+        code: '5',
+        note: {
+          de: 'Ein Feld zu kurz: Das Gold ganz links bleibt liegen.',
+          en: 'One cell too short: the gold at the far left stays where it is.',
+        },
+      },
+      {
+        code: '7',
+        note: {
+          de: 'Der Krieger holt das Gold, tut aber noch einen Schritt und läuft gegen den linken Rand.',
+          en: 'The warrior takes the gold, but makes one more step and walks into the left edge.',
+        },
+      },
+      {
+        code: '3',
+        note: {
+          de: 'Der Krieger geht nur bis zu seinem Start zurück. Das Gold links bleibt liegen.',
+          en: 'The warrior goes back only as far as his start. The gold on the left stays where it is.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-break-for',
+    title: { de: 'Vorzeitig aufhören', en: 'Stopping early' },
+    intro: {
+      de: 'Auch eine `for`-Schleife kann mit `break` früher enden, als `range` es vorsieht.',
+      en: 'A `for` loop can also end earlier than `range` says, with `break`.',
+    },
+    map: ['@.oH.'],
+    code: 'for i in range(6):\n    move_east()\n    if body_here():\n        attack()\n        ___',
+    choices: [
+      {
+        code: 'break',
+        note: {
+          de: 'Nach dem Schlag verlässt der Krieger die Schleife, obwohl noch Runden übrig wären.',
+          en: 'After the blow the warrior leaves the loop, although there would be rounds left.',
+        },
+      },
+      {
+        code: 'pass',
+        note: {
+          de: '`pass` tut nichts, die Schleife läuft weiter. Der Krieger geht bis zum Rand und läuft dagegen.',
+          en: '`pass` does nothing, so the loop carries on. The warrior walks on to the edge and into it.',
+        },
+      },
+      {
+        code: 'stop()',
+        note: {
+          de: 'Eine Funktion `stop` gibt es nicht: Python meldet einen Fehler.',
+          en: 'There is no function `stop`: Python reports an error.',
+        },
+      },
+      {
+        code: 'attack()',
+        note: {
+          de: 'Der Krieger schlägt gleich noch einmal zu, aber die Hydra ist schon besiegt: ins Leere.',
+          en: 'The warrior strikes a second time at once, but the hydra is already defeated: into air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-two-ifs',
+    title: { de: 'Zwei Ifs hintereinander', en: 'Two ifs in a row' },
+    intro: {
+      de: 'Zwei `if` untereinander werden beide geprüft, jedes für sich. In jeder Runde können also null, eins oder beide gelten.',
+      en: 'Two `if`s one below the other are both checked, each on its own. In every round none, one or both can hold.',
+    },
+    map: ['@.o.o', '..H.H'],
+    code: 'for i in range(4):\n    move_east()\n    if i == 1:\n        attack()\n    if ___:\n        attack()',
+    choices: [
+      {
+        code: 'i == 3',
+        note: {
+          de: 'In Runde 1 steht der Krieger auf dem ersten Körper, in Runde 3 auf dem zweiten: beide Hydras sind besiegt.',
+          en: 'In round 1 the warrior stands on the first body, in round 3 on the second: both hydras are defeated.',
+        },
+      },
+      {
+        code: 'i == 2',
+        note: {
+          de: 'In Runde 2 steht der Krieger auf Gras zwischen den Hydras: Der Schlag geht ins Leere.',
+          en: 'In round 2 the warrior stands on grass between the hydras: the blow hits only air.',
+        },
+      },
+      {
+        code: 'i == 4',
+        note: {
+          de: '`i` wird nie 4, der zweite Schlag kommt nie. Die zweite Hydra bleibt am Leben.',
+          en: '`i` never becomes 4, so the second blow never comes. The second hydra stays alive.',
+        },
+      },
+      {
+        code: 'i >= 1',
+        note: {
+          de: 'Schon in Runde 1 gelten beide `if`: Der zweite Schlag trifft die schon besiegte Hydra nicht mehr, ins Leere.',
+          en: 'Already in round 1 both `if`s hold: the second blow no longer hits the already defeated hydra, only air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-or',
+    title: { de: 'Das eine oder das andere', en: 'This one or that one' },
+    intro: {
+      de: '`or` heißt "oder": `i == 0 or i == 3` stimmt, wenn mindestens eine der beiden Seiten stimmt. `and` heißt "und" und braucht beide.',
+      en: '`or` means "or": `i == 0 or i == 3` is true when at least one of the two sides is true. `and` needs both.',
+    },
+    map: ['@o..o', '.H..H'],
+    code: 'for i in range(4):\n    move_east()\n    if ___:\n        attack()',
+    choices: [
+      {
+        code: 'i == 0 or i == 3',
+        note: {
+          de: 'In Runde 0 und in Runde 3 steht der Krieger auf einem Körper: Beide Hydras sind besiegt.',
+          en: 'In round 0 and in round 3 the warrior stands on a body: both hydras are defeated.',
+        },
+      },
+      {
+        code: 'i == 0 and i == 3',
+        note: {
+          de: '`i` kann nicht gleichzeitig 0 und 3 sein, also wird nie geschlagen. Beide Hydras bleiben am Leben.',
+          en: '`i` cannot be 0 and 3 at the same time, so there is never a blow. Both hydras stay alive.',
+        },
+      },
+      {
+        code: 'i == 0 or i == 2',
+        note: {
+          de: 'Runde 0 trifft die erste Hydra. In Runde 2 steht der Krieger auf Gras: Der Schlag geht ins Leere.',
+          en: 'Round 0 hits the first hydra. In round 2 the warrior stands on grass: the blow hits only air.',
+        },
+      },
+      {
+        code: 'i == 1 or i == 3',
+        note: {
+          de: 'In Runde 1 steht der Krieger auf Gras, noch vor dem ersten Schlag: Der geht ins Leere.',
+          en: 'In round 1 the warrior stands on grass, before any blow has landed: it hits only air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-and',
+    title: { de: 'Beide Bedingungen', en: 'Both conditions' },
+    intro: {
+      de: '`and` heißt "und": `n < 4 and not body_here()` stimmt nur, wenn beide Seiten stimmen. Sobald eine Seite nicht mehr stimmt, endet die Schleife.',
+      en: '`and` means "and": `n < 4 and not body_here()` is true only when both sides are true. As soon as one side stops being true, the loop ends.',
+    },
+    map: ['@.oH..'],
+    code: 'n = 0\nwhile ___:\n    move_east()\n    n = n + 1\nattack()',
+    choices: [
+      {
+        code: 'n < 4 and not body_here()',
+        note: {
+          de: 'Der Krieger geht, bis er auf dem Körper steht, dann endet die Schleife (`n` ist erst 2), und er schlägt zu.',
+          en: 'The warrior walks until he stands on the body, then the loop ends (`n` is only 2 by then), and he strikes.',
+        },
+      },
+      {
+        code: 'n < 4 or not body_here()',
+        note: {
+          de: 'Mit `or` genügt eine wahre Seite: Solange `n` unter 4 ist, geht der Krieger weiter, auch über den Körper hinweg, und tritt auf den Kopf: Er wird gefressen.',
+          en: 'With `or` one true side is enough: as long as `n` is below 4 the warrior walks on, right past the body, and steps on the head: he is eaten.',
+        },
+      },
+      {
+        code: 'n < 1',
+        note: {
+          de: 'Nur ein Schritt, dann ist `n` schon 1. Der Krieger steht auf Gras, und der Schlag geht ins Leere.',
+          en: 'Only one step, then `n` is already 1. The warrior stands on grass, and the blow hits only air.',
+        },
+      },
+      {
+        code: 'body_here()',
+        note: {
+          de: 'Am Start steht der Krieger auf keinem Körper, die Schleife läuft nie, und der Schlag geht ins Leere.',
+          en: 'At the start the warrior stands on no body, so the loop never runs, and the blow hits only air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-flag',
+    title: { de: 'Die Fertig-Fahne', en: 'The done flag' },
+    intro: {
+      de: 'Eine Variable kann sich merken, ob man fertig ist: `False` heißt nein, `True` heißt ja. `while not done:` läuft, bis `done` auf `True` steht.',
+      en: 'A variable can remember whether you are done: `False` means no, `True` means yes. `while not done:` runs until `done` is set to `True`.',
+    },
+    map: ['@..oH.'],
+    code: 'done = False\nwhile not done:\n    move_east()\n    if body_here():\n        attack()\n        ___',
+    choices: [
+      {
+        code: 'done = True',
+        note: {
+          de: 'Nach dem Schlag steht `done` auf `True`, und die Schleife endet.',
+          en: 'After the blow `done` is `True`, and the loop ends.',
+        },
+      },
+      {
+        code: 'done = False',
+        note: {
+          de: '`done` war schon `False`: Nichts ändert sich, die Schleife läuft weiter, und der Krieger läuft bis gegen den Rand.',
+          en: '`done` was already `False`: nothing changes, the loop carries on, and the warrior walks on into the edge.',
+        },
+      },
+      {
+        code: 'done = true',
+        note: {
+          de: 'Python schreibt `True` groß. Ein Name `true` gibt es nicht: Python meldet einen Fehler.',
+          en: 'Python writes `True` with a capital. There is no name `true`: Python reports an error.',
+        },
+      },
+      {
+        code: 'attack()',
+        note: {
+          de: 'Der Krieger schlägt noch einmal zu, die Hydra ist aber schon besiegt: ins Leere.',
+          en: 'The warrior strikes once more, but the hydra is already defeated: into air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-return',
+    title: { de: 'Eine Zahl zurückgeben', en: 'Giving back a number' },
+    intro: {
+      de: '`return` gibt einer Funktion einen Wert mit. Beim Aufruf steht dieser Wert genau dort, wo `steps()` geschrieben ist, hier also in `range(…)`.',
+      en: '`return` hands a value back from a function. At the call that value stands exactly where `steps()` is written, here inside `range(…)`.',
+    },
+    map: ['@..oH.'],
+    code: 'def steps():\n    return ___\n\nfor i in range(steps()):\n    move_east()\nattack()',
+    choices: [
+      {
+        code: '3',
+        note: {
+          de: '`range(3)` ergibt drei Schritte: Der Krieger steht auf dem Körper, und `attack()` trifft.',
+          en: '`range(3)` gives three steps: the warrior stands on the body, and `attack()` hits.',
+        },
+      },
+      {
+        code: '2',
+        note: {
+          de: 'Zwei Schritte: Der Krieger steht noch auf Gras, und der Schlag geht ins Leere.',
+          en: 'Two steps: the warrior still stands on grass, and the blow hits only air.',
+        },
+      },
+      {
+        code: '4',
+        note: {
+          de: 'Vier Schritte: Der vierte führt auf den Kopf der Hydra, und die frisst den Krieger.',
+          en: 'Four steps: the fourth leads onto the hydra\'s head, and it eats the warrior.',
+        },
+      },
+      {
+        code: '0',
+        note: {
+          de: '`range(0)` läuft nie. Der Krieger schlägt am Start ins Leere.',
+          en: '`range(0)` never runs. The warrior strikes at the start, into air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-range-step',
+    title: { de: 'In Zweierschritten', en: 'In steps of two' },
+    intro: {
+      de: 'Die dritte Zahl in `range` ist die Schrittweite: `range(0, 6, 2)` zählt 0, 2, 4 und läuft dreimal. Bei `range(0, 6, 3)` sind es nur 0 und 3.',
+      en: 'The third number in `range` is the step size: `range(0, 6, 2)` counts 0, 2, 4 and runs three times. `range(0, 6, 3)` gives only 0 and 3.',
+    },
+    map: ['@..oH.'],
+    code: 'for i in range(0, 6, ___):\n    move_east()\nattack()',
+    choices: [
+      {
+        code: '2',
+        note: {
+          de: '0, 2, 4: drei Runden, drei Schritte. Der Krieger steht auf dem Körper, und `attack()` trifft.',
+          en: '0, 2, 4: three rounds, three steps. The warrior stands on the body, and `attack()` hits.',
+        },
+      },
+      {
+        code: '1',
+        note: {
+          de: '0 bis 5: sechs Runden. Der vierte Schritt führt auf den Kopf der Hydra, und die frisst den Krieger.',
+          en: '0 to 5: six rounds. The fourth step leads onto the hydra\'s head, and it eats the warrior.',
+        },
+      },
+      {
+        code: '3',
+        note: {
+          de: '0 und 3: zwei Schritte. Der Krieger steht noch auf Gras, und der Schlag geht ins Leere.',
+          en: '0 and 3: two steps. The warrior still stands on grass, and the blow hits only air.',
+        },
+      },
+      {
+        code: '6',
+        note: {
+          de: 'Nur die 0: ein Schritt. Der Schlag geht ins Leere.',
+          en: 'Only the 0: one step. The blow hits only air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
+  {
+    id: 'hunt-check-in-function',
+    title: { de: 'Prüfen in der Funktion', en: 'Checking inside the function' },
+    intro: {
+      de: 'Eine Funktion darf selbst ein `if` enthalten. Ruft man sie in einer Schleife auf, wird bei jeder Runde neu geprüft.',
+      en: 'A function may contain an `if` of its own. When you call it in a loop, the check is made afresh in every round.',
+    },
+    map: ['@o...o', '.H...H'],
+    code: 'def step():\n    move_east()\n    if ___:\n        attack()\n\nfor i in range(5):\n    step()',
+    choices: [
+      {
+        code: 'body_here()',
+        note: {
+          de: 'Wo der Krieger auf einem Körper steht, schlägt er zu, sonst nicht: Beide Hydras sind besiegt.',
+          en: 'Where the warrior stands on a body he strikes, otherwise he does not: both hydras are defeated.',
+        },
+      },
+      {
+        code: 'not body_here()',
+        note: {
+          de: 'Die Bedingung ist umgekehrt: Auf dem Körper wird nicht geschlagen, schon am nächsten Feld aber, und da ist Gras: ins Leere.',
+          en: 'The condition is flipped: no blow on the body, but one on the very next cell, and that is grass: into air.',
+        },
+      },
+      {
+        code: 'False',
+        note: {
+          de: '`False` stimmt nie, der Krieger schlägt nie zu. Beide Hydras bleiben am Leben.',
+          en: '`False` is never true, so the warrior never strikes. Both hydras stay alive.',
+        },
+      },
+      {
+        code: 'body_here',
+        note: {
+          de: 'Ohne Klammern ist `body_here` nur ein Name, und der gilt immer als wahr: Der Krieger schlägt in jeder Runde, auch auf Gras, ins Leere.',
+          en: 'Without parentheses `body_here` is only a name, and that always counts as true: the warrior strikes in every round, even on grass, into air.',
+        },
+      },
+    ],
+    answerIndex: 0,
+  },
 ];

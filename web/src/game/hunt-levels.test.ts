@@ -35,6 +35,26 @@ const EXPECTED: Record<string, Outcome['kind'][]> = {
   'hunt-break-count': ['success', 'missed', 'missed', 'crash'],
   'hunt-corner': ['success', 'crash', 'missed', 'air'],
   'hunt-hit-twice': ['success', 'missed', 'crash', 'missed'],
+  'hunt-hydra-then-gold': ['success', 'missed', 'crash', 'missed'],
+  'hunt-rock': ['success', 'crash', 'missed', 'air'],
+  'hunt-last-round': ['success', 'air', 'crash', 'air'],
+  'hunt-not': ['success', 'air', 'eaten', 'air'],
+  'hunt-elif': ['success', 'crash', 'air', 'air'],
+  'hunt-two-functions': ['success', 'crash', 'error', 'missed'],
+  'hunt-hop': ['success', 'missed', 'air', 'crash'],
+  'hunt-count-up': ['success', 'air', 'eaten', 'air'],
+  'hunt-plus-equals': ['success', 'missed', 'crash', 'missed'],
+  'hunt-arithmetic': ['success', 'air', 'eaten', 'air'],
+  'hunt-down-to-hydra': ['success', 'crash', 'crash', 'loop'],
+  'hunt-and-back': ['success', 'missed', 'crash', 'missed'],
+  'hunt-break-for': ['success', 'crash', 'error', 'air'],
+  'hunt-two-ifs': ['success', 'air', 'missed', 'air'],
+  'hunt-or': ['success', 'missed', 'air', 'air'],
+  'hunt-and': ['success', 'eaten', 'air', 'air'],
+  'hunt-flag': ['success', 'crash', 'error', 'air'],
+  'hunt-return': ['success', 'air', 'eaten', 'air'],
+  'hunt-range-step': ['success', 'eaten', 'air', 'air'],
+  'hunt-check-in-function': ['success', 'air', 'missed', 'air'],
 };
 
 /** What the player sees of a run: the warrior's path, the hydras slain, the gold taken and how it ended. */
@@ -42,9 +62,9 @@ const behaviour = (trace: Trace) =>
   JSON.stringify([trace.steps.map((s) => [s.x, s.y, s.slain, s.taken]), trace.outcome]);
 
 describe('hunt levels', () => {
-  it('has 5 to 24 levels with unique ids', () => {
+  it('has 5 to 44 levels with unique ids', () => {
     expect(LEVELS.length).toBeGreaterThanOrEqual(5);
-    expect(LEVELS.length).toBeLessThanOrEqual(24);
+    expect(LEVELS.length).toBeLessThanOrEqual(44);
     expect(new Set(LEVELS.map((l) => l.id)).size).toBe(LEVELS.length);
     expect(Object.keys(EXPECTED)).toEqual(LEVELS.map((l) => l.id));
   });

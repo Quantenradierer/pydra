@@ -6,8 +6,7 @@ import { applyEvent, backfill, streakMultiplier, XP } from './engine.ts';
 import { levelInfo, TITLE_COUNT, titleKey, xpForLevel } from './levels.ts';
 import { MESSAGES } from '../i18n.ts';
 import { PointsService } from './service.ts';
-import { currentStreak, dayKey, emptyPoints, parsePoints, previousDay, type PointsEvent, type PointsState } from './state.ts';
-import { generateTasks, median, type GameContext } from './tasks.ts';
+import { currentStreak, dayKey, emptyPoints, parsePoints, previousDay, type GameContext, type PointsEvent, type PointsState } from './state.ts';
 
 const CTX: GameContext = {
   totals: { game: 10, hunt: 10, order: 10, predict: 10 },
@@ -76,7 +75,6 @@ describe('earning XP', () => {
     const wrong = play(emptyPoints(), [quiz('a', false)], at(day));
     expect(wrong.gained).toBe(0);
     expect(wrong.state.streak.days).toBe(0);
-    expect(wrong.state.history[day]).toEqual({ quizAnswers: 1, quizCorrect: 0, levels: 0 });
     expect(play(wrong.state, [quiz('a')], at(day)).gained).toBeGreaterThan(0);
   });
 
@@ -127,106 +125,6 @@ describe('streak', () => {
     expect(previousDay('2026-03-01')).toBe('2026-02-28');
     expect(previousDay('2026-01-01')).toBe('2025-12-31');
     expect(dayKey(new Date(2026, 0, 5))).toBe('2026-01-05');
-  });
-});
-
-describe('daily tasks', () => {
-  const day = '2026-03-10';
-
-  it('gives new players the default targets', () => {
-    const tasks = generateTasks(day, {}, CTX);
-    expect(tasks.map((t) => t.id)).toEqual(expect.arrayContaining(['quiz', 'levels']));
-    expect(tasks.find((t) => t.id === 'quiz')!.target).toBe(5);
-    expect(tasks.find((t) => t.id === 'levels')!.target).toBe(3);
-    expect(tasks.every((t) => t.progress === 0 && !t.done)).toBe(true);
-  });
-
-  it('gives the same tasks for the same day', () => {
-    expect(generateTasks(day, {}, CTX)).toEqual(generateTasks(day, {}, CTX));
-  });
-
-  it('follows the pace of the last week', () => {
-    const history = {
-      '2026-03-09': { quizAnswers: 12, quizCorrect: 10, levels: 0 },
-      '2026-03-08': { quizAnswers: 12, quizCorrect: 10, levels: 0 },
-      '2026-03-07': { quizAnswers: 12, quizCorrect: 10, levels: 0 },
-    };
-    expect(generateTasks(day, history, CTX).find((t) => t.id === 'quiz')!.target).toBe(12);
-  });
-
-  it('does not raise the bar when most answers were wrong', () => {
-    const history = { '2026-03-09': { quizAnswers: 30, quizCorrect: 10, levels: 0 } };
-    expect(generateTasks(day, history, CTX).find((t) => t.id === 'quiz')!.target).toBe(10);
-  });
-
-  it('keeps the targets within bounds', () => {
-    const big = { '2026-03-09': { quizAnswers: 500, quizCorrect: 500, levels: 90 } };
-    const small = { '2026-03-09': { quizAnswers: 1, quizCorrect: 1, levels: 1 } };
-    const t = (h: Record<string, never> | typeof big) => generateTasks(day, h, CTX);
-    expect(t(big).find((x) => x.id === 'quiz')!.target).toBe(20);
-    expect(t(small).find((x) => x.id === 'quiz')!.target).toBe(3);
-    expect(t(big).find((x) => x.id === 'levels')!.target).toBeLessThanOrEqual(7);
-  });
-
-  it('ignores days older than a week', () => {
-    const old = { '2026-02-01': { quizAnswers: 50, quizCorrect: 50, levels: 0 } };
-    expect(generateTasks(day, old, CTX).find((t) => t.id === 'quiz')!.target).toBe(5);
-  });
-
-  it('only offers games that still have levels', () => {
-    const ctx: GameContext = { ...CTX, remaining: { game: 0, hunt: 0, order: 0, predict: 0 } };
-    expect(generateTasks(day, {}, ctx).map((t) => t.id)).toEqual(['quiz']);
-    const one: GameContext = { ...CTX, remaining: { game: 0, hunt: 4, order: 0, predict: 0 } };
-    expect(generateTasks(day, {}, one).map((t) => t.id)).toEqual(['quiz', 'levels']);
-    const two: GameContext = { ...CTX, remaining: { game: 0, hunt: 4, order: 1, predict: 0 } };
-    const game = generateTasks(day, {}, two).find((t) => t.kind === 'game')!;
-    expect(['hunt', 'order']).toContain(game.game);
-  });
-
-  it('computes medians', () => {
-    expect(median([])).toBe(0);
-    expect(median([5, 1, 3])).toBe(3);
-    expect(median([1, 2, 3, 10])).toBe(2.5);
-  });
-
-  it('counts progress, pays on completion and rolls over at midnight', () => {
-    const start = applyEvent(emptyPoints(), quiz('q0'), at(day), CTX).state;
-    const target = start.daily!.tasks.find((t) => t.id === 'quiz')!.target;
-    const events = Array.from({ length: target - 1 }, (_, i) => quiz(`q${i + 1}`));
-    let finished = 0;
-    let state = start;
-    for (const event of events) {
-      const out = applyEvent(state, event, at(day), CTX);
-      state = out.state;
-      finished += out.result.tasks.length;
-    }
-    expect(finished).toBe(1);
-    expect(state.tasksDone).toBe(1);
-    expect(state.daily!.tasks.find((t) => t.id === 'quiz')).toMatchObject({ done: true, progress: target });
-    // More answers do not complete it again.
-    const more = applyEvent(state, quiz('extra'), at(day), CTX);
-    expect(more.result.tasks).toEqual([]);
-    expect(more.state.tasksDone).toBe(1);
-    // A new day, new tasks.
-    const next = applyEvent(state, quiz('next'), at('2026-03-11'), CTX).state;
-    expect(next.daily!.day).toBe('2026-03-11');
-    expect(next.daily!.tasks.find((t) => t.id === 'quiz')!.progress).toBe(1);
-  });
-
-  it('counts a level for the any-game task and its game task', () => {
-    const state = applyEvent(emptyPoints(), quiz('seed'), at(day), CTX).state;
-    const gameTask = state.daily!.tasks.find((t) => t.kind === 'game')!;
-    const after = applyEvent(state, level(gameTask.game!, 'l1'), at(day), CTX).state;
-    expect(after.daily!.tasks.find((t) => t.id === 'levels')!.progress).toBe(1);
-    expect(after.daily!.tasks.find((t) => t.id === gameTask.id)!.progress).toBe(1);
-    const other = (['game', 'hunt', 'order', 'predict'] as const).find((g) => g !== gameTask.game)!;
-    const third = applyEvent(after, level(other, 'l2'), at(day), CTX).state;
-    expect(third.daily!.tasks.find((t) => t.id === gameTask.id)!.progress).toBe(1);
-  });
-
-  it('prunes old history', () => {
-    const old = { ...emptyPoints(), history: { '2025-01-01': { quizAnswers: 1, quizCorrect: 1, levels: 0 } } };
-    expect(Object.keys(applyEvent(old, quiz('a'), at('2026-03-10'), CTX).state.history)).toEqual(['2026-03-10']);
   });
 });
 
@@ -288,15 +186,15 @@ describe('parsePoints', () => {
       total: 40,
       awarded: ['q:a', 7, 'q:a'],
       streak: { days: 'x' },
-      history: { 'not-a-day': { quizAnswers: 1, quizCorrect: 1, levels: 1 }, '2026-03-10': { quizAnswers: 1 } },
-      daily: { day: '2026-03-10', tasks: [{ id: 'quiz', kind: 'nope', target: 3, progress: 0, done: false }] },
+      history: { '2026-03-10': { quizAnswers: 1 } },
+      daily: { day: '2026-03-10', tasks: [] },
       achievements: { a: '2026-03-10T00:00:00Z', b: 4 },
     });
     expect(state.total).toBe(40);
     expect(state.awarded).toEqual(['q:a']);
     expect(state.streak).toEqual({ days: 0, last: '' });
-    expect(state.history).toEqual({});
-    expect(state.daily).toBeUndefined();
+    expect(state).not.toHaveProperty('history');
+    expect(state).not.toHaveProperty('daily');
     expect(state.achievements).toEqual({ a: '2026-03-10T00:00:00Z' });
   });
 });
@@ -329,14 +227,6 @@ describe('PointsService', () => {
     off();
     service.record(quiz('b'));
     expect(seen).toEqual([11]);
-  });
-
-  it('rolls the tasks over on a new day without an event', () => {
-    const { service, setNow } = setup();
-    service.record(quiz('a'));
-    setNow(at('2026-03-11'));
-    expect(service.state().daily?.day).toBe('2026-03-11');
-    expect(service.state().daily?.tasks.every((t) => t.progress === 0)).toBe(true);
   });
 
   it('is wiped by Reset progress, but the name stays', () => {

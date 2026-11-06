@@ -1,7 +1,6 @@
 import type { AppStorage } from '../storage.ts';
-import { applyEvent, backfill, rollDay, type PointsResult } from './engine.ts';
-import { dayKey, emptyPoints, type PointsEvent, type PointsState } from './state.ts';
-import type { GameContext } from './tasks.ts';
+import { applyEvent, backfill, type PointsResult } from './engine.ts';
+import { emptyPoints, type GameContext, type PointsEvent, type PointsState } from './state.ts';
 
 /** The point system on top of storage: every event is saved straight away. */
 export class PointsService {
@@ -18,16 +17,14 @@ export class PointsService {
     private now: () => Date = () => new Date(),
   ) {}
 
-  /** The current state, with today's tasks. The first call credits earlier progress. */
+  /** The current state. The first call credits earlier progress. */
   state(): PointsState {
     let state = this.storage.points();
     if (!state) {
       state = backfill(emptyPoints(), this.legacy(), this.now(), this.context());
       this.storage.setPoints(state);
     }
-    const rolled = rollDay(state, dayKey(this.now()), this.context());
-    if (rolled !== state) this.storage.setPoints(rolled);
-    return rolled;
+    return state;
   }
 
   record(event: PointsEvent) {

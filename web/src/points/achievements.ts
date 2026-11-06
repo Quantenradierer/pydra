@@ -1,6 +1,5 @@
-import { XP_GAMES, type PointsState, type XpGame } from './state.ts';
+import { XP_GAMES, type GameContext, type PointsState, type XpGame } from './state.ts';
 import { levelInfo } from './levels.ts';
-import type { GameContext } from './tasks.ts';
 
 export type Tier = 'bronze' | 'silver' | 'gold';
 
@@ -11,14 +10,13 @@ export interface Stats {
   levelsByGame: Record<XpGame, number>;
   bestStreak: number;
   perfectSessions: number;
-  tasksDone: number;
   playerLevel: number;
   challenges: number;
   bestChallenge: number;
   totals: Record<XpGame, number>;
 }
 
-type CountKey = 'ach.desc.quiz' | 'ach.desc.levels' | 'ach.desc.streak' | 'ach.desc.perfect' | 'ach.desc.tasks' | 'ach.desc.level' | 'ach.desc.challenges' | 'ach.desc.challengeStreak';
+type CountKey = 'ach.desc.quiz' | 'ach.desc.levels' | 'ach.desc.streak' | 'ach.desc.perfect' | 'ach.desc.level' | 'ach.desc.challenges' | 'ach.desc.challengeStreak';
 
 export type Describe = { key: CountKey; n: number } | { key: 'ach.desc.master'; game: XpGame };
 
@@ -49,9 +47,6 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   counted('streak-30', 'gold', 'ach.desc.streak', 30, (s) => s.bestStreak),
   counted('perfect-1', 'bronze', 'ach.desc.perfect', 1, (s) => s.perfectSessions),
   counted('perfect-10', 'gold', 'ach.desc.perfect', 10, (s) => s.perfectSessions),
-  counted('tasks-1', 'bronze', 'ach.desc.tasks', 1, (s) => s.tasksDone),
-  counted('tasks-10', 'silver', 'ach.desc.tasks', 10, (s) => s.tasksDone),
-  counted('tasks-50', 'gold', 'ach.desc.tasks', 50, (s) => s.tasksDone),
   counted('daily-1', 'bronze', 'ach.desc.challenges', 1, (s) => s.challenges),
   counted('daily-streak-7', 'gold', 'ach.desc.challengeStreak', 7, (s) => s.bestChallenge),
   counted('daily-30', 'gold', 'ach.desc.challenges', 30, (s) => s.challenges),
@@ -78,7 +73,6 @@ export function statsOf(state: PointsState, ctx: GameContext): Stats {
     levelsByGame,
     bestStreak: state.bestStreak,
     perfectSessions: state.perfectSessions,
-    tasksDone: state.tasksDone,
     playerLevel: levelInfo(state.total).level,
     challenges: state.challenges,
     bestChallenge: state.bestChallenge,

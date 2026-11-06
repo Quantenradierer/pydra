@@ -15,29 +15,10 @@ export type PointsEvent =
   /** The daily challenge of `day` was finished; `right[i]` = step i was answered right. */
   | { type: 'daily'; day: string; right: boolean[] };
 
-/** What one local day added up to; the daily tasks adapt to the last days. */
-export interface DayStats {
-  quizAnswers: number;
-  quizCorrect: number;
-  levels: number;
-}
-
-export type TaskKind = 'quiz' | 'levels' | 'game';
-
-export interface DailyTask {
-  id: string;
-  kind: TaskKind;
-  /** Only for kind "game". */
-  game?: XpGame;
-  target: number;
-  progress: number;
-  done: boolean;
-}
-
-export interface Daily {
-  /** Local date, YYYY-MM-DD. */
-  day: string;
-  tasks: DailyTask[];
+/** What the games look like to the achievements: levels per game and how many are not solved yet. */
+export interface GameContext {
+  totals: Record<XpGame, number>;
+  remaining: Record<XpGame, number>;
 }
 
 /** Everything the point system saves. */
@@ -47,11 +28,8 @@ export interface PointsState {
   awarded: string[];
   streak: { days: number; last: string };
   bestStreak: number;
-  history: Record<string, DayStats>;
-  daily?: Daily;
   /** Achievement id -> ISO timestamp of the unlock. */
   achievements: Record<string, string>;
-  tasksDone: number;
   perfectSessions: number;
   /** The daily challenge streak: consecutive days finished, ending on `last`. */
   challenge: { days: number; last: string };
@@ -66,9 +44,7 @@ export function emptyPoints(): PointsState {
     awarded: [],
     streak: { days: 0, last: '' },
     bestStreak: 0,
-    history: {},
     achievements: {},
-    tasksDone: 0,
     perfectSessions: 0,
     challenge: { days: 0, last: '' },
     bestChallenge: 0,
@@ -104,16 +80,6 @@ export function currentChallengeStreak(state: PointsState, day: string): number 
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 const isCount = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 0;
-const DAY = /^\d{4}-\d{2}-\d{2}$/;
-
-function parseTask(raw: unknown): DailyTask | undefined {
-  if (!isRecord(raw)) return undefined;
-  const { id, kind, game, target, progress, done } = raw;
-  if (typeof id !== 'string' || (kind !== 'quiz' && kind !== 'levels' && kind !== 'game')) return undefined;
-  if (!isCount(target) || target < 1 || !isCount(progress) || typeof done !== 'boolean') return undefined;
-  if (kind === 'game' && !isXpGame(game)) return undefined;
-  return { id, kind, ...(kind === 'game' ? { game: game as XpGame } : {}), target, progress: Math.min(progress, target), done };
-}
 
 /** Reads saved points defensively: anything malformed reads as "nothing yet" or is dropped. */
 export function parsePoints(raw: unknown): PointsState {
@@ -125,22 +91,9 @@ export function parsePoints(raw: unknown): PointsState {
     state.streak = { days: raw.streak.days, last: raw.streak.last };
   }
   state.bestStreak = Math.max(isCount(raw.bestStreak) ? raw.bestStreak : 0, state.streak.days);
-  if (isRecord(raw.history)) {
-    for (const [day, v] of Object.entries(raw.history)) {
-      if (!DAY.test(day) || !isRecord(v)) continue;
-      if (isCount(v.quizAnswers) && isCount(v.quizCorrect) && isCount(v.levels)) {
-        state.history[day] = { quizAnswers: v.quizAnswers, quizCorrect: v.quizCorrect, levels: v.levels };
-      }
-    }
-  }
-  if (isRecord(raw.daily) && typeof raw.daily.day === 'string' && DAY.test(raw.daily.day) && Array.isArray(raw.daily.tasks)) {
-    const tasks = raw.daily.tasks.map(parseTask);
-    if (tasks.every((t) => t !== undefined)) state.daily = { day: raw.daily.day, tasks: tasks as DailyTask[] };
-  }
   if (isRecord(raw.achievements)) {
     for (const [id, at] of Object.entries(raw.achievements)) if (typeof at === 'string') state.achievements[id] = at;
   }
-  if (isCount(raw.tasksDone)) state.tasksDone = raw.tasksDone;
   if (isCount(raw.perfectSessions)) state.perfectSessions = raw.perfectSessions;
   if (isRecord(raw.challenge) && isCount(raw.challenge.days) && typeof raw.challenge.last === 'string') {
     state.challenge = { days: raw.challenge.days, last: raw.challenge.last };

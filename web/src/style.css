@@ -2314,32 +2314,12 @@ progress {
   color: var(--fg);
 }
 
-.tasks,
 .achievements {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   gap: 0.6rem;
-}
-
-.task {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.25rem 0.75rem;
-}
-
-.task.done .task-label {
-  text-decoration: line-through;
-  color: var(--muted);
-}
-
-.task.done .task-count {
-  color: var(--green);
-}
-
-.task progress {
-  grid-column: 1 / -1;
 }
 
 .achievements {

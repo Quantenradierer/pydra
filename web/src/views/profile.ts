@@ -1,6 +1,6 @@
 import type { App, Screen } from '../app.ts';
 import { ACHIEVEMENTS, showcase, type Achievement } from '../points/achievements.ts';
-import { streakMultiplier, XP } from '../points/engine.ts';
+import { streakMultiplier } from '../points/engine.ts';
 import { levelInfo, titleKey } from '../points/levels.ts';
 import { currentStreak, dayKey } from '../points/state.ts';
 import { h } from '../dom.ts';
@@ -9,7 +9,7 @@ import { subpageHeader } from './header.ts';
 
 export const MAX_NAME_LENGTH = 20;
 
-/** Name, level, today's tasks and the achievements. */
+/** Name, level, streaks and the achievements. */
 export function profileScreen(app: App): Screen {
   const { t } = app;
   const { storage, points } = app.services;
@@ -71,26 +71,6 @@ export function profileScreen(app: App): Screen {
     ),
   );
 
-  const tasks = h(
-    'section',
-    { 'aria-labelledby': 'daily-heading' },
-    h('h2', { id: 'daily-heading' }, t('profile.daily')),
-    h('p', { class: 'hint' }, t('profile.dailyHint', { xp: XP.task })),
-    h(
-      'ul',
-      { class: 'tasks', 'data-testid': 'tasks' },
-      ...(state.daily?.tasks ?? []).map((task) =>
-        h(
-          'li',
-          { class: task.done ? 'task done' : 'task', 'data-testid': `task-${task.id}` },
-          h('span', { class: 'task-label' }, app.taskLabel(task)),
-          h('span', { class: 'task-count' }, task.done ? t('profile.taskDone') : `${task.progress}/${task.target}`),
-          h('progress', { max: task.target, value: task.progress, 'aria-hidden': 'true' }),
-        ),
-      ),
-    ),
-  );
-
   const describe = (a: Achievement) =>
     a.desc.key === 'ach.desc.master'
       ? t(a.desc.key, { game: t(`lesson.${a.desc.game}.title`) })
@@ -118,6 +98,6 @@ export function profileScreen(app: App): Screen {
     ),
   );
 
-  const root = h('main', { class: 'screen profile' }, subpageHeader(app, t('profile.title')), greeting, levelCard, form, tasks, achievements);
+  const root = h('main', { class: 'screen profile' }, subpageHeader(app, t('profile.title')), greeting, levelCard, form, achievements);
   return { root };
 }

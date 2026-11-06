@@ -158,11 +158,9 @@ describe('daily challenge points', () => {
     expect(again.state.challenges).toBe(1);
   });
 
-  it('pays nothing for the quiz questions and keeps the daily tasks untouched', () => {
+  it('pays nothing for the quiz questions', () => {
     const { state } = applyEvent(emptyPoints(), event('2026-11-07', 5), at('2026-11-07'), ctx);
     expect(state.awarded.filter((id) => id.startsWith('q:'))).toEqual([]);
-    expect(state.daily!.tasks.every((t) => t.progress === 0)).toBe(true);
-    expect(state.history['2026-11-07']).toBeUndefined();
   });
 
   it('counts as activity for the practice streak', () => {
@@ -181,7 +179,7 @@ describe('daily challenge points', () => {
   });
 
   it('unlocks the three daily achievements', () => {
-    expect(ACHIEVEMENTS).toHaveLength(24);
+    expect(ACHIEVEMENTS).toHaveLength(21);
     let state = emptyPoints();
     const out = applyEvent(state, event('2026-01-01', 5), at('2026-01-01'), ctx);
     expect(out.result.achievements).toContain('daily-1');

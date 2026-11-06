@@ -6,7 +6,6 @@ import type { OrderGame } from './game/order.ts';
 import type { PredictGame } from './game/predict.ts';
 import { h } from './dom.ts';
 import { levelInfo, titleKey } from './points/levels.ts';
-import type { DailyTask } from './points/state.ts';
 import { translate, type Lang, type MessageKey, type Params } from './i18n.ts';
 import type { InstallPrompt } from './install.ts';
 import type { PointsResult } from './points/engine.ts';
@@ -93,7 +92,6 @@ export class App {
     const lines: string[] = [];
     if (result.gained > 0) lines.push(this.t('points.gained', { n: result.gained }));
     if (result.levelUp) lines.push(this.t('points.levelUp', { n: result.levelUp, title: this.t(titleKey(levelInfo(this.services.points.state().total).title)) }));
-    for (const task of result.tasks) lines.push(this.t('points.taskDone', { task: this.taskLabel(task) }));
     for (const id of result.achievements) lines.push(this.t('points.achievement', { title: this.t(`ach.${id}.title` as MessageKey) }));
     if (lines.length === 0) return;
     let box = document.getElementById('toasts');
@@ -104,13 +102,6 @@ export class App {
     const note = h('div', { class: 'toast' }, ...lines.map((line) => h('p', {}, line)));
     box.append(note);
     setTimeout(() => note.remove(), 2500 + 1000 * lines.length);
-  }
-
-  /** The name of a daily task, in the active language. */
-  taskLabel(task: DailyTask): string {
-    if (task.kind === 'quiz') return this.t('task.quiz');
-    if (task.kind === 'levels') return this.t('task.levels');
-    return this.t('task.game', { game: this.t(`lesson.${task.game!}.title`) });
   }
 
   t = (key: MessageKey, params?: Params): string => translate(this.lang, key, params);

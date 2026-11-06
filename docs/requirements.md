@@ -29,8 +29,6 @@ questions a session asks.
 
 ### Daily challenge (`daily`, "Tages-Challenge")
 
-(Not to be confused with the daily *tasks* of the points system.)
-
 - One short program a day, the same for everyone on that local date, and five
   multiple-choice questions that follow the code as it changes, easy to hard:
   1. **Trace:** only the first 3 lines are shown; "what value does `x` have after them?"
@@ -74,8 +72,7 @@ questions a session asks.
   practice: no XP, no change to the locked result (the last practice score is shown).
 - **Resume:** the run is saved after every answer and reopened on launch like a quiz; a run of an earlier day is
   dropped. An app update waits while the challenge screen is open.
-- **Points:** see "Points, levels and achievements". The challenge pays no `q:` XP and does not count towards the
-  daily *tasks* (they are about the quiz and the games).
+- **Points:** see "Points, levels and achievements". The challenge pays no `q:` XP.
 
 ### Spot the difference (`diff`)
 
@@ -432,7 +429,7 @@ nothing is sent. Code: `web/src/points/`.
   not after a wrong try first); a level solved the first time pays 20 XP, 30 if
   no wrong pick or check came before (the code puzzle always pays 20); a quiz
   round with every answer right pays 25 XP, once a day. Replays pay nothing,
-  like they never change a game's score. Everything but daily tasks is
+  like they never change a game's score. Everything is
   multiplied by the streak bonus: +10 % per day in a row, at most +70 %.
 - **Daily challenge.** Finishing it pays 50 XP plus 10 per step answered right (so 50-100), once per local day
   (id `d:<day>`, replays and practice pay nothing), with the streak bonus. It counts as activity for the streak.
@@ -448,24 +445,16 @@ nothing is sent. Code: `web/src/points/`.
   61,840 XP after 365 days (level 50, the last title). Each title takes a few days
   early on and about 11 days near the end. Only the first right answer of a
   question pays, so a year of daily XP in this amount comes from the daily
-  challenge (up to 100 XP, plus the bonus) and the daily tasks, not from
-  answering the same questions again.
-- **Daily tasks.** Up to three per local day, made on the first activity or
-  visit of the day and the same all day: right quiz answers, levels solved in
-  any game, levels solved in one game (only games with unsolved levels, and
-  only if at least two have). Targets follow the median of the days played in
-  the last 7 days (+20 %, but +0 % when under 60 % of the answers were right),
-  within 3-20 answers and 1-6 levels; new players get 5 and 2. Each task done
-  pays 50 XP.
-- **Achievements.** 24, in bronze, silver and gold (gold = rare): answers,
-  levels, streak, perfect rounds, daily tasks, the daily challenge (first one, 7 days in a row [gold], 30 finished [gold]), player level (10 and 50 [gold]), and every level of
+  challenge (up to 100 XP, plus the bonus, every day), not from answering the
+  same questions again.
+- **Achievements.** 21, in bronze, silver and gold (gold = rare): answers,
+  levels, streak, perfect rounds, the daily challenge (first one, 7 days in a row [gold], 30 finished [gold]), player level (10 and 50 [gold]), and every level of
   one game. The profile shows the earned ones with their date; the rarest earned
   title appears under the level.
 - **Profile** (`#/profile`, from the chip on Home): name (1-20 characters,
-  optional, shown on Home and in the greeting), level and XP bar, streak, today's
-  tasks, achievements.
+  optional, shown on Home and in the greeting), level and XP bar, streak, achievements.
 - **Toast.** A short note (`aria-live="polite"`, no focus change) after an event
-  that paid XP or unlocked something: XP, level up, task done, achievement.
+  that paid XP or unlocked something: XP, level up, achievement.
 - **Existing players.** On the first start with points, the questions answered
   right and levels solved so far are credited (no streak, no toast).
 - **Reset progress** deletes the points; the name stays.

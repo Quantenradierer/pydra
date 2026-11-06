@@ -2,7 +2,8 @@
 
 Pydra (Py + Hydra) is a multiple-choice trainer for absolute Python beginners,
 in German (default) and English. It is an installable PWA that works fully
-offline. Three lessons: a quiz of 10 random questions from 80 in 8 topics,
+offline. Lessons and games: a daily challenge (one program a day, five questions that follow it as it grows and changes), a quiz of 10 random questions from 80 in 8 topics,
+"Spot the difference" (two almost identical snippets, what does the change do?),
 "Reading functions", which walks through a short function line by line and
 then asks what the whole function does, and "Hydra goes fishing", a game:
 fill the gap in a small program and watch a hydra run it step by step. A
@@ -32,6 +33,8 @@ In `web/src`:
 | `app.ts`                        | Hash router                                                         |
 | `views/`                        | The screens                                                         |
 | `content/lessons.ts`            | The lessons and the content they play (`CONTENT`)                   |
+| `content/diff.ts`, `content/diff/` | The "Spot the difference" questions (`code` = version A, `codeB` = B) |
+| `daily/`, `content/daily.ts`, `content/daily/` | The daily challenge: pick of the day (`select.ts`), run and result (`challenge.ts`), the 45 snippets (levels 1-3) and the 7 intro-week snippets |
 | `session.ts`                    | Builds sessions (random or in order) and shuffles choices           |
 | `trainer.ts`                    | Quiz flow and stats                                                 |
 | `storage.ts`                    | localStorage access                                                 |

@@ -1,0 +1,299 @@
+[
+  {
+    "id": "diff-functions-01",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def f(x):\n    return x * 2\nprint(f(3))",
+    "codeB": "def f(x):\n    print(x * 2)\nprint(f(3))",
+    "choices": [
+      {
+        "de": "B gibt nur 6 aus, genau wie A",
+        "en": "B prints only 6, just like A"
+      },
+      {
+        "de": "B gibt 6 und danach noch None aus",
+        "en": "B prints 6 and then None as well"
+      },
+      {
+        "de": "B gibt nur None aus",
+        "en": "B prints only None"
+      },
+      {
+        "de": "B gibt 3 und danach 6 aus",
+        "en": "B prints 3 and then 6"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`return` schickt einen Wert an die Stelle zurück, an der die Funktion aufgerufen wurde. In A kommt die 6 so bei `print(f(3))` an und wird einmal ausgegeben.\n\nIn B zeigt die Funktion die 6 selbst mit `print` an, gibt aber nichts zurück. Eine Funktion ohne `return` liefert `None`, \"nichts\". Das äußere `print` zeigt dann dieses `None`. Es erscheint die 6 aus der Funktion und danach `None`.",
+      "en": "`return` sends a value back to the place where the function was called. In A the 6 arrives at `print(f(3))` that way and is printed once.\n\nIn B the function shows the 6 itself with `print`, but returns nothing. A function without `return` gives back `None`, \"nothing\". The outer `print` then shows this `None`. The 6 from inside the function appears, and then `None`."
+    }
+  },
+  {
+    "id": "diff-functions-02",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def add(a, b):\n    return a + b\nprint(add(2, 3))",
+    "codeB": "def add(a, b):\n    a + b\nprint(add(2, 3))",
+    "choices": [
+      {
+        "de": "B gibt None statt 5 aus: Ohne return kommt nichts zurück",
+        "en": "B prints None instead of 5: without return nothing comes back"
+      },
+      {
+        "de": "B gibt 5 aus, genau wie A, die Rechnung ist ja da",
+        "en": "B prints 5, just like A, the calculation is there after all"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil a + b allein nicht erlaubt ist",
+        "en": "B stops with an error, because a + b alone is not allowed"
+      },
+      {
+        "de": "B gibt 0 statt 5 aus",
+        "en": "B prints 0 instead of 5"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine Funktion rechnet im Inneren, aber nur was mit `return` zurückgeschickt wird, kommt draußen an. In A ist `return a + b` die Antwort der Funktion: 5.\n\nIn B wird `a + b` zwar ausgerechnet, doch niemand nimmt das Ergebnis mit. Es verschwindet, wenn die Funktion endet. Weil kein `return` da ist, antwortet die Funktion mit `None`. Ein Fehler ist das nicht.",
+      "en": "A function calculates inside, but only what is sent back with `return` arrives outside. In A, `return a + b` is the function's answer: 5.\n\nIn B, `a + b` is worked out, but nobody takes the result along. It vanishes when the function ends. Since there is no `return`, the function answers with `None`. That is not an error."
+    }
+  },
+  {
+    "id": "diff-functions-03",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def hi(name=\"you\"):\n    print(\"hi\", name)\nhi()",
+    "codeB": "def hi(name=\"you\"):\n    print(\"hi\", name)\nhi(\"Ann\")",
+    "choices": [
+      {
+        "de": "B gibt hi you Ann aus",
+        "en": "B prints hi you Ann"
+      },
+      {
+        "de": "B gibt hi you aus, genau wie A, der Standardwert gewinnt immer",
+        "en": "B prints hi you, just like A, the default always wins"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil name schon einen Wert hat",
+        "en": "B stops with an error, because name already has a value"
+      },
+      {
+        "de": "B gibt hi Ann statt hi you aus: Der übergebene Wert ersetzt den Standardwert",
+        "en": "B prints hi Ann instead of hi you: the given value replaces the default"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`name=\"you\"` in der Klammer ist ein Standardwert: Er gilt nur, wenn beim Aufruf nichts anderes mitgegeben wird. In A ist der Aufruf `hi()` leer, also wird `you` benutzt.\n\nIn B steht `\"Ann\"` in der Klammer. Dieser Wert ersetzt den Standard, und es erscheint `hi Ann`. Der Standardwert ist wie ein Reserve-Schlüssel, der nur benutzt wird, wenn du keinen eigenen mitbringst.",
+      "en": "`name=\"you\"` in the parentheses is a default value: it only applies if nothing else is given when calling. In A the call `hi()` is empty, so `you` is used.\n\nIn B there is `\"Ann\"` in the parentheses. This value replaces the default, and `hi Ann` appears. The default value is like a spare key that is only used if you do not bring your own."
+    }
+  },
+  {
+    "id": "diff-functions-04",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def f():\n    for i in range(3):\n        print(i)\n    return \"end\"\nprint(f())",
+    "codeB": "def f():\n    for i in range(3):\n        print(i)\n        return \"end\"\nprint(f())",
+    "choices": [
+      {
+        "de": "B gibt 0, 1, 2 und end aus, genau wie A",
+        "en": "B prints 0, 1, 2 and end, just like A"
+      },
+      {
+        "de": "B gibt end und danach 0, 1, 2 aus",
+        "en": "B prints end and then 0, 1, 2"
+      },
+      {
+        "de": "B gibt nur 0 und end aus: return beendet die Funktion sofort, mitten in der Schleife",
+        "en": "B prints only 0 and end: return ends the function at once, in the middle of the loop"
+      },
+      {
+        "de": "B gibt 0, end, 1, end, 2, end aus",
+        "en": "B prints 0, end, 1, end, 2, end"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "In A steht `return` nach der Schleife (weniger eingerückt). Die Schleife läuft ganz durch und gibt 0, 1, 2 aus, erst dann geht es mit `return \"end\"` zurück.\n\nIn B ist `return` in die Schleife eingerückt. Gleich in der ersten Runde, nach der 0, springt die Funktion mit `\"end\"` zurück, und alles Übrige wird nie ausgeführt. `return` ist wie ein Notausgang: Beim ersten Mal ist die Funktion zu Ende.",
+      "en": "In A, `return` is after the loop (indented less). The loop runs all the way through and prints 0, 1, 2, and only then does `return \"end\"` send back the result.\n\nIn B, `return` is indented into the loop. Right in the first round, after the 0, the function returns `\"end\"`, and everything else is never executed. `return` is like an emergency exit: the first time it is reached, the function is over."
+    }
+  },
+  {
+    "id": "diff-functions-05",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def inc(n):\n    return n + 1\nn = 1\ninc(n)\nprint(n)",
+    "codeB": "def inc(n):\n    return n + 1\nn = 1\nn = inc(n)\nprint(n)",
+    "choices": [
+      {
+        "de": "B gibt 1 aus, genau wie A",
+        "en": "B prints 1, just like A"
+      },
+      {
+        "de": "B gibt 2 statt 1 aus: Das Ergebnis wird wieder in n gespeichert",
+        "en": "B prints 2 instead of 1: the result is saved in n again"
+      },
+      {
+        "de": "B gibt 3 aus, weil n zweimal erhöht wird",
+        "en": "B prints 3, because n is increased twice"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil n und der Parameter n gleich heißen",
+        "en": "B stops with an error, because n and the parameter n have the same name"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Funktion bekommt nur eine Kopie des Wertes. In A rechnet `inc(n)` aus 1 die Zahl 2 aus und schickt sie zurück, aber niemand fängt sie auf. Die Variable `n` draußen bleibt 1.\n\nIn B fängt `n = inc(n)` die Antwort auf und legt sie wieder in `n`. Jetzt steht dort 2. Die Funktion ändert nie von allein deine Variable: Du musst das Ergebnis selbst speichern.",
+      "en": "The function only receives a copy of the value. In A, `inc(n)` works out 2 from 1 and sends it back, but nobody catches it. The variable `n` outside stays 1.\n\nIn B, `n = inc(n)` catches the answer and puts it into `n` again. Now it holds 2. A function never changes your variable on its own: you have to save the result yourself."
+    }
+  },
+  {
+    "id": "diff-functions-06",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def sub(a, b):\n    return a - b\nprint(sub(5, 2))",
+    "codeB": "def sub(a, b):\n    return a - b\nprint(sub(2, 5))",
+    "choices": [
+      {
+        "de": "B gibt -3 statt 3 aus: Die Reihenfolge der Werte zählt",
+        "en": "B prints -3 instead of 3: the order of the values matters"
+      },
+      {
+        "de": "B gibt 3 aus, genau wie A, Minus ist ja egal",
+        "en": "B prints 3, just like A, minus does not matter"
+      },
+      {
+        "de": "B gibt 7 statt 3 aus",
+        "en": "B prints 7 instead of 3"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil das Ergebnis negativ ist",
+        "en": "B stops with an error, because the result is negative"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Beim Aufruf gehen die Werte der Reihe nach in die Parameter: Der erste Wert wird zu `a`, der zweite zu `b`. Das nennt man Positionsargumente.\n\nIn A ist `a` 5 und `b` 2, also `5 - 2 = 3`. In B sind die Werte vertauscht: `a` ist 2 und `b` ist 5, also `2 - 5 = -3`. Bei Plus wäre die Reihenfolge egal, bei Minus nicht.",
+      "en": "When calling, the values go into the parameters one after another: the first value becomes `a`, the second `b`. These are called positional arguments.\n\nIn A, `a` is 5 and `b` is 2, so `5 - 2 = 3`. In B the values are swapped: `a` is 2 and `b` is 5, so `2 - 5 = -3`. With plus the order would not matter, with minus it does."
+    }
+  },
+  {
+    "id": "diff-functions-07",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def power(x, n=2):\n    return x ** n\nprint(power(3))",
+    "codeB": "def power(x, n=2):\n    return x ** n\nprint(power(3, 3))",
+    "choices": [
+      {
+        "de": "B gibt 6 statt 9 aus",
+        "en": "B prints 6 instead of 9"
+      },
+      {
+        "de": "B gibt 9 aus, genau wie A, der Standardwert gewinnt",
+        "en": "B prints 9, just like A, the default wins"
+      },
+      {
+        "de": "B gibt 33 statt 9 aus",
+        "en": "B prints 33 instead of 9"
+      },
+      {
+        "de": "B gibt 27 statt 9 aus: n ist jetzt 3 statt dem Standardwert 2",
+        "en": "B prints 27 instead of 9: n is now 3 instead of the default 2"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Weil `n=2` ein Standardwert ist, darf man `power(3)` ohne zweite Zahl aufrufen. Dann ist `n` einfach 2, und `3 ** 2` ist 9.\n\nMit `power(3, 3)` gibst du `n` selbst vor: `3 ** 3 = 3 · 3 · 3 = 27`. Der Standardwert wird dann nicht benutzt. Er ist nur ein Vorschlag, den man jederzeit überstimmen kann.",
+      "en": "Because `n=2` is a default value, you may call `power(3)` without a second number. Then `n` is simply 2, and `3 ** 2` is 9.\n\nWith `power(3, 3)` you set `n` yourself: `3 ** 3 = 3 · 3 · 3 = 27`. The default value is not used then. It is only a suggestion that you can overrule at any time."
+    }
+  },
+  {
+    "id": "diff-functions-08",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def hi():\n    return \"hi\"\nprint(hi())",
+    "codeB": "def hi():\n    return \"hi\"\nprint(hi)",
+    "choices": [
+      {
+        "de": "B gibt hi aus, genau wie A, die Klammern sind nur Zierde",
+        "en": "B prints hi, just like A, the parentheses are only decoration"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil hi ohne Klammern nicht existiert",
+        "en": "B stops with an error, because hi does not exist without parentheses"
+      },
+      {
+        "de": "B gibt keinen Gruß aus, sondern eine Beschreibung der Funktion wie <function hi at 0x…>",
+        "en": "B does not print the greeting but a description of the function like <function hi at 0x…>"
+      },
+      {
+        "de": "B gibt None aus",
+        "en": "B prints None"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Erst die runden Klammern rufen die Funktion auf, also führen sie aus. `hi()` läuft, gibt `\"hi\"` zurück, und das gibt `print` aus.\n\nOhne Klammern ist `hi` nur der Name der Funktion, so wie das Türschild eines Raumes, ohne dass du hineingehst. Die Funktion läuft nicht. `print` zeigt dann, was dort steht: ein Hinweis wie `<function hi at 0x…>` (die Zahl am Ende ist ein Speicherort und jedes Mal anders).",
+      "en": "Only the round brackets call the function, meaning they run it. `hi()` runs, returns `\"hi\"`, and `print` prints that.\n\nWithout the brackets, `hi` is only the name of the function, like the sign on a door without you going in. The function does not run. `print` then shows what is there: a note like `<function hi at 0x…>` (the number at the end is a memory location and different each time)."
+    }
+  },
+  {
+    "id": "diff-functions-09",
+    "topic": "functions",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "def f():\n    print(\"a\")\n    return 1\nprint(f())",
+    "codeB": "def f():\n    return 1\n    print(\"a\")\nprint(f())",
+    "choices": [
+      {
+        "de": "B gibt 1 und danach a aus",
+        "en": "B prints 1 and then a"
+      },
+      {
+        "de": "B gibt nur 1 aus: Nach return läuft die Funktion nicht weiter, das print mit a wird nie erreicht",
+        "en": "B prints only 1: after return the function does not go on, the print with a is never reached"
+      },
+      {
+        "de": "B gibt a und danach 1 aus, genau wie A",
+        "en": "B prints a and then 1, just like A"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil nach return nichts stehen darf",
+        "en": "B stops with an error, because nothing may stand after return"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eine Funktion läuft Zeile für Zeile. In A kommt erst `print(\"a\")` und dann `return 1`. Es erscheinen `a` und danach die zurückgegebene `1`.\n\nIn B steht `return` vorn. Dort ist die Funktion sofort zu Ende, und alles, was danach kommt, wird nie ausgeführt. Python meldet dafür keinen Fehler: Die tote Zeile steht einfach nur nutzlos da. Es erscheint nur die `1`.",
+      "en": "A function runs line by line. In A, `print(\"a\")` comes first and then `return 1`. First `a` appears, and then the returned `1`.\n\nIn B, `return` comes first. The function is over right there, and everything after it is never executed. Python reports no error for that: the dead line just stands there uselessly. Only the `1` appears."
+    }
+  }
+]

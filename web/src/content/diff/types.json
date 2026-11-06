@@ -1,0 +1,332 @@
+[
+  {
+    "id": "diff-types-01",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(len(\"abc\"))",
+    "codeB": "print(len(\"abc\") + 1)",
+    "choices": [
+      {
+        "de": "B gibt abc1 aus",
+        "en": "B prints abc1"
+      },
+      {
+        "de": "B gibt 4 statt 3 aus",
+        "en": "B prints 4 instead of 3"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil man bei len() nichts dazuzählen darf",
+        "en": "B stops with an error, because you may not add anything to len()"
+      },
+      {
+        "de": "B gibt auch 3 aus, das + 1 ändert nichts",
+        "en": "B also prints 3, the + 1 changes nothing"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`len(\"abc\")` zählt die Zeichen im Text: a, b, c, also 3. Das Ergebnis ist eine ganz normale Zahl, und mit Zahlen darf man rechnen, genau wie mit einer 3, die du selbst hinschreibst.\n\nIn B wird deshalb `3 + 1` gerechnet, und das ergibt 4. Der Text `\"abc\"` selbst bleibt unverändert, nur die Zahl, die `len` liefert, wird größer.",
+      "en": "`len(\"abc\")` counts the characters in the text: a, b, c, so 3. The result is a normal number, and you can calculate with numbers, just like with a 3 you write down yourself.\n\nSo B works out `3 + 1`, which is 4. The text `\"abc\"` itself stays the same, only the number that `len` returns gets bigger."
+    }
+  },
+  {
+    "id": "diff-types-02",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "x = \"5\"\nprint(x + x)",
+    "codeB": "x = 5\nprint(x + x)",
+    "choices": [
+      {
+        "de": "B gibt 10 statt 55 aus",
+        "en": "B prints 10 instead of 55"
+      },
+      {
+        "de": "B gibt 55 statt 10 aus",
+        "en": "B prints 55 instead of 10"
+      },
+      {
+        "de": "B gibt 5 5 aus, mit einem Leerzeichen dazwischen",
+        "en": "B prints 5 5, with a space in between"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil man x nicht mit sich selbst addieren darf",
+        "en": "B stops with an error, because you may not add x to itself"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Die Anführungszeichen machen den Unterschied: `\"5\"` ist ein Text (ein `str`), die Ziffer 5 ist hier nur ein Zeichen wie ein Buchstabe. `+` klebt bei Texten zusammen, also wird aus `\"5\" + \"5\"` der Text `55`.\n\nIn B ist `5` eine echte Zahl (ein `int`). Bei Zahlen bedeutet `+` rechnen, also `5 + 5 = 10`. Gleiches Zeichen `+`, anderes Verhalten, je nachdem, was links und rechts steht.",
+      "en": "The quotes make the difference: `\"5\"` is a text (a `str`), the digit 5 is just a character here, like a letter. For texts `+` glues them together, so `\"5\" + \"5\"` becomes the text `55`.\n\nIn B, `5` is a real number (an `int`). For numbers `+` means calculating, so `5 + 5 = 10`. The same `+` sign behaves differently depending on what is on its left and right."
+    }
+  },
+  {
+    "id": "diff-types-03",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(type(3))",
+    "codeB": "print(type(3.0))",
+    "choices": [
+      {
+        "de": "B nennt den Typ str statt int",
+        "en": "B names the type str instead of int"
+      },
+      {
+        "de": "B gibt 3.0 statt 3 aus",
+        "en": "B prints 3.0 instead of 3"
+      },
+      {
+        "de": "Nichts: Beide nennen int, weil 3.0 und 3 denselben Wert haben",
+        "en": "Nothing: both name int, because 3.0 and 3 have the same value"
+      },
+      {
+        "de": "B nennt den Typ float statt int",
+        "en": "B names the type float instead of int"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`type()` verrät, was für eine Art von Wert vorliegt. `3` ist eine ganze Zahl, also ein `int`. `3.0` hat einen Dezimalpunkt und ist deshalb eine Kommazahl, ein `float`, auch wenn nach dem Punkt nur eine Null steht.\n\nDer Wert ist gleich groß, aber der Typ ist ein anderer. Python schaut nur auf die Schreibweise: Punkt dabei, also `float`.",
+      "en": "`type()` tells you what kind of value you have. `3` is a whole number, so an `int`. `3.0` has a decimal point and is therefore a decimal number, a `float`, even if there is only a zero after the point.\n\nThe value is equally big, but the type is different. Python only looks at how you wrote it: a point in it means `float`."
+    }
+  },
+  {
+    "id": "diff-types-04",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(int(\"3\") + int(\"4\"))",
+    "codeB": "print(\"3\" + \"4\")",
+    "choices": [
+      {
+        "de": "B gibt 7 aus, genau wie A",
+        "en": "B prints 7, just like A"
+      },
+      {
+        "de": "B gibt 3 4 aus, mit einem Leerzeichen dazwischen",
+        "en": "B prints 3 4, with a space in between"
+      },
+      {
+        "de": "B gibt 34 statt 7 aus",
+        "en": "B prints 34 instead of 7"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil Texte keine Zahlen sind",
+        "en": "B stops with an error, because texts are not numbers"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "In A macht `int(\"3\")` aus dem Text `\"3\"` die Zahl 3 (und ebenso die 4). Dann wird richtig gerechnet: `3 + 4 = 7`.\n\nIn B bleiben `\"3\"` und `\"4\"` Texte. Bei Texten klebt `+` sie nur aneinander, so wie man zwei Buchstabenkarten nebeneinanderlegt: `34`. Python rechnet nicht von allein, nur weil in einem Text eine Ziffer steht.",
+      "en": "In A, `int(\"3\")` turns the text `\"3\"` into the number 3 (and the same for 4). Then it really calculates: `3 + 4 = 7`.\n\nIn B, `\"3\"` and `\"4\"` stay texts. For texts `+` only glues them together, like putting two letter cards next to each other: `34`. Python does not calculate on its own just because a text contains a digit."
+    }
+  },
+  {
+    "id": "diff-types-05",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(bool(0))",
+    "codeB": "print(bool(\"0\"))",
+    "choices": [
+      {
+        "de": "B gibt 0 statt False aus",
+        "en": "B prints 0 instead of False"
+      },
+      {
+        "de": "B gibt True statt False aus",
+        "en": "B prints True instead of False"
+      },
+      {
+        "de": "B gibt auch False aus, weil 0 und \"0\" dasselbe sind",
+        "en": "B also prints False, because 0 and \"0\" are the same"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil bool() keinen Text annimmt",
+        "en": "B stops with an error, because bool() does not accept text"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`bool()` fragt: Ist da \"etwas\" drin oder ist es \"leer\"? Die Zahl `0` zählt als leer, also `False`.\n\nDer Text `\"0\"` ist aber nicht leer: Er enthält ein Zeichen, die Ziffer 0. Nur der ganz leere Text `\"\"` wäre `False`. Darum ist `bool(\"0\")` gleich `True`. Eine Zahl 0 und ein Text mit einer 0 sind für Python zwei verschiedene Dinge.",
+      "en": "`bool()` asks: is there \"something\" in it or is it \"empty\"? The number `0` counts as empty, so `False`.\n\nThe text `\"0\"` is not empty though: it contains one character, the digit 0. Only the completely empty text `\"\"` would be `False`. That is why `bool(\"0\")` is `True`. A number 0 and a text containing a 0 are two different things for Python."
+    }
+  },
+  {
+    "id": "diff-types-06",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(10 == 10.0)",
+    "codeB": "print(10 == \"10\")",
+    "choices": [
+      {
+        "de": "B gibt False statt True aus",
+        "en": "B prints False instead of True"
+      },
+      {
+        "de": "B gibt auch True aus: Python schaut nur auf die Ziffern",
+        "en": "B also prints True: Python only looks at the digits"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil man Zahl und Text nicht vergleichen darf",
+        "en": "B stops with an error, because you may not compare a number and a text"
+      },
+      {
+        "de": "B gibt 10 aus",
+        "en": "B prints 10"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "In A werden zwei Zahlen verglichen. `10` und `10.0` sind verschieden geschrieben, aber gleich viel wert, also ist `10 == 10.0` wahr.\n\nIn B steht rechts ein Text. Eine Zahl und ein Text sind nie gleich, auch wenn beide wie \"zehn\" aussehen. Vergleichen mit `==` ist erlaubt und liefert einfach `False`, es gibt keinen Fehler.",
+      "en": "A compares two numbers. `10` and `10.0` are written differently but are worth the same, so `10 == 10.0` is true.\n\nIn B there is a text on the right. A number and a text are never equal, even if both look like \"ten\". Comparing with `==` is allowed and simply gives `False`, there is no error."
+    }
+  },
+  {
+    "id": "diff-types-07",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "age = 12\nprint(\"Age: \" + str(age))",
+    "codeB": "age = 12\nprint(\"Age: \" + age)",
+    "choices": [
+      {
+        "de": "B gibt Age: 12 aus, genau wie A",
+        "en": "B prints Age: 12, just like A"
+      },
+      {
+        "de": "B gibt Age: 12 ohne das Leerzeichen aus",
+        "en": "B prints Age: 12 without the space"
+      },
+      {
+        "de": "B gibt Age: age aus",
+        "en": "B prints Age: age"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab: Ein Text und eine Zahl lassen sich nicht mit + verbinden",
+        "en": "B stops with an error: a text and a number cannot be joined with +"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`+` kann zwei Zahlen addieren oder zwei Texte verkleben, aber nicht einen Text mit einer Zahl mischen. Python rät nicht, was du meinst, und stoppt mit einem `TypeError`.\n\nIn A macht `str(age)` aus der Zahl 12 erst den Text `\"12\"`. Dann sind beide Seiten Texte und das Verkleben klappt. In B fehlt dieser Umweg.",
+      "en": "`+` can add two numbers or glue two texts together, but it cannot mix a text with a number. Python does not guess what you mean and stops with a `TypeError`.\n\nIn A, `str(age)` first turns the number 12 into the text `\"12\"`. Then both sides are texts and gluing works. B is missing this detour."
+    }
+  },
+  {
+    "id": "diff-types-08",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(int(3.9))",
+    "codeB": "print(round(3.9))",
+    "choices": [
+      {
+        "de": "B gibt 3.9 statt 3 aus",
+        "en": "B prints 3.9 instead of 3"
+      },
+      {
+        "de": "B gibt auch 3 aus, beide machen aus 3.9 eine 3",
+        "en": "B also prints 3, both turn 3.9 into 3"
+      },
+      {
+        "de": "B gibt 4 statt 3 aus: round rundet, int schneidet ab",
+        "en": "B prints 4 instead of 3: round rounds, int cuts off"
+      },
+      {
+        "de": "B gibt 4.0 statt 3 aus",
+        "en": "B prints 4.0 instead of 3"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`int(3.9)` wirft alles hinter dem Komma einfach weg, wie ein Messer, das den Rest abschneidet. Übrig bleibt 3, egal wie hoch die Nachkommastelle ist.\n\n`round(3.9)` rundet dagegen zur nächsten ganzen Zahl, und das ist 4. Das Ergebnis ist wieder eine ganze Zahl (`4`, nicht `4.0`).",
+      "en": "`int(3.9)` simply throws away everything after the point, like a knife cutting off the rest. What is left is 3, however high the decimal part is.\n\n`round(3.9)`, on the other hand, rounds to the nearest whole number, and that is 4. The result is a whole number again (`4`, not `4.0`)."
+    }
+  },
+  {
+    "id": "diff-types-09",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(str(5) * 3)",
+    "codeB": "print(5 * 3)",
+    "choices": [
+      {
+        "de": "B gibt 555 statt 15 aus",
+        "en": "B prints 555 instead of 15"
+      },
+      {
+        "de": "B gibt 15 statt 555 aus",
+        "en": "B prints 15 instead of 555"
+      },
+      {
+        "de": "B gibt 5 3 aus",
+        "en": "B prints 5 3"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil man Zahlen nicht malnehmen darf",
+        "en": "B stops with an error, because you may not multiply numbers"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "In A ist `str(5)` der Text `\"5\"`. Ein Text mal 3 wiederholt ihn dreimal: `555`, so als würdest du die Ziffer dreimal hintereinander tippen.\n\nIn B ist `5` eine echte Zahl, und `5 * 3` rechnet ganz normal: 15. Dasselbe `*` bedeutet bei Texten \"wiederholen\" und bei Zahlen \"malnehmen\".",
+      "en": "In A, `str(5)` is the text `\"5\"`. A text times 3 repeats it three times: `555`, as if you typed the digit three times in a row.\n\nIn B, `5` is a real number, and `5 * 3` calculates as usual: 15. The same `*` means \"repeat\" for texts and \"multiply\" for numbers."
+    }
+  },
+  {
+    "id": "diff-types-10",
+    "topic": "types",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "x = 5\nx = x + 1\nprint(x)",
+    "codeB": "x = 5\nx + 1\nprint(x)",
+    "choices": [
+      {
+        "de": "B gibt 5 statt 6 aus: ohne x = bleibt x unverändert",
+        "en": "B prints 5 instead of 6: without x = the x stays unchanged"
+      },
+      {
+        "de": "B gibt 6 aus, genau wie A",
+        "en": "B prints 6, just like A"
+      },
+      {
+        "de": "B gibt 1 aus",
+        "en": "B prints 1"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil x + 1 allein nichts tut",
+        "en": "B stops with an error, because x + 1 on its own does nothing"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Eine Variable ist wie eine beschriftete Schachtel. `x = x + 1` rechnet 5 + 1 und legt das Ergebnis 6 zurück in die Schachtel x. Danach steht dort 6.\n\nIn B wird `x + 1` zwar ausgerechnet, aber das Ergebnis wird nirgends hingelegt, es verpufft. Die Schachtel x enthält weiter die 5. Das ist kein Fehler, nur eine Rechnung ohne Wirkung.",
+      "en": "A variable is like a labelled box. `x = x + 1` works out 5 + 1 and puts the result 6 back into the box x. After that it holds 6.\n\nIn B, `x + 1` is worked out, but the result is not put anywhere, it vanishes. The box x still holds the 5. That is not an error, just a calculation without effect."
+    }
+  }
+]

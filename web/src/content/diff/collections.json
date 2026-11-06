@@ -1,0 +1,299 @@
+[
+  {
+    "id": "diff-collections-01",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "a = [1, 2]\na.append([3, 4])\nprint(a)",
+    "codeB": "a = [1, 2]\na.extend([3, 4])\nprint(a)",
+    "choices": [
+      {
+        "de": "B gibt [1, 2, [3, 4]] aus, genau wie A",
+        "en": "B prints [1, 2, [3, 4]], just like A"
+      },
+      {
+        "de": "B gibt [1, 2, 3, 4] aus: extend packt die Einträge einzeln dazu",
+        "en": "B prints [1, 2, 3, 4]: extend adds the entries one by one"
+      },
+      {
+        "de": "B gibt [3, 4, 1, 2] aus",
+        "en": "B prints [3, 4, 1, 2]"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil man keine Liste anhängen darf",
+        "en": "B stops with an error, because you may not add a list"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`append` hängt genau ein Ding hinten an. Wenn dieses Ding selbst eine Liste ist, steckt die ganze Liste als ein einziger Eintrag in `a`: `[1, 2, [3, 4]]`, eine Schachtel in der Schachtel.\n\n`extend` nimmt dagegen die Einträge der Liste heraus und hängt sie einzeln an: `[1, 2, 3, 4]`. Merke: `append` = ein Ding dazu, `extend` = viele Dinge dazu.",
+      "en": "`append` adds exactly one thing at the end. If that thing is a list itself, the whole list sits in `a` as a single entry: `[1, 2, [3, 4]]`, a box inside a box.\n\n`extend`, on the other hand, takes the entries out of the list and adds them one by one: `[1, 2, 3, 4]`. Remember: `append` = add one thing, `extend` = add many things."
+    }
+  },
+  {
+    "id": "diff-collections-02",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "nums = [10, 20, 30]\nprint(nums[0])",
+    "codeB": "nums = [10, 20, 30]\nprint(nums[-1])",
+    "choices": [
+      {
+        "de": "B gibt 30 statt 10 aus: -1 ist der letzte Eintrag",
+        "en": "B prints 30 instead of 10: -1 is the last entry"
+      },
+      {
+        "de": "B gibt 20 statt 10 aus",
+        "en": "B prints 20 instead of 10"
+      },
+      {
+        "de": "B gibt 0 statt 10 aus",
+        "en": "B prints 0 instead of 10"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil Listen keine negativen Plätze haben",
+        "en": "B stops with an error, because lists have no negative places"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Die Plätze einer Liste werden ab 0 gezählt: `nums[0]` ist der erste Eintrag, die 10.\n\nNegative Plätze zählen von hinten: `nums[-1]` ist der letzte Eintrag, `nums[-2]` der vorletzte. Darum liefert B die 30, und das geht bei jeder Länge der Liste, ohne dass du sie zählen musst.",
+      "en": "The places of a list are counted from 0: `nums[0]` is the first entry, the 10.\n\nNegative places count from the back: `nums[-1]` is the last entry, `nums[-2]` the second to last. That is why B gives the 30, and it works for any length of the list without you having to count it."
+    }
+  },
+  {
+    "id": "diff-collections-03",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "nums = [1, 2, 3, 4]\nprint(nums[:2])",
+    "codeB": "nums = [1, 2, 3, 4]\nprint(nums[2:])",
+    "choices": [
+      {
+        "de": "B gibt [2, 3] statt [1, 2] aus",
+        "en": "B prints [2, 3] instead of [1, 2]"
+      },
+      {
+        "de": "B gibt [3] statt [1, 2] aus",
+        "en": "B prints [3] instead of [1, 2]"
+      },
+      {
+        "de": "B gibt [1, 2, 3, 4] aus, weil die Zahl nur eine Grenze ist",
+        "en": "B prints [1, 2, 3, 4], because the number is only a limit"
+      },
+      {
+        "de": "B gibt [3, 4] statt [1, 2] aus: Es ist der hintere Teil statt des vorderen",
+        "en": "B prints [3, 4] instead of [1, 2]: it is the back part instead of the front part"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "Beim Ausschneiden steht die Zahl vor oder nach dem Doppelpunkt. Steht sie dahinter, wie in `nums[:2]`, ist das das Ende: Es kommt alles bis vor Platz 2, also die Plätze 0 und 1, `[1, 2]`.\n\nSteht sie davor, wie in `nums[2:]`, ist das der Anfang: Es kommt alles ab Platz 2 bis zum Ende, also `[3, 4]`. Der Doppelpunkt zeigt, auf welcher Seite \"der Rest\" liegt.",
+      "en": "When slicing, the number is before or after the colon. If it is behind it, like in `nums[:2]`, it is the end: everything up to place 2 comes out, so places 0 and 1, `[1, 2]`.\n\nIf it is before it, like in `nums[2:]`, it is the start: everything from place 2 to the end comes out, so `[3, 4]`. The colon shows on which side \"the rest\" lies."
+    }
+  },
+  {
+    "id": "diff-collections-04",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "t = [1, 2]\nt[0] = 9\nprint(t)",
+    "codeB": "t = (1, 2)\nt[0] = 9\nprint(t)",
+    "choices": [
+      {
+        "de": "B gibt (9, 2) aus, nur in runden Klammern",
+        "en": "B prints (9, 2), just in round brackets"
+      },
+      {
+        "de": "B gibt [9, 2] aus, genau wie A",
+        "en": "B prints [9, 2], just like A"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab: Ein Tupel lässt sich nicht verändern",
+        "en": "B stops with an error: a tuple cannot be changed"
+      },
+      {
+        "de": "B gibt (1, 2) aus, die Änderung wird ignoriert",
+        "en": "B prints (1, 2), the change is ignored"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Eine Liste (eckige Klammern) darf man nachträglich ändern: `t[0] = 9` tauscht die 1 gegen die 9, und `[9, 2]` erscheint.\n\nEin Tupel (runde Klammern) ist dagegen unveränderlich, wie eine versiegelte Packung. Der Versuch, einen Platz zu überschreiben, stoppt das Programm mit einem `TypeError`. Das schützt Daten, die gleich bleiben sollen.",
+      "en": "A list (square brackets) may be changed afterwards: `t[0] = 9` swaps the 1 for the 9, and `[9, 2]` appears.\n\nA tuple (round brackets), on the other hand, is unchangeable, like a sealed package. Trying to overwrite a place stops the program with a `TypeError`. That protects data that should stay the same."
+    }
+  },
+  {
+    "id": "diff-collections-05",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "a = [1, 2]\nb = a.copy()\nb.append(3)\nprint(a)",
+    "codeB": "a = [1, 2]\nb = a\nb.append(3)\nprint(a)",
+    "choices": [
+      {
+        "de": "B gibt [3] statt [1, 2] aus",
+        "en": "B prints [3] instead of [1, 2]"
+      },
+      {
+        "de": "B gibt [1, 2, 3] statt [1, 2] aus: a und b sind dieselbe Liste",
+        "en": "B prints [1, 2, 3] instead of [1, 2]: a and b are the same list"
+      },
+      {
+        "de": "B gibt [1, 2] aus, genau wie A",
+        "en": "B prints [1, 2], just like A"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil zwei Namen nicht dieselbe Liste haben dürfen",
+        "en": "B stops with an error, because two names may not have the same list"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`b = a` kopiert keine Liste. Es klebt nur ein zweites Namensschild auf dieselbe Liste. `a` und `b` sind also zwei Namen für eine einzige Liste, und was du über `b` änderst, siehst du auch bei `a`. Darum steht in B `[1, 2, 3]`.\n\n`a.copy()` macht dagegen eine echte zweite Liste. Die 3 landet nur in `b`, und `a` bleibt `[1, 2]`.",
+      "en": "`b = a` does not copy a list. It just sticks a second name tag on the same list. So `a` and `b` are two names for one single list, and what you change through `b` you also see in `a`. That is why B shows `[1, 2, 3]`.\n\n`a.copy()`, on the other hand, makes a real second list. The 3 only lands in `b`, and `a` stays `[1, 2]`."
+    }
+  },
+  {
+    "id": "diff-collections-06",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(len([1, 2, 3]))",
+    "codeB": "print(len([[1, 2, 3]]))",
+    "choices": [
+      {
+        "de": "B gibt 1 statt 3 aus: Die äußere Liste hat nur einen Eintrag",
+        "en": "B prints 1 instead of 3: the outer list has only one entry"
+      },
+      {
+        "de": "B gibt 2 statt 3 aus",
+        "en": "B prints 2 instead of 3"
+      },
+      {
+        "de": "B gibt 3 aus, genau wie A, weil len auch in Listen hineinzählt",
+        "en": "B prints 3, just like A, because len also counts inside lists"
+      },
+      {
+        "de": "B gibt 6 statt 3 aus",
+        "en": "B prints 6 instead of 3"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`len` zählt die Einträge der Liste, die du ihm gibst, und zwar nur die oberste Ebene. In A sind es drei Zahlen.\n\nIn B stecken die drei Zahlen zusätzlich in einer weiteren Liste. Die äußere Liste hat nur einen einzigen Eintrag, nämlich die innere Liste, auch wenn darin drei Dinge liegen. `len` schaut nicht hinein: Es zählt Kartons, nicht den Inhalt der Kartons.",
+      "en": "`len` counts the entries of the list you give it, and only on the top level. In A there are three numbers.\n\nIn B the three numbers are additionally inside another list. The outer list has only a single entry, the inner list, even if three things lie in it. `len` does not look inside: it counts boxes, not the contents of the boxes."
+    }
+  },
+  {
+    "id": "diff-collections-07",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "a = [3, 1, 2]\nprint(sorted(a))",
+    "codeB": "a = [3, 1, 2]\nprint(a.sort())",
+    "choices": [
+      {
+        "de": "B gibt [1, 2, 3] aus, genau wie A",
+        "en": "B prints [1, 2, 3], just like A"
+      },
+      {
+        "de": "B gibt [3, 2, 1] aus, absteigend",
+        "en": "B prints [3, 2, 1], descending"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil print keine Methoden aufrufen darf",
+        "en": "B stops with an error, because print may not call methods"
+      },
+      {
+        "de": "B gibt None aus: sort sortiert die Liste selbst und liefert nichts zurück",
+        "en": "B prints None: sort sorts the list itself and returns nothing"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`sorted(a)` baut eine neue, sortierte Liste und gibt sie zurück. `print` zeigt sie: `[1, 2, 3]`.\n\n`a.sort()` sortiert dagegen die Liste `a` selbst an Ort und Stelle und gibt gar nichts zurück. Das \"Nichts\" heißt in Python `None`, und das zeigt `print` hier. Die sortierte Liste steckt danach in `a`, aber nicht im `print`.",
+      "en": "`sorted(a)` builds a new, sorted list and returns it. `print` shows it: `[1, 2, 3]`.\n\n`a.sort()`, on the other hand, sorts the list `a` itself in place and returns nothing at all. The \"nothing\" is called `None` in Python, and that is what `print` shows here. The sorted list is in `a` afterwards, but not in the `print`."
+    }
+  },
+  {
+    "id": "diff-collections-08",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "a = [1, 2, 3]\na.pop()\nprint(a)",
+    "codeB": "a = [1, 2, 3]\na.pop(0)\nprint(a)",
+    "choices": [
+      {
+        "de": "B gibt [1, 3] statt [1, 2] aus",
+        "en": "B prints [1, 3] instead of [1, 2]"
+      },
+      {
+        "de": "B gibt [1, 2] aus, genau wie A",
+        "en": "B prints [1, 2], just like A"
+      },
+      {
+        "de": "B gibt [2, 3] statt [1, 2] aus: pop(0) entfernt den ersten Eintrag",
+        "en": "B prints [2, 3] instead of [1, 2]: pop(0) removes the first entry"
+      },
+      {
+        "de": "B gibt [0] statt [1, 2] aus",
+        "en": "B prints [0] instead of [1, 2]"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`pop()` ohne Zahl nimmt den letzten Eintrag heraus, so wie man das oberste Buch von einem Stapel nimmt. Übrig bleibt `[1, 2]`.\n\nMit einer Zahl in der Klammer sagst du, welchen Platz du herausnehmen willst. `pop(0)` nimmt den Eintrag auf Platz 0, den ersten, die 1. Übrig bleibt `[2, 3]`. Die Zahl ist ein Platz, nicht die Anzahl.",
+      "en": "`pop()` without a number takes out the last entry, like taking the top book off a pile. What is left is `[1, 2]`.\n\nWith a number in the brackets you say which place you want to take out. `pop(0)` takes out the entry at place 0, the first one, the 1. What is left is `[2, 3]`. The number is a place, not a count."
+    }
+  },
+  {
+    "id": "diff-collections-09",
+    "topic": "collections",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "a = [1, 2, 3]\nprint(a[len(a) - 1])",
+    "codeB": "a = [1, 2, 3]\nprint(a[len(a)])",
+    "choices": [
+      {
+        "de": "B gibt 3 aus, genau wie A",
+        "en": "B prints 3, just like A"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab: Platz 3 gibt es nicht",
+        "en": "B stops with an error: there is no place 3"
+      },
+      {
+        "de": "B gibt 1 aus, es fängt wieder von vorn an",
+        "en": "B prints 1, it starts again from the front"
+      },
+      {
+        "de": "B gibt None aus, weil hinter dem letzten Eintrag nichts steht",
+        "en": "B prints None, because nothing stands after the last entry"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Eine Liste mit drei Einträgen hat die Plätze 0, 1 und 2. `len(a)` ist 3, also die Anzahl, und nicht der letzte Platz.\n\nIn A ist `len(a) - 1` gleich 2, der letzte Platz, und der Eintrag dort ist die 3. In B ist `a[3]` ein Platz, den es nicht gibt. Python meldet das mit einem `IndexError` (\"Index außerhalb der Liste\"). Der klassische Fehler um eins daneben.",
+      "en": "A list with three entries has the places 0, 1 and 2. `len(a)` is 3, the count, and not the last place.\n\nIn A, `len(a) - 1` is 2, the last place, and the entry there is the 3. In B, `a[3]` is a place that does not exist. Python reports this with an `IndexError` (\"index outside the list\"). The classic off-by-one mistake."
+    }
+  }
+]

@@ -3,7 +3,7 @@ import { LESSONS, type LessonId } from '../content/lessons.ts';
 import { h, svg } from '../dom.ts';
 import { logoArt } from '../hydra/view.ts';
 import { GEAR, SPEECH_BUBBLE } from '../icons.ts';
-import { levelInfo } from '../points/levels.ts';
+import { levelInfo, titleKey } from '../points/levels.ts';
 import { percentCorrect } from '../stats.ts';
 
 export function homeScreen(app: App): Screen {
@@ -84,6 +84,28 @@ export function homeScreen(app: App): Screen {
     );
   };
 
+  /** The daily challenge: one card above the lessons with today's state. */
+  const dailyCard = () => {
+    const state = app.services.daily.state();
+    const text =
+      state.kind === 'done'
+        ? t('home.daily.done', { score: state.score })
+        : state.kind === 'running'
+          ? t('home.daily.running', { n: state.answered })
+          : t('home.daily.new');
+    return h(
+      'li',
+      { class: 'lesson daily-card' },
+      h(
+        'button',
+        { class: 'start', 'data-testid': 'start-daily', 'aria-describedby': 'stats-daily', onclick: () => app.navigate('daily') },
+        h('span', { class: 'lesson-title' }, t('lesson.daily.title')),
+        h('span', { class: 'lesson-description' }, t('lesson.daily.description')),
+      ),
+      h('p', { class: 'stats', id: 'stats-daily', 'data-testid': 'stats-daily' }, text),
+    );
+  };
+
   const iconButton = (label: string, icon: string, onclick: () => void, testId: string) =>
     h('button', { class: 'icon-button', 'aria-label': label, title: label, 'data-testid': testId, onclick }, svg(icon));
 
@@ -98,7 +120,7 @@ export function homeScreen(app: App): Screen {
       'span',
       { class: 'chip-text' },
       name ? h('strong', {}, name) : null,
-      h('span', { 'data-testid': 'home-level' }, t('home.level', { n: info.level, title: t(`level.title.${info.title}`) })),
+      h('span', { 'data-testid': 'home-level' }, t('home.level', { n: info.level, title: t(titleKey(info.title)) })),
     ),
     h('progress', { max: info.span, value: info.into, 'aria-hidden': 'true' }),
     h('span', { class: 'chip-xp' }, `${state.total} XP`),
@@ -121,6 +143,11 @@ export function homeScreen(app: App): Screen {
     logoArt(),
     h('h1', { tabindex: -1 }, 'Pydra'),
     h('p', { class: 'tagline' }, t('app.tagline')),
+    h(
+      'section',
+      { class: 'lesson-group', 'aria-label': t('lesson.daily.title') },
+      h('ul', { class: 'lessons' }, dailyCard()),
+    ),
     h(
       'section',
       { class: 'lesson-group' },

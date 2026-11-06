@@ -1,6 +1,7 @@
 import { registerSW } from 'virtual:pwa-register';
 import { App, GAME_ROUTES } from './app.ts';
 import { CONTENT } from './content/lessons.ts';
+import { DailyChallenge } from './daily/challenge.ts';
 import { FeedbackQueue } from './feedback/queue.ts';
 import { Game } from './game/game.ts';
 import { HUNT_LEVELS, type HuntLevel } from './game/hunt-levels.ts';
@@ -36,6 +37,7 @@ const points: PointsService = new PointsService(
 const onPoints = (event: PointsEvent): void => points.record(event);
 
 const trainer = new Trainer(storage, CONTENT, Math.random, () => new Date(), onPoints);
+const daily = new DailyChallenge(storage, undefined, () => new Date(), Math.random, onPoints);
 const game = Game.fishing(storage, Math.random, onPoints);
 const hunt = new Game(storage, HUNT_LEVELS, Math.random, 'hunt', onPoints);
 const order = new OrderGame(storage, undefined, onPoints);
@@ -46,7 +48,7 @@ const install = new InstallPrompt(window);
 
 // A new version reloads the app at once, or when the running quiz or a hydra game is left.
 const updates = new UpdateManager(
-  () => trainer.isRunning() || GAME_ROUTES.some((route) => location.hash === `#/${route}`),
+  () => trainer.isRunning() || location.hash === '#/daily' || GAME_ROUTES.some((route) => location.hash === `#/${route}`),
   () => void updateSW(true),
 );
 const updateSW = registerSW({
@@ -57,7 +59,7 @@ const updateSW = registerSW({
   },
 });
 
-new App(document.getElementById('app')!, { storage, trainer, game, hunt, order, predict, points, feedback, install, updates }).start();
+new App(document.getElementById('app')!, { storage, trainer, daily, game, hunt, order, predict, points, feedback, install, updates }).start();
 
 // Deliver feedback written while offline.
 const flushFeedback = () => void feedback.flush();

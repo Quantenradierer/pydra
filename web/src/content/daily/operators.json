@@ -1,0 +1,797 @@
+[
+  {
+    "id": "operators-01",
+    "topic": "operators",
+    "level": 1,
+    "code": "price = 4\ncount = 3\ntotal = price * count\nif total > 10:\n    total = total - 2\nprint(total)",
+    "variant": "price = 5\ncount = 3\ntotal = price * count\nif total > 10:\n    total = total - 2\nprint(total)",
+    "altered": "price = 4\ncount = 3\ntotal = price * count\nif total > 12:\n    total = total - 2\nprint(total)",
+    "requirement": [
+      4,
+      4
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `total` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `total` have after them?"
+        },
+        "choices": [
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "12",
+            "en": "12"
+          },
+          {
+            "de": "43",
+            "en": "43"
+          },
+          {
+            "de": "64",
+            "en": "64"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`price * count` heißt 4 mal 3. Das Sternchen `*` ist das Mal-Zeichen in Python, und 4 · 3 ist 12. In `total` steht danach diese Zahl, nicht die Rechnung.",
+          "en": "`price * count` means 4 times 3. The star `*` is the times sign in Python, and 4 · 3 is 12. After that `total` holds that number, not the calculation."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "12",
+            "en": "12"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "14",
+            "en": "14"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`total` ist 12, und 12 ist größer als 10. Die Bedingung stimmt, also läuft die eingerückte Zeile: `total = total - 2` rechnet 12 - 2 und speichert 10 wieder in `total`. Danach zeigt `print` diesen neuen Wert.",
+          "en": "`total` is 12, and 12 is bigger than 10. The condition is true, so the indented line runs: `total = total - 2` calculates 12 - 2 and stores 10 in `total` again. Then `print` shows this new value."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `price` ist jetzt 5. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `price` is now 5. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "15",
+            "en": "15"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "13",
+            "en": "13"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Jetzt ist `total` 5 * 3 = 15. Das ist größer als 10, der Rabatt wird abgezogen: 15 - 2 = 13. Die Bedingung wird jedes Mal neu geprüft, mit dem aktuellen Wert.",
+          "en": "Now `total` is 5 * 3 = 15. That is bigger than 10, so the discount is taken off: 15 - 2 = 13. The condition is checked fresh every time, with the current value."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt 12 aus: Bei genau 12 gibt es keinen Rabatt mehr",
+            "en": "B prints 12: with exactly 12 there is no discount any more"
+          },
+          {
+            "de": "B gibt 10 aus, genau wie A, die Grenze ist ja egal",
+            "en": "B prints 10, just like A; the limit does not matter"
+          },
+          {
+            "de": "B gibt 14 aus, weil der Rabatt jetzt aufgeschlagen wird",
+            "en": "B prints 14, because the discount is now added"
+          },
+          {
+            "de": "B gibt 8 aus, weil der Rabatt doppelt abgezogen wird",
+            "en": "B prints 8, because the discount is taken off twice"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In B muss `total` größer als 12 sein. `total` ist aber genau 12, und 12 ist nicht größer als 12. Die Bedingung ist falsch, der Rabatt wird übersprungen, und `print` zeigt 12. A hatte die Grenze bei 10, da gab es den Rabatt.",
+          "en": "In B, `total` has to be bigger than 12. But `total` is exactly 12, and 12 is not bigger than 12. The condition is false, the discount is skipped, and `print` shows 12. A had the limit at 10, so it gave the discount."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Auch eine Summe von genau 10 soll den Rabatt von 2 bekommen. Womit ersetzt du Zeile 4 (markiert)?",
+          "en": "New requirement: A total of exactly 10 must get the discount of 2 as well. What do you replace line 4 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "if total == 10:",
+            "en": "if total == 10:"
+          },
+          {
+            "de": "if total >= 10:",
+            "en": "if total >= 10:"
+          },
+          {
+            "de": "if total < 10:",
+            "en": "if total < 10:"
+          },
+          {
+            "de": "if total >= 11:",
+            "en": "if total >= 11:"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Genau 10 soll mitzählen, und alles darüber auch. Das schafft `>=`, „größer oder gleich“. Prüfe die Probe: Bei 10 stimmt es, bei 9 nicht, bei 12 wieder.\n\n`==` trifft nur die 10 und lässt 12 ohne Rabatt. `<` dreht die Richtung um. `>= 11` verpasst die 10 und ist bei ganzen Zahlen dasselbe wie das alte `> 10`.",
+          "en": "Exactly 10 should count, and everything above too. `>=` does that, “greater than or equal”. Try it out: with 10 it is true, with 9 it is not, with 12 it is again.\n\n`==` hits only the 10 and leaves 12 without a discount. `<` turns the direction around. `>= 11` misses the 10 and, for whole numbers, is the same as the old `> 10`."
+        }
+      }
+    ]
+  },
+  {
+    "id": "operators-02",
+    "topic": "operators",
+    "level": 2,
+    "code": "minutes = 135\nhours = minutes // 60\nrest = minutes % 60\nif rest >= 30:\n    hours = hours + 1\nprint(hours)",
+    "variant": "minutes = 150\nhours = minutes // 60\nrest = minutes % 60\nif rest >= 30:\n    hours = hours + 1\nprint(hours)",
+    "altered": "minutes = 135\nhours = minutes % 60\nrest = minutes % 60\nif rest >= 30:\n    hours = hours + 1\nprint(hours)",
+    "requirement": [
+      4,
+      4
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `rest` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `rest` have after them?"
+        },
+        "choices": [
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "2.25",
+            "en": "2.25"
+          },
+          {
+            "de": "15",
+            "en": "15"
+          },
+          {
+            "de": "75",
+            "en": "75"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`%` heißt „Rest bei der Division“. 135 geteilt durch 60 geht 2-mal auf (2 · 60 = 120), und es bleiben 135 - 120 = 15 übrig. Das ist `rest`: die Minuten, die keine volle Stunde mehr ergeben.",
+          "en": "`%` means “remainder of the division”. 135 divided by 60 fits 2 times (2 · 60 = 120), and 135 - 120 = 15 are left over. That is `rest`: the minutes that no longer make a full hour."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "2.25",
+            "en": "2.25"
+          },
+          {
+            "de": "15",
+            "en": "15"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`hours` ist 2 (`//` ist die Division ohne Rest) und `rest` ist 15. Ist 15 mindestens 30? Nein. Der `if`-Teil läuft nicht, `hours` bleibt bei 2.",
+          "en": "`hours` is 2 (`//` is division without a remainder) and `rest` is 15. Is 15 at least 30? No. The `if` part does not run, and `hours` stays at 2."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `minutes` ist jetzt 150. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `minutes` is now 150. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "2.5",
+            "en": "2.5"
+          },
+          {
+            "de": "30",
+            "en": "30"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "150 ÷ 60 geht 2-mal auf, `hours` ist 2. Der Rest ist 150 - 120 = 30. Und 30 ist mindestens 30, die Bedingung stimmt, also wird `hours` um 1 größer: 3. Die Stunde wird aufgerundet.",
+          "en": "150 ÷ 60 fits 2 times, so `hours` is 2. The remainder is 150 - 120 = 30. And 30 is at least 30, so the condition is true and `hours` grows by 1: 3. The hour is rounded up."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B teilt jetzt ohne Rest und gibt 2.25 aus",
+            "en": "B now divides without a remainder and prints 2.25"
+          },
+          {
+            "de": "B nimmt bei hours den Rest: 15",
+            "en": "B takes the remainder for hours: 15"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn % und // sind gleich",
+            "en": "B prints the same as A, because % and // are the same"
+          },
+          {
+            "de": "B gibt 3 aus, weil der Rest 15 aufgerundet wird",
+            "en": "B prints 3, because the remainder of 15 is rounded up"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "In B steht bei `hours` ein `%` statt `//`. `135 % 60` ist der Rest 15, nicht die Zahl der vollen Stunden. Der Rest ist 15, die Bedingung ist falsch, und `print` zeigt 15. Ein einziges Zeichen verwandelt „wie oft passt es rein“ in „was bleibt übrig“.",
+          "en": "B has a `%` instead of `//` for `hours`. `135 % 60` is the remainder 15, not the number of full hours. The remainder is 15, the condition is false, and `print` shows 15. A single character turns “how often does it fit” into “what is left over”."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Schon ab 15 Minuten Rest soll aufgerundet werden, bei 14 und weniger nicht. Womit ersetzt du Zeile 4 (markiert)?",
+          "en": "New requirement: Rounding up must start at a remainder of 15 minutes; with 14 or fewer it must not. What do you replace line 4 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "if rest > 15:",
+            "en": "if rest > 15:"
+          },
+          {
+            "de": "if rest <= 15:",
+            "en": "if rest <= 15:"
+          },
+          {
+            "de": "if rest >= 15:",
+            "en": "if rest >= 15:"
+          },
+          {
+            "de": "if rest >= 30:",
+            "en": "if rest >= 30:"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Bei 135 Minuten ist der Rest 15, und der soll schon aufrunden. Dafür muss die Bedingung bei 15 wahr sein und bei 14 falsch: `rest >= 15`.\n\n`> 15` schließt die 15 aus, `<= 15` läuft genau falsch herum (bei Rest 40 würde nicht aufgerundet), und `>= 30` ist die alte Regel.",
+          "en": "With 135 minutes the remainder is 15, and that should already round up. So the condition must be true at 15 and false at 14: `rest >= 15`.\n\n`> 15` shuts out the 15, `<= 15` runs exactly the wrong way round (with a remainder of 40 it would not round up), and `>= 30` is the old rule."
+        }
+      }
+    ]
+  },
+  {
+    "id": "operators-03",
+    "topic": "operators",
+    "level": 2,
+    "code": "side = 3\narea = side ** 2\nperimeter = side * 4\nbig = area\nif perimeter > area:\n    big = perimeter\nprint(big)",
+    "variant": "side = 5\narea = side ** 2\nperimeter = side * 4\nbig = area\nif perimeter > area:\n    big = perimeter\nprint(big)",
+    "altered": "side = 3\narea = side ** 2\nperimeter = side + 4\nbig = area\nif perimeter > area:\n    big = perimeter\nprint(big)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `area` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `area` have after them?"
+        },
+        "choices": [
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "27",
+            "en": "27"
+          },
+          {
+            "de": "9",
+            "en": "9"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`**` bedeutet „hoch“. `side ** 2` ist 3 hoch 2, also 3 · 3 = 9. Es ist nicht 3 · 2 = 6: Die kleine Zahl sagt, wie oft die 3 mit sich selbst multipliziert wird.",
+          "en": "`**` means “to the power of”. `side ** 2` is 3 to the power of 2, so 3 · 3 = 9. It is not 3 · 2 = 6: the small number says how often the 3 is multiplied by itself."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "12",
+            "en": "12"
+          },
+          {
+            "de": "9",
+            "en": "9"
+          },
+          {
+            "de": "21",
+            "en": "21"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`area` ist 9 und `perimeter` ist 3 * 4 = 12. `big` startet bei 9. Dann die Frage: Ist 12 größer als 9? Ja, also bekommt `big` den Wert 12. `print` zeigt 12: Das Programm sucht die größere der beiden Zahlen.",
+          "en": "`area` is 9 and `perimeter` is 3 * 4 = 12. `big` starts at 9. Then the question: is 12 bigger than 9? Yes, so `big` gets the value 12. `print` shows 12: the program looks for the bigger of the two numbers."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `side` ist jetzt 5. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `side` is now 5. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "20",
+            "en": "20"
+          },
+          {
+            "de": "25",
+            "en": "25"
+          },
+          {
+            "de": "45",
+            "en": "45"
+          },
+          {
+            "de": "5",
+            "en": "5"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Mit `side = 5` ist `area` 5 · 5 = 25 und `perimeter` 5 · 4 = 20. 20 ist nicht größer als 25, der `if`-Teil wird übersprungen. `big` bleibt bei 25: 25. Bei kleinen Zahlen gewinnt der Umfang, bei großen die Fläche.",
+          "en": "With `side = 5`, `area` is 5 · 5 = 25 and `perimeter` is 5 · 4 = 20. 20 is not bigger than 25, so the `if` part is skipped. `big` stays at 25: 25. With small numbers the perimeter wins, with big ones the area."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B rechnet mit 3 + 4 = 7 und gibt deshalb 7 aus",
+            "en": "B calculates 3 + 4 = 7 and therefore prints 7"
+          },
+          {
+            "de": "B gibt 12 aus, genau wie A",
+            "en": "B prints 12, just like A"
+          },
+          {
+            "de": "B addiert 4: perimeter ist 7, B gibt 9 aus",
+            "en": "B adds 4: perimeter is 7, B prints 9"
+          },
+          {
+            "de": "B gibt 16 aus, weil 12 + 4 gerechnet wird",
+            "en": "B prints 16, because 12 + 4 is calculated"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "In B ist `perimeter` nur 3 + 4 = 7 statt 3 · 4 = 12. Jetzt ist 7 nicht mehr größer als `area` (9). Der `if`-Teil wird übersprungen, `big` bleibt 9: 9. Die 7 selbst wird nie ausgegeben, sie entscheidet nur.",
+          "en": "In B, `perimeter` is only 3 + 4 = 7 instead of 3 · 4 = 12. Now 7 is no longer bigger than `area` (9). The `if` part is skipped, `big` stays 9: 9. The 7 itself is never printed; it only decides."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Aus dem Quadrat wird ein Würfel: `area` soll jetzt Seite hoch 3 sein (also 3 · 3 · 3). Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: The square becomes a cube: `area` must now be side to the power of 3 (that is 3 · 3 · 3). What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "area = 3 ** side",
+            "en": "area = 3 ** side"
+          },
+          {
+            "de": "area = side * 3",
+            "en": "area = side * 3"
+          },
+          {
+            "de": "area = side ^ 3",
+            "en": "area = side ^ 3"
+          },
+          {
+            "de": "area = side ** 3",
+            "en": "area = side ** 3"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "„Seite hoch 3“ schreibt man `side ** 3`: Die Seite steht links, der Exponent rechts. `side * 3` ist nur das Dreifache (9), nicht das Hoch.\n\nVorsicht bei `3 ** side`: Das ist „3 hoch Seite“. Bei Seite 3 kommt zufällig auch 27 heraus, bei Seite 2 aber 9 statt 8. Und `^` ist in Python kein Hoch, sondern eine ganz andere Operation (3 ^ 3 ist 0).",
+          "en": "“Side to the power of 3” is written `side ** 3`: the side is on the left, the exponent on the right. `side * 3` is only three times as much (9), not the power.\n\nBe careful with `3 ** side`: that is “3 to the power of side”. With side 3 it happens to give 27 too, but with side 2 it gives 9 instead of 8. And `^` is not a power in Python but a completely different operation (3 ^ 3 is 0)."
+        }
+      }
+    ]
+  },
+  {
+    "id": "operators-04",
+    "topic": "operators",
+    "level": 1,
+    "code": "coins = 10\nprice = 3\ncoins -= price\nif coins >= 2 * price:\n    coins -= price\nprint(coins)",
+    "variant": "coins = 10\nprice = 4\ncoins -= price\nif coins >= 2 * price:\n    coins -= price\nprint(coins)",
+    "altered": "coins = 10\nprice = 3\ncoins -= price\nif coins >= 3 * price:\n    coins -= price\nprint(coins)",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `coins` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `coins` have after them?"
+        },
+        "choices": [
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "13",
+            "en": "13"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`coins -= price` ist die Kurzform von `coins = coins - price`: Der Wert wird kleiner. Aus 10 wird 10 - 3 = 7. Die Zeile verändert `coins` selbst, deshalb steht danach die neue Zahl darin.",
+          "en": "`coins -= price` is the short form of `coins = coins - price`: the value gets smaller. 10 becomes 10 - 3 = 7. The line changes `coins` itself, so the new number is in it afterwards."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "1",
+            "en": "1"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Nach Zeile 3 hat man 7 Münzen. `2 * price` ist 6, und 7 ist mindestens 6, die Bedingung stimmt. Also wird noch einmal bezahlt: 7 - 3 = 4. Das Rechnen vor dem Vergleichen passiert zuerst.",
+          "en": "After line 3 there are 7 coins. `2 * price` is 6, and 7 is at least 6, so the condition is true. So another payment follows: 7 - 3 = 4. The calculation inside the comparison happens first."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `price` ist jetzt 4. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `price` is now 4. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Mit `price = 4` bleiben nach dem ersten Kauf 10 - 4 = 6 Münzen. Die Bedingung fragt jetzt: Ist 6 mindestens 2 * 4 = 8? Nein. Der zweite Kauf findet nicht statt, es bleibt bei 6.",
+          "en": "With `price = 4`, 10 - 4 = 6 coins are left after the first purchase. Now the condition asks: is 6 at least 2 * 4 = 8? No. The second purchase does not happen, so it stays at 6."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B zahlt zweimal und gibt 1 aus",
+            "en": "B pays twice and prints 1"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, die 3 ändert nichts",
+            "en": "B prints the same as A, the 3 changes nothing"
+          },
+          {
+            "de": "B stoppt mit einem Fehler, weil 3 * price nicht erlaubt ist",
+            "en": "B stops with an error, because 3 * price is not allowed"
+          },
+          {
+            "de": "B verlangt 9 Münzen für den zweiten Kauf: 7",
+            "en": "B demands 9 coins for the second purchase: 7"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "In B braucht man 3 * 3 = 9 Münzen für den zweiten Kauf. Nach dem ersten sind es aber nur 7, und 7 ist nicht mindestens 9. Der zweite Kauf entfällt, `print` zeigt 7. In A reichten schon 6.",
+          "en": "In B you need 3 * 3 = 9 coins for the second purchase. After the first one there are only 7, and 7 is not at least 9. The second purchase is skipped, and `print` shows 7. In A, 6 were enough."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Der zweite Kauf soll teurer sein: Er kostet `price + 1` statt `price`. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: The second purchase must cost more: it costs `price + 1` instead of `price`. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    coins -= price + 1",
+            "en": "    coins -= price + 1"
+          },
+          {
+            "de": "    coins = coins - price + 1",
+            "en": "    coins = coins - price + 1"
+          },
+          {
+            "de": "    coins -= price - 1",
+            "en": "    coins -= price - 1"
+          },
+          {
+            "de": "    coins += price + 1",
+            "en": "    coins += price + 1"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`coins -= price + 1` heißt `coins = coins - (price + 1)`: Rechts vom `-=` wird zuerst alles ausgerechnet (3 + 1 = 4), dann abgezogen: 7 - 4 = 3.\n\nBei `coins = coins - price + 1` wird erst abgezogen und dann 1 dazugezählt (das gäbe 5). `- 1` macht den Kauf billiger statt teurer, und `+=` bringt Münzen dazu.",
+          "en": "`coins -= price + 1` means `coins = coins - (price + 1)`: to the right of `-=` everything is worked out first (3 + 1 = 4), then subtracted: 7 - 4 = 3.\n\nWith `coins = coins - price + 1` Python subtracts first and then adds 1 (that would give 5). `- 1` makes the purchase cheaper instead of dearer, and `+=` adds coins."
+        }
+      }
+    ]
+  },
+  {
+    "id": "operators-05",
+    "topic": "operators",
+    "level": 1,
+    "code": "number = 12\nrest = number % 5\nmissing = 5 - rest\nif rest == 0:\n    print(\"full box\")\nelse:\n    print(\"add\", missing)",
+    "variant": "number = 10\nrest = number % 5\nmissing = 5 - rest\nif rest == 0:\n    print(\"full box\")\nelse:\n    print(\"add\", missing)",
+    "altered": "number = 12\nrest = number % 5\nmissing = rest\nif rest == 0:\n    print(\"full box\")\nelse:\n    print(\"add\", missing)",
+    "requirement": [
+      7,
+      7
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `rest` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `rest` have after them?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "2.4",
+            "en": "2.4"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "12",
+            "en": "12"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Eier kommen in Schachteln zu 5. `%` gibt den Rest beim Teilen: 12 Eier füllen 2 Schachteln (10 Eier), und es bleiben 2 übrig. Geteilt wird dabei nicht, `/` wäre das (2.4).",
+          "en": "Eggs go into boxes of 5. `%` gives the remainder when dividing: 12 eggs fill 2 boxes (10 eggs), and 2 are left. It does not divide, `/` would do that (2.4)."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "add 2",
+            "en": "add 2"
+          },
+          {
+            "de": "full box",
+            "en": "full box"
+          },
+          {
+            "de": "add 5",
+            "en": "add 5"
+          },
+          {
+            "de": "add 3",
+            "en": "add 3"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`rest` ist 2, und `5 - rest` ergibt 3: So viele Eier fehlen für die nächste volle Schachtel. Der Rest ist nicht 0, also läuft der `else`-Teil. Ausgabe: add 3.",
+          "en": "`rest` is 2, and `5 - rest` is 3: that many eggs are missing for the next full box. The remainder is not 0, so the `else` part runs. Output: add 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `number` ist jetzt 10. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `number` is now 10. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "full box",
+            "en": "full box"
+          },
+          {
+            "de": "add 5",
+            "en": "add 5"
+          },
+          {
+            "de": "add 0",
+            "en": "add 0"
+          },
+          {
+            "de": "add 3",
+            "en": "add 3"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "10 Eier füllen genau 2 Schachteln, es bleibt kein Rest: `10 % 5` ist 0. Die Bedingung `rest == 0` stimmt, also läuft der `if`-Teil. Ausgabe: full box.",
+          "en": "10 eggs fill exactly 2 boxes, nothing is left: `10 % 5` is 0. The condition `rest == 0` is true, so the `if` part runs. Output: full box."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt add 3 aus, genau wie A",
+            "en": "B prints add 3, just like A"
+          },
+          {
+            "de": "B nimmt rest statt 5 - rest und gibt add 2 aus",
+            "en": "B takes rest instead of 5 - rest and prints add 2"
+          },
+          {
+            "de": "B gibt full box aus, weil rest nicht 0 ist",
+            "en": "B prints full box, because rest is not 0"
+          },
+          {
+            "de": "B gibt add 10 aus, weil missing 12 - 2 ist",
+            "en": "B prints add 10, because missing is 12 - 2"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "In B ist `missing` einfach `rest`, also 2: die Eier, die schon in der angebrochenen Schachtel liegen, nicht die fehlenden. Der `else`-Teil läuft genauso wie in A, nur die Zahl ist eine andere. Ausgabe: add 2.",
+          "en": "In B `missing` is simply `rest`, so 2: the eggs already in the unfinished box, not the missing ones. The `else` part runs just like in A, only the number is different. Output: add 2."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Hinter der fehlenden Zahl soll noch das Wort `eggs` stehen: `add 3 eggs`. Womit ersetzt du Zeile 7 (markiert)?",
+          "en": "New requirement: The word `eggs` must follow the missing number: `add 3 eggs`. What do you replace line 7 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    print(\"add\", missing + \"eggs\")",
+            "en": "    print(\"add\", missing + \"eggs\")"
+          },
+          {
+            "de": "    print(\"add\", rest, \"eggs\")",
+            "en": "    print(\"add\", rest, \"eggs\")"
+          },
+          {
+            "de": "    print(\"add\", missing, \"eggs\")",
+            "en": "    print(\"add\", missing, \"eggs\")"
+          },
+          {
+            "de": "    print(\"add missing eggs\")",
+            "en": "    print(\"add missing eggs\")"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`print` kann mehrere Dinge zeigen, wenn man sie mit Kommas trennt, und setzt jeweils ein Leerzeichen dazwischen: `add`, die Zahl, `eggs`.\n\nBei `missing + \"eggs\"` will Python eine Zahl und Text addieren: Fehler. `rest` ist die falsche Zahl (2). Und `\"add missing eggs\"` ist nur Text, der Wert von `missing` fehlt.",
+          "en": "`print` can show several things if you separate them with commas, and puts a space between them: `add`, the number, `eggs`.\n\nWith `missing + \"eggs\"` Python tries to add a number and text: error. `rest` is the wrong number (2). And `\"add missing eggs\"` is just text, the value of `missing` is missing."
+        }
+      }
+    ]
+  }
+]

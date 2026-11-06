@@ -1,0 +1,299 @@
+[
+  {
+    "id": "diff-strings-01",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(\"hello\"[0])",
+    "codeB": "print(\"hello\"[-1])",
+    "choices": [
+      {
+        "de": "B gibt hell statt h aus",
+        "en": "B prints hell instead of h"
+      },
+      {
+        "de": "B gibt o statt h aus: -1 zählt von hinten",
+        "en": "B prints o instead of h: -1 counts from the back"
+      },
+      {
+        "de": "B gibt e statt h aus",
+        "en": "B prints e instead of h"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil es keinen Index -1 gibt",
+        "en": "B stops with an error, because there is no index -1"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Die Zeichen eines Textes sind durchnummeriert, und Python fängt bei 0 an zu zählen: `\"hello\"[0]` ist das erste Zeichen, `h`.\n\nNegative Zahlen zählen von hinten: `-1` ist das letzte Zeichen, `-2` das vorletzte. Darum ist `\"hello\"[-1]` das `o`. Praktisch, wenn man das Ende eines Textes braucht, ohne seine Länge zu kennen.",
+      "en": "The characters of a text are numbered, and Python starts counting at 0: `\"hello\"[0]` is the first character, `h`.\n\nNegative numbers count from the back: `-1` is the last character, `-2` the second to last. That is why `\"hello\"[-1]` is the `o`. Handy when you need the end of a text without knowing its length."
+    }
+  },
+  {
+    "id": "diff-strings-02",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(\"hello\"[1:3])",
+    "codeB": "print(\"hello\"[1:4])",
+    "choices": [
+      {
+        "de": "B gibt ell statt el aus: Das Ende der Scheibe wird weiter hinten gesetzt",
+        "en": "B prints ell instead of el: the end of the slice is set further back"
+      },
+      {
+        "de": "B gibt hell statt el aus",
+        "en": "B prints hell instead of el"
+      },
+      {
+        "de": "B gibt ello statt el aus",
+        "en": "B prints ello instead of el"
+      },
+      {
+        "de": "B gibt el aus, die zweite Zahl hat keine Wirkung",
+        "en": "B prints el, the second number has no effect"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Beim Ausschneiden mit `[von:bis]` zählt das erste Zeichen ab Nummer 0, und das Zeichen bei `bis` ist nicht mehr dabei. In `h(0) e(1) l(2) l(3) o(4)` holt `[1:3]` die Nummern 1 und 2: `el`.\n\nMit `[1:4]` kommt Nummer 3 dazu, also `ell`. Merkhilfe: Die Endzahl ist wie ein Schnitt, der direkt vor diesem Zeichen gemacht wird.",
+      "en": "When slicing with `[from:to]`, counting starts at number 0, and the character at `to` is no longer included. In `h(0) e(1) l(2) l(3) o(4)`, `[1:3]` takes numbers 1 and 2: `el`.\n\nWith `[1:4]` number 3 is added, so `ell`. Memory aid: the end number is like a cut made right before that character."
+    }
+  },
+  {
+    "id": "diff-strings-03",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(\"Hi\".upper())",
+    "codeB": "print(\"Hi\".lower())",
+    "choices": [
+      {
+        "de": "B gibt hI statt HI aus",
+        "en": "B prints hI instead of HI"
+      },
+      {
+        "de": "B gibt Hi aus, genau wie der Originaltext",
+        "en": "B prints Hi, exactly like the original text"
+      },
+      {
+        "de": "B gibt 2 statt HI aus",
+        "en": "B prints 2 instead of HI"
+      },
+      {
+        "de": "B gibt hi statt HI aus",
+        "en": "B prints hi instead of HI"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`.upper()` macht aus allen Buchstaben Großbuchstaben: `Hi` wird `HI`.\n\n`.lower()` macht das Gegenteil und schreibt alles klein: `Hi` wird `hi`. Beide Methoden ändern den ursprünglichen Text nicht, sie liefern einen neuen Text zurück.",
+      "en": "`.upper()` turns all letters into capitals: `Hi` becomes `HI`.\n\n`.lower()` does the opposite and writes everything in small letters: `Hi` becomes `hi`. Neither method changes the original text, they return a new text."
+    }
+  },
+  {
+    "id": "diff-strings-04",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(\"ab\" + \"3\")",
+    "codeB": "print(\"ab\" * 3)",
+    "choices": [
+      {
+        "de": "B gibt ab ab ab statt ab3 aus",
+        "en": "B prints ab ab ab instead of ab3"
+      },
+      {
+        "de": "B gibt ab3 aus, genau wie A",
+        "en": "B prints ab3, just like A"
+      },
+      {
+        "de": "B gibt ababab statt ab3 aus",
+        "en": "B prints ababab instead of ab3"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil man Text nicht malnehmen darf",
+        "en": "B stops with an error, because you may not multiply text"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`+` klebt zwei Texte aneinander. `\"ab\" + \"3\"` ergibt `ab3`, denn `\"3\"` ist hier nur ein Zeichen.\n\n`*` mit einer Zahl wiederholt den Text so oft: `\"ab\" * 3` ergibt dreimal `ab` hintereinander, ohne Leerzeichen dazwischen. Das ist erlaubt, auch wenn Text sonst nicht \"malnehmbar\" wirkt.",
+      "en": "`+` glues two texts together. `\"ab\" + \"3\"` gives `ab3`, because `\"3\"` is just a character here.\n\n`*` with a number repeats the text that many times: `\"ab\" * 3` gives `ab` three times in a row, without spaces in between. That is allowed, even though text does not seem \"multipliable\" otherwise."
+    }
+  },
+  {
+    "id": "diff-strings-05",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "name = \"Ana\"\nprint(f\"Hi {name}\")",
+    "codeB": "name = \"Ana\"\nprint(\"Hi {name}\")",
+    "choices": [
+      {
+        "de": "B bricht mit einem Fehler ab, weil name in geschweiften Klammern steht",
+        "en": "B stops with an error, because name is in curly braces"
+      },
+      {
+        "de": "B gibt Hi {name} aus, ohne den Namen einzusetzen",
+        "en": "B prints Hi {name}, without putting the name in"
+      },
+      {
+        "de": "B gibt Hi Ana aus, genau wie A",
+        "en": "B prints Hi Ana, just like A"
+      },
+      {
+        "de": "B gibt Hi name aus",
+        "en": "B prints Hi name"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Das kleine `f` vor dem Anführungszeichen macht einen \"f-String\": Alles in geschweiften Klammern wird durch den Wert der Variablen ersetzt. Aus `{name}` wird `Ana`.\n\nOhne das `f` ist es ein ganz normaler Text. Python gibt die geschweiften Klammern dann einfach so aus, wie sie dastehen: `Hi {name}`. Ein Fehler ist das nicht.",
+      "en": "The little `f` in front of the quote makes an \"f-string\": everything in curly braces is replaced by the value of the variable. `{name}` becomes `Ana`.\n\nWithout the `f` it is a perfectly normal text. Python then prints the curly braces just as they are: `Hi {name}`. That is not an error."
+    }
+  },
+  {
+    "id": "diff-strings-06",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(\"a b c\".split())",
+    "codeB": "print(\"a b c\".replace(\" \", \"\"))",
+    "choices": [
+      {
+        "de": "B gibt einen Text abc aus, A eine Liste mit drei Texten",
+        "en": "B prints one text abc, A prints a list of three texts"
+      },
+      {
+        "de": "B gibt auch eine Liste aus, nur ohne Leerzeichen",
+        "en": "B also prints a list, just without spaces"
+      },
+      {
+        "de": "B gibt a b c aus, die Leerzeichen bleiben",
+        "en": "B prints a b c, the spaces stay"
+      },
+      {
+        "de": "B gibt 3 aus, die Anzahl der Buchstaben",
+        "en": "B prints 3, the number of letters"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`.split()` schneidet den Text an den Leerzeichen in Stücke und liefert eine Liste: `['a', 'b', 'c']`. Die eckigen Klammern und Anführungszeichen zeigen, dass es drei einzelne Texte sind.\n\n`.replace(\" \", \"\")` tauscht jedes Leerzeichen gegen \"nichts\" aus und bleibt ein einziger Text: `abc`. Es bleibt also ein Text, es entsteht keine Liste.",
+      "en": "`.split()` cuts the text into pieces at the spaces and returns a list: `['a', 'b', 'c']`. The square brackets and quotes show that these are three separate texts.\n\n`.replace(\" \", \"\")` swaps every space for \"nothing\" and stays one single text: `abc`. So it stays a text, no list is created."
+    }
+  },
+  {
+    "id": "diff-strings-07",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(\"banana\".count(\"a\"))",
+    "codeB": "print(\"banana\".find(\"a\"))",
+    "choices": [
+      {
+        "de": "B gibt 0 statt 3 aus, weil das erste a an Stelle 0 steht",
+        "en": "B prints 0 instead of 3, because the first a is at position 0"
+      },
+      {
+        "de": "B gibt 3 aus, genau wie A",
+        "en": "B prints 3, just like A"
+      },
+      {
+        "de": "B gibt True statt 3 aus",
+        "en": "B prints True instead of 3"
+      },
+      {
+        "de": "B gibt 1 statt 3 aus: find nennt die Stelle des ersten a, count zählt alle",
+        "en": "B prints 1 instead of 3: find names the position of the first a, count counts all of them"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`.count(\"a\")` zählt, wie oft ein Stück Text vorkommt: In `banana` gibt es drei `a`.\n\n`.find(\"a\")` sucht dagegen nur die Stelle des ersten Treffers. Gezählt wird ab 0: b ist Stelle 0, das erste a Stelle 1. Darum kommt 1 heraus, auch wenn es mehr a's gibt.",
+      "en": "`.count(\"a\")` counts how often a piece of text appears: there are three `a` in `banana`.\n\n`.find(\"a\")`, on the other hand, only looks for the position of the first match. Counting starts at 0: b is position 0, the first a is position 1. So 1 comes out, even though there are more a's."
+    }
+  },
+  {
+    "id": "diff-strings-08",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "s = \"hi\"\ns.upper()\nprint(s)",
+    "codeB": "s = \"hi\"\ns = s.upper()\nprint(s)",
+    "choices": [
+      {
+        "de": "B gibt hi aus, genau wie A",
+        "en": "B prints hi, just like A"
+      },
+      {
+        "de": "B gibt Hi statt hi aus",
+        "en": "B prints Hi instead of hi"
+      },
+      {
+        "de": "B gibt HI statt hi aus, weil das Ergebnis in s gespeichert wird",
+        "en": "B prints HI instead of hi, because the result is saved in s"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil s sich selbst nicht ersetzen darf",
+        "en": "B stops with an error, because s may not replace itself"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Texte in Python lassen sich nicht verändern. `s.upper()` baut einen neuen Text `\"HI\"`, aber den alten Text in `s` lässt es in Ruhe. In A wird der neue Text nirgends aufgefangen, also steht in `s` noch immer `hi`.\n\nIn B sorgt `s = ...` dafür, dass die Variable ab jetzt auf den neuen Text zeigt. So wie du ein neues Etikett auf die Schachtel klebst. Dann gibt `print(s)` `HI` aus.",
+      "en": "Texts in Python cannot be changed. `s.upper()` builds a new text `\"HI\"`, but leaves the old text in `s` alone. In A the new text is not caught anywhere, so `s` still holds `hi`.\n\nIn B, `s = ...` makes the variable point to the new text from now on. Like putting a new label on the box. Then `print(s)` prints `HI`."
+    }
+  },
+  {
+    "id": "diff-strings-09",
+    "topic": "strings",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(len(\"hi there\"))",
+    "codeB": "print(len(\"hi there\".split()))",
+    "choices": [
+      {
+        "de": "B gibt 7 statt 8 aus: Das Leerzeichen zählt nicht mit",
+        "en": "B prints 7 instead of 8: the space is not counted"
+      },
+      {
+        "de": "B gibt 2 statt 8 aus: Gezählt werden Wörter statt Zeichen",
+        "en": "B prints 2 instead of 8: words are counted instead of characters"
+      },
+      {
+        "de": "B gibt 8 aus, genau wie A",
+        "en": "B prints 8, just like A"
+      },
+      {
+        "de": "B gibt 1 statt 8 aus",
+        "en": "B prints 1 instead of 8"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`len()` zählt bei einem Text alle Zeichen, auch das Leerzeichen: h, i, Leerzeichen, t, h, e, r, e sind 8.\n\nIn B macht `.split()` zuerst aus dem Text eine Liste mit zwei Wörtern: `['hi', 'there']`. Und `len()` zählt bei einer Liste die Einträge, also 2. Dieselbe Funktion `len` zählt je nach Sache etwas anderes.",
+      "en": "For a text, `len()` counts all characters, including the space: h, i, space, t, h, e, r, e make 8.\n\nIn B, `.split()` first turns the text into a list of two words: `['hi', 'there']`. And for a list `len()` counts the entries, so 2. The same function `len` counts something different depending on what you give it."
+    }
+  }
+]

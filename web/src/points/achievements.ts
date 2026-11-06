@@ -13,10 +13,12 @@ export interface Stats {
   perfectSessions: number;
   tasksDone: number;
   playerLevel: number;
+  challenges: number;
+  bestChallenge: number;
   totals: Record<XpGame, number>;
 }
 
-type CountKey = 'ach.desc.quiz' | 'ach.desc.levels' | 'ach.desc.streak' | 'ach.desc.perfect' | 'ach.desc.tasks' | 'ach.desc.level';
+type CountKey = 'ach.desc.quiz' | 'ach.desc.levels' | 'ach.desc.streak' | 'ach.desc.perfect' | 'ach.desc.tasks' | 'ach.desc.level' | 'ach.desc.challenges' | 'ach.desc.challengeStreak';
 
 export type Describe = { key: CountKey; n: number } | { key: 'ach.desc.master'; game: XpGame };
 
@@ -50,8 +52,11 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   counted('tasks-1', 'bronze', 'ach.desc.tasks', 1, (s) => s.tasksDone),
   counted('tasks-10', 'silver', 'ach.desc.tasks', 10, (s) => s.tasksDone),
   counted('tasks-50', 'gold', 'ach.desc.tasks', 50, (s) => s.tasksDone),
-  counted('level-5', 'silver', 'ach.desc.level', 5, (s) => s.playerLevel),
-  counted('level-10', 'gold', 'ach.desc.level', 10, (s) => s.playerLevel),
+  counted('daily-1', 'bronze', 'ach.desc.challenges', 1, (s) => s.challenges),
+  counted('daily-streak-7', 'gold', 'ach.desc.challengeStreak', 7, (s) => s.bestChallenge),
+  counted('daily-30', 'gold', 'ach.desc.challenges', 30, (s) => s.challenges),
+  counted('level-10', 'silver', 'ach.desc.level', 10, (s) => s.playerLevel),
+  counted('level-50', 'gold', 'ach.desc.level', 50, (s) => s.playerLevel),
   ...XP_GAMES.map(
     (game): Achievement => ({
       id: `master-${game}`,
@@ -75,6 +80,8 @@ export function statsOf(state: PointsState, ctx: GameContext): Stats {
     perfectSessions: state.perfectSessions,
     tasksDone: state.tasksDone,
     playerLevel: levelInfo(state.total).level,
+    challenges: state.challenges,
+    bestChallenge: state.bestChallenge,
     totals: ctx.totals,
   };
 }

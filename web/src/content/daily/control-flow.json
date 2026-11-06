@@ -1,0 +1,956 @@
+[
+  {
+    "id": "control-flow-01",
+    "topic": "control-flow",
+    "level": 1,
+    "code": "points = 72\nbonus = 5\ntotal = points + bonus\nif total >= 90:\n    print(\"A\")\nelif total >= 70:\n    print(\"B\")\nelse:\n    print(\"C\")",
+    "variant": "points = 72\nbonus = 20\ntotal = points + bonus\nif total >= 90:\n    print(\"A\")\nelif total >= 70:\n    print(\"B\")\nelse:\n    print(\"C\")",
+    "altered": "points = 72\nbonus = 5\ntotal = points + bonus\nif total >= 90:\n    print(\"A\")\nelif total >= 80:\n    print(\"B\")\nelse:\n    print(\"C\")",
+    "requirement": [
+      8,
+      9
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `total` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `total` have after them?"
+        },
+        "choices": [
+          {
+            "de": "72",
+            "en": "72"
+          },
+          {
+            "de": "77",
+            "en": "77"
+          },
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "725",
+            "en": "725"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Zwei Zahlen werden addiert: 72 + 5 ist 77. Weil beides Zahlen sind, wird gerechnet und nicht zusammengeklebt (das gäbe es nur bei Texten).",
+          "en": "Two numbers are added: 72 + 5 is 77. Because both are numbers, Python calculates and does not glue (that happens only with texts)."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "A",
+            "en": "A"
+          },
+          {
+            "de": "C",
+            "en": "C"
+          },
+          {
+            "de": "B",
+            "en": "B"
+          },
+          {
+            "de": "77",
+            "en": "77"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Python prüft von oben nach unten und nimmt den ersten Treffer. 77 ≥ 90? Nein. 77 ≥ 70? Ja, also läuft dieser Teil und es erscheint B. Alles darunter wird übersprungen, auch wenn es ebenfalls passen würde.",
+          "en": "Python checks from top to bottom and takes the first hit. 77 ≥ 90? No. 77 ≥ 70? Yes, so this part runs and B appears. Everything below is skipped, even if it would fit as well."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `bonus` ist jetzt 20. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `bonus` is now 20. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "B",
+            "en": "B"
+          },
+          {
+            "de": "C",
+            "en": "C"
+          },
+          {
+            "de": "92",
+            "en": "92"
+          },
+          {
+            "de": "A",
+            "en": "A"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Mit `bonus = 20` ist `total` gleich 92. Die erste Prüfung (92 ≥ 90) stimmt sofort: A. Die zweite Prüfung `elif` würde ebenfalls stimmen, wird aber nie angeschaut, weil schon ein Treffer da ist.",
+          "en": "With `bonus = 20`, `total` is 92. The first check (92 ≥ 90) is true at once: A. The second check `elif` would be true as well but is never looked at, because there already is a hit."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B verlangt 80 Punkte für B und gibt C aus",
+            "en": "B demands 80 points for a B and prints C"
+          },
+          {
+            "de": "B gibt A aus, weil 77 fast 80 ist",
+            "en": "B prints A, because 77 is almost 80"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, 77 ist ja weiter ein B",
+            "en": "B prints the same as A, 77 is still a B"
+          },
+          {
+            "de": "B gibt B und C aus, weil beide Zweige passen",
+            "en": "B prints B and C, because both branches fit"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In B muss man 80 Punkte haben, um ein B zu bekommen. 77 hat man aber nicht. Weder `if` (≥ 90) noch `elif` (≥ 80) stimmen, deshalb läuft der `else`-Teil: C. Eine kleine Zahl verschiebt die Notengrenze.",
+          "en": "In B you need 80 points to get a B. But you have only 77. Neither the `if` (≥ 90) nor the `elif` (≥ 80) is true, so the `else` part runs: C. One small number moves the grade limit."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Unter 50 Punkten soll ein F erscheinen; ab 50 bleibt es beim C. Womit ersetzt du Zeilen 8 bis 9 (markiert)?",
+          "en": "New requirement: Below 50 points an F must appear; from 50 on it stays a C. What do you replace lines 8 to 9 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "else:\n    print(\"C\")\n    print(\"F\")",
+            "en": "else:\n    print(\"C\")\n    print(\"F\")"
+          },
+          {
+            "de": "elif total >= 50:\n    print(\"C\")\nelse:\n    print(\"F\")",
+            "en": "elif total >= 50:\n    print(\"C\")\nelse:\n    print(\"F\")"
+          },
+          {
+            "de": "elif total <= 50:\n    print(\"C\")\nelse:\n    print(\"F\")",
+            "en": "elif total <= 50:\n    print(\"C\")\nelse:\n    print(\"F\")"
+          },
+          {
+            "de": "if total >= 50:\n    print(\"C\")\nelse:\n    print(\"F\")",
+            "en": "if total >= 50:\n    print(\"C\")\nelse:\n    print(\"F\")"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Die Kette bleibt eine Kette: `if`, `elif`, `elif` … und am Ende zwei Wege für den Rest. Das neue `elif total >= 50` fängt 50 bis 69 ab, und `else` bekommt alles darunter: F.\n\nEin zweites `if` würde eine neue Kette beginnen und noch einmal prüfen (dann erschiene bei 77 zusätzlich ein C). Bei `<= 50` sind die Grenzen verdreht, und ein `else` mit zwei Zeilen druckt beide.",
+          "en": "The chain stays a chain: `if`, `elif`, `elif` … and at the end two ways for the rest. The new `elif total >= 50` catches 50 to 69, and `else` gets everything below: F.\n\nA second `if` would start a new chain and check again (then a 77 would also print a C). With `<= 50` the borders are twisted, and an `else` with two lines prints both."
+        }
+      }
+    ]
+  },
+  {
+    "id": "control-flow-02",
+    "topic": "control-flow",
+    "level": 2,
+    "code": "name = \"\"\nage = 20\nadult = age >= 18\nif adult and name:\n    print(\"Hi \" + name + \"!\")\nelse:\n    print(\"Hi, stranger!\")",
+    "variant": "name = \"Ada\"\nage = 20\nadult = age >= 18\nif adult and name:\n    print(\"Hi \" + name + \"!\")\nelse:\n    print(\"Hi, stranger!\")",
+    "altered": "name = \"\"\nage = 20\nadult = age >= 18\nif adult or name:\n    print(\"Hi \" + name + \"!\")\nelse:\n    print(\"Hi, stranger!\")",
+    "requirement": [
+      4,
+      4
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `adult` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `adult` have after them?"
+        },
+        "choices": [
+          {
+            "de": "False",
+            "en": "False"
+          },
+          {
+            "de": "20",
+            "en": "20"
+          },
+          {
+            "de": "True",
+            "en": "True"
+          },
+          {
+            "de": "18",
+            "en": "18"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`age >= 18` ist eine Frage: Ist 20 mindestens 18? Ja, die Antwort ist True. In `adult` steht der Wahrheitswert, nicht das Alter. Der leere Text `name = \"\"` hat damit nichts zu tun.",
+          "en": "`age >= 18` is a question: is 20 at least 18? Yes, the answer is True. `adult` holds the truth value, not the age. The empty text `name = \"\"` has nothing to do with it."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "Hi !",
+            "en": "Hi !"
+          },
+          {
+            "de": "Hi True!",
+            "en": "Hi True!"
+          },
+          {
+            "de": "Hi 20!",
+            "en": "Hi 20!"
+          },
+          {
+            "de": "Hi, stranger!",
+            "en": "Hi, stranger!"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`adult and name` ist nur wahr, wenn BEIDES wahr ist. `adult` ist `True`, aber `name` ist ein leerer Text, und der zählt in Python als „falsch“. Die Bedingung stimmt also nicht, der `else`-Teil läuft: Hi, stranger!.",
+          "en": "`adult and name` is only true if BOTH are true. `adult` is `True`, but `name` is an empty text, and that counts as “false” in Python. So the condition is false, the `else` part runs: Hi, stranger!."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `name` ist jetzt `\"Ada\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `name` is now `\"Ada\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "Hi Ada!",
+            "en": "Hi Ada!"
+          },
+          {
+            "de": "Hi, stranger!",
+            "en": "Hi, stranger!"
+          },
+          {
+            "de": "Hi name!",
+            "en": "Hi name!"
+          },
+          {
+            "de": "Hi True!",
+            "en": "Hi True!"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Ein Text mit Inhalt zählt als „wahr“. `adult` ist wahr und `name` ist `\"Ada\"`: beides wahr, die Bedingung stimmt. Der `if`-Teil klebt den Gruß zusammen: Hi Ada!. Hier steht der Inhalt von `name`, nicht das Wort „name“.",
+          "en": "A text with something in it counts as “true”. `adult` is true and `name` is `\"Ada\"`: both true, so the condition is true. The `if` part glues the greeting together: Hi Ada!. It uses what is inside `name`, not the word “name”."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt Hi, stranger! aus, genau wie A",
+            "en": "B prints Hi, stranger!, just like A"
+          },
+          {
+            "de": "B reicht schon ein einziger wahrer Teil, deshalb gibt B Hi ! aus",
+            "en": "In B a single true part is enough, so B prints Hi !"
+          },
+          {
+            "de": "B gibt Hi Ada! aus, weil or den Namen ergänzt",
+            "en": "B prints Hi Ada!, because or fills in the name"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil or mit einem Text nicht geht",
+            "en": "B stops with an error, because or does not work with a text"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`or` heißt „oder“: Es genügt, wenn EIN Teil wahr ist. `adult` ist wahr, also stimmt die Bedingung, obwohl `name` leer ist. Der `if`-Teil läuft und klebt `Hi `, den leeren Namen und `!` zusammen: Hi !. `and` hätte beides verlangt.",
+          "en": "`or` means “or”: it is enough if ONE part is true. `adult` is true, so the condition is true, although `name` is empty. The `if` part runs and glues `Hi `, the empty name and `!` together: Hi !. `and` would have demanded both."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Jeder mit einem Namen soll begrüßt werden, egal wie alt; ohne Namen nicht. Womit ersetzt du Zeile 4 (markiert)?",
+          "en": "New requirement: Everyone with a name must be greeted, no matter how old; without a name nobody. What do you replace line 4 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "if adult or name:",
+            "en": "if adult or name:"
+          },
+          {
+            "de": "if name == True:",
+            "en": "if name == True:"
+          },
+          {
+            "de": "if name:",
+            "en": "if name:"
+          },
+          {
+            "de": "if not name:",
+            "en": "if not name:"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Ein Text mit Inhalt zählt als wahr, ein leerer als falsch. Darum genügt `if name:` ganz allein, das Alter ist egal.\n\n`adult or name` begrüßt auch Erwachsene ohne Namen. `name == True` vergleicht den Text mit dem Wahrheitswert, und `\"Ada\"` ist nicht gleich `True`. `not name` dreht alles um.",
+          "en": "A text with something in it counts as true, an empty one as false. That is why `if name:` is enough all by itself; the age does not matter.\n\n`adult or name` also greets adults without a name. `name == True` compares the text with the truth value, and `\"Ada\"` is not equal to `True`. `not name` turns everything around."
+        }
+      }
+    ]
+  },
+  {
+    "id": "control-flow-03",
+    "topic": "control-flow",
+    "level": 2,
+    "code": "temp = 24\nsunny = True\noutfit = \"jacket\"\nif temp > 20:\n    outfit = \"shirt\"\nif not sunny:\n    outfit = outfit + \" and umbrella\"\nprint(outfit)",
+    "variant": "temp = 24\nsunny = False\noutfit = \"jacket\"\nif temp > 20:\n    outfit = \"shirt\"\nif not sunny:\n    outfit = outfit + \" and umbrella\"\nprint(outfit)",
+    "altered": "temp = 24\nsunny = True\noutfit = \"jacket\"\nif temp > 20:\n    outfit = \"shirt\"\nif sunny:\n    outfit = outfit + \" and umbrella\"\nprint(outfit)",
+    "requirement": [
+      6,
+      6
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `outfit` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `outfit` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'shirt'",
+            "en": "'shirt'"
+          },
+          {
+            "de": "24",
+            "en": "24"
+          },
+          {
+            "de": "'sunny'",
+            "en": "'sunny'"
+          },
+          {
+            "de": "'jacket'",
+            "en": "'jacket'"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Die Zeilen 1 und 2 merken sich nur Werte, sie ändern `outfit` nicht. In `outfit` steht der Text, den Zeile 3 hineingelegt hat: 'jacket'. Mit dem `if` kommt es erst danach zur Entscheidung.",
+          "en": "Lines 1 and 2 only remember values; they do not change `outfit`. `outfit` holds the text that line 3 put in: 'jacket'. The decision with `if` only comes afterwards."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "shirt",
+            "en": "shirt"
+          },
+          {
+            "de": "jacket",
+            "en": "jacket"
+          },
+          {
+            "de": "shirt and umbrella",
+            "en": "shirt and umbrella"
+          },
+          {
+            "de": "jacket and umbrella",
+            "en": "jacket and umbrella"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Zuerst: 24 ist größer als 20, also wird `outfit` zu `\"shirt\"`. Dann die zweite Frage: `not sunny` heißt „nicht sonnig“. Es ist sonnig (`True`), also ist `not sunny` falsch, und der Regenschirm wird übersprungen. Es bleibt shirt.",
+          "en": "First: 24 is bigger than 20, so `outfit` becomes `\"shirt\"`. Then the second question: `not sunny` means “not sunny”. It is sunny (`True`), so `not sunny` is false and the umbrella is skipped. What remains is shirt."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `sunny` ist jetzt `False`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `sunny` is now `False`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "shirt",
+            "en": "shirt"
+          },
+          {
+            "de": "shirt and umbrella",
+            "en": "shirt and umbrella"
+          },
+          {
+            "de": "jacket and umbrella",
+            "en": "jacket and umbrella"
+          },
+          {
+            "de": "umbrella",
+            "en": "umbrella"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Der erste `if` läuft wie vorher: `outfit` wird zu `shirt`. Aber jetzt ist es nicht sonnig, `not sunny` ist wahr, und die zweite Zeile hängt ` and umbrella` hinten an das, was schon in `outfit` steht: shirt and umbrella. Die beiden `if`-Blöcke arbeiten nacheinander.",
+          "en": "The first `if` runs as before: `outfit` becomes `shirt`. But now it is not sunny, `not sunny` is true, and the second line attaches ` and umbrella` to what is already in `outfit`: shirt and umbrella. The two `if` blocks work one after the other."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B nimmt bei Regen den Regenschirm mit und gibt shirt aus",
+            "en": "B takes the umbrella along when it rains and prints shirt"
+          },
+          {
+            "de": "B gibt jacket and umbrella aus, die Jacke bleibt",
+            "en": "B prints jacket and umbrella, the jacket stays"
+          },
+          {
+            "de": "B nimmt bei Sonne den Schirm mit: shirt and umbrella",
+            "en": "B takes the umbrella when sunny: shirt and umbrella"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, not hat keine Wirkung",
+            "en": "B prints the same as A, not has no effect"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Ohne `not` fragt B: Ist es sonnig? Ja, also wird der Schirm dazugehängt: shirt and umbrella. A fragte nach dem Gegenteil und ließ den Schirm bei Sonne zu Hause. Das Wort `not` dreht eine Bedingung um.",
+          "en": "Without `not`, B asks: is it sunny? Yes, so the umbrella is added: shirt and umbrella. A asked for the opposite and left the umbrella at home when it was sunny. The word `not` turns a condition around."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Den Schirm soll es nur geben, wenn es nicht sonnig UND höchstens 20 Grad warm ist. Womit ersetzt du Zeile 6 (markiert)?",
+          "en": "New requirement: The umbrella must only be added if it is not sunny AND at most 20 degrees. What do you replace line 6 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "if not sunny or temp <= 20:",
+            "en": "if not sunny or temp <= 20:"
+          },
+          {
+            "de": "if not sunny and temp > 20:",
+            "en": "if not sunny and temp > 20:"
+          },
+          {
+            "de": "if sunny and temp <= 20:",
+            "en": "if sunny and temp <= 20:"
+          },
+          {
+            "de": "if not sunny and temp <= 20:",
+            "en": "if not sunny and temp <= 20:"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Bei `and` müssen beide Teile wahr sein: nicht sonnig UND kühl. „Höchstens 20“ schreibt man `temp <= 20`. Wer die Fälle durchspielt (warm und Regen, kalt und Sonne, kalt und Regen), sieht, dass der Schirm nur im letzten Fall kommt.\n\n`or` würde schon einen der beiden Gründe genügen lassen. `temp > 20` meint „wärmer“, und `sunny` ohne `not` meint Sonne.",
+          "en": "With `and` both parts must be true: not sunny AND cool. “At most 20” is written `temp <= 20`. If you play through the cases (warm and rain, cold and sun, cold and rain), you see that the umbrella only comes in the last one.\n\n`or` would let one of the two reasons be enough. `temp > 20` means “warmer”, and `sunny` without `not` means sun."
+        }
+      }
+    ]
+  },
+  {
+    "id": "control-flow-04",
+    "topic": "control-flow",
+    "level": 3,
+    "code": "coins = 4\nlives = 3\nbonus = coins // 4\nif coins > 5:\n    lives = lives + bonus\n    coins = coins - 5\nprint(lives, coins)",
+    "variant": "coins = 8\nlives = 3\nbonus = coins // 4\nif coins > 5:\n    lives = lives + bonus\n    coins = coins - 5\nprint(lives, coins)",
+    "altered": "coins = 4\nlives = 3\nbonus = coins // 4\nif coins > 5:\n    lives = lives + bonus\ncoins = coins - 5\nprint(lives, coins)",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `bonus` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `bonus` have after them?"
+        },
+        "choices": [
+          {
+            "de": "1",
+            "en": "1"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "0",
+            "en": "0"
+          },
+          {
+            "de": "16",
+            "en": "16"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`//` teilt ohne Rest. 4 geteilt durch 4 ist genau 1. Der Wert wird in `bonus` aufgehoben, aber noch nicht benutzt. Das passiert erst später im Programm.",
+          "en": "`//` divides without a remainder. 4 divided by 4 is exactly 1. The value is kept in `bonus` but not used yet. That only happens later in the program."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "5 -1",
+            "en": "5 -1"
+          },
+          {
+            "de": "3 4",
+            "en": "3 4"
+          },
+          {
+            "de": "4 -1",
+            "en": "4 -1"
+          },
+          {
+            "de": "3 -1",
+            "en": "3 -1"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`coins` ist 4, und 4 ist nicht größer als 5. Die Bedingung stimmt nicht, und die beiden eingerückten Zeilen darunter werden zusammen übersprungen. Nichts ändert sich: 3 4.",
+          "en": "`coins` is 4, and 4 is not bigger than 5. The condition is false, and the two indented lines below it are skipped together. Nothing changes: 3 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `coins` ist jetzt 8. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `coins` is now 8. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "3 8",
+            "en": "3 8"
+          },
+          {
+            "de": "4 3",
+            "en": "4 3"
+          },
+          {
+            "de": "5 3",
+            "en": "5 3"
+          },
+          {
+            "de": "5 8",
+            "en": "5 8"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Jetzt ist `bonus` gleich 8 // 4 = 2, und 8 ist größer als 5: Beide eingerückten Zeilen laufen. `lives` wird 3 + 2 = 5, `coins` wird 8 - 5 = 3. `print` zeigt 5 3 (erst `lives`, dann `coins`).",
+          "en": "Now `bonus` is 8 // 4 = 2, and 8 is bigger than 5: both indented lines run. `lives` becomes 3 + 2 = 5, `coins` becomes 8 - 5 = 3. `print` shows 5 3 (first `lives`, then `coins`)."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "In B läuft die Zeile mit lives immer, B gibt 4 4 aus",
+            "en": "In B the line with lives always runs, B prints 4 4"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil die Einrückung fehlt",
+            "en": "B stops with an error, because the indentation is missing"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, die Einrückung ist nur Optik",
+            "en": "B prints the same as A, the indentation is only looks"
+          },
+          {
+            "de": "In B ist die Zeile mit coins nicht eingerückt: 3 -1",
+            "en": "In B the coins line is not indented: 3 -1"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Eingerückte Zeilen gehören zum `if`, nicht eingerückte nicht mehr. In B steht `coins = coins - 5` am linken Rand, also läuft es immer, auch wenn die Bedingung falsch ist: 4 - 5 = -1. Es entsteht 3 -1. Die Einrückung ist in Python kein Schmuck, sie bestimmt, was zusammengehört.",
+          "en": "Indented lines belong to the `if`, lines that are not indented do not. In B `coins = coins - 5` is at the left edge, so it always runs, even if the condition is false: 4 - 5 = -1. The result is 3 -1. Indentation in Python is not decoration; it decides what belongs together."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Der Bonus soll nie größer als 3 werden, auch bei sehr vielen Münzen. Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: The bonus must never be bigger than 3, even with very many coins. What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "bonus = min(coins // 4, 3)",
+            "en": "bonus = min(coins // 4, 3)"
+          },
+          {
+            "de": "bonus = max(coins // 4, 3)",
+            "en": "bonus = max(coins // 4, 3)"
+          },
+          {
+            "de": "bonus = min(coins, 3) // 4",
+            "en": "bonus = min(coins, 3) // 4"
+          },
+          {
+            "de": "bonus = coins // min(4, 3)",
+            "en": "bonus = coins // min(4, 3)"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`min(a, b)` gibt die kleinere von zwei Zahlen. `min(coins // 4, 3)` nimmt den Bonus, aber höchstens 3: bei 20 Münzen wäre er 5, mit `min` bleibt er 3. Die Zahl 3 ist die Obergrenze.\n\n`max` macht daraus eine Untergrenze (der Bonus wäre mindestens 3). `min(coins, 3) // 4` kommt immer auf 0, und `coins // min(4, 3)` teilt durch 3 statt durch 4.",
+          "en": "`min(a, b)` gives the smaller of two numbers. `min(coins // 4, 3)` takes the bonus but at most 3: with 20 coins it would be 5, with `min` it stays 3. The number 3 is the upper limit.\n\n`max` turns that into a lower limit (the bonus would be at least 3). `min(coins, 3) // 4` always ends up 0, and `coins // min(4, 3)` divides by 3 instead of 4."
+        }
+      }
+    ]
+  },
+  {
+    "id": "control-flow-05",
+    "topic": "control-flow",
+    "level": 1,
+    "code": "age = 10\nprice = 8\ntotal = price * 2\nif age < 12:\n    total = total - 4\nprint(\"pay\", total)",
+    "variant": "age = 14\nprice = 8\ntotal = price * 2\nif age < 12:\n    total = total - 4\nprint(\"pay\", total)",
+    "altered": "age = 10\nprice = 8\ntotal = price * 2\nif age < 12:\n    total = total + 4\nprint(\"pay\", total)",
+    "requirement": [
+      4,
+      4
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `total` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `total` have after them?"
+        },
+        "choices": [
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "16",
+            "en": "16"
+          },
+          {
+            "de": "20",
+            "en": "20"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Zwei Eintrittskarten zu je 8: `price * 2` ist 16. Das Malzeichen rechnet, es klebt keine Ziffern aneinander. `total` ist 16.",
+          "en": "Two tickets at 8 each: `price * 2` is 16. The times sign calculates, it does not glue digits together. `total` is 16."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "pay 16",
+            "en": "pay 16"
+          },
+          {
+            "de": "pay 4",
+            "en": "pay 4"
+          },
+          {
+            "de": "pay 8",
+            "en": "pay 8"
+          },
+          {
+            "de": "pay 12",
+            "en": "pay 12"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "10 ist kleiner als 12, die Bedingung stimmt. Also läuft die eingerückte Zeile: 16 - 4 = 12. Der `print` steht ohne Einrückung und läuft immer. Ausgabe: pay 12.",
+          "en": "10 is smaller than 12, so the condition is true. The indented line runs: 16 - 4 = 12. The `print` is not indented and always runs. Output: pay 12."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `age` ist jetzt 14. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `age` is now 14. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "pay 16",
+            "en": "pay 16"
+          },
+          {
+            "de": "pay 12",
+            "en": "pay 12"
+          },
+          {
+            "de": "pay 4",
+            "en": "pay 4"
+          },
+          {
+            "de": "pay 14",
+            "en": "pay 14"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "14 ist nicht kleiner als 12, die Bedingung stimmt nicht. Die eingerückte Zeile wird übersprungen, `total` bleibt 16. Ausgabe: pay 16.",
+          "en": "14 is not smaller than 12, so the condition is false. The indented line is skipped, and `total` stays 16. Output: pay 16."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt pay 16 aus, weil die Bedingung nicht stimmt",
+            "en": "B prints pay 16, because the condition is false"
+          },
+          {
+            "de": "B rechnet 4 drauf statt 4 abzuziehen und gibt pay 20 aus",
+            "en": "B adds 4 instead of subtracting 4 and prints pay 20"
+          },
+          {
+            "de": "B gibt pay 12 aus, genau wie A",
+            "en": "B prints pay 12, just like A"
+          },
+          {
+            "de": "B gibt pay 8 aus, weil 4 zweimal abgezogen wird",
+            "en": "B prints pay 8, because 4 is subtracted twice"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "In B steht `+ 4` statt `- 4`. Die Bedingung `age < 12` stimmt weiter, die Zeile läuft: 16 + 4 = 20. Aus dem Rabatt wird ein Aufschlag. Ausgabe: pay 20.",
+          "en": "B has `+ 4` instead of `- 4`. The condition `age < 12` is still true, so the line runs: 16 + 4 = 20. The discount became a surcharge. Output: pay 20."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Auch 12-Jährige sollen den Rabatt bekommen (12 gehört dazu), 13-Jährige nicht. Womit ersetzt du Zeile 4 (markiert)?",
+          "en": "New requirement: 12-year-olds must get the discount too (12 counts), 13-year-olds not. What do you replace line 4 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "if age < 12:",
+            "en": "if age < 12:"
+          },
+          {
+            "de": "if age == 12:",
+            "en": "if age == 12:"
+          },
+          {
+            "de": "if age <= 12:",
+            "en": "if age <= 12:"
+          },
+          {
+            "de": "if age > 12:",
+            "en": "if age > 12:"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`<=` heißt „kleiner als oder gleich“. Bei 12 stimmt es, bei 13 nicht, und alle Jüngeren sind weiter dabei.\n\n`<` schließt die 12 aus. `==` trifft nur genau 12, die 10-Jährige bekäme keinen Rabatt mehr. `>` dreht alles um.",
+          "en": "`<=` means “smaller than or equal to”. It is true for 12, not for 13, and all younger kids are still included.\n\n`<` leaves out the 12. `==` only hits exactly 12, so the 10-year-old would lose the discount. `>` turns everything around."
+        }
+      }
+    ]
+  },
+  {
+    "id": "control-flow-06",
+    "topic": "control-flow",
+    "level": 1,
+    "code": "light = \"yellow\"\nwait = 5\nextra = wait - 2\nif light == \"red\":\n    print(\"stop\", wait)\nelif light == \"yellow\":\n    print(\"slow\", extra)",
+    "variant": "light = \"red\"\nwait = 5\nextra = wait - 2\nif light == \"red\":\n    print(\"stop\", wait)\nelif light == \"yellow\":\n    print(\"slow\", extra)",
+    "altered": "light = \"yellow\"\nwait = 5\nextra = wait - 2\nif light == \"red\":\n    print(\"stop\", wait)\nelif light == \"green\":\n    print(\"slow\", extra)",
+    "requirement": [
+      7,
+      7
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `extra` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `extra` have after them?"
+        },
+        "choices": [
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`wait - 2` ist 5 minus 2, also 3. Die Zahl in `wait` bleibt dabei unberührt: Sie ist weiter 5.",
+          "en": "`wait - 2` is 5 minus 2, so 3. The number in `wait` is not touched: it is still 5."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "slow 3",
+            "en": "slow 3"
+          },
+          {
+            "de": "stop 5",
+            "en": "stop 5"
+          },
+          {
+            "de": "slow 5",
+            "en": "slow 5"
+          },
+          {
+            "de": "slow 2",
+            "en": "slow 2"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Die Ampel ist gelb. Zuerst fragt Python: Ist sie rot? Nein, also weiter zu `elif`: Ist sie gelb? Ja. Dort läuft `print(\"slow\", extra)`. Ausgabe: slow 3. Von den beiden Teilen läuft immer nur einer.",
+          "en": "The light is yellow. First Python asks: is it red? No, so on to `elif`: is it yellow? Yes. There `print(\"slow\", extra)` runs. Output: slow 3. Only one of the two parts ever runs."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `light` ist jetzt \"red\". Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `light` is now \"red\". What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "slow 3",
+            "en": "slow 3"
+          },
+          {
+            "de": "stop 5",
+            "en": "stop 5"
+          },
+          {
+            "de": "stop 3",
+            "en": "stop 3"
+          },
+          {
+            "de": "stop 2",
+            "en": "stop 2"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Jetzt ist die erste Frage schon mit Ja zu beantworten: Rot. Also läuft `print(\"stop\", wait)`, und der `elif`-Teil wird gar nicht mehr gefragt. Es wird `wait` gedruckt (5), nicht `extra`. Ausgabe: stop 5.",
+          "en": "Now the first question is already answered with yes: red. So `print(\"stop\", wait)` runs, and the `elif` part is not even asked. It prints `wait` (5), not `extra`. Output: stop 5."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt slow 3 aus, genau wie A",
+            "en": "B prints slow 3, just like A"
+          },
+          {
+            "de": "B gibt stop 5 aus, weil gelb wie rot behandelt wird",
+            "en": "B prints stop 5, because yellow is treated like red"
+          },
+          {
+            "de": "B fragt nach grün, hat keine Zeile für gelb und gibt gar nichts aus",
+            "en": "B asks for green, has no line for yellow and prints nothing at all"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil ein else fehlt",
+            "en": "B stops with an error, because an else is missing"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "In B fragt das `elif` nach grün. Die Ampel ist aber gelb: Weder die erste noch die zweite Frage stimmt, und es gibt kein `else`. Dann wird einfach nichts gemacht, das Programm gibt nichts aus und läuft ohne Fehler zu Ende.",
+          "en": "In B the `elif` asks for green. But the light is yellow: neither the first nor the second question is true, and there is no `else`. Then nothing is done: the program prints nothing and ends without an error."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Bei Gelb soll die doppelte Wartezeit stehen: `slow 10`. Womit ersetzt du Zeile 7 (markiert)?",
+          "en": "New requirement: For yellow the doubled waiting time must be shown: `slow 10`. What do you replace line 7 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    print(\"slow\", wait + 2)",
+            "en": "    print(\"slow\", wait + 2)"
+          },
+          {
+            "de": "    print(\"slow\", extra * 2)",
+            "en": "    print(\"slow\", extra * 2)"
+          },
+          {
+            "de": "    print(\"slow\", \"wait\" * 2)",
+            "en": "    print(\"slow\", \"wait\" * 2)"
+          },
+          {
+            "de": "    print(\"slow\", wait * 2)",
+            "en": "    print(\"slow\", wait * 2)"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`wait` ist die Wartezeit (5), `wait * 2` ist das Doppelte: 10.\n\n`wait + 2` addiert nur 2 (7). `extra * 2` verdoppelt die kleinere Zahl 3 zu 6. Und `\"wait\" * 2` in Anführungszeichen ist Text: Es kommt `waitwait` heraus.",
+          "en": "`wait` is the waiting time (5), `wait * 2` is double: 10.\n\n`wait + 2` adds only 2 (7). `extra * 2` doubles the smaller number 3 to 6. And `\"wait\" * 2` in quotes is text: you get `waitwait`."
+        }
+      }
+    ]
+  }
+]

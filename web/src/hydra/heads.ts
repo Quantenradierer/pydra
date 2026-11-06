@@ -1,5 +1,5 @@
 import type { Question } from '../content/types.ts';
-import { isCorrect, type Session } from '../session.ts';
+import { isCorrect, type Run } from '../session.ts';
 
 /**
  * What a head of the quiz hydra shows: an upcoming question, the current
@@ -8,7 +8,7 @@ import { isCorrect, type Session } from '../session.ts';
 export type HeadState = 'idle' | 'active' | 'slashed' | 'regrown';
 
 /** One head per question of the session, derived from the saved answers. */
-export function sessionHeads(session: Session, question: (id: string) => Question): HeadState[] {
+export function sessionHeads(session: Run, question: (id: string) => Question): HeadState[] {
   return session.items.map((item, i) => {
     if (item.picked !== null) return isCorrect(item, question(item.id)) ? 'slashed' : 'regrown';
     return i === session.index ? 'active' : 'idle';

@@ -35,6 +35,23 @@ describe('what reports to the points', () => {
     expect(events.at(-1)).toEqual({ type: 'session', perfect: true });
   });
 
+  it('the diff lesson reports every answer by its unique diff- id', () => {
+    const { storage, events, on } = setup();
+    const trainer = new Trainer(storage, CONTENT, Math.random, () => new Date(), on);
+    trainer.start('diff');
+    for (let i = 0; i < 10; i++) {
+      const s = trainer.session()!;
+      const item = s.items[s.index]!;
+      trainer.answer(present(CONTENT.byId.get(item.id)!, item.order).answerIndex);
+      trainer.next();
+    }
+    const ids = events.flatMap((e) => (e.type === 'quiz' ? [e.id] : []));
+    expect(ids).toHaveLength(10);
+    expect(new Set(ids).size).toBe(10);
+    expect(ids.every((id) => id.startsWith('diff-'))).toBe(true);
+    expect(events.at(-1)).toEqual({ type: 'session', perfect: true });
+  });
+
   it('a hunt level reports its first solve, clean or not, and no practice', () => {
     const { storage, events, on } = setup();
     const hunt = new Game(storage, HUNT_LEVELS, Math.random, 'hunt', on);

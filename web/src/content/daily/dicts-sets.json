@@ -1,0 +1,956 @@
+[
+  {
+    "id": "dicts-sets-01",
+    "topic": "dicts-sets",
+    "level": 1,
+    "code": "stock = {\"apple\": 3, \"pear\": 0}\nitem = \"apple\"\ncount = stock[item]\nif count > 0:\n    stock[item] = count - 1\nprint(stock)",
+    "variant": "stock = {\"apple\": 3, \"pear\": 0}\nitem = \"pear\"\ncount = stock[item]\nif count > 0:\n    stock[item] = count - 1\nprint(stock)",
+    "altered": "stock = {\"apple\": 3, \"pear\": 0}\nitem = \"apple\"\ncount = stock[item]\nif count > 0:\n    stock[item] = count + 1\nprint(stock)",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `count` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `count` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'apple'",
+            "en": "'apple'"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "0",
+            "en": "0"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Ein Dictionary (Wörterbuch) schlägt zu einem Schlüssel den Wert nach. `item` ist `\"apple\"`, und `stock[\"apple\"]` liefert den Wert dazu: 3. Der Schlüssel steht in den eckigen Klammern, der Wert kommt heraus.",
+          "en": "A dictionary looks up the value that belongs to a key. `item` is `\"apple\"`, and `stock[\"apple\"]` gives the value for it: 3. The key goes into the square brackets, the value comes out."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "{'apple': 3, 'pear': 0}",
+            "en": "{'apple': 3, 'pear': 0}"
+          },
+          {
+            "de": "{'apple': 2}",
+            "en": "{'apple': 2}"
+          },
+          {
+            "de": "{'apple': 2, 'pear': 0}",
+            "en": "{'apple': 2, 'pear': 0}"
+          },
+          {
+            "de": "{'apple': 2, 'pear': -1}",
+            "en": "{'apple': 2, 'pear': -1}"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`count` ist 3, und 3 ist größer als 0. Also wird für `apple` der neue Wert 3 - 1 = 2 eingetragen. Der alte Eintrag wird überschrieben, ein Schlüssel kommt nur einmal vor. `pear` bleibt unberührt. `print` zeigt das ganze Dictionary: {'apple': 2, 'pear': 0}.",
+          "en": "`count` is 3, and 3 is bigger than 0. So the new value 3 - 1 = 2 is stored for `apple`. The old entry is overwritten, a key appears only once. `pear` stays untouched. `print` shows the whole dictionary: {'apple': 2, 'pear': 0}."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `item` ist jetzt `\"pear\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `item` is now `\"pear\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "{'apple': 3, 'pear': -1}",
+            "en": "{'apple': 3, 'pear': -1}"
+          },
+          {
+            "de": "{'apple': 2, 'pear': 0}",
+            "en": "{'apple': 2, 'pear': 0}"
+          },
+          {
+            "de": "{'apple': 3}",
+            "en": "{'apple': 3}"
+          },
+          {
+            "de": "{'apple': 3, 'pear': 0}",
+            "en": "{'apple': 3, 'pear': 0}"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Für `pear` steht im Dictionary die 0. 0 ist nicht größer als 0, der `if`-Teil wird übersprungen. Niemand zieht etwas ab, das Dictionary bleibt, wie es war: {'apple': 3, 'pear': 0}. So bleibt der Bestand nie unter 0.",
+          "en": "For `pear` the dictionary holds 0. 0 is not bigger than 0, so the `if` part is skipped. Nothing is subtracted, and the dictionary stays as it was: {'apple': 3, 'pear': 0}. That way the stock never falls below 0."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B erhöht den Bestand von apple auf 4: {'apple': 4, 'pear': 0}",
+            "en": "B raises the stock of apple to 4: {'apple': 4, 'pear': 0}"
+          },
+          {
+            "de": "B fügt einen zweiten Eintrag apple: 4 hinzu, der alte bleibt",
+            "en": "B adds a second entry apple: 4, the old one stays"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil man beim Dictionary nicht addieren darf",
+            "en": "B stops with an error, because you may not add to a dictionary"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, + und - sind beim Zählen gleich",
+            "en": "B prints the same as A, + and - are the same when counting"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In B steht `count + 1`: 3 + 1 = 4. Das wird als neuer Wert für `apple` gespeichert und ersetzt die 3. Es entsteht kein zweiter Eintrag, denn ein Schlüssel gibt es nur einmal: {'apple': 4, 'pear': 0}.",
+          "en": "B has `count + 1`: 3 + 1 = 4. That is stored as the new value for `apple` and replaces the 3. No second entry is made, because a key exists only once: {'apple': 4, 'pear': 0}."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Fragt man nach einer Frucht, die es nicht gibt (z. B. `\"plum\"`), soll das Programm nicht abstürzen, sondern mit 0 weiterarbeiten. Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: If you ask for a fruit that does not exist (e.g. `\"plum\"`), the program must not crash but carry on with 0. What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "count = stock[item, 0]",
+            "en": "count = stock[item, 0]"
+          },
+          {
+            "de": "count = stock.get(item, 0)",
+            "en": "count = stock.get(item, 0)"
+          },
+          {
+            "de": "count = stock[item] or 0",
+            "en": "count = stock[item] or 0"
+          },
+          {
+            "de": "count = stock.get(item)",
+            "en": "count = stock.get(item)"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`stock.get(item, 0)` schaut nach dem Schlüssel und liefert die 0, wenn er fehlt, statt abzustürzen. Das zweite Ding in den Klammern ist der Ersatz.\n\nBei `stock[item, 0]` sucht Python den Schlüssel `(item, 0)` und findet ihn nie. `stock[item] or 0` greift zuerst zu und stürzt schon dabei ab. `stock.get(item)` ohne Ersatz gibt `None`, und `None > 0` lässt sich nicht vergleichen.",
+          "en": "`stock.get(item, 0)` looks for the key and gives 0 if it is missing instead of crashing. The second thing in the brackets is the replacement.\n\nWith `stock[item, 0]` Python looks for the key `(item, 0)` and never finds it. `stock[item] or 0` grabs first and crashes right there. `stock.get(item)` without a replacement gives `None`, and `None > 0` cannot be compared."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dicts-sets-02",
+    "topic": "dicts-sets",
+    "level": 2,
+    "code": "tags = [\"a\", \"b\", \"a\", \"c\", \"b\"]\nunique = set(tags)\nn = len(unique)\nif n < len(tags):\n    print(\"duplicates:\", len(tags) - n)\nelse:\n    print(\"all different\")",
+    "variant": "tags = [\"x\", \"y\", \"z\"]\nunique = set(tags)\nn = len(unique)\nif n < len(tags):\n    print(\"duplicates:\", len(tags) - n)\nelse:\n    print(\"all different\")",
+    "altered": "tags = [\"a\", \"b\", \"a\", \"c\", \"b\"]\nunique = set(tags)\nn = len(tags)\nif n < len(tags):\n    print(\"duplicates:\", len(tags) - n)\nelse:\n    print(\"all different\")",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `n` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `n` have after them?"
+        },
+        "choices": [
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`set(tags)` macht aus der Liste eine Menge. Eine Menge enthält jeden Wert nur einmal, doppelte fallen weg: aus a, b, a, c, b werden a, b, c. `len` zählt diese verschiedenen Werte: 3.",
+          "en": "`set(tags)` turns the list into a set. A set holds every value only once, doubles drop out: a, b, a, c, b become a, b, c. `len` counts these different values: 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "all different",
+            "en": "all different"
+          },
+          {
+            "de": "duplicates: 3",
+            "en": "duplicates: 3"
+          },
+          {
+            "de": "duplicates: 5",
+            "en": "duplicates: 5"
+          },
+          {
+            "de": "duplicates: 2",
+            "en": "duplicates: 2"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Die Menge hat 3 Werte, die Liste 5. 3 ist kleiner als 5, also gab es doppelte Einträge. Der `if`-Teil rechnet aus, wie viele überzählig sind: 5 - 3 = 2. Ausgabe: duplicates: 2.",
+          "en": "The set has 3 values, the list has 5. 3 is smaller than 5, so there were doubles. The `if` part works out how many are extra: 5 - 3 = 2. Output: duplicates: 2."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `tags` ist jetzt `[\"x\", \"y\", \"z\"]`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `tags` is now `[\"x\", \"y\", \"z\"]`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "all different",
+            "en": "all different"
+          },
+          {
+            "de": "duplicates: 0",
+            "en": "duplicates: 0"
+          },
+          {
+            "de": "duplicates: 3",
+            "en": "duplicates: 3"
+          },
+          {
+            "de": "duplicates: 1",
+            "en": "duplicates: 1"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Hier sind alle drei Werte verschieden, die Menge hat genauso viele Werte wie die Liste. 3 ist nicht kleiner als 3, der `else`-Teil läuft: all different. Die Menge hat nichts verloren, weil nichts doppelt war.",
+          "en": "Here all three values are different, so the set has exactly as many values as the list. 3 is not smaller than 3, the `else` part runs: all different. The set lost nothing, because nothing was doubled."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B zählt die Menge und gibt duplicates: 2 aus, wie A",
+            "en": "B counts the set and prints duplicates: 2, just like A"
+          },
+          {
+            "de": "B zählt die Liste statt der Menge: all different",
+            "en": "B counts the list instead of the set: all different"
+          },
+          {
+            "de": "B gibt duplicates: 0 aus, weil nichts abgezogen wird",
+            "en": "B prints duplicates: 0, because nothing is subtracted"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil len(tags) hier nicht erlaubt ist",
+            "en": "B stops with an error, because len(tags) is not allowed here"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "In B ist `n` die Länge der Liste, also 5. Die Bedingung fragt dann, ob 5 kleiner als 5 ist, und das stimmt nie. Der `else`-Teil läuft immer: all different. Die Menge `unique` wird nicht mehr benutzt, deshalb sieht B die doppelten nicht.",
+          "en": "In B, `n` is the length of the list, so 5. The condition then asks whether 5 is smaller than 5, and that is never true. The `else` part always runs: all different. The set `unique` is no longer used, so B does not see the doubles."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Statt der überzähligen soll die Zahl der verschiedenen Tags gemeldet werden: `different: 3`. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: Instead of the extra ones, the number of different tags must be reported: `different: 3`. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    print(\"different:\", len(tags))",
+            "en": "    print(\"different:\", len(tags))"
+          },
+          {
+            "de": "    print(\"different:\" + n)",
+            "en": "    print(\"different:\" + n)"
+          },
+          {
+            "de": "    print(\"different:\", n)",
+            "en": "    print(\"different:\", n)"
+          },
+          {
+            "de": "    print(\"different:\", len(set))",
+            "en": "    print(\"different:\", len(set))"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`n` enthält genau diese Zahl, die Länge der Menge. Ein Komma im `print` trennt Text und Zahl und setzt ein Leerzeichen dazwischen.\n\n`len(tags)` wäre die Länge der Liste (5), also falsch. Mit `+` lassen sich Text und Zahl nicht verbinden, das gibt einen Fehler. Und `set` allein ist nur der Name des Typs, `len(set)` ist sinnlos.",
+          "en": "`n` holds exactly this number, the length of the set. A comma in `print` separates text and number and puts a space between them.\n\n`len(tags)` would be the length of the list (5), which is wrong. With `+` text and a number cannot be joined; that gives an error. And `set` alone is only the name of the type, `len(set)` makes no sense."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dicts-sets-03",
+    "topic": "dicts-sets",
+    "level": 3,
+    "code": "votes = [\"red\", \"blue\", \"red\"]\ncounts = {}\ntotal = len(votes)\nfor v in votes:\n    counts[v] = counts.get(v, 0) + 1\nprint(counts, total)",
+    "variant": "votes = [\"blue\", \"blue\"]\ncounts = {}\ntotal = len(votes)\nfor v in votes:\n    counts[v] = counts.get(v, 0) + 1\nprint(counts, total)",
+    "altered": "votes = [\"red\", \"blue\", \"red\"]\ncounts = {}\ntotal = len(votes)\nfor v in votes:\n    counts[v] = 1\nprint(counts, total)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `total` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `total` have after them?"
+        },
+        "choices": [
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "0",
+            "en": "0"
+          },
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`len(votes)` zählt alle Einträge der Liste, auch wenn ein Wert doppelt vorkommt: red, blue, red sind drei Stimmen, also 3. Die Zeile `counts = {}` davor legt nur ein leeres Dictionary an.",
+          "en": "`len(votes)` counts all entries in the list, even if a value appears twice: red, blue, red are three votes, so 3. The line `counts = {}` before it only creates an empty dictionary."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "{'red': 2, 'blue': 1} 3",
+            "en": "{'red': 2, 'blue': 1} 3"
+          },
+          {
+            "de": "{'red': 1, 'blue': 1} 3",
+            "en": "{'red': 1, 'blue': 1} 3"
+          },
+          {
+            "de": "{'blue': 1, 'red': 2} 3",
+            "en": "{'blue': 1, 'red': 2} 3"
+          },
+          {
+            "de": "{'red': 2, 'blue': 1} 2",
+            "en": "{'red': 2, 'blue': 1} 2"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`counts.get(v, 0)` holt die bisherige Zahl oder 0, wenn es die Farbe noch nicht gibt. Dann kommt 1 dazu. Bei `red`: 0 + 1 = 1. `blue`: 0 + 1 = 1. Wieder `red`: 1 + 1 = 2. Das Dictionary merkt sich die Reihenfolge des ersten Auftretens. Ausgabe: {'red': 2, 'blue': 1} 3.",
+          "en": "`counts.get(v, 0)` fetches the number so far or 0 if the colour does not exist yet. Then 1 is added. For `red`: 0 + 1 = 1. `blue`: 0 + 1 = 1. `red` again: 1 + 1 = 2. The dictionary remembers the order of first appearance. Output: {'red': 2, 'blue': 1} 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `votes` ist jetzt `[\"blue\", \"blue\"]`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `votes` is now `[\"blue\", \"blue\"]`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "{'blue': 1} 2",
+            "en": "{'blue': 1} 2"
+          },
+          {
+            "de": "{'blue': 2} 2",
+            "en": "{'blue': 2} 2"
+          },
+          {
+            "de": "{'blue': 2} 1",
+            "en": "{'blue': 2} 1"
+          },
+          {
+            "de": "{'blue': 2, 'red': 0} 2",
+            "en": "{'blue': 2, 'red': 0} 2"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Zweimal `blue`: Beim ersten Mal ist der Eintrag neu (0 + 1 = 1), beim zweiten Mal wird er auf 1 + 1 = 2 erhöht. `red` kommt nicht vor und steht deshalb auch nicht im Dictionary. `total` ist 2: {'blue': 2} 2.",
+          "en": "`blue` twice: the first time the entry is new (0 + 1 = 1), the second time it is raised to 1 + 1 = 2. `red` does not occur and therefore is not in the dictionary. `total` is 2: {'blue': 2} 2."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B zählt nichts und gibt {} 3 aus",
+            "en": "B counts nothing and prints {} 3"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, die Zählung bleibt",
+            "en": "B prints the same as A, the counting stays"
+          },
+          {
+            "de": "B setzt jeden Wert auf 1 und gibt {'red': 1, 'blue': 1} 3 aus",
+            "en": "B sets every value to 1 and prints {'red': 1, 'blue': 1} 3"
+          },
+          {
+            "de": "B zählt nur zwei Farben und gibt {'red': 1, 'blue': 1} 2 aus",
+            "en": "B counts only two colours and prints {'red': 1, 'blue': 1} 2"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`counts[v] = 1` schreibt immer fest die 1 hin und fragt nicht, was schon drin steht. Das zweite `red` überschreibt die 1 mit einer neuen 1. Es kommt nicht auf 2. Und ein Schlüssel kann nie doppelt vorkommen: {'red': 1, 'blue': 1} 3.",
+          "en": "`counts[v] = 1` always writes a fixed 1 and does not ask what is already in there. The second `red` overwrites the 1 with a new 1. It never gets to 2. And a key can never appear twice: {'red': 1, 'blue': 1} 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Die Farbe `green` soll immer in der Zählung stehen, auch mit 0 Stimmen, und zwar ganz vorn. Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: The colour `green` must always appear in the count, even with 0 votes, and right at the front. What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "counts = {green: 0}",
+            "en": "counts = {green: 0}"
+          },
+          {
+            "de": "counts = {\"green\"}",
+            "en": "counts = {\"green\"}"
+          },
+          {
+            "de": "counts = [\"green\", 0]",
+            "en": "counts = [\"green\", 0]"
+          },
+          {
+            "de": "counts = {\"green\": 0}",
+            "en": "counts = {\"green\": 0}"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Ein Dictionary wird in geschweiften Klammern mit `schlüssel: wert` angelegt. `{\"green\": 0}` startet mit einem Eintrag, und die Schleife trägt die anderen Farben dahinter ein. Der Schlüssel ist ein Text, deshalb Anführungszeichen.\n\nOhne Anführungszeichen sucht Python eine Variable `green`. `{\"green\"}` hat keinen Wert und ist eine Menge. Eine Liste mit eckigen Klammern kennt kein `get`.",
+          "en": "A dictionary is created in curly brackets with `key: value`. `{\"green\": 0}` starts with one entry, and the loop adds the other colours behind it. The key is a text, so it needs quotation marks.\n\nWithout quotation marks Python looks for a variable `green`. `{\"green\"}` has no value and is a set. A list with square brackets does not know `get`."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dicts-sets-04",
+    "topic": "dicts-sets",
+    "level": 3,
+    "code": "a = {1, 2, 3, 4}\nb = {3, 4, 5}\nfound = a & b\nif len(found) > 1:\n    print(\"found:\", sorted(found))\nprint(len(a | b))",
+    "variant": "a = {1, 2, 3, 4}\nb = {5, 6, 7}\nfound = a & b\nif len(found) > 1:\n    print(\"found:\", sorted(found))\nprint(len(a | b))",
+    "altered": "a = {1, 2, 3, 4}\nb = {3, 4, 5}\nfound = a | b\nif len(found) > 1:\n    print(\"found:\", sorted(found))\nprint(len(a | b))",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `found` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `found` have after them?"
+        },
+        "choices": [
+          {
+            "de": "{1, 2, 3, 4, 5}",
+            "en": "{1, 2, 3, 4, 5}"
+          },
+          {
+            "de": "{1, 2, 5}",
+            "en": "{1, 2, 5}"
+          },
+          {
+            "de": "{5}",
+            "en": "{5}"
+          },
+          {
+            "de": "{3, 4}",
+            "en": "{3, 4}"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Jede Menge ist wie ein Korb mit Zetteln. `a & b` fragt: Welche Zettel liegen in beiden Körben? Das sind die 3 und die 4. In `found` liegt also {3, 4}. Die 1 und 2 sind nur in `a`, die 5 nur in `b`.",
+          "en": "Every set is like a basket of slips of paper. `a & b` asks: which slips lie in both baskets? That is the 3 and the 4. So `found` holds {3, 4}. The 1 and 2 are only in `a`, the 5 only in `b`."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "found: [3, 4]\n5",
+            "en": "found: [3, 4]\n5"
+          },
+          {
+            "de": "found: [3, 4] / 7",
+            "en": "found: [3, 4] / 7"
+          },
+          {
+            "de": "found: [3, 4] / 2",
+            "en": "found: [3, 4] / 2"
+          },
+          {
+            "de": "found: [1, 2, 3, 4, 5] / 5",
+            "en": "found: [1, 2, 3, 4, 5] / 5"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`found` hat 2 Zettel, und 2 ist größer als 1, also läuft der `print` in der `if`-Zeile: `found: [3, 4]` (`sorted` legt sie der Reihe nach hin). Dann zählt `a | b` alle Zettel aus beiden Körben, aber jeden nur einmal: 1, 2, 3, 4, 5, das sind 5, nicht 7. Ausgabe: found: [3, 4] / 5.",
+          "en": "`found` has 2 slips, and 2 is bigger than 1, so the `print` in the `if` runs: `found: [3, 4]` (`sorted` lays them out in order). Then `a | b` counts all slips from both baskets, but each only once: 1, 2, 3, 4, 5, which is 5, not 7. Output: found: [3, 4] / 5."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `b` ist jetzt `{5, 6, 7}`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `b` is now `{5, 6, 7}`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "found: [] / 7",
+            "en": "found: [] / 7"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "found: set() / 7",
+            "en": "found: set() / 7"
+          },
+          {
+            "de": "0 / 7",
+            "en": "0 / 7"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Jetzt liegt in beiden Körben nichts Gleiches, `found` ist leer und hat 0 Zettel. 0 ist nicht größer als 1, also wird die `if`-Zeile übersprungen. Nur die letzte Zeile druckt: `a | b` hat 4 + 3 = 7 verschiedene Zettel. Ausgabe: 7.",
+          "en": "Now the baskets share nothing, `found` is empty and has 0 slips. 0 is not bigger than 1, so the `if` line is skipped. Only the last line prints: `a | b` has 4 + 3 = 7 different slips. Output: 7."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt dasselbe aus wie A, denn | und & finden beide das Gemeinsame",
+            "en": "B prints the same as A, because | and & both find what is shared"
+          },
+          {
+            "de": "B gibt found: [3, 4] / 7 aus, weil | die Zahlen doppelt zählt",
+            "en": "B prints found: [3, 4] / 7, because | counts the numbers twice"
+          },
+          {
+            "de": "B nimmt alle Zahlen beider Mengen und gibt found: [1, 2, 3, 4, 5] / 5 aus",
+            "en": "B takes all numbers of both sets and prints found: [1, 2, 3, 4, 5] / 5"
+          },
+          {
+            "de": "B gibt nur die letzte Zeile aus, weil found leer ist",
+            "en": "B prints only the last line, because found is empty"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`&` behält nur, was in beiden Mengen liegt. `|` legt alles zusammen, jede Zahl einmal. In B enthält `found` also 1, 2, 3, 4 und 5 und ist größer als 1: Die `if`-Zeile druckt alle fünf. Die letzte Zeile ändert sich nicht. Ausgabe: found: [1, 2, 3, 4, 5] / 5.",
+          "en": "`&` keeps only what lies in both sets. `|` puts everything together, each number once. So in B `found` holds 1, 2, 3, 4 and 5 and is bigger than 1: the `if` line prints all five. The last line does not change. Output: found: [1, 2, 3, 4, 5] / 5."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Das Programm soll die Zahlen finden, die nur in `a` liegen, aber nicht in `b`. Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: The program must find the numbers that are only in `a` but not in `b`. What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "found = b - a",
+            "en": "found = b - a"
+          },
+          {
+            "de": "found = a ^ b",
+            "en": "found = a ^ b"
+          },
+          {
+            "de": "found = a | b",
+            "en": "found = a | b"
+          },
+          {
+            "de": "found = a - b",
+            "en": "found = a - b"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`a - b` heißt: Nimm die Zettel aus `a` und wirf alle weg, die auch in `b` liegen. Übrig bleiben 1 und 2, die nur `a` hat.\n\n`b - a` dreht es um (Ergebnis: nur die 5). `a ^ b` behält alles, was in genau einem Korb liegt, also auch die 5. `a | b` ist alles zusammen.",
+          "en": "`a - b` means: take the slips from `a` and throw away all that also lie in `b`. What is left are 1 and 2, which only `a` has.\n\n`b - a` turns it around (result: only the 5). `a ^ b` keeps everything that lies in exactly one basket, so the 5 as well. `a | b` is everything together."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dicts-sets-05",
+    "topic": "dicts-sets",
+    "level": 1,
+    "code": "ages = {\"Ann\": 9, \"Bob\": 7}\nages[\"Cy\"] = 8\nn = len(ages)\nif n > 2:\n    print(\"crowd\", n)\nelse:\n    print(\"few\", n)",
+    "variant": "ages = {\"Ann\": 9}\nages[\"Cy\"] = 8\nn = len(ages)\nif n > 2:\n    print(\"crowd\", n)\nelse:\n    print(\"few\", n)",
+    "altered": "ages = {\"Ann\": 9, \"Bob\": 7}\nages[\"Bob\"] = 8\nn = len(ages)\nif n > 2:\n    print(\"crowd\", n)\nelse:\n    print(\"few\", n)",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `n` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `n` have after them?"
+        },
+        "choices": [
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "5",
+            "en": "5"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Ein Dictionary ist wie ein Heft mit Namen und Zahlen. Zeile 2 schreibt einen neuen Eintrag hinein: Cy ist 8. Jetzt stehen drei Namen im Heft, und `len(ages)` zählt die Einträge: 3.",
+          "en": "A dictionary is like a notebook with names and numbers. Line 2 writes a new entry into it: Cy is 8. Now there are three names in the notebook, and `len(ages)` counts the entries: 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "few 3",
+            "en": "few 3"
+          },
+          {
+            "de": "crowd 2",
+            "en": "crowd 2"
+          },
+          {
+            "de": "crowd 3",
+            "en": "crowd 3"
+          },
+          {
+            "de": "crowd 8",
+            "en": "crowd 8"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "3 ist größer als 2, also läuft der `if`-Teil. Ausgabe: crowd 3. `len` zählt die Einträge, nicht die Alterszahlen.",
+          "en": "3 is bigger than 2, so the `if` part runs. Output: crowd 3. `len` counts the entries, not the ages."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Am Anfang steht nur Ann im Dictionary. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): At the start only Ann is in the dictionary. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "crowd 2",
+            "en": "crowd 2"
+          },
+          {
+            "de": "few 1",
+            "en": "few 1"
+          },
+          {
+            "de": "few 3",
+            "en": "few 3"
+          },
+          {
+            "de": "few 2",
+            "en": "few 2"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Jetzt steht erst nur Ann im Heft, dann kommt Cy dazu: 2 Einträge. 2 ist nicht größer als 2, also läuft der `else`-Teil. Ausgabe: few 2.",
+          "en": "Now only Ann is in the notebook at first, then Cy is added: 2 entries. 2 is not bigger than 2, so the `else` part runs. Output: few 2."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B ändert das Alter von Bob statt Cy anzulegen und gibt few 2 aus",
+            "en": "B changes Bob's age instead of adding Cy and prints few 2"
+          },
+          {
+            "de": "B gibt crowd 3 aus, genau wie A",
+            "en": "B prints crowd 3, just like A"
+          },
+          {
+            "de": "B gibt few 3 aus, weil Bob jetzt zweimal vorkommt",
+            "en": "B prints few 3, because Bob now appears twice"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil Bob schon da ist",
+            "en": "B stops with an error, because Bob is already there"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In B steht `ages[\"Bob\"] = 8`. Den Namen Bob gibt es schon, also wird nur sein Alter von 7 auf 8 überschrieben. Es kommt kein neuer Eintrag dazu: Es bleiben 2. Ausgabe: few 2.\n\nMerke: Ein neuer Name legt einen neuen Eintrag an, ein alter Name überschreibt den Wert.",
+          "en": "B has `ages[\"Bob\"] = 8`. The name Bob already exists, so only his age is overwritten, from 7 to 8. No new entry appears: there are still 2. Output: few 2.\n\nRemember: a new name creates a new entry, an old name overwrites the value."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Nach `crowd` soll das Alter von Ann stehen (9) statt der Anzahl. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: After `crowd` the age of Ann (9) must be shown instead of the number. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    print(\"crowd\", ages[\"Cy\"])",
+            "en": "    print(\"crowd\", ages[\"Cy\"])"
+          },
+          {
+            "de": "    print(\"crowd\", ages[\"Ann\"])",
+            "en": "    print(\"crowd\", ages[\"Ann\"])"
+          },
+          {
+            "de": "    print(\"crowd\", ages[0])",
+            "en": "    print(\"crowd\", ages[0])"
+          },
+          {
+            "de": "    print(\"crowd\", ages(\"Ann\"))",
+            "en": "    print(\"crowd\", ages(\"Ann\"))"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`ages[\"Ann\"]` schlägt Anns Alter nach: 9. Der Name steht in Anführungszeichen in den eckigen Klammern.\n\n`ages[\"Cy\"]` ist das Alter von Cy (8), also ein anderer Name. `ages[0]` sucht einen Namen \"0\", den es nicht gibt. Mit runden Klammern wäre es ein Aufruf, und ein Dictionary kann man nicht aufrufen.",
+          "en": "`ages[\"Ann\"]` looks up Ann's age: 9. The name goes into the square brackets, in quotes.\n\n`ages[\"Cy\"]` is Cy's age (8), a different name. `ages[0]` looks for a key 0, which does not exist. With round brackets it would be a call, and you cannot call a dictionary."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dicts-sets-06",
+    "topic": "dicts-sets",
+    "level": 1,
+    "code": "prices = {\"tea\": 2, \"milk\": 3}\nwant = \"milk\"\nfound = want in prices\nif found:\n    print(\"cost\", prices[want])\nelse:\n    print(\"sold out\")",
+    "variant": "prices = {\"tea\": 2, \"milk\": 3}\nwant = \"cake\"\nfound = want in prices\nif found:\n    print(\"cost\", prices[want])\nelse:\n    print(\"sold out\")",
+    "altered": "prices = {\"tea\": 2, \"milk\": 3}\nwant = \"milk\"\nfound = 3 in prices\nif found:\n    print(\"cost\", prices[want])\nelse:\n    print(\"sold out\")",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `found` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `found` have after them?"
+        },
+        "choices": [
+          {
+            "de": "False",
+            "en": "False"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "True",
+            "en": "True"
+          },
+          {
+            "de": "'milk'",
+            "en": "'milk'"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`in` fragt: Steht dieser Name im Dictionary? \"milk\" steht darin, also ist `found` True (ein Wahr/Falsch-Wert, keine Zahl).",
+          "en": "`in` asks: is this name in the dictionary? \"milk\" is in it, so `found` is True (a true/false value, not a number)."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "sold out",
+            "en": "sold out"
+          },
+          {
+            "de": "cost 2",
+            "en": "cost 2"
+          },
+          {
+            "de": "cost milk",
+            "en": "cost milk"
+          },
+          {
+            "de": "cost 3",
+            "en": "cost 3"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`found` ist wahr, also läuft der `if`-Teil. `prices[want]` schlägt den Preis von \"milk\" nach: 3. Ausgabe: cost 3.",
+          "en": "`found` is true, so the `if` part runs. `prices[want]` looks up the price of \"milk\": 3. Output: cost 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `want` ist jetzt \"cake\". Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `want` is now \"cake\". What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "sold out",
+            "en": "sold out"
+          },
+          {
+            "de": "cost 0",
+            "en": "cost 0"
+          },
+          {
+            "de": "cost 2",
+            "en": "cost 2"
+          },
+          {
+            "de": "cost cake",
+            "en": "cost cake"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "\"cake\" steht nicht im Dictionary, also ist `found` falsch und der `else`-Teil läuft. Die Zeile mit `prices[want]` wird gar nicht erst angefasst, darum gibt es auch keinen Fehler. Ausgabe: sold out.",
+          "en": "\"cake\" is not in the dictionary, so `found` is false and the `else` part runs. The line with `prices[want]` is never touched, so there is no error. Output: sold out."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt cost 3 aus, denn 3 ist ein Preis im Dictionary",
+            "en": "B prints cost 3, because 3 is a price in the dictionary"
+          },
+          {
+            "de": "B fragt nach der Zahl 3 statt nach dem Namen und gibt sold out aus",
+            "en": "B asks for the number 3 instead of the name and prints sold out"
+          },
+          {
+            "de": "B gibt cost 2 aus, weil 3 der zweite Eintrag ist",
+            "en": "B prints cost 2, because 3 is the second entry"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil in keine Zahlen prüfen darf",
+            "en": "B stops with an error, because in may not check numbers"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Bei einem Dictionary schaut `in` nur auf die Namen vorne (die Schlüssel), nicht auf die Zahlen dahinter. 3 ist ein Preis, aber kein Name. Also ist `found` falsch, und es läuft der `else`-Teil. Ausgabe: sold out.",
+          "en": "With a dictionary, `in` only looks at the names at the front (the keys), not at the numbers behind them. 3 is a price, but not a name. So `found` is false and the `else` part runs. Output: sold out."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Auf den Preis kommt 1 Münze Gebühr: Für milk soll `cost 4` stehen. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: 1 coin of fee is added to the price: for milk it must say `cost 4`. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    print(\"cost\", prices[\"tea\"] + 1)",
+            "en": "    print(\"cost\", prices[\"tea\"] + 1)"
+          },
+          {
+            "de": "    print(\"cost\", prices[want + 1])",
+            "en": "    print(\"cost\", prices[want + 1])"
+          },
+          {
+            "de": "    print(\"cost\", prices[want] + 1)",
+            "en": "    print(\"cost\", prices[want] + 1)"
+          },
+          {
+            "de": "    print(\"cost 1\", prices[want])",
+            "en": "    print(\"cost 1\", prices[want])"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`prices[want]` ist der Preis (3), und `+ 1` kommt dahinter: 4. Gerechnet wird mit dem Wert, den das Nachschlagen liefert.\n\n`prices[\"tea\"] + 1` nimmt immer den Tee-Preis. In `prices[want + 1]` steht das Plus in den Klammern: Man kann zum Namen keine 1 addieren. Und `cost 1` ist nur Text.",
+          "en": "`prices[want]` is the price (3), and `+ 1` comes after it: 4. You calculate with the value the lookup gives you.\n\n`prices[\"tea\"] + 1` always takes the tea price. In `prices[want + 1]` the plus is inside the brackets: you cannot add 1 to a name. And `cost 1` is just text."
+        }
+      }
+    ]
+  }
+]

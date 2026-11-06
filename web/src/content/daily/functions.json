@@ -1,0 +1,797 @@
+[
+  {
+    "id": "functions-01",
+    "topic": "functions",
+    "level": 1,
+    "code": "def double(n):\n    return n * 2\nx = double(4)\ny = double(x)\nprint(x, y)",
+    "variant": "def double(n):\n    return n * 2\nx = double(5)\ny = double(x)\nprint(x, y)",
+    "altered": "def double(n):\n    return n + 2\nx = double(4)\ny = double(x)\nprint(x, y)",
+    "requirement": [
+      4,
+      4
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `x` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `x` have after them?"
+        },
+        "choices": [
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`def double(n):` baut eine kleine Maschine, die erst bei einem Aufruf läuft. Beim Aufruf `double(4)` steckt die 4 als `n` hinein, `return n * 2` rechnet 4 * 2 und gibt 8 zurück. Dieser Wert landet in `x`.",
+          "en": "`def double(n):` builds a little machine that only runs when it is called. With the call `double(4)` the 4 goes in as `n`, `return n * 2` calculates 4 * 2 and gives back 8. That value lands in `x`."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "8 8",
+            "en": "8 8"
+          },
+          {
+            "de": "8 16",
+            "en": "8 16"
+          },
+          {
+            "de": "4 8",
+            "en": "4 8"
+          },
+          {
+            "de": "16 16",
+            "en": "16 16"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Die Maschine wird zweimal benutzt. Erst `x = double(4)`: 8. Dann `y = double(x)`, jetzt mit der 8 als `n`: 8 * 2 = 16. Beide Werte bleiben erhalten, `x` wird nicht überschrieben: 8 16.",
+          "en": "The machine is used twice. First `x = double(4)`: 8. Then `y = double(x)`, now with the 8 as `n`: 8 * 2 = 16. Both values are kept, `x` is not overwritten: 8 16."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Der erste Aufruf ist jetzt `double(5)`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): The first call is now `double(5)`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "10 10",
+            "en": "10 10"
+          },
+          {
+            "de": "5 10",
+            "en": "5 10"
+          },
+          {
+            "de": "10 20",
+            "en": "10 20"
+          },
+          {
+            "de": "10 40",
+            "en": "10 40"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Mit der 5 gibt der erste Aufruf 5 * 2 = 10 zurück, `x` ist 10. Der zweite Aufruf bekommt diese 10 und gibt 20 zurück. Die Funktion bleibt dieselbe, nur die Eingabe ist neu: 10 20.",
+          "en": "With the 5 the first call gives back 5 * 2 = 10, so `x` is 10. The second call gets this 10 and gives back 20. The function stays the same, only the input is new: 10 20."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B verdoppelt weiterhin und gibt 8 16 aus, die Funktion heißt ja double",
+            "en": "B still doubles and prints 8 16, the function is called double, after all"
+          },
+          {
+            "de": "B addiert nur einmal und gibt 6 6 aus",
+            "en": "B adds only once and prints 6 6"
+          },
+          {
+            "de": "B stoppt mit einem Fehler, weil der Name double nicht zum + passt",
+            "en": "B stops with an error, because the name double does not match the +"
+          },
+          {
+            "de": "B addiert 2 statt zu verdoppeln und gibt 6 8 aus",
+            "en": "B adds 2 instead of doubling and prints 6 8"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Python kümmert sich nicht um den Namen der Funktion, nur um das, was drin steht. In B rechnet sie `n + 2`: erst 4 + 2 = 6, dann 6 + 2 = 8. Die Ausgabe ist 6 8. Der Name `double` ist dann irreführend, aber er stört nicht.",
+          "en": "Python does not care about the name of the function, only about what is inside. In B it calculates `n + 2`: first 4 + 2 = 6, then 6 + 2 = 8. The output is 6 8. The name `double` is then misleading, but it does not disturb."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: `y` soll viermal so groß wie `x` werden (`8 32`), indem die Funktion zweimal hintereinander auf `x` angewendet wird. Womit ersetzt du Zeile 4 (markiert)?",
+          "en": "New requirement: `y` must become four times as big as `x` (`8 32`), by applying the function twice in a row to `x`. What do you replace line 4 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "y = double(double(x))",
+            "en": "y = double(double(x))"
+          },
+          {
+            "de": "y = double(x, x)",
+            "en": "y = double(x, x)"
+          },
+          {
+            "de": "y = double(x) + 2",
+            "en": "y = double(x) + 2"
+          },
+          {
+            "de": "y = double(double)",
+            "en": "y = double(double)"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Eine Funktion gibt einen Wert zurück, und den kann man gleich wieder in eine Funktion stecken. Python rechnet von innen nach außen: `double(x)` ist 16, dann `double(16)` ist 32.\n\n`double(x, x)` übergibt zwei Werte, aber die Funktion hat nur einen Platz. `double(x) + 2` addiert 2 statt zu verdoppeln. Und `double(double)` steckt die Funktion selbst hinein, nicht eine Zahl.",
+          "en": "A function gives back a value, and you can put it right back into a function. Python works from the inside out: `double(x)` is 16, then `double(16)` is 32.\n\n`double(x, x)` hands over two values, but the function has only one place. `double(x) + 2` adds 2 instead of doubling. And `double(double)` puts the function itself in, not a number."
+        }
+      }
+    ]
+  },
+  {
+    "id": "functions-02",
+    "topic": "functions",
+    "level": 2,
+    "code": "def greet(name, excl=\"!\"):\n    return \"Hi \" + name + excl\na = greet(\"Ann\")\nb = greet(\"Bo\", \"?\")\nprint(a, b)",
+    "variant": "def greet(name, excl=\"!\"):\n    return \"Hi \" + name + excl\na = greet(\"Ann\", \"?\")\nb = greet(\"Bo\", \"?\")\nprint(a, b)",
+    "altered": "def greet(name, excl=\"?\"):\n    return \"Hi \" + name + excl\na = greet(\"Ann\")\nb = greet(\"Bo\", \"?\")\nprint(a, b)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `a` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `a` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'Hi Ann'",
+            "en": "'Hi Ann'"
+          },
+          {
+            "de": "'Hi Ann!'",
+            "en": "'Hi Ann!'"
+          },
+          {
+            "de": "'Hi Ann?'",
+            "en": "'Hi Ann?'"
+          },
+          {
+            "de": "'Hi name!'",
+            "en": "'Hi name!'"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Die Funktion hat zwei Plätze: `name` und `excl`. Bei `greet(\"Ann\")` ist nur der erste gefüllt. Für `excl` gilt der Standardwert `\"!\"`, den man hinter dem `=` festgelegt hat. Heraus kommt 'Hi Ann!'.",
+          "en": "The function has two places: `name` and `excl`. With `greet(\"Ann\")` only the first is filled. For `excl` the default value `\"!\"` applies, which was set behind the `=`. The result is 'Hi Ann!'."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "Hi Ann! Hi Bo!",
+            "en": "Hi Ann! Hi Bo!"
+          },
+          {
+            "de": "Hi Ann Hi Bo",
+            "en": "Hi Ann Hi Bo"
+          },
+          {
+            "de": "Hi Ann! Hi Bo?",
+            "en": "Hi Ann! Hi Bo?"
+          },
+          {
+            "de": "Hi Ann! Hi Bo",
+            "en": "Hi Ann! Hi Bo"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Der erste Aufruf nimmt den Standardwert: `Hi Ann!`. Beim zweiten Aufruf wird `\"?\"` mitgegeben, das ersetzt den Standardwert: `Hi Bo?`. `print` schreibt beide Texte mit einem Leerzeichen dazwischen: Hi Ann! Hi Bo?.",
+          "en": "The first call uses the default value: `Hi Ann!`. The second call also passes `\"?\"`, which replaces the default: `Hi Bo?`. `print` writes both texts with a space in between: Hi Ann! Hi Bo?."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Der erste Aufruf ist jetzt `greet(\"Ann\", \"?\")`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): The first call is now `greet(\"Ann\", \"?\")`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "Hi Ann! Hi Bo?",
+            "en": "Hi Ann! Hi Bo?"
+          },
+          {
+            "de": "Hi Ann?! Hi Bo?",
+            "en": "Hi Ann?! Hi Bo?"
+          },
+          {
+            "de": "Hi ? Hi Bo?",
+            "en": "Hi ? Hi Bo?"
+          },
+          {
+            "de": "Hi Ann? Hi Bo?",
+            "en": "Hi Ann? Hi Bo?"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Jetzt bekommen beide Aufrufe ein eigenes Zeichen, der Standardwert wird nirgends gebraucht. Der erste Aufruf gibt `Hi Ann?` zurück, der zweite `Hi Bo?`: Hi Ann? Hi Bo?. Ein mitgegebener Wert ersetzt den Standardwert, er wird nicht dazugeklebt.",
+          "en": "Now both calls get a character of their own, the default value is not needed anywhere. The first call gives back `Hi Ann?`, the second `Hi Bo?`: Hi Ann? Hi Bo?. A value you pass replaces the default; it is not glued on."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B hat ? als Standardwert, deshalb gibt B Hi Ann? Hi Bo? aus",
+            "en": "B has ? as its default, so B prints Hi Ann? Hi Bo?"
+          },
+          {
+            "de": "B hat jetzt zwei Standardwerte und gibt Hi Ann!? Hi Bo? aus",
+            "en": "B now has two defaults and prints Hi Ann!? Hi Bo?"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn der zweite Aufruf bringt sein eigenes ? mit",
+            "en": "B prints the same as A, because the second call brings its own ?"
+          },
+          {
+            "de": "B stoppt mit einem Fehler, weil ? kein Standardwert sein darf",
+            "en": "B stops with an error, because ? may not be a default value"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Der Standardwert gilt nur, wenn beim Aufruf nichts mitgegeben wird. Das passiert nur beim ersten Aufruf: aus `Hi Ann!` wird `Hi Ann?`. Der zweite Aufruf gibt sein eigenes `?` mit und ändert sich nicht. Ausgabe: Hi Ann? Hi Bo?.",
+          "en": "The default only applies when nothing is passed in the call. That only happens in the first call: `Hi Ann!` becomes `Hi Ann?`. The second call passes its own `?` and does not change. Output: Hi Ann? Hi Bo?."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Der Name soll immer mit großem Anfangsbuchstaben erscheinen, auch wenn er klein eingegeben wird (`greet(\"cleo\")` gibt `Hi Cleo!`). Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: The name must always appear with a capital first letter, even if it is typed in small letters (`greet(\"cleo\")` gives `Hi Cleo!`). What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    return \"Hi \" + name.upper() + excl",
+            "en": "    return \"Hi \" + name.upper() + excl"
+          },
+          {
+            "de": "    return \"Hi \" + name.title() + excl",
+            "en": "    return \"Hi \" + name.title() + excl"
+          },
+          {
+            "de": "    return \"Hi \" + title(name) + excl",
+            "en": "    return \"Hi \" + title(name) + excl"
+          },
+          {
+            "de": "    return \"Hi \" + name + excl.title()",
+            "en": "    return \"Hi \" + name + excl.title()"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`name.title()` macht den Anfang des Namens groß: aus `cleo` wird `Cleo`, aus `Ann` bleibt `Ann`. Der Aufruf mit Punkt gehört direkt an den Wert.\n\n`name.upper()` macht alles groß (`CLEO`). `title(name)` gibt es als eigene Funktion nicht, Python meldet einen Fehler. Und `excl.title()` verändert das Satzzeichen statt des Namens.",
+          "en": "`name.title()` capitalises the start of the name: `cleo` becomes `Cleo`, `Ann` stays `Ann`. The call with the dot belongs right at the value.\n\n`name.upper()` capitalises everything (`CLEO`). A function of its own called `title(name)` does not exist, so Python reports an error. And `excl.title()` changes the punctuation mark instead of the name."
+        }
+      }
+    ]
+  },
+  {
+    "id": "functions-03",
+    "topic": "functions",
+    "level": 2,
+    "code": "def add_bonus(points):\n    return points + 5\nscore = add_bonus(10)\nif score > 12:\n    score = add_bonus(score)\nprint(score)",
+    "variant": "def add_bonus(points):\n    return points + 5\nscore = add_bonus(3)\nif score > 12:\n    score = add_bonus(score)\nprint(score)",
+    "altered": "def add_bonus(points):\n    return points + 5\nscore = add_bonus(10)\nif score > 15:\n    score = add_bonus(score)\nprint(score)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `score` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `score` have after them?"
+        },
+        "choices": [
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "15",
+            "en": "15"
+          },
+          {
+            "de": "105",
+            "en": "105"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`add_bonus(10)` gibt `10 + 5` zurück, das ist 15. Dieser Rückgabewert wird in `score` gespeichert. Erst `return` liefert das Ergebnis zurück, an die Stelle, wo die Funktion aufgerufen wurde.",
+          "en": "`add_bonus(10)` gives back `10 + 5`, which is 15. This returned value is stored in `score`. Only `return` delivers the result back to the place where the function was called."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "15",
+            "en": "15"
+          },
+          {
+            "de": "25",
+            "en": "25"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "20",
+            "en": "20"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`score` ist 15, und 15 ist größer als 12. Also wird `add_bonus` noch einmal mit 15 aufgerufen und gibt 20 zurück. Dieses Ergebnis ersetzt den alten Wert von `score`: 20.",
+          "en": "`score` is 15, and 15 is bigger than 12. So `add_bonus` is called once more with 15 and gives back 20. This result replaces the old value of `score`: 20."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Der erste Aufruf ist jetzt `add_bonus(3)`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): The first call is now `add_bonus(3)`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "13",
+            "en": "13"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "15",
+            "en": "15"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Mit der 3 gibt die Funktion 3 + 5 = 8 zurück. Ist 8 größer als 12? Nein, der zweite Aufruf findet nicht statt. `score` bleibt bei 8.",
+          "en": "With the 3 the function gives back 3 + 5 = 8. Is 8 bigger than 12? No, the second call does not happen. `score` stays at 8."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt 25 aus, weil die Grenze höher ist",
+            "en": "B prints 25, because the limit is higher"
+          },
+          {
+            "de": "B hat die Grenze bei 15 und gibt 15 aus",
+            "en": "B has its limit at 15 and prints 15"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, die Funktion läuft ja trotzdem",
+            "en": "B prints the same as A, the function runs anyway"
+          },
+          {
+            "de": "B gibt 10 aus, weil score nie geändert wird",
+            "en": "B prints 10, because score is never changed"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "In B muss `score` größer als 15 sein, aber er ist genau 15. Die Bedingung ist falsch, der zweite Bonus wird nicht vergeben. Es bleibt der erste Bonus: 15. Die 10 am Anfang hat die Funktion schon auf 15 gebracht.",
+          "en": "In B, `score` has to be bigger than 15, but it is exactly 15. The condition is false, so the second bonus is not given. The first bonus remains: 15. The function already brought the starting 10 to 15."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Die Funktion soll jetzt 10 Punkte statt 5 dazugeben. Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: The function must now add 10 points instead of 5. What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    return points * 10",
+            "en": "    return points * 10"
+          },
+          {
+            "de": "    points + 10",
+            "en": "    points + 10"
+          },
+          {
+            "de": "    return points + 10",
+            "en": "    return points + 10"
+          },
+          {
+            "de": "    return 10",
+            "en": "    return 10"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`return points + 10` rechnet mit dem Wert, der hineingesteckt wurde, und gibt das Ergebnis zurück. So werden aus 10 erst 20 und dann 30.\n\nBei `points * 10` wird mal gerechnet. Ohne `return` (`points + 10`) wird zwar gerechnet, aber nichts zurückgegeben; `score` wäre `None`. Und `return 10` gibt immer 10 zurück, egal was hineingesteckt wird.",
+          "en": "`return points + 10` works with the value that was put in and gives back the result. So 10 becomes 20 first and then 30.\n\nWith `points * 10` it multiplies. Without `return` (`points + 10`) it does calculate but gives nothing back; `score` would be `None`. And `return 10` always gives back 10, no matter what was put in."
+        }
+      }
+    ]
+  },
+  {
+    "id": "functions-04",
+    "topic": "functions",
+    "level": 3,
+    "code": "def shout(word):\n    print(word.upper())\nres = shout(\"hi\")\nprint(\"got\", res)\nprint(res is None)",
+    "variant": "def shout(word):\n    print(word.upper() + \"!\")\nres = shout(\"hi\")\nprint(\"got\", res)\nprint(res is None)",
+    "altered": "def shout(word):\n    return word.upper()\nres = shout(\"hi\")\nprint(\"got\", res)\nprint(res is None)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `res` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `res` have after them?"
+        },
+        "choices": [
+          {
+            "de": "None",
+            "en": "None"
+          },
+          {
+            "de": "'HI'",
+            "en": "'HI'"
+          },
+          {
+            "de": "'hi'",
+            "en": "'hi'"
+          },
+          {
+            "de": "''",
+            "en": "''"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Beim Aufruf läuft die Funktion: Sie zeigt HI auf dem Bildschirm. Das ist nur Zeigen, wie ein Schild hochhalten. Zurückgegeben hat sie nichts, denn es gibt kein `return`. Eine Funktion ohne `return` gibt den Wert None zurück, das heißt \"nichts\". Das landet in `res`.",
+          "en": "On the call the function runs: it shows HI on the screen. That is only showing, like holding up a sign. It handed back nothing, because there is no `return`. A function without `return` gives back the value None, which means \"nothing\". That lands in `res`."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "got HI / False",
+            "en": "got HI / False"
+          },
+          {
+            "de": "HI\ngot None\nTrue",
+            "en": "HI\ngot None\nTrue"
+          },
+          {
+            "de": "HI / got HI / False",
+            "en": "HI / got HI / False"
+          },
+          {
+            "de": "HI / got None / False",
+            "en": "HI / got None / False"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Zuerst zeigt der Aufruf in Zeile 3 das HI. Dann druckt Zeile 4 `got` und den Inhalt von `res`: Das ist None, weil die Funktion nichts zurückgegeben hat. Zeile 5 fragt, ob `res` None ist: ja, True. Ausgabe: HI / got None / True.",
+          "en": "First the call in line 3 shows the HI. Then line 4 prints `got` and what is in `res`: that is None, because the function handed nothing back. Line 5 asks whether `res` is None: yes, True. Output: HI / got None / True."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Die Funktion zeigt jetzt noch ein `!` dahinter. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): The function now shows a `!` behind the word. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "HI! / got HI! / False",
+            "en": "HI! / got HI! / False"
+          },
+          {
+            "de": "HI / got None / True",
+            "en": "HI / got None / True"
+          },
+          {
+            "de": "HI!\ngot None\nTrue",
+            "en": "HI!\ngot None\nTrue"
+          },
+          {
+            "de": "HI! / got None! / True",
+            "en": "HI! / got None! / True"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Das `!` wird nur gezeigt, am Rückgabewert ändert sich nichts. Es gibt immer noch kein `return`, also ist `res` weiter None. Die Funktion zeigt `HI!`, danach folgen `got None` und `True`. Ausgabe: HI! / got None / True.",
+          "en": "The `!` is only shown, nothing changes about the return value. There is still no `return`, so `res` is still None. The function shows `HI!`, then come `got None` and `True`. Output: HI! / got None / True."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B zeigt HI und gibt dann got HI / False aus",
+            "en": "B shows HI and then prints got HI / False"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn beide benutzen word.upper()",
+            "en": "B prints the same as A, because both use word.upper()"
+          },
+          {
+            "de": "B gibt got None / True aus, nur ohne die HI-Zeile",
+            "en": "B prints got None / True, just without the HI line"
+          },
+          {
+            "de": "B zeigt beim Aufruf nichts, res ist HI: got HI / False",
+            "en": "B shows nothing on the call, res is HI: got HI / False"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`return` gibt den Wert zurück, wie einen Zettel, den man weiterreicht. Er wird in `res` aufbewahrt, aber nichts wird gezeigt. In B steht in `res` also `HI`, und das ist nicht None. Es bleiben zwei Zeilen: got HI / False. Bei A wurde HI nur gezeigt, `res` blieb leer.",
+          "en": "`return` hands the value back, like a note you pass on. It is kept in `res`, but nothing is shown. So in B `res` holds `HI`, and that is not None. Two lines remain: got HI / False. In A the HI was only shown and `res` stayed empty."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Die Funktion soll selbst nichts zeigen, sondern \"HI\" zurückgeben, damit `res` danach \"HI\" enthält. Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: The function must not show anything itself but hand back \"HI\", so that `res` holds \"HI\" afterwards. What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    return word.upper()",
+            "en": "    return word.upper()"
+          },
+          {
+            "de": "    return print(word.upper())",
+            "en": "    return print(word.upper())"
+          },
+          {
+            "de": "    word.upper()",
+            "en": "    word.upper()"
+          },
+          {
+            "de": "    print(word.upper())",
+            "en": "    print(word.upper())"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`return word.upper()` macht aus dem Wort Großbuchstaben und reicht das Ergebnis weiter. Die Funktion zeigt nichts, `res` hat `HI`.\n\n`print(...)` zeigt nur. `return print(...)` zeigt erst und gibt dann das Ergebnis von `print` zurück, und das ist None. `word.upper()` allein rechnet, wirft das Ergebnis aber weg.",
+          "en": "`return word.upper()` turns the word into capitals and passes the result on. The function shows nothing, `res` has `HI`.\n\n`print(...)` only shows. `return print(...)` first shows and then returns the result of `print`, which is None. `word.upper()` alone calculates but throws the result away."
+        }
+      }
+    ]
+  },
+  {
+    "id": "functions-05",
+    "topic": "functions",
+    "level": 1,
+    "code": "def is_big(n):\n    return n > 10\na = is_big(7)\nb = is_big(12)\nprint(a, b)",
+    "variant": "def is_big(n):\n    return n > 5\na = is_big(7)\nb = is_big(12)\nprint(a, b)",
+    "altered": "def is_big(n):\n    return n < 10\na = is_big(7)\nb = is_big(12)\nprint(a, b)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `a` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `a` have after them?"
+        },
+        "choices": [
+          {
+            "de": "True",
+            "en": "True"
+          },
+          {
+            "de": "False",
+            "en": "False"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "None",
+            "en": "None"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`is_big(7)` fragt: Ist 7 größer als 10? Nein. Eine Funktion kann auch die Antwort einer Frage zurückgeben: `a` ist False, ein Wahr/Falsch-Wert und nicht die Zahl 7.",
+          "en": "`is_big(7)` asks: is 7 bigger than 10? No. A function can also hand back the answer to a question: `a` is False, a true/false value and not the number 7."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "True True",
+            "en": "True True"
+          },
+          {
+            "de": "False False",
+            "en": "False False"
+          },
+          {
+            "de": "False True",
+            "en": "False True"
+          },
+          {
+            "de": "7 12",
+            "en": "7 12"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Für 7 lautet die Antwort falsch, für 12 wahr. `print` zeigt beide Antworten nebeneinander: False True.",
+          "en": "For 7 the answer is false, for 12 it is true. `print` shows both answers side by side: False True."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Die Grenze in der Funktion ist jetzt 5. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): The limit inside the function is now 5. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "False True",
+            "en": "False True"
+          },
+          {
+            "de": "True False",
+            "en": "True False"
+          },
+          {
+            "de": "False False",
+            "en": "False False"
+          },
+          {
+            "de": "True True",
+            "en": "True True"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Jetzt ist die Frage: Ist `n` größer als 5? Für 7 stimmt das, für 12 auch. Beide Antworten sind wahr: True True.",
+          "en": "Now the question is: is `n` bigger than 5? That is true for 7, and for 12 too. Both answers are true: True True."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B dreht den Vergleich um und gibt True False aus",
+            "en": "B turns the comparison around and prints True False"
+          },
+          {
+            "de": "B gibt False True aus, genau wie A",
+            "en": "B prints False True, just like A"
+          },
+          {
+            "de": "B gibt 7 12 aus, weil n zurückgegeben wird",
+            "en": "B prints 7 12, because n is returned"
+          },
+          {
+            "de": "B gibt True True aus, weil beide Zahlen unter 20 liegen",
+            "en": "B prints True True, because both numbers are below 20"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In B steht `n < 10`: Ist `n` kleiner als 10? 7 ist kleiner, also wahr. 12 ist nicht kleiner, also falsch. Alles ist genau andersherum als in A. Ausgabe: True False.",
+          "en": "B has `n < 10`: is `n` smaller than 10? 7 is, so true. 12 is not, so false. Everything is the other way round compared to A. Output: True False."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Ab 7 soll eine Zahl als groß gelten (7 selbst zählt schon dazu). Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: From 7 on a number must count as big (7 itself counts already). What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    return n > 7",
+            "en": "    return n > 7"
+          },
+          {
+            "de": "    return n >= 7",
+            "en": "    return n >= 7"
+          },
+          {
+            "de": "    return n >= 8",
+            "en": "    return n >= 8"
+          },
+          {
+            "de": "    return n <= 7",
+            "en": "    return n <= 7"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`n >= 7` heißt „7 oder mehr“. Für 7 und 12 wahr, für 6 falsch.\n\n`n > 7` lässt die 7 durchfallen. `n >= 8` auch. `n <= 7` dreht es um: Dann wären die kleinen Zahlen groß.",
+          "en": "`n >= 7` means “7 or more”. True for 7 and 12, false for 6.\n\n`n > 7` lets the 7 fail. So does `n >= 8`. `n <= 7` turns it around: then the small numbers would be big."
+        }
+      }
+    ]
+  }
+]

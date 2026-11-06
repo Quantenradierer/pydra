@@ -1,0 +1,299 @@
+[
+  {
+    "id": "diff-control-flow-01",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "x = 5\nif x > 5:\n    print(\"big\")\nelse:\n    print(\"small\")",
+    "codeB": "x = 5\nif x >= 5:\n    print(\"big\")\nelse:\n    print(\"small\")",
+    "choices": [
+      {
+        "de": "B gibt small aus, genau wie A",
+        "en": "B prints small, just like A"
+      },
+      {
+        "de": "B gibt big statt small aus: >= lässt die 5 mitzählen",
+        "en": "B prints big instead of small: >= lets the 5 count"
+      },
+      {
+        "de": "B gibt big und small aus",
+        "en": "B prints big and small"
+      },
+      {
+        "de": "B gibt nichts aus, weil 5 genau auf der Grenze liegt",
+        "en": "B prints nothing, because 5 lies exactly on the limit"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "In A fragt die Bedingung `x > 5`: Ist x größer als 5? Bei genau 5 lautet die Antwort nein, also läuft der `else`-Block und es erscheint `small`.\n\nIn B fragt `x >= 5`: Ist x größer als 5 oder genau 5? Jetzt lautet die Antwort ja, also läuft der `if`-Block. Es läuft immer genau einer der beiden Blöcke, nie beide und nie keiner.",
+      "en": "In A, the condition `x > 5` asks: is x greater than 5? For exactly 5 the answer is no, so the `else` block runs and `small` appears.\n\nIn B, `x >= 5` asks: is x greater than 5 or exactly 5? Now the answer is yes, so the `if` block runs. Exactly one of the two blocks always runs, never both and never none."
+    }
+  },
+  {
+    "id": "diff-control-flow-02",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "x = 3\nif x == 3:\n    print(\"yes\")",
+    "codeB": "x = 3\nif x != 3:\n    print(\"yes\")",
+    "choices": [
+      {
+        "de": "B gibt nichts aus",
+        "en": "B prints nothing"
+      },
+      {
+        "de": "B gibt no aus",
+        "en": "B prints no"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil es kein else gibt",
+        "en": "B stops with an error, because there is no else"
+      },
+      {
+        "de": "B gibt yes aus, genau wie A",
+        "en": "B prints yes, just like A"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`==` fragt \"gleich?\", `!=` fragt \"verschieden?\". In A ist x gleich 3, die Bedingung stimmt, und der eingerückte Block gibt `yes` aus.\n\nIn B stimmt die Bedingung nicht, denn x ist nicht verschieden von 3. Dann überspringt Python den Block einfach. Ein `if` ohne `else` darf das: Wenn nichts passt, passiert eben nichts, und es gibt keinen Fehler.",
+      "en": "`==` asks \"equal?\", `!=` asks \"different?\". In A, x is equal to 3, the condition holds, and the indented block prints `yes`.\n\nIn B, the condition does not hold, because x is not different from 3. Then Python simply skips the block. An `if` without `else` is allowed to do that: if nothing matches, nothing happens, and there is no error."
+    }
+  },
+  {
+    "id": "diff-control-flow-03",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "n = 5\nif n > 3:\n    print(\"a\")\nelif n > 1:\n    print(\"b\")",
+    "codeB": "n = 5\nif n > 3:\n    print(\"a\")\nif n > 1:\n    print(\"b\")",
+    "choices": [
+      {
+        "de": "B gibt nur b aus, A nur a",
+        "en": "B prints only b, A only a"
+      },
+      {
+        "de": "B gibt nur a aus, genau wie A",
+        "en": "B prints only a, just like A"
+      },
+      {
+        "de": "B gibt b und a in umgekehrter Reihenfolge aus",
+        "en": "B prints b and a in the reverse order"
+      },
+      {
+        "de": "B gibt a und b aus, A nur a",
+        "en": "B prints a and b, A only a"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "In A gehören `if` und `elif` zusammen, wie eine Kette von Fragen: Sobald eine Bedingung passt, wird ihr Block ausgeführt und der Rest der Kette übersprungen. 5 ist größer als 3, also wird `a` ausgegeben, und das `elif` wird gar nicht mehr gefragt.\n\nIn B steht ein zweites `if`. Das ist eine neue, eigene Frage, die immer gestellt wird. 5 ist auch größer als 1, also kommt `b` dazu.",
+      "en": "In A, `if` and `elif` belong together like a chain of questions: as soon as one condition matches, its block runs and the rest of the chain is skipped. 5 is greater than 3, so `a` is printed, and the `elif` is not even asked any more.\n\nIn B there is a second `if`. That is a new, separate question that is always asked. 5 is also greater than 1, so `b` is added."
+    }
+  },
+  {
+    "id": "diff-control-flow-04",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "a = 4\nif a > 2 and a > 6:\n    print(\"ok\")",
+    "codeB": "a = 4\nif a > 2 or a > 6:\n    print(\"ok\")",
+    "choices": [
+      {
+        "de": "B gibt nichts aus, genau wie A",
+        "en": "B prints nothing, just like A"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil a > 6 falsch ist",
+        "en": "B stops with an error, because a > 6 is false"
+      },
+      {
+        "de": "B gibt ok aus, A nichts",
+        "en": "B prints ok, A prints nothing"
+      },
+      {
+        "de": "B gibt ok zweimal aus, einmal pro wahrer Seite",
+        "en": "B prints ok twice, once for each true side"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`a > 2` stimmt (4 ist größer als 2), `a > 6` stimmt nicht.\n\nMit `and` müssen beide Teile stimmen, wie bei \"du brauchst Schlüssel UND Ticket\". Ein Teil fehlt, also wird nichts ausgegeben. Mit `or` genügt einer, wie bei \"Schlüssel ODER Ticket\". Ein Teil stimmt, also läuft der Block, und zwar nur einmal.",
+      "en": "`a > 2` holds (4 is greater than 2), `a > 6` does not.\n\nWith `and` both parts must hold, like \"you need a key AND a ticket\". One part is missing, so nothing is printed. With `or` one is enough, like \"key OR ticket\". One part holds, so the block runs, and only once."
+    }
+  },
+  {
+    "id": "diff-control-flow-05",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "x = 1\nif x > 5:\n    print(\"big\")\n    print(\"done\")",
+    "codeB": "x = 1\nif x > 5:\n    print(\"big\")\nprint(\"done\")",
+    "choices": [
+      {
+        "de": "B gibt big und done aus",
+        "en": "B prints big and done"
+      },
+      {
+        "de": "B gibt done aus, A nichts",
+        "en": "B prints done, A prints nothing"
+      },
+      {
+        "de": "B gibt nichts aus, genau wie A",
+        "en": "B prints nothing, just like A"
+      },
+      {
+        "de": "B gibt big aus",
+        "en": "B prints big"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Welche Zeilen zum `if` gehören, bestimmt allein die Einrückung. In A sind beide `print`-Zeilen eingerückt, sie gehören also beide zum `if`. Weil 1 nicht größer als 5 ist, werden beide übersprungen.\n\nIn B ist `print(\"done\")` nach links gerückt und gehört nicht mehr zum `if`. Es steht jetzt \"draußen\" und läuft immer, egal wie die Bedingung ausgeht. Vier Leerzeichen können also darüber entscheiden, ob eine Zeile immer oder nur manchmal läuft.",
+      "en": "Which lines belong to the `if` is decided by the indentation alone. In A both `print` lines are indented, so they both belong to the `if`. Because 1 is not greater than 5, both are skipped.\n\nIn B, `print(\"done\")` is moved to the left and no longer belongs to the `if`. It now stands \"outside\" and always runs, however the condition turns out. So four spaces can decide whether a line always runs or only sometimes."
+    }
+  },
+  {
+    "id": "diff-control-flow-06",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "if []:\n    print(\"full\")\nelse:\n    print(\"empty\")",
+    "codeB": "if [0]:\n    print(\"full\")\nelse:\n    print(\"empty\")",
+    "choices": [
+      {
+        "de": "B gibt full statt empty aus: Die Liste ist nicht leer, auch wenn nur eine 0 drin ist",
+        "en": "B prints full instead of empty: the list is not empty, even if it only holds a 0"
+      },
+      {
+        "de": "B gibt empty aus, genau wie A, weil die 0 als falsch zählt",
+        "en": "B prints empty, just like A, because the 0 counts as false"
+      },
+      {
+        "de": "B gibt full und empty aus",
+        "en": "B prints full and empty"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil eine Liste keine Bedingung sein darf",
+        "en": "B stops with an error, because a list may not be a condition"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Python darf auch Dinge als Bedingung benutzen, die keine Wahrheitswerte sind. Die Regel: \"Leer\" zählt als falsch, \"etwas drin\" als wahr. Die leere Liste `[]` ist leer, also läuft der `else`-Block: `empty`.\n\nIn B liegt eine Zahl in der Liste, die `0`. Die 0 selbst wäre falsch, aber die Liste ist nicht leer: Sie ist wie ein Karton, in dem eine Null liegt. Darum zählt sie als wahr und es erscheint `full`.",
+      "en": "Python may also use things as conditions that are not truth values. The rule: \"empty\" counts as false, \"something in it\" as true. The empty list `[]` is empty, so the `else` block runs: `empty`.\n\nIn B there is a number in the list, the `0`. The 0 on its own would be false, but the list is not empty: it is like a box with a zero inside. So it counts as true and `full` appears."
+    }
+  },
+  {
+    "id": "diff-control-flow-07",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "if \"a\" in \"cat\":\n    print(\"yes\")\nelse:\n    print(\"no\")",
+    "codeB": "if \"a\" not in \"cat\":\n    print(\"yes\")\nelse:\n    print(\"no\")",
+    "choices": [
+      {
+        "de": "B gibt yes aus, genau wie A",
+        "en": "B prints yes, just like A"
+      },
+      {
+        "de": "B gibt yes und no aus",
+        "en": "B prints yes and no"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil not in zwei Wörter sind",
+        "en": "B stops with an error, because not in is two words"
+      },
+      {
+        "de": "B gibt no statt yes aus",
+        "en": "B prints no instead of yes"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`in` prüft, ob etwas darin vorkommt: Das `a` steckt in `cat`, also stimmt die Bedingung und `yes` erscheint.\n\n`not in` dreht die Frage um: \"Kommt es nicht vor?\" Weil das `a` aber doch vorkommt, stimmt die Bedingung nicht, und der `else`-Block gibt `no` aus.",
+      "en": "`in` checks whether something is contained: the `a` is inside `cat`, so the condition holds and `yes` appears.\n\n`not in` turns the question around: \"is it not contained?\" Since the `a` is contained after all, the condition does not hold, and the `else` block prints `no`."
+    }
+  },
+  {
+    "id": "diff-control-flow-08",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "x = 7\nif x % 2 == 0:\n    print(\"even\")\nelse:\n    print(\"odd\")",
+    "codeB": "x = 7\nif x % 2 == 1:\n    print(\"even\")\nelse:\n    print(\"odd\")",
+    "choices": [
+      {
+        "de": "B gibt odd aus, genau wie A",
+        "en": "B prints odd, just like A"
+      },
+      {
+        "de": "B gibt even und odd aus",
+        "en": "B prints even and odd"
+      },
+      {
+        "de": "B gibt even statt odd aus: 7 % 2 ist 1, und das passt jetzt zur Bedingung",
+        "en": "B prints even instead of odd: 7 % 2 is 1, and that now matches the condition"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil % 2 nur 0 liefern darf",
+        "en": "B stops with an error, because % 2 may only give 0"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`7 % 2` ist der Rest von 7 geteilt durch 2, nämlich 1. In A fragt die Bedingung, ob der Rest 0 ist (das wäre bei geraden Zahlen so). Das stimmt nicht, also läuft `else`: `odd`.\n\nIn B fragt die Bedingung nach dem Rest 1, und das stimmt für die 7. Also läuft der `if`-Block und gibt `even` aus, obwohl 7 ungerade ist. Python tut genau das, was dasteht, nicht das, was du meinst: B hat einen Denkfehler im Programm.",
+      "en": "`7 % 2` is the remainder of 7 divided by 2, namely 1. In A the condition asks whether the remainder is 0 (that is what happens for even numbers). It does not hold, so `else` runs: `odd`.\n\nIn B the condition asks for the remainder 1, and that holds for the 7. So the `if` block runs and prints `even`, although 7 is odd. Python does exactly what is written, not what you mean: B has a logic mistake."
+    }
+  },
+  {
+    "id": "diff-control-flow-09",
+    "topic": "control-flow",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "x = 15\nif x > 5:\n    print(\"big\")\nelif x > 10:\n    print(\"huge\")",
+    "codeB": "x = 15\nif x > 10:\n    print(\"huge\")\nelif x > 5:\n    print(\"big\")",
+    "choices": [
+      {
+        "de": "B gibt big und huge aus",
+        "en": "B prints big and huge"
+      },
+      {
+        "de": "B gibt huge statt big aus: Die Reihenfolge der Fragen entscheidet",
+        "en": "B prints huge instead of big: the order of the questions decides"
+      },
+      {
+        "de": "B gibt big aus, genau wie A",
+        "en": "B prints big, just like A"
+      },
+      {
+        "de": "B gibt nichts aus, weil sich die Bedingungen widersprechen",
+        "en": "B prints nothing, because the conditions contradict each other"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "Python geht die Bedingungen von oben nach unten durch und nimmt den ersten Block, dessen Bedingung stimmt. Der Rest wird danach übersprungen.\n\nIn A kommt `x > 5` zuerst, und die 15 passt schon. `huge` wird nie erreicht. In B steht die strengere Frage `x > 10` vorn, die die 15 ebenfalls erfüllt, also kommt `huge`. Merke: Das Genaueste gehört nach oben.",
+      "en": "Python goes through the conditions from top to bottom and takes the first block whose condition holds. The rest is skipped afterwards.\n\nIn A, `x > 5` comes first, and the 15 already fits. `huge` is never reached. In B the stricter question `x > 10` comes first, which the 15 also satisfies, so `huge` appears. Remember: the most specific condition belongs on top."
+    }
+  }
+]

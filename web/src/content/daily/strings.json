@@ -1,0 +1,956 @@
+[
+  {
+    "id": "strings-01",
+    "topic": "strings",
+    "level": 2,
+    "code": "word = \"python\"\nfirst = word[0]\nlast = word[-1]\nif first == last:\n    print(\"same\")\nelse:\n    print(first + last)",
+    "variant": "word = \"level\"\nfirst = word[0]\nlast = word[-1]\nif first == last:\n    print(\"same\")\nelse:\n    print(first + last)",
+    "altered": "word = \"python\"\nfirst = word[0]\nlast = word[-2]\nif first == last:\n    print(\"same\")\nelse:\n    print(first + last)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `last` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `last` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'p'",
+            "en": "'p'"
+          },
+          {
+            "de": "'n'",
+            "en": "'n'"
+          },
+          {
+            "de": "'o'",
+            "en": "'o'"
+          },
+          {
+            "de": "'y'",
+            "en": "'y'"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Jeder Buchstabe hat eine Nummer. Von vorn gezählt beginnt es bei 0. Von hinten beginnt es bei -1: `word[-1]` ist der allerletzte Buchstabe von `python`, also 'n'. Ein Minus bedeutet also „von hinten“.",
+          "en": "Every letter has a number. Counted from the front it starts at 0. Counted from the back it starts at -1: `word[-1]` is the very last letter of `python`, so 'n'. A minus means “from the back”."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "same",
+            "en": "same"
+          },
+          {
+            "de": "np",
+            "en": "np"
+          },
+          {
+            "de": "pn",
+            "en": "pn"
+          },
+          {
+            "de": "p n",
+            "en": "p n"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`first` ist `p`, `last` ist `n`. Sind die beiden gleich? Nein, also läuft der `else`-Teil. Dort klebt das `+` die beiden Buchstaben hintereinander, ohne Leerzeichen dazwischen: pn.",
+          "en": "`first` is `p`, `last` is `n`. Are they equal? No, so the `else` part runs. There `+` glues the two letters together with no space in between: pn."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `word` ist jetzt `\"level\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `word` is now `\"level\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "ll",
+            "en": "ll"
+          },
+          {
+            "de": "le",
+            "en": "le"
+          },
+          {
+            "de": "ve",
+            "en": "ve"
+          },
+          {
+            "de": "same",
+            "en": "same"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`level` beginnt mit `l` und endet mit `l`. `first` und `last` sind also gleich, der `if`-Teil läuft und gibt das Wort same aus. Nicht die Buchstaben, sondern das Wort „same“ (gleich).",
+          "en": "`level` starts with `l` and ends with `l`. So `first` and `last` are equal, the `if` part runs and prints the word same. Not the letters, but the word “same”."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B nimmt den vorletzten Buchstaben und gibt po aus",
+            "en": "B takes the second-to-last letter and prints po"
+          },
+          {
+            "de": "B nimmt den zweiten Buchstaben von vorn und gibt py aus",
+            "en": "B takes the second letter from the front and prints py"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn -1 und -2 sind beide hinten",
+            "en": "B prints the same as A, because -1 and -2 are both at the back"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil -2 keine gültige Stelle ist",
+            "en": "B stops with an error, because -2 is not a valid place"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "-1 ist der letzte Buchstabe, -2 der davor. Bei `python` ist das ein `o`. `first` ist weiterhin `p`, die beiden sind verschieden, und es wird po ausgegeben (`p` und `o`). Negative Nummern zählen von hinten und sind erlaubt.",
+          "en": "-1 is the last letter, -2 the one before it. In `python` that is an `o`. `first` is still `p`, the two differ, and po is printed (`p` and `o`). Negative numbers count from the back and are allowed."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: `first` soll die ersten zwei Buchstaben enthalten (bei `python` also `py`), nicht nur einen. Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: `first` must hold the first two letters (so `py` for `python`), not just one. What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "first = word[2]",
+            "en": "first = word[2]"
+          },
+          {
+            "de": "first = word[:2]",
+            "en": "first = word[:2]"
+          },
+          {
+            "de": "first = word[0:1]",
+            "en": "first = word[0:1]"
+          },
+          {
+            "de": "first = word[1:3]",
+            "en": "first = word[1:3]"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Ein Doppelpunkt in den eckigen Klammern schneidet ein Stück aus. `word[:2]` heißt „von Anfang bis vor Stelle 2“: die Stellen 0 und 1, also `py`. Das Ende zählt nie mit.\n\n`word[2]` ist nur ein einzelner Buchstabe (`t`), `word[0:1]` reicht nur bis vor Stelle 1 (also nur `p`), und `word[1:3]` beginnt zu spät (`yt`).",
+          "en": "A colon inside the square brackets cuts out a piece. `word[:2]` means “from the start up to before place 2”: places 0 and 1, so `py`. The end never counts.\n\n`word[2]` is just a single letter (`t`), `word[0:1]` only reaches up to before place 1 (so just `p`), and `word[1:3]` starts too late (`yt`)."
+        }
+      }
+    ]
+  },
+  {
+    "id": "strings-02",
+    "topic": "strings",
+    "level": 1,
+    "code": "name = \"ada\"\nshout = name.upper()\ngreeting = \"Hi \" + shout\nif len(name) > 2:\n    greeting = greeting + \"!\"\nprint(greeting)",
+    "variant": "name = \"al\"\nshout = name.upper()\ngreeting = \"Hi \" + shout\nif len(name) > 2:\n    greeting = greeting + \"!\"\nprint(greeting)",
+    "altered": "name = \"ada\"\nshout = name.title()\ngreeting = \"Hi \" + shout\nif len(name) > 2:\n    greeting = greeting + \"!\"\nprint(greeting)",
+    "requirement": [
+      4,
+      4
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `greeting` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `greeting` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'Hi ada'",
+            "en": "'Hi ada'"
+          },
+          {
+            "de": "'HI ADA'",
+            "en": "'HI ADA'"
+          },
+          {
+            "de": "'Hi ADA'",
+            "en": "'Hi ADA'"
+          },
+          {
+            "de": "'HiADA'",
+            "en": "'HiADA'"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`name.upper()` macht alle Buchstaben groß: aus `ada` wird `ADA`. Das Wort `\"Hi \"` bleibt, wie es ist, mit dem Leerzeichen am Ende. Das `+` klebt beides zusammen: 'Hi ADA'. Die Methode verändert nur die Kopie in `shout`, `name` bleibt klein.",
+          "en": "`name.upper()` makes all letters capital: `ada` becomes `ADA`. The word `\"Hi \"` stays as it is, with the space at the end. `+` glues both together: 'Hi ADA'. The method only changes the copy in `shout`; `name` stays small."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "Hi ADA",
+            "en": "Hi ADA"
+          },
+          {
+            "de": "Hi ada!",
+            "en": "Hi ada!"
+          },
+          {
+            "de": "HI ADA!",
+            "en": "HI ADA!"
+          },
+          {
+            "de": "Hi ADA!",
+            "en": "Hi ADA!"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`name` ist `ada` und hat 3 Buchstaben. `len(name) > 2` stimmt, denn 3 ist größer als 2. Also hängt der `if`-Teil ein `!` an den Gruß: Hi ADA!. Das `!` kommt ans Ende, nicht in die Mitte.",
+          "en": "`name` is `ada` and has 3 letters. `len(name) > 2` is true, because 3 is bigger than 2. So the `if` part attaches a `!` to the greeting: Hi ADA!. The `!` goes at the end, not in the middle."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `name` ist jetzt `\"al\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `name` is now `\"al\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "Hi AL",
+            "en": "Hi AL"
+          },
+          {
+            "de": "Hi AL!",
+            "en": "Hi AL!"
+          },
+          {
+            "de": "Hi al",
+            "en": "Hi al"
+          },
+          {
+            "de": "Hi al!",
+            "en": "Hi al!"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`al` hat nur 2 Buchstaben. 2 ist nicht größer als 2, der `if`-Teil läuft nicht, es gibt kein `!`. Und `upper()` hat die Buchstaben schon groß gemacht: Hi AL.",
+          "en": "`al` has only 2 letters. 2 is not bigger than 2, so the `if` part does not run and there is no `!`. And `upper()` has already made the letters capital: Hi AL."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B macht gar keinen Buchstaben groß und gibt Hi ada! aus",
+            "en": "B makes no letter capital and prints Hi ada!"
+          },
+          {
+            "de": "B macht nur den ersten Buchstaben groß und gibt Hi Ada! aus",
+            "en": "B makes only the first letter capital and prints Hi Ada!"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, title und upper sind gleich",
+            "en": "B prints the same as A, title and upper are the same"
+          },
+          {
+            "de": "B gibt Hi ADA aus, das Ausrufezeichen fehlt",
+            "en": "B prints Hi ADA, the exclamation mark is missing"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`title()` macht nur den Anfang eines Worts groß, `upper()` alle Buchstaben. Aus `ada` wird `Ada`, und der Gruß wird Hi Ada!. Das `!` kommt weiterhin dazu, denn die Länge von `name` hat sich nicht geändert.",
+          "en": "`title()` capitalises only the start of a word, `upper()` all letters. `ada` becomes `Ada`, and the greeting becomes Hi Ada!. The `!` still comes along, because the length of `name` did not change."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Das Ausrufezeichen soll nur kommen, wenn der Name mit `a` beginnt. Womit ersetzt du Zeile 4 (markiert)?",
+          "en": "New requirement: The exclamation mark must only come if the name starts with `a`. What do you replace line 4 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "if name == \"a\":",
+            "en": "if name == \"a\":"
+          },
+          {
+            "de": "if name[-1] == \"a\":",
+            "en": "if name[-1] == \"a\":"
+          },
+          {
+            "de": "if name[0] == \"a\":",
+            "en": "if name[0] == \"a\":"
+          },
+          {
+            "de": "if \"a\" in name:",
+            "en": "if \"a\" in name:"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`name[0]` ist der erste Buchstabe, und genau den soll die Bedingung prüfen. Bei `eva` ist es ein `e`, kein `!`; bei `abe` ein `a`, mit `!`.\n\n`name == \"a\"` vergleicht den ganzen Namen (nur der Name `a` passt). `name[-1]` prüft das Ende, `eva` endet auch auf `a`. `\"a\" in name` sucht irgendwo, auch mitten im Namen.",
+          "en": "`name[0]` is the first letter, and that is exactly what the condition should check. With `eva` it is an `e`, so no `!`; with `abe` it is an `a`, so with `!`.\n\n`name == \"a\"` compares the whole name (only the name `a` fits). `name[-1]` checks the end, and `eva` also ends in `a`. `\"a\" in name` searches anywhere, also in the middle of the name."
+        }
+      }
+    ]
+  },
+  {
+    "id": "strings-03",
+    "topic": "strings",
+    "level": 2,
+    "code": "text = \"one two three\"\nwords = text.split()\ncount = len(words)\nif count > 2:\n    print(words[-1])\nelse:\n    print(words[0])",
+    "variant": "text = \"hello world\"\nwords = text.split()\ncount = len(words)\nif count > 2:\n    print(words[-1])\nelse:\n    print(words[0])",
+    "altered": "text = \"one two three\"\nwords = text.split()\ncount = len(words)\nif count > 3:\n    print(words[-1])\nelse:\n    print(words[0])",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `count` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `count` have after them?"
+        },
+        "choices": [
+          {
+            "de": "13",
+            "en": "13"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`text.split()` schneidet den Text an den Leerzeichen in Wörter und macht eine Liste daraus: `[\"one\", \"two\", \"three\"]`. `len(words)` zählt die Wörter in der Liste, nicht die Buchstaben: 3. (Die Buchstaben wären 13.)",
+          "en": "`text.split()` cuts the text at the spaces into words and makes a list of them: `[\"one\", \"two\", \"three\"]`. `len(words)` counts the words in the list, not the letters: 3. (The letters would be 13.)"
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "three",
+            "en": "three"
+          },
+          {
+            "de": "one",
+            "en": "one"
+          },
+          {
+            "de": "two",
+            "en": "two"
+          },
+          {
+            "de": "one two three",
+            "en": "one two three"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Es gibt 3 Wörter, und 3 ist größer als 2. Also läuft der `if`-Teil und zeigt `words[-1]`, das letzte Wort. Der `else`-Teil mit `words[0]` (dem ersten Wort) wird übersprungen: three.",
+          "en": "There are 3 words, and 3 is bigger than 2. So the `if` part runs and shows `words[-1]`, the last word. The `else` part with `words[0]` (the first word) is skipped: three."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `text` ist jetzt `\"hello world\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `text` is now `\"hello world\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "world",
+            "en": "world"
+          },
+          {
+            "de": "hello",
+            "en": "hello"
+          },
+          {
+            "de": "hello world",
+            "en": "hello world"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Jetzt sind es nur 2 Wörter, und 2 ist nicht größer als 2. Der `else`-Teil läuft und zeigt das erste Wort, `words[0]`: hello. Das zweite Wort bleibt unbenutzt.",
+          "en": "Now there are only 2 words, and 2 is not bigger than 2. The `else` part runs and shows the first word, `words[0]`: hello. The second word stays unused."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B zählt jetzt Buchstaben und gibt three aus",
+            "en": "B now counts letters and prints three"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn drei Wörter sind genug",
+            "en": "B prints the same as A, because three words are enough"
+          },
+          {
+            "de": "B verlangt mehr als 3 Wörter und gibt one aus",
+            "en": "B demands more than 3 words and prints one"
+          },
+          {
+            "de": "B gibt 3 aus, die Anzahl der Wörter",
+            "en": "B prints 3, the number of words"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "In B muss `count` größer als 3 sein, aber es sind genau 3 Wörter. Die Bedingung stimmt nicht, der `else`-Teil läuft, und es erscheint das erste Wort: one. A hatte die Grenze bei 2.",
+          "en": "In B, `count` has to be bigger than 3, but there are exactly 3 words. The condition is false, the `else` part runs, and the first word appears: one. A had the limit at 2."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Das erste Wort soll in Großbuchstaben ausgegeben werden (ONE statt one), im `if`-Fall. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: The first word must be printed in capital letters (ONE instead of one), in the `if` case. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    print(words[0]).upper()",
+            "en": "    print(words[0]).upper()"
+          },
+          {
+            "de": "    print(words.upper()[0])",
+            "en": "    print(words.upper()[0])"
+          },
+          {
+            "de": "    print(words[-1].upper())",
+            "en": "    print(words[-1].upper())"
+          },
+          {
+            "de": "    print(words[0].upper())",
+            "en": "    print(words[0].upper())"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Man hängt `.upper()` direkt an den Wert, der groß werden soll: `words[0]` ist das erste Wort, `words[0].upper()` dasselbe in Großbuchstaben. Erst danach druckt `print`.\n\nBei `print(...).upper()` steht `.upper()` hinter der Klammer von `print`, aber `print` gibt nichts zurück, was groß werden könnte. `words.upper()` geht nicht, weil die Liste keine Großbuchstaben kennt. Und `words[-1]` ist das letzte Wort.",
+          "en": "You attach `.upper()` right to the value that should become capital: `words[0]` is the first word, `words[0].upper()` is the same in capital letters. Only then does `print` print it.\n\nWith `print(...).upper()` the `.upper()` sits behind the bracket of `print`, but `print` gives back nothing that could be capitalised. `words.upper()` does not work, because the list knows no capital letters. And `words[-1]` is the last word."
+        }
+      }
+    ]
+  },
+  {
+    "id": "strings-04",
+    "topic": "strings",
+    "level": 1,
+    "code": "sentence = \"I like python\"\nhas_py = \"py\" in sentence\nshout = sentence.upper()\nif has_py:\n    print(shout)\nelse:\n    print(sentence)",
+    "variant": "sentence = \"I like Python\"\nhas_py = \"py\" in sentence\nshout = sentence.upper()\nif has_py:\n    print(shout)\nelse:\n    print(sentence)",
+    "altered": "sentence = \"I like python\"\nhas_py = \"py\" not in sentence\nshout = sentence.upper()\nif has_py:\n    print(shout)\nelse:\n    print(sentence)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `has_py` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `has_py` have after them?"
+        },
+        "choices": [
+          {
+            "de": "True",
+            "en": "True"
+          },
+          {
+            "de": "False",
+            "en": "False"
+          },
+          {
+            "de": "'py'",
+            "en": "'py'"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`\"py\" in sentence` fragt: Kommt der Text `py` irgendwo im Satz vor? In `python` steckt `py` am Anfang, die Antwort ist also True. `in` gibt keine Stelle zurück, sondern nur Ja oder Nein, einen Wahrheitswert.",
+          "en": "`\"py\" in sentence` asks: does the text `py` appear anywhere in the sentence? `python` starts with `py`, so the answer is True. `in` does not give a position, only yes or no, a truth value."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "I like python",
+            "en": "I like python"
+          },
+          {
+            "de": "I LIKE PYTHON",
+            "en": "I LIKE PYTHON"
+          },
+          {
+            "de": "True",
+            "en": "True"
+          },
+          {
+            "de": "I LIKE PY",
+            "en": "I LIKE PY"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`has_py` ist `True`, also läuft der `if`-Teil und zeigt `shout`, den Satz in Großbuchstaben: I LIKE PYTHON. Die Zeile `shout = sentence.upper()` ist schon vorher gelaufen, `sentence` selbst ist unverändert.",
+          "en": "`has_py` is `True`, so the `if` part runs and shows `shout`, the sentence in capital letters: I LIKE PYTHON. The line `shout = sentence.upper()` already ran before; `sentence` itself is unchanged."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `sentence` hat jetzt ein großes P: `\"I like Python\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `sentence` now has a capital P: `\"I like Python\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "I like python",
+            "en": "I like python"
+          },
+          {
+            "de": "True",
+            "en": "True"
+          },
+          {
+            "de": "I like Python",
+            "en": "I like Python"
+          },
+          {
+            "de": "I like PYTHON",
+            "en": "I like PYTHON"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Python unterscheidet Groß- und Kleinschreibung: `P` und `p` sind verschiedene Buchstaben. `py` kommt in `I like Python` nicht vor, `has_py` ist also `False`. Der `else`-Teil zeigt den Satz unverändert, wie er war: I like Python.",
+          "en": "Python tells capital and small letters apart: `P` and `p` are different letters. `py` does not appear in `I like Python`, so `has_py` is `False`. The `else` part shows the sentence unchanged, as it was: I like Python."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B sucht jetzt nach not im Satz und gibt True aus",
+            "en": "B now searches for not in the sentence and prints True"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, not in ändert nichts",
+            "en": "B prints the same as A, not in changes nothing"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil not in nicht existiert",
+            "en": "B stops with an error, because not in does not exist"
+          },
+          {
+            "de": "B dreht die Frage um und gibt I like python aus",
+            "en": "B turns the question around and prints I like python"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`not in` fragt das Gegenteil von `in`: Kommt `py` NICHT vor? Das ist falsch, denn `py` kommt vor. `has_py` ist also `False`, der `else`-Teil läuft, und der Satz erscheint unverändert: I like python. A schrieb ihn dagegen in Großbuchstaben.",
+          "en": "`not in` asks the opposite of `in`: does `py` NOT appear? That is false, because `py` does appear. So `has_py` is `False`, the `else` part runs, and the sentence appears unchanged: I like python. A wrote it in capital letters instead."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Auch `Python` mit großem P soll erkannt werden (und `PYTHON` rocks ebenfalls). Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: `Python` with a capital P must be recognised too (and `PYTHON rocks` as well). What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "has_py = \"py\" in sentence.lower()",
+            "en": "has_py = \"py\" in sentence.lower()"
+          },
+          {
+            "de": "has_py = \"py\" in sentence.upper()",
+            "en": "has_py = \"py\" in sentence.upper()"
+          },
+          {
+            "de": "has_py = \"Py\" in sentence",
+            "en": "has_py = \"Py\" in sentence"
+          },
+          {
+            "de": "has_py = \"py\" in sentence.lower",
+            "en": "has_py = \"py\" in sentence.lower"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Man macht den Satz erst ganz klein und sucht dann das kleine `py`: `sentence.lower()` gibt eine kleine Kopie. So passen `Python`, `python` und `PYTHON` alle. Die Klammern gehören dazu, sonst ist es nur der Name der Methode, nicht ihr Ergebnis.\n\n`upper()` macht die Kopie groß, dann gibt es kein kleines `py` mehr. `\"Py\"` erkennt nur genau diese Schreibweise.",
+          "en": "First make the whole sentence small, then search for the small `py`: `sentence.lower()` gives a small-letter copy. That way `Python`, `python` and `PYTHON` all fit. The brackets belong to it; without them you only have the name of the method, not its result.\n\n`upper()` makes the copy capital, so there is no small `py` any more. `\"Py\"` recognises only exactly that spelling."
+        }
+      }
+    ]
+  },
+  {
+    "id": "strings-05",
+    "topic": "strings",
+    "level": 3,
+    "code": "name = \"Grace Hopper\"\nstart = name[:5]\nn = len(start)\nif n == 5:\n    print(f\"{start} has {n} letters\")\nprint(name[6:])",
+    "variant": "name = \"Grace Hopper\"\nstart = name[:3]\nn = len(start)\nif n == 5:\n    print(f\"{start} has {n} letters\")\nprint(name[6:])",
+    "altered": "name = \"Grace Hopper\"\nstart = name[:5]\nn = len(start)\nif n == 5:\n    print(\"{start} has {n} letters\")\nprint(name[6:])",
+    "requirement": [
+      6,
+      6
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `start` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `start` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'Grac'",
+            "en": "'Grac'"
+          },
+          {
+            "de": "'Grace'",
+            "en": "'Grace'"
+          },
+          {
+            "de": "'Grace '",
+            "en": "'Grace '"
+          },
+          {
+            "de": "'Hopper'",
+            "en": "'Hopper'"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Ein Text ist eine Perlenkette, die Perlen sind durchnummeriert, ab 0. `name[:5]` heißt: alles vor Platz 5. Das sind die Plätze 0 bis 4: G, r, a, c, e. Der Platz 5 (das Leerzeichen) ist nicht mehr dabei. In `start` liegt 'Grace'.",
+          "en": "A text is a string of beads, and the beads are numbered, starting at 0. `name[:5]` means: everything before place 5. That is places 0 to 4: G, r, a, c, e. Place 5 (the space) is no longer included. `start` holds 'Grace'."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "Grace has 4 letters / Hopper",
+            "en": "Grace has 4 letters / Hopper"
+          },
+          {
+            "de": "Grace has 5 letters / opper",
+            "en": "Grace has 5 letters / opper"
+          },
+          {
+            "de": "Grace has 5 letters\nHopper",
+            "en": "Grace has 5 letters\nHopper"
+          },
+          {
+            "de": "Grace has 5 letters / Grace",
+            "en": "Grace has 5 letters / Grace"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`start` hat 5 Buchstaben, die Bedingung stimmt. Das `f` vor den Anführungszeichen füllt die Lücken `{start}` und `{n}` mit den echten Werten. Dann zeigt `name[6:]` alles ab Platz 6, das ist das H von Hopper (Platz 5 ist das Leerzeichen). Ausgabe: Grace has 5 letters / Hopper.",
+          "en": "`start` has 5 letters, so the condition is true. The `f` before the quotes fills the gaps `{start}` and `{n}` with the real values. Then `name[6:]` shows everything from place 6, the H of Hopper (place 5 is the space). Output: Grace has 5 letters / Hopper."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `start` nimmt jetzt nur die ersten 3 Plätze. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `start` now takes only the first 3 places. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "Gra has 3 letters / Hopper",
+            "en": "Gra has 3 letters / Hopper"
+          },
+          {
+            "de": "Gra has 5 letters / Hopper",
+            "en": "Gra has 5 letters / Hopper"
+          },
+          {
+            "de": "Gra / Hopper",
+            "en": "Gra / Hopper"
+          },
+          {
+            "de": "Hopper",
+            "en": "Hopper"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`name[:3]` ergibt `Gra`, mit 3 Buchstaben. Die Frage `n == 5` ist jetzt falsch, also wird die eingerückte `print`-Zeile übersprungen. Nur die letzte Zeile zeigt etwas: Hopper.",
+          "en": "`name[:3]` gives `Gra`, with 3 letters. The question `n == 5` is now false, so the indented `print` line is skipped. Only the last line shows something: Hopper."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B hat kein f und zeigt die Klammern als Text: {start} has {n} letters / Hopper",
+            "en": "B has no f and shows the braces as text: {start} has {n} letters / Hopper"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, die Klammern werden trotzdem gefüllt",
+            "en": "B prints the same as A, the braces are filled in anyway"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil das f fehlt",
+            "en": "B stops with an error, because the f is missing"
+          },
+          {
+            "de": "B zeigt Grace has 5 letters nicht und gibt nur Hopper aus",
+            "en": "B does not show Grace has 5 letters and prints only Hopper"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Nur ein Text mit `f` davor füllt die geschweiften Klammern aus. Ohne das `f` ist es ein ganz gewöhnlicher Text, und Python zeigt die Zeichen genau so, wie sie dastehen, mit den Klammern. Einen Fehler gibt es nicht. Ausgabe: {start} has {n} letters / Hopper.",
+          "en": "Only a text with an `f` in front fills in the curly braces. Without the `f` it is a quite ordinary text, and Python shows the characters exactly as they stand, braces included. There is no error. Output: {start} has {n} letters / Hopper."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Die letzte Zeile soll bei jedem Namen aus Vor- und Nachname den Nachnamen zeigen, egal wie lang der Vorname ist. Womit ersetzt du Zeile 6 (markiert)?",
+          "en": "New requirement: The last line must show the last name for any name made of a first and a last name, however long the first name is. What do you replace line 6 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "print(name[6:])",
+            "en": "print(name[6:])"
+          },
+          {
+            "de": "print(name.split()[-1])",
+            "en": "print(name.split()[-1])"
+          },
+          {
+            "de": "print(name[-6:])",
+            "en": "print(name[-6:])"
+          },
+          {
+            "de": "print(name.split()[0])",
+            "en": "print(name.split()[0])"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`name.split()` zerschneidet den Text an den Leerzeichen in eine Liste mit den Wörtern. `[-1]` nimmt das letzte Wort, und das ist immer der Nachname, wie lang der Vorname auch ist.\n\n`name[6:]` und `name[-6:]` zählen feste Plätze und passen nur zu Namen mit genau diesen Längen. `[0]` ist das erste Wort, der Vorname.",
+          "en": "`name.split()` cuts the text at the spaces into a list of the words. `[-1]` takes the last word, and that is always the last name, however long the first name is.\n\n`name[6:]` and `name[-6:]` count fixed places and only fit names with exactly these lengths. `[0]` is the first word, the first name."
+        }
+      }
+    ]
+  },
+  {
+    "id": "strings-06",
+    "topic": "strings",
+    "level": 1,
+    "code": "score = 7\ntext = \"Score: \" + str(score)\nsize = len(text)\nif size > 8:\n    print(text)\nelse:\n    print(\"short\", size)",
+    "variant": "score = 10\ntext = \"Score: \" + str(score)\nsize = len(text)\nif size > 8:\n    print(text)\nelse:\n    print(\"short\", size)",
+    "altered": "score = 7\ntext = \"Score:\" + str(score)\nsize = len(text)\nif size > 8:\n    print(text)\nelse:\n    print(\"short\", size)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `size` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `size` have after them?"
+        },
+        "choices": [
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "9",
+            "en": "9"
+          },
+          {
+            "de": "1",
+            "en": "1"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`str(score)` macht aus der Zahl 7 den Text \"7\". Den kann man an \"Score: \" kleben: \"Score: 7\". Zähle alle Zeichen, auch das Leerzeichen: S-c-o-r-e-Doppelpunkt-Leerzeichen sind 7, dazu die 7 selbst. `size` ist 8.",
+          "en": "`str(score)` turns the number 7 into the text \"7\". That can be glued to \"Score: \": \"Score: 7\". Count every character, the space too: S-c-o-r-e-colon-space are 7, plus the 7 itself. `size` is 8."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "Score: 7",
+            "en": "Score: 7"
+          },
+          {
+            "de": "short 7",
+            "en": "short 7"
+          },
+          {
+            "de": "short 8",
+            "en": "short 8"
+          },
+          {
+            "de": "short 9",
+            "en": "short 9"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "8 ist nicht größer als 8, also läuft der `else`-Teil. Ausgabe: short 8. Nur wenn `size` mindestens 9 wäre, käme der Text selbst.",
+          "en": "8 is not bigger than 8, so the `else` part runs. Output: short 8. Only if `size` were at least 9 would the text itself be printed."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `score` ist jetzt 10. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `score` is now 10. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "short 9",
+            "en": "short 9"
+          },
+          {
+            "de": "short 10",
+            "en": "short 10"
+          },
+          {
+            "de": "Score: 9",
+            "en": "Score: 9"
+          },
+          {
+            "de": "Score: 10",
+            "en": "Score: 10"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Aus 10 wird der Text \"10\" mit zwei Zeichen, der Gesamttext hat 9 Zeichen. 9 ist größer als 8, also läuft der `if`-Teil und der Text selbst wird gedruckt: Score: 10.",
+          "en": "10 becomes the text \"10\" with two characters, so the whole text has 9 characters. 9 is bigger than 8, so the `if` part runs and the text itself is printed: Score: 10."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B lässt das Leerzeichen nach dem Doppelpunkt weg und gibt short 7 aus",
+            "en": "B leaves out the space after the colon and prints short 7"
+          },
+          {
+            "de": "B gibt short 8 aus, genau wie A",
+            "en": "B prints short 8, just like A"
+          },
+          {
+            "de": "B hängt die 7 nicht an und gibt short 6 aus",
+            "en": "B does not attach the 7 and prints short 6"
+          },
+          {
+            "de": "B ist kürzer, also gibt B den Text Score:7 aus",
+            "en": "B is shorter, so B prints the text Score:7"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In B fehlt das Leerzeichen hinter dem Doppelpunkt, der Text hat ein Zeichen weniger: \"Score:7\" sind 7 Zeichen. 7 ist nicht größer als 8, also läuft der `else`-Teil: short 7.",
+          "en": "B is missing the space after the colon, so the text has one character less: \"Score:7\" is 7 characters. 7 is not bigger than 8, so the `else` part runs: short 7."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Der Text soll auf ` points` enden: `Score: 7 points`. Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: The text must end with ` points`: `Score: 7 points`. What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "text = \"Score: \" + score + \" points\"",
+            "en": "text = \"Score: \" + score + \" points\""
+          },
+          {
+            "de": "text = \"Score: \" + str(score) + \" points\"",
+            "en": "text = \"Score: \" + str(score) + \" points\""
+          },
+          {
+            "de": "text = \"Score: \" + \"score\" + \" points\"",
+            "en": "text = \"Score: \" + \"score\" + \" points\""
+          },
+          {
+            "de": "text = \"Score: \" + str(score) + \"points\"",
+            "en": "text = \"Score: \" + str(score) + \"points\""
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Mit `+` klebst du Texte aneinander, und `str(score)` macht aus der Zahl vorher einen Text. Hinten kommt \" points\" dazu, mit Leerzeichen am Anfang.\n\nOhne `str` mischt Python Text und Zahl nicht: Fehler. Der Text \"score\" in Anführungszeichen ist kein Wert der Variable. Und \"points\" ohne Leerzeichen klebt direkt an der Zahl.",
+          "en": "With `+` you glue texts together, and `str(score)` first turns the number into text. \" points\" comes at the end, with a space in front.\n\nWithout `str`, Python does not mix text and number: error. The text \"score\" in quotes is not the value of the variable. And \"points\" without a space sticks right to the number."
+        }
+      }
+    ]
+  }
+]

@@ -229,3 +229,41 @@ describe('functions lesson', () => {
     expect(new AppStorage(kv, CONTENT).lastResult()).toEqual({ lesson: 'mixed', score: 3, total: 10 });
   });
 });
+
+describe('diff lesson', () => {
+  it('asks 10 distinct spot-the-difference questions, each with two snippets', () => {
+    const { trainer } = setup();
+    const session = trainer.start('diff');
+    expect(session.lesson).toBe('diff');
+    expect(new Set(session.items.map((i) => i.id)).size).toBe(10);
+    for (const item of session.items) {
+      const q = trainer.question(item.id);
+      expect(item.id).toMatch(/^diff-/);
+      expect(q.codeB).toBeTruthy();
+      expect(CONTENT.diff).toContain(q);
+    }
+  });
+
+  it('keeps its own counters and result, apart from the other lessons', () => {
+    const { trainer, storage, correctSlot } = setup();
+    trainer.start('diff');
+    for (let i = 0; i < 10; i++) {
+      if (i > 0) trainer.next();
+      trainer.answer(i < 7 ? correctSlot() : (correctSlot() + 1) % 4);
+    }
+    expect(trainer.next()).toEqual({ lesson: 'diff', score: 7, total: 10 });
+    expect(storage.lastResult()).toEqual({ lesson: 'diff', score: 7, total: 10 });
+    expect(storage.counters('diff')).toEqual({ sessionsPlayed: 1, bestScore: 7, totalAnswers: 10, totalCorrect: 7 });
+    expect(storage.counters()).toEqual(EMPTY_COUNTERS);
+    expect(storage.counters('functions')).toEqual(EMPTY_COUNTERS);
+    storage.resetProgress();
+    expect(storage.counters('diff')).toEqual(EMPTY_COUNTERS);
+  });
+
+  it('resumes after a reload', () => {
+    const { trainer, kv, correctSlot } = setup();
+    trainer.start('diff');
+    trainer.answer(correctSlot());
+    expect(setup(kv).trainer.session()).toEqual(trainer.session());
+  });
+});

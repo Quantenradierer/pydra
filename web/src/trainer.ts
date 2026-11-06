@@ -53,8 +53,8 @@ export class Trainer {
   /** Starts a lesson. The functions lesson walks through the function played least often. */
   start(lesson: LessonId = 'mixed'): Session {
     const session =
-      lesson === 'mixed'
-        ? buildSession(this.content.questions, this.rng)
+      lesson === 'mixed' || lesson === 'diff'
+        ? buildSession(lesson === 'mixed' ? this.content.questions : this.content.diff, this.rng, lesson)
         : orderedSession(
             lesson,
             pickLeastPlayed(this.content.walkthroughs, (w) => this.timesPlayed(w), this.rng).questions,

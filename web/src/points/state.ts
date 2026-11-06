@@ -11,7 +11,9 @@ export type PointsEvent =
   /** A quiz session ended. */
   | { type: 'session'; perfect: boolean }
   /** A level was solved for the first time; `clean` = without a wrong try. */
-  | { type: 'level'; game: XpGame; id: string; clean: boolean };
+  | { type: 'level'; game: XpGame; id: string; clean: boolean }
+  /** The daily challenge of `day` was finished; `right[i]` = step i was answered right. */
+  | { type: 'daily'; day: string; right: boolean[] };
 
 /** What one local day added up to; the daily tasks adapt to the last days. */
 export interface DayStats {
@@ -41,7 +43,7 @@ export interface Daily {
 /** Everything the point system saves. */
 export interface PointsState {
   total: number;
-  /** Ids that already paid out ("q:<question>", "l:<game>:<level>", "p:<day>"). */
+  /** Ids that already paid out ("q:<question>", "l:<game>:<level>", "p:<day>", "d:<day>"). */
   awarded: string[];
   streak: { days: number; last: string };
   bestStreak: number;
@@ -51,6 +53,11 @@ export interface PointsState {
   achievements: Record<string, string>;
   tasksDone: number;
   perfectSessions: number;
+  /** The daily challenge streak: consecutive days finished, ending on `last`. */
+  challenge: { days: number; last: string };
+  bestChallenge: number;
+  /** Daily challenges finished. */
+  challenges: number;
 }
 
 export function emptyPoints(): PointsState {
@@ -63,6 +70,9 @@ export function emptyPoints(): PointsState {
     achievements: {},
     tasksDone: 0,
     perfectSessions: 0,
+    challenge: { days: 0, last: '' },
+    bestChallenge: 0,
+    challenges: 0,
   };
 }
 
@@ -77,10 +87,19 @@ export function previousDay(key: string): string {
   return dayKey(new Date(y, m - 1, d - 1));
 }
 
-/** The streak as it stands on `day`: broken when neither today nor yesterday was played. */
+/** A streak as it stands on `day`: broken when neither today nor yesterday counted. */
+export function streakOn(streak: { days: number; last: string }, day: string): number {
+  return streak.last === day || streak.last === previousDay(day) ? streak.days : 0;
+}
+
+/** The practice streak as it stands on `day`. */
 export function currentStreak(state: PointsState, day: string): number {
-  const { days, last } = state.streak;
-  return last === day || last === previousDay(day) ? days : 0;
+  return streakOn(state.streak, day);
+}
+
+/** The daily challenge streak as it stands on `day`. */
+export function currentChallengeStreak(state: PointsState, day: string): number {
+  return streakOn(state.challenge, day);
 }
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -123,5 +142,10 @@ export function parsePoints(raw: unknown): PointsState {
   }
   if (isCount(raw.tasksDone)) state.tasksDone = raw.tasksDone;
   if (isCount(raw.perfectSessions)) state.perfectSessions = raw.perfectSessions;
+  if (isRecord(raw.challenge) && isCount(raw.challenge.days) && typeof raw.challenge.last === 'string') {
+    state.challenge = { days: raw.challenge.days, last: raw.challenge.last };
+  }
+  state.bestChallenge = Math.max(isCount(raw.bestChallenge) ? raw.bestChallenge : 0, state.challenge.days);
+  if (isCount(raw.challenges)) state.challenges = raw.challenges;
   return state;
 }

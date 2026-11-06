@@ -1,0 +1,266 @@
+[
+  {
+    "id": "diff-operators-01",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(7 / 2)",
+    "codeB": "print(7 // 2)",
+    "choices": [
+      {
+        "de": "B gibt 4 statt 3.5 aus, weil // aufrundet",
+        "en": "B prints 4 instead of 3.5, because // rounds up"
+      },
+      {
+        "de": "B gibt 3 statt 3.5 aus: // schneidet den Rest ab",
+        "en": "B prints 3 instead of 3.5: // cuts off the remainder"
+      },
+      {
+        "de": "B gibt 3.0 statt 3.5 aus",
+        "en": "B prints 3.0 instead of 3.5"
+      },
+      {
+        "de": "B gibt auch 3.5 aus, // und / sind dasselbe",
+        "en": "B also prints 3.5, // and / are the same"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`/` ist die normale Division und liefert immer eine Kommazahl: 7 durch 2 ist 3.5.\n\n`//` fragt stattdessen: Wie oft passt die 2 ganz in die 7? Dreimal (3 · 2 = 6), und der Rest 1 wird weggelassen. Das Ergebnis ist die ganze Zahl 3, nicht aufgerundet.",
+      "en": "`/` is normal division and always gives a decimal number: 7 divided by 2 is 3.5.\n\n`//` asks instead: how often does 2 fit completely into 7? Three times (3 · 2 = 6), and the remainder 1 is left out. The result is the whole number 3, not rounded up."
+    }
+  },
+  {
+    "id": "diff-operators-02",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(2 + 3 * 4)",
+    "codeB": "print((2 + 3) * 4)",
+    "choices": [
+      {
+        "de": "B gibt 20 statt 14 aus",
+        "en": "B prints 20 instead of 14"
+      },
+      {
+        "de": "B gibt 14 statt 20 aus",
+        "en": "B prints 14 instead of 20"
+      },
+      {
+        "de": "B gibt 14 aus, Klammern ändern nichts",
+        "en": "B prints 14, parentheses change nothing"
+      },
+      {
+        "de": "B gibt 24 aus",
+        "en": "B prints 24"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "Python hält sich an \"Punkt vor Strich\": Malnehmen kommt vor Addieren. In A wird erst `3 * 4 = 12` gerechnet, dann `2 + 12 = 14`.\n\nKlammern gehen noch vor Punkt vor Strich. In B wird zuerst `(2 + 3) = 5` gerechnet, dann `5 * 4 = 20`. Mit Klammern bestimmst du selbst die Reihenfolge.",
+      "en": "Python follows \"multiplication before addition\". In A, `3 * 4 = 12` is worked out first, then `2 + 12 = 14`.\n\nParentheses come even before that. In B, `(2 + 3) = 5` is worked out first, then `5 * 4 = 20`. With parentheses you decide the order yourself."
+    }
+  },
+  {
+    "id": "diff-operators-03",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(2 * 3)",
+    "codeB": "print(2 ** 3)",
+    "choices": [
+      {
+        "de": "B gibt 5 statt 6 aus",
+        "en": "B prints 5 instead of 6"
+      },
+      {
+        "de": "B gibt 9 statt 6 aus",
+        "en": "B prints 9 instead of 6"
+      },
+      {
+        "de": "B gibt 6 aus, ** und * sind dasselbe",
+        "en": "B prints 6, ** and * are the same"
+      },
+      {
+        "de": "B gibt 8 statt 6 aus: ** ist \"hoch\"",
+        "en": "B prints 8 instead of 6: ** means \"to the power of\""
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`*` ist Malnehmen: `2 * 3` heißt 2 + 2 + 2 = 6.\n\n`**` heißt \"hoch\": `2 ** 3` heißt 2 · 2 · 2 = 8. Die 2 wird dreimal mit sich selbst malgenommen, nicht dreimal addiert. Zwei Sternchen sind also etwas ganz anderes als eins.",
+      "en": "`*` is multiplication: `2 * 3` means 2 + 2 + 2 = 6.\n\n`**` means \"to the power of\": `2 ** 3` means 2 · 2 · 2 = 8. The 2 is multiplied by itself three times, not added three times. Two stars are something quite different from one."
+    }
+  },
+  {
+    "id": "diff-operators-04",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(10 % 3)",
+    "codeB": "print(10 // 3)",
+    "choices": [
+      {
+        "de": "B gibt 3.33 statt 1 aus",
+        "en": "B prints 3.33 instead of 1"
+      },
+      {
+        "de": "B gibt 1 aus, % und // sind dasselbe",
+        "en": "B prints 1, % and // are the same"
+      },
+      {
+        "de": "B gibt 3 statt 1 aus: // zählt, wie oft es passt, % liefert den Rest",
+        "en": "B prints 3 instead of 1: // counts how often it fits, % gives the remainder"
+      },
+      {
+        "de": "B gibt 0 statt 1 aus",
+        "en": "B prints 0 instead of 1"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "Stell dir vor, du verteilst 10 Bonbons an 3 Kinder, jedes bekommt gleich viele. Jedes Kind bekommt 3 Bonbons, und 1 Bonbon bleibt übrig.\n\n`10 // 3` ist die Antwort auf \"Wie viele bekommt jeder?\", also 3. `10 % 3` (\"Modulo\") ist die Antwort auf \"Was bleibt übrig?\", also 1.",
+      "en": "Imagine you share 10 sweets among 3 children, and each gets the same amount. Each child gets 3 sweets, and 1 sweet is left over.\n\n`10 // 3` answers \"How many does each get?\", so 3. `10 % 3` (\"modulo\") answers \"What is left over?\", so 1."
+    }
+  },
+  {
+    "id": "diff-operators-05",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "print(5 == 5)",
+    "codeB": "print(5 != 5)",
+    "choices": [
+      {
+        "de": "B gibt auch True aus",
+        "en": "B also prints True"
+      },
+      {
+        "de": "B gibt False statt True aus",
+        "en": "B prints False instead of True"
+      },
+      {
+        "de": "B gibt 0 statt 5 aus",
+        "en": "B prints 0 instead of 5"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil man 5 nicht mit sich selbst vergleichen darf",
+        "en": "B stops with an error, because you may not compare 5 with itself"
+      }
+    ],
+    "answerIndex": 1,
+    "explanation": {
+      "de": "`==` fragt: \"Sind beide Seiten gleich?\" Bei `5 == 5` lautet die Antwort ja, also `True`.\n\n`!=` fragt das Gegenteil: \"Sind sie verschieden?\" Die 5 ist nicht von sich selbst verschieden, die Antwort ist nein, also `False`. Das `!` bedeutet hier \"nicht\".",
+      "en": "`==` asks: \"are both sides equal?\" For `5 == 5` the answer is yes, so `True`.\n\n`!=` asks the opposite: \"are they different?\" The 5 is not different from itself, the answer is no, so `False`. The `!` means \"not\" here."
+    }
+  },
+  {
+    "id": "diff-operators-06",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "age = 18\nprint(age < 18)",
+    "codeB": "age = 18\nprint(age <= 18)",
+    "choices": [
+      {
+        "de": "B gibt True statt False aus: <= schließt die 18 mit ein",
+        "en": "B prints True instead of False: <= includes the 18"
+      },
+      {
+        "de": "B gibt False aus, genau wie A",
+        "en": "B prints False, just like A"
+      },
+      {
+        "de": "B gibt 17 statt 18 aus",
+        "en": "B prints 17 instead of 18"
+      },
+      {
+        "de": "B bricht mit einem Fehler ab, weil <= nur für Kommazahlen geht",
+        "en": "B stops with an error, because <= only works for decimal numbers"
+      }
+    ],
+    "answerIndex": 0,
+    "explanation": {
+      "de": "`<` heißt \"kleiner als\" und lässt die Grenze draußen: 18 ist nicht kleiner als 18, also `False`.\n\n`<=` heißt \"kleiner als oder gleich\" und nimmt die Grenze mit hinein: 18 ist gleich 18, also `True`. Dieses eine Zeichen entscheidet, ob genau 18 Jahre noch mitzählen.",
+      "en": "`<` means \"less than\" and leaves the limit out: 18 is not less than 18, so `False`.\n\n`<=` means \"less than or equal to\" and includes the limit: 18 is equal to 18, so `True`. This one sign decides whether exactly 18 years still counts."
+    }
+  },
+  {
+    "id": "diff-operators-07",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "x = 4\nx += 2\nprint(x)",
+    "codeB": "x = 4\nx = 2\nprint(x)",
+    "choices": [
+      {
+        "de": "B gibt 8 statt 6 aus",
+        "en": "B prints 8 instead of 6"
+      },
+      {
+        "de": "B gibt 4 statt 6 aus",
+        "en": "B prints 4 instead of 6"
+      },
+      {
+        "de": "B gibt auch 6 aus, = und += sind dasselbe",
+        "en": "B also prints 6, = and += are the same"
+      },
+      {
+        "de": "B gibt 2 statt 6 aus: = ersetzt den Wert, += zählt etwas dazu",
+        "en": "B prints 2 instead of 6: = replaces the value, += adds to it"
+      }
+    ],
+    "answerIndex": 3,
+    "explanation": {
+      "de": "`x += 2` ist die Kurzform von `x = x + 2`: Python nimmt den alten Wert 4, zählt 2 dazu und legt 6 in x.\n\n`x = 2` dagegen schaut gar nicht auf den alten Wert. Es wirft die 4 weg und legt einfach die 2 in die Schachtel x. Das Pluszeichen vor dem `=` macht den Unterschied zwischen \"dazutun\" und \"ersetzen\".",
+      "en": "`x += 2` is short for `x = x + 2`: Python takes the old value 4, adds 2 and puts 6 into x.\n\n`x = 2`, on the other hand, does not look at the old value at all. It throws the 4 away and just puts the 2 into the box x. The plus sign before the `=` makes the difference between \"add to\" and \"replace\"."
+    }
+  },
+  {
+    "id": "diff-operators-08",
+    "topic": "operators",
+    "prompt": {
+      "de": "Was macht Version B anders als Version A?",
+      "en": "What does version B do differently from version A?"
+    },
+    "code": "a = 3\nprint(a > 1 and a > 5)",
+    "codeB": "a = 3\nprint(a > 1 or a > 5)",
+    "choices": [
+      {
+        "de": "B gibt False aus, genau wie A",
+        "en": "B prints False, just like A"
+      },
+      {
+        "de": "B gibt 3 statt False aus",
+        "en": "B prints 3 instead of False"
+      },
+      {
+        "de": "B gibt True statt False aus: or genügt eine wahre Seite",
+        "en": "B prints True instead of False: or needs only one true side"
+      },
+      {
+        "de": "B gibt False statt True aus",
+        "en": "B prints False instead of True"
+      }
+    ],
+    "answerIndex": 2,
+    "explanation": {
+      "de": "`a > 1` ist wahr (3 ist größer als 1), `a > 5` ist falsch (3 ist nicht größer als 5).\n\n`and` verlangt, dass beide Seiten wahr sind, wie \"Ich gehe raus, wenn es trocken ist UND warm\". Eine Seite ist falsch, also `False`. `or` verlangt nur eine wahre Seite, wie \"trocken ODER warm\". Eine Seite stimmt, also `True`.",
+      "en": "`a > 1` is true (3 is greater than 1), `a > 5` is false (3 is not greater than 5).\n\n`and` needs both sides to be true, like \"I go out if it is dry AND warm\". One side is false, so `False`. `or` needs only one true side, like \"dry OR warm\". One side holds, so `True`."
+    }
+  }
+]

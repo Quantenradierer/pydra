@@ -24,7 +24,7 @@ test('earns XP for right answers, shows tasks and achievements, and keeps the pl
   await expect(page.getByTestId('profile-total')).toHaveText(`${before} XP insgesamt`);
   await expect(page.getByTestId('task-quiz')).toContainText('1/5');
   await expect(page.getByTestId('ach-first-answer')).toHaveClass(/earned/);
-  await expect(page.getByTestId('ach-count')).toHaveText('1 von 21 erreicht');
+  await expect(page.getByTestId('ach-count')).toHaveText('1 von 24 erreicht');
   await expect(page.getByTestId('ach-streak-30')).not.toHaveClass(/earned/);
 
   // The name is saved on this device and survives a reload and a progress reset.
@@ -49,5 +49,5 @@ test('shows the profile in English', async ({ page }) => {
   await page.goto('/#/profile');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Profile');
   await expect(page.getByTestId('profile-level')).toHaveText('Level 1 · Hydra Egg');
-  await expect(page.getByTestId('ach-count')).toHaveText('0 of 21 earned');
+  await expect(page.getByTestId('ach-count')).toHaveText('0 of 24 earned');
 });

@@ -1,0 +1,956 @@
+[
+  {
+    "id": "collections-01",
+    "topic": "collections",
+    "level": 1,
+    "code": "fruits = [\"apple\", \"pear\"]\nfruits.append(\"plum\")\nlast = fruits[-1]\nif len(fruits) > 2:\n    print(last, len(fruits))\nelse:\n    print(\"short\")",
+    "variant": "fruits = [\"apple\"]\nfruits.append(\"plum\")\nlast = fruits[-1]\nif len(fruits) > 2:\n    print(last, len(fruits))\nelse:\n    print(\"short\")",
+    "altered": "fruits = [\"apple\", \"pear\"]\nfruits.insert(0, \"plum\")\nlast = fruits[-1]\nif len(fruits) > 2:\n    print(last, len(fruits))\nelse:\n    print(\"short\")",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `last` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `last` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'pear'",
+            "en": "'pear'"
+          },
+          {
+            "de": "'plum'",
+            "en": "'plum'"
+          },
+          {
+            "de": "'apple'",
+            "en": "'apple'"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`append` hängt etwas hinten an die Liste an. Aus `[\"apple\", \"pear\"]` wird `[\"apple\", \"pear\", \"plum\"]`. `fruits[-1]` ist das letzte Element, also 'plum'. Das Anhängen verändert die Liste selbst, deshalb ist `plum` jetzt hinten.",
+          "en": "`append` attaches something to the end of the list. `[\"apple\", \"pear\"]` becomes `[\"apple\", \"pear\", \"plum\"]`. `fruits[-1]` is the last element, so 'plum'. Appending changes the list itself, which is why `plum` is at the back now."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "plum 2",
+            "en": "plum 2"
+          },
+          {
+            "de": "short",
+            "en": "short"
+          },
+          {
+            "de": "plum 3",
+            "en": "plum 3"
+          },
+          {
+            "de": "pear 3",
+            "en": "pear 3"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Die Liste hat jetzt 3 Elemente, und 3 ist größer als 2. Der `if`-Teil läuft: `print` zeigt das letzte Element und die Länge, mit einem Leerzeichen dazwischen: plum 3.",
+          "en": "The list now has 3 elements, and 3 is bigger than 2. The `if` part runs: `print` shows the last element and the length with a space in between: plum 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Die Liste startet nur noch mit `[\"apple\"]`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): The list now starts with only `[\"apple\"]`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "plum 2",
+            "en": "plum 2"
+          },
+          {
+            "de": "plum 3",
+            "en": "plum 3"
+          },
+          {
+            "de": "apple 2",
+            "en": "apple 2"
+          },
+          {
+            "de": "short",
+            "en": "short"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Nach dem `append` stehen zwei Dinge in der Liste: `apple` und `plum`. 2 ist nicht größer als 2, also läuft der `else`-Teil, und es erscheint nur das Wort short. Das letzte Element und die Länge werden gar nicht gezeigt.",
+          "en": "After the `append` there are two things in the list: `apple` and `plum`. 2 is not bigger than 2, so the `else` part runs, and only the word short appears. The last element and the length are not shown at all."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B setzt plum vorne ein; das letzte Element ist pear: pear 3",
+            "en": "B puts plum at the front; the last element is pear: pear 3"
+          },
+          {
+            "de": "B ersetzt apple durch plum und gibt plum 2 aus",
+            "en": "B replaces apple with plum and prints plum 2"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, insert und append sind gleich",
+            "en": "B prints the same as A, insert and append are the same"
+          },
+          {
+            "de": "B gibt short aus, weil insert die Liste nicht länger macht",
+            "en": "B prints short, because insert does not make the list longer"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`insert(0, ...)` fügt vorne ein (Stelle 0) und schiebt die anderen nach hinten. Die Liste ist dann `[\"plum\", \"apple\", \"pear\"]`, also wieder 3 lang. Das letzte Element ist jetzt `pear`: pear 3. `append` hängt immer hinten an, `insert` an einer Stelle deiner Wahl.",
+          "en": "`insert(0, ...)` puts in at the front (place 0) and pushes the others back. The list is then `[\"plum\", \"apple\", \"pear\"]`, 3 long again. The last element is now `pear`: pear 3. `append` always attaches at the back, `insert` at a place of your choice."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: `plum` soll genau zwischen `apple` und `pear` stehen; `pear` bleibt das letzte Element. Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: `plum` must stand exactly between `apple` and `pear`; `pear` stays the last element. What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "fruits.insert(2, \"plum\")",
+            "en": "fruits.insert(2, \"plum\")"
+          },
+          {
+            "de": "fruits.insert(1, \"plum\")",
+            "en": "fruits.insert(1, \"plum\")"
+          },
+          {
+            "de": "fruits[1] = \"plum\"",
+            "en": "fruits[1] = \"plum\""
+          },
+          {
+            "de": "fruits.add(\"plum\")",
+            "en": "fruits.add(\"plum\")"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Die Stellen einer Liste zählen ab 0: `apple` ist Stelle 0, `pear` Stelle 1. `insert(1, ...)` setzt vor Stelle 1 ein; `pear` rutscht nach hinten und bleibt das letzte.\n\n`insert(2, ...)` landet hinter `pear`. `fruits[1] = ...` ersetzt `pear` (die Liste bleibt kurz), und `add` gibt es für Listen nicht (das kennt nur die Menge `set`).",
+          "en": "The places of a list count from 0: `apple` is place 0, `pear` place 1. `insert(1, ...)` puts in before place 1; `pear` slides back and stays the last one.\n\n`insert(2, ...)` lands behind `pear`. `fruits[1] = ...` replaces `pear` (the list stays short), and `add` does not exist for lists (only the `set` knows it)."
+        }
+      }
+    ]
+  },
+  {
+    "id": "collections-02",
+    "topic": "collections",
+    "level": 2,
+    "code": "nums = [10, 20, 30, 40, 50]\npart = nums[1:3]\nsize = len(part)\nif size == 2:\n    part.append(99)\nprint(part, nums)",
+    "variant": "nums = [10, 20, 30, 40, 50]\npart = nums[1:2]\nsize = len(part)\nif size == 2:\n    part.append(99)\nprint(part, nums)",
+    "altered": "nums = [10, 20, 30, 40, 50]\npart = nums[1:]\nsize = len(part)\nif size == 2:\n    part.append(99)\nprint(part, nums)",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `part` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `part` have after them?"
+        },
+        "choices": [
+          {
+            "de": "[20, 30, 40]",
+            "en": "[20, 30, 40]"
+          },
+          {
+            "de": "[10, 20, 30]",
+            "en": "[10, 20, 30]"
+          },
+          {
+            "de": "[20, 30]",
+            "en": "[20, 30]"
+          },
+          {
+            "de": "[10, 20]",
+            "en": "[10, 20]"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Beim Ausschneiden `nums[1:3]` zählt man ab 0: Stelle 1 ist die 20. Das Ende ist „bis vor Stelle 3“, die 40 gehört also nicht mehr dazu. Übrig bleiben die Stellen 1 und 2: [20, 30]. Das Ende zählt nie mit.",
+          "en": "When slicing with `nums[1:3]` you count from 0: place 1 is the 20. The end means “up to before place 3”, so the 40 is not included. Places 1 and 2 are left: [20, 30]. The end never counts."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "[20, 30, 99] [10, 20, 30, 40, 50, 99]",
+            "en": "[20, 30, 99] [10, 20, 30, 40, 50, 99]"
+          },
+          {
+            "de": "[20, 30] [10, 20, 30, 40, 50]",
+            "en": "[20, 30] [10, 20, 30, 40, 50]"
+          },
+          {
+            "de": "[20, 30, 40, 99] [10, 20, 30, 40, 50]",
+            "en": "[20, 30, 40, 99] [10, 20, 30, 40, 50]"
+          },
+          {
+            "de": "[20, 30, 99] [10, 20, 30, 40, 50]",
+            "en": "[20, 30, 99] [10, 20, 30, 40, 50]"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`part` hat 2 Elemente, also stimmt `size == 2`, und die 99 wird an `part` angehängt. Ein Ausschnitt ist eine eigene Kopie: `nums` bleibt unverändert, `part` hat die 99. `print` zeigt beide Listen: [20, 30, 99] [10, 20, 30, 40, 50].",
+          "en": "`part` has 2 elements, so `size == 2` is true, and the 99 is appended to `part`. A slice is a copy of its own: `nums` stays unchanged, `part` has the 99. `print` shows both lists: [20, 30, 99] [10, 20, 30, 40, 50]."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Der Ausschnitt ist jetzt `nums[1:2]`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): The slice is now `nums[1:2]`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "[20] [10, 20, 30, 40, 50]",
+            "en": "[20] [10, 20, 30, 40, 50]"
+          },
+          {
+            "de": "[20, 99] [10, 20, 30, 40, 50]",
+            "en": "[20, 99] [10, 20, 30, 40, 50]"
+          },
+          {
+            "de": "[20, 30] [10, 20, 30, 40, 50]",
+            "en": "[20, 30] [10, 20, 30, 40, 50]"
+          },
+          {
+            "de": "[] [10, 20, 30, 40, 50]",
+            "en": "[] [10, 20, 30, 40, 50]"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`nums[1:2]` geht von Stelle 1 bis vor Stelle 2: nur die 20, also eine Liste mit einem Element. `size` ist 1, nicht 2, also wird nichts angehängt. `nums` bleibt wie es war: [20] [10, 20, 30, 40, 50].",
+          "en": "`nums[1:2]` goes from place 1 to before place 2: only the 20, a list with one element. `size` is 1, not 2, so nothing is appended. `nums` stays as it was: [20] [10, 20, 30, 40, 50]."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B schneidet nichts aus und gibt zweimal die ganze Liste aus",
+            "en": "B cuts out nothing and prints the whole list twice"
+          },
+          {
+            "de": "B schneidet bis zum Ende aus: size ist 4, nichts wird angehängt",
+            "en": "B slices to the end: size is 4, nothing is appended"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, nur das Ende fehlt",
+            "en": "B prints the same as A, only the end is missing"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil nach dem Doppelpunkt eine Zahl fehlt",
+            "en": "B stops with an error, because a number is missing after the colon"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Ist hinter dem Doppelpunkt nichts angegeben, geht der Ausschnitt bis zum Ende: `nums[1:]` ist `[20, 30, 40, 50]`. Das sind 4 Elemente, `size == 2` stimmt nicht, die 99 wird nicht angehängt. Ausgabe: [20, 30, 40, 50] [10, 20, 30, 40, 50].",
+          "en": "If nothing is written after the colon, the slice goes to the end: `nums[1:]` is `[20, 30, 40, 50]`. That is 4 elements, `size == 2` is false, and the 99 is not appended. Output: [20, 30, 40, 50] [10, 20, 30, 40, 50]."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Nur `nums` soll die 99 bekommen; `part` soll unverändert bleiben (`[20, 30]`). Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: Only `nums` must get the 99; `part` must stay unchanged (`[20, 30]`). What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    part.append(99)",
+            "en": "    part.append(99)"
+          },
+          {
+            "de": "    nums.append[99]",
+            "en": "    nums.append[99]"
+          },
+          {
+            "de": "    nums.append(99)",
+            "en": "    nums.append(99)"
+          },
+          {
+            "de": "    nums.append(part)",
+            "en": "    nums.append(part)"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Der Name vor dem Punkt sagt, welche Liste sich ändert: `nums.append(99)` hängt die 99 an `nums`, `part` bleibt eine Kopie ohne Änderung. Die Klammern gehören zum Aufruf.\n\n`part.append(99)` ändert die andere Liste (das war das alte Programm). `nums.append[99]` benutzt eckige Klammern, die man nur zum Zugreifen braucht, und `nums.append(part)` hängt die ganze Liste `part` als einen Eintrag an.",
+          "en": "The name before the dot says which list changes: `nums.append(99)` attaches the 99 to `nums`, and `part` stays a copy without changes. The round brackets belong to the call.\n\n`part.append(99)` changes the other list (that was the old program). `nums.append[99]` uses square brackets, which you only need for accessing, and `nums.append(part)` attaches the whole list `part` as a single entry."
+        }
+      }
+    ]
+  },
+  {
+    "id": "collections-03",
+    "topic": "collections",
+    "level": 2,
+    "code": "point = (3, 4)\nx = point[0]\ny = point[1]\nif x < y:\n    x, y = y, x\nprint(x, y)",
+    "variant": "point = (5, 2)\nx = point[0]\ny = point[1]\nif x < y:\n    x, y = y, x\nprint(x, y)",
+    "altered": "point = (3, 4)\nx = point[0]\ny = point[1]\nif x > y:\n    x, y = y, x\nprint(x, y)",
+    "requirement": [
+      6,
+      6
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `y` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `y` have after them?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "(3, 4)",
+            "en": "(3, 4)"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Ein Tupel wie `(3, 4)` ist eine feste Reihe von Werten. Man holt Teile mit der Stelle: `point[0]` ist die erste Zahl (3), `point[1]` die zweite (4). Also steckt in `y` die 4. Gezählt wird ab 0.",
+          "en": "A tuple like `(3, 4)` is a fixed row of values. You fetch parts with the place: `point[0]` is the first number (3), `point[1]` the second (4). So `y` holds the 4. Counting starts at 0."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "4 3",
+            "en": "4 3"
+          },
+          {
+            "de": "3 4",
+            "en": "3 4"
+          },
+          {
+            "de": "4 4",
+            "en": "4 4"
+          },
+          {
+            "de": "3 3",
+            "en": "3 3"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Ist 3 kleiner als 4? Ja, der `if`-Teil läuft. `x, y = y, x` tauscht beide Werte in einem Schritt: Python merkt sich erst beide rechten Werte und weist sie dann zu. Danach hat `x` die 4 und `y` die 3: 4 3.",
+          "en": "Is 3 smaller than 4? Yes, the `if` part runs. `x, y = y, x` swaps both values in one step: Python first notes both right-hand values and then assigns them. Afterwards `x` has the 4 and `y` the 3: 4 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Das Tupel ist jetzt `(5, 2)`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): The tuple is now `(5, 2)`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "2 5",
+            "en": "2 5"
+          },
+          {
+            "de": "5 2",
+            "en": "5 2"
+          },
+          {
+            "de": "5 5",
+            "en": "5 5"
+          },
+          {
+            "de": "2 2",
+            "en": "2 2"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Jetzt ist `x` 5 und `y` 2. Ist 5 kleiner als 2? Nein, die Bedingung ist falsch, der Tausch wird übersprungen. Die Werte bleiben, wie sie sind: 5 2. Das Programm tauscht nur, wenn die Reihenfolge „falsch“ ist.",
+          "en": "Now `x` is 5 and `y` is 2. Is 5 smaller than 2? No, the condition is false, so the swap is skipped. The values stay as they are: 5 2. The program only swaps if the order is “wrong”."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B tauscht immer und gibt 4 3 aus, wie A",
+            "en": "B always swaps and prints 4 3, like A"
+          },
+          {
+            "de": "B gibt 4 4 aus, weil x überschrieben wird",
+            "en": "B prints 4 4, because x is overwritten"
+          },
+          {
+            "de": "B tauscht bei 3 und 4 nicht und gibt 3 4 aus",
+            "en": "B does not swap with 3 and 4 and prints 3 4"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil ein Tupel nicht verglichen werden kann",
+            "en": "B stops with an error, because a tuple cannot be compared"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`>` dreht die Frage um: Ist 3 größer als 4? Nein. Der Tausch wird übersprungen, `x` bleibt 3 und `y` bleibt 4. Die Ausgabe ist 3 4, so wie die Zahlen im Tupel stehen. Das Tupel selbst wird dabei nie verändert, `x` und `y` sind nur Kopien der Werte.",
+          "en": "`>` turns the question around: is 3 bigger than 4? No. The swap is skipped, `x` stays 3 and `y` stays 4. The output is 3 4, as the numbers stand in the tuple. The tuple itself is never changed; `x` and `y` are only copies of the values."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Am Ende soll hinter `x` und `y` auch die Summe der beiden Zahlen stehen (`4 3 7`). Womit ersetzt du Zeile 6 (markiert)?",
+          "en": "New requirement: At the end the sum of the two numbers must stand behind `x` and `y` (`4 3 7`). What do you replace line 6 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "print(x + y)",
+            "en": "print(x + y)"
+          },
+          {
+            "de": "print(x, y, \"x + y\")",
+            "en": "print(x, y, \"x + y\")"
+          },
+          {
+            "de": "print(x, y, x, y)",
+            "en": "print(x, y, x, y)"
+          },
+          {
+            "de": "print(x, y, x + y)",
+            "en": "print(x, y, x + y)"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`print` kann mehrere Dinge zeigen, getrennt durch Kommas. Das dritte Ding soll die Summe sein, also `x + y`, ohne Anführungszeichen, damit gerechnet wird.\n\n`print(x + y)` zeigt nur die Summe und lässt `x` und `y` weg. Mit Anführungszeichen ist `\"x + y\"` nur ein Text. Und `x, y, x, y` zeigt die Werte doppelt, statt zu rechnen.",
+          "en": "`print` can show several things separated by commas. The third thing must be the sum, so `x + y` without quotation marks, so that Python calculates.\n\n`print(x + y)` shows only the sum and leaves out `x` and `y`. With quotation marks, `\"x + y\"` is just a text. And `x, y, x, y` shows the values twice instead of calculating."
+        }
+      }
+    ]
+  },
+  {
+    "id": "collections-04",
+    "topic": "collections",
+    "level": 2,
+    "code": "guests = [\"Ann\", \"Ben\"]\nwanted = \"Cy\"\npresent = wanted in guests\nif not present:\n    guests.append(wanted)\nprint(guests, len(guests))",
+    "variant": "guests = [\"Ann\", \"Ben\"]\nwanted = \"Ben\"\npresent = wanted in guests\nif not present:\n    guests.append(wanted)\nprint(guests, len(guests))",
+    "altered": "guests = [\"Ann\", \"Ben\"]\nwanted = \"Cy\"\npresent = wanted in guests\nif present:\n    guests.append(wanted)\nprint(guests, len(guests))",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `present` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `present` have after them?"
+        },
+        "choices": [
+          {
+            "de": "False",
+            "en": "False"
+          },
+          {
+            "de": "True",
+            "en": "True"
+          },
+          {
+            "de": "'Cy'",
+            "en": "'Cy'"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`wanted in guests` fragt: Steht `\"Cy\"` in der Liste? Die Liste enthält nur `\"Ann\"` und `\"Ben\"`, die Antwort ist also False. `in` prüft bei einer Liste, ob ein Element genau so darin vorkommt.",
+          "en": "`wanted in guests` asks: is `\"Cy\"` in the list? The list only holds `\"Ann\"` and `\"Ben\"`, so the answer is False. With a list, `in` checks whether an element appears in it exactly like that."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "['Ann', 'Ben'] 2",
+            "en": "['Ann', 'Ben'] 2"
+          },
+          {
+            "de": "['Ann', 'Ben', 'Cy'] 3",
+            "en": "['Ann', 'Ben', 'Cy'] 3"
+          },
+          {
+            "de": "['Ann', 'Ben', 'Cy'] 2",
+            "en": "['Ann', 'Ben', 'Cy'] 2"
+          },
+          {
+            "de": "['Cy'] 1",
+            "en": "['Cy'] 1"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`present` ist `False`, also ist `not present` wahr, und der `if`-Teil läuft: `Cy` wird hinten angehängt. Die Liste hat jetzt 3 Gäste. `print` zeigt die Liste und danach ihre Länge: ['Ann', 'Ben', 'Cy'] 3.",
+          "en": "`present` is `False`, so `not present` is true, and the `if` part runs: `Cy` is attached at the back. The list now has 3 guests. `print` shows the list and then its length: ['Ann', 'Ben', 'Cy'] 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `wanted` ist jetzt `\"Ben\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `wanted` is now `\"Ben\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "['Ann', 'Ben', 'Ben'] 3",
+            "en": "['Ann', 'Ben', 'Ben'] 3"
+          },
+          {
+            "de": "['Ben'] 1",
+            "en": "['Ben'] 1"
+          },
+          {
+            "de": "['Ann', 'Ben'] 2",
+            "en": "['Ann', 'Ben'] 2"
+          },
+          {
+            "de": "['Ann', 'Ben', 'Cy'] 3",
+            "en": "['Ann', 'Ben', 'Cy'] 3"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`Ben` steht schon in der Liste, `present` ist `True`, und `not present` ist falsch. Der `if`-Teil wird übersprungen, `Ben` wird nicht noch einmal angehängt. Die Liste bleibt unverändert: ['Ann', 'Ben'] 2.",
+          "en": "`Ben` is already in the list, `present` is `True`, and `not present` is false. The `if` part is skipped, and `Ben` is not appended a second time. The list stays unchanged: ['Ann', 'Ben'] 2."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B hängt Cy doppelt an und gibt 4 als Länge aus",
+            "en": "B appends Cy twice and prints 4 as the length"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, not ist nur Verzierung",
+            "en": "B prints the same as A, not is only decoration"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil present hier kein Ja/Nein ist",
+            "en": "B stops with an error, because present is not a yes/no here"
+          },
+          {
+            "de": "B hängt Cy nicht an und gibt ['Ann', 'Ben'] 2 aus",
+            "en": "B does not append Cy and prints ['Ann', 'Ben'] 2"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Ohne `not` läuft der `if`-Teil nur, wenn der Gast schon in der Liste steht. Cy steht nicht drin, also wird nichts angehängt. Die Liste bleibt bei zwei Gästen: ['Ann', 'Ben'] 2. Das Programm macht jetzt das Gegenteil von A.",
+          "en": "Without `not`, the `if` part only runs when the guest is already in the list. Cy is not in it, so nothing is appended. The list stays at two guests: ['Ann', 'Ben'] 2. The program now does the opposite of A."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Neue Gäste sollen ganz vorne in der Liste stehen (an Stelle 0), nicht hinten. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: New guests must be at the very front of the list (at place 0), not at the back. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    guests.insert(0, wanted)",
+            "en": "    guests.insert(0, wanted)"
+          },
+          {
+            "de": "    guests.append(0, wanted)",
+            "en": "    guests.append(0, wanted)"
+          },
+          {
+            "de": "    guests[0] = wanted",
+            "en": "    guests[0] = wanted"
+          },
+          {
+            "de": "    guests.insert(wanted, 0)",
+            "en": "    guests.insert(wanted, 0)"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`insert(stelle, wert)` setzt den Wert an eine bestimmte Stelle: erst die Stelle (0 = ganz vorn), dann der Wert. Alle anderen rücken nach hinten, nichts geht verloren.\n\n`append` hat nur einen Wert und kennt keine Stelle (zwei Dinge in den Klammern sind ein Fehler). `guests[0] = wanted` ersetzt `Ann` durch `Cy`. Und bei `insert(wanted, 0)` sind Stelle und Wert vertauscht.",
+          "en": "`insert(place, value)` puts the value at a certain place: first the place (0 = the very front), then the value. All others move back, nothing is lost.\n\n`append` takes only one value and knows no place (two things in the brackets are an error). `guests[0] = wanted` replaces `Ann` with `Cy`. And with `insert(wanted, 0)` place and value are swapped."
+        }
+      }
+    ]
+  },
+  {
+    "id": "collections-05",
+    "topic": "collections",
+    "level": 3,
+    "code": "queue = [\"Ann\", \"Ben\", \"Cy\"]\nfirst = queue.pop(0)\nqueue.append(first)\nif queue[0] == \"Ben\":\n    queue.insert(1, \"Dee\")\nprint(queue)",
+    "variant": "queue = [\"Ann\", \"Ben\", \"Cy\"]\nfirst = queue.pop()\nqueue.append(first)\nif queue[0] == \"Ben\":\n    queue.insert(1, \"Dee\")\nprint(queue)",
+    "altered": "queue = [\"Ann\", \"Ben\", \"Cy\"]\nfirst = queue.pop(0)\nqueue.append(first)\nif queue[0] == \"Ben\":\n    queue.append(\"Dee\")\nprint(queue)",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `queue` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `queue` have after them?"
+        },
+        "choices": [
+          {
+            "de": "['Ann', 'Ben', 'Cy']",
+            "en": "['Ann', 'Ben', 'Cy']"
+          },
+          {
+            "de": "['Ben', 'Cy']",
+            "en": "['Ben', 'Cy']"
+          },
+          {
+            "de": "['Ann', 'Ben', 'Cy', 'Ann']",
+            "en": "['Ann', 'Ben', 'Cy', 'Ann']"
+          },
+          {
+            "de": "['Ben', 'Cy', 'Ann']",
+            "en": "['Ben', 'Cy', 'Ann']"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Die Liste ist eine Warteschlange. `pop(0)` nimmt den Ersten (Ann) heraus und gibt ihn zurück; er ist weg aus der Liste: `Ben, Cy`. Dann hängt `append` Ann hinten wieder an. Die Schlange ist jetzt ['Ben', 'Cy', 'Ann']: Ann hat sich hinten angestellt.",
+          "en": "The list is a queue. `pop(0)` takes the first one (Ann) out and hands him back; he is gone from the list: `Ben, Cy`. Then `append` adds Ann at the back again. The queue is now ['Ben', 'Cy', 'Ann']: Ann went to the back."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "['Ben', 'Dee', 'Cy', 'Ann']",
+            "en": "['Ben', 'Dee', 'Cy', 'Ann']"
+          },
+          {
+            "de": "['Dee', 'Ben', 'Cy', 'Ann']",
+            "en": "['Dee', 'Ben', 'Cy', 'Ann']"
+          },
+          {
+            "de": "['Ben', 'Cy', 'Dee', 'Ann']",
+            "en": "['Ben', 'Cy', 'Dee', 'Ann']"
+          },
+          {
+            "de": "['Ben', 'Cy', 'Ann']",
+            "en": "['Ben', 'Cy', 'Ann']"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Vorne steht jetzt Ben, die Bedingung stimmt. `insert(1, \"Dee\")` schiebt Dee auf Platz 1, das ist der zweite Platz (gezählt wird ab 0). Alle dahinter rücken eins weiter. Dee steht also zwischen Ben und Cy: ['Ben', 'Dee', 'Cy', 'Ann'].",
+          "en": "Ben is at the front now, so the condition is true. `insert(1, \"Dee\")` pushes Dee in at place 1, the second place (counting starts at 0). Everyone behind moves up one. So Dee stands between Ben and Cy: ['Ben', 'Dee', 'Cy', 'Ann']."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `pop()` hat jetzt keine Zahl mehr in den Klammern. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `pop()` now has no number in the brackets. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "['Ben', 'Cy', 'Ann']",
+            "en": "['Ben', 'Cy', 'Ann']"
+          },
+          {
+            "de": "['Ann', 'Ben', 'Cy']",
+            "en": "['Ann', 'Ben', 'Cy']"
+          },
+          {
+            "de": "['Ann', 'Ben', 'Dee', 'Cy']",
+            "en": "['Ann', 'Ben', 'Dee', 'Cy']"
+          },
+          {
+            "de": "['Ann', 'Ben']",
+            "en": "['Ann', 'Ben']"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Ohne Zahl nimmt `pop()` den Letzten heraus, nicht den Ersten: Cy. Danach hängt `append` Cy gleich wieder hinten an, es ändert sich nichts: `Ann, Ben, Cy`. Vorne steht Ann, nicht Ben. Die Bedingung stimmt nicht, `insert` wird übersprungen. Ausgabe: ['Ann', 'Ben', 'Cy'].",
+          "en": "Without a number `pop()` takes out the last one, not the first: Cy. Then `append` puts Cy straight back at the end, so nothing changes: `Ann, Ben, Cy`. Ann is at the front, not Ben. The condition is false, `insert` is skipped. Output: ['Ann', 'Ben', 'Cy']."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt dasselbe aus wie A, denn Dee kommt in beiden zur Liste",
+            "en": "B prints the same as A, because Dee joins the list in both"
+          },
+          {
+            "de": "B stellt Dee ganz vorne an und gibt ['Dee', 'Ben', 'Cy', 'Ann'] aus",
+            "en": "B puts Dee at the very front and prints ['Dee', 'Ben', 'Cy', 'Ann']"
+          },
+          {
+            "de": "B stellt Dee hinten an und gibt ['Ben', 'Cy', 'Ann', 'Dee'] aus",
+            "en": "B puts Dee at the back and prints ['Ben', 'Cy', 'Ann', 'Dee']"
+          },
+          {
+            "de": "B lässt Dee weg, weil append nur Zahlen annimmt",
+            "en": "B leaves Dee out, because append only takes numbers"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`insert(1, ...)` setzt ein Ding auf einen bestimmten Platz mitten in die Liste. `append(...)` hängt es immer hinten an. In B steht Dee also nach Ann am Ende. Die anderen ändern ihre Plätze nicht. Ausgabe: ['Ben', 'Cy', 'Ann', 'Dee'].",
+          "en": "`insert(1, ...)` puts a thing at a certain place in the middle of the list. `append(...)` always adds it at the end. So in B Dee stands at the end, after Ann. The others do not change places. Output: ['Ben', 'Cy', 'Ann', 'Dee']."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Dee soll ganz vorne in der Schlange stehen; alle anderen bleiben in ihrer Reihenfolge dahinter. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: Dee must stand at the very front of the queue; everyone else stays behind in the same order. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    queue.insert(1, \"Dee\")",
+            "en": "    queue.insert(1, \"Dee\")"
+          },
+          {
+            "de": "    queue.append(\"Dee\")",
+            "en": "    queue.append(\"Dee\")"
+          },
+          {
+            "de": "    queue[0] = \"Dee\"",
+            "en": "    queue[0] = \"Dee\""
+          },
+          {
+            "de": "    queue.insert(0, \"Dee\")",
+            "en": "    queue.insert(0, \"Dee\")"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Platz 0 ist der erste Platz. `insert(0, \"Dee\")` schiebt Dee dort hinein, und alle anderen rücken einen Platz nach hinten.\n\n`insert(1, ...)` ist der zweite Platz, `append` ganz hinten. `queue[0] = \"Dee\"` stellt niemanden dazu, es ersetzt den Ersten: Ben wäre weg.",
+          "en": "Place 0 is the first place. `insert(0, \"Dee\")` pushes Dee in there, and everyone else moves back one place.\n\n`insert(1, ...)` is the second place, `append` the very end. `queue[0] = \"Dee\"` adds nobody, it replaces the first one: Ben would be gone."
+        }
+      }
+    ]
+  },
+  {
+    "id": "collections-06",
+    "topic": "collections",
+    "level": 1,
+    "code": "mine = [\"pen\", \"ink\"]\nyours = [\"cap\"]\nboth = mine + yours\nif len(both) > 3:\n    print(\"lots\", len(both))\nelse:\n    print(both)",
+    "variant": "mine = [\"pen\", \"ink\"]\nyours = [\"cap\", \"bag\"]\nboth = mine + yours\nif len(both) > 3:\n    print(\"lots\", len(both))\nelse:\n    print(both)",
+    "altered": "mine = [\"pen\", \"ink\"]\nyours = [\"cap\"]\nboth = yours + mine\nif len(both) > 3:\n    print(\"lots\", len(both))\nelse:\n    print(both)",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `both` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `both` have after them?"
+        },
+        "choices": [
+          {
+            "de": "['pen', 'ink', 'cap']",
+            "en": "['pen', 'ink', 'cap']"
+          },
+          {
+            "de": "['pen', 'ink', ['cap']]",
+            "en": "['pen', 'ink', ['cap']]"
+          },
+          {
+            "de": "['pen', 'ink']",
+            "en": "['pen', 'ink']"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Bei Listen klebt `+` die Einträge hintereinander: erst alles aus `mine`, dann alles aus `yours`. Es kommt eine neue, längere Liste heraus: ['pen', 'ink', 'cap']. Keine Zahlen werden gerechnet.",
+          "en": "With lists, `+` sticks the entries one after the other: first everything from `mine`, then everything from `yours`. A new, longer list comes out: ['pen', 'ink', 'cap']. No numbers are calculated."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "lots 3",
+            "en": "lots 3"
+          },
+          {
+            "de": "['pen', 'ink', 'cap']",
+            "en": "['pen', 'ink', 'cap']"
+          },
+          {
+            "de": "lots 4",
+            "en": "lots 4"
+          },
+          {
+            "de": "['pen', 'ink']",
+            "en": "['pen', 'ink']"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`both` hat 3 Einträge, und 3 ist nicht größer als 3. Also läuft der `else`-Teil und die Liste wird gedruckt: ['pen', 'ink', 'cap'].",
+          "en": "`both` has 3 entries, and 3 is not bigger than 3. So the `else` part runs and the list is printed: ['pen', 'ink', 'cap']."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `yours` hat jetzt zwei Einträge: \"cap\" und \"bag\". Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `yours` now has two entries: \"cap\" and \"bag\". What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "['pen', 'ink', 'cap', 'bag']",
+            "en": "['pen', 'ink', 'cap', 'bag']"
+          },
+          {
+            "de": "lots 3",
+            "en": "lots 3"
+          },
+          {
+            "de": "lots 4",
+            "en": "lots 4"
+          },
+          {
+            "de": "['pen', 'ink', 'cap']",
+            "en": "['pen', 'ink', 'cap']"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "2 + 2 Einträge ergeben eine Liste mit 4. Jetzt ist 4 größer als 3, also läuft der `if`-Teil. Gedruckt wird nur das Wort und die Anzahl, nicht die Liste. Ausgabe: lots 4.",
+          "en": "2 + 2 entries make a list of 4. Now 4 is bigger than 3, so the `if` part runs. Only the word and the count are printed, not the list. Output: lots 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt dasselbe aus wie A, die Reihenfolge ist beim Plus egal",
+            "en": "B prints the same as A, the order does not matter with plus"
+          },
+          {
+            "de": "B gibt lots 3 aus, weil die Listen getauscht sind",
+            "en": "B prints lots 3, because the lists are swapped"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil man Listen nicht addieren darf",
+            "en": "B stops with an error, because lists may not be added"
+          },
+          {
+            "de": "B setzt cap an den Anfang und gibt ['cap', 'pen', 'ink'] aus",
+            "en": "B puts cap at the front and prints ['cap', 'pen', 'ink']"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Beim Zusammenkleben zählt die Reihenfolge: Was links vom `+` steht, kommt zuerst. In B steht `yours` vorn, also kommt `cap` zuerst. Die Länge bleibt 3, also läuft der `else`-Teil. Ausgabe: ['cap', 'pen', 'ink'].",
+          "en": "When sticking lists together, the order counts: what is left of the `+` comes first. In B `yours` is in front, so `cap` comes first. The length stays 3, so the `else` part runs. Output: ['cap', 'pen', 'ink']."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Ganz hinten in `both` soll noch \"bag\" stehen. Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: \"bag\" must be at the very end of `both` as well. What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "both = mine + yours + [\"bag\"]",
+            "en": "both = mine + yours + [\"bag\"]"
+          },
+          {
+            "de": "both = mine + [\"bag\"] + yours",
+            "en": "both = mine + [\"bag\"] + yours"
+          },
+          {
+            "de": "both = mine + yours + \"bag\"",
+            "en": "both = mine + yours + \"bag\""
+          },
+          {
+            "de": "both = mine + yours, \"bag\"",
+            "en": "both = mine + yours, \"bag\""
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`[\"bag\"]` ist eine Liste mit einem Eintrag. Hinten mit `+` angeklebt landet er ganz am Ende.\n\n`mine + [\"bag\"] + yours` legt \"bag\" in die Mitte. Ohne eckige Klammern ist \"bag\" Text, und eine Liste lässt sich nicht mit Text addieren. Mit dem Komma entsteht ein Paar aus zwei Dingen, keine Liste.",
+          "en": "`[\"bag\"]` is a list with one entry. Stuck on with `+` at the back, it lands at the very end.\n\n`mine + [\"bag\"] + yours` puts \"bag\" in the middle. Without square brackets \"bag\" is text, and a list cannot be added to text. The comma makes a pair of two things, not a list."
+        }
+      }
+    ]
+  }
+]

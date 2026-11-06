@@ -13,7 +13,7 @@ when a requirement changes; the code, tests and the other docs follow it.
 
 ## Lessons
 
-Home offers three lessons and four games. The first two use the same quiz screen, answer feedback,
+Home offers the daily challenge, three lessons and four games. The three lessons use the same quiz screen, answer feedback,
 explanations, hydra, resume and stats rules (below); they differ in which
 questions a session asks.
 
@@ -21,10 +21,81 @@ questions a session asks.
 | --------- | ---------------------------------- | ----------------------------------------------------------------------- |
 | `mixed`   | Quiz / Quiz                        | 10 random questions from the 80 (see Quiz session)                      |
 | `functions` | Funktionen lesen / Reading functions | one function read line by line: one question per line, in order, then one about the whole function |
+| `diff`    | Finde den Unterschied / Spot the difference | 10 random questions from the 71 "spot the difference" questions (see below) |
 | game      | Hydra auf Fischfang / Hydra goes fishing | the hydra game: its own screen and progress (see below) |
 | hunt      | Hydra-Jagd / Hydra hunt            | the warrior game: same screen, its own world, levels and progress (see below) |
 | order     | Code-Puzzle / Code puzzle          | the warrior's world, but the lines of the program are to be put in order (see below) |
 | predict   | Was sagt die Hydra? / What does the hydra say? | read a short program and type what it prints (see below) |
+
+### Daily challenge (`daily`, "Tages-Challenge")
+
+(Not to be confused with the daily *tasks* of the points system.)
+
+- One short program a day, the same for everyone on that local date, and five
+  multiple-choice questions that follow the code as it changes, easy to hard:
+  1. **Trace:** only the first 3 lines are shown; "what value does `x` have after them?"
+  2. **Extend:** the whole program, the new lines marked (green bar and `+`); "what does it print?"
+  3. **What if:** one line changed (marked); what does it print now?
+  4. **Difference:** version A (the program) and B (one change), side by side like Spot the difference; what does B do differently?
+  5. **New requirement:** a requirement in words; which replacement of the marked line(s) fulfils it? The choices are code.
+- Every step is an ordinary 4-choice question with a de + en explanation, shown with the quiz screen
+  (feedback, explanation, hydra with 5 heads, keys 1-4). A wrong answer does not end the challenge.
+  The button on the question screen reads "Pause" and keeps the run.
+- **Pick of the day:** `dailyIndex(day, pool)` (`web/src/daily/select.ts`, pure, tested), the same for everyone on a
+  local date. A gentle start in two parts:
+  - **Intro week:** 7 extra snippets `intro-01`..`intro-07` (`level` 0, `content/daily/intro.json`) are played one per
+    day from `INTRO_START = '2026-11-06'` (2026-11-06..2026-11-12), in this order: variables and assignment,
+    `+ - *`, text with `+` and `len`, `if`/`else` with one comparison, `for ... in range(3)`, a small list
+    (index, `append`, `len`), a function with one parameter and `return`. 4-7 lines, ONE idea each, numbers up to
+    15, no f-strings, slicing, `while`, `import`, `elif`, `and`/`or`/`not` (tested); easy questions, short
+    explanations, a one-line change in step 5. They are NOT part of the regular cycle, so a returning player never
+    gets an "x = 1" day again.
+  - **Regular cycle** (levels 1-3, 45 snippets) from 2026-11-13 on: played in cycles of the pool size, each cycle in
+    another fixed seeded shuffle **inside a level**, easy to hard: first all level 1, then 2, then 3 (21 / 16 / 8).
+    Nothing repeats before the pool is used up and two days in a row (also across the intro week and a cycle border)
+    never share a topic. A new player who joins later simply gets today's snippet of the global cycle (so at worst a
+    level 3 day in the last quarter of a cycle); the same date gives the same snippet on every device. Dates before
+    the launch date use the cycles backwards (no topic guarantee across their borders).
+  - Levels: 1 = one idea, 2 = typical, 3 = harder (slicing + f-strings, `break`, `dict.get` counting, set
+    operations, `pop`/`insert`, functions that print instead of returning, `elif` chains with indented updates).
+    Level 3: strings-05, loops-04, loops-05, collections-05, dicts-sets-03, dicts-sets-04, functions-04,
+    control-flow-04.
+- **Content:** 45 regular snippets in `web/src/content/daily/<topic>.json` (types 4, operators 5, strings 6,
+  control-flow 6, loops 7, collections 6, dicts-sets 6, functions 5), ids `<topic>-NN`, each with `level` 1-3, 5-9
+  lines, all lines at most 40 characters, plus the 7 intro snippets (4-7 lines). A snippet holds the program (`code`), `variant` (step 3), `altered` (step 4), the replaced
+  `requirement` lines and the five steps; the programs shown are derived from them, so step 1 is always the first 3
+  lines of step 2. Every value, output and every requirement choice was verified by running the code with
+  `python3` (the right choice meets all checks, each wrong one fails at least one). Wrong choices are typical
+  beginner mistakes; the right choice is not systematically the longest (tested).
+- **One attempt a day** counts: the result (5 booleans) is locked after the last answer and shown on Home
+  ("Noch nicht gespielt" / "Läuft: 3/5" / "Heute geschafft: 4/5") and on the end screen: score x/5, the hydra, the
+  challenge streak and a share line `Pydra Daily 2026-11-07 🐉🐉🐲🐉🐲 4/5` (🐉 right, 🐲 wrong) with a "Copy"
+  button (clipboard API, fallback `execCommand`) and a status message. Afterwards the player may replay the day for
+  practice: no XP, no change to the locked result (the last practice score is shown).
+- **Resume:** the run is saved after every answer and reopened on launch like a quiz; a run of an earlier day is
+  dropped. An app update waits while the challenge screen is open.
+- **Points:** see "Points, levels and achievements". The challenge pays no `q:` XP and does not count towards the
+  daily *tasks* (they are about the quiz and the games).
+
+### Spot the difference (`diff`)
+
+- Every question shows two short Python snippets: version A (the original)
+  and version B (the same code with one small change), each 1-5 lines. The
+  prompt asks what B does differently; four choices (shuffled), one right,
+  wrong ones are typical beginner misconceptions. Quiz screen, feedback,
+  explanations, hydra heads, 10-question sessions, resume, stats and points
+  are those of the quiz; only the question pool differs.
+- The snippets are labelled "Version A (Original)" / "Version B (geändert)"
+  and sit side by side where there is room and stacked on phones (360 px).
+  They are highlighted like quiz code blocks; the lines that differ between
+  A and B are tinted with a yellow bar (the labels name the versions, so
+  colour is not the only signal).
+- Content: 71 questions in the same 8 topics, in
+  `web/src/content/diff/<topic>.json`, ids `diff-<topic>-NN` (unique across
+  all questions, so XP is paid once per question). Same shape as a question
+  plus `codeB` (`code` is version A). Every claimed output was checked by
+  running both snippets with `python3`.
+- The header shows the topic. Counters in `counters.diff`.
 
 ### Reading functions (walkthroughs)
 
@@ -236,6 +307,7 @@ questions a session asks.
     topic: Topic;
     prompt: { de: string; en: string };
     code?: string;
+    codeB?: string;          // spot the difference only: version B (`code` is A)
     choices: { de: string; en: string }[]; // length 4
     answerIndex: 0 | 1 | 2 | 3;
     explanation: { de: string; en: string };
@@ -304,12 +376,15 @@ a way home.
   Feedback.
   - Quiz: e.g. "12 sessions · best 9/10 · 74% correct"; a friendly line when
     no session has been played yet.
+  - Spot the difference: like the quiz (e.g. "1 session · best 9/10 · 90% correct").
   - Reading functions: e.g. "2 of 4 functions read · 80% correct"; "No
     function read yet." before the first answer.
   - Hydra goes fishing and Hydra hunt: e.g. "3 of 19 levels solved · 60%
     correct" (share of right picks); "No level played yet." before the
     first pick.
+- **Daily challenge card:** the first card of Home, above Lessons, with its state line (`start-daily`, `stats-daily`).
 - **Quiz:** as above.
+- **Daily challenge:** the quiz screen with the code of the step; after the last answer the result screen (see above).
 - **Game:** as above, with a back button to Home (pushed onto the history
   like Settings).
 - **Summary:** as above.
@@ -339,8 +414,9 @@ defensively: corrupt or foreign data is ignored and never throws.
 - the in-progress session;
 - lifetime counters per lesson: sessions played, best score, total answers,
   total correct (`counters` for the quiz, `counters.functions` for reading
-  functions);
+  functions, `counters.diff` for spot the difference);
 - the games' progress (`game`, `hunt` and `order`, see the games above);
+- the daily challenge (`daily`: the run in progress `{day, snippet, practice, items, index}`, the locked `result` and the last `practice` round, each `{day, snippet, right[5]}`), parsed defensively; Reset progress wipes it;
 - the last result (lesson, score, total) for the summary;
 - per-question stats `{ seen, correct, lastSeen }` keyed by question id
   (collected now, not yet used to pick questions);
@@ -358,11 +434,22 @@ nothing is sent. Code: `web/src/points/`.
   round with every answer right pays 25 XP, once a day. Replays pay nothing,
   like they never change a game's score. Everything but daily tasks is
   multiplied by the streak bonus: +10 % per day in a row, at most +70 %.
-- **Streak.** A day counts when a question was answered right or a level solved.
+- **Daily challenge.** Finishing it pays 50 XP plus 10 per step answered right (so 50-100), once per local day
+  (id `d:<day>`, replays and practice pay nothing), with the streak bonus. It counts as activity for the streak.
+  A separate challenge streak counts consecutive days finished (`challenge`, `bestChallenge`, `challenges` in the points).
+- **Streak.** A day counts when a question was answered right or a level solved (or the daily challenge finished).
   It is broken when neither today nor yesterday counts.
-- **Player level.** Level n starts at `round(100 * (n - 1)^1.5)` XP (level 2:
-  100, level 5: 800, level 10: 2700). Levels 1-10 carry a title (Hydra-Ei …
-  Hydra-Meister); higher levels keep the last one.
+- **Player level.** Level n starts at `round(180 * (n - 1)^1.5)` XP (level 2:
+  180, level 10: 4860, level 25: 21,164, level 50: 61,740). Levels 1-50 each carry
+  their own title (Hydra-Ei … Ewige Hydra); higher levels keep the last one. The
+  curve is tuned for a player who answers 10 questions right every day without
+  breaking the streak: 10 × 10 XP × the streak bonus (+10 % a day up to +70 %) is
+  110 XP on day 1, 170 XP from day 7 on, 4890 XP after 30 days (level 10) and
+  61,840 XP after 365 days (level 50, the last title). Each title takes a few days
+  early on and about 11 days near the end. Only the first right answer of a
+  question pays, so a year of daily XP in this amount comes from the daily
+  challenge (up to 100 XP, plus the bonus) and the daily tasks, not from
+  answering the same questions again.
 - **Daily tasks.** Up to three per local day, made on the first activity or
   visit of the day and the same all day: right quiz answers, levels solved in
   any game, levels solved in one game (only games with unsolved levels, and
@@ -370,8 +457,8 @@ nothing is sent. Code: `web/src/points/`.
   the last 7 days (+20 %, but +0 % when under 60 % of the answers were right),
   within 3-20 answers and 1-6 levels; new players get 5 and 2. Each task done
   pays 50 XP.
-- **Achievements.** 21, in bronze, silver and gold (gold = rare): answers,
-  levels, streak, perfect rounds, daily tasks, player level, and every level of
+- **Achievements.** 24, in bronze, silver and gold (gold = rare): answers,
+  levels, streak, perfect rounds, daily tasks, the daily challenge (first one, 7 days in a row [gold], 30 finished [gold]), player level (10 and 50 [gold]), and every level of
   one game. The profile shows the earned ones with their date; the rarest earned
   title appears under the level.
 - **Profile** (`#/profile`, from the chip on Home): name (1-20 characters,
@@ -470,7 +557,8 @@ Hono on Node 24 with `node:sqlite`. API types and validation live in
     - the game's interpreter, world simulation and progress, and every
       level: the right answer solves it, each wrong answer fails with its
       own behaviour, and no note of a wrong answer names the right one;
-    - a content validation test over all 80 questions.
+    - a content validation test over all 80 questions;
+    - the daily challenge: pool validation, the pick of the day, the run, its saved data, XP, streak and achievements.
   - **Playwright e2e,** against the built app served by the Node server:
     - a full 10-question run, including the hydra heads and the summary hydra;
     - slashed and regrown heads, restored after a reload without animation;

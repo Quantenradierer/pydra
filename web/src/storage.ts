@@ -138,6 +138,15 @@ export class AppStorage {
     this.write(key, progress);
   }
 
+  /** The daily challenge's saved data, raw: daily/challenge.ts parses it. */
+  dailyData(): unknown {
+    return this.read('daily');
+  }
+
+  setDailyData(data: unknown) {
+    this.write('daily', data);
+  }
+
   /** How fast the game plays a run; a setting, so Reset progress keeps it. */
   gameSpeed(): GameSpeed {
     const speed = this.read('gameSpeed');
@@ -179,9 +188,9 @@ export class AppStorage {
     else this.write('feedbackQueue', queue);
   }
 
-  /** Wipes stats, counters, points, any session and every hydra game's progress; keeps the language, the player name and unsent feedback. */
+  /** Wipes stats, counters, points, any session, the daily challenge and every hydra game's progress; keeps the language, the player name and unsent feedback. */
   resetProgress() {
-    for (const key of ['session', ...LESSONS.map(countersKey), 'questionStats', 'lastResult', 'points', ...GAME_DATA_KEYS]) this.remove(key);
+    for (const key of ['session', ...LESSONS.map(countersKey), 'questionStats', 'lastResult', 'points', 'daily', ...GAME_DATA_KEYS]) this.remove(key);
   }
 }
 

@@ -172,4 +172,13 @@ describe('lessons', () => {
       expect(parseSession(JSON.parse(JSON.stringify(raw)), CONTENT), JSON.stringify(raw)).toBeUndefined();
     }
   });
+
+  it('builds diff sessions from the diff pool only, and keeps them apart from mixed', () => {
+    const session = buildSession(CONTENT.diff, seeded(7), 'diff');
+    expect(session.lesson).toBe('diff');
+    expect(parseSession(JSON.parse(JSON.stringify(session)), CONTENT)).toEqual(session);
+    expect(parseSession(JSON.parse(JSON.stringify({ ...session, lesson: 'mixed' })), CONTENT)).toBeUndefined();
+    const quizAsDiff = { ...buildSession(QUESTIONS, seeded(8)), lesson: 'diff' };
+    expect(parseSession(JSON.parse(JSON.stringify(quizAsDiff)), CONTENT)).toBeUndefined();
+  });
 });

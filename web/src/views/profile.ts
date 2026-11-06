@@ -1,7 +1,7 @@
 import type { App, Screen } from '../app.ts';
 import { ACHIEVEMENTS, showcase, type Achievement } from '../points/achievements.ts';
 import { streakMultiplier, XP } from '../points/engine.ts';
-import { levelInfo } from '../points/levels.ts';
+import { levelInfo, titleKey } from '../points/levels.ts';
 import { currentStreak, dayKey } from '../points/state.ts';
 import { h } from '../dom.ts';
 import type { MessageKey } from '../i18n.ts';
@@ -57,7 +57,7 @@ export function profileScreen(app: App): Screen {
   const levelCard = h(
     'section',
     { class: 'level-card', 'aria-labelledby': 'level-heading' },
-    h('h2', { id: 'level-heading', 'data-testid': 'profile-level' }, t('home.level', { n: info.level, title: t(`level.title.${info.title}`) })),
+    h('h2', { id: 'level-heading', 'data-testid': 'profile-level' }, t('home.level', { n: info.level, title: t(titleKey(info.title)) })),
     title ? h('p', { class: 'showcase' }, t(`ach.${title.id}.title` as MessageKey)) : null,
     h('progress', { max: info.span, value: info.into, 'aria-label': t('profile.xp', { into: info.into, span: info.span }) }),
     h('p', { class: 'hint' }, t('profile.xp', { into: info.into, span: info.span })),

@@ -1,10 +1,11 @@
+import type { DailyChallenge } from './daily/challenge.ts';
 import type { FeedbackQueue } from './feedback/queue.ts';
 import type { Game } from './game/game.ts';
 import type { HuntLevel } from './game/hunt-levels.ts';
 import type { OrderGame } from './game/order.ts';
 import type { PredictGame } from './game/predict.ts';
 import { h } from './dom.ts';
-import { levelInfo } from './points/levels.ts';
+import { levelInfo, titleKey } from './points/levels.ts';
 import type { DailyTask } from './points/state.ts';
 import { translate, type Lang, type MessageKey, type Params } from './i18n.ts';
 import type { InstallPrompt } from './install.ts';
@@ -13,6 +14,7 @@ import type { PointsService } from './points/service.ts';
 import type { AppStorage } from './storage.ts';
 import type { Trainer } from './trainer.ts';
 import type { UpdateManager } from './update.ts';
+import { dailyScreen } from './views/daily.ts';
 import { feedbackScreen } from './views/feedback.ts';
 import { gameScreen } from './views/game.ts';
 import { huntScreen } from './views/hunt.ts';
@@ -24,7 +26,7 @@ import { quizScreen } from './views/quiz.ts';
 import { settingsScreen } from './views/settings.ts';
 import { summaryScreen } from './views/summary.ts';
 
-export const ROUTES = ['home', 'quiz', 'summary', 'settings', 'feedback', 'game', 'hunt', 'order', 'predict', 'profile'] as const;
+export const ROUTES = ['home', 'quiz', 'summary', 'settings', 'feedback', 'game', 'hunt', 'order', 'predict', 'profile', 'daily'] as const;
 export type Route = (typeof ROUTES)[number];
 
 /** What a view renders; dispose() removes listeners when the screen is left. */
@@ -38,6 +40,7 @@ export interface Screen {
 export interface Services {
   storage: AppStorage;
   trainer: Trainer;
+  daily: DailyChallenge;
   game: Game;
   hunt: Game<HuntLevel>;
   order: OrderGame;
@@ -59,6 +62,7 @@ const VIEWS: Record<Route, (app: App) => Screen> = {
   order: orderScreen,
   predict: predictScreen,
   profile: profileScreen,
+  daily: dailyScreen,
 };
 
 /** The hydra games' screens. */
@@ -88,7 +92,7 @@ export class App {
   private toast(result: PointsResult) {
     const lines: string[] = [];
     if (result.gained > 0) lines.push(this.t('points.gained', { n: result.gained }));
-    if (result.levelUp) lines.push(this.t('points.levelUp', { n: result.levelUp, title: this.t(`level.title.${levelInfo(this.services.points.state().total).title}`) }));
+    if (result.levelUp) lines.push(this.t('points.levelUp', { n: result.levelUp, title: this.t(titleKey(levelInfo(this.services.points.state().total).title)) }));
     for (const task of result.tasks) lines.push(this.t('points.taskDone', { task: this.taskLabel(task) }));
     for (const id of result.achievements) lines.push(this.t('points.achievement', { title: this.t(`ach.${id}.title` as MessageKey) }));
     if (lines.length === 0) return;
@@ -115,6 +119,7 @@ export class App {
   start() {
     addEventListener('popstate', () => this.render());
     if (this.services.trainer.isRunning()) history.replaceState(null, '', '#/quiz');
+    else if (this.services.daily.isRunning()) history.replaceState(null, '', '#/daily');
     this.render();
   }
 
@@ -157,6 +162,6 @@ export class App {
     document.title = this.t('app.title');
     (this.screen.focus ?? this.screen.root.querySelector<HTMLElement>('h1'))?.focus({ preventScroll: true });
     // The hydra games count like a quiz: an update waits until the player leaves them.
-    if (route !== 'quiz' && !isGame(route)) updates.quizEnded();
+    if (route !== 'quiz' && route !== 'daily' && !isGame(route)) updates.quizEnded();
   }
 }

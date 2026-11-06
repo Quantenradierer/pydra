@@ -40,9 +40,9 @@ export function shuffle<T>(items: readonly T[], rng: Rng): T[] {
   return result;
 }
 
-/** The mixed lesson: SESSION_LENGTH distinct questions picked uniformly at random, choices shuffled. */
-export function buildSession(questions: readonly Question[], rng: Rng = Math.random): Session {
-  return orderedSession('mixed', shuffle(questions, rng).slice(0, SESSION_LENGTH), rng);
+/** A random-pool lesson (mixed, diff): SESSION_LENGTH distinct questions picked uniformly at random, choices shuffled. */
+export function buildSession(questions: readonly Question[], rng: Rng = Math.random, lesson: LessonId = 'mixed'): Session {
+  return orderedSession(lesson, shuffle(questions, rng).slice(0, SESSION_LENGTH), rng);
 }
 
 /** A session over the given questions in the given order; only the choices are shuffled. */
@@ -77,7 +77,10 @@ export function present(question: Question, order: readonly number[]): Presented
   };
 }
 
-export function currentItem(session: Session): SessionItem {
+/** What the run helpers read: a quiz session or a daily challenge. */
+export type Run = Pick<Session, 'items' | 'index'>;
+
+export function currentItem(session: Run): SessionItem {
   return session.items[session.index]!;
 }
 
@@ -93,7 +96,7 @@ export function answer(session: Session, slot: number): Session {
   return { ...session, items };
 }
 
-export function isLastQuestion(session: Session): boolean {
+export function isLastQuestion(session: Run): boolean {
   return session.index === session.items.length - 1;
 }
 
@@ -110,24 +113,22 @@ export function score(session: Session, byId: ReadonlyMap<string, Question>): nu
 const isInt = (v: unknown): v is number => Number.isInteger(v);
 
 /**
- * Validates a saved session against the current content. Anything malformed,
- * a question id that no longer exists, or questions that do not fit the
- * lesson yield undefined. Sessions saved before lessons existed are `mixed`.
+ * Validates the saved items of a run (a session or a daily challenge) against
+ * the known questions: every id exists once, the choice order is a
+ * permutation, questions before `index` are answered and later ones are not.
  */
-export function parseSession(raw: unknown, content: Content): Session | undefined {
-  if (typeof raw !== 'object' || raw === null) return undefined;
-  const { items, index, lesson = 'mixed' } = raw as Partial<Session>;
-  if (!isLesson(lesson)) return undefined;
-  if (!Array.isArray(items) || items.length === 0 || !isInt(index) || index < 0 || index >= items.length) {
+export function parseItems(rawItems: unknown, rawIndex: unknown, byId: ReadonlyMap<string, Question>): { items: SessionItem[]; index: number } | undefined {
+  if (!Array.isArray(rawItems) || rawItems.length === 0 || !isInt(rawIndex) || rawIndex < 0 || rawIndex >= rawItems.length) {
     return undefined;
   }
+  const index: number = rawIndex;
   const ids = new Set<string>();
   const parsed: SessionItem[] = [];
-  for (const [i, item] of items.entries()) {
+  for (const [i, item] of rawItems.entries()) {
     if (typeof item !== 'object' || item === null) return undefined;
     const { id, order, picked } = item as Partial<SessionItem>;
     if (typeof id !== 'string' || ids.has(id)) return undefined;
-    const question = content.byId.get(id);
+    const question = byId.get(id);
     if (!question) return undefined;
     const n = question.choices.length;
     if (
@@ -142,8 +143,21 @@ export function parseSession(raw: unknown, content: Content): Session | undefine
     // Questions before the current one are answered, later ones are not.
     if ((i < index && picked === null) || (i > index && picked !== null)) return undefined;
     ids.add(id);
-    parsed.push({ id, order: [...order], picked });
+    parsed.push({ id, order: [...order], picked: picked as number | null });
   }
-  if (!fitsLesson(content, lesson, [...ids])) return undefined;
-  return { lesson, items: parsed, index };
+  return { items: parsed, index };
+}
+
+/**
+ * Validates a saved session against the current content. Anything malformed,
+ * a question id that no longer exists, or questions that do not fit the
+ * lesson yield undefined. Sessions saved before lessons existed are `mixed`.
+ */
+export function parseSession(raw: unknown, content: Content): Session | undefined {
+  if (typeof raw !== 'object' || raw === null) return undefined;
+  const { items, index, lesson = 'mixed' } = raw as Partial<Session>;
+  if (!isLesson(lesson)) return undefined;
+  const parsed = parseItems(items, index, content.byId);
+  if (!parsed || !fitsLesson(content, lesson, parsed.items.map((item) => item.id))) return undefined;
+  return { lesson, ...parsed };
 }

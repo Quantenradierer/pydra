@@ -15,7 +15,7 @@ describe('walkthrough content', () => {
     const ids = WALKTHROUGHS.flatMap((w) => walkthroughQuestions(w).map((q) => q.id));
     expect(new Set(ids).size).toBe(ids.length);
     for (const id of ids) expect(QUESTIONS_BY_ID.has(id), id).toBe(false);
-    expect(CONTENT.byId.size).toBe(QUESTIONS_BY_ID.size + ids.length);
+    expect(CONTENT.byId.size).toBe(QUESTIONS_BY_ID.size + CONTENT.diff.length + ids.length);
   });
 
   describe.each(WALKTHROUGHS.map((w) => [w.id, w] as const))('%s', (_id, w) => {

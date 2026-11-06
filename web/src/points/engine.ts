@@ -17,6 +17,9 @@ export const XP = {
   cleanLevel: 10,
   perfectSession: 25,
   task: 50,
+  /** Finishing the daily challenge, plus `dailyStep` for every step answered right. */
+  daily: 50,
+  dailyStep: 10,
 } as const;
 
 /** The streak bonus: +10 % per day, up to a week. */
@@ -58,6 +61,59 @@ function bump(history: Record<string, DayStats>, day: string, add: Partial<DaySt
   };
 }
 
+/** The state with the achievements that are earned now unlocked. */
+function unlockAchievements(state: PointsState, now: Date, ctx: GameContext): { state: PointsState; unlocked: string[] } {
+  const unlocked = newlyEarned(state, ctx);
+  if (unlocked.length === 0) return { state, unlocked };
+  const at = now.toISOString();
+  return { state: { ...state, achievements: { ...state.achievements, ...Object.fromEntries(unlocked.map((id) => [id, at])) } }, unlocked };
+}
+
+/**
+ * The daily challenge: pays once per day (`d:<day>`), 50 XP plus 10 per step
+ * answered right, with the streak bonus. It keeps the practice streak going,
+ * extends the challenge streak, and touches neither the daily tasks nor the
+ * per-question XP.
+ */
+function applyDaily(
+  state: PointsState,
+  event: Extract<PointsEvent, { type: 'daily' }>,
+  now: Date,
+  ctx: GameContext,
+): { state: PointsState; result: PointsResult } {
+  const id = `d:${event.day}`;
+  if (state.awarded.includes(id)) return { state, result: NOTHING };
+  const today = dayKey(now);
+
+  let { streak, bestStreak } = state;
+  if (streak.last !== today) {
+    streak = { days: streak.last === previousDay(today) ? streak.days + 1 : 1, last: today };
+    bestStreak = Math.max(bestStreak, streak.days);
+  }
+  let { challenge } = state;
+  if (challenge.last !== event.day) {
+    challenge = { days: challenge.last === previousDay(event.day) ? challenge.days + 1 : 1, last: event.day };
+  }
+
+  const base = XP.daily + XP.dailyStep * event.right.filter(Boolean).length;
+  const gained = Math.round(base * streakMultiplier(currentStreak({ ...state, streak }, today)));
+  const total = state.total + gained;
+  const paid: PointsState = {
+    ...state,
+    total,
+    awarded: [...state.awarded, id],
+    streak,
+    bestStreak,
+    challenge,
+    bestChallenge: Math.max(state.bestChallenge, challenge.days),
+    challenges: state.challenges + 1,
+  };
+  const { state: next, unlocked } = unlockAchievements(paid, now, ctx);
+  const was = levelInfo(state.total).level;
+  const is = levelInfo(total).level;
+  return { state: next, result: { gained, ...(is > was ? { levelUp: is } : {}), tasks: [], achievements: unlocked } };
+}
+
 /**
  * Applies one event. Only the first correct answer of a question and the first
  * solve of a level pay out, so replaying earns nothing; the daily tasks and the
@@ -71,6 +127,8 @@ export function applyEvent(
 ): { state: PointsState; result: PointsResult } {
   const day = dayKey(now);
   let state = rollDay(before, day, ctx);
+
+  if (event.type === 'daily') return applyDaily(state, event, now, ctx);
 
   if (event.type === 'quiz' && !event.correct) {
     return { state: { ...state, history: bump(state.history, day, { quizAnswers: 1 }) }, result: NOTHING };
@@ -133,11 +191,8 @@ export function applyEvent(
     daily: { day, tasks },
   };
 
-  const unlocked = newlyEarned(next, ctx);
-  if (unlocked.length > 0) {
-    const at = now.toISOString();
-    next = { ...next, achievements: { ...next.achievements, ...Object.fromEntries(unlocked.map((id) => [id, at])) } };
-  }
+  const { state: unlockedState, unlocked } = unlockAchievements(next, now, ctx);
+  next = unlockedState;
 
   const was = levelInfo(state.total).level;
   const is = levelInfo(total).level;
@@ -154,11 +209,5 @@ export function applyEvent(
 export function backfill(state: PointsState, ids: readonly string[], now: Date, ctx: GameContext): PointsState {
   const fresh = [...new Set(ids)].filter((id) => !state.awarded.includes(id));
   const xp = fresh.reduce((n, id) => n + (id.startsWith('q:') ? XP.quiz : XP.level), 0);
-  let next: PointsState = { ...state, total: state.total + xp, awarded: [...state.awarded, ...fresh] };
-  const unlocked = newlyEarned(next, ctx);
-  if (unlocked.length > 0) {
-    const at = now.toISOString();
-    next = { ...next, achievements: { ...next.achievements, ...Object.fromEntries(unlocked.map((id) => [id, at])) } };
-  }
-  return next;
+  return unlockAchievements({ ...state, total: state.total + xp, awarded: [...state.awarded, ...fresh] }, now, ctx).state;
 }

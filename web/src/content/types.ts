@@ -23,6 +23,8 @@ export interface Question {
   prompt: Localized;
   /** Python snippet shown below the prompt; the same in every language. */
   code?: string;
+  /** "Spot the difference" only: the changed version of `code` (shown as version B, `code` is A). */
+  codeB?: string;
   /** Exactly four choices. */
   choices: Localized[];
   answerIndex: 0 | 1 | 2 | 3;

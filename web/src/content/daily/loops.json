@@ -1,0 +1,1115 @@
+[
+  {
+    "id": "loops-01",
+    "topic": "loops",
+    "level": 1,
+    "code": "count = 3\nstep = 2\nstart = count * step\nfor i in range(count):\n    start = start + step\nprint(start)",
+    "variant": "count = 2\nstep = 2\nstart = count * step\nfor i in range(count):\n    start = start + step\nprint(start)",
+    "altered": "count = 3\nstep = 2\nstart = count * step\nfor i in range(count + 1):\n    start = start + step\nprint(start)",
+    "requirement": [
+      6,
+      6
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `start` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `start` have after them?"
+        },
+        "choices": [
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "32",
+            "en": "32"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`count * step` heißt 3 mal 2. Das ist 6, und genau diese Zahl landet in `start`. Mit dem Malzeichen wird gerechnet, es werden keine Ziffern aneinandergehängt (das wäre 32).",
+          "en": "`count * step` means 3 times 2. That is 6, and exactly this number goes into `start`. The times sign calculates; it does not join digits together (that would be 32)."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "12",
+            "en": "12"
+          },
+          {
+            "de": "6",
+            "en": "6"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`range(count)` heißt: 3 Durchgänge. In jedem Durchgang wird `step` (2) zu `start` addiert. Start ist 6, dann 8, dann 10, dann 12. Der `print` steht nicht eingerückt, er läuft erst, wenn die Schleife ganz fertig ist.",
+          "en": "`range(count)` means: 3 rounds. In every round `step` (2) is added to `start`. Start is 6, then 8, then 10, then 12. The `print` is not indented, so it only runs after the loop has completely finished."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `count` ist jetzt 2. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `count` is now 2. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Mit `count = 2` startet `start` bei 2 * 2 = 4, und die Schleife läuft nur 2-mal. Jede Runde addiert 2: 4, dann 6, dann 8. `count` wirkt hier zweimal: bei der Startzahl und bei der Zahl der Durchgänge.",
+          "en": "With `count = 2`, `start` begins at 2 * 2 = 4, and the loop runs only 2 times. Each round adds 2: 4, then 6, then 8. `count` works twice here: in the start number and in the number of rounds."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B läuft einmal öfter durch die Schleife und gibt 14 statt 12 aus",
+            "en": "B goes through the loop once more and prints 14 instead of 12"
+          },
+          {
+            "de": "B läuft nur 3-mal und gibt 12 aus, genau wie A",
+            "en": "B runs only 3 times and prints 12, just like A"
+          },
+          {
+            "de": "B zählt bei 1 statt bei 0 und gibt 10 aus",
+            "en": "B counts from 1 instead of 0 and prints 10"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil man bei range nichts addieren darf",
+            "en": "B stops with an error, because you may not add anything inside range"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In B steht `range(count + 1)`, also `range(4)`, und das sind 4 Durchgänge statt 3. Jeder Durchgang addiert 2, also kommt einmal 2 dazu: 6 + 4 · 2 = 14. In `range` darf man rechnen wie überall.",
+          "en": "B has `range(count + 1)`, that is `range(4)`, which means 4 rounds instead of 3. Each round adds 2, so 2 more come in: 6 + 4 · 2 = 14. You may calculate inside `range` just like anywhere else."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Nach jedem Durchgang soll der aktuelle Stand ausgegeben werden: erst 8, dann 10, dann 12. Womit ersetzt du Zeile 6 (markiert)?",
+          "en": "New requirement: After every round the current value must be printed: first 8, then 10, then 12. What do you replace line 6 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "print(start, start, start)",
+            "en": "print(start, start, start)"
+          },
+          {
+            "de": "    print(start)",
+            "en": "    print(start)"
+          },
+          {
+            "de": "    print(i)",
+            "en": "    print(i)"
+          },
+          {
+            "de": "print(start) * count",
+            "en": "print(start) * count"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Was zur Schleife gehört, wird eingerückt: Mit den 4 Leerzeichen läuft `print(start)` in jedem Durchgang mit und zeigt den Stand nach dem Addieren: 8, 10, 12.\n\nOhne Einrückung (`print(start, start, start)`) läuft die Zeile einmal am Schluss. `print(i)` zeigt nur den Zähler 0, 1, 2. Und `print(start) * count` rechnet mit dem Ergebnis von `print`, das gibt nichts zurück.",
+          "en": "What belongs to the loop is indented: with the 4 spaces `print(start)` runs in every round and shows the value after adding: 8, 10, 12.\n\nWithout indentation (`print(start, start, start)`) the line runs once at the end. `print(i)` shows only the counter 0, 1, 2. And `print(start) * count` calculates with the result of `print`, which gives back nothing."
+        }
+      }
+    ]
+  },
+  {
+    "id": "loops-02",
+    "topic": "loops",
+    "level": 2,
+    "code": "fuel = 10\nuse = 3\nrounds = fuel // use\nwhile fuel >= use:\n    fuel = fuel - use\nprint(rounds, fuel)",
+    "variant": "fuel = 10\nuse = 5\nrounds = fuel // use\nwhile fuel >= use:\n    fuel = fuel - use\nprint(rounds, fuel)",
+    "altered": "fuel = 10\nuse = 3\nrounds = fuel // use\nwhile fuel >= use * 2:\n    fuel = fuel - use\nprint(rounds, fuel)",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `rounds` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `rounds` have after them?"
+        },
+        "choices": [
+          {
+            "de": "1",
+            "en": "1"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`//` teilt und wirft den Rest weg: 10 geteilt durch 3 passt 3-mal (3 · 3 = 9), es bleibt 1 übrig. Das Ergebnis ist 3. Gemeint ist: Wie oft passt der Verbrauch in den Tank?",
+          "en": "`//` divides and throws the remainder away: 10 divided by 3 fits 3 times (3 · 3 = 9), 1 is left over. The result is 3. It means: how often does the use fit into the tank?"
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "3 10",
+            "en": "3 10"
+          },
+          {
+            "de": "3 4",
+            "en": "3 4"
+          },
+          {
+            "de": "4 1",
+            "en": "4 1"
+          },
+          {
+            "de": "3 1",
+            "en": "3 1"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`rounds` ist 3 und wird nicht mehr verändert. Die `while`-Schleife wiederholt, solange `fuel >= use` stimmt: 10 → 7 → 4 → 1. Bei 1 ist 1 nicht mehr mindestens 3, die Schleife endet. `print` zeigt 3 1.",
+          "en": "`rounds` is 3 and is not changed any more. The `while` loop repeats as long as `fuel >= use` is true: 10 → 7 → 4 → 1. At 1, 1 is no longer at least 3, so the loop ends. `print` shows 3 1."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `use` ist jetzt 5. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `use` is now 5. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "2 0",
+            "en": "2 0"
+          },
+          {
+            "de": "2 5",
+            "en": "2 5"
+          },
+          {
+            "de": "2 10",
+            "en": "2 10"
+          },
+          {
+            "de": "1 0",
+            "en": "1 0"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`rounds` ist 10 // 5 = 2. Die Schleife: 10 ≥ 5, also 10 - 5 = 5. Dann 5 ≥ 5 stimmt noch (gleich zählt mit), also 5 - 5 = 0. Dann 0 ≥ 5 stimmt nicht mehr. Ergebnis: 2 0.",
+          "en": "`rounds` is 10 // 5 = 2. The loop: 10 ≥ 5, so 10 - 5 = 5. Then 5 ≥ 5 is still true (equal counts), so 5 - 5 = 0. Then 0 ≥ 5 is false. Result: 2 0."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B läuft endlos, weil use * 2 nie erreicht wird",
+            "en": "B runs forever, because use * 2 is never reached"
+          },
+          {
+            "de": "B hört früher auf: 3 4",
+            "en": "B stops earlier: 3 4"
+          },
+          {
+            "de": "B gibt 6 4 aus, weil zweimal so viel gerechnet wird",
+            "en": "B prints 6 4, because twice as much is calculated"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, die 2 ist nur Dekoration",
+            "en": "B prints the same as A, the 2 is only decoration"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Jetzt muss `fuel` mindestens 6 sein (2 · 3), damit die Schleife weiterläuft: 10 ≥ 6 → 7, 7 ≥ 6 → 4, und 4 ≥ 6 stimmt nicht. Die Schleife läuft nur 2-mal und `fuel` endet bei 4. Die Ausgabe ist 3 4. `rounds` bleibt 3, denn es wurde ja schon vorher berechnet.",
+          "en": "Now `fuel` must be at least 6 (2 · 3) for the loop to go on: 10 ≥ 6 → 7, 7 ≥ 6 → 4, and 4 ≥ 6 is false. The loop runs only 2 times and `fuel` ends at 4. The output is 3 4. `rounds` stays 3, because it was already calculated before."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Die Schleife soll nach dem ersten Durchgang sofort verlassen werden: Der Tank wird nur ein einziges Mal abgezogen. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: The loop must be left right after the first round: the tank is reduced only a single time. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    break\n    fuel = fuel - use",
+            "en": "    break\n    fuel = fuel - use"
+          },
+          {
+            "de": "    fuel = fuel - use\nbreak",
+            "en": "    fuel = fuel - use\nbreak"
+          },
+          {
+            "de": "    fuel = fuel - use\n    break",
+            "en": "    fuel = fuel - use\n    break"
+          },
+          {
+            "de": "    fuel = fuel - use\n    continue",
+            "en": "    fuel = fuel - use\n    continue"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`break` verlässt die Schleife sofort. Es kommt nach der Rechnung und wird genauso eingerückt, damit es zur Schleife gehört: erst abziehen (10 → 7), dann raus.\n\nSteht `break` vor der Rechnung, wird nie abgezogen. Ohne Einrückung gehört es nicht zur Schleife, und Python meldet einen Fehler. `continue` springt nur zum nächsten Durchgang und beendet nichts.",
+          "en": "`break` leaves the loop at once. It comes after the calculation and is indented the same way, so that it belongs to the loop: first subtract (10 → 7), then out.\n\nIf `break` comes before the calculation, nothing is ever subtracted. Without indentation it does not belong to the loop and Python reports an error. `continue` only jumps to the next round and ends nothing."
+        }
+      }
+    ]
+  },
+  {
+    "id": "loops-03",
+    "topic": "loops",
+    "level": 2,
+    "code": "prices = [5, 12, 8]\nlimit = 10\nn = len(prices)\nfor p in prices:\n    if p > limit:\n        print(p, \"too much\")\nprint(n, \"checked\")",
+    "variant": "prices = [5, 12, 8]\nlimit = 6\nn = len(prices)\nfor p in prices:\n    if p > limit:\n        print(p, \"too much\")\nprint(n, \"checked\")",
+    "altered": "prices = [5, 12, 8]\nlimit = 10\nn = len(prices)\nfor p in prices:\n    if p > limit:\n        print(p, \"too much\")\n    print(n, \"checked\")",
+    "requirement": [
+      6,
+      6
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `n` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `n` have after them?"
+        },
+        "choices": [
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`len(prices)` zählt, wie viele Dinge in der Liste stehen: 5, 12 und 8 sind drei Zahlen, also 3. Welche Werte es sind, spielt dabei keine Rolle.",
+          "en": "`len(prices)` counts how many things are in the list: 5, 12 and 8 are three numbers, so 3. It does not matter which values they are."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "12 too much\n3 checked",
+            "en": "12 too much\n3 checked"
+          },
+          {
+            "de": "3 checked",
+            "en": "3 checked"
+          },
+          {
+            "de": "5 too much\n12 too much\n8 too much\n3 checked",
+            "en": "5 too much\n12 too much\n8 too much\n3 checked"
+          },
+          {
+            "de": "12 too much",
+            "en": "12 too much"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Die Schleife nimmt nacheinander jeden Preis. 5 ist nicht größer als 10: nichts. 12 ist größer: es erscheint `12 too much`. 8: nichts. Erst danach kommt die letzte Zeile, die nicht eingerückt ist und nur einmal läuft. Zusammen: 12 too much / 3 checked.",
+          "en": "The loop takes each price in turn. 5 is not bigger than 10: nothing. 12 is bigger: `12 too much` appears. 8: nothing. Only then comes the last line, which is not indented and runs just once. Together: 12 too much / 3 checked."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `limit` ist jetzt 6. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `limit` is now 6. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "12 too much\n3 checked",
+            "en": "12 too much\n3 checked"
+          },
+          {
+            "de": "12 too much\n8 too much\n3 checked",
+            "en": "12 too much\n8 too much\n3 checked"
+          },
+          {
+            "de": "5 too much\n3 checked",
+            "en": "5 too much\n3 checked"
+          },
+          {
+            "de": "12 too much\n8 too much",
+            "en": "12 too much\n8 too much"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Mit `limit = 6` ist 5 immer noch nicht zu teuer, aber 12 und 8 sind es beide. Beide werden gemeldet, in der Reihenfolge der Liste. Danach kommt wieder die einmalige Schlusszeile. Zusammen: 12 too much / 8 too much / 3 checked.",
+          "en": "With `limit = 6`, 5 is still not too much, but 12 and 8 both are. Both are reported, in the order of the list. Then comes the one-time last line again. Together: 12 too much / 8 too much / 3 checked."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "In B gehört die letzte Zeile zum if und erscheint nur bei 12",
+            "en": "In B the last line belongs to the if and appears only for 12"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, vier Leerzeichen sind nur Optik",
+            "en": "B prints the same as A, four spaces are only looks"
+          },
+          {
+            "de": "In B steht „3 checked“ nach jedem Preis",
+            "en": "In B “3 checked” appears after every price"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil n in der Schleife nicht benutzt werden darf",
+            "en": "B stops with an error, because n may not be used inside the loop"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Vier Leerzeichen bringen die Zeile in die `for`-Schleife, aber nicht in das `if`. Sie läuft jetzt bei jedem der drei Preise: vor der 12 einmal, nach der 12 einmal, und für die 8 noch einmal. Die Ausgabe ist 3 checked / 12 too much / 3 checked / 3 checked. Die Einrückung zeigt, wozu eine Zeile gehört.",
+          "en": "Four spaces bring the line into the `for` loop, but not into the `if`. It now runs for each of the three prices: once for the 5, once after the 12 and once for the 8. The output is 3 checked / 12 too much / 3 checked / 3 checked. Indentation shows what a line belongs to."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Statt `too much` soll bei den zu teuren Preisen die Differenz zum Limit stehen: `2 too much` für 12 bei Limit 10. Womit ersetzt du Zeile 6 (markiert)?",
+          "en": "New requirement: For prices that are too high, the difference to the limit must be shown first: `2 too much` for 12 with limit 10. What do you replace line 6 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "        print(limit - p, \"too much\")",
+            "en": "        print(limit - p, \"too much\")"
+          },
+          {
+            "de": "        print(p, limit, \"too much\")",
+            "en": "        print(p, limit, \"too much\")"
+          },
+          {
+            "de": "        print(\"p - limit\", \"too much\")",
+            "en": "        print(\"p - limit\", \"too much\")"
+          },
+          {
+            "de": "        print(p - limit, \"too much\")",
+            "en": "        print(p - limit, \"too much\")"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Wie weit ein Preis über dem Limit liegt, zeigt `p - limit`: 12 - 10 = 2. Die Reihenfolge zählt, Preis zuerst. Und ohne Anführungszeichen rechnet Python mit den Werten.\n\n`limit - p` gibt -2 (die Differenz andersherum). `p, limit` druckt beide Zahlen, aber rechnet nichts. Und `\"p - limit\"` ist nur ein Text, der dasteht, wie er ist.",
+          "en": "How far a price is above the limit is shown by `p - limit`: 12 - 10 = 2. The order counts, price first. And without quotation marks Python works with the values.\n\n`limit - p` gives -2 (the difference the other way round). `p, limit` prints both numbers but calculates nothing. And `\"p - limit\"` is only a text that appears exactly as written."
+        }
+      }
+    ]
+  },
+  {
+    "id": "loops-04",
+    "topic": "loops",
+    "level": 3,
+    "code": "word = \"banana\"\nvowels = \"aeiou\"\nn = len(word)\nfound = 0\nfor letter in word:\n    if letter in vowels:\n        found = found + 1\nprint(found, \"of\", n)",
+    "variant": "word = \"cherry\"\nvowels = \"aeiou\"\nn = len(word)\nfound = 0\nfor letter in word:\n    if letter in vowels:\n        found = found + 1\nprint(found, \"of\", n)",
+    "altered": "word = \"banana\"\nvowels = \"aeiou\"\nn = len(word)\nfound = 0\nfor letter in word:\n    if letter in vowels:\n        found = found + 2\nprint(found, \"of\", n)",
+    "requirement": [
+      6,
+      6
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `n` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `n` have after them?"
+        },
+        "choices": [
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`len` zählt die Zeichen eines Textes: b, a, n, a, n, a sind sechs Buchstaben, auch wenn manche mehrfach vorkommen. Das ist 6.",
+          "en": "`len` counts the characters of a text: b, a, n, a, n, a are six letters, even though some appear several times. That is 6."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "6 of 6",
+            "en": "6 of 6"
+          },
+          {
+            "de": "3 of 6",
+            "en": "3 of 6"
+          },
+          {
+            "de": "1 of 6",
+            "en": "1 of 6"
+          },
+          {
+            "de": "3 of 3",
+            "en": "3 of 3"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Die Schleife geht den Text Buchstabe für Buchstabe durch: b, a, n, a, n, a. Bei jedem Buchstaben prüft `in`, ob er in `aeiou` vorkommt. Das stimmt nur bei den drei `a`, also steigt `found` dreimal um 1. Ausgabe: 3 of 6.",
+          "en": "The loop goes through the text letter by letter: b, a, n, a, n, a. For each letter `in` checks whether it appears in `aeiou`. That is only true for the three `a`s, so `found` goes up by 1 three times. Output: 3 of 6."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `word` ist jetzt `\"cherry\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `word` is now `\"cherry\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "2 of 6",
+            "en": "2 of 6"
+          },
+          {
+            "de": "0 of 6",
+            "en": "0 of 6"
+          },
+          {
+            "de": "1 of 6",
+            "en": "1 of 6"
+          },
+          {
+            "de": "1 of 1",
+            "en": "1 of 1"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`cherry` hat 6 Buchstaben, aber nur das `e` steht in `aeiou`. Das `y` ist hier kein Vokal, weil es nicht in der Zeichenkette `aeiou` vorkommt. Also zählt `found` genau einmal: 1 of 6.",
+          "en": "`cherry` has 6 letters, but only the `e` is in `aeiou`. The `y` is not a vowel here, because it does not appear in the string `aeiou`. So `found` counts exactly once: 1 of 6."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B zählt pro Buchstabe 2, auch bei Konsonanten, und gibt 12 of 6 aus",
+            "en": "B counts 2 per letter, even for consonants, and prints 12 of 6"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn es gibt 3 Vokale",
+            "en": "B prints the same as A, because there are 3 vowels"
+          },
+          {
+            "de": "B zählt nur die Hälfte und gibt 1 of 6 aus",
+            "en": "B counts only half and prints 1 of 6"
+          },
+          {
+            "de": "B zählt pro Vokal 2 statt 1 und gibt 6 of 6 aus",
+            "en": "B counts 2 instead of 1 per vowel and prints 6 of 6"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Die Zeile wird nur bei den drei Vokalen erreicht. In B wächst `found` dabei um 2: 0 → 2 → 4 → 6. Ausgabe: 6 of 6. Die Zahl der Buchstaben (6) hat sich nicht geändert, nur die Zählweise.",
+          "en": "The line is only reached for the three vowels. In B `found` grows by 2 each time: 0 → 2 → 4 → 6. Output: 6 of 6. The number of letters (6) did not change, only the way of counting."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Auch große Vokale wie das `A` in `BANANA` oder `Apple` sollen mitgezählt werden. Womit ersetzt du Zeile 6 (markiert)?",
+          "en": "New requirement: Capital vowels such as the `A` in `BANANA` or `Apple` must be counted too. What do you replace line 6 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    if letter.lower() in vowels:",
+            "en": "    if letter.lower() in vowels:"
+          },
+          {
+            "de": "    if letter in vowels.lower():",
+            "en": "    if letter in vowels.lower():"
+          },
+          {
+            "de": "    if letter.upper() in vowels:",
+            "en": "    if letter.upper() in vowels:"
+          },
+          {
+            "de": "    if letter in vowels or \"A\":",
+            "en": "    if letter in vowels or \"A\":"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Man macht den Buchstaben klein, bevor man ihn mit `aeiou` vergleicht: `letter.lower()` verwandelt `A` in `a`. Dann passt jeder Vokal, ob groß oder klein.\n\n`vowels.lower()` ändert nichts, denn `aeiou` ist schon klein. `letter.upper()` macht es noch schlimmer, `aeiou` enthält keine Großbuchstaben. Und `... or \"A\"` ist immer wahr, ein nicht leerer Text zählt als wahr; dann würde jeder Buchstabe zählen.",
+          "en": "You make the letter small before comparing it with `aeiou`: `letter.lower()` turns `A` into `a`. Then every vowel fits, capital or small.\n\n`vowels.lower()` changes nothing, because `aeiou` is already small. `letter.upper()` makes it worse; `aeiou` contains no capitals. And `... or \"A\"` is always true, a non-empty text counts as true; then every letter would count."
+        }
+      }
+    ]
+  },
+  {
+    "id": "loops-05",
+    "topic": "loops",
+    "level": 3,
+    "code": "nums = [4, 7, 5, 1]\nlimit = 12\nsize = len(nums)\ntotal = 0\nfor n in nums:\n    if total + n > limit:\n        break\n    total += n\nprint(total, \"of\", size)",
+    "variant": "nums = [4, 7, 5, 1]\nlimit = 16\nsize = len(nums)\ntotal = 0\nfor n in nums:\n    if total + n > limit:\n        break\n    total += n\nprint(total, \"of\", size)",
+    "altered": "nums = [4, 7, 5, 1]\nlimit = 12\nsize = len(nums)\ntotal = 0\nfor n in nums:\n    if total + n > limit:\n        continue\n    total += n\nprint(total, \"of\", size)",
+    "requirement": [
+      7,
+      7
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `size` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `size` have after them?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "12",
+            "en": "12"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "16",
+            "en": "16"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`len(nums)` zählt, wie viele Dinge in der Liste liegen, nicht, wie groß sie sind. Es sind 4 Zahlen: 4, 7, 5 und 1. Die Liste selbst ändert sich dadurch nicht.",
+          "en": "`len(nums)` counts how many things lie in the list, not how big they are. There are 4 numbers: 4, 7, 5 and 1. The list itself does not change."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "12 of 4",
+            "en": "12 of 4"
+          },
+          {
+            "de": "17 of 4",
+            "en": "17 of 4"
+          },
+          {
+            "de": "4 of 4",
+            "en": "4 of 4"
+          },
+          {
+            "de": "11 of 4",
+            "en": "11 of 4"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Die Schleife legt Zahl für Zahl in `total`, solange es nicht über 12 geht. 4 passt (4), 7 passt (11). Bei der 5 wären es 16, das ist mehr als 12: `break` verlässt die Schleife sofort. Die 1 kommt nie dran, obwohl sie noch gepasst hätte. Ausgabe: 11 of 4.",
+          "en": "The loop puts number after number into `total` as long as it does not go over 12. 4 fits (4), 7 fits (11). With the 5 it would be 16, which is more than 12: `break` leaves the loop at once. The 1 never gets a turn, even though it would still have fit. Output: 11 of 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `limit` ist jetzt 16. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `limit` is now 16. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "16 of 4",
+            "en": "16 of 4"
+          },
+          {
+            "de": "17 of 4",
+            "en": "17 of 4"
+          },
+          {
+            "de": "11 of 4",
+            "en": "11 of 4"
+          },
+          {
+            "de": "16 of 3",
+            "en": "16 of 3"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Mit der Grenze 16 passt jetzt auch die 5: 4, dann 11, dann 16. 16 ist nicht größer als 16, also darf sie rein. Bei der 1 wären es 17, das ist zu viel: `break`. `total` bleibt 16, und `size` ist weiter 4, weil `size` die Länge der Liste ist, nicht die der addierten Zahlen. Ausgabe: 16 of 4.",
+          "en": "With the limit 16 the 5 fits now too: 4, then 11, then 16. 16 is not bigger than 16, so it may come in. With the 1 it would be 17, which is too much: `break`. `total` stays 16, and `size` is still 4, because `size` is the length of the list, not of the numbers that were added. Output: 16 of 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B hört bei der 5 auf wie A und gibt auch 11 of 4 aus",
+            "en": "B stops at the 5 like A and also prints 11 of 4"
+          },
+          {
+            "de": "B überspringt die 5 nur und nimmt die 1 noch mit: 12 of 4",
+            "en": "B only skips the 5 and still takes the 1: 12 of 4"
+          },
+          {
+            "de": "B nimmt alle Zahlen und gibt 17 of 4 aus",
+            "en": "B takes all numbers and prints 17 of 4"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil continue nicht in ein if darf",
+            "en": "B stops with an error, because continue may not be inside an if"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`break` verlässt die ganze Schleife, `continue` nur diese eine Runde und macht mit der nächsten weiter. In B wird die 5 übersprungen (16 wäre zu viel), die Schleife geht aber weiter: Die 1 passt noch, 11 + 1 = 12, und 12 ist nicht größer als 12. Ausgabe: 12 of 4.",
+          "en": "`break` leaves the whole loop, `continue` only this one round and goes on with the next. In B the 5 is skipped (16 would be too much), but the loop goes on: the 1 still fits, 11 + 1 = 12, and 12 is not bigger than 12. Output: 12 of 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Zahlen, die nicht mehr passen, sollen nur übersprungen werden; die Schleife soll mit der nächsten Zahl weitermachen. Womit ersetzt du Zeile 7 (markiert)?",
+          "en": "New requirement: Numbers that no longer fit must only be skipped; the loop must go on with the next number. What do you replace line 7 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "        pass",
+            "en": "        pass"
+          },
+          {
+            "de": "        break",
+            "en": "        break"
+          },
+          {
+            "de": "        continue",
+            "en": "        continue"
+          },
+          {
+            "de": "        skip",
+            "en": "        skip"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`continue` heißt: Diese Runde ist fertig, auf zur nächsten Zahl. Die Zeile `total += n` wird dann übersprungen, die Zahl wird nicht addiert.\n\n`pass` tut nichts, also läuft danach `total += n` trotzdem. `break` beendet die ganze Schleife. `skip` gibt es in Python nicht, das ist ein Fehler.",
+          "en": "`continue` means: this round is done, on to the next number. The line `total += n` is then skipped, so the number is not added.\n\n`pass` does nothing, so `total += n` runs after it anyway. `break` ends the whole loop. `skip` does not exist in Python, that is an error."
+        }
+      }
+    ]
+  },
+  {
+    "id": "loops-06",
+    "topic": "loops",
+    "level": 1,
+    "code": "last = 4\nitems = []\nsize = len(items)\nfor n in range(1, last):\n    items.append(n * n)\nprint(size, items)",
+    "variant": "last = 3\nitems = []\nsize = len(items)\nfor n in range(1, last):\n    items.append(n * n)\nprint(size, items)",
+    "altered": "last = 4\nitems = []\nsize = len(items)\nfor n in range(1, last + 1):\n    items.append(n * n)\nprint(size, items)",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `size` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `size` have after them?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "1",
+            "en": "1"
+          },
+          {
+            "de": "0",
+            "en": "0"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Zeile 2 macht eine leere Liste. `len` zählt ihre Einträge: 0. Dieser Wert wird jetzt festgehalten. Später kommen Zahlen in die Liste, aber `size` zählt nicht von allein mit.",
+          "en": "Line 2 makes an empty list. `len` counts its entries: 0. That value is saved right now. Numbers go into the list later, but `size` does not keep counting by itself."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "0 [1, 4, 9]",
+            "en": "0 [1, 4, 9]"
+          },
+          {
+            "de": "3 [1, 4, 9]",
+            "en": "3 [1, 4, 9]"
+          },
+          {
+            "de": "0 [1, 4, 9, 16]",
+            "en": "0 [1, 4, 9, 16]"
+          },
+          {
+            "de": "0 [1, 2, 3]",
+            "en": "0 [1, 2, 3]"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`range(1, last)` startet bei 1 und hört vor 4 auf: 1, 2, 3. Die 4 ist nicht dabei. Jede Zahl wird mit sich selbst malgenommen und hinten an die Liste gehängt: 1, 4, 9. `size` blieb bei 0. Ausgabe: 0 [1, 4, 9].",
+          "en": "`range(1, last)` starts at 1 and stops before 4: 1, 2, 3. The 4 is not included. Each number is multiplied by itself and appended to the list: 1, 4, 9. `size` stayed at 0. Output: 0 [1, 4, 9]."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `last` ist jetzt 3. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `last` is now 3. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "0 [1, 4, 9]",
+            "en": "0 [1, 4, 9]"
+          },
+          {
+            "de": "0 [1, 4]",
+            "en": "0 [1, 4]"
+          },
+          {
+            "de": "2 [1, 4]",
+            "en": "2 [1, 4]"
+          },
+          {
+            "de": "0 [1, 2]",
+            "en": "0 [1, 2]"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Mit `last = 3` läuft `range(1, 3)`: nur 1 und 2. Das ergibt 1 und 4 in der Liste. `size` ist weiter 0. Ausgabe: 0 [1, 4].",
+          "en": "With `last = 3`, `range(1, 3)` gives only 1 and 2. That puts 1 and 4 into the list. `size` is still 0. Output: 0 [1, 4]."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt 4 [1, 4, 9, 16] aus, weil size mitwächst",
+            "en": "B prints 4 [1, 4, 9, 16], because size grows along"
+          },
+          {
+            "de": "B startet bei 0 und gibt 0 [0, 1, 4, 9] aus",
+            "en": "B starts at 0 and prints 0 [0, 1, 4, 9]"
+          },
+          {
+            "de": "B läuft eine Runde länger, bis zur 4, und gibt 0 [1, 4, 9, 16] aus",
+            "en": "B runs one round longer, up to 4, and prints 0 [1, 4, 9, 16]"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn die 4 ist schon in range",
+            "en": "B prints the same as A, because the 4 is already in range"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Mit `last + 1` ist das Ende von `range` die 5. Es gibt also 4 Runden (1, 2, 3, 4), und die Liste bekommt noch die 16. Ausgabe: 0 [1, 4, 9, 16]. Gestartet wird weiter bei 1, und `size` bleibt 0.",
+          "en": "With `last + 1` the end of `range` is 5. So there are 4 rounds (1, 2, 3, 4), and the list also gets the 16. Output: 0 [1, 4, 9, 16]. It still starts at 1, and `size` stays 0."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: In die Liste soll jede Zahl plus 10 kommen: 11, 12, 13. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: Each number plus 10 must go into the list: 11, 12, 13. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    items.append(n * 10)",
+            "en": "    items.append(n * 10)"
+          },
+          {
+            "de": "    items.append(10)",
+            "en": "    items.append(10)"
+          },
+          {
+            "de": "    items = n + 10",
+            "en": "    items = n + 10"
+          },
+          {
+            "de": "    items.append(n + 10)",
+            "en": "    items.append(n + 10)"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`n + 10` rechnet in jeder Runde die aktuelle Zahl plus 10, und `append` hängt das Ergebnis hinten an: 11, 12, 13.\n\n`n * 10` würde 10, 20, 30 anhängen. `append(10)` hängt immer nur die 10 an. Und `items = n + 10` wirft die Liste weg und macht aus `items` eine einzelne Zahl.",
+          "en": "`n + 10` adds 10 to the current number in every round, and `append` puts the result at the end: 11, 12, 13.\n\n`n * 10` would append 10, 20, 30. `append(10)` always appends just the 10. And `items = n + 10` throws the list away and turns `items` into a single number."
+        }
+      }
+    ]
+  },
+  {
+    "id": "loops-07",
+    "topic": "loops",
+    "level": 1,
+    "code": "prices = [2, 3, 4]\ntotal = 0\ncount = len(prices)\nfor p in prices:\n    total = total + p\nprint(total, count)",
+    "variant": "prices = [5, 5]\ntotal = 0\ncount = len(prices)\nfor p in prices:\n    total = total + p\nprint(total, count)",
+    "altered": "prices = [2, 3, 4]\ntotal = 0\ncount = len(prices)\nfor p in prices:\n    total = p\nprint(total, count)",
+    "requirement": [
+      5,
+      5
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `count` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `count` have after them?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "0",
+            "en": "0"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`len(prices)` zählt, wie viele Zahlen in der Liste stehen: 2, 3 und 4, also 3. Gezählt werden die Einträge, nicht ihre Summe.",
+          "en": "`len(prices)` counts how many numbers are in the list: 2, 3 and 4, so 3. It counts the entries, not their sum."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "9 9",
+            "en": "9 9"
+          },
+          {
+            "de": "9 3",
+            "en": "9 3"
+          },
+          {
+            "de": "3 9",
+            "en": "3 9"
+          },
+          {
+            "de": "9 4",
+            "en": "9 4"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Die Schleife nimmt einen Preis nach dem anderen und legt ihn zu `total` dazu: 0, dann 2, dann 5, dann 9. Der `print` steht ohne Einrückung, er läuft erst nach der Schleife. Ausgabe: 9 3.",
+          "en": "The loop takes one price after the other and adds it to `total`: 0, then 2, then 5, then 9. The `print` is not indented, so it only runs after the loop. Output: 9 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `prices` hat jetzt nur zwei Preise: 5 und 5. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `prices` now has only two prices: 5 and 5. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "10 3",
+            "en": "10 3"
+          },
+          {
+            "de": "5 2",
+            "en": "5 2"
+          },
+          {
+            "de": "10 2",
+            "en": "10 2"
+          },
+          {
+            "de": "10 5",
+            "en": "10 5"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Zwei Preise, also ist `count` 2. In zwei Runden kommen 5 und noch einmal 5 zu `total`: 10. Ausgabe: 10 2.",
+          "en": "Two prices, so `count` is 2. In two rounds 5 and another 5 are added to `total`: 10. Output: 10 2."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt 9 3 aus, genau wie A",
+            "en": "B prints 9 3, just like A"
+          },
+          {
+            "de": "B gibt 2 3 aus, weil der erste Preis bleibt",
+            "en": "B prints 2 3, because the first price stays"
+          },
+          {
+            "de": "B gibt 0 3 aus, weil total nie verändert wird",
+            "en": "B prints 0 3, because total is never changed"
+          },
+          {
+            "de": "B überschreibt total in jeder Runde und gibt 4 3 aus",
+            "en": "B overwrites total in every round and prints 4 3"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "In B steht `total = p` statt `total = total + p`. Jede Runde wirft den alten Stand weg und nimmt nur den neuen Preis: 2, dann 3, dann 4. Am Ende bleibt der letzte Preis übrig. Ausgabe: 4 3.",
+          "en": "B has `total = p` instead of `total = total + p`. Every round throws the old value away and takes only the new price: 2, then 3, then 4. In the end only the last price is left. Output: 4 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Jeder Preis soll doppelt zählen: aus 2, 3, 4 wird eine Summe von 18. Womit ersetzt du Zeile 5 (markiert)?",
+          "en": "New requirement: Every price must count double: 2, 3, 4 add up to 18. What do you replace line 5 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "    total = total + p * 2",
+            "en": "    total = total + p * 2"
+          },
+          {
+            "de": "    total = (total + p) * 2",
+            "en": "    total = (total + p) * 2"
+          },
+          {
+            "de": "    total = total * 2 + p",
+            "en": "    total = total * 2 + p"
+          },
+          {
+            "de": "    total = p * 2",
+            "en": "    total = p * 2"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`p * 2` verdoppelt den neuen Preis, und der kommt zum alten Stand dazu: 4, 10, 18. Punkt vor Strich: Erst wird `p * 2` gerechnet, dann addiert.\n\nMit Klammern oder mit `total * 2` würde auch das verdoppelt, was schon in `total` liegt. Und `total = p * 2` vergisst den alten Stand.",
+          "en": "`p * 2` doubles the new price, and that is added to the old value: 4, 10, 18. Multiplication comes first: `p * 2` is calculated, then added.\n\nWith brackets or `total * 2`, what is already in `total` would be doubled too. And `total = p * 2` forgets the old value."
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,638 @@
+[
+  {
+    "id": "types-01",
+    "topic": "types",
+    "level": 2,
+    "code": "apples = 5\npears = 2.5\ntotal = apples + pears\nif total > 6:\n    print(total, type(total))",
+    "variant": "apples = 5\npears = 3\ntotal = apples + pears\nif total > 6:\n    print(total, type(total))",
+    "altered": "apples = 5\npears = 2.5\ntotal = apples * pears\nif total > 6:\n    print(total, type(total))",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `total` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `total` have after them?"
+        },
+        "choices": [
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "7.5",
+            "en": "7.5"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "7.52",
+            "en": "7.52"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`apples` ist die ganze Zahl 5, `pears` ist die Kommazahl 2.5. Beides lässt sich einfach addieren: 5 + 2.5 ergibt 7.5. Python rundet dabei nichts weg.",
+          "en": "`apples` is the whole number 5, `pears` is the decimal number 2.5. You can simply add them: 5 + 2.5 gives 7.5. Python does not round anything away."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "7.5 <class 'int'>",
+            "en": "7.5 <class 'int'>"
+          },
+          {
+            "de": "7 <class 'int'>",
+            "en": "7 <class 'int'>"
+          },
+          {
+            "de": "7.5 <class 'float'>",
+            "en": "7.5 <class 'float'>"
+          },
+          {
+            "de": "7.5 <class 'str'>",
+            "en": "7.5 <class 'str'>"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Der Wert 7.5 ist größer als 6, also läuft der eingerückte `print`. `type(total)` verrät die Art des Werts: Weil eine Kommazahl im Spiel war, ist auch das Ergebnis eine Kommazahl, ein `float`.\n\nMerke: ganze Zahl plus Kommazahl ergibt immer eine Kommazahl.",
+          "en": "The value 7.5 is bigger than 6, so the indented `print` runs. `type(total)` tells you what kind of value it is: a decimal number took part, so the result is a decimal number too, a `float`.\n\nRemember: whole number plus decimal number is always a decimal number."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `pears` ist jetzt 3 (ohne Punkt). Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `pears` is now 3 (no point). What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "8 <class 'float'>",
+            "en": "8 <class 'float'>"
+          },
+          {
+            "de": "8.0 <class 'float'>",
+            "en": "8.0 <class 'float'>"
+          },
+          {
+            "de": "8 <class 'str'>",
+            "en": "8 <class 'str'>"
+          },
+          {
+            "de": "8 <class 'int'>",
+            "en": "8 <class 'int'>"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Jetzt sind beide Zahlen ganze Zahlen, ohne Dezimalpunkt. 5 + 3 ergibt 8, und ganze Zahl plus ganze Zahl bleibt eine ganze Zahl: `int`. Ein `float` entsteht nur, wenn mindestens eine Kommazahl beteiligt ist.",
+          "en": "Now both numbers are whole numbers, without a decimal point. 5 + 3 is 8, and a whole number plus a whole number stays a whole number: `int`. A `float` only appears when at least one decimal number takes part."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B multipliziert statt zu addieren und gibt 12.5 <class 'float'> aus",
+            "en": "B multiplies instead of adding and prints 12.5 <class 'float'>"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, nur der Typ wird ein int",
+            "en": "B prints the same as A, only the type becomes an int"
+          },
+          {
+            "de": "B gibt gar nichts aus, weil 5 * 2.5 kleiner als 6 ist",
+            "en": "B prints nothing, because 5 * 2.5 is smaller than 6"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil man * nicht mit Kommazahlen benutzen darf",
+            "en": "B stops with an error, because * may not be used with decimals"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In A steht `+`, in B steht `*`. 5 * 2.5 ergibt 12.5, und das ist größer als 6. Also gibt B 12.5 <class 'float'> aus. Der Typ bleibt `float`, weil eine Kommazahl beteiligt ist. `*` geht mit Kommazahlen ganz normal.",
+          "en": "A has `+`, B has `*`. 5 * 2.5 is 12.5, which is bigger than 6. So B prints 12.5 <class 'float'>. The type stays `float` because a decimal number takes part. `*` works with decimals just fine."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: `total` soll eine ganze Zahl sein; die Nachkommastellen werden einfach abgeschnitten (7.5 wird 7). Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: `total` must be a whole number; the digits after the point are simply cut off (7.5 becomes 7). What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "total = round(apples + pears)",
+            "en": "total = round(apples + pears)"
+          },
+          {
+            "de": "total = int(apples + pears)",
+            "en": "total = int(apples + pears)"
+          },
+          {
+            "de": "total = int(apples) + pears",
+            "en": "total = int(apples) + pears"
+          },
+          {
+            "de": "total = float(apples + pears)",
+            "en": "total = float(apples + pears)"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`int(...)` macht aus einer Kommazahl eine ganze Zahl und schneidet dabei einfach ab: `int(7.5)` ist 7. Die Klammer muss die ganze Summe umschließen, sonst wird nur ein Teil umgewandelt.\n\n`round` rundet (7.5 wird 8), und `int(apples) + pears` wandelt nur die 5 um; das Ergebnis bleibt eine Kommazahl. `float(...)` macht das Gegenteil.",
+          "en": "`int(...)` turns a decimal number into a whole number by simply cutting off: `int(7.5)` is 7. The brackets must wrap the whole sum, otherwise only a part is converted.\n\n`round` rounds (7.5 becomes 8), and `int(apples) + pears` converts only the 5, so the result stays a decimal number. `float(...)` does the opposite."
+        }
+      }
+    ]
+  },
+  {
+    "id": "types-02",
+    "topic": "types",
+    "level": 2,
+    "code": "a = \"3\"\nb = 4\nc = int(a) + b\nif c > 5:\n    print(\"big\", c)\nelse:\n    print(\"small\", c)",
+    "variant": "a = \"1\"\nb = 4\nc = int(a) + b\nif c > 5:\n    print(\"big\", c)\nelse:\n    print(\"small\", c)",
+    "altered": "a = \"3\"\nb = 4\nc = int(a) * b\nif c > 5:\n    print(\"big\", c)\nelse:\n    print(\"small\", c)",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `c` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `c` have after them?"
+        },
+        "choices": [
+          {
+            "de": "34",
+            "en": "34"
+          },
+          {
+            "de": "'34'",
+            "en": "'34'"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`a` ist der Text `\"3\"`, `b` ist die Zahl 4. `int(a)` macht aus dem Text die Zahl 3. Dann wird gerechnet: 3 + 4 ist 7. Weil wirklich gerechnet wird, ist das Ergebnis eine Zahl und kein zusammengeklebter Text.",
+          "en": "`a` is the text `\"3\"`, `b` is the number 4. `int(a)` turns the text into the number 3. Then Python calculates: 3 + 4 is 7. Because it really calculates, the result is a number and not glued-together text."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "small 7",
+            "en": "small 7"
+          },
+          {
+            "de": "big 34",
+            "en": "big 34"
+          },
+          {
+            "de": "big 3",
+            "en": "big 3"
+          },
+          {
+            "de": "big 7",
+            "en": "big 7"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`c` ist 7, und 7 ist größer als 5. Die Bedingung stimmt, also läuft der `if`-Teil und nicht der `else`-Teil. `print(\"big\", c)` schreibt die beiden Dinge hintereinander, mit einem Leerzeichen dazwischen: big 7.",
+          "en": "`c` is 7, and 7 is bigger than 5. The condition is true, so the `if` part runs and not the `else` part. `print(\"big\", c)` writes both things one after the other with a space in between: big 7."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `a` ist jetzt der Text `\"1\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `a` is now the text `\"1\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "small 5",
+            "en": "small 5"
+          },
+          {
+            "de": "big 5",
+            "en": "big 5"
+          },
+          {
+            "de": "small 14",
+            "en": "small 14"
+          },
+          {
+            "de": "big 14",
+            "en": "big 14"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Jetzt ist `int(a)` die Zahl 1 und `c` ist 1 + 4 = 5. Ist 5 größer als 5? Nein, genau gleich ist nicht größer. Die Bedingung stimmt nicht, also läuft der `else`-Teil: small 5.",
+          "en": "Now `int(a)` is the number 1 and `c` is 1 + 4 = 5. Is 5 bigger than 5? No, equal is not bigger. The condition is false, so the `else` part runs: small 5."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B klebt die Texte zusammen und gibt big 34 aus",
+            "en": "B glues the texts together and prints big 34"
+          },
+          {
+            "de": "B multipliziert 3 mit 4 und gibt big 12 aus",
+            "en": "B multiplies 3 by 4 and prints big 12"
+          },
+          {
+            "de": "B gibt small 12 aus, weil 12 zu groß für big ist",
+            "en": "B prints small 12, because 12 is too big for big"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn 3 und 4 bleiben gleich",
+            "en": "B prints the same as A, because 3 and 4 stay the same"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "In B steht `*` statt `+`. 3 * 4 ist 12, und 12 ist größer als 5. Der `if`-Teil läuft also wieder, aber `c` ist jetzt 12: big 12. Der Zahlenwert hat sich geändert, deshalb ist die Ausgabe nicht gleich.",
+          "en": "B has `*` instead of `+`. 3 * 4 is 12, and 12 is bigger than 5. So the `if` part runs again, but `c` is now 12: big 12. The number changed, so the output is not the same."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Zeile 2 lautet künftig `b = \"4\"` (auch `b` kommt als Text an), aber `c` soll weiterhin 3 + 4 sein. Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: Line 2 will read `b = \"4\"` (`b` also arrives as text), but `c` must still be 3 + 4. What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "c = int(a + b)",
+            "en": "c = int(a + b)"
+          },
+          {
+            "de": "c = a + b",
+            "en": "c = a + b"
+          },
+          {
+            "de": "c = int(a) + int(b)",
+            "en": "c = int(a) + int(b)"
+          },
+          {
+            "de": "c = int(a) + b",
+            "en": "c = int(a) + b"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Beide Teile sind jetzt Text, also muss jeder einzeln mit `int(...)` zur Zahl werden, erst danach wird gerechnet: `int(a) + int(b)` ist 3 + 4.\n\nBei `int(a + b)` kleben erst die Texte zu `\"34\"` zusammen und werden dann zur Zahl 34. `a + b` klebt nur. `int(a) + b` rechnet Zahl plus Text, und das mag Python nicht.",
+          "en": "Both parts are text now, so each one needs its own `int(...)` to become a number, and only then Python calculates: `int(a) + int(b)` is 3 + 4.\n\nWith `int(a + b)` the texts first glue together to `\"34\"` and then become the number 34. `a + b` only glues. `int(a) + b` adds a number and a text, and Python does not like that."
+        }
+      }
+    ]
+  },
+  {
+    "id": "types-03",
+    "topic": "types",
+    "level": 1,
+    "code": "age = 15\nis_adult = age >= 18\nticket = 8\nif is_adult:\n    ticket = 12\nprint(ticket)",
+    "variant": "age = 21\nis_adult = age >= 18\nticket = 8\nif is_adult:\n    ticket = 12\nprint(ticket)",
+    "altered": "age = 15\nis_adult = age >= 18\nticket = 8\nif not is_adult:\n    ticket = 12\nprint(ticket)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `is_adult` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `is_adult` have after them?"
+        },
+        "choices": [
+          {
+            "de": "True",
+            "en": "True"
+          },
+          {
+            "de": "15",
+            "en": "15"
+          },
+          {
+            "de": "0",
+            "en": "0"
+          },
+          {
+            "de": "False",
+            "en": "False"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Die Zeile `is_adult = age >= 18` stellt eine Frage: Ist 15 mindestens 18? Die Antwort ist ein Wahrheitswert, ein `bool`. Hier ist sie False, denn 15 ist kleiner als 18. In `is_adult` landet also die Antwort, nicht die Zahl.",
+          "en": "The line `is_adult = age >= 18` asks a question: is 15 at least 18? The answer is a truth value, a `bool`. Here it is False, because 15 is smaller than 18. So `is_adult` gets the answer, not the number."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "12",
+            "en": "12"
+          },
+          {
+            "de": "20",
+            "en": "20"
+          },
+          {
+            "de": "15",
+            "en": "15"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`is_adult` ist `False`. Der eingerückte Teil unter `if` läuft nur, wenn die Bedingung wahr ist, also wird er übersprungen. `ticket` bleibt bei der ersten Zahl und `print(ticket)` zeigt 8.",
+          "en": "`is_adult` is `False`. The indented part under `if` only runs when the condition is true, so it is skipped. `ticket` keeps its first number and `print(ticket)` shows 8."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `age` ist jetzt 21. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `age` is now 21. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "12",
+            "en": "12"
+          },
+          {
+            "de": "20",
+            "en": "20"
+          },
+          {
+            "de": "True",
+            "en": "True"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "21 ist mindestens 18, also ist `is_adult` jetzt `True`. Der `if`-Teil läuft, und `ticket = 12` ersetzt die 8. Die Zahlen werden nicht addiert, die neue Zuweisung überschreibt die alte: 12.",
+          "en": "21 is at least 18, so `is_adult` is now `True`. The `if` part runs, and `ticket = 12` replaces the 8. The numbers are not added; the new assignment overwrites the old one: 12."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt einen Fehler aus, weil not vor einem Namen nicht erlaubt ist",
+            "en": "B shows an error, because not is not allowed in front of a name"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn 15 ist weiterhin ein Kind",
+            "en": "B prints the same as A, because 15 is still a child"
+          },
+          {
+            "de": "B ändert das Ticket auf 12 und gibt 12 aus",
+            "en": "B changes the ticket to 12 and prints 12"
+          },
+          {
+            "de": "B rechnet 8 + 12 und gibt 20 aus",
+            "en": "B calculates 8 + 12 and prints 20"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`not` dreht Wahr und Falsch um. `is_adult` ist `False`, also ist `not is_adult` wahr, und der `if`-Teil läuft: `ticket` wird 12. A hat ihn übersprungen und 8 ausgegeben. Ein Wort mehr, und das Ergebnis dreht sich.",
+          "en": "`not` flips true and false. `is_adult` is `False`, so `not is_adult` is true and the `if` part runs: `ticket` becomes 12. A skipped it and printed 8. One word more, and the result flips."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Wer 16 oder älter ist, soll als Erwachsener zahlen; 15 und jünger nicht. Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: Everyone aged 16 or older must pay as an adult; 15 and younger must not. What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "is_adult = age > 16",
+            "en": "is_adult = age > 16"
+          },
+          {
+            "de": "is_adult = age == 16",
+            "en": "is_adult = age == 16"
+          },
+          {
+            "de": "is_adult = age <= 16",
+            "en": "is_adult = age <= 16"
+          },
+          {
+            "de": "is_adult = age >= 16",
+            "en": "is_adult = age >= 16"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`>=` heißt „größer oder gleich“. Dann zählt genau 16 mit, und alle älteren auch; 15 und jünger bleiben draußen. Prüfe immer die Grenze selbst: Passt der Wert 16 und der Wert 15?\n\n`>` lässt die 16 draußen, `==` trifft nur genau 16, und `<=` dreht alles um.",
+          "en": "`>=` means “greater than or equal”. Then exactly 16 counts, and everything older too; 15 and younger stay out. Always test the border itself: does the value 16 fit, and the value 15?\n\n`>` leaves out the 16, `==` hits only exactly 16, and `<=` turns everything around."
+        }
+      }
+    ]
+  },
+  {
+    "id": "types-04",
+    "topic": "types",
+    "level": 1,
+    "code": "word = \"ha\"\ntimes = 3\nlaugh = word * times\nif len(laugh) > 5:\n    laugh = laugh + \"!\"\nprint(laugh)",
+    "variant": "word = \"ha\"\ntimes = 2\nlaugh = word * times\nif len(laugh) > 5:\n    laugh = laugh + \"!\"\nprint(laugh)",
+    "altered": "word = \"ha\"\ntimes = 3\nlaugh = word * times\nif len(laugh) > 6:\n    laugh = laugh + \"!\"\nprint(laugh)",
+    "requirement": [
+      4,
+      4
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `laugh` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `laugh` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'hahaha'",
+            "en": "'hahaha'"
+          },
+          {
+            "de": "'ha3'",
+            "en": "'ha3'"
+          },
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "'haha'",
+            "en": "'haha'"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Der Text `\"ha\"` mal die Zahl 3: Python wiederholt den Text dreimal und klebt ihn zusammen. Es kommt 'hahaha' heraus. Es wird nicht gerechnet und nichts dazugeschrieben, der Text wird nur vervielfacht.",
+          "en": "The text `\"ha\"` times the number 3: Python repeats the text three times and glues it together. The result is 'hahaha'. Nothing is calculated and nothing is added; the text is just multiplied."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "hahaha",
+            "en": "hahaha"
+          },
+          {
+            "de": "hahaha!",
+            "en": "hahaha!"
+          },
+          {
+            "de": "ha3!",
+            "en": "ha3!"
+          },
+          {
+            "de": "ha!ha!ha!",
+            "en": "ha!ha!ha!"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`laugh` ist `hahaha` und hat 6 Zeichen. 6 ist größer als 5, also läuft der `if`-Teil und hängt ein Ausrufezeichen hinten an. `print` zeigt hahaha!. Das `+` klebt hier Texte aneinander.",
+          "en": "`laugh` is `hahaha` and has 6 characters. 6 is bigger than 5, so the `if` part runs and attaches an exclamation mark at the end. `print` shows hahaha!. Here `+` glues texts together."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): `times` ist jetzt 2. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): `times` is now 2. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "haha!",
+            "en": "haha!"
+          },
+          {
+            "de": "hahaha",
+            "en": "hahaha"
+          },
+          {
+            "de": "haha",
+            "en": "haha"
+          },
+          {
+            "de": "ha2",
+            "en": "ha2"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Mit `times = 2` wird `\"ha\"` nur zweimal wiederholt: `haha`. Das sind 4 Zeichen, und 4 ist nicht größer als 5. Der `if`-Teil wird übersprungen, es gibt kein Ausrufezeichen: haha.",
+          "en": "With `times = 2` the text `\"ha\"` is repeated only twice: `haha`. That is 4 characters, and 4 is not bigger than 5. The `if` part is skipped, so there is no exclamation mark: haha."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B hängt zwei Ausrufezeichen an, weil die Grenze höher ist",
+            "en": "B attaches two exclamation marks, because the limit is higher"
+          },
+          {
+            "de": "B zeigt eine Fehlermeldung, weil 6 und 6 gleich sind",
+            "en": "B shows an error message, because 6 and 6 are equal"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn hahaha ist ja lang genug",
+            "en": "B prints the same as A, because hahaha is long enough"
+          },
+          {
+            "de": "B hängt kein ! an und gibt hahaha aus",
+            "en": "B attaches no ! and prints hahaha"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "In B steht `> 6` statt `> 5`. `hahaha` hat genau 6 Zeichen, und 6 ist nicht größer als 6. Die Bedingung ist falsch, das `!` wird nicht angehängt: hahaha. Bei „größer als“ zählt der Grenzwert selbst nicht mit.",
+          "en": "B has `> 6` instead of `> 5`. `hahaha` has exactly 6 characters, and 6 is not bigger than 6. The condition is false, so the `!` is not attached: hahaha. With “bigger than” the limit itself does not count."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Schon ab 4 Zeichen soll das Ausrufezeichen kommen; bei 3 oder weniger nicht. Womit ersetzt du Zeile 4 (markiert)?",
+          "en": "New requirement: The exclamation mark must come from 4 characters on; with 3 or fewer it must not. What do you replace line 4 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "if len(laugh) > 3:",
+            "en": "if len(laugh) > 3:"
+          },
+          {
+            "de": "if len(laugh) > 4:",
+            "en": "if len(laugh) > 4:"
+          },
+          {
+            "de": "if len(laugh) < 4:",
+            "en": "if len(laugh) < 4:"
+          },
+          {
+            "de": "if len(laugh) == 3:",
+            "en": "if len(laugh) == 3:"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Die Länge von `haha` ist 4, die von `hhh` ist 3. „Ab 4“ heißt: 4 und mehr. `len(laugh) > 3` stimmt für 4, 5, 6 … und nicht für 3. Rechne die Grenzfälle durch, dann siehst du sofort, welche Bedingung passt.\n\n`> 4` verpasst die 4, `< 4` dreht alles um, und `== 3` trifft nur genau die Länge, die gar nicht kommen soll.",
+          "en": "The length of `haha` is 4, the length of `hhh` is 3. “From 4 on” means 4 and more. `len(laugh) > 3` is true for 4, 5, 6 … and not for 3. Work through the border cases and you see at once which condition fits.\n\n`> 4` misses the 4, `< 4` turns everything around, and `== 3` hits only the exact length that should not get the mark."
+        }
+      }
+    ]
+  }
+]

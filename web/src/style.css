@@ -2406,3 +2406,114 @@ progress {
 .toast p {
   margin: 0;
 }
+
+/* Spot the difference: version A and B side by side (stacked on narrow screens) */
+
+.diff-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.75rem;
+}
+
+.diff-snippet {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.diff-snippet figcaption {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.diff-snippet .code {
+  flex: 1;
+}
+
+.code.marked {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.code.marked .line {
+  display: inline-block;
+  min-width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  border-left: 4px solid transparent;
+  padding-left: calc(1rem - 4px);
+}
+
+.code.marked .line.changed {
+  border-left-color: #ffd43b;
+  background: color-mix(in srgb, #ffd43b 22%, transparent);
+}
+
+/* Daily challenge */
+
+.daily-card {
+  border-left-color: var(--yellow);
+}
+
+.daily-code {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.daily-code figcaption {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.code.marked .line {
+  position: relative;
+}
+
+.code.marked .line.added {
+  border-left-color: var(--green);
+  background: color-mix(in srgb, var(--green) 16%, transparent);
+}
+
+.code.marked .line.added::before {
+  content: '+';
+  position: absolute;
+  left: 0.25rem;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.daily-result .share {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.share-line {
+  display: block;
+  max-width: 100%;
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.daily-result .hint {
+  margin: 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.daily-code .code.marked .line {
+  padding-left: calc(1.5rem - 4px);
+}

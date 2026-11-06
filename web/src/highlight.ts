@@ -12,10 +12,14 @@ export interface CodeBlockOptions {
   numbered?: boolean;
   /** 1-based line to mark (implies numbered). */
   focusLine?: number;
+  /** 1-based lines to tint as "changed" (spot the difference); no line numbers. */
+  changedLines?: readonly number[];
+  /** 1-based lines to tint as "added" (daily challenge); can be combined with changedLines. */
+  addedLines?: readonly number[];
 }
 
 /** A highlighted Python snippet. Colours come from CSS variables in style.css. */
-export function codeBlock(code: string, { numbered = false, focusLine }: CodeBlockOptions = {}): HTMLPreElement {
+export function codeBlock(code: string, { numbered = false, focusLine, changedLines, addedLines }: CodeBlockOptions = {}): HTMLPreElement {
   const el = h('code', { class: 'hljs language-python' });
   // highlight.js escapes the source, so its HTML output is safe to insert.
   if (numbered || focusLine !== undefined) {
@@ -24,6 +28,13 @@ export function codeBlock(code: string, { numbered = false, focusLine }: CodeBlo
       .map((line, i) => `<span class="line${i + 1 === focusLine ? ' focus' : ''}">${highlight(line)}</span>`)
       .join('\n');
     return h('pre', { class: 'code numbered' }, el);
+  }
+  if (changedLines !== undefined || addedLines !== undefined) {
+    el.innerHTML = code
+      .split('\n')
+      .map((line, i) => `<span class="line${changedLines?.includes(i + 1) ? ' changed' : ''}${addedLines?.includes(i + 1) ? ' added' : ''}">${highlight(line)}</span>`)
+      .join('\n');
+    return h('pre', { class: 'code marked' }, el);
   }
   el.innerHTML = highlight(code);
   return h('pre', { class: 'code' }, el);

@@ -3,7 +3,8 @@ import { MemoryKeyValue, AppStorage } from '../storage.ts';
 import { CONTENT } from '../content/lessons.ts';
 import { ACHIEVEMENTS, newlyEarned, showcase } from './achievements.ts';
 import { applyEvent, backfill, streakMultiplier, XP } from './engine.ts';
-import { levelInfo, xpForLevel } from './levels.ts';
+import { levelInfo, TITLE_COUNT, titleKey, xpForLevel } from './levels.ts';
+import { MESSAGES } from '../i18n.ts';
 import { PointsService } from './service.ts';
 import { currentStreak, dayKey, emptyPoints, parsePoints, previousDay, type PointsEvent, type PointsState } from './state.ts';
 import { generateTasks, median, type GameContext } from './tasks.ts';
@@ -33,10 +34,30 @@ describe('levels', () => {
   });
 
   it('finds the level of a total', () => {
-    expect(levelInfo(0)).toMatchObject({ level: 1, title: 1, into: 0, span: 100 });
-    expect(levelInfo(99).level).toBe(1);
-    expect(levelInfo(100)).toMatchObject({ level: 2, into: 0 });
-    expect(levelInfo(xpForLevel(12)).title).toBe(10);
+    expect(levelInfo(0)).toMatchObject({ level: 1, title: 1, into: 0, span: 180 });
+    expect(levelInfo(179).level).toBe(1);
+    expect(levelInfo(180)).toMatchObject({ level: 2, into: 0 });
+    expect(levelInfo(xpForLevel(12)).title).toBe(12);
+    expect(levelInfo(xpForLevel(TITLE_COUNT + 5)).title).toBe(TITLE_COUNT);
+  });
+
+  it('has a title for every level in both languages, all different', () => {
+    for (const lang of ['de', 'en'] as const) {
+      const names = Array.from({ length: TITLE_COUNT }, (_, i) => MESSAGES[lang][titleKey(i + 1)]);
+      expect(new Set(names).size, lang).toBe(TITLE_COUNT);
+    }
+  });
+
+  it('reaches level 10 after a month and the last title after a year of 10 right answers a day', () => {
+    // Each answer pays 10 XP times the streak bonus; the streak is never broken.
+    let total = 0;
+    const reached: Record<number, number> = {};
+    for (let day = 1; day <= 365; day++) {
+      total += 10 * Math.round(XP.quiz * streakMultiplier(day));
+      for (const level of [10, TITLE_COUNT]) if (total >= xpForLevel(level)) reached[level] ??= day;
+    }
+    expect(reached[10]).toBeLessThanOrEqual(30);
+    expect(reached[TITLE_COUNT]).toBe(365);
   });
 });
 
@@ -236,8 +257,9 @@ describe('achievements', () => {
   });
 
   it('unlocks the player level achievements', () => {
-    const state = { ...emptyPoints(), total: xpForLevel(5) };
-    expect(newlyEarned(state, CTX)).toContain('level-5');
+    const state = { ...emptyPoints(), total: xpForLevel(10) };
+    expect(newlyEarned(state, CTX)).toContain('level-10');
+    expect(newlyEarned(state, CTX)).not.toContain('level-50');
   });
 });
 

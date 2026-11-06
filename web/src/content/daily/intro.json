@@ -1,0 +1,1115 @@
+[
+  {
+    "id": "intro-01",
+    "topic": "types",
+    "level": 0,
+    "code": "cats = 2\ndogs = 3\ncats = 4\nprint(cats, dogs)",
+    "variant": "cats = 2\ndogs = 3\ncats = 6\nprint(cats, dogs)",
+    "altered": "cats = 2\ndogs = 3\ncats = dogs\nprint(cats, dogs)",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `cats` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `cats` have after them?"
+        },
+        "choices": [
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "6",
+            "en": "6"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`cats = 2` legt eine Schachtel namens `cats` an und steckt die 2 hinein. In Zeile 3 kommt eine neue Zahl in dieselbe Schachtel: die 4. Die alte 2 ist weg. Zuletzt gilt immer der neueste Wert: 4.",
+          "en": "`cats = 2` makes a box called `cats` and puts the 2 inside. Line 3 puts a new number into the same box: the 4. The old 2 is gone. The newest value always wins: 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "2 3",
+            "en": "2 3"
+          },
+          {
+            "de": "4 3",
+            "en": "4 3"
+          },
+          {
+            "de": "3 4",
+            "en": "3 4"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`print(cats, dogs)` zeigt beide Schachteln nebeneinander. `cats` enthält jetzt 4, `dogs` enthält 3. Es erscheint also 4 3.",
+          "en": "`print(cats, dogs)` shows both boxes side by side. `cats` holds 4 now, `dogs` holds 3. So 4 3 appears."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Zeile 3 ist jetzt `cats = 6`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): line 3 is now `cats = 6`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "4 3",
+            "en": "4 3"
+          },
+          {
+            "de": "2 3",
+            "en": "2 3"
+          },
+          {
+            "de": "6 3",
+            "en": "6 3"
+          },
+          {
+            "de": "9",
+            "en": "9"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Zeile 3 steckt jetzt die 6 in `cats`. `dogs` bleibt bei 3. Es erscheint 6 3. Die beiden Zahlen werden nicht zusammengezählt, sondern nur nebeneinander gezeigt.",
+          "en": "Line 3 now puts the 6 into `cats`. `dogs` stays 3. 6 3 appears. The two numbers are not added, they are just shown side by side."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B schreibt das Wort dogs in cats: es erscheint dogs 3",
+            "en": "B writes the word dogs into cats: dogs 3 appears"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn cats bleibt 4: 4 3",
+            "en": "B prints the same as A, because cats stays 4: 4 3"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil dogs kein Wert ist",
+            "en": "B stops with an error, because dogs is not a value"
+          },
+          {
+            "de": "B kopiert den Wert von dogs in cats: es erscheint 3 3",
+            "en": "B copies the value of dogs into cats: 3 3 appears"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "In B steht rechts vom `=` kein Zahlenwert, sondern der Name `dogs`. Python schaut in die Schachtel `dogs`, findet die 3 und kopiert sie nach `cats`. Beide Schachteln enthalten jetzt 3: 3 3.",
+          "en": "In B there is no number right of the `=`, but the name `dogs`. Python looks into the box `dogs`, finds the 3 and copies it into `cats`. Both boxes hold 3 now: 3 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Das Programm soll `5 3` ausgeben. Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: the program must print `5 3`. What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "cats = 5",
+            "en": "cats = 5"
+          },
+          {
+            "de": "cats == 5",
+            "en": "cats == 5"
+          },
+          {
+            "de": "dogs = 5",
+            "en": "dogs = 5"
+          },
+          {
+            "de": "cats = 3",
+            "en": "cats = 3"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`cats = 5` steckt die 5 in die Schachtel `cats`, `dogs` bleibt 3: 5 3.\n\n`cats == 5` mit zwei Gleichzeichen fragt nur „ist `cats` gleich 5?“ und ändert nichts: es bleibt 2 3. `dogs = 5` ändert die falsche Schachtel (2 5), und `cats = 3` gibt 3 3.",
+          "en": "`cats = 5` puts the 5 into the box `cats`, `dogs` stays 3: 5 3.\n\n`cats == 5` with two equal signs only asks “is `cats` equal to 5?” and changes nothing: it stays 2 3. `dogs = 5` changes the wrong box (2 5), and `cats = 3` gives 3 3."
+        }
+      }
+    ]
+  },
+  {
+    "id": "intro-02",
+    "topic": "operators",
+    "level": 0,
+    "code": "apples = 4\neaten = 1\nleft = apples - eaten\npieces = left * 2\nprint(pieces)",
+    "variant": "apples = 5\neaten = 1\nleft = apples - eaten\npieces = left * 2\nprint(pieces)",
+    "altered": "apples = 4\neaten = 1\nleft = apples - eaten\npieces = left + 2\nprint(pieces)",
+    "requirement": [
+      4,
+      4
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `left` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `left` have after them?"
+        },
+        "choices": [
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "`apples - eaten` heißt 4 minus 1. Von 4 Äpfeln wurde einer gegessen, es bleiben 3. Das Minuszeichen rechnet also weg, nicht dazu.",
+          "en": "`apples - eaten` means 4 minus 1. One of the 4 apples was eaten, so 3 are left. The minus sign takes away, it does not add."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Zuerst `left`: 4 minus 1 ist 3. Dann `left * 2`: das Sternchen ist das Malzeichen, 3 mal 2 ist 6. Das gibt `print` aus: 6.",
+          "en": "First `left`: 4 minus 1 is 3. Then `left * 2`: the star is the times sign, 3 times 2 is 6. That is what `print` shows: 6."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Zeile 1 ist jetzt `apples = 5`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): line 1 is now `apples = 5`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "6",
+            "en": "6"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "8",
+            "en": "8"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Mit 5 Äpfeln und 1 gegessenen bleiben 4. Dann 4 mal 2 ist 8. Eine Zahl am Anfang ändert alles, was danach daraus gerechnet wird.",
+          "en": "With 5 apples and 1 eaten, 4 are left. Then 4 times 2 is 8. A number at the start changes everything that is worked out from it later."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B zählt 2 dazu statt mal 2 zu rechnen: es erscheint 5",
+            "en": "B adds 2 instead of multiplying by 2: 5 appears"
+          },
+          {
+            "de": "B zieht 2 ab statt mal 2 zu rechnen: es erscheint 1",
+            "en": "B subtracts 2 instead of multiplying by 2: 1 appears"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn 2 und 3 gehen beide: 6",
+            "en": "B prints the same as A, because both ways work out: 6"
+          },
+          {
+            "de": "B zählt 2 dazu und gibt 7 aus, weil es mit 5 rechnet",
+            "en": "B adds 2 and prints 7, because it works with 5"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "In B steht `+` statt `*`. `left` ist 3, und 3 plus 2 ist 5. Bei A kam 3 mal 2 = 6 heraus. Plus und mal sind zwei verschiedene Rechnungen.",
+          "en": "B has `+` instead of `*`. `left` is 3, and 3 plus 2 is 5. A worked out 3 times 2 = 6. Plus and times are two different sums."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Jeder übrige Apfel wird in 3 Stücke geschnitten, `pieces` soll also 9 sein. Womit ersetzt du Zeile 4 (markiert)?",
+          "en": "New requirement: every apple left is cut into 3 pieces, so `pieces` must be 9. What do you replace line 4 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "pieces = left + 3",
+            "en": "pieces = left + 3"
+          },
+          {
+            "de": "pieces = left * 3",
+            "en": "pieces = left * 3"
+          },
+          {
+            "de": "pieces = left - 3",
+            "en": "pieces = left - 3"
+          },
+          {
+            "de": "pieces = apples * 3",
+            "en": "pieces = apples * 3"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Drei Stücke pro Apfel heißt „mal 3“: 3 Äpfel mal 3 ist 9.\n\n`left + 3` ergibt nur 6, `left - 3` ergibt 0, und `apples * 3` rechnet mit den 4 ursprünglichen Äpfeln (12) statt mit den übrigen.",
+          "en": "Three pieces per apple means “times 3”: 3 apples times 3 is 9.\n\n`left + 3` gives only 6, `left - 3` gives 0, and `apples * 3` uses the 4 original apples (12) instead of the ones left."
+        }
+      }
+    ]
+  },
+  {
+    "id": "intro-03",
+    "topic": "strings",
+    "level": 0,
+    "code": "word = \"cat\"\nmore = word + \"s\"\nsize = len(more)\nprint(more, size)",
+    "variant": "word = \"dog\"\nmore = word + \"s\"\nsize = len(more)\nprint(more, size)",
+    "altered": "word = \"cat\"\nmore = word + word\nsize = len(more)\nprint(more, size)",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `size` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `size` have after them?"
+        },
+        "choices": [
+          {
+            "de": "3",
+            "en": "3"
+          },
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "4",
+            "en": "4"
+          },
+          {
+            "de": "'cats'",
+            "en": "'cats'"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`word + \"s\"` klebt ein s an `cat`: `more` ist `cats`. `len(more)` zählt die Buchstaben, und `cats` hat 4. Mit `+` wird bei Text nichts gerechnet, sondern aneinandergeklebt.",
+          "en": "`word + \"s\"` glues an s onto `cat`: `more` is `cats`. `len(more)` counts the letters, and `cats` has 4. With text, `+` does not add up, it glues things together."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "cat 3",
+            "en": "cat 3"
+          },
+          {
+            "de": "cats 3",
+            "en": "cats 3"
+          },
+          {
+            "de": "cat s 4",
+            "en": "cat s 4"
+          },
+          {
+            "de": "cats 4",
+            "en": "cats 4"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`more` ist `cats` und `size` ist 4. `print` zeigt beides mit einem Leerzeichen dazwischen: cats 4. Die Anführungszeichen sieht man bei `print` nicht.",
+          "en": "`more` is `cats` and `size` is 4. `print` shows both with one space between: cats 4. `print` does not show the quote marks."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Zeile 1 ist jetzt `word = \"dog\"`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): line 1 is now `word = \"dog\"`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "dogs 4",
+            "en": "dogs 4"
+          },
+          {
+            "de": "cats 4",
+            "en": "cats 4"
+          },
+          {
+            "de": "dog 3",
+            "en": "dog 3"
+          },
+          {
+            "de": "dogs 3",
+            "en": "dogs 3"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Jetzt ist `word` das Wort dog. Mit dem s dahinter wird `more` zu `dogs`, und das hat 4 Buchstaben: dogs 4.",
+          "en": "Now `word` is the word dog. With the s behind it, `more` becomes `dogs`, which has 4 letters: dogs 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B klebt cat und ein Leerzeichen zusammen: cat cat 6",
+            "en": "B glues cat and a space together: cat cat 6"
+          },
+          {
+            "de": "B klebt cat zweimal aneinander: es erscheint catcat 6",
+            "en": "B glues cat to itself: catcat 6 appears"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A, denn es kommt cat vor: cats 4",
+            "en": "B prints the same as A, because cat is used: cats 4"
+          },
+          {
+            "de": "B rechnet 3 plus 3 und gibt 6 6 aus, ohne Text",
+            "en": "B works out 3 plus 3 and prints 6 6, without text"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "In B wird nicht das s angeklebt, sondern `word` noch einmal: `cat` und `cat` ergeben `catcat`. Das sind 6 Buchstaben. Es erscheint catcat 6, ohne Leerzeichen im Wort.",
+          "en": "B does not glue on an s, but `word` once more: `cat` and `cat` make `catcat`. That is 6 letters. catcat 6 appears, with no space inside the word."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: `more` soll `cat!` sein (mit Ausrufezeichen statt s). Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: `more` must be `cat!` (an exclamation mark instead of the s). What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "more = word - \"!\"",
+            "en": "more = word - \"!\""
+          },
+          {
+            "de": "more = \"word\" + \"!\"",
+            "en": "more = \"word\" + \"!\""
+          },
+          {
+            "de": "more = word + \"!\"",
+            "en": "more = word + \"!\""
+          },
+          {
+            "de": "more = word + \"s!\"",
+            "en": "more = word + \"s!\""
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`word + \"!\"` klebt ein Ausrufezeichen an das Wort: `cat!`.\n\n`word - \"!\"` geht nicht, Text kann man nicht abziehen (Fehler). `\"word\" + \"!\"` mit Anführungszeichen ist das Wort word statt des Inhalts der Schachtel, und `\"s!\"` hängt noch ein s dazu: `cats!`.",
+          "en": "`word + \"!\"` glues an exclamation mark onto the word: `cat!`.\n\n`word - \"!\"` does not work, you cannot take text away (error). `\"word\" + \"!\"` with quotes is the word word rather than what is in the box, and `\"s!\"` adds an s as well: `cats!`."
+        }
+      }
+    ]
+  },
+  {
+    "id": "intro-04",
+    "topic": "control-flow",
+    "level": 0,
+    "code": "temp = 5\nlimit = 10\ncold = temp < limit\nif cold:\n    print(\"coat\")\nelse:\n    print(\"shirt\")",
+    "variant": "temp = 15\nlimit = 10\ncold = temp < limit\nif cold:\n    print(\"coat\")\nelse:\n    print(\"shirt\")",
+    "altered": "temp = 5\nlimit = 3\ncold = temp < limit\nif cold:\n    print(\"coat\")\nelse:\n    print(\"shirt\")",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `cold` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `cold` have after them?"
+        },
+        "choices": [
+          {
+            "de": "False",
+            "en": "False"
+          },
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "10",
+            "en": "10"
+          },
+          {
+            "de": "True",
+            "en": "True"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`temp < limit` fragt: „Ist 5 kleiner als 10?“ Ja, das stimmt. Die Antwort auf so eine Frage ist ein Wort, kein Rechenergebnis: `True` (stimmt). Bei „stimmt nicht“ wäre es `False`.",
+          "en": "`temp < limit` asks: “Is 5 smaller than 10?” Yes, that is true. The answer to such a question is a word, not a sum: `True`. If it were not true, it would be `False`."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "coat",
+            "en": "coat"
+          },
+          {
+            "de": "shirt",
+            "en": "shirt"
+          },
+          {
+            "de": "coat shirt",
+            "en": "coat shirt"
+          },
+          {
+            "de": "True",
+            "en": "True"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`cold` ist `True`. Bei `if cold:` läuft darum der Teil direkt darunter, und der Teil nach `else:` wird übersprungen. Es erscheint coat.",
+          "en": "`cold` is `True`. So with `if cold:` the part right below it runs, and the part after `else:` is skipped. coat appears."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Zeile 1 ist jetzt `temp = 15`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): line 1 is now `temp = 15`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "coat",
+            "en": "coat"
+          },
+          {
+            "de": "shirt",
+            "en": "shirt"
+          },
+          {
+            "de": "nothing",
+            "en": "nothing"
+          },
+          {
+            "de": "False",
+            "en": "False"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "15 ist nicht kleiner als 10, also ist `cold` jetzt `False`. Dann läuft der `else`-Teil: shirt. Gedruckt wird das Wort aus dem Programm, nicht `False`.",
+          "en": "15 is not smaller than 10, so `cold` is `False` now. Then the `else` part runs: shirt. What is printed is the word from the program, not `False`."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B gibt trotzdem coat aus, weil 5 kleiner als 10 ist",
+            "en": "B still prints coat, because 5 is smaller than 10"
+          },
+          {
+            "de": "B gibt coat und shirt hintereinander aus",
+            "en": "B prints coat and then shirt, one after the other"
+          },
+          {
+            "de": "B senkt die Grenze auf 3, 5 ist nicht kleiner: es erscheint shirt",
+            "en": "B lowers the limit to 3, 5 is not smaller: shirt appears"
+          },
+          {
+            "de": "B bricht mit einem Fehler ab, weil 3 zu klein ist",
+            "en": "B stops with an error, because 3 is too small"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "In B ist die Grenze nur 3. Ist 5 kleiner als 3? Nein, also ist `cold` `False`, und der `else`-Teil läuft: shirt. Das `10` aus A gibt es in B nicht mehr.",
+          "en": "In B the limit is only 3. Is 5 smaller than 3? No, so `cold` is `False` and the `else` part runs: shirt. The `10` from A is gone in B."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Bei genau 10 Grad soll man auch noch den coat anziehen (und bei 12 das shirt). Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: at exactly 10 degrees you should still wear the coat (and the shirt at 12). What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "cold = temp < limit",
+            "en": "cold = temp < limit"
+          },
+          {
+            "de": "cold = temp > limit",
+            "en": "cold = temp > limit"
+          },
+          {
+            "de": "cold = temp == limit",
+            "en": "cold = temp == limit"
+          },
+          {
+            "de": "cold = temp <= limit",
+            "en": "cold = temp <= limit"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`<=` heißt „kleiner oder gleich“: bei 10 stimmt es, bei 5 auch, bei 12 nicht. Genau das wird verlangt.\n\n`<` lässt die 10 durchfallen (shirt). `>` dreht alles um, und `==` stimmt nur bei genau 10, bei 5 nicht.",
+          "en": "`<=` means “smaller or equal”: at 10 it is true, at 5 too, at 12 not. That is exactly what is asked.\n\n`<` lets the 10 fail (shirt). `>` turns everything around, and `==` is only true at exactly 10, not at 5."
+        }
+      }
+    ]
+  },
+  {
+    "id": "intro-05",
+    "topic": "loops",
+    "level": 0,
+    "code": "stars = \"\"\nfor i in range(3):\n    stars = stars + \"*\"\nprint(stars, len(stars))",
+    "variant": "stars = \"\"\nfor i in range(5):\n    stars = stars + \"*\"\nprint(stars, len(stars))",
+    "altered": "stars = \"\"\nfor i in range(3):\n    stars = stars + \"**\"\nprint(stars, len(stars))",
+    "requirement": [
+      2,
+      2
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `stars` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `stars` have after them?"
+        },
+        "choices": [
+          {
+            "de": "'***'",
+            "en": "'***'"
+          },
+          {
+            "de": "'*'",
+            "en": "'*'"
+          },
+          {
+            "de": "'**'",
+            "en": "'**'"
+          },
+          {
+            "de": "'****'",
+            "en": "'****'"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "`range(3)` heißt: dreimal. Jedes Mal klebt die Schleife ein `*` an `stars`. Aus dem leeren Text wird `*`, dann `**`, dann `***`. Fertig nach drei Runden.",
+          "en": "`range(3)` means: three times. Each time the loop glues a `*` onto `stars`. The empty text becomes `*`, then `**`, then `***`. Done after three rounds."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "* 1",
+            "en": "* 1"
+          },
+          {
+            "de": "*** 3",
+            "en": "*** 3"
+          },
+          {
+            "de": "**** 4",
+            "en": "**** 4"
+          },
+          {
+            "de": "* * * 3",
+            "en": "* * * 3"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Nach der Schleife ist `stars` gleich `***`. `len(stars)` zählt die Sterne: 3. `print` zeigt beides mit einem Leerzeichen dazwischen: *** 3.",
+          "en": "After the loop `stars` is `***`. `len(stars)` counts the stars: 3. `print` shows both with a space between: *** 3."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Zeile 2 ist jetzt `for i in range(5):`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): line 2 is now `for i in range(5):`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "*** 3",
+            "en": "*** 3"
+          },
+          {
+            "de": "****** 6",
+            "en": "****** 6"
+          },
+          {
+            "de": "***** 5",
+            "en": "***** 5"
+          },
+          {
+            "de": "**** 4",
+            "en": "**** 4"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`range(5)` heißt fünfmal. Fünf Runden, fünf Sterne, und `len` zählt 5: ***** 5. Die Zahl in `range` ist die Anzahl der Runden.",
+          "en": "`range(5)` means five times. Five rounds, five stars, and `len` counts 5: ***** 5. The number in `range` is how many rounds."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B läuft nur zweimal und gibt ** 2 aus",
+            "en": "B runs only twice and prints ** 2"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A: *** 3",
+            "en": "B prints the same as A: *** 3"
+          },
+          {
+            "de": "B hängt zwei Sterne an, läuft aber fünfmal: ********** 10",
+            "en": "B glues on two stars but runs five times: ********** 10"
+          },
+          {
+            "de": "B hängt in jeder Runde zwei Sterne an: es erscheint ****** 6",
+            "en": "B glues two stars on in every round: ****** 6 appears"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "In B kommen pro Runde zwei Sterne dazu statt einem. Es sind weiter drei Runden: 3 mal 2 ergibt 6 Sterne. Es erscheint ****** 6.",
+          "en": "In B two stars are added per round instead of one. It is still three rounds: 3 times 2 makes 6 stars. ****** 6 appears."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: Es sollen 4 Sterne erscheinen. Womit ersetzt du Zeile 2 (markiert)?",
+          "en": "New requirement: 4 stars must appear. What do you replace line 2 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "for i in range(4):",
+            "en": "for i in range(4):"
+          },
+          {
+            "de": "for i in range(5):",
+            "en": "for i in range(5):"
+          },
+          {
+            "de": "for i in range(3):",
+            "en": "for i in range(3):"
+          },
+          {
+            "de": "for i in range(2):",
+            "en": "for i in range(2):"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Ein Stern pro Runde, also vier Runden: `range(4)`.\n\n`range(5)` gibt fünf Sterne, `range(3)` ist das alte Programm (drei) und `range(2)` gibt nur zwei.",
+          "en": "One star per round, so four rounds: `range(4)`.\n\n`range(5)` gives five stars, `range(3)` is the old program (three) and `range(2)` gives only two."
+        }
+      }
+    ]
+  },
+  {
+    "id": "intro-06",
+    "topic": "collections",
+    "level": 0,
+    "code": "nums = [5, 8, 2]\nnums.append(9)\npick = nums[0]\nprint(pick, len(nums))",
+    "variant": "nums = [7, 8, 2]\nnums.append(9)\npick = nums[0]\nprint(pick, len(nums))",
+    "altered": "nums = [5, 8, 2]\nnums.append(9)\npick = nums[1]\nprint(pick, len(nums))",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `pick` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `pick` have after them?"
+        },
+        "choices": [
+          {
+            "de": "8",
+            "en": "8"
+          },
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "9",
+            "en": "9"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Beim Zählen in Python fängt man bei 0 an: `nums[0]` ist das erste Ding der Liste, also die 5. (`append` hängt hinten noch eine 9 an, das ändert die erste Stelle nicht.)",
+          "en": "Python counts from 0: `nums[0]` is the first thing in the list, so the 5. (`append` adds a 9 at the back, which does not change the first place.)"
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "8 4",
+            "en": "8 4"
+          },
+          {
+            "de": "5 3",
+            "en": "5 3"
+          },
+          {
+            "de": "5 4",
+            "en": "5 4"
+          },
+          {
+            "de": "9 4",
+            "en": "9 4"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Die Liste ist erst `[5, 8, 2]`, nach `append(9)` hat sie vier Dinge. `pick` ist die erste Zahl, 5, und `len(nums)` zählt die Dinge: 4. Es erscheint 5 4.",
+          "en": "The list starts as `[5, 8, 2]`, after `append(9)` it has four things. `pick` is the first number, 5, and `len(nums)` counts the things: 4. 5 4 appears."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Zeile 1 ist jetzt `nums = [7, 8, 2]`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): line 1 is now `nums = [7, 8, 2]`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "5 4",
+            "en": "5 4"
+          },
+          {
+            "de": "7 3",
+            "en": "7 3"
+          },
+          {
+            "de": "8 4",
+            "en": "8 4"
+          },
+          {
+            "de": "7 4",
+            "en": "7 4"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "Die erste Zahl der Liste ist jetzt die 7. Mit der angehängten 9 sind es immer noch vier Dinge: 7 4.",
+          "en": "The first number in the list is a 7 now. With the 9 added there are still four things: 7 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B nimmt die Zahl an Stelle 1, das ist die zweite: 8 4",
+            "en": "B takes the number at place 1, which is the second one: 8 4"
+          },
+          {
+            "de": "B nimmt weiter die erste Zahl und gibt 5 4 aus",
+            "en": "B still takes the first number and prints 5 4"
+          },
+          {
+            "de": "B nimmt die letzte Zahl und gibt 9 4 aus",
+            "en": "B takes the last number and prints 9 4"
+          },
+          {
+            "de": "B nimmt die dritte Zahl und gibt 2 4 aus",
+            "en": "B takes the third number and prints 2 4"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Die Stellen zählen ab 0: Stelle 0 ist die 5, Stelle 1 ist die 8. B nimmt Stelle 1, also die 8 (die zweite Zahl). Die Länge bleibt 4: 8 4.",
+          "en": "Places count from 0: place 0 is the 5, place 1 is the 8. B takes place 1, so the 8 (the second number). The length stays 4: 8 4."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: `pick` soll die 2 sein, die dritte Zahl der Liste. Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: `pick` must be the 2, the third number in the list. What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "pick = nums[3]",
+            "en": "pick = nums[3]"
+          },
+          {
+            "de": "pick = nums[2]",
+            "en": "pick = nums[2]"
+          },
+          {
+            "de": "pick = nums[1]",
+            "en": "pick = nums[1]"
+          },
+          {
+            "de": "pick = nums[4]",
+            "en": "pick = nums[4]"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Die dritte Zahl hat die Stelle 2 (0, 1, 2): `nums[2]`.\n\n`nums[3]` ist schon die 9, `nums[1]` ist die 8, und `nums[4]` gibt es nicht, die Liste hat nur Stellen 0 bis 3 (Fehler).",
+          "en": "The third number is at place 2 (0, 1, 2): `nums[2]`.\n\n`nums[3]` is already the 9, `nums[1]` is the 8, and `nums[4]` does not exist, the list only has places 0 to 3 (error)."
+        }
+      }
+    ]
+  },
+  {
+    "id": "intro-07",
+    "topic": "functions",
+    "level": 0,
+    "code": "def add_two(n):\n    return n + 2\nx = add_two(5)\ny = add_two(x)\nprint(x, y)",
+    "variant": "def add_two(n):\n    return n + 2\nx = add_two(1)\ny = add_two(x)\nprint(x, y)",
+    "altered": "def add_two(n):\n    return n + 3\nx = add_two(5)\ny = add_two(x)\nprint(x, y)",
+    "requirement": [
+      3,
+      3
+    ],
+    "steps": [
+      {
+        "prompt": {
+          "de": "Nur die ersten 3 Zeilen sind da. Welchen Wert hat `x` danach?",
+          "en": "Only the first 3 lines exist so far. What value does `x` have after them?"
+        },
+        "choices": [
+          {
+            "de": "5",
+            "en": "5"
+          },
+          {
+            "de": "2",
+            "en": "2"
+          },
+          {
+            "de": "7",
+            "en": "7"
+          },
+          {
+            "de": "9",
+            "en": "9"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "`def add_two(n)` baut eine kleine Maschine: Zahl hinein, `n + 2` kommt heraus. Mit `add_two(5)` wird die 5 hineingesteckt, heraus kommt 5 plus 2, also 7. Das `return` gibt das Ergebnis zurück.",
+          "en": "`def add_two(n)` builds a little machine: a number goes in, `n + 2` comes out. With `add_two(5)` the 5 is put in, and 5 plus 2 comes out, so 7. The `return` hands the result back."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das Programm wurde erweitert (die neuen Zeilen sind markiert). Was gibt es jetzt aus?",
+          "en": "The program has grown (the new lines are marked). What does it print now?"
+        },
+        "choices": [
+          {
+            "de": "7 7",
+            "en": "7 7"
+          },
+          {
+            "de": "5 7",
+            "en": "5 7"
+          },
+          {
+            "de": "9 9",
+            "en": "9 9"
+          },
+          {
+            "de": "7 9",
+            "en": "7 9"
+          }
+        ],
+        "answerIndex": 3,
+        "explanation": {
+          "de": "`x` ist 7. Dann steckt Zeile 4 diese 7 wieder in die Maschine: 7 plus 2 ist 9, das ist `y`. `print` zeigt beide: 7 9.",
+          "en": "`x` is 7. Then line 4 puts this 7 into the machine again: 7 plus 2 is 9, that is `y`. `print` shows both: 7 9."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Jetzt wurde etwas geändert (markiert): Zeile 3 ist jetzt `x = add_two(1)`. Was gibt das Programm jetzt aus?",
+          "en": "Something changed (marked): line 3 is now `x = add_two(1)`. What does the program print now?"
+        },
+        "choices": [
+          {
+            "de": "3 5",
+            "en": "3 5"
+          },
+          {
+            "de": "7 9",
+            "en": "7 9"
+          },
+          {
+            "de": "3 3",
+            "en": "3 3"
+          },
+          {
+            "de": "1 3",
+            "en": "1 3"
+          }
+        ],
+        "answerIndex": 0,
+        "explanation": {
+          "de": "Jetzt geht die 1 in die Maschine: 1 plus 2 ist 3, das ist `x`. Dann geht die 3 hinein: 3 plus 2 ist 5, das ist `y`. Es erscheint 3 5.",
+          "en": "Now the 1 goes into the machine: 1 plus 2 is 3, that is `x`. Then the 3 goes in: 3 plus 2 is 5, that is `y`. 3 5 appears."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Das ist Version B: Eine Stelle wurde geändert. Was macht B anders als A?",
+          "en": "This is version B: one place was changed. What does B do differently from A?"
+        },
+        "choices": [
+          {
+            "de": "B addiert 3 nur beim ersten Aufruf und gibt 8 10 aus",
+            "en": "B adds 3 only in the first call and prints 8 10"
+          },
+          {
+            "de": "B addiert 3 statt 2, bei beiden Aufrufen: es erscheint 8 11",
+            "en": "B adds 3 instead of 2, in both calls: 8 11 appears"
+          },
+          {
+            "de": "B gibt dasselbe aus wie A: 7 9",
+            "en": "B prints the same as A: 7 9"
+          },
+          {
+            "de": "B gibt 8 8 aus, weil die Maschine nur einmal läuft",
+            "en": "B prints 8 8, because the machine only runs once"
+          }
+        ],
+        "answerIndex": 1,
+        "explanation": {
+          "de": "Die Maschine selbst ist anders: sie addiert jetzt 3. Beide Aufrufe benutzen die neue Maschine. `x` ist 5 plus 3 gleich 8, `y` ist 8 plus 3 gleich 11: 8 11.",
+          "en": "The machine itself is different: it adds 3 now. Both calls use the new machine. `x` is 5 plus 3 which is 8, `y` is 8 plus 3 which is 11: 8 11."
+        }
+      },
+      {
+        "prompt": {
+          "de": "Neue Anforderung: `x` soll 8 sein (die Maschine bleibt, wie sie ist). Womit ersetzt du Zeile 3 (markiert)?",
+          "en": "New requirement: `x` must be 8 (the machine stays as it is). What do you replace line 3 (marked) with?"
+        },
+        "choices": [
+          {
+            "de": "x = add_two(8)",
+            "en": "x = add_two(8)"
+          },
+          {
+            "de": "x = add_two(2)",
+            "en": "x = add_two(2)"
+          },
+          {
+            "de": "x = add_two(6)",
+            "en": "x = add_two(6)"
+          },
+          {
+            "de": "x = add_two(7)",
+            "en": "x = add_two(7)"
+          }
+        ],
+        "answerIndex": 2,
+        "explanation": {
+          "de": "Die Maschine addiert 2, also muss 6 hinein, damit 8 herauskommt: `add_two(6)`.\n\n`add_two(8)` ergibt 10, `add_two(2)` ergibt 4 und `add_two(7)` ergibt 9. Die Zahl in der Klammer ist das, was hineingeht, nicht das, was herauskommt.",
+          "en": "The machine adds 2, so 6 must go in for 8 to come out: `add_two(6)`.\n\n`add_two(8)` gives 10, `add_two(2)` gives 4 and `add_two(7)` gives 9. The number in the brackets is what goes in, not what comes out."
+        }
+      }
+    ]
+  }
+]

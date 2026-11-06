@@ -178,17 +178,42 @@ button.primary:disabled {
   text-align: center;
 }
 
-.toolbar {
-  align-self: stretch;
+.home {
+  gap: 0.5rem;
+}
+
+.home > * {
+  max-width: 100%;
+}
+
+.home-top {
+  align-self: center;
+  width: 100%;
+  max-width: 26rem;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
   gap: 0.25rem;
 }
 
+.home-top .profile-chip {
+  flex: 1;
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+}
+
+.toolbar .icon-button {
+  width: 2.75rem;
+  min-height: 2.75rem;
+}
+
 .logo {
-  width: 160px;
-  height: 160px;
-  padding: 8px;
+  width: 112px;
+  height: 112px;
+  padding: 6px;
+  margin-top: 0.5rem;
   border-radius: 22%;
   background: var(--hydra-bg);
   /* The swaying heads may reach a little past the artwork's edge. */
@@ -218,40 +243,88 @@ button.primary:disabled {
   color: var(--muted);
 }
 
-.lessons {
-  list-style: none;
-  margin: 0.5rem 0 0;
-  padding: 0;
+.lesson-group {
   width: 100%;
-  max-width: 22rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  max-width: 26rem;
+  margin-top: 0.75rem;
+  text-align: left;
 }
 
-.lesson {
+.lesson-group h2 {
+  margin: 0 0 0.5rem 0.25rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lessons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.6rem;
+}
+
+/* One card per lesson or game; the whole card is the button's hit area. */
+.lesson {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+}
+
+.lesson:hover {
+  border-color: var(--accent);
+}
+
+.lesson:focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .start {
-  width: 100%;
-  min-height: 3.5rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
+  align-items: flex-start;
+  gap: 0.1rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.start:focus-visible {
+  outline: none;
+}
+
+.start::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
 }
 
 .lesson-title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 650;
 }
 
 .lesson-description {
   font-size: 0.9rem;
   font-weight: 400;
-  opacity: 0.9;
+  color: var(--muted);
+}
+
+.lesson .stats {
+  font-size: 0.8rem;
 }
 
 /* Hydra: one head per question, see src/hydra/ */
@@ -1974,4 +2047,362 @@ textarea {
 .game .order-run {
   width: 100%;
   min-height: 2.4rem;
+}
+
+/*
+ * What does the hydra say?: the quiz hydra with one head per printed line,
+ * the program, and a console of output lines the player types. The level
+ * title sits on the dark band above the heads, so it never hides one.
+ */
+.game.predict .predict-hydra-box {
+  max-width: none;
+  padding-top: 1.6rem;
+  border-radius: var(--radius);
+  background: var(--hydra-bg);
+}
+
+.game.predict .hydra {
+  width: 100%;
+  height: auto;
+  max-height: 11dvh;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.predict-head-number {
+  fill: #e8eef5;
+  fill-opacity: 0.85;
+  font: 600 5.5px system-ui, sans-serif;
+  text-anchor: middle;
+}
+
+.game.predict .program {
+  max-height: 24dvh;
+}
+
+.predict-console {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.25rem 0.4rem 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--code-bg);
+}
+
+.predict-console-title {
+  color: var(--code-comment);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.predict-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.predict-line {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.predict-number {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: #2a5680;
+  color: #e8eef5;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: background-color 200ms;
+}
+
+.predict-input {
+  flex: 1;
+  min-width: 0;
+  height: 1.8rem;
+  padding: 0 0.55rem;
+  border: 2px solid var(--border);
+  border-radius: 0.55rem;
+  background: var(--surface);
+  color: var(--code-fg);
+  /* At least 16px, so phones do not zoom in when it gets the focus. */
+  font: 1rem ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  transition:
+    border-color 200ms,
+    background-color 200ms;
+}
+
+.predict-input:focus-visible {
+  outline: none;
+  border-color: var(--focus);
+}
+
+.predict-line:has(.predict-input:focus) .predict-number {
+  background: #3776ab;
+}
+
+.predict-line .mark {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 1.4rem;
+}
+
+.predict-line .mark:empty {
+  display: none;
+}
+
+.predict-line.right .predict-input {
+  border-color: var(--green);
+  background: var(--green-bg);
+}
+
+.predict-line.right .mark {
+  color: var(--green);
+}
+
+.predict-line.wrong .predict-input {
+  border-color: var(--red);
+  background: var(--red-bg);
+}
+
+.predict-line.wrong .mark {
+  color: var(--red);
+}
+
+.predict-line.focus .predict-number {
+  background: var(--yellow);
+  color: #14202e;
+}
+
+.game .predict-check {
+  width: 100%;
+  min-height: 2.4rem;
+}
+
+.game .predict-reveal {
+  align-self: flex-start;
+  min-height: 2.2rem;
+}
+
+.predict-revealed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.predict-revealed .code {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .predict-number,
+  .predict-input {
+    transition: none;
+  }
+}
+
+/* Points, profile and toasts */
+progress {
+  width: 100%;
+  height: 0.6rem;
+  accent-color: var(--accent);
+}
+
+.profile-chip progress {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.profile-chip progress::-webkit-progress-bar {
+  background: var(--border);
+}
+
+.profile-chip progress::-webkit-progress-value {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.profile-chip progress::-moz-progress-bar {
+  background: var(--accent);
+}
+
+.profile-chip {
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.9rem;
+  text-align: left;
+}
+
+.profile-chip .chip-text {
+  font-size: 0.9rem;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-chip progress {
+  grid-column: 1 / -1;
+}
+
+.chip-xp {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.profile section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.profile .hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.profile .greeting {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.profile .showcase {
+  margin: 0;
+  font-weight: 600;
+}
+
+.name-form .row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.name-form input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.tasks,
+.achievements {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.task {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem 0.75rem;
+}
+
+.task.done .task-label {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.task.done .task-count {
+  color: var(--green);
+}
+
+.task progress {
+  grid-column: 1 / -1;
+}
+
+.achievements {
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+}
+
+.achievement {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+.achievement.earned {
+  opacity: 1;
+}
+
+.achievement.earned.bronze {
+  border-color: #b87333;
+}
+
+.achievement.earned.silver {
+  border-color: #9aa5b1;
+}
+
+.achievement.earned.gold {
+  border-color: var(--yellow);
+}
+
+.achievement .tier,
+.achievement .locked,
+.achievement time {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.toasts {
+  position: fixed;
+  top: max(0.75rem, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+  width: max-content;
+  max-width: calc(100vw - 2rem);
+}
+
+.toast {
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.3);
+}
+
+.toast p {
+  margin: 0;
 }

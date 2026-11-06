@@ -13,7 +13,7 @@ when a requirement changes; the code, tests and the other docs follow it.
 
 ## Lessons
 
-Home offers three lessons and three games. The first two use the same quiz screen, answer feedback,
+Home offers three lessons and four games. The first two use the same quiz screen, answer feedback,
 explanations, hydra, resume and stats rules (below); they differ in which
 questions a session asks.
 
@@ -24,6 +24,7 @@ questions a session asks.
 | game      | Hydra auf Fischfang / Hydra goes fishing | the hydra game: its own screen and progress (see below) |
 | hunt      | Hydra-Jagd / Hydra hunt            | the warrior game: same screen, its own world, levels and progress (see below) |
 | order     | Code-Puzzle / Code puzzle          | the warrior's world, but the lines of the program are to be put in order (see below) |
+| predict   | Was sagt die Hydra? / What does the hydra say? | read a short program and type what it prints (see below) |
 
 ### Reading functions (walkthroughs)
 
@@ -166,6 +167,37 @@ questions a session asks.
 - Progress (`order` in storage): levels solved, runs and winning runs, and
   the current level with its arrangement (kept across reloads). Home shows
   e.g. "1 of 8 levels solved · 5 runs". Reset progress wipes it.
+
+### What does the hydra say? (the fourth game)
+
+- A short program (at most 6 lines) that prints 1 to 4 lines. The quiz
+  hydra has one head per printed line, numbered from left to right; the
+  player types each line into a numbered "Output" box and presses "Check"
+  (Enter moves to the next box, and checks in the last one). Empty boxes
+  are not checked.
+- A check runs the program step by step with the same run controls,
+  highlighted line, variables and speed as the other games. Each time it
+  prints, the head of that line falls (right) or grows back (wrong) and
+  its box turns green or red. A line is right when it is exactly what
+  Python prints; only spaces around it are ignored.
+- After a miss: how many lines are right, a word on near misses (the text
+  in quotes, other upper/lower case, other spaces), the level's hint and a
+  nudge to step through the run. The right output is never shown, except
+  that after two wrong checks of a level a "Show the output" button
+  reveals it; it still has to be typed to solve the level. After a win a
+  short explanation and "Next level". Changing a line ends the run shown.
+- 16 levels, one concept each: print shows text, calculations, text vs.
+  calculation, `True`/`False`, a changing variable, a value worked out
+  once, `//` `%` and precedence, `+` on texts, several values in one
+  print, `if`/`else`, `range`, print after a loop, print inside a loop,
+  a `while` countdown, `len` and indexing, a function that returns.
+  Every output is checked against the interpreter and was verified with
+  real `python3`.
+- Progress (`predict` in storage): levels solved, checks and right checks
+  of unsolved levels (practice on a solved level counts nothing), and the
+  current level with the typed lines and its misses, kept across reloads.
+  Home shows e.g. "1 of 16 levels solved · 50% correct". Reset progress
+  wipes it.
 
 ## Content
 
@@ -312,7 +344,44 @@ defensively: corrupt or foreign data is ignored and never throws.
 - the last result (lesson, score, total) for the summary;
 - per-question stats `{ seen, correct, lastSeen }` keyed by question id
   (collected now, not yet used to pick questions);
+- the points (`points`, see below) and the player name (`playerName`, a setting that Reset progress keeps);
 - the feedback queue.
+
+## Points, levels and achievements
+
+All on the device (localStorage key `points`, name in `playerName`); no accounts,
+nothing is sent. Code: `web/src/points/`.
+
+- **XP.** A question answered right pays 10 XP the first time (never again, also
+  not after a wrong try first); a level solved the first time pays 20 XP, 30 if
+  no wrong pick or check came before (the code puzzle always pays 20); a quiz
+  round with every answer right pays 25 XP, once a day. Replays pay nothing,
+  like they never change a game's score. Everything but daily tasks is
+  multiplied by the streak bonus: +10 % per day in a row, at most +70 %.
+- **Streak.** A day counts when a question was answered right or a level solved.
+  It is broken when neither today nor yesterday counts.
+- **Player level.** Level n starts at `round(100 * (n - 1)^1.5)` XP (level 2:
+  100, level 5: 800, level 10: 2700). Levels 1-10 carry a title (Hydra-Ei …
+  Hydra-Meister); higher levels keep the last one.
+- **Daily tasks.** Up to three per local day, made on the first activity or
+  visit of the day and the same all day: right quiz answers, levels solved in
+  any game, levels solved in one game (only games with unsolved levels, and
+  only if at least two have). Targets follow the median of the days played in
+  the last 7 days (+20 %, but +0 % when under 60 % of the answers were right),
+  within 3-20 answers and 1-6 levels; new players get 5 and 2. Each task done
+  pays 50 XP.
+- **Achievements.** 21, in bronze, silver and gold (gold = rare): answers,
+  levels, streak, perfect rounds, daily tasks, player level, and every level of
+  one game. The profile shows the earned ones with their date; the rarest earned
+  title appears under the level.
+- **Profile** (`#/profile`, from the chip on Home): name (1-20 characters,
+  optional, shown on Home and in the greeting), level and XP bar, streak, today's
+  tasks, achievements.
+- **Toast.** A short note (`aria-live="polite"`, no focus change) after an event
+  that paid XP or unlocked something: XP, level up, task done, achievement.
+- **Existing players.** On the first start with points, the questions answered
+  right and levels solved so far are credited (no streak, no toast).
+- **Reset progress** deletes the points; the name stays.
 
 ## Look and accessibility
 

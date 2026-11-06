@@ -36,6 +36,7 @@ In `web/src`:
 | `trainer.ts`                    | Quiz flow and stats                                                 |
 | `storage.ts`                    | localStorage access                                                 |
 | `update.ts`                     | Service worker update rule (never reload during a quiz)             |
+| `points/`                       | XP, levels, daily tasks, achievements (pure engine + service)       |
 | `feedback/`                     | Feedback client and offline queue                                   |
 | `hydra/`                        | The quiz hydra: neck geometry, head states from the session, SVG; its animations are in `style.css` |
 | `game/`                         | The hydra games: Python-subset interpreter (`python.ts`), what every level has (`puzzle.ts`), progress (`progress.ts`, `game.ts`). Fishing: pool simulation (`world.ts`), levels (`levels.ts`), the pool SVG (`arena.ts`). Hunt: simulation (`hunt.ts`), levels (`hunt-levels.ts`), the map SVG (`hunt-arena.ts`) and the warrior (`hero.ts`). Code puzzle: levels (`order-levels.ts`) and progress (`order.ts`), screen `views/order.ts`. The shared screen is `views/puzzle.ts`, set up by `views/game.ts` and `views/hunt.ts` |

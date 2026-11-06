@@ -1,8 +1,9 @@
-import type { App, Screen } from '../app.ts';
+import { GAME_ROUTES, type App, type GameRoute, type Screen } from '../app.ts';
 import { LESSONS, type LessonId } from '../content/lessons.ts';
 import { h, svg } from '../dom.ts';
 import { logoArt } from '../hydra/view.ts';
 import { GEAR, SPEECH_BUBBLE } from '../icons.ts';
+import { levelInfo } from '../points/levels.ts';
 import { percentCorrect } from '../stats.ts';
 
 export function homeScreen(app: App): Screen {
@@ -34,7 +35,7 @@ export function homeScreen(app: App): Screen {
       h(
         'button',
         {
-          class: 'primary start',
+          class: 'start',
           'data-testid': `start-${lesson}`,
           'aria-describedby': `stats-${lesson}`,
           onclick: () => {
@@ -49,9 +50,12 @@ export function homeScreen(app: App): Screen {
     );
 
   /** The hydra games: not quiz lessons, each has its own screen and progress. */
-  const gameCard = (route: 'game' | 'hunt' | 'order') => {
+  const gameCard = (route: GameRoute) => {
     let statsText: string;
-    if (route === 'order') {
+    if (route === 'predict') {
+      const stats = app.services.predict.stats();
+      statsText = stats.checks === 0 ? t('home.game.noStats') : t('home.game.stats', stats);
+    } else if (route === 'order') {
       const stats = app.services.order.stats();
       statsText = stats.runs === 0 ? t('home.order.noStats') : t(stats.runs === 1 ? 'home.order.stats.one' : 'home.order.stats.other', stats);
     } else {
@@ -64,7 +68,7 @@ export function homeScreen(app: App): Screen {
       h(
         'button',
         {
-          class: 'primary start',
+          class: 'start',
           'data-testid': `start-${route}`,
           'aria-describedby': `stats-${route}`,
           onclick: () => app.navigate(route),
@@ -83,19 +87,52 @@ export function homeScreen(app: App): Screen {
   const iconButton = (label: string, icon: string, onclick: () => void, testId: string) =>
     h('button', { class: 'icon-button', 'aria-label': label, title: label, 'data-testid': testId, onclick }, svg(icon));
 
+  const { points } = app.services;
+  const state = points.state();
+  const info = levelInfo(state.total);
+  const name = storage.playerName();
+  const profile = h(
+    'button',
+    { class: 'profile-chip', 'data-testid': 'open-profile', 'aria-label': t('home.profile'), onclick: () => app.navigate('profile') },
+    h(
+      'span',
+      { class: 'chip-text' },
+      name ? h('strong', {}, name) : null,
+      h('span', { 'data-testid': 'home-level' }, t('home.level', { n: info.level, title: t(`level.title.${info.title}`) })),
+    ),
+    h('progress', { max: info.span, value: info.into, 'aria-hidden': 'true' }),
+    h('span', { class: 'chip-xp' }, `${state.total} XP`),
+  );
+
   const root = h(
     'main',
     { class: 'screen home' },
     h(
-      'nav',
-      { class: 'toolbar' },
-      iconButton(t('home.feedback'), SPEECH_BUBBLE, () => app.navigate('feedback'), 'open-feedback'),
-      iconButton(t('home.settings'), GEAR, () => app.navigate('settings'), 'open-settings'),
+      'div',
+      { class: 'home-top' },
+      profile,
+      h(
+        'nav',
+        { class: 'toolbar' },
+        iconButton(t('home.feedback'), SPEECH_BUBBLE, () => app.navigate('feedback'), 'open-feedback'),
+        iconButton(t('home.settings'), GEAR, () => app.navigate('settings'), 'open-settings'),
+      ),
     ),
     logoArt(),
     h('h1', { tabindex: -1 }, 'Pydra'),
     h('p', { class: 'tagline' }, t('app.tagline')),
-    h('ul', { class: 'lessons', 'aria-label': t('home.lessons') }, ...LESSONS.map(lessonCard), gameCard('game'), gameCard('hunt'), gameCard('order')),
+    h(
+      'section',
+      { class: 'lesson-group' },
+      h('h2', { id: 'home-lessons' }, t('home.lessons')),
+      h('ul', { class: 'lessons', 'aria-labelledby': 'home-lessons' }, ...LESSONS.map(lessonCard)),
+    ),
+    h(
+      'section',
+      { class: 'lesson-group' },
+      h('h2', { id: 'home-games' }, t('home.games')),
+      h('ul', { class: 'lessons', 'aria-labelledby': 'home-games' }, ...GAME_ROUTES.map(gameCard)),
+    ),
   );
   return { root };
 }

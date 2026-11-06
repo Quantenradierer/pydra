@@ -1,3 +1,4 @@
+import type { PointsEvent } from '../points/state.ts';
 import type { AppStorage } from '../storage.ts';
 import { ORDER_LEVELS, type OrderLevel } from './order-levels.ts';
 
@@ -46,10 +47,16 @@ export function unlockedOrder(progress: OrderProgress, levels: readonly OrderLev
 export class OrderGame {
   private storage: AppStorage;
   readonly levels: readonly OrderLevel[];
+  private onPoints: (event: PointsEvent) => void;
 
-  constructor(storage: AppStorage, levels: readonly OrderLevel[] = ORDER_LEVELS) {
+  constructor(
+    storage: AppStorage,
+    levels: readonly OrderLevel[] = ORDER_LEVELS,
+    onPoints: (event: PointsEvent) => void = () => {},
+  ) {
     this.storage = storage;
     this.levels = levels;
+    this.onPoints = onPoints;
   }
 
   progress(): OrderProgress {
@@ -93,6 +100,7 @@ export class OrderGame {
     if (!id) return;
     const solved = success && !progress.solved.includes(id) ? [...progress.solved, id] : progress.solved;
     this.save({ ...progress, solved, runs: progress.runs + 1, wins: progress.wins + (success ? 1 : 0) });
+    if (solved !== progress.solved) this.onPoints({ type: 'level', game: 'order', id, clean: false });
   }
 
   /** Levels solved, how many there are, and the runs so far. */

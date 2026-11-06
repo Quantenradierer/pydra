@@ -1,4 +1,5 @@
 import type { Rng } from '../session.ts';
+import type { PointsEvent } from '../points/state.ts';
 import type { AppStorage } from '../storage.ts';
 import { LEVELS, type GameLevel } from './levels.ts';
 import type { PuzzleLevel } from './puzzle.ts';
@@ -13,17 +14,25 @@ export class Game<L extends PuzzleLevel = GameLevel> {
   readonly levels: readonly L[];
   private rng: Rng;
   private key: GameKey;
+  private onPoints: (event: PointsEvent) => void;
 
-  constructor(storage: AppStorage, levels: readonly L[], rng: Rng = Math.random, key: GameKey = 'game') {
+  constructor(
+    storage: AppStorage,
+    levels: readonly L[],
+    rng: Rng = Math.random,
+    key: GameKey = 'game',
+    onPoints: (event: PointsEvent) => void = () => {},
+  ) {
     this.storage = storage;
     this.levels = levels;
     this.rng = rng;
     this.key = key;
+    this.onPoints = onPoints;
   }
 
   /** The fishing game. */
-  static fishing(storage: AppStorage, rng?: Rng): Game<GameLevel> {
-    return new Game(storage, LEVELS, rng, 'game');
+  static fishing(storage: AppStorage, rng?: Rng, onPoints?: (event: PointsEvent) => void): Game<GameLevel> {
+    return new Game(storage, LEVELS, rng, 'game', onPoints);
   }
 
   progress(): GameProgress {
@@ -49,7 +58,11 @@ export class Game<L extends PuzzleLevel = GameLevel> {
     const progress = this.progress();
     const level = this.levels.find((l) => l.id === progress.current?.level);
     if (!level) return undefined;
-    return this.save(pick(progress, level, slot)).current;
+    const next = this.save(pick(progress, level, slot));
+    if (next.solved.length > progress.solved.length) {
+      this.onPoints({ type: 'level', game: this.key, id: level.id, clean: progress.current!.tried.length === 0 });
+    }
+    return next.current;
   }
 
   /** Levels solved, how many there are, and the share of right picks in whole percent. */

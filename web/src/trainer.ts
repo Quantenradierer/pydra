@@ -13,6 +13,7 @@ import {
   type Session,
 } from './session.ts';
 import { recordAnswer, recordQuestion, recordSession } from './stats.ts';
+import type { PointsEvent } from './points/state.ts';
 import type { AppStorage, LastResult } from './storage.ts';
 
 /** Quiz flow on top of storage: every change is saved straight away. */
@@ -22,6 +23,7 @@ export class Trainer {
     private content: Content,
     private rng: Rng = Math.random,
     private now: () => Date = () => new Date(),
+    private onPoints: (event: PointsEvent) => void = () => {},
   ) {}
 
   /** The session to resume, if a valid one is saved. */
@@ -74,6 +76,7 @@ export class Trainer {
     this.storage.setCounters(recordAnswer(this.storage.counters(next.lesson), correct), next.lesson);
     this.storage.setQuestionStats(recordQuestion(this.storage.questionStats(), item.id, correct, this.now()));
     this.storage.setSession(next);
+    this.onPoints({ type: 'quiz', id: item.id, correct });
     return next;
   }
 
@@ -90,6 +93,7 @@ export class Trainer {
     this.storage.setCounters(recordSession(this.storage.counters(session.lesson), result.score), session.lesson);
     this.storage.setLastResult(result);
     this.storage.clearSession();
+    this.onPoints({ type: 'session', perfect: result.score === result.total });
     return result;
   }
 

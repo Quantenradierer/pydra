@@ -1,11 +1,16 @@
 import { isLesson, LESSONS, type Content, type LessonId } from './content/lessons.ts';
 import { DEFAULT_LANG, isLang, type Lang } from './i18n.ts';
 import { DEFAULT_GAME_SPEED, isGameSpeed, type GameSpeed } from './game/speed.ts';
+import { parsePoints, type PointsState } from './points/state.ts';
 import { parseSession, type Session } from './session.ts';
 import { parseCounters, parseQuestionStats, type Counters, type QuestionStats } from './stats.ts';
 
 /** The subset of the Web Storage API used here; localStorage in the app. */
 export type KeyValue = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+
+/** Where each hydra game keeps its progress. */
+export const GAME_DATA_KEYS = ['game', 'hunt', 'order', 'predict'] as const;
+export type GameDataKey = (typeof GAME_DATA_KEYS)[number];
 
 /** All keys live in one versioned namespace. */
 export const NAMESPACE = 'pydra.v1.';
@@ -124,12 +129,12 @@ export class AppStorage {
     this.remove('lastResult');
   }
 
-  /** A hydra game's saved progress, raw: game/progress.ts (or game/order.ts) parses it. */
-  gameData(key: 'game' | 'hunt' | 'order' = 'game'): unknown {
+  /** A hydra game's saved progress, raw: game/progress.ts (or game/order.ts, game/predict.ts) parses it. */
+  gameData(key: GameDataKey = 'game'): unknown {
     return this.read(key);
   }
 
-  setGameData(progress: unknown, key: 'game' | 'hunt' | 'order' = 'game') {
+  setGameData(progress: unknown, key: GameDataKey = 'game') {
     this.write(key, progress);
   }
 
@@ -143,6 +148,27 @@ export class AppStorage {
     this.write('gameSpeed', speed);
   }
 
+  /** The saved points, or undefined if there are none yet (the first start credits earlier progress). */
+  points(): PointsState | undefined {
+    const raw = this.read('points');
+    return raw === undefined ? undefined : parsePoints(raw);
+  }
+
+  setPoints(points: PointsState) {
+    this.write('points', points);
+  }
+
+  /** The player's name: a setting, so Reset progress keeps it. Empty when unset. */
+  playerName(): string {
+    const name = this.read('playerName');
+    return typeof name === 'string' ? name : '';
+  }
+
+  setPlayerName(name: string) {
+    if (name === '') this.remove('playerName');
+    else this.write('playerName', name);
+  }
+
   feedbackQueue(): string[] {
     const raw = this.read('feedbackQueue');
     return Array.isArray(raw) ? raw.filter((t): t is string => typeof t === 'string') : [];
@@ -153,9 +179,9 @@ export class AppStorage {
     else this.write('feedbackQueue', queue);
   }
 
-  /** Wipes stats, counters, any session and every hydra game's progress; keeps the language and unsent feedback. */
+  /** Wipes stats, counters, points, any session and every hydra game's progress; keeps the language, the player name and unsent feedback. */
   resetProgress() {
-    for (const key of ['session', ...LESSONS.map(countersKey), 'questionStats', 'lastResult', 'game', 'hunt', 'order']) this.remove(key);
+    for (const key of ['session', ...LESSONS.map(countersKey), 'questionStats', 'lastResult', 'points', ...GAME_DATA_KEYS]) this.remove(key);
   }
 }
 

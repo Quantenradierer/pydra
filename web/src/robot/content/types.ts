@@ -56,7 +56,7 @@ export interface EnemyData {
   breaks?: boolean;
   /** Lines of a clean solution: fewer or equal lines earns the "few lines" star. */
   par: number;
-  /** Fights of Proving Grounds: take the first map of each of these other enemies instead. */
+  /** Fights of Proving Grounds: take one map of each of these other enemies instead: the first, or the n-th with "id#n". */
   mix?: string[];
   /** false: a side mission with its own set-up; it is not part of the chapter's regression run. */
   regression?: boolean;

@@ -9,14 +9,16 @@ export const codeLines = (script: string): number => script.split('\n').filter((
 
 export function layoutsOf(enemy: EnemyData, all: readonly EnemyData[]): LayoutSpec[] {
   const pick = (id: string) => all.find((e) => e.id === id)!;
-  const sources = enemy.mix ? enemy.mix.map(pick) : [enemy];
   const out: LayoutSpec[] = [];
-  sources.forEach((src, k) => {
-    for (const [i, map] of src.maps.entries()) {
-      if (enemy.mix && i > 0) break; // a mixed fight takes one layout of each source
-      out.push({ map, enemies: src.enemies, seed: SEEDS[(i + k) % 3]!, ...(enemy.maxTicks ?? src.maxTicks ? { maxTicks: enemy.maxTicks ?? src.maxTicks! } : {}) });
-    }
-  });
+  const add = (src: EnemyData, i: number, k: number) =>
+    out.push({ map: src.maps[i]!, enemies: src.enemies, seed: SEEDS[(i + k) % 3]!, ...(enemy.maxTicks ?? src.maxTicks ? { maxTicks: enemy.maxTicks ?? src.maxTicks! } : {}) });
+  if (enemy.mix) {
+    // A mixed fight takes one layout of each source: the first, or the n-th with "id#n" (1-based).
+    enemy.mix.forEach((ref, k) => {
+      const [id, n] = ref.split('#');
+      add(pick(id!), n ? Number(n) - 1 : 0, k);
+    });
+  } else enemy.maps.forEach((_, i) => add(enemy, i, 0));
   return out;
 }
 
@@ -46,7 +48,7 @@ export function bareCode(script: string): string {
     .join('\n');
 }
 
-export const usesWord = (script: string, word: string): boolean => new RegExp(`(^|[^A-Za-z0-9_])${word.replace(/ /g, '\\s+')}($|[^A-Za-z0-9_])`).test(bareCode(script));
+export const usesWord = (script: string, word: string): boolean => new RegExp(`(^|[^A-Za-z0-9_])${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/ /g, '\\s+')}($|[^A-Za-z0-9_])`).test(bareCode(script));
 
 /** Whether some number literal is written more than once. */
 export function repeatsNumber(script: string): boolean {

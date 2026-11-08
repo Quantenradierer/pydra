@@ -100,7 +100,7 @@ export function parseProgress(raw: unknown, steps: readonly Step[]): RobotProgre
 export function unlockLevel(solved: readonly string[], steps: readonly Step[]): number {
   const open = steps.find((s) => s.kind === 'battle' && s.enemy!.regression !== false && !solved.includes(s.id));
   const chapter = open ? open.chapter : Math.max(...steps.map((s) => s.chapter));
-  return chapter === 25 ? 2 : chapter;
+  return chapter === 25 ? 2 : chapter === 45 ? 4 : chapter;
 }
 
 export function isUnlocked(step: Step, solved: readonly string[], steps: readonly Step[]): boolean {

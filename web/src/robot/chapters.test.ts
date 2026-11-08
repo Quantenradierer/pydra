@@ -37,3 +37,27 @@ describe('Chapter 3', () => {
     expect(run('order-matters', wrong).won).toBe(false);
   });
 });
+
+describe('Proving Grounds II', () => {
+  it('the Chapter 4 boss script is not enough for the Final Exam (no shield awareness)', () => {
+    const r = run('final-exam', enemy('hide-and-seek').solution, enemy('pg2-a').solutionBuild);
+    expect(r.won).toBe(false);
+  });
+  it('the final script wins all eighteen fights of the Final Exam', () => {
+    const r = run('final-exam', enemy('final-exam').solution);
+    expect(r.fights).toHaveLength(18);
+    expect(r.won).toBe(true);
+  });
+});
+
+describe('the two late additions', () => {
+  it('Backstep Dummy: standing still wins but takes damage, backing off takes none', () => {
+    const r = run('backstep-dummy', 'fire()\nfire()');
+    expect(r.won).toBe(false);
+    expect(r.fights.every((f) => f.battle.outcome === 'win' && f.unmet === 'damage')).toBe(true);
+    expect(run('backstep-dummy', 'backward()\nfire()\nfire()').won).toBe(true);
+  });
+  it('Growing Shots: a plain fire(3) does not count, fire(i) does', () => {
+    expect(run('growing-shots', 'forward(4)\nfire(3)\nwait()\nwait()\nfire(3)').won).toBe(false);
+  });
+});

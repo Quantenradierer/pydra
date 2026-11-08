@@ -83,7 +83,10 @@ export function robotScreen(app: App): Screen {
         ),
       ),
     );
-    show(subpageHeader(app, t('lesson.robot.title')), h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, ...sections));
+    show(
+      subpageHeader(app, t('lesson.robot.title')),
+      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, p.solved.includes('final-exam') ? h('p', { class: 'robot-win', 'data-testid': 'robot-certificate' }, `🎓 ${t('robot.certificate')}`) : null, ...sections),
+    );
   }
 
   // ---------------------------------------------------------------- build panel

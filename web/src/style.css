@@ -2568,9 +2568,19 @@ progress {
 }
 .robot-card-note summary,
 .robot-build summary,
+.robot-api summary,
 .robot-history summary {
   cursor: pointer;
   font-weight: 600;
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+}
+.robot-api dl {
+  margin-top: 0.3rem;
+}
+.robot-twist h3 {
+  margin-top: 0;
 }
 .robot-build fieldset {
   border: 1px solid var(--border);
@@ -2735,22 +2745,46 @@ progress {
 .robot-hint:empty {
   display: none;
 }
-.robot-controls {
-  display: flex;
-  flex-wrap: wrap;
+.robot-replay {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.7rem;
+}
+.robot .robot-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
   gap: 0.4rem;
-  margin-top: 0.6rem;
+}
+.robot .robot-controls .run-control {
+  width: 100%;
+  padding-inline: 0.3rem;
+}
+.robot .robot-controls .robot-play {
+  grid-column: 1 / -1;
+  order: -1;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+}
+.robot-replay > input[type='range'] {
+  min-height: 2.75rem;
+  width: 100%;
 }
 .robot-speed {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin: 0.5rem 0;
 }
 .robot-speed input {
-  flex: 1 1 8rem;
+  flex: 1 1 6rem;
+  min-width: 0;
   max-width: 14rem;
+  min-height: 2.75rem;
+}
+.robot-speed-label {
+  min-width: 6.5rem;
 }
 .robot-speed-label {
   font-weight: 700;
@@ -2759,7 +2793,6 @@ progress {
   background: var(--code-bg);
   border-radius: 0.6rem;
   padding: 0.5rem 0.8rem;
-  margin: 0.6rem 0;
 }
 .robot-explain h3,
 .robot-cols h3 {
@@ -2807,6 +2840,7 @@ progress {
 }
 .robot-queue {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
   margin-top: 0.6rem;
 }
@@ -2943,12 +2977,9 @@ progress {
 .robot .run-control {
   width: auto;
   height: auto;
-  min-height: 2.2rem;
+  min-height: 2.75rem;
   padding: 0.3rem 0.7rem;
   font-size: 0.9rem;
   line-height: 1.2;
 }
-.robot .robot-controls {
-  display: flex;
-  flex-wrap: wrap;
-}
+

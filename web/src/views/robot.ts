@@ -177,11 +177,11 @@ export function robotScreen(app: App): Screen {
     );
   }
 
-  function apiPanel(build: Build): HTMLElement {
+  function apiPanel(build: Build, open = false): HTMLElement {
     return h(
-      'section',
-      { class: 'robot-api', 'data-testid': 'robot-api' },
-      h('h3', {}, t('robot.api')),
+      'details',
+      { class: 'robot-api', 'data-testid': 'robot-api', open },
+      h('summary', {}, t('robot.api')),
       h('dl', {}, ...apiEntries(build).flatMap((e) => [h('dt', {}, h('code', {}, e.sig)), h('dd', {}, t(`robot.api.${e.id}` as MessageKey))])),
     );
   }
@@ -189,13 +189,16 @@ export function robotScreen(app: App): Screen {
   // ---------------------------------------------------------------- the editor
 
   function editor(initial: string, onInput: (text: string) => void, testId = 'robot-code'): HTMLTextAreaElement {
-    const area = h('textarea', { class: 'robot-code', rows: 10, spellcheck: false, autocapitalize: 'off', autocomplete: 'off', 'aria-label': t('robot.code'), 'data-testid': testId }) as HTMLTextAreaElement;
+    const area = h('textarea', { class: 'robot-code', rows: 4, spellcheck: false, autocapitalize: 'off', autocomplete: 'off', 'aria-label': t('robot.code'), 'data-testid': testId }) as HTMLTextAreaElement;
     area.value = initial;
-    area.addEventListener('input', () => onInput(area.value));
+    const fit = () => (area.rows = Math.max(5, Math.min(16, area.value.split('\n').length + 1)));
+    fit();
+    area.addEventListener('input', () => (fit(), onInput(area.value)));
     area.addEventListener('keydown', (e) => {
       if (e.key !== 'Tab' || e.shiftKey) return;
       e.preventDefault();
       area.setRangeText('    ', area.selectionStart, area.selectionEnd, 'end');
+      fit();
       onInput(area.value);
     });
     return area;
@@ -482,19 +485,19 @@ export function robotScreen(app: App): Screen {
     const build = game.build();
     show(
       stepHeader(step, opts.back),
+      h('section', { class: 'robot-card robot-twist' }, h('h3', {}, t('robot.twist')), h('p', { 'data-testid': 'robot-twist' }, enemy.twist[lang])),
       opts.training ? null : cardsBlock(step.chapter),
-      h('section', { class: 'robot-card' }, h('h3', {}, t('robot.twist')), h('p', { 'data-testid': 'robot-twist' }, enemy.twist[lang])),
-      buildPanel(() => showStep(step.id)),
-      apiPanel(build),
       h('section', { class: 'robot-editor' }, h('h3', {}, t('robot.code')), h('p', { class: 'robot-note' }, t('robot.code.hint')), (area = editor(game.script(), (text) => game.setScript(text)))),
       h(
         'div',
         { class: 'robot-actions' },
-        h('button', { class: 'robot-run', 'data-testid': 'robot-run', onclick: () => (game.setScript(area.value), fight()) }, t('robot.run')),
+        h('button', { class: 'robot-run', 'data-testid': 'robot-run', onclick: () => (game.setScript(area.value), fight(), result.scrollIntoView?.({ block: 'start', behavior: 'smooth' })) }, t('robot.run')),
         h('button', { class: 'run-control', 'data-testid': 'robot-hint', onclick: () => (opts.training ? (localHint = Math.min(3, localHint + 1)) : game.hint(step.id) < 3 && game.nextHint(step.id), renderHints()) }, t('robot.hint')),
       ),
       hintBox,
       result,
+      apiPanel(build),
+      buildPanel(() => showStep(step.id)),
       historyBox,
     );
     renderHints();

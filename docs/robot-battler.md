@@ -8,24 +8,30 @@ status and the handover. Everything lives in `web/src/robot/` (engine, interpret
 Decisions for the doc's open questions: the UI is Pydra's de/en with **English function names**; player-vs-player is out
 of scope; `try / except` stays outside the subset (friendly "not available" message).
 
-## Status: about half of the MVP
+## Status: the MVP content is complete (Chapters 0-4, both Proving Grounds)
 
 | Done | Where |
 | --- | --- |
-| Deterministic grid/tick engine: HP, armor, walls, rubble, pits, simultaneous resolution, shields, seeded RNG, tick limit | `engine.ts`, `rng.ts`, `layout.ts` (ASCII maps, seeded mirroring) |
+| Deterministic grid/tick engine: HP, armor, walls, rubble, pits, simultaneous resolution, shields, regeneration, push, armor plates, seeded RNG, tick limit | `engine.ts`, `rng.ts`, `layout.ts` (ASCII maps, seeded mirroring) |
 | Python interpreter for the teaching subset, **resumable** (generators pause at action calls, per-tick step budget), friendly errors (de/en) with did-you-mean, pre-battle checker, CPython golden tests (200 snippets) | `py/` (`lexer`, `parser`, `interp`, `builtins`, `values`, `check`, `errors`), `friendly.ts`, `messages-errors.ts` |
-| Parts as host objects: wheels, spider legs, blaster (+ burst Mk II), cannon, eyes (+ wide-angle, shield scanner), hammer, shield, GPS, `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
+| Parts as host objects: wheels, spider legs, **treads** (+3 armor, 2-tick turns, `push()`), blaster (+ burst Mk II), cannon, eyes (+ wide-angle, shield scanner), hammer, shield, GPS, **armor plates** (optional, 12 stars), `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
 | Battle runner recording frames (positions, events, script line, sensor reads, say() bubbles) | `battle.ts` |
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
-| Chapter 0-2 enemies (26) + Proving Grounds I (6) = **32 battles**, three layouts each | `content/chapter0.ts`, `chapter1.ts`, `chapter2.ts`, `proving1.ts` |
-| Build/code/battle/improve loop; "never a blank file" persistence; regression re-test of earlier enemies of the chapter on every run (a win that breaks one does not count); stars; 3-step hint ladder; script history with restore; points/XP via the existing points system (`game: 'robot'`) | `game.ts`, `fight.ts` |
-| **12 challenges**: 2 Line Up, 3 Predict, 3 Glitch, 2 Workshop (paint brush), 2 Constraint | `content/challenges.ts`, `challenges.ts` |
-| Tests: 360+ unit tests in `web/src/robot/*.test.ts` (every enemy is won by its solution, regression-safe, and not won by the previous solution), Playwright `e2e/robot.spec.ts` | |
+| **62 battles**: Chapter 0 (9, incl. Backstep Dummy), 1 (9), 2 (10, incl. Growing Shots), Proving Grounds I (6), **Chapter 3 (10)**, **Chapter 4 (9)**, **Proving Grounds II (8 fights + boss Final Exam)**; three layouts each | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts` |
+| Build/code/battle/improve loop; "never a blank file" persistence; regression re-test of earlier enemies of the chapter on every run; stars; 3-step hint ladder; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
+| **29 challenges**: 3 Line Up, 7 Predict, 9 Glitch, 5 Workshop (paint brush), 5 Constraint (line limits, `without`, no repeated number) | `content/challenges.ts`, `challenges.ts` |
+| **Concept cards**: one per chapter 0-4 and one per new part (cannon, legs, wide-angle + scanner, hammer, shield, GPS, treads, burst blaster); open until read, then a click away | `content/cards.ts`, `cardsBlock()` in the view |
+| **Training Grounds** (from Chapter 2): endless seeded fights built from the frame of the latest chapter, plus a daily fight (seed from the date); every generated fight has a winning script and is tested for 60 seeds | `training.ts`, `RobotGame.trainingStep/runTraining` |
+| Tests: 480+ robot unit tests (every enemy is won by its solution, regression-safe, and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot.spec.ts` (loop, builder, line-up, Chapter 3, Chapter 4 to the certificate, Training Grounds) | |
 
 Deviations from the doc, on purpose: chassis HP is 8/12 (the table), not "10 default"; battles run on the main thread (they
 are tiny: the engine is pure and worker-ready, see Remaining work); the editor is a `<textarea>` (no CodeMirror
 dependency); `wait()` costs one tick ("free" in the doc means "needs no part"); `distance()` returns 0 when nothing is in
 range; a win ends the battle at once, but free statements right after the winning action (e.g. `say("done")`) still run.
+Chapter 3 uses a 9x8 arena (robot at (4, 6)) so left and right are symmetric; its final build is blaster + eyes + shield
+(the medium chassis has three slots), so the hammer is an alternative for the Charger, not a requirement. Chapter 3-4
+extras are side missions (`regression: false`) with their own set-up, like the Chapter 2 extras. Proving Grounds II mixes
+Chapter 3 and 4 fights (their frames are the only ones one script can win together); `id#n` in `mix` picks layout n.
 
 ## Architecture
 
@@ -68,10 +74,11 @@ An enemy is a plain object (`content/types.ts` → `EnemyData`) appended to `ENE
 {
   id: 'peekaboo', title: T('Guck-guck', 'Peekaboo'), twist: T('…', '…'), idea: T('…', '…'), // hint 1 = twist, 2 = idea
   skeleton: 'if see() == "enemy":\n    ???',        // hint 3
-  enemies: [{ hp: 2, armor: 0, face: 'W', gear: ['blaster','eyes'], script: 'fire()' }],   // 'D' = enemies[0], '1'-'9' = n-th
+  enemies: [{ hp: 2, armor: 0, face: 'W', gear: ['blaster','eyes'], script: 'fire()', regen: { every: 2, amount: 1 } }],   // 'D' = enemies[0], '1'-'9' = n-th
   maps: [mk(8, 8, ['^', 3, 7], ['D', 3, 4]), …],     // 1-3 ASCII layouts (. # ~ rubble o pit, ^ > v < player, D/1-9 enemies)
   maxTicks: 30,                                       // optional, loses at this tick
-  needs: { say: true, sayPrefix: 'Distance: ', sayOnce: 'done', maxLines: 6 },
+  needs: { say: true, sayPrefix: 'Distance: ', sayOnce: 'done', maxLines: 6,
+           maxDamage: 4, noWaste: true, uses: ['while'], without: ['for'], noRepeatedNumber: true },
   solution: '…', solutionBuild: { gear: ['cannon','eyes'] },  // a script that beats this and all earlier enemies of the chapter
   breaks: true,                                       // the previous solution must NOT win (set false for practice enemies)
   regression: false,                                  // side mission with its own set-up, not part of the chapter run
@@ -83,43 +90,30 @@ An enemy is a plain object (`content/types.ts` → `EnemyData`) appended to `ENE
 chapter (the line limit / `sayOnce` of old enemies are ignored there), and that the previous solution does not win.
 Enemy scripts use the same API as the player (`script`, `gear`, `locomotion`); a failing enemy script throws in tests.
 `layout.ts` can mirror a map per seed (`mirror: true` on the layout) – unused so far because Chapters 0-2 are fixed-pose.
-Chapter text: add `robot.chapter.N` in `messages-ui.ts`; `unlockLevel()` in `game.ts` maps chapter 25 (Proving Grounds I) to 2.
+Chapter text: add `robot.chapter.N` in `messages-ui.ts`; `unlockLevel()` in `game.ts` maps chapter 25 (Proving Grounds I) to 2 and 45 (Proving Grounds II) to 4. A concept card is one entry in `content/cards.ts`.
+`needs` rules: `maxDamage` (HP lost per layout), `noWaste` (no shot into a raised shield), `uses` / `without` (words in the code, comments and strings ignored; `"while True"` and `"fire(i)"` work), `noRepeatedNumber`. A mixed Proving Grounds fight lists `mix: ['peekaboo#2', 'bubble']` (first layout, or the n-th with `#n`) and no maps of its own.
 A challenge (`content/challenges.ts`) sits `after` an enemy id and has `kind` lineup | predict | glitch | workshop | constraint;
 logic and checks are in `challenges.ts` (predict answers are computed by running the script, so they cannot be wrong).
 Every new step also needs nothing else: `RobotGame` builds its step list from the two data files, and Home/points/profile
 pick the new total up automatically.
 
-## Remaining work (not started)
+## Remaining work
 
-1. **Chapter 3 – if/elif/else** (`content/chapter3.ts`, add `robot.chapter.3`): Peekaboo, Three-Way, Bubble, Charger,
-   boss Gatekeeper (worked example in the doc) and the extras Wall or Not, Health Check, Rhythm Dummy (`clock.tick() % 2`),
-   Order Matters, Not Today. Engine/parts for it already exist and are tested: medium chassis, wide-angle eyes
-   (`see_left/see_right`), shield scanner (`enemy_shielded`), hammer, shield, `clock`. Enemies that fight back need
-   `EnemyDef.script`/`gear` (supported; see `battle.test.ts` "enemies run Python too"). Bubble = `while True: shield.activate(); wait()`.
-   Gating note: parts of Chapter 3/4 unlock when the first unsolved main battle is in that chapter (`UNLOCK_CHAPTER`).
-2. **Chapter 4 – while / booleans**: Far-Far Dummy, Regenerator, Maze Runner, Patroller, boss Hide & Seek, extras Run to
-   the Wall, Countdown, Sentry Duty, Break Out, Crate Courier. Needs GPS (done), burst blaster Mk II (done), and for
-   Crate Courier a **gripper + crates** (not implemented: engine has no items). Treads (+3 armor, `push()`) are not implemented.
-3. **Proving Grounds II** (8 mixed fights + boss Final Exam, "Basics Certificate") and the missing PG-I fights (doc: 6 +
-   boss; done: 5 + boss, all in the Chapter 2 frame because one script must win them – `content/proving1.ts`, `mix`).
-4. **Missing Chapter 0-2 enemies**: Chapter 0 *Backstep Dummy* (`backward()`; needs a layout where backing up matters –
-   e.g. add a minimum range or a rear target), Chapter 2 *Growing Shots* (`fire(i)` – needs a cannon+blaster build or the
-   burst blaster; cooldown makes a clean loop awkward). Chapter 1 and 2 extras not in the table above are done.
-5. **Missing challenges** (12 of ~25 done; ids in `content/challenges.ts`): Ch0 extra Line Up / Predict; Ch1 Predict value
-   of `x`, Glitch misspelled variable, Glitch `"3" + 3`, Constraint "no number written twice" (needs a new
-   `Needs.noRepeatedNumber` check); Ch2 Workshop *Art Studio* stairs and spiral, Glitch wrong indentation variants,
-   Constraint Dummy Row in 5 lines (done: 3 lines); Ch3 Predict which branch runs, Glitch `=` vs `==`, Glitch missing colon,
-   Workshop *Battery Sorter* (needs gripper); Ch4 Predict loop count, Glitch infinite loop, Constraint Maze Runner without `for`.
-6. **Features**: the *gauntlet* as a visible event (boss, then all earlier enemies in a row with a summary; today the
-   earlier enemies are re-run silently on every run and only gate the win – `RobotGame.run`); *concept cards* (2-minute
-   card per chapter, first-appearance cards for parts); Training Grounds (seeded endless arenas + daily); Throwback and bonus
-   enemies; reading the enemy's source after beating it (tier ≥ 3); cosmetics/optional gear earned with stars (the ~20 optional
-   gear items of the doc are all missing); stars only count, they unlock nothing yet; script history has no diff view and
-   no limit UI beyond 30 entries.
-7. **Engineering**: run battles in a **Web Worker** (`runBattle`/`fightEnemy` are pure; move them behind a worker with
-   `postMessage`, keep `Frame` JSON-serialisable – `RbError` needs a plain-object form); a **CodeMirror 6** editor with
-   gutter line numbers and error marks (the textarea has neither); seeded `mirror` layouts for Chapters 3+; Mk III upgrades
-   and Chapters 5-9 (Mk II long-range eyes, directional shield, functions `def`, classes `__init__` for Chapter 8: the parser
-   rejects `class` today).
-8. **Tests to add with new content**: nothing new is needed for enemies/challenges (the data-driven tests pick them up);
-   add golden snippets to `py/golden-snippets.ts` and run `npm run golden -w web` for every new Python feature.
+1. **Engineering** (not started, deliberately left): run battles in a **Web Worker** (`runBattle`/`fightEnemy` are pure; move
+   them behind a worker with `postMessage`, keep `Frame` JSON-serialisable - `RbError` needs a plain-object form); a
+   **CodeMirror 6** editor with gutter line numbers and error marks (the textarea has neither). Everything fits in a few
+   milliseconds on the main thread today, so neither blocks a release.
+2. **Not built from the design doc**: Crate Courier and Battery Sorter (need a gripper and crates: the engine has no items);
+   the other ~18 optional gear items (railgun, flamethrower, hook, EMP, mines, boomerang, ears, thermal camera, analyzer,
+   hacking module, smoke, cloak, decoy, turbo, jump jets, teleporter, scout drone, repair drone) and cosmetics earned with
+   stars - armor plates (`STAR_GATE` in `build.ts`) is the template for a passive item, `parts.ts` for an active one;
+   Throwback and bonus enemies; the *gauntlet* as a visible event (boss, then all earlier enemies in a row with a summary;
+   today the earlier enemies are re-run silently on every run and only gate the win - `RobotGame.run`); reading the enemy's
+   source after beating it (tier >= 3); seeded `mirror` layouts for Chapters 3+ (the Chapter 3-4 layouts are fixed so that
+   each side is tested on purpose); script history has no diff view.
+3. **Chapters 5-9** (functions, lists, dictionaries, state, Arena League), Mk III upgrades and the Chapter 5+ parts
+   (hover jets, repair kit, radar, missile pod, heavy chassis, directional shield, ...). The parser rejects `class` today
+   (needed for Chapter 8).
+4. **Tests to add with new content**: nothing new is needed for enemies/challenges (the data-driven tests pick them up);
+   add golden snippets to `py/golden-snippets.ts` and run `npm run golden -w web` for every new Python feature. Rules that are
+   the point of a twist deserve an explicit case in `chapters.test.ts` (see Bubble: blind shooting; Gatekeeper: waiting).

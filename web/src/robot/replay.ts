@@ -9,9 +9,74 @@ const FACING_ANGLE = { N: -Math.PI / 2, E: 0, S: Math.PI / 2, W: Math.PI } as co
 
 const center = (p: Pos, cell = CELL) => ({ x: p.x * cell + cell / 2, y: p.y * cell + cell / 2 });
 
+/** A call shown on the arena next to the robot: the command or sensor that just ran, with its result. */
+export interface Callout {
+  kind: 'action' | 'sensor' | 'say';
+  text: string;
+}
+
+export interface DrawExtras {
+  /** The frame before: the robot's old place is drawn as a ghost with an arrow to the new one. */
+  prev?: Frame;
+  callouts?: readonly Callout[];
+  /** Show the positions only: the shots and bubbles of this frame belong to the tick that has not resolved yet. */
+  quiet?: boolean;
+}
+
+const CALLOUT_COLORS = { action: '#4fc3f7', sensor: '#7bd88f', say: '#ffffff' } as const;
+
+/** Calls as pills above the player's robot, move ghost + arrow, and floating damage numbers. */
+function drawOverlay(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, frame: Frame, extras: DrawExtras) {
+  const me = frame.robots.find((r) => r.id === 'player');
+  const before = extras.prev?.robots.find((r) => r.id === 'player');
+  if (me && before && (before.pos.x !== me.pos.x || before.pos.y !== me.pos.y)) {
+    const a = center(before.pos);
+    const b = center(me.pos);
+    ctx.save();
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = '#4fc3f7';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(a.x, a.y, CELL * 0.34, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+    ctx.restore();
+  }
+  ctx.font = 'bold 12px sans-serif';
+  ctx.textBaseline = 'middle';
+  for (const e of frame.events) {
+    if (e.type !== 'damage') continue;
+    const r = frame.robots.find((x) => x.id === e.robot);
+    if (!r) continue;
+    const c = center(r.pos);
+    ctx.fillStyle = '#ff6b6b';
+    ctx.fillText(`-${e.amount}`, c.x + CELL * 0.1, c.y - CELL * 0.45);
+  }
+  if (me && extras.callouts?.length) {
+    const c = center(me.pos);
+    const below = me.pos.y <= 1;
+    extras.callouts.forEach((callout, i) => {
+      const text = callout.text.length > 26 ? `${callout.text.slice(0, 25)}…` : callout.text;
+      const w = ctx.measureText(text).width + 14;
+      const x = Math.min(Math.max(c.x - w / 2, 2), canvas.width - w - 2);
+      const y = below ? c.y + CELL * 0.45 + i * 21 : c.y - CELL * 0.45 - 20 - i * 21;
+      ctx.fillStyle = CALLOUT_COLORS[callout.kind];
+      ctx.beginPath();
+      ctx.roundRect(x, Math.min(Math.max(y, 2), canvas.height - 20), w, 19, 9);
+      ctx.fill();
+      ctx.fillStyle = '#14202e';
+      ctx.fillText(text, x + 7, Math.min(Math.max(y, 2), canvas.height - 20) + 10);
+    });
+  }
+}
+
 /** Draws one frame of a battle on a canvas: tiles, robots with HP, shots, hits and speech bubbles. */
-export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index: number, trail: ReadonlySet<string> = new Set()): void {
-  const frame = battle.frames[Math.min(index, battle.frames.length - 1)]!;
+export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index: number, trail: ReadonlySet<string> = new Set(), extras: DrawExtras = {}): void {
+  const shown = battle.frames[Math.min(index, battle.frames.length - 1)]!;
+  const frame: Frame = extras.quiet ? { ...shown, events: [], bubbles: [] } : shown;
   const rows = battle.tiles.length;
   const cols = battle.tiles[0]?.length ?? 0;
   canvas.width = cols * CELL;
@@ -110,6 +175,7 @@ export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index
     ctx.fillStyle = '#14202e';
     ctx.fillText(text, x + 6, y + 9);
   }
+  drawOverlay(ctx, canvas, frame, extras);
 }
 
 type T = (key: MessageKey, params?: Params) => string;

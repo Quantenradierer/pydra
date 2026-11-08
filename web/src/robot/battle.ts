@@ -42,6 +42,8 @@ export interface Frame {
   sensors: Record<string, string[]>;
   /** What the player's script did before this tick's action (only recorded with `trace: true`). */
   trace?: TraceEvent[];
+  /** On the last frame of a win: what the script still did after the winning action (say("done")). */
+  after?: TraceEvent[];
 }
 
 export type EndReason = 'win' | 'dead' | 'timeout' | 'error' | 'budget';
@@ -271,7 +273,7 @@ export function runBattle(input: BattleInput): BattleResult {
     bubbles.length = 0;
     brains.get('player')?.runFree();
     frames.at(-1)!.bubbles.push(...bubbles);
-    if (input.trace) frames.at(-1)!.trace = [...(frames.at(-1)!.trace ?? []), ...tickTrace];
+    if (input.trace && tickTrace.length > 0) frames.at(-1)!.after = tickTrace;
   }
   const outcome: Outcome = reason === 'win' ? 'win' : 'loss';
   return {

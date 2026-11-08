@@ -7,15 +7,16 @@ import { START_BUILD, UNLOCK_CHAPTER, CHASSIS, addonsFor, type Build, type GearI
 import { checkConstraint, checkGlitch, checkLineUp, checkPredict, checkWorkshop, injectGlitch, predictAnswer, shuffledLines } from '../robot/challenges.ts';
 import { cardsOfChapter } from '../robot/content/cards.ts';
 import type { Challenge } from '../robot/content/challenges.ts';
-import type { EnemyReport } from '../robot/fight.ts';
+import type { EnemyData } from '../robot/content/types.ts';
+import type { EnemyReport, FightReport } from '../robot/fight.ts';
+import { evaluateQueue, playItem, type LossReason, type QueueItem } from '../robot/variations.ts';
+import { createViewer, type Speed, type Viewer } from './robot-viewer.ts';
 import { friendlyError } from '../robot/friendly.ts';
 import type { RunReport, Step } from '../robot/game.ts';
-import { describeFrame, drawFrame } from '../robot/replay.ts';
 import { precheck as precheckFn, type BattleResult } from '../robot/battle.ts';
 import type { RbError } from '../robot/py/errors.ts';
 import { subpageHeader } from './header.ts';
 
-const TICK_MS = 450;
 const GEAR_ORDER: GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps', 'plates'];
 
 /** Robot Battler: a map of tasks, and for each task the build / code / battle / improve loop. */
@@ -23,10 +24,12 @@ export function robotScreen(app: App): Screen {
   const { t, lang } = app;
   const game = app.services.robot;
   const root = h('main', { class: 'screen game robot' });
-  let timer: ReturnType<typeof setInterval> | undefined;
+  const speed: Speed = { level: 1 };
+  /** Stops whatever is playing on the current screen (set by the battle screen). */
+  let cleanup: (() => void) | undefined;
   const stop = () => {
-    if (timer) clearInterval(timer);
-    timer = undefined;
+    cleanup?.();
+    cleanup = undefined;
   };
 
   const titleOf = (s: Step) => (s.enemy ? s.enemy.title[lang] : s.challenge!.title[lang]);
@@ -198,64 +201,184 @@ export function robotScreen(app: App): Screen {
     return area;
   }
 
-  // ---------------------------------------------------------------- the replay
+  // ---------------------------------------------------------------- the variation queue
 
-  /** The viewer: canvas, controls, the script with the active line, sensors and the log of the tick. */
-  function replay(battle: BattleResult, script: string, trail?: ReadonlySet<string>): HTMLElement {
-    const lines = script.split('\n');
-    const last = battle.frames.length - 1;
-    let index = 0;
-    const canvas = h('canvas', { class: 'robot-canvas', role: 'img', 'aria-label': t('robot.canvas'), 'data-testid': 'robot-canvas' }) as HTMLCanvasElement;
-    const position = h('p', { class: 'run-position', 'data-testid': 'robot-position', 'aria-live': 'off' });
-    const listing = h('ol', { class: 'robot-listing', 'data-testid': 'robot-listing' }, ...lines.map((l, i) => h('li', { 'data-line': String(i + 1) }, h('code', {}, l || ' '))));
-    const sensors = h('ul', { class: 'robot-sensors', 'data-testid': 'robot-sensors' });
-    const log = h('ul', { class: 'robot-log', 'data-testid': 'robot-log' });
-    const slider = h('input', { type: 'range', min: 0, max: last, value: 0, 'aria-label': t('robot.replay'), 'data-testid': 'robot-slider' }) as HTMLInputElement;
-    const playBtn = h('button', { class: 'run-control', 'data-testid': 'robot-play' }, t('robot.play'));
-
-    function render() {
-      const frame = battle.frames[index]!;
-      drawFrame(canvas, battle, index, trail);
-      position.textContent = t('robot.tick', { n: index, total: last });
-      slider.value = String(index);
-      const active = frame.lines.player;
-      for (const li of listing.children) li.classList.toggle('active', active != null && li.getAttribute('data-line') === String(active));
-      listing.dataset.active = active == null ? '' : String(active);
-      sensors.replaceChildren(...(frame.sensors.player ?? []).map((s) => h('li', {}, h('code', {}, s))));
-      log.replaceChildren(...describeFrame(frame, t).map((s) => h('li', {}, s)));
+  /** Why a fight was not won, in words. */
+  function unmetText(unmet: NonNullable<FightReport['unmet']>, enemy: EnemyData): string {
+    const words = (list: string[] | undefined) => (list ?? []).map((w) => `"${w}"`).join(', ');
+    switch (unmet) {
+      case 'say':
+        return t('robot.outcome.say');
+      case 'sayPrefix':
+        return t('robot.outcome.sayPrefix', { text: enemy.needs?.sayPrefix ?? '' });
+      case 'damage':
+        return t('robot.outcome.damage', { max: enemy.needs?.maxDamage ?? 0 });
+      case 'waste':
+        return t('robot.outcome.waste');
+      case 'uses':
+        return t('robot.outcome.uses', { words: words(enemy.needs?.uses) });
+      case 'without':
+        return t('robot.outcome.without', { words: words(enemy.needs?.without) });
+      case 'repeat':
+        return t('robot.outcome.repeat');
+      case 'sayOnce':
+        return t('robot.outcome.sayOnce', { text: enemy.needs?.sayOnce ?? '' });
     }
-    const go = (i: number) => {
-      index = Math.max(0, Math.min(last, i));
-      render();
+  }
+
+  function lossText(reason: LossReason, enemy: EnemyData): string {
+    switch (reason.code) {
+      case 'error':
+        return t('robot.outcome.stop', { line: reason.line, message: errorText(reason.error) });
+      case 'budget':
+        return t('robot.outcome.budget', { line: reason.line, message: t('robot.err.loop-budget') });
+      case 'dead':
+        return t('robot.vq.dead');
+      case 'timeout':
+        return t('robot.vq.timeout');
+      case 'unmet':
+        return unmetText(reason.unmet, enemy);
+    }
+  }
+
+  /**
+   * The fights of a run, one after another: the first fight of the enemy, then its other variations and the
+   * earlier enemies of the chapter. Each plays in the line-by-line viewer; a queue bar shows the progress and
+   * a summary at the end says who won and why a loss happened.
+   */
+  function variationQueue(items: QueueItem[], build: Build, script: string, tooLong: Node | null): { el: HTMLElement; dispose: () => void } {
+    const outcomes = evaluateQueue(items, build, script);
+    const done = new Set<number>();
+    let current = 0;
+    let auto = true;
+    let viewer: Viewer | undefined;
+    let autoTimer: ReturnType<typeof setTimeout> | undefined;
+    const holder = h('div', { class: 'robot-viewer' });
+    const progress = h('p', { class: 'robot-vq-progress', 'data-testid': 'robot-vq-progress' });
+    const stateTag = h('span', { class: 'robot-vq-state', 'data-testid': 'robot-vq-state' });
+    const reasonBox = h('p', { class: 'robot-note', 'data-testid': 'robot-vq-reason' });
+    const chips = h('div', { class: 'robot-layouts', role: 'group', 'data-testid': 'robot-vq-chips' });
+    const summary = h('div', { class: 'robot-vq-summary', 'data-testid': 'robot-vq-summary' });
+    const nextBtn = h('button', { class: 'run-control', 'data-testid': 'robot-vq-next', onclick: () => load(current + 1, true) }, t('robot.vq.next'));
+    const skipBtn = h('button', { class: 'run-control', 'data-testid': 'robot-vq-skip', onclick: skip }, t('robot.vq.skip'));
+    const allBtn = h('button', { class: 'run-control', 'data-testid': 'robot-vq-all', onclick: skipAll }, t('robot.vq.all'));
+    const autoBox = h('input', { type: 'checkbox', checked: true, 'data-testid': 'robot-vq-auto', onchange: () => ((auto = autoBox.checked), !auto && cancelAuto()) }) as HTMLInputElement;
+    const labelOf = (item: QueueItem) => (item.regression ? `${item.enemy.title[lang]} ${item.n}` : t('robot.layout', { n: item.n }));
+    const cancelAuto = () => {
+      if (autoTimer) clearTimeout(autoTimer);
+      autoTimer = undefined;
     };
-    const pause = () => {
-      stop();
-      playBtn.textContent = t('robot.play');
-    };
-    playBtn.addEventListener('click', () => {
-      if (timer) return pause();
-      if (index >= last) index = 0;
-      playBtn.textContent = t('robot.pause');
-      timer = setInterval(() => {
-        if (index >= last) return pause();
-        go(index + 1);
-      }, TICK_MS);
-    });
-    slider.addEventListener('input', () => {
-      pause();
-      go(Number(slider.value));
-    });
-    const btn = (label: MessageKey, id: string, fn: () => void) => h('button', { class: 'run-control', 'data-testid': id, onclick: () => (pause(), fn()) }, t(label));
-    render();
-    return h(
-      'section',
-      { class: 'robot-replay', 'aria-label': t('robot.replay') },
-      h('div', { class: 'robot-stage' }, canvas, h('div', { class: 'robot-side-panel' }, h('h3', {}, t('robot.code')), listing)),
-      h('div', { class: 'run-controls' }, btn('robot.restart', 'robot-restart', () => go(0)), btn('robot.back', 'robot-back', () => go(index - 1)), playBtn, btn('robot.forward', 'robot-forward', () => go(index + 1)), btn('robot.end', 'robot-end', () => go(last))),
-      slider,
-      position,
-      h('div', { class: 'robot-cols' }, h('div', {}, h('h3', {}, t('robot.sensors')), sensors), h('div', {}, h('h3', {}, t('robot.log')), log)),
+
+    function paint() {
+      const item = items[current]!;
+      const out = outcomes[current]!;
+      const finished = done.has(current);
+      progress.textContent = t(item.regression ? 'robot.vq.progress.old' : 'robot.vq.progress', { k: current + 1, n: items.length, title: item.enemy.title[lang], v: item.n, m: item.of });
+      const state = finished ? (out.won ? 'won' : 'lost') : 'running';
+      stateTag.textContent = t(`robot.vq.state.${state}` as MessageKey);
+      stateTag.dataset.state = state;
+      reasonBox.textContent = finished && out.reason ? lossText(out.reason, item.enemy) : '';
+      chips.replaceChildren(
+        ...items.map((it, i) => {
+          const o = outcomes[i]!;
+          const seen = done.has(i);
+          const state = seen ? (o.won ? 'won' : 'lost') : 'pending';
+          return h(
+            'button',
+            {
+              class: `run-control layout${seen ? (o.won ? ' won' : ' lost') : ''}${it.regression ? ' old' : ''}`,
+              'data-testid': it.regression ? `robot-vq-chip-${it.key}` : `robot-layout-${it.n}`,
+              'aria-pressed': String(i === current),
+              'aria-label': `${labelOf(it)}, ${t(`robot.vq.state.${state}` as MessageKey)}`,
+              onclick: () => load(i, false),
+            },
+            `${seen ? (o.won ? '✓' : '✗') : '·'} ${labelOf(it)}`,
+          );
+        }),
+      );
+      const last = current >= items.length - 1;
+      nextBtn.hidden = !finished || last;
+      skipBtn.hidden = finished && last;
+      allBtn.hidden = done.size >= items.length;
+    }
+
+    function showSummary() {
+      const won = outcomes.filter((o) => o.won).length;
+      summary.replaceChildren(
+        h('h3', {}, t('robot.vq.summary', { won, n: items.length })),
+        h('p', { class: won === items.length ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-vq-verdict' }, t(won === items.length ? 'robot.vq.summary.ok' : 'robot.vq.summary.bad')),
+        ...(tooLong ? [tooLong] : []),
+        h(
+          'ul',
+          { class: 'robot-vq-rows' },
+          ...outcomes.map((o, i) =>
+            h(
+              'li',
+              { class: o.won ? 'won' : 'lost', 'data-testid': `robot-vq-row-${o.item.key}` },
+              h('strong', {}, `${o.won ? '✓' : '✗'} ${o.item.regression ? `${t('robot.vq.old')}: ` : ''}${o.item.enemy.title[lang]} · ${t('robot.layout', { n: o.item.n })}`),
+              h('span', { class: 'robot-note' }, ` ${t('robot.vq.ticks', { n: o.ticks })}`),
+              o.reason ? h('span', { class: 'robot-vq-why' }, lossText(o.reason, o.item.enemy)) : null,
+              h('button', { class: 'run-control', 'data-testid': `robot-vq-watch-${o.item.key}`, onclick: () => load(i, false) }, t('robot.vq.watch')),
+            ),
+          ),
+        ),
+      );
+    }
+
+    function finish(i: number) {
+      done.add(i);
+      if (done.size >= items.length) showSummary();
+      if (i === current) paint();
+    }
+
+    function load(i: number, play: boolean) {
+      cancelAuto();
+      viewer?.dispose();
+      current = Math.max(0, Math.min(items.length - 1, i));
+      const item = items[current]!;
+      const at = current;
+      const report = playItem(item, build, script, true);
+      viewer = createViewer(report.battle, script, {
+        t,
+        speed,
+        onUser: cancelAuto,
+        onEnd: (byPlay) => {
+          finish(at);
+          if (byPlay && auto) autoTimer = setTimeout(() => (at < items.length - 1 ? load(at + 1, true) : undefined), 1500);
+        },
+      });
+      holder.replaceChildren(viewer.el);
+      paint();
+      if (play) viewer.play();
+    }
+
+    function skip() {
+      const playing = viewer?.playing() ?? false;
+      finish(current);
+      if (current < items.length - 1) load(current + 1, playing);
+    }
+    function skipAll() {
+      cancelAuto();
+      viewer?.pause();
+      items.forEach((_, i) => done.add(i));
+      showSummary();
+      paint();
+      summary.scrollIntoView?.({ block: 'nearest' });
+    }
+
+    const el = h(
+      'div',
+      { class: 'robot-queue', 'data-testid': 'robot-queue' },
+      h('h3', {}, t('robot.vq.title')),
+      chips,
+      h('div', { class: 'robot-vq-head' }, progress, stateTag),
+      reasonBox,
+      holder,
+      h('div', { class: 'robot-actions' }, skipBtn, nextBtn, allBtn, h('label', { class: 'robot-option' }, autoBox, t('robot.vq.auto'))),
+      summary,
     );
+    load(0, false);
+    return { el, dispose: () => (cancelAuto(), viewer?.dispose()) };
   }
 
   // ---------------------------------------------------------------- a battle step
@@ -276,14 +399,7 @@ export function robotScreen(app: App): Screen {
     if (report.tooLong) return { text: t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 }), ok: false, extra };
     const failed = report.fights.find((f) => !f.won)!;
     const b = failed.battle;
-    if (failed.unmet === 'say') return { text: t('robot.outcome.say'), ok: false, extra };
-    if (failed.unmet === 'sayPrefix') return { text: t('robot.outcome.sayPrefix', { text: enemy.needs?.sayPrefix ?? '' }), ok: false, extra };
-    if (failed.unmet === 'damage') return { text: t('robot.outcome.damage', { max: enemy.needs?.maxDamage ?? 0 }), ok: false, extra };
-    if (failed.unmet === 'waste') return { text: t('robot.outcome.waste'), ok: false, extra };
-    if (failed.unmet === 'uses') return { text: t('robot.outcome.uses', { words: (enemy.needs?.uses ?? []).map((w) => `"${w}"`).join(', ') }), ok: false, extra };
-    if (failed.unmet === 'without') return { text: t('robot.outcome.without', { words: (enemy.needs?.without ?? []).map((w) => `"${w}"`).join(', ') }), ok: false, extra };
-    if (failed.unmet === 'repeat') return { text: t('robot.outcome.repeat'), ok: false, extra };
-    if (failed.unmet === 'sayOnce') return { text: t('robot.outcome.sayOnce', { text: enemy.needs?.sayOnce ?? '' }), ok: false, extra };
+    if (failed.unmet) return { text: unmetText(failed.unmet, enemy), ok: false, extra };
     if (b.error) {
       extra.push(rawError(b.error));
       return { text: t('robot.outcome.stop', { line: b.error.line, message: errorText(b.error) }), ok: false, extra };
@@ -347,16 +463,9 @@ export function robotScreen(app: App): Screen {
       }
       const report = run.report!;
       const { text, ok, extra } = outcomeFor(run, report, step);
-      const failedFirst = Math.max(0, report.fights.findIndex((f) => !f.won));
-      const viewer = h('div', { class: 'robot-viewer' });
-      const script = game.script();
-      function pick(i: number) {
-        viewer.replaceChildren(replay(report.fights[i]!.battle, script));
-        for (const [j, b] of tabs.entries()) b.setAttribute('aria-pressed', String(i === j));
-      }
-      const tabs = report.fights.map((f, i) =>
-        h('button', { class: `run-control layout${f.won ? ' won' : ' lost'}`, 'data-testid': `robot-layout-${i + 1}`, 'aria-pressed': 'false', 'aria-label': t(f.won ? 'robot.layout.won' : 'robot.layout.lost', { n: i + 1 }), onclick: () => pick(i) }, `${f.won ? '✓' : '✗'} ${t('robot.layout', { n: i + 1 })}`),
-      );
+      stop();
+      const queue = variationQueue(game.variationQueue(step), game.build(), game.script(), report.tooLong ? h('p', { class: 'robot-loss' }, t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 })) : null);
+      cleanup = queue.dispose;
       const regression = enemy.regression === false ? null : h('p', { class: 'robot-note' }, run.broken.length === 0 && run.won ? t('robot.regression.ok') : '');
       const next = run.won ? opts.next() : undefined;
       result.replaceChildren(
@@ -364,12 +473,10 @@ export function robotScreen(app: App): Screen {
         h('p', { class: ok ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text),
         ...extra,
         regression,
-        h('div', { class: 'robot-layouts', role: 'group' }, ...tabs),
-        viewer,
+        queue.el,
         next ? h('button', { class: 'robot-next', 'data-testid': 'robot-next', onclick: next.go }, next.label) : null,
         ].filter((n): n is HTMLElement => n !== null),
       );
-      pick(failedFirst);
     }
 
     const build = game.build();

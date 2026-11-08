@@ -34,6 +34,9 @@ for (const [device, viewport] of [
     await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()');
     await page.getByTestId('robot-run').click();
     await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
+    // The queue shows a result once the fight has been watched to its end.
+    await expect(page.getByTestId('robot-layout-1')).not.toContainText('✗');
+    await page.getByTestId('robot-end').click();
     await expect(page.getByTestId('robot-layout-1')).toContainText('✗');
     // ... a loss sends the player back to the same script; one more line wins.
     await page.getByTestId('robot-code').fill('forward()\nfire()\nfire()');
@@ -256,4 +259,142 @@ test('the Training Grounds: random fights from Chapter 2 on', async ({ page }) =
   await expect(page.getByTestId('robot-step-title')).toContainText('Training Nr. 2');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
   await expect(page.getByTestId('robot-training-stats')).toContainText('1 Trainingskämpfe');
+});
+
+/** Starts the Robot Battler on a given step with some progress and a script. */
+async function openStep(page: import('@playwright/test').Page, step: string, script: string, solved: string[] = []) {
+  await page.goto('/');
+  await page.evaluate(([solvedIds, code]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: solvedIds, script: code, runs: 1, wins: 1 })), [solved, script] as const);
+  await page.reload();
+  await page.getByTestId('start-robot').click();
+  await page.getByTestId(`robot-step-${step}`).click();
+  await page.getByTestId('robot-run').click();
+  await expect(page.getByTestId('robot-listing')).toBeVisible();
+}
+
+for (const [device, viewport] of [
+  ['phone', { width: 360, height: 640 }],
+  ['desktop', { width: 1280, height: 800 }],
+] as const) {
+  test(`on a ${device}: the fight runs line by line with calls, variables, branches and the call stack`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await openStep(page, 'first-contact', 'd = distance()\nif d > 0:\n    forward()\nfire()');
+    const narration = page.getByTestId('robot-narration');
+    // Slow by default; nothing has run yet.
+    await expect(page.getByTestId('robot-speed')).toHaveValue('1');
+    await expect(page.getByTestId('robot-speed-label')).toHaveText('sehr langsam');
+    await expect(page.getByTestId('robot-where')).toContainText('Schritt 0 von');
+    await expect(page.locator('.robot-listing li.active')).toHaveCount(0);
+
+    // Line 1: a sensor call that costs no tick, and a variable that changes.
+    await page.getByTestId('robot-line-forward').click();
+    await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '1');
+    await expect(page.getByTestId('robot-where')).toHaveText(/^Zeile 1 · Schritt 1 von \d+$/);
+    await expect(narration).toContainText('kostet keinen Tick');
+    await expect(page.getByTestId('robot-vars')).toContainText('d = ');
+    await expect(page.locator('.robot-listing li[data-line="1"] .robot-hint')).toContainText('distance() →');
+    await expect(page.getByTestId('robot-sensors')).toContainText('distance()');
+    await expect(page.getByTestId('robot-position')).toHaveText(/^Tick 1 von \d+$/);
+
+    // Line 2: the branch that was taken is lit up and explained.
+    await page.getByTestId('robot-line-forward').click();
+    await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '2');
+    await expect(narration).toContainText('Die Bedingung ist wahr');
+    await expect(page.locator('.robot-listing li[data-line="2"]')).toHaveClass(/branch-true/);
+
+    // Line 3: the command; stepping on plays it out in the arena (move) and the log tells it.
+    await page.getByTestId('robot-line-forward').click();
+    await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '3');
+    await expect(narration).toContainText('ist ein Befehl');
+    await page.getByTestId('robot-line-forward').click();
+    await expect(page.getByTestId('robot-where')).toContainText('Arena · Tick 1');
+    await expect(narration).toContainText('fährt von');
+
+    // A tick back goes to the start of the fight; a tick forward jumps over the lines of the next tick.
+    await page.getByTestId('robot-back').click();
+    await expect(page.getByTestId('robot-position')).toHaveText(/^Tick 0 von/);
+    await page.getByTestId('robot-forward').click();
+    await expect(page.getByTestId('robot-position')).toHaveText(/^Tick 1 von/);
+    await page.getByTestId('robot-end').click();
+    await expect(page.getByTestId('robot-log')).toContainText('schießt und trifft');
+
+    // Play at top speed: it runs to the end by itself, and the slider keeps its value.
+    await page.getByTestId('robot-restart').click();
+    await page.getByTestId('robot-speed').fill('5');
+    await expect(page.getByTestId('robot-speed-label')).toHaveText('sehr schnell');
+    await page.getByTestId('robot-play').click();
+    await expect(page.getByTestId('robot-play')).toHaveText('Abspielen', { timeout: 10_000 });
+    await expect(page.getByTestId('robot-log')).toContainText('schießt und trifft');
+
+    // The code and the arena stack on a phone and sit side by side on a desktop; nothing scrolls sideways.
+    const canvas = (await page.getByTestId('robot-canvas').boundingBox())!;
+    const code = (await page.getByTestId('robot-listing').boundingBox())!;
+    if (device === 'phone') expect(code.y).toBeGreaterThanOrEqual(canvas.y + canvas.height - 1);
+    else expect(code.x).toBeGreaterThanOrEqual(canvas.x + canvas.width - 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+}
+
+test('a function call shows in the call stack with its argument and the local variable', async ({ page }) => {
+  await openStep(page, 'first-contact', 'def go(n):\n    forward(n)\ngo(1)\nfire()');
+  // def (line 1), the call (line 3), then inside the function (line 2).
+  for (let i = 0; i < 3; i++) await page.getByTestId('robot-line-forward').click();
+  await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '2');
+  await expect(page.getByTestId('robot-stack')).toContainText('go(1)');
+  await expect(page.getByTestId('robot-vars')).toContainText('n = 1');
+});
+
+test('the variation queue: first fight, then the other variations and earlier enemies, with a summary', async ({ page }) => {
+  test.setTimeout(90_000);
+  await openStep(page, 'one-more-line', 'forward()\nfire()\nfire()', ['first-contact']);
+  const queue = page.getByTestId('robot-queue');
+  await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 1 von (\d+): .*, Variante 1 von \d+$/);
+  const total = Number((await page.getByTestId('robot-vq-progress').textContent())!.match(/von (\d+):/)![1]);
+  expect(total).toBeGreaterThan(3);
+  await expect(page.getByTestId('robot-vq-state')).toHaveText('läuft');
+  // Watch the first fight to its end: its result lights up in the queue.
+  await page.getByTestId('robot-end').click();
+  await expect(page.getByTestId('robot-vq-state')).toHaveText('gewonnen');
+  await expect(page.getByTestId('robot-layout-1')).toContainText('✓');
+  // Go on to the next variation, then let the rest play on its own at top speed (auto-advance).
+  await page.getByTestId('robot-vq-next').click();
+  await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 2 von/);
+  // "Next fight" starts it playing at once; speed it up and the rest follows by itself.
+  await expect(page.getByTestId('robot-play')).toHaveText('Pause');
+  await page.getByTestId('robot-speed').fill('5');
+  await expect(page.getByTestId('robot-vq-summary')).toContainText(`${total} von ${total} Kämpfen gewonnen`, { timeout: 60_000 });
+  await expect(page.getByTestId('robot-vq-verdict')).toHaveText('Dein Skript schlägt alle Varianten und alle früheren Gegner.');
+  // The earlier enemy is part of the queue and can be watched again from the summary.
+  await expect(queue.getByTestId('robot-vq-row-first-contact#1')).toContainText('früherer Gegner');
+  await queue.getByTestId('robot-vq-watch-first-contact#1').click();
+  await expect(page.getByTestId('robot-vq-progress')).toContainText('früherer Gegner „');
+  await expect(page.locator('.robot-listing li')).toHaveCount(3);
+});
+
+test('the queue summary says which variations were lost and why, and skipping shows it at once', async ({ page }) => {
+  await openStep(page, 'one-more-line', 'forward()\nfire()', ['first-contact']);
+  await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
+  await page.getByTestId('robot-vq-all').click();
+  const summary = page.getByTestId('robot-vq-summary');
+  await expect(summary).toContainText('Kämpfen gewonnen');
+  await expect(page.getByTestId('robot-vq-verdict')).toContainText('Mindestens ein Kampf ging verloren');
+  const lost = summary.locator('li.lost').first();
+  await expect(lost).toContainText('✗');
+  await expect(lost).toContainText('Die Zeit lief ab');
+  // The skipped fights are marked in the queue, and a lost one can be watched.
+  await expect(page.getByTestId('robot-layout-1')).toContainText('✗');
+  await lost.getByRole('button', { name: 'Ansehen' }).click();
+  await expect(page.getByTestId('robot-vq-state')).toHaveText('verloren');
+  await expect(page.getByTestId('robot-vq-reason')).toContainText('Die Zeit lief ab');
+});
+
+test('English texts in the stepping view', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => localStorage.setItem('pydra.v1.language', JSON.stringify('en')));
+  await openStep(page, 'first-contact', 'forward()\nfire()');
+  await page.getByTestId('robot-line-forward').click();
+  await expect(page.getByTestId('robot-narration')).toContainText('is a command: it costs one tick');
+  await expect(page.getByTestId('robot-where')).toHaveText(/^Line 1 · step 1 of \d+$/);
+  await expect(page.getByTestId('robot-vq-progress')).toContainText('Fight 1 of');
+  await expect(page.getByTestId('robot-speed-label')).toHaveText('very slow');
 });

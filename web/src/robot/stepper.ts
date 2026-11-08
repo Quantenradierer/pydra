@@ -17,6 +17,8 @@ export interface Beat {
   line: number | null;
   /** What the line did, in order (empty for start / resolve). */
   events: TraceEvent[];
+  /** A line that ran after the winning action: the arena already shows the final tick. */
+  after?: true;
 }
 
 const startsGroup = (e: TraceEvent) => e.k === 'line' || e.k === 'leave';
@@ -40,6 +42,17 @@ export function buildBeats(frames: readonly Frame[]): Beat[] {
     flush();
     beats.push({ tick, kind: 'resolve', line: frame.lines.player ?? null, events: [] });
   }
+  const last = frames.length - 1;
+  let group: TraceEvent[] = [];
+  const flushAfter = () => {
+    if (group.length > 0) beats.push({ tick: last, kind: 'line', line: lineOf(group[0]!), events: group, after: true });
+    group = [];
+  };
+  for (const e of frames[last]?.after ?? []) {
+    if (startsGroup(e) || group.length === 0) flushAfter();
+    group.push(e);
+  }
+  flushAfter();
   return beats;
 }
 

@@ -2698,6 +2698,169 @@ progress {
   color: #14202e;
   font-weight: 700;
 }
+.robot-arena {
+  display: grid;
+  gap: 0.3rem;
+}
+.robot-counter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.8rem;
+  align-items: baseline;
+}
+.robot-counter p {
+  margin: 0;
+}
+.robot-where {
+  font-weight: 700;
+}
+.robot-listing li {
+  padding-right: 0.4rem;
+  border-left: 4px solid transparent;
+}
+.robot-listing li.seen {
+  border-left-color: var(--muted);
+}
+.robot-listing li.branch-true {
+  border-left-color: var(--green);
+}
+.robot-listing li.branch-false {
+  border-left-color: var(--red);
+}
+.robot-hint {
+  margin-left: 1.2rem;
+  font-style: italic;
+  opacity: 0.85;
+}
+.robot-hint:empty {
+  display: none;
+}
+.robot-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+.robot-speed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+.robot-speed input {
+  flex: 1 1 8rem;
+  max-width: 14rem;
+}
+.robot-speed-label {
+  font-weight: 700;
+}
+.robot-explain {
+  background: var(--code-bg);
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.8rem;
+  margin: 0.6rem 0;
+}
+.robot-explain h3,
+.robot-cols h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+}
+.robot-narration {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+  min-height: 3.2rem;
+}
+.robot-narration-line code {
+  font-weight: 700;
+}
+.robot-vars,
+.robot-stack {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.robot-vars li,
+.robot-stack li {
+  background: var(--code-bg);
+  border-radius: 0.4rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.9rem;
+}
+.robot-vars li.changed {
+  background: var(--yellow);
+  color: #14202e;
+  font-weight: 700;
+}
+.robot-stack {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.robot-stack li.top {
+  outline: 2px solid var(--focus);
+}
+.robot-queue {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+.robot-queue h3 {
+  margin: 0;
+}
+.robot-vq-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  align-items: baseline;
+}
+.robot-vq-progress {
+  margin: 0;
+  font-weight: 700;
+}
+.robot-vq-state {
+  border-radius: 1rem;
+  padding: 0.05rem 0.6rem;
+  border: 2px solid var(--muted);
+  font-size: 0.9rem;
+}
+.robot-vq-state[data-state='won'] {
+  border-color: var(--green);
+}
+.robot-vq-state[data-state='lost'] {
+  border-color: var(--red);
+}
+.robot .layout.old {
+  border-style: dashed;
+}
+.robot-vq-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.robot-vq-rows li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.6rem;
+  background: var(--code-bg);
+  border-radius: 0.6rem;
+  border-left: 4px solid var(--green);
+  padding: 0.4rem 0.6rem;
+}
+.robot-vq-rows li.lost {
+  border-left-color: var(--red);
+}
+.robot-vq-why {
+  flex: 1 1 100%;
+}
 .robot-listing-static {
   background: var(--code-bg);
   padding: 0.6rem 0.8rem;
@@ -2774,4 +2937,18 @@ progress {
 }
 .robot-card-note h4 {
   margin: 0.5rem 0 0;
+}
+
+/* Robot Battler: its buttons carry words, not icons. */
+.robot .run-control {
+  width: auto;
+  height: auto;
+  min-height: 2.2rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+.robot .robot-controls {
+  display: flex;
+  flex-wrap: wrap;
 }

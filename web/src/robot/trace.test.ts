@@ -103,7 +103,8 @@ describe('battle trace', () => {
   it('keeps the events after the winning action (say) in the last frame', () => {
     const r = run('forward()\nfire()\nsay("done")', ['>.D']);
     expect(r.outcome).toBe('win');
-    expect(r.frames.at(-1)!.trace).toContainEqual(expect.objectContaining({ k: 'call', fn: 'say', kind: 'say' }));
+    expect(r.frames.at(-1)!.after).toContainEqual(expect.objectContaining({ k: 'call', fn: 'say', kind: 'say' }));
+    expect(r.frames.at(-1)!.trace).not.toContainEqual(expect.objectContaining({ fn: 'say' }));
   });
 
   it('cuts a tick that runs very long without acting', () => {

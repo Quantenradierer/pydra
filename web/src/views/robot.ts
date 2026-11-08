@@ -86,7 +86,7 @@ export function robotScreen(app: App): Screen {
     );
     show(
       subpageHeader(app, t('lesson.robot.title')),
-      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, p.solved.includes('final-exam') ? h('p', { class: 'robot-win', 'data-testid': 'robot-certificate' }, `🎓 ${t('robot.certificate')}`) : null, ...sections),
+      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, p.solved.includes('final-exam') ? h('p', { class: 'robot-win', 'data-testid': 'robot-certificate' }, `🎓 ${t('robot.certificate')}`) : null, game.canTrain() ? h('button', { class: 'run-control', 'data-testid': 'robot-training', onclick: showTraining }, t('robot.training')) : null, ...sections),
     );
   }
 
@@ -292,8 +292,19 @@ export function robotScreen(app: App): Screen {
     return { text: t('robot.outcome.lost', { lost, n }), ok: false, extra };
   }
 
-  function showBattle(step: Step) {
+  /** How a battle screen runs its fight and where it leads: the task map, or the Training Grounds. */
+  interface BattleOpts {
+    run: () => RunReport | undefined;
+    next: () => { label: string; go: () => void } | undefined;
+    back: () => void;
+    /** Training fights are not stored: their hints live only on the screen. */
+    training?: boolean;
+  }
+
+  function showBattle(step: Step, opts: BattleOpts = taskOpts(step)) {
     const enemy = step.enemy!;
+    let localHint = 0;
+    const hintCount = () => (opts.training ? localHint : game.hint(step.id));
     const result = h('div', { class: 'robot-result', 'data-testid': 'robot-result' }, h('p', { 'data-testid': 'robot-outcome', 'aria-live': 'polite' }, t('robot.outcome.idle')));
     const hintBox = h('div', { class: 'robot-hints', 'data-testid': 'robot-hints' });
     const historyBox = h('details', { class: 'robot-history', 'data-testid': 'robot-history' });
@@ -302,7 +313,7 @@ export function robotScreen(app: App): Screen {
     const hintText = (n: number): Node =>
       n === 1 ? h('p', {}, t('robot.hint.1', { text: enemy.twist[lang] })) : n === 2 ? h('p', {}, t('robot.hint.2', { text: enemy.idea[lang] })) : h('div', {}, h('p', {}, t('robot.hint.3')), h('pre', {}, h('code', {}, enemy.skeleton)));
     function renderHints() {
-      const shown = game.hint(step.id);
+      const shown = hintCount();
       hintBox.replaceChildren(...Array.from({ length: shown }, (_, i) => hintText(i + 1)));
     }
     function renderHistory() {
@@ -327,7 +338,7 @@ export function robotScreen(app: App): Screen {
     }
 
     function fight() {
-      const run = game.run(step.id);
+      const run = opts.run();
       if (!run) return;
       renderHistory();
       if (run.error) {
@@ -347,7 +358,7 @@ export function robotScreen(app: App): Screen {
         h('button', { class: `run-control layout${f.won ? ' won' : ' lost'}`, 'data-testid': `robot-layout-${i + 1}`, 'aria-pressed': 'false', 'aria-label': t(f.won ? 'robot.layout.won' : 'robot.layout.lost', { n: i + 1 }), onclick: () => pick(i) }, `${f.won ? '✓' : '✗'} ${t('robot.layout', { n: i + 1 })}`),
       );
       const regression = enemy.regression === false ? null : h('p', { class: 'robot-note' }, run.broken.length === 0 && run.won ? t('robot.regression.ok') : '');
-      const next = run.won ? nextStep(step) : undefined;
+      const next = run.won ? opts.next() : undefined;
       result.replaceChildren(
         ...[
         h('p', { class: ok ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text),
@@ -355,7 +366,7 @@ export function robotScreen(app: App): Screen {
         regression,
         h('div', { class: 'robot-layouts', role: 'group' }, ...tabs),
         viewer,
-        next ? h('button', { class: 'robot-next', 'data-testid': 'robot-next', onclick: () => (game.open(next.id), showStep(next.id)) }, `${t('robot.next')}: ${titleOf(next)}`) : null,
+        next ? h('button', { class: 'robot-next', 'data-testid': 'robot-next', onclick: next.go }, next.label) : null,
         ].filter((n): n is HTMLElement => n !== null),
       );
       pick(failedFirst);
@@ -363,8 +374,8 @@ export function robotScreen(app: App): Screen {
 
     const build = game.build();
     show(
-      stepHeader(step),
-      cardsBlock(step.chapter),
+      stepHeader(step, opts.back),
+      opts.training ? null : cardsBlock(step.chapter),
       h('section', { class: 'robot-card' }, h('h3', {}, t('robot.twist')), h('p', { 'data-testid': 'robot-twist' }, enemy.twist[lang])),
       buildPanel(() => showStep(step.id)),
       apiPanel(build),
@@ -373,7 +384,7 @@ export function robotScreen(app: App): Screen {
         'div',
         { class: 'robot-actions' },
         h('button', { class: 'robot-run', 'data-testid': 'robot-run', onclick: () => (game.setScript(area.value), fight()) }, t('robot.run')),
-        h('button', { class: 'run-control', 'data-testid': 'robot-hint', onclick: () => (game.hint(step.id) < 3 && game.nextHint(step.id), renderHints()) }, t('robot.hint')),
+        h('button', { class: 'run-control', 'data-testid': 'robot-hint', onclick: () => (opts.training ? (localHint = Math.min(3, localHint + 1)) : game.hint(step.id) < 3 && game.nextHint(step.id), renderHints()) }, t('robot.hint')),
       ),
       hintBox,
       result,
@@ -383,17 +394,51 @@ export function robotScreen(app: App): Screen {
     renderHistory();
   }
 
+  function taskOpts(step: Step): BattleOpts {
+    return {
+      run: () => game.run(step.id),
+      next: () => {
+        const n = nextStep(step);
+        return n ? { label: `${t('robot.next')}: ${titleOf(n)}`, go: () => (game.open(n.id), showStep(n.id)) } : undefined;
+      },
+      back: () => (game.open(step.id), showMap()),
+    };
+  }
+
+  // ---------------------------------------------------------------- Training Grounds
+
+  function showTraining() {
+    const stats = game.trainingStats();
+    const play = (step: Step) =>
+      showBattle(step, {
+        run: () => game.runTraining(step),
+        next: () => ({ label: t('robot.training.another'), go: () => play(game.trainingStep(game.nextTrainingSeed())) }),
+        back: showTraining,
+        training: true,
+      });
+    show(
+      subpageHeader(app, t('robot.training')),
+      h('p', { class: 'robot-card' }, t('robot.training.intro')),
+      h('p', { 'data-testid': 'robot-training-stats' }, t('robot.training.stats', { wins: stats.wins })),
+      h('div', { class: 'robot-actions' },
+        h('button', { class: 'robot-run', 'data-testid': 'robot-train-daily', onclick: () => play(game.trainingStep('daily')) }, t(stats.dailyDone ? 'robot.training.dailyDone' : 'robot.training.daily')),
+        h('button', { class: 'run-control', 'data-testid': 'robot-train-new', onclick: () => play(game.trainingStep(game.nextTrainingSeed())) }, t('robot.training.new')),
+        h('button', { class: 'run-control', 'data-testid': 'robot-train-back', onclick: showMap }, t('robot.toMap')),
+      ),
+    );
+  }
+
   /** The next unsolved battle after this step, for the "Next" button. */
   function nextStep(step: Step): Step | undefined {
     const i = game.steps.indexOf(step);
     return game.steps.slice(i + 1).find((s) => s.kind === 'battle' && game.unlocked(s.id) && !game.progress().solved.includes(s.id));
   }
 
-  function stepHeader(step: Step): HTMLElement {
+  function stepHeader(step: Step, back: () => void = () => (game.open(step.id), showMap())): HTMLElement {
     return h(
       'header',
       { class: 'subpage-header' },
-      h('button', { class: 'icon-button', 'aria-label': t('nav.back'), title: t('nav.back'), onclick: () => (game.open(step.id), showMap()) }, svg(BACK)),
+      h('button', { class: 'icon-button', 'aria-label': t('nav.back'), title: t('nav.back'), onclick: back }, svg(BACK)),
       h('h1', { tabindex: -1, 'data-testid': 'robot-step-title' }, titleOf(step)),
     );
   }

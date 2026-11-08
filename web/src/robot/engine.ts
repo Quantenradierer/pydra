@@ -36,6 +36,8 @@ export type Intent =
   /** A hit on the tile in front. */
   | { type: 'melee'; damage: number }
   | { type: 'shield' }
+  /** A step forward that shoves a robot standing there one tile further (when that tile is free). */
+  | { type: 'push' }
   /** A lost tick: an action that was not charged. The replay shows "Shield still charging (1 tick left)". */
   | { type: 'fizzle'; part: string; reason: 'charging' | 'overheated'; ticks: number };
 
@@ -65,6 +67,7 @@ export type GameEvent =
   | { type: 'shot'; by: string; from: Pos; to: Pos; hit?: string; blocked?: boolean }
   | { type: 'smash'; by: string; at: Pos; hit?: string; blocked?: boolean }
   | { type: 'damage'; robot: string; amount: number }
+  | { type: 'push'; by: string; target: string }
   | { type: 'bump'; robot: string; reason: 'wall' | 'rubble' | 'pit' | 'robot' | 'edge' }
   | { type: 'shield'; robot: string }
   | { type: 'fizzle'; robot: string; part: string; reason: 'charging' | 'overheated'; ticks: number }
@@ -200,7 +203,21 @@ export class World {
   step(intents: ReadonlyMap<string, Intent>): GameEvent[] {
     const events: GameEvent[] = [];
     const live = this.alive();
-    const intentOf = (r: Robot): Intent => intents.get(r.id) ?? { type: 'wait' };
+    const pushed = new Map<string, Intent>();
+    const intentOf = (r: Robot): Intent => pushed.get(r.id) ?? intents.get(r.id) ?? { type: 'wait' };
+
+    // Pushes: the robot ahead is shoved one tile further, then the pusher steps like on a normal move.
+    for (const r of live) {
+      if (intents.get(r.id)?.type !== 'push') continue;
+      const target = step(r.pos, r.facing);
+      const blocker = this.robotAt(target);
+      const beyond = step(target, r.facing);
+      if (blocker && blocker !== r && this.passable(blocker, beyond) === true && !this.robotAt(beyond)) {
+        blocker.pos = beyond;
+        events.push({ type: 'push', by: r.id, target: blocker.id });
+      }
+      pushed.set(r.id, { type: 'move', dir: r.facing });
+    }
 
     // Turns and shields.
     for (const r of live) {

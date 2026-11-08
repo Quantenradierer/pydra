@@ -117,7 +117,7 @@ export function robotScreen(app: App): Screen {
       { class: 'robot-build', 'data-testid': 'robot-build', open: buildOpen },
       h('summary', {}, t('robot.build')),
       h('fieldset', {}, h('legend', {}, t('robot.build.chassis')), ...(['light', 'medium'] as const).map((c) => radio('chassis', c, t(`robot.chassis.${c}`), build.chassis === c, game.can('chassis', c) && (c === 'light' || build.gear.length <= CHASSIS[c].slots), () => apply({ ...build, chassis: c })))),
-      h('fieldset', {}, h('legend', {}, t('robot.build.locomotion')), ...(['wheels', 'legs'] as const).map((l) => radio('locomotion', l, t(`robot.loco.${l}`), build.locomotion === l, game.can('locomotion', l), () => apply({ ...build, locomotion: l })))),
+      h('fieldset', {}, h('legend', {}, t('robot.build.locomotion')), ...(['wheels', 'legs', 'treads'] as const).map((l) => radio('locomotion', l, t(`robot.loco.${l}`), build.locomotion === l, game.can('locomotion', l), () => apply({ ...build, locomotion: l })))),
       h(
         'fieldset',
         {},

@@ -8,7 +8,7 @@ export interface EnemyDef {
   /** Facing; defaults to the side that faces the player. */
   face?: Dir;
   /** Parts: gear object names, locomotion. Enemies use the same parts as the player. */
-  locomotion?: 'wheels' | 'legs';
+  locomotion?: 'wheels' | 'legs' | 'treads';
   gear?: string[];
   /** The enemy's Python script (same API as the player's); none = a dummy. */
   script?: string;
@@ -86,13 +86,13 @@ export interface BuiltLayout {
   defOf: Record<string, EnemyDef>;
 }
 
-export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCross: { rubble: boolean; pit: boolean } }): BuiltLayout {
+export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCross: { rubble: boolean; pit: boolean }; armor?: number }): BuiltLayout {
   const rng = new Rng(spec.seed);
   const mirrored = spec.mirror === true && rng.chance(0.5);
   const rows = mirrored ? mirrorMap(spec.map) : [...spec.map];
   const parsed = parseMap(rows);
   const robots: RobotSetup[] = [
-    { id: 'player', team: 'player', pos: parsed.player.pos, facing: parsed.player.facing, hp: playerHp, canCross: player.canCross },
+    { id: 'player', team: 'player', pos: parsed.player.pos, facing: parsed.player.facing, hp: playerHp, canCross: player.canCross, ...(player.armor ? { armor: player.armor } : {}) },
   ];
   const defOf: Record<string, EnemyDef> = {};
   parsed.enemies.forEach((e, i) => {
@@ -101,7 +101,7 @@ export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCro
     const id = `enemy${i + 1}`;
     defOf[id] = def;
     const facing = def.face ? (mirrored ? MIRROR[def.face] : def.face) : towards(e.pos, parsed.player.pos);
-    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: def.armor ?? 0, canCross: { rubble: def.locomotion === 'legs' }, ...(def.regen ? { regen: def.regen } : {}) });
+    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: (def.armor ?? 0) + (def.locomotion === 'treads' ? 3 : 0), canCross: { rubble: def.locomotion === 'legs' || def.locomotion === 'treads' }, ...(def.regen ? { regen: def.regen } : {}) });
   });
   return { setup: { tiles: parsed.tiles, robots, seed: spec.seed, ...(spec.maxTicks ? { maxTicks: spec.maxTicks } : {}) }, mapRows: rows, mirrored, enemyDefs: [...spec.enemies], defOf };
 }

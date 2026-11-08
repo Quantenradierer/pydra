@@ -11,8 +11,9 @@ export interface ApiEntry {
 export function apiEntries(build: Build): ApiEntry[] {
   const out: ApiEntry[] = [];
   const has = (g: Build['gear'][number]) => build.gear.includes(g);
-  if (build.locomotion === 'wheels') {
+  if (build.locomotion !== 'legs') {
     out.push({ sig: 'forward(steps)', id: 'forward' }, { sig: 'backward(steps)', id: 'backward' }, { sig: 'turn_left()', id: 'turn_left' }, { sig: 'turn_right()', id: 'turn_right' });
+    if (build.locomotion === 'treads') out.push({ sig: 'push()', id: 'push' });
   } else {
     out.push({ sig: 'move_north(steps)  move_east(steps)  move_south(steps)  move_west(steps)', id: 'move' }, { sig: 'rotate_left()  rotate_right()', id: 'rotate' });
   }

@@ -84,11 +84,16 @@ export function createEnv(rc: RobotContext): Env {
   // ---- locomotion
   const move = (dir: Dir): Step => ({ type: 'move', dir });
   const times = (n: number, s: Step) => Array.from({ length: n }, () => s);
-  if (build.locomotion === 'wheels') {
+  if (build.locomotion === 'wheels' || build.locomotion === 'treads') {
+    const treads = build.locomotion === 'treads';
     globals.forward = fn('forward', (a) => action('forward', times(count('forward', a, 1, 0, 20, 'a number from 0 to 20'), () => move(me().facing) as Intent)));
     globals.backward = fn('backward', (a) => action('backward', times(count('backward', a, 1, 0, 20, 'a number from 0 to 20'), () => move(opposite(me().facing)) as Intent)));
-    globals.turn_left = fn('turn_left', () => action('turn_left', [{ type: 'turn', side: 'left' }]));
-    globals.turn_right = fn('turn_right', () => action('turn_right', [{ type: 'turn', side: 'right' }]));
+    /** Treads turn slowly: a lost tick first, then the turn. */
+    const turn = (side: 'left' | 'right'): Step[] => (treads ? [{ type: 'wait' }, { type: 'turn', side }] : [{ type: 'turn', side }]);
+    globals.turn_left = fn('turn_left', () => action('turn_left', turn('left')));
+    globals.turn_right = fn('turn_right', () => action('turn_right', turn('right')));
+    if (treads) globals.push = fn('push', () => action('push', [{ type: 'push' }]));
+    else notEquipped.set('push', { kind: 'part', need: 'treads' });
     for (const [name, dir] of Object.entries(DIR_NAMES)) notEquipped.set(`move_${name}`, { kind: 'move-absolute', dir: name });
     for (const name of ['rotate_left', 'rotate_right']) notEquipped.set(name, { kind: 'move-absolute', dir: 'north' });
   } else {
@@ -98,6 +103,7 @@ export function createEnv(rc: RobotContext): Env {
     globals.rotate_left = fn('rotate_left', () => action('rotate_left', [{ type: 'turn', side: 'left' }]));
     globals.rotate_right = fn('rotate_right', () => action('rotate_right', [{ type: 'turn', side: 'right' }]));
     for (const name of ['forward', 'backward', 'turn_left', 'turn_right']) notEquipped.set(name, { kind: 'move-relative' });
+    notEquipped.set('push', { kind: 'part', need: 'treads' });
   }
   // ---- status checks every gear item has
   const common = (g: GearId): Record<string, HostFunction> => ({

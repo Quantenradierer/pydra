@@ -1,6 +1,6 @@
 /** The robot's build: chassis, locomotion and gear. Parts become Python functions (see parts.ts). */
 export type ChassisId = 'light' | 'medium';
-export type LocomotionId = 'wheels' | 'legs';
+export type LocomotionId = 'wheels' | 'legs' | 'treads';
 export type GearId = 'blaster' | 'cannon' | 'eyes' | 'hammer' | 'shield' | 'gps';
 export type AddonId = 'wide' | 'scanner';
 
@@ -9,7 +9,10 @@ export const CHASSIS: Record<ChassisId, { slots: number; hp: number }> = {
   medium: { slots: 3, hp: 12 },
 };
 
-export const LOCOMOTIONS: readonly LocomotionId[] = ['wheels', 'legs'];
+export const LOCOMOTIONS: readonly LocomotionId[] = ['wheels', 'legs', 'treads'];
+
+/** Armor the locomotion adds: treads are heavy plating. */
+export const locomotionArmor = (l: LocomotionId): number => (l === 'treads' ? 3 : 0);
 export const GEAR: readonly GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps'];
 export const WEAPONS: readonly GearId[] = ['blaster', 'cannon', 'hammer'];
 
@@ -28,7 +31,7 @@ export const START_BUILD: Build = { chassis: 'light', locomotion: 'wheels', gear
 /** What a part needs before the player may pick it: the chapter that unlocks it. */
 export const UNLOCK_CHAPTER = {
   chassis: { light: 0, medium: 3 },
-  locomotion: { wheels: 0, legs: 1 },
+  locomotion: { wheels: 0, legs: 1, treads: 4 },
   gear: { blaster: 0, eyes: 0, cannon: 1, hammer: 3, shield: 3, gps: 4 },
   addon: { wide: 3, scanner: 3 },
   blasterMark2: 4,
@@ -53,7 +56,7 @@ export function parseBuild(raw: unknown): Build | undefined {
   if (typeof raw !== 'object' || raw === null) return undefined;
   const r = raw as Record<string, unknown>;
   if (r.chassis !== 'light' && r.chassis !== 'medium') return undefined;
-  if (r.locomotion !== 'wheels' && r.locomotion !== 'legs') return undefined;
+  if (r.locomotion !== 'wheels' && r.locomotion !== 'legs' && r.locomotion !== 'treads') return undefined;
   if (!Array.isArray(r.gear) || !r.gear.every((g) => (GEAR as readonly unknown[]).includes(g))) return undefined;
   const addons = Array.isArray(r.addons) ? r.addons.filter((a): a is AddonId => a === 'wide' || a === 'scanner') : [];
   const build: Build = { chassis: r.chassis, locomotion: r.locomotion, gear: [...new Set(r.gear as GearId[])], addons, blasterMark: r.blasterMark === 2 ? 2 : 1 };

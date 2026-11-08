@@ -4,7 +4,7 @@
  * until somebody wins or the time is up. Everything is recorded in frames for
  * the replay viewer. Deterministic for a given layout, build and script.
  */
-import { addonsFor, CHASSIS, type Build } from './build.ts';
+import { addonsFor, CHASSIS, locomotionArmor, type Build } from './build.ts';
 const buildHp = (b: Build): number => CHASSIS[b.chassis].hp;
 import { World, type Dir, type GameEvent, type Intent, type Outcome, type Pos, type Tile } from './engine.ts';
 import { buildLayout, type EnemyDef, type LayoutSpec } from './layout.ts';
@@ -134,7 +134,7 @@ export function precheck(build: Build, script: string): RbError | undefined {
 
 export function runBattle(input: BattleInput): BattleResult {
   const { build, script, layout } = input;
-  const built = buildLayout(layout, buildHp(build), { canCross: { rubble: build.locomotion === 'legs', pit: false } });
+  const built = buildLayout(layout, buildHp(build), { canCross: { rubble: build.locomotion !== 'wheels', pit: false }, armor: locomotionArmor(build.locomotion) });
   const world = new World(built.setup);
   const bubbles: Frame['bubbles'] = [];
   const logs = new Map<string, string[]>();

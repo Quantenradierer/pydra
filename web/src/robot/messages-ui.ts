@@ -1,7 +1,7 @@
 /** Robot Battler screen texts (de / en). Function names in code stay English. */
 export const API_IDS = [
   'forward', 'backward', 'turn_left', 'turn_right', 'move', 'rotate', 'fire_blaster', 'fire_burst', 'heat', 'fire_cannon', 'see', 'distance', 'see_side',
-  'enemy_shielded', 'smash', 'activate', 'is_up', 'position', 'facing', 'wait', 'say', 'hp', 'alive', 'tick', 'checks',
+  'enemy_shielded', 'push', 'smash', 'activate', 'is_up', 'position', 'facing', 'wait', 'say', 'hp', 'alive', 'tick', 'checks',
 ] as const;
 export type ApiId = (typeof API_IDS)[number];
 
@@ -20,6 +20,7 @@ const API: Record<ApiId, [string, string]> = {
   distance: ['Felder bis dahin, 0 wenn nichts da ist (kostenlos)', 'tiles to it, 0 if nothing is there (free)'],
   see_side: ['wie see(), aber nach links / rechts (kostenlos)', 'like see(), but to the left / right (free)'],
   enemy_shielded: ['True, solange der Gegner vor dir sein Schild oben hat (kostenlos)', 'True while the enemy ahead has its shield up (free)'],
+  push: ['fährt ein Feld vor und schiebt einen Roboter dort ein Feld weiter', 'steps one tile forward and shoves a robot standing there one tile further'],
   smash: ['schlägt aufs Feld direkt vor dir, 3 Schaden, danach 2 Ticks laden', 'hits the tile right ahead, 3 damage, then 2 ticks to recharge'],
   activate: ['Schild für den nächsten Tick, blockt einen Treffer, danach 2 Ticks laden', 'shield up for the next tick, blocks one hit, then 2 ticks to recharge'],
   is_up: ['True, wenn dein Schild oben ist (kostenlos)', 'True when your shield is up (free)'],
@@ -70,6 +71,7 @@ export const UI_DE = {
   'robot.chassis.medium': 'Mittel (3 Plätze, 12 Leben)',
   'robot.loco.wheels': 'Räder: forward(), turn_left() …',
   'robot.loco.legs': 'Spinnenbeine: move_north() …',
+  'robot.loco.treads': 'Ketten: forward() …, +3 Panzerung, push()',
   'robot.gear.blaster': 'Blaster',
   'robot.gear.cannon': 'Kanone',
   'robot.gear.eyes': 'Augen',
@@ -137,6 +139,7 @@ export const UI_DE = {
   'robot.ev.smash.hit': '{who} schlägt zu und trifft.',
   'robot.ev.smash.blocked': '{who} schlägt zu, aber das Schild blockt.',
   'robot.ev.smash.miss': '{who} schlägt ins Leere.',
+  'robot.ev.push': '{who} schiebt {target} weg.',
   'robot.ev.damage': '{who} verliert {amount} Leben.',
   'robot.ev.death': '{who} ist ausgeschaltet.',
   'robot.ev.shield': '{who} hebt das Schild.',
@@ -213,6 +216,7 @@ export const UI_EN: Record<keyof typeof UI_DE, string> = {
   'robot.chassis.medium': 'Medium (3 slots, 12 HP)',
   'robot.loco.wheels': 'Wheels: forward(), turn_left() …',
   'robot.loco.legs': 'Spider legs: move_north() …',
+  'robot.loco.treads': 'Treads: forward() …, +3 armor, push()',
   'robot.gear.blaster': 'Blaster',
   'robot.gear.cannon': 'Cannon',
   'robot.gear.eyes': 'Eyes',
@@ -280,6 +284,7 @@ export const UI_EN: Record<keyof typeof UI_DE, string> = {
   'robot.ev.smash.hit': '{who} smashes and hits.',
   'robot.ev.smash.blocked': '{who} smashes, but the shield blocks it.',
   'robot.ev.smash.miss': '{who} smashes at nothing.',
+  'robot.ev.push': '{who} shoves {target} away.',
   'robot.ev.damage': '{who} loses {amount} HP.',
   'robot.ev.death': '{who} is down.',
   'robot.ev.shield': '{who} raises the shield.',

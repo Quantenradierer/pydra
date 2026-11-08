@@ -55,6 +55,9 @@ export function homeScreen(app: App): Screen {
     if (route === 'predict') {
       const stats = app.services.predict.stats();
       statsText = stats.checks === 0 ? t('home.game.noStats') : t('home.game.stats', stats);
+    } else if (route === 'robot') {
+      const stats = app.services.robot.stats();
+      statsText = stats.runs === 0 ? t('home.robot.noStats') : t('home.robot.stats', stats);
     } else if (route === 'order') {
       const stats = app.services.order.stats();
       statsText = stats.runs === 0 ? t('home.order.noStats') : t(stats.runs === 1 ? 'home.order.stats.one' : 'home.order.stats.other', stats);

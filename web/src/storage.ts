@@ -9,7 +9,7 @@ import { parseCounters, parseQuestionStats, type Counters, type QuestionStats } 
 export type KeyValue = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
 /** Where each hydra game keeps its progress. */
-export const GAME_DATA_KEYS = ['game', 'hunt', 'order', 'predict'] as const;
+export const GAME_DATA_KEYS = ['game', 'hunt', 'order', 'predict', 'robot'] as const;
 export type GameDataKey = (typeof GAME_DATA_KEYS)[number];
 
 /** All keys live in one versioned namespace. */

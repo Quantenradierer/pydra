@@ -7,6 +7,7 @@ import { Game } from './game/game.ts';
 import { HUNT_LEVELS, type HuntLevel } from './game/hunt-levels.ts';
 import { OrderGame } from './game/order.ts';
 import { PredictGame } from './game/predict.ts';
+import { RobotGame } from './robot/game.ts';
 import { InstallPrompt } from './install.ts';
 import { PointsService } from './points/service.ts';
 import { XP_GAMES, type PointsEvent, type XpGame } from './points/state.ts';
@@ -18,7 +19,7 @@ import './style.css';
 const storage = new AppStorage(localStorage, CONTENT);
 
 // The games by key; assigned below, read lazily by the points.
-let games: { game: Game; hunt: Game<HuntLevel>; order: OrderGame; predict: PredictGame };
+let games: { game: Game; hunt: Game<HuntLevel>; order: OrderGame; predict: PredictGame; robot: RobotGame };
 
 const byGame = <T>(fn: (key: XpGame) => T) => Object.fromEntries(XP_GAMES.map((key) => [key, fn(key)])) as Record<XpGame, T>;
 
@@ -42,7 +43,8 @@ const game = Game.fishing(storage, Math.random, onPoints);
 const hunt = new Game(storage, HUNT_LEVELS, Math.random, 'hunt', onPoints);
 const order = new OrderGame(storage, undefined, onPoints);
 const predict = new PredictGame(storage, undefined, onPoints);
-games = { game, hunt, order, predict };
+const robot = new RobotGame(storage, undefined, undefined, onPoints);
+games = { game, hunt, order, predict, robot };
 const feedback = new FeedbackQueue(storage);
 const install = new InstallPrompt(window);
 
@@ -59,7 +61,7 @@ const updateSW = registerSW({
   },
 });
 
-new App(document.getElementById('app')!, { storage, trainer, daily, game, hunt, order, predict, points, feedback, install, updates }).start();
+new App(document.getElementById('app')!, { storage, trainer, daily, game, hunt, order, predict, robot, points, feedback, install, updates }).start();
 
 // Deliver feedback written while offline.
 const flushFeedback = () => void feedback.flush();

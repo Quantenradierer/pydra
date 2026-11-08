@@ -9,8 +9,8 @@ import { PointsService } from './service.ts';
 import { currentStreak, dayKey, emptyPoints, parsePoints, previousDay, type GameContext, type PointsEvent, type PointsState } from './state.ts';
 
 const CTX: GameContext = {
-  totals: { game: 10, hunt: 10, order: 10, predict: 10 },
-  remaining: { game: 10, hunt: 10, order: 10, predict: 10 },
+  totals: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10 },
+  remaining: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10 },
 };
 const at = (day: string, hour = 12) => new Date(`${day}T${String(hour).padStart(2, '0')}:00:00`);
 
@@ -24,7 +24,7 @@ function play(state: PointsState, events: PointsEvent[], now: Date, ctx = CTX) {
   return { state, gained };
 }
 const quiz = (id: string, correct = true): PointsEvent => ({ type: 'quiz', id, correct });
-const level = (game: 'game' | 'hunt' | 'order' | 'predict', id: string, clean = false): PointsEvent => ({ type: 'level', game, id, clean });
+const level = (game: 'game' | 'hunt' | 'order' | 'predict' | 'robot', id: string, clean = false): PointsEvent => ({ type: 'level', game, id, clean });
 
 describe('levels', () => {
   it('needs more XP for each level', () => {

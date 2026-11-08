@@ -26,6 +26,7 @@ questions a session asks.
 | hunt      | Hydra-Jagd / Hydra hunt            | the warrior game: same screen, its own world, levels and progress (see below) |
 | order     | Code-Puzzle / Code puzzle          | the warrior's world, but the lines of the program are to be put in order (see below) |
 | predict   | Was sagt die Hydra? / What does the hydra say? | read a short program and type what it prints (see below) |
+| robot     | Roboter-Kampf / Robot Battler      | build a robot and write the Python script that drives it in battle; see [robot-battler.md](robot-battler.md) |
 
 ### Daily challenge (`daily`, "Tages-Challenge")
 
@@ -447,7 +448,7 @@ nothing is sent. Code: `web/src/points/`.
   question pays, so a year of daily XP in this amount comes from the daily
   challenge (up to 100 XP, plus the bonus, every day), not from answering the
   same questions again.
-- **Achievements.** 21, in bronze, silver and gold (gold = rare): answers,
+- **Achievements.** 22, in bronze, silver and gold (gold = rare): answers,
   levels, streak, perfect rounds, the daily challenge (first one, 7 days in a row [gold], 30 finished [gold]), player level (10 and 50 [gold]), and every level of
   one game. The profile shows the earned ones with their date; the rarest earned
   title appears under the level.

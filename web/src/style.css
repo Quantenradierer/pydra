@@ -2497,3 +2497,264 @@ progress {
 .daily-code .code.marked .line {
   padding-left: calc(1.5rem - 4px);
 }
+
+/* ------------------------------------------------------------ Robot Battler */
+.robot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.robot h2,
+.robot h3 {
+  margin: 0.4rem 0 0.3rem;
+}
+.robot-chapter .robot-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.robot-step {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+.robot-step.solved {
+  border-color: var(--green);
+}
+.robot-step.challenge {
+  border-style: dashed;
+}
+.robot-step:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.robot-kind {
+  font-size: 0.8rem;
+  color: var(--muted);
+  min-width: 5.5rem;
+}
+.robot-title {
+  font-weight: 600;
+  flex: 1;
+}
+.robot-state,
+.robot-side {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.robot-card,
+.robot-build,
+.robot-api,
+.robot-history,
+.robot-result {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.7rem 0.9rem;
+}
+.robot-build summary,
+.robot-history summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.robot-build fieldset {
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  margin: 0.6rem 0 0;
+}
+.robot-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+}
+.robot-option.locked {
+  opacity: 0.55;
+}
+.robot-api dl {
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.robot-api dt {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9rem;
+}
+.robot-api dd {
+  margin: 0 0 0 0.8rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.robot-code,
+.robot-answer {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 1rem;
+  line-height: 1.45;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--code-bg);
+  color: var(--code-fg);
+  tab-size: 4;
+}
+.robot-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.robot-run,
+.robot-next {
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 0;
+  border-radius: var(--radius);
+  padding: 0.7rem 1.2rem;
+  font: inherit;
+  font-weight: 700;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+.robot-win {
+  color: var(--green);
+  font-weight: 600;
+}
+.robot-loss,
+.robot-error {
+  color: var(--red);
+}
+.robot-error {
+  background: var(--red-bg);
+  border-radius: 0.6rem;
+  padding: 0.6rem 0.8rem;
+}
+.robot-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0.2rem 0;
+}
+.robot-layouts {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.robot .layout.won {
+  border-color: var(--green);
+}
+.robot .layout.lost {
+  border-color: var(--red);
+}
+.robot .layout[aria-pressed='true'] {
+  outline: 2px solid var(--focus);
+}
+.robot-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 0.8rem;
+  align-items: start;
+}
+@media (max-width: 640px) {
+  .robot-stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.robot-canvas {
+  width: 100%;
+  height: auto;
+  max-width: 28rem;
+  border-radius: 0.6rem;
+  background: #0f1722;
+  image-rendering: pixelated;
+}
+.robot-listing {
+  list-style: decimal;
+  margin: 0;
+  padding: 0.4rem 0.4rem 0.4rem 2.2rem;
+  background: var(--code-bg);
+  border-radius: 0.6rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.9rem;
+  white-space: pre;
+  overflow-x: auto;
+}
+.robot-listing li.active {
+  background: var(--yellow);
+  color: #14202e;
+  font-weight: 700;
+}
+.robot-listing-static {
+  background: var(--code-bg);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  overflow-x: auto;
+}
+.robot-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.8rem;
+}
+.robot-sensors,
+.robot-log {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+}
+.robot-lineup {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.robot-lineup li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--code-bg);
+  border-radius: 0.6rem;
+  padding: 0.3rem 0.6rem;
+}
+.robot-lineup code {
+  flex: 1;
+}
+.robot-pixels {
+  display: grid;
+  grid-template-columns: repeat(8, 1.1rem);
+  gap: 1px;
+}
+.robot-pixels i {
+  width: 1.1rem;
+  height: 1.1rem;
+  background: var(--code-bg);
+  border-radius: 2px;
+}
+.robot-pixels i.on {
+  background: var(--green);
+}
+.robot-picture {
+  display: inline-block;
+  margin: 0.5rem 1rem 0 0;
+}
+.robot-history ol {
+  padding-left: 1.1rem;
+}
+.robot-history li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 0.3rem 0;
+}

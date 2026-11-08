@@ -6,7 +6,7 @@
  */
 import { addonsFor, CHASSIS, type Build } from './build.ts';
 const buildHp = (b: Build): number => CHASSIS[b.chassis].hp;
-import { World, type GameEvent, type Intent, type Outcome, type Pos, type Dir } from './engine.ts';
+import { World, type Dir, type GameEvent, type Intent, type Outcome, type Pos, type Tile } from './engine.ts';
 import { buildLayout, type EnemyDef, type LayoutSpec } from './layout.ts';
 import { createEnv, type Env, type Step } from './parts.ts';
 import { checkProgram } from './py/check.ts';
@@ -48,11 +48,13 @@ export interface BattleResult {
   /** A Python error that stopped the player's script (reason "error"), or the line of a budget stop. */
   error?: RbError;
   budgetLine?: number;
+  /** Tiles painted with the workshop brush, "x,y". */
+  trail: string[];
   /** HP the player lost over the battle. */
   damageTaken: number;
   /** Everything print() wrote, as bubbles also. */
   mapRows: string[];
-  tiles: string[][];
+  tiles: Tile[][];
 }
 
 class Brain {
@@ -108,6 +110,8 @@ export interface BattleInput {
   build: Build;
   script: string;
   layout: LayoutSpec;
+  /** Workshop mode: the player gets the paint `brush` and the result lists the painted tiles. */
+  brush?: boolean;
 }
 
 /** The build an enemy fights with (same parts as the player could get). */
@@ -135,12 +139,21 @@ export function runBattle(input: BattleInput): BattleResult {
   const bubbles: Frame['bubbles'] = [];
   const logs = new Map<string, string[]>();
   const brains = new Map<string, Brain>();
+  const trail = new Set<string>();
+  let brushDown = false;
+  const paint = () => {
+    if (brushDown) trail.add(`${world.player.pos.x},${world.player.pos.y}`);
+  };
 
   const addBrain = (id: string, b: Build, source: string | undefined, strict: boolean) => {
     if (source === undefined) return;
     const sensorLog: string[] = [];
     logs.set(id, sensorLog);
     const env = createEnv({ world, id, build: b, sensorLog, say: (text) => bubbles.push({ robot: id, text }) });
+    if (input.brush && id === 'player') {
+      const m = (name: string, down: boolean) => ({ kind: 'host' as const, name, call: () => ((brushDown = down), paint(), null) });
+      env.globals.brush = { kind: 'object', name: 'brush', names: () => ['down', 'up'], get: (a: string) => (a === 'down' ? m('down', true) : a === 'up' ? m('up', false) : undefined) };
+    }
     const program = new Program(parse(source), {
       globals: env.globals,
       known: [...env.notEquipped.keys()],
@@ -149,7 +162,31 @@ export function runBattle(input: BattleInput): BattleResult {
     void strict;
     brains.set(id, new Brain(program, env));
   };
-  addBrain('player', build, script, true);
+  try {
+    addBrain('player', build, script, true);
+  } catch (e) {
+    if (!(e instanceof RbError)) throw e;
+    // A syntax error: nothing runs, the battle is lost on the spot.
+    return {
+      outcome: 'loss',
+      reason: 'error',
+      frames: [
+        {
+          tick: 0,
+          robots: world.robots.map((r) => ({ id: r.id, pos: { ...r.pos }, facing: r.facing, hp: r.hp, maxHp: r.maxHp, shieldUp: false })),
+          events: [],
+          lines: {},
+          bubbles: [],
+          sensors: {},
+        },
+      ],
+      error: e,
+      trail: [],
+      damageTaken: 0,
+      mapRows: built.mapRows,
+      tiles: world.tiles.map((row) => [...row]),
+    };
+  }
   for (const r of world.robots.filter((x) => x.team === 'enemy')) {
     const def = built.defOf[r.id]!;
     addBrain(r.id, enemyBuild(def), def.script, false);
@@ -197,6 +234,7 @@ export function runBattle(input: BattleInput): BattleResult {
       break;
     }
     const events = world.step(intents);
+    paint();
     frames.push(snapshot(events, lines, [...bubbles], sensors));
     const outcome = world.outcome();
     if (outcome) {
@@ -217,6 +255,7 @@ export function runBattle(input: BattleInput): BattleResult {
     frames,
     ...(error ? { error } : {}),
     ...(budgetLine !== undefined ? { budgetLine } : {}),
+    trail: [...trail],
     damageTaken: world.player.maxHp - world.player.hp,
     mapRows: built.mapRows,
     tiles: world.tiles.map((row) => [...row]),

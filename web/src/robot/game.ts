@@ -6,7 +6,7 @@
  */
 import type { PointsEvent } from '../points/state.ts';
 import type { AppStorage } from '../storage.ts';
-import { buildProblem, parseBuild, START_BUILD, UNLOCK_CHAPTER, type Build } from './build.ts';
+import { buildProblem, parseBuild, START_BUILD, STAR_GATE, UNLOCK_CHAPTER, type Build } from './build.ts';
 import { precheck } from './battle.ts';
 import { CARDS } from './content/cards.ts';
 import { CHALLENGES, type Challenge } from './content/challenges.ts';
@@ -195,7 +195,7 @@ export class RobotGame {
 
   /** Saves a build if it is legal at the current chapter; returns false (and saves nothing) otherwise. */
   setBuild(build: Build): boolean {
-    if (buildProblem(build, this.level())) return false;
+    if (buildProblem(build, this.level(), this.stats().stars)) return false;
     this.save({ ...this.progress(), build });
     return true;
   }
@@ -203,7 +203,7 @@ export class RobotGame {
   /** Parts the player may pick now. */
   can(kind: 'chassis' | 'locomotion' | 'gear' | 'addon', id: string): boolean {
     const table = UNLOCK_CHAPTER[kind] as Record<string, number>;
-    return (table[id] ?? 99) <= this.level();
+    return (table[id] ?? 99) <= this.level() && (kind !== 'gear' || ((STAR_GATE as Record<string, number>)[id] ?? 0) <= this.stats().stars);
   }
 
   /** Whether a concept card has been read. */

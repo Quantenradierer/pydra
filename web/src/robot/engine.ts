@@ -59,6 +59,8 @@ export interface Robot {
   armor: number;
   /** Where the last hit came from, as the side of this robot ("N", "E", ...), or null. */
   lastHit: Dir | null;
+  /** Armor plates: 100 = fresh, each absorbed hit costs 20; absent = no plates. */
+  plates?: number;
   /** Heals `amount` hit points every `every` ticks (up to the maximum). */
   regen?: { every: number; amount: number };
 }
@@ -85,6 +87,7 @@ export interface RobotSetup {
   armor?: number;
   canCross?: { rubble?: boolean; pit?: boolean };
   regen?: { every: number; amount: number };
+  plates?: boolean;
 }
 
 export interface WorldSetup {
@@ -125,6 +128,7 @@ export class World {
       armor: r.armor ?? 0,
       lastHit: null,
       ...(r.regen ? { regen: r.regen } : {}),
+      ...(r.plates ? { plates: 100 } : {}),
     }));
   }
 
@@ -263,7 +267,11 @@ export class World {
         target.shieldUp = false;
         return false;
       }
-      const dealt = Math.max(0, amount - target.armor);
+      let dealt = Math.max(0, amount - target.armor);
+      if (dealt > 0 && target.plates) {
+        dealt -= 1;
+        target.plates = Math.max(0, target.plates - 20);
+      }
       if (dealt === 0) return true;
       const old = damage.get(target);
       damage.set(target, { amount: (old?.amount ?? 0) + dealt, from: old?.from ?? from });

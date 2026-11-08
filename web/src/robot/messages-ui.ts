@@ -1,7 +1,7 @@
 /** Robot Battler screen texts (de / en). Function names in code stay English. */
 export const API_IDS = [
   'forward', 'backward', 'turn_left', 'turn_right', 'move', 'rotate', 'fire_blaster', 'fire_burst', 'heat', 'fire_cannon', 'see', 'distance', 'see_side',
-  'enemy_shielded', 'push', 'smash', 'activate', 'is_up', 'position', 'facing', 'wait', 'say', 'hp', 'alive', 'tick', 'checks',
+  'enemy_shielded', 'push', 'integrity', 'smash', 'activate', 'is_up', 'position', 'facing', 'wait', 'say', 'hp', 'alive', 'tick', 'checks',
 ] as const;
 export type ApiId = (typeof API_IDS)[number];
 
@@ -21,6 +21,7 @@ const API: Record<ApiId, [string, string]> = {
   see_side: ['wie see(), aber nach links / rechts (kostenlos)', 'like see(), but to the left / right (free)'],
   enemy_shielded: ['True, solange der Gegner vor dir sein Schild oben hat (kostenlos)', 'True while the enemy ahead has its shield up (free)'],
   push: ['fährt ein Feld vor und schiebt einen Roboter dort ein Feld weiter', 'steps one tile forward and shoves a robot standing there one tile further'],
+  integrity: ['Zustand der Panzerplatten, 100 bis 0; jeder abgefangene Treffer kostet 20 (kostenlos)', 'condition of the armor plates, 100 to 0; every absorbed hit costs 20 (free)'],
   smash: ['schlägt aufs Feld direkt vor dir, 3 Schaden, danach 2 Ticks laden', 'hits the tile right ahead, 3 damage, then 2 ticks to recharge'],
   activate: ['Schild für den nächsten Tick, blockt einen Treffer, danach 2 Ticks laden', 'shield up for the next tick, blocks one hit, then 2 ticks to recharge'],
   is_up: ['True, wenn dein Schild oben ist (kostenlos)', 'True when your shield is up (free)'],
@@ -78,6 +79,7 @@ export const UI_DE = {
   'robot.gear.hammer': 'Hammer',
   'robot.gear.shield': 'Schildgenerator',
   'robot.gear.gps': 'GPS',
+  'robot.gear.plates': 'Panzerplatten (ab 12 Sternen)',
   'robot.addon.wide': 'Weitwinkel',
   'robot.addon.scanner': 'Schild-Scanner',
   'robot.mk2': 'Burst-Blaster (Mk II)',
@@ -174,6 +176,7 @@ export const UI_DE = {
   'robot.part.hammer': 'Hammer',
   'robot.part.shield': 'Schildgenerator',
   'robot.part.gps': 'GPS',
+  'robot.part.plates': 'Panzerplatten',
   'robot.part.wide': 'Weitwinkel-Augen',
   'robot.part.scanner': 'Schild-Scanner',
   'robot.dir.north': 'Norden',
@@ -223,6 +226,7 @@ export const UI_EN: Record<keyof typeof UI_DE, string> = {
   'robot.gear.hammer': 'Hammer',
   'robot.gear.shield': 'Shield generator',
   'robot.gear.gps': 'GPS',
+  'robot.gear.plates': 'Armor plates (from 12 stars)',
   'robot.addon.wide': 'Wide-angle',
   'robot.addon.scanner': 'Shield scanner',
   'robot.mk2': 'Burst blaster (Mk II)',
@@ -319,6 +323,7 @@ export const UI_EN: Record<keyof typeof UI_DE, string> = {
   'robot.part.hammer': 'hammer',
   'robot.part.shield': 'shield generator',
   'robot.part.gps': 'GPS',
+  'robot.part.plates': 'armor plates',
   'robot.part.wide': 'wide-angle eyes',
   'robot.part.scanner': 'shield scanner',
   'robot.dir.north': 'north',

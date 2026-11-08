@@ -16,7 +16,7 @@ import type { RbError } from '../robot/py/errors.ts';
 import { subpageHeader } from './header.ts';
 
 const TICK_MS = 450;
-const GEAR_ORDER: GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps'];
+const GEAR_ORDER: GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps', 'plates'];
 
 /** Robot Battler: a map of tasks, and for each task the build / code / battle / improve loop. */
 export function robotScreen(app: App): Screen {

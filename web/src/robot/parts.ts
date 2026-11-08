@@ -196,6 +196,9 @@ export function createEnv(rc: RobotContext): Env {
     });
   } else notEquipped.set('gps', { kind: 'part', need: 'gps' });
 
+  if (has('plates')) globals.plates = obj('plates', { ...common('plates'), integrity: fn('integrity', () => me().plates ?? 0) });
+  else notEquipped.set('plates', { kind: 'part', need: 'plates' });
+
   // ---- eyes
   const log = (call: string, v: Value) => {
     rc.sensorLog.push(`${call} → ${repr(v)}`);

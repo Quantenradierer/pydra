@@ -86,13 +86,13 @@ export interface BuiltLayout {
   defOf: Record<string, EnemyDef>;
 }
 
-export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCross: { rubble: boolean; pit: boolean }; armor?: number }): BuiltLayout {
+export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCross: { rubble: boolean; pit: boolean }; armor?: number; plates?: boolean }): BuiltLayout {
   const rng = new Rng(spec.seed);
   const mirrored = spec.mirror === true && rng.chance(0.5);
   const rows = mirrored ? mirrorMap(spec.map) : [...spec.map];
   const parsed = parseMap(rows);
   const robots: RobotSetup[] = [
-    { id: 'player', team: 'player', pos: parsed.player.pos, facing: parsed.player.facing, hp: playerHp, canCross: player.canCross, ...(player.armor ? { armor: player.armor } : {}) },
+    { id: 'player', team: 'player', pos: parsed.player.pos, facing: parsed.player.facing, hp: playerHp, canCross: player.canCross, ...(player.armor ? { armor: player.armor } : {}), ...(player.plates ? { plates: true } : {}) },
   ];
   const defOf: Record<string, EnemyDef> = {};
   parsed.enemies.forEach((e, i) => {

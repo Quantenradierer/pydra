@@ -134,7 +134,7 @@ export function precheck(build: Build, script: string): RbError | undefined {
 
 export function runBattle(input: BattleInput): BattleResult {
   const { build, script, layout } = input;
-  const built = buildLayout(layout, buildHp(build), { canCross: { rubble: build.locomotion !== 'wheels', pit: false }, armor: locomotionArmor(build.locomotion) });
+  const built = buildLayout(layout, buildHp(build), { canCross: { rubble: build.locomotion !== 'wheels', pit: false }, armor: locomotionArmor(build.locomotion), plates: build.gear.includes('plates') });
   const world = new World(built.setup);
   const bubbles: Frame['bubbles'] = [];
   const logs = new Map<string, string[]>();

@@ -1,7 +1,7 @@
 /** The robot's build: chassis, locomotion and gear. Parts become Python functions (see parts.ts). */
 export type ChassisId = 'light' | 'medium';
 export type LocomotionId = 'wheels' | 'legs' | 'treads';
-export type GearId = 'blaster' | 'cannon' | 'eyes' | 'hammer' | 'shield' | 'gps';
+export type GearId = 'blaster' | 'cannon' | 'eyes' | 'hammer' | 'shield' | 'gps' | 'plates';
 export type AddonId = 'wide' | 'scanner';
 
 export const CHASSIS: Record<ChassisId, { slots: number; hp: number }> = {
@@ -13,7 +13,7 @@ export const LOCOMOTIONS: readonly LocomotionId[] = ['wheels', 'legs', 'treads']
 
 /** Armor the locomotion adds: treads are heavy plating. */
 export const locomotionArmor = (l: LocomotionId): number => (l === 'treads' ? 3 : 0);
-export const GEAR: readonly GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps'];
+export const GEAR: readonly GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps', 'plates'];
 export const WEAPONS: readonly GearId[] = ['blaster', 'cannon', 'hammer'];
 
 export interface Build {
@@ -32,18 +32,21 @@ export const START_BUILD: Build = { chassis: 'light', locomotion: 'wheels', gear
 export const UNLOCK_CHAPTER = {
   chassis: { light: 0, medium: 3 },
   locomotion: { wheels: 0, legs: 1, treads: 4 },
-  gear: { blaster: 0, eyes: 0, cannon: 1, hammer: 3, shield: 3, gps: 4 },
+  gear: { blaster: 0, eyes: 0, cannon: 1, hammer: 3, shield: 3, gps: 4, plates: 0 },
   addon: { wide: 3, scanner: 3 },
   blasterMark2: 4,
 } as const;
 
+/** Optional gear is earned with stars (the sum over all tasks) and never needed by a lesson. */
+export const STAR_GATE: Partial<Record<GearId, number>> = { plates: 12 };
+
 /** Whether a build is legal at all: known parts, enough slots, no duplicates, a weapon-less robot is allowed. */
-export function buildProblem(build: Build, chapter = 99): 'slots' | 'locked' | 'duplicate' | undefined {
+export function buildProblem(build: Build, chapter = 99, stars = 999): 'slots' | 'locked' | 'duplicate' | undefined {
   if (build.gear.length > CHASSIS[build.chassis].slots) return 'slots';
   if (new Set(build.gear).size !== build.gear.length) return 'duplicate';
   if (UNLOCK_CHAPTER.chassis[build.chassis] > chapter) return 'locked';
   if (UNLOCK_CHAPTER.locomotion[build.locomotion] > chapter) return 'locked';
-  if (build.gear.some((g) => UNLOCK_CHAPTER.gear[g] > chapter)) return 'locked';
+  if (build.gear.some((g) => UNLOCK_CHAPTER.gear[g] > chapter || (STAR_GATE[g] ?? 0) > stars)) return 'locked';
   if (build.addons.some((a) => UNLOCK_CHAPTER.addon[a] > chapter || !build.gear.includes('eyes'))) return 'locked';
   if (build.blasterMark === 2 && UNLOCK_CHAPTER.blasterMark2 > chapter) return 'locked';
   return undefined;

@@ -30,6 +30,7 @@ export function apiEntries(build: Build): ApiEntry[] {
   }
   if (has('shield')) out.push({ sig: 'shield.activate()', id: 'activate' }, { sig: 'shield.is_up()', id: 'is_up' });
   if (has('gps')) out.push({ sig: 'gps.position()', id: 'position' }, { sig: 'gps.facing()', id: 'facing' });
+  if (has('plates')) out.push({ sig: 'plates.integrity()', id: 'integrity' });
   if (build.gear.length > 0) out.push({ sig: 'blaster.is_charged()  .cooldown()  .mark()', id: 'checks' });
   out.push({ sig: 'wait()', id: 'wait' }, { sig: 'say(text)', id: 'say' }, { sig: 'hp()', id: 'hp' }, { sig: 'alive()', id: 'alive' }, { sig: 'clock.tick()', id: 'tick' });
   return out;

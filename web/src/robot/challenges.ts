@@ -57,6 +57,6 @@ export function checkWorkshop(c: Workshop, script: string): { ok: boolean; trail
 }
 
 export function checkConstraint(c: Constraint, script: string, build: Build): boolean {
-  const enemy = { ...enemyOf(c.enemy), needs: { ...enemyOf(c.enemy).needs, maxLines: c.maxLines } };
+  const enemy = { ...enemyOf(c.enemy), needs: { ...enemyOf(c.enemy).needs, ...(c.maxLines !== undefined ? { maxLines: c.maxLines } : {}), ...c.needs } };
   return fightEnemy(enemy, ENEMIES, build, script).won;
 }

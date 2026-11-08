@@ -434,7 +434,7 @@ export function robotScreen(app: App): Screen {
       }
       case 'constraint': {
         const area = editor(game.script(), (text) => game.setScript(text), 'robot-constraint-code');
-        show(...head, h('p', { class: 'robot-note' }, t('robot.constraint.rule', { n: c.maxLines })), apiPanel(game.build()), area, h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick: () => out.replaceChildren(...constraintResult(c, area.value, step)) }, t('robot.run')), out, back);
+        show(...head, h('p', { class: 'robot-note' }, [c.maxLines !== undefined ? t('robot.constraint.rule', { n: c.maxLines }) : '', c.rule ? c.rule[lang] : ''].filter(Boolean).join(' ')), apiPanel(game.build()), area, h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick: () => out.replaceChildren(...constraintResult(c, area.value, step)) }, t('robot.run')), out, back);
         break;
       }
     }

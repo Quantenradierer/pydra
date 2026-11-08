@@ -32,8 +32,10 @@ describe('challenges', () => {
           const good = enemyScript(c.enemy);
           const buggy = injectGlitch(c, good);
           expect(buggy).not.toBe(good);
-          expect(checkGlitch(c, buggy, fullBuild(undefined))).toBe(false);
-          expect(checkGlitch(c, good, fullBuild(undefined))).toBe(true);
+          const build = fullBuild(enemyOf(c.enemy).solutionBuild);
+          expect(checkGlitch(c, buggy, build)).toBe(false);
+          expect(checkGlitch(c, good, build)).toBe(true);
+          expect(checkGlitch(c, c.fallback, build), 'the fallback must be broken too').toBe(false);
           break;
         }
         case 'workshop': {
@@ -42,9 +44,10 @@ describe('challenges', () => {
           break;
         }
         case 'constraint': {
-          const long = `${enemyScript(c.enemy)}\nwait()`;
-          expect(checkConstraint(c, c.solution, fullBuild(undefined))).toBe(true);
-          expect(checkConstraint(c, long, fullBuild(undefined))).toBe(false);
+          const build = fullBuild(enemyOf(c.enemy).solutionBuild);
+          const breaking = c.violation ?? `${c.solution}\nwait()`;
+          expect(checkConstraint(c, c.solution, build)).toBe(true);
+          expect(checkConstraint(c, breaking, build)).toBe(false);
           break;
         }
       }
@@ -60,4 +63,5 @@ describe('challenges', () => {
   });
 });
 
-const enemyScript = (id: string) => ENEMIES.find((e) => e.id === id)!.solution;
+const enemyOf = (id: string) => ENEMIES.find((e) => e.id === id)!;
+const enemyScript = (id: string) => enemyOf(id).solution;

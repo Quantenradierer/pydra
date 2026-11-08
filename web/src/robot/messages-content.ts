@@ -10,6 +10,10 @@ export const CONTENT_DE = {
   'robot.outcome.repeat': 'Gewonnen, aber eine Zahl steht zweimal im Code. Gib ihr einen Namen (eine Variable).',
   'robot.ev.heal': '{who} repariert sich um {amount} Leben.',
   'robot.certificate': 'Grundlagen-Zertifikat: Du hast die Abschlussprüfung bestanden.',
+  'robot.card': 'Karteikarte',
+  'robot.card.example': 'Beispiel',
+  'robot.card.try': 'Probier es aus',
+  'robot.card.gotit': 'Verstanden',
 } as const;
 
 export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
@@ -23,4 +27,8 @@ export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
   'robot.outcome.repeat': 'Won, but a number is written twice in the code. Give it a name (a variable).',
   'robot.ev.heal': '{who} repairs itself by {amount} HP.',
   'robot.certificate': 'Basics Certificate: you passed the final exam.',
+  'robot.card': 'Concept card',
+  'robot.card.example': 'Example',
+  'robot.card.try': 'Try it',
+  'robot.card.gotit': 'Got it',
 };

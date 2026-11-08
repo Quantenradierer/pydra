@@ -2556,6 +2556,7 @@ progress {
   color: var(--muted);
 }
 .robot-card,
+.robot-card-note,
 .robot-build,
 .robot-api,
 .robot-history,
@@ -2565,6 +2566,7 @@ progress {
   border-radius: var(--radius);
   padding: 0.7rem 0.9rem;
 }
+.robot-card-note summary,
 .robot-build summary,
 .robot-history summary {
   cursor: pointer;
@@ -2757,4 +2759,19 @@ progress {
   gap: 0.6rem;
   align-items: center;
   margin: 0.3rem 0;
+}
+
+.robot-cards {
+  display: grid;
+  gap: 0.6rem;
+}
+.robot-card-note.new {
+  border-color: var(--accent, currentColor);
+}
+.robot-card-note pre {
+  overflow-x: auto;
+  margin: 0.3rem 0;
+}
+.robot-card-note h4 {
+  margin: 0.5rem 0 0;
 }

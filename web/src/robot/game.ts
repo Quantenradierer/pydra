@@ -8,6 +8,7 @@ import type { PointsEvent } from '../points/state.ts';
 import type { AppStorage } from '../storage.ts';
 import { buildProblem, parseBuild, START_BUILD, UNLOCK_CHAPTER, type Build } from './build.ts';
 import { precheck } from './battle.ts';
+import { CARDS } from './content/cards.ts';
 import { CHALLENGES, type Challenge } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import type { EnemyData } from './content/types.ts';
@@ -62,10 +63,12 @@ export interface RobotProgress {
   /** All runs and the ones that won: the "% right" on Home. */
   runs: number;
   wins: number;
+  /** Concept cards the player has read. */
+  cards: string[];
   current?: string;
 }
 
-export const emptyProgress = (): RobotProgress => ({ build: { ...START_BUILD, gear: [...START_BUILD.gear] }, script: STARTER_SCRIPT, history: [], solved: [], stars: {}, hints: {}, misses: {}, runs: 0, wins: 0 });
+export const emptyProgress = (): RobotProgress => ({ build: { ...START_BUILD, gear: [...START_BUILD.gear] }, script: STARTER_SCRIPT, history: [], solved: [], stars: {}, hints: {}, misses: {}, runs: 0, wins: 0, cards: [] });
 
 const isCount = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 0;
 const record = (v: unknown, max: number, ids: Set<string>): Record<string, number> => {
@@ -92,6 +95,7 @@ export function parseProgress(raw: unknown, steps: readonly Step[]): RobotProgre
   out.misses = record(r.misses, 1000, ids);
   if (isCount(r.runs)) out.runs = r.runs;
   if (isCount(r.wins) && r.wins <= out.runs) out.wins = r.wins;
+  if (Array.isArray(r.cards)) out.cards = [...new Set(r.cards.filter((id): id is string => CARDS.some((c) => c.id === id)))];
   if (typeof r.current === 'string' && ids.has(r.current)) out.current = r.current;
   return out;
 }
@@ -193,6 +197,17 @@ export class RobotGame {
   can(kind: 'chassis' | 'locomotion' | 'gear' | 'addon', id: string): boolean {
     const table = UNLOCK_CHAPTER[kind] as Record<string, number>;
     return (table[id] ?? 99) <= this.level();
+  }
+
+  /** Whether a concept card has been read. */
+  cardSeen(id: string): boolean {
+    return this.progress().cards.includes(id);
+  }
+
+  markCard(id: string) {
+    const p = this.progress();
+    if (!CARDS.some((c) => c.id === id) || p.cards.includes(id)) return;
+    this.save({ ...p, cards: [...p.cards, id] });
   }
 
   hint(id: string): number {

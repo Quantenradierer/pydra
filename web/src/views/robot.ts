@@ -5,6 +5,7 @@ import type { MessageKey } from '../i18n.ts';
 import { apiEntries } from '../robot/api.ts';
 import { START_BUILD, UNLOCK_CHAPTER, CHASSIS, addonsFor, type Build, type GearId } from '../robot/build.ts';
 import { checkConstraint, checkGlitch, checkLineUp, checkPredict, checkWorkshop, injectGlitch, predictAnswer, shuffledLines } from '../robot/challenges.ts';
+import { cardsOfChapter } from '../robot/content/cards.ts';
 import type { Challenge } from '../robot/content/challenges.ts';
 import type { EnemyReport } from '../robot/fight.ts';
 import { friendlyError } from '../robot/friendly.ts';
@@ -86,6 +87,35 @@ export function robotScreen(app: App): Screen {
     show(
       subpageHeader(app, t('lesson.robot.title')),
       h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, p.solved.includes('final-exam') ? h('p', { class: 'robot-win', 'data-testid': 'robot-certificate' }, `🎓 ${t('robot.certificate')}`) : null, ...sections),
+    );
+  }
+
+  // ---------------------------------------------------------------- concept cards
+
+  /** The chapter's cards: unread ones are open with a "Got it" button, read ones stay one click away. */
+  function cardsBlock(chapter: number): Node | null {
+    const cards = cardsOfChapter(chapter);
+    if (cards.length === 0) return null;
+    return h(
+      'section',
+      { class: 'robot-cards', 'data-testid': 'robot-cards' },
+      ...cards.map((c) => {
+        const unseen = !game.cardSeen(c.id);
+        const box = h(
+          'details',
+          { class: `robot-card-note${unseen ? ' new' : ''}`, 'data-testid': `robot-card-${c.id}`, open: unseen },
+          h('summary', {}, `${t('robot.card')}: ${c.title[lang]}`),
+          h('p', {}, c.idea[lang]),
+          h('h4', {}, t('robot.card.example')),
+          h('pre', {}, h('code', {}, c.example)),
+          h('p', {}, h('strong', {}, `${t('robot.card.try')}: `), c.tryIt[lang]),
+          unseen
+            ? h('button', { class: 'run-control', 'data-testid': `robot-card-gotit-${c.id}`, onclick: () => (game.markCard(c.id), box.removeAttribute('open'), box.classList.remove('new'), btnRemove()) }, t('robot.card.gotit'))
+            : null,
+        );
+        const btnRemove = () => box.querySelector('button')?.remove();
+        return box;
+      }),
     );
   }
 
@@ -334,6 +364,7 @@ export function robotScreen(app: App): Screen {
     const build = game.build();
     show(
       stepHeader(step),
+      cardsBlock(step.chapter),
       h('section', { class: 'robot-card' }, h('h3', {}, t('robot.twist')), h('p', { 'data-testid': 'robot-twist' }, enemy.twist[lang])),
       buildPanel(() => showStep(step.id)),
       apiPanel(build),

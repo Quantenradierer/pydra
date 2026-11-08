@@ -130,6 +130,9 @@ export function describeFrame(frame: Frame, t: T): string[] {
       case 'damage':
         out.push(t('robot.ev.damage', { who: who(e.robot), amount: e.amount }));
         break;
+      case 'heal':
+        out.push(t('robot.ev.heal', { who: who(e.robot), amount: e.amount }));
+        break;
       case 'death':
         out.push(t('robot.ev.death', { who: who(e.robot) }));
         break;

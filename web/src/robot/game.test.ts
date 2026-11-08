@@ -16,9 +16,9 @@ function setup() {
 describe('steps', () => {
   const steps = buildSteps();
 
-  it('are the 32 enemies and 12 challenges in order, each challenge after its enemy', () => {
-    expect(steps.filter((s) => s.kind === 'battle')).toHaveLength(32);
-    expect(steps.filter((s) => s.kind !== 'battle')).toHaveLength(12);
+  it('are all enemies and challenges in order, each challenge after its enemy', () => {
+    expect(steps.filter((s) => s.kind === 'battle')).toHaveLength(ENEMIES.length);
+    expect(steps.filter((s) => s.kind !== 'battle')).toHaveLength(CHALLENGES.length);
     for (const s of steps.filter((x) => x.challenge)) expect(steps.findIndex((x) => x.id === s.challenge!.after)).toBeLessThan(steps.indexOf(s));
   });
 
@@ -51,7 +51,7 @@ describe('RobotGame', () => {
     expect(game.run('first-contact')!.firstWin).toBe(false);
     expect(events).toHaveLength(1);
     expect(game.history()).toHaveLength(1);
-    expect(game.stats()).toMatchObject({ done: 1, total: 44 });
+    expect(game.stats()).toMatchObject({ done: 1, total: buildSteps().length });
   });
 
   it('keeps the script after a win and after a loss, and a loss sends the player back to it', () => {

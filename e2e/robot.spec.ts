@@ -51,7 +51,7 @@ for (const [device, viewport] of [
     await expect(page.getByTestId('robot-step-one-more-line')).toContainText('geschafft');
     await expect(page.getByTestId('robot-step-training-dummy')).toBeEnabled();
     await page.getByRole('button', { name: 'Zurück', exact: true }).click();
-    await expect(page.getByTestId('stats-robot')).toContainText('2 von 44 Aufgaben geschafft');
+    await expect(page.getByTestId('stats-robot')).toContainText(/^2 von \d+ Aufgaben geschafft/);
     await expect(page.getByTestId('home-level')).toBeVisible();
   });
 }

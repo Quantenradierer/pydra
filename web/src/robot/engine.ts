@@ -57,6 +57,8 @@ export interface Robot {
   armor: number;
   /** Where the last hit came from, as the side of this robot ("N", "E", ...), or null. */
   lastHit: Dir | null;
+  /** Heals `amount` hit points every `every` ticks (up to the maximum). */
+  regen?: { every: number; amount: number };
 }
 
 export type GameEvent =
@@ -66,6 +68,7 @@ export type GameEvent =
   | { type: 'bump'; robot: string; reason: 'wall' | 'rubble' | 'pit' | 'robot' | 'edge' }
   | { type: 'shield'; robot: string }
   | { type: 'fizzle'; robot: string; part: string; reason: 'charging' | 'overheated'; ticks: number }
+  | { type: 'heal'; robot: string; amount: number }
   | { type: 'death'; robot: string };
 
 export type Outcome = 'win' | 'loss';
@@ -78,6 +81,7 @@ export interface RobotSetup {
   hp: number;
   armor?: number;
   canCross?: { rubble?: boolean; pit?: boolean };
+  regen?: { every: number; amount: number };
 }
 
 export interface WorldSetup {
@@ -117,6 +121,7 @@ export class World {
       hitsTaken: 0,
       armor: r.armor ?? 0,
       lastHit: null,
+      ...(r.regen ? { regen: r.regen } : {}),
     }));
   }
 
@@ -272,6 +277,17 @@ export class World {
       target.lastHit = from;
       events.push({ type: 'damage', robot: target.id, amount });
       if (target.hp === 0) events.push({ type: 'death', robot: target.id });
+    }
+
+    // Regeneration: every `every` ticks a standing robot heals.
+    for (const r of live) {
+      if (r.regen && r.hp > 0 && (this.tick + 1) % r.regen.every === 0) {
+        const healed = Math.min(r.maxHp, r.hp + r.regen.amount);
+        if (healed > r.hp) {
+          events.push({ type: 'heal', robot: r.id, amount: healed - r.hp });
+          r.hp = healed;
+        }
+      }
     }
 
     // Shields: a raised one lasts through this tick only; a pending one rises for the next.

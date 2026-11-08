@@ -17,6 +17,16 @@ export interface Needs {
   maxLines?: number;
   /** Exactly one bubble must read exactly this (a say() after a loop, not inside it). */
   sayOnce?: string;
+  /** The player may lose at most this many HP over one layout. */
+  maxDamage?: number;
+  /** No shot of the player may hit a raised shield (blocked shots are wasted). */
+  noWaste?: boolean;
+  /** The script must contain each of these words (`while`, `break`, ...; comments and strings are ignored). */
+  uses?: string[];
+  /** The script must not contain any of these words (`for`, ...). */
+  without?: string[];
+  /** No number may be written twice in the code: give repeated numbers a name. */
+  noRepeatedNumber?: boolean;
 }
 
 /**
@@ -25,7 +35,7 @@ export interface Needs {
  */
 export interface EnemyData {
   id: string;
-  /** 0-4 for the chapters; 25 = Proving Grounds I ("chapter 2.5"). */
+  /** 0-4 for the chapters; 25 = Proving Grounds I ("chapter 2.5"), 45 = Proving Grounds II. */
   chapter: number;
   title: Text;
   /** The pre-battle card: the twist in one sentence. */

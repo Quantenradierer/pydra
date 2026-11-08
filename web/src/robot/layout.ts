@@ -12,6 +12,8 @@ export interface EnemyDef {
   gear?: string[];
   /** The enemy's Python script (same API as the player's); none = a dummy. */
   script?: string;
+  /** Heals this many hit points every so many ticks (the Regenerator). */
+  regen?: { every: number; amount: number };
 }
 
 const PLAYER_FACING: Record<string, Dir> = { '^': 'N', '>': 'E', v: 'S', '<': 'W' };
@@ -99,7 +101,7 @@ export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCro
     const id = `enemy${i + 1}`;
     defOf[id] = def;
     const facing = def.face ? (mirrored ? MIRROR[def.face] : def.face) : towards(e.pos, parsed.player.pos);
-    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: def.armor ?? 0, canCross: { rubble: def.locomotion === 'legs' } });
+    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: def.armor ?? 0, canCross: { rubble: def.locomotion === 'legs' }, ...(def.regen ? { regen: def.regen } : {}) });
   });
   return { setup: { tiles: parsed.tiles, robots, seed: spec.seed, ...(spec.maxTicks ? { maxTicks: spec.maxTicks } : {}) }, mapRows: rows, mirrored, enemyDefs: [...spec.enemies], defOf };
 }

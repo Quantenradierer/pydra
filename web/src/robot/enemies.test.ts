@@ -40,7 +40,8 @@ describe('enemy data', () => {
   }
 
   it('covers the chapters in order', () => {
-    expect(chapters).toEqual([...chapters].sort((a, b) => a - b));
+    const order = (c: number) => (c === 25 ? 2.5 : c === 45 ? 4.5 : c);
+    expect(chapters.map(order)).toEqual(chapters.map(order).sort((a, b) => a - b));
     expect(START_BUILD.gear).toContain('eyes');
   });
 });

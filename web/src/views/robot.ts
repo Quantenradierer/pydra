@@ -245,6 +245,11 @@ export function robotScreen(app: App): Screen {
     const b = failed.battle;
     if (failed.unmet === 'say') return { text: t('robot.outcome.say'), ok: false, extra };
     if (failed.unmet === 'sayPrefix') return { text: t('robot.outcome.sayPrefix', { text: enemy.needs?.sayPrefix ?? '' }), ok: false, extra };
+    if (failed.unmet === 'damage') return { text: t('robot.outcome.damage', { max: enemy.needs?.maxDamage ?? 0 }), ok: false, extra };
+    if (failed.unmet === 'waste') return { text: t('robot.outcome.waste'), ok: false, extra };
+    if (failed.unmet === 'uses') return { text: t('robot.outcome.uses', { words: (enemy.needs?.uses ?? []).map((w) => `"${w}"`).join(', ') }), ok: false, extra };
+    if (failed.unmet === 'without') return { text: t('robot.outcome.without', { words: (enemy.needs?.without ?? []).map((w) => `"${w}"`).join(', ') }), ok: false, extra };
+    if (failed.unmet === 'repeat') return { text: t('robot.outcome.repeat'), ok: false, extra };
     if (failed.unmet === 'sayOnce') return { text: t('robot.outcome.sayOnce', { text: enemy.needs?.sayOnce ?? '' }), ok: false, extra };
     if (b.error) {
       extra.push(rawError(b.error));

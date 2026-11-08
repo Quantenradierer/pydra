@@ -8,7 +8,6 @@ describe('challenges', () => {
   it('have unique ids and sit after an existing enemy', () => {
     expect(new Set(CHALLENGES.map((c) => c.id)).size).toBe(CHALLENGES.length);
     for (const c of CHALLENGES) expect(ENEMIES.some((e) => e.id === c.after), c.id).toBe(true);
-    expect(CHALLENGES.length).toBe(12);
   });
 
   for (const c of CHALLENGES) {

@@ -13,7 +13,11 @@ import { checkProgram } from './py/check.ts';
 import { RbError } from './py/errors.ts';
 import { Program } from './py/interp.ts';
 import { parse } from './py/parser.ts';
+import type { TraceEvent } from './py/trace.ts';
 import type { ActionRequest } from './py/values.ts';
+
+/** Trace events kept per tick (a script that runs 1 000 steps without acting would otherwise fill the viewer). */
+export const TRACE_CAP = 400;
 
 /** Steps (statements and calls) one robot may run per tick before the loop guard stops it. */
 export const STEP_BUDGET = 1000;
@@ -36,6 +40,8 @@ export interface Frame {
   bubbles: { robot: string; text: string }[];
   /** Sensor values the scripts read this tick. */
   sensors: Record<string, string[]>;
+  /** What the player's script did before this tick's action (only recorded with `trace: true`). */
+  trace?: TraceEvent[];
 }
 
 export type EndReason = 'win' | 'dead' | 'timeout' | 'error' | 'budget';
@@ -112,6 +118,8 @@ export interface BattleInput {
   layout: LayoutSpec;
   /** Workshop mode: the player gets the paint `brush` and the result lists the painted tiles. */
   brush?: boolean;
+  /** Record `Frame.trace` for the player's script (the line-by-line viewer needs it; fast checks do not). */
+  trace?: boolean;
 }
 
 /** The build an enemy fights with (same parts as the player could get). */
@@ -139,6 +147,12 @@ export function runBattle(input: BattleInput): BattleResult {
   const bubbles: Frame['bubbles'] = [];
   const logs = new Map<string, string[]>();
   const brains = new Map<string, Brain>();
+  let tickTrace: TraceEvent[] = [];
+  let cut = false;
+  const record = (ev: TraceEvent) => {
+    if (tickTrace.length < TRACE_CAP) tickTrace.push(ev);
+    else if (!cut) (cut = true), tickTrace.push({ k: 'cut' });
+  };
   const trail = new Set<string>();
   let brushDown = false;
   const paint = () => {
@@ -158,6 +172,7 @@ export function runBattle(input: BattleInput): BattleResult {
       globals: env.globals,
       known: [...env.notEquipped.keys()],
       print: (t) => bubbles.push({ robot: id, text: t.replace(/\n$/, '').slice(0, 40) }),
+      ...(input.trace && id === 'player' ? { trace: record } : {}),
     });
     void strict;
     brains.set(id, new Brain(program, env));
@@ -192,6 +207,14 @@ export function runBattle(input: BattleInput): BattleResult {
     addBrain(r.id, enemyBuild(def), def.script, false);
   }
 
+  /** The trace of the script run since the last frame (taken, so each tick gets its own). */
+  const takeTrace = (): Pick<Frame, 'trace'> => {
+    if (!input.trace) return {};
+    const trace = tickTrace;
+    tickTrace = [];
+    cut = false;
+    return { trace };
+  };
   const snapshot = (events: GameEvent[], lines: Frame['lines'], bubbleList: Frame['bubbles'], sensors: Frame['sensors']): Frame => ({
     tick: world.tick,
     robots: world.robots.map((r) => ({ id: r.id, pos: { ...r.pos }, facing: r.facing, hp: r.hp, maxHp: r.maxHp, shieldUp: r.shieldUp })),
@@ -199,6 +222,7 @@ export function runBattle(input: BattleInput): BattleResult {
     lines,
     bubbles: bubbleList,
     sensors,
+    ...takeTrace(),
   });
   const frames: Frame[] = [snapshot([], {}, [], {})];
   let error: RbError | undefined;
@@ -247,6 +271,7 @@ export function runBattle(input: BattleInput): BattleResult {
     bubbles.length = 0;
     brains.get('player')?.runFree();
     frames.at(-1)!.bubbles.push(...bubbles);
+    if (input.trace) frames.at(-1)!.trace = [...(frames.at(-1)!.trace ?? []), ...tickTrace];
   }
   const outcome: Outcome = reason === 'win' ? 'win' : 'loss';
   return {

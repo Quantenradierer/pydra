@@ -9,6 +9,7 @@
 import type { Expr, Stmt, Target } from './ast.ts';
 import { BUILTINS, callMethod, hasMethod, methodNames, toArray } from './builtins.ts';
 import { BudgetExceeded, RbError, suggest } from './errors.ts';
+import type { TraceEvent } from './trace.ts';
 import {
   ActionRequest, compare, equal, formatValue, isFloat, isInt, isNumeric, keyOf, PyDict, PyFloat, PyRange, PyTuple, repr, Scope, str, toNumber, truthy, typeName,
   type Builtin, type PyFunction, type Value,
@@ -22,6 +23,8 @@ export interface ProgramOptions {
   /** Gets everything `print()` writes, including the trailing newline. */
   print?: (text: string) => void;
   maxDepth?: number;
+  /** Gets one event per executed statement, call, branch, loop pass and variable change (see `trace.ts`). */
+  trace?: (event: TraceEvent) => void;
 }
 
 export type RunResult =
@@ -88,6 +91,11 @@ function localsOf(fn: PyFunction) {
   return info;
 }
 
+/** `forward`, `eyes.see_right`: the name a call is shown with. */
+function calleeName(e: Expr): string {
+  return e.kind === 'name' ? e.name : e.kind === 'attr' ? `${calleeName(e.obj)}.${e.name}` : '…';
+}
+
 const lineless = (e: RbError, line: number) => (e.line === 0 ? e.at(line) : e);
 
 export class Program {
@@ -102,6 +110,7 @@ export class Program {
   private steps = 0;
   private depth = 0;
   private maxDepth: number;
+  private trace: ((event: TraceEvent) => void) | undefined;
   /** The line being executed; with an action, the line of the call. */
   line = 0;
   /** Total steps used so far (statements and calls). */
@@ -112,6 +121,7 @@ export class Program {
     private options: ProgramOptions = {},
   ) {
     this.maxDepth = options.maxDepth ?? MAX_DEPTH;
+    this.trace = options.trace;
     for (const b of BUILTINS) this.builtins.set(b.name, b);
     const print = options.print;
     this.builtins.set('print', {
@@ -197,6 +207,7 @@ export class Program {
 
   private *exec(s: Stmt): Gen<Flow> {
     this.tick(s.line);
+    this.trace?.({ k: 'line', line: s.line });
     try {
       return yield* this.execInner(s);
     } catch (e) {
@@ -231,11 +242,16 @@ export class Program {
         return undefined;
       }
       case 'if': {
-        if (truthy(yield* this.eval(s.test))) return yield* this.block(s.body);
+        const taken = truthy(yield* this.eval(s.test));
+        this.trace?.({ k: 'branch', line: s.line, kind: 'if', taken, hasElse: s.orelse.length > 0 });
+        if (taken) return yield* this.block(s.body);
         return yield* this.block(s.orelse);
       }
       case 'while':
-        while (truthy(yield* this.eval(s.test))) {
+        for (let n = 1; ; n++) {
+          const taken = truthy(yield* this.eval(s.test));
+          this.trace?.({ k: 'branch', line: s.line, kind: 'while', taken, n });
+          if (!taken) break;
           const flow = yield* this.block(s.body);
           if (flow === BREAK) break;
           if (flow instanceof Return) return flow;
@@ -246,22 +262,26 @@ export class Program {
         const iterable = yield* this.eval(s.iter);
         if (iterable instanceof PyRange) {
           for (let i = 0; i < iterable.length; i++) {
+            this.trace?.({ k: 'branch', line: s.line, kind: 'for', taken: true, n: i + 1, value: repr(iterable.at(i)) });
             yield* this.assign(s.target, iterable.at(i));
             const flow = yield* this.block(s.body);
             if (flow === BREAK) break;
             if (flow instanceof Return) return flow;
             this.tick(s.line);
           }
+          this.trace?.({ k: 'branch', line: s.line, kind: 'for', taken: false });
           return undefined;
         }
         const live = Array.isArray(iterable) ? iterable : toArray(iterable);
         for (let i = 0; i < live.length; i++) {
+          this.trace?.({ k: 'branch', line: s.line, kind: 'for', taken: true, n: i + 1, value: repr(live[i]!) });
           yield* this.assign(s.target, live[i]!);
           const flow = yield* this.block(s.body);
           if (flow === BREAK) break;
           if (flow instanceof Return) return flow;
           this.tick(s.line);
         }
+        this.trace?.({ k: 'branch', line: s.line, kind: 'for', taken: false });
         return undefined;
       }
       case 'break':
@@ -271,7 +291,7 @@ export class Program {
       case 'def': {
         const defaults: (Value | undefined)[] = [];
         for (const p of s.params) defaults.push(p.default ? yield* this.eval(p.default) : undefined);
-        this.setName(s.name, { kind: 'function', name: s.name, params: s.params, defaults, body: s.body, closure: this.scope });
+        this.setName(s.name, { kind: 'function', name: s.name, params: s.params, defaults, body: s.body, closure: this.scope }, false);
         return undefined;
       }
       case 'return':
@@ -301,9 +321,11 @@ export class Program {
     }
   }
 
-  private setName(name: string, value: Value) {
-    if (this.scope.globals.has(name)) this.module.vars.set(name, value);
+  private setName(name: string, value: Value, traced = true) {
+    const global = this.scope.globals.has(name);
+    if (global) this.module.vars.set(name, value);
     else this.scope.vars.set(name, value);
+    if (traced && this.trace) this.trace({ k: 'set', line: this.line, name, value: repr(value), depth: global ? 0 : this.depth });
   }
 
   private lookup(name: string): Value {
@@ -452,16 +474,21 @@ export class Program {
     }
     switch (callee.kind) {
       case 'builtin':
+        if (callee.name === 'print' && this.trace) this.trace({ k: 'call', line: e.line, fn: 'print', args: args.map(repr), kind: 'say', result: 'None' });
         return callee.call(args, kwargs);
       case 'method':
         return callMethod(callee.self, callee.name, args, kwargs);
       case 'host': {
         const r = callee.call(args, kwargs);
+        const label = this.trace ? calleeName(e.func) : '';
+        const shown = this.trace ? [...args.map(repr), ...Object.entries(kwargs).map(([k, v]) => `${k}=${repr(v)}`)] : [];
         if (r instanceof ActionRequest) {
           r.line = e.line;
           this.line = e.line;
+          this.trace?.({ k: 'call', line: e.line, fn: label, args: shown, kind: 'action' });
           return yield r;
         }
+        this.trace?.({ k: 'call', line: e.line, fn: label, args: shown, kind: label === 'say' ? 'say' : 'sensor', result: repr(r) });
         return r;
       }
       case 'function':
@@ -499,9 +526,14 @@ export class Program {
     const outer = this.scope;
     this.scope = scope;
     this.depth++;
+    const callLine = this.line;
+    this.trace?.({ k: 'enter', line: callLine, fn: fn.name, args: [...fn.params.map((p) => `${p.name}=${repr(scope.vars.get(p.name) ?? null)}`)], depth: this.depth });
     try {
       const flow = yield* this.block(fn.body);
-      return flow instanceof Return ? flow.value : null;
+      const value = flow instanceof Return ? flow.value : null;
+      this.trace?.({ k: 'leave', line: callLine, fn: fn.name, value: repr(value), depth: this.depth });
+      this.line = callLine;
+      return value;
     } finally {
       this.depth--;
       this.scope = outer;

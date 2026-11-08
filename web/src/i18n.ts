@@ -1,3 +1,5 @@
+import { ERRORS_DE, ERRORS_EN } from './robot/messages-errors.ts';
+
 export const LANGS = ['de', 'en'] as const;
 export type Lang = (typeof LANGS)[number];
 export const DEFAULT_LANG: Lang = 'de';
@@ -7,6 +9,7 @@ export function isLang(value: unknown): value is Lang {
 }
 
 const de = {
+  ...ERRORS_DE,
   'app.title': 'Pydra: Python Trainer',
   'app.tagline': 'Python-Grundlagen. Aufgaben mit Köpfchen.',
   'home.lessons': 'Lektionen',
@@ -308,6 +311,7 @@ const de = {
 export type MessageKey = keyof typeof de;
 
 const en: Record<MessageKey, string> = {
+  ...ERRORS_EN,
   'app.title': 'Pydra: Python Trainer',
   'app.tagline': 'Python basics, one head at a time.',
   'home.lessons': 'Lessons',

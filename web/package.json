@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "icons": "node scripts/icons.mjs",
+    "golden": "node scripts/golden.mjs",
     "test": "vitest run",
     "check": "tsc -p ."
   },

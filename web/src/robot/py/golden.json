@@ -1,0 +1,1002 @@
+{
+ "print(1 + 2 * 3)": {
+  "out": "7\n",
+  "error": null,
+  "line": null
+ },
+ "print(7 // 2, -7 // 2, 7 // -2, -7 // -2)": {
+  "out": "3 -4 -4 3\n",
+  "error": null,
+  "line": null
+ },
+ "print(7 % 3, -7 % 3, 7 % -3, -7 % -3)": {
+  "out": "1 2 -2 -1\n",
+  "error": null,
+  "line": null
+ },
+ "print(7 / 2, 6 / 3, -7 / 2)": {
+  "out": "3.5 2.0 -3.5\n",
+  "error": null,
+  "line": null
+ },
+ "print(2 ** 10, 2 ** -1, 2 ** 0.5, (-2) ** 3)": {
+  "out": "1024 0.5 1.4142135623730951 -8\n",
+  "error": null,
+  "line": null
+ },
+ "print(0.1 + 0.2, 1.0, 1e10, 1e16, 1e-5, 0.0001, 123456789.123456789)": {
+  "out": "0.30000000000000004 1.0 10000000000.0 1e+16 1e-05 0.0001 123456789.12345679\n",
+  "error": null,
+  "line": null
+ },
+ "print(1e15, 1e22, 1.5e-7, 100.0, 2.5e300)": {
+  "out": "1000000000000000.0 1e+22 1.5e-07 100.0 2.5e+300\n",
+  "error": null,
+  "line": null
+ },
+ "print(10 // 3.0, 10 % 3.5, -10 // 3.0, 7.5 % -2)": {
+  "out": "3.0 3.0 -4.0 -0.5\n",
+  "error": null,
+  "line": null
+ },
+ "print(True + True, True * 5, False - 1)": {
+  "out": "2 5 -1\n",
+  "error": null,
+  "line": null
+ },
+ "print(round(2.5), round(3.5), round(-2.5), round(0.5), round(1.5))": {
+  "out": "2 4 -2 0 2\n",
+  "error": null,
+  "line": null
+ },
+ "print(round(3.14159, 2), round(1234, -2), round(2.675, 2))": {
+  "out": "3.14 1200 2.67\n",
+  "error": null,
+  "line": null
+ },
+ "print(abs(-3), abs(-2.5), abs(0))": {
+  "out": "3 2.5 0\n",
+  "error": null,
+  "line": null
+ },
+ "print(int(3.9), int(-3.9), int(\"42\"), int(\" 7 \"), int(True))": {
+  "out": "3 -3 42 7 1\n",
+  "error": null,
+  "line": null
+ },
+ "print(float(3), float(\"2.5\"), float(\"1e3\"))": {
+  "out": "3.0 2.5 1000.0\n",
+  "error": null,
+  "line": null
+ },
+ "print(min(3, 1, 2), max(3, 1, 2), min([4, 2, 8]), max(\"abc\"))": {
+  "out": "1 3 2 c\n",
+  "error": null,
+  "line": null
+ },
+ "print(sum([1, 2, 3]), sum([0.5, 0.25]), sum(range(5)), sum([1, 2], 10))": {
+  "out": "6 0.75 10 13\n",
+  "error": null,
+  "line": null
+ },
+ "x = 5\nx += 2\nx -= 1\nx *= 3\nx //= 4\nx %= 3\nprint(x)": {
+  "out": "1\n",
+  "error": null,
+  "line": null
+ },
+ "x = 7\nx /= 2\nprint(x)": {
+  "out": "3.5\n",
+  "error": null,
+  "line": null
+ },
+ "x = 2\nx **= 5\nprint(x)": {
+  "out": "32\n",
+  "error": null,
+  "line": null
+ },
+ "print(10 == 10.0, 1 == True, 0 == False, 3 != 4)": {
+  "out": "True True True True\n",
+  "error": null,
+  "line": null
+ },
+ "print(1 < 2 < 3, 1 < 3 < 2, 3 > 2 >= 2)": {
+  "out": "True False True\n",
+  "error": null,
+  "line": null
+ },
+ "print(5 // 1, 5 % 1, 0 // 5, 0 % 5, -0.0)": {
+  "out": "5 0 0 0 -0.0\n",
+  "error": null,
+  "line": null
+ },
+ "print(1_000 + 1)": {
+  "out": "1001\n",
+  "error": null,
+  "line": null
+ },
+ "print(.5 + 5.)": {
+  "out": "5.5\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"a\" + \"b\", \"ab\" * 3, 3 * \"ab\", \"x\" * 0)": {
+  "out": "ab ababab ababab \n",
+  "error": null,
+  "line": null
+ },
+ "print('it\\'s', \"say \\\"hi\\\"\")": {
+  "out": "it's say \"hi\"\n",
+  "error": null,
+  "line": null
+ },
+ "print(repr(\"it's\"), repr('say \"hi\"'), repr(\"both ' and \\\"\"))": {
+  "out": "\"it's\" 'say \"hi\"' 'both \\' and \"'\n",
+  "error": null,
+  "line": null
+ },
+ "print(repr(\"tab\\tnew\\nline\"))": {
+  "out": "'tab\\tnew\\nline'\n",
+  "error": null,
+  "line": null
+ },
+ "print(len(\"hello\"), \"hello\"[1], \"hello\"[-1], \"hello\"[1:3], \"hello\"[::-1], \"hello\"[::2])": {
+  "out": "5 e o el olleh hlo\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"hello\"[10:], \"hello\"[-3:], \"hello\"[:-3], \"hello\"[1:-1])": {
+  "out": " llo he ell\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"Hello\".upper(), \"Hello\".lower(), \"hello world\".title(), \"hello\".capitalize())": {
+  "out": "HELLO hello Hello World Hello\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"  hi  \".strip() + \"|\", \"  hi  \".lstrip() + \"|\", \"  hi  \".rstrip() + \"|\", \"xxhixx\".strip(\"x\"))": {
+  "out": "hi| hi  |   hi| hi\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"a,b,c\".split(\",\"), \"a b  c\".split(), \"a,b,c\".split(\",\", 1))": {
+  "out": "['a', 'b', 'c'] ['a', 'b', 'c'] ['a', 'b,c']\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"-\".join([\"a\", \"b\", \"c\"]), \"\".join([\"x\", \"y\"]))": {
+  "out": "a-b-c xy\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"hello\".replace(\"l\", \"L\"), \"hello\".replace(\"l\", \"L\", 1))": {
+  "out": "heLLo heLlo\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"hello\".startswith(\"he\"), \"hello\".endswith(\"lo\"), \"hello\".find(\"l\"), \"hello\".find(\"z\"), \"hello\".count(\"l\"))": {
+  "out": "True True 2 -1 2\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"123\".isdigit(), \"12a\".isdigit(), \"abc\".isalpha(), \"ab1\".isalnum(), \"  \".isspace())": {
+  "out": "True False True True True\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"abc\" < \"abd\", \"a\" < \"B\", \"abc\" == \"abc\", \"\" < \"a\")": {
+  "out": "True False True True\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"a\" in \"cat\", \"z\" in \"cat\", \"at\" in \"cat\", \"x\" not in \"cat\")": {
+  "out": "True False True True\n",
+  "error": null,
+  "line": null
+ },
+ "print(str(5) + \"!\", str(2.50), str(True), str(None), str([1, \"a\"]))": {
+  "out": "5! 2.5 True None [1, 'a']\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"5\" * 3, int(\"5\") * 3)": {
+  "out": "555 15\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"a\\nb\")": {
+  "out": "a\nb\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"abc\".zfill(5), \"42\".zfill(5), \"-4\".zfill(4), \"ab\".ljust(4) + \"|\", \"ab\".rjust(4), \"ab\".center(6, \"*\"))": {
+  "out": "00abc 00042 -004 ab  |   ab **ab**\n",
+  "error": null,
+  "line": null
+ },
+ "name = \"Rob\"\nprint(f\"Hi {name}!\")": {
+  "out": "Hi Rob!\n",
+  "error": null,
+  "line": null
+ },
+ "x = 3\nprint(f\"{x} + {x} = {x + x}\", f\"{{braces}}\", f\"{x!r}\", f\"{name!r}\" if False else \"\")": {
+  "out": "3 + 3 = 6 {braces} 3 \n",
+  "error": null,
+  "line": null
+ },
+ "v = 3.14159\nprint(f\"{v:.2f}\", f\"{v:8.3f}|\", f\"{v:<8.1f}|\", f\"{v:^9.2f}|\", f\"{v:+.1f}\")": {
+  "out": "3.14    3.142| 3.1     |   3.14   | +3.1\n",
+  "error": null,
+  "line": null
+ },
+ "n = 42\nprint(f\"{n:5d}|\", f\"{n:<5d}|\", f\"{n:05d}\", f\"{n:,}\", f\"{1234567:,}\", f\"{n:x}\", f\"{n:b}\")": {
+  "out": "   42| 42   | 00042 42 1,234,567 2a 101010\n",
+  "error": null,
+  "line": null
+ },
+ "s = \"ab\"\nprint(f\"{s:>5}|\", f\"{s:*^6}|\", f\"{s:<4}|\", f\"{s!r}\")": {
+  "out": "   ab| **ab**| ab  | 'ab'\n",
+  "error": null,
+  "line": null
+ },
+ "print(f\"{2 * 3}{4}\", f\"{'q'}\", f\"{[1, 2]}\", f\"{(1, 2)}\", f\"{None}\", f\"{1.0}\")": {
+  "out": "64 q [1, 2] (1, 2) None 1.0\n",
+  "error": null,
+  "line": null
+ },
+ "print(f\"{0.5:.0%}\", f\"{12.5:e}\", f\"{3:.1f}\")": {
+  "out": "50% 1.250000e+01 3.0\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"a\" \"b\" 'c')": {
+  "out": "abc\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"a\" + 1)": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "print(\"a\" * \"b\")": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "print(\"abc\"[5])": {
+  "out": "",
+  "error": "IndexError",
+  "line": 1
+ },
+ "print(int(\"abc\"))": {
+  "out": "",
+  "error": "ValueError",
+  "line": 1
+ },
+ "print(float(\"x\"))": {
+  "out": "",
+  "error": "ValueError",
+  "line": 1
+ },
+ "print(\"a\" < 1)": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "x = \"abc\"\nx[0] = \"z\"": {
+  "out": "",
+  "error": "TypeError",
+  "line": 2
+ },
+ "print(\"abc\".foo())": {
+  "out": "",
+  "error": "AttributeError",
+  "line": 1
+ },
+ "print(len(5))": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "print(True and False, True or False, not True, not 0, not \"\")": {
+  "out": "False True False True True\n",
+  "error": null,
+  "line": null
+ },
+ "print(0 or \"x\", \"\" or 0, 3 and 4, 0 and 4, None or [], [] or None)": {
+  "out": "x 0 4 0 [] None\n",
+  "error": null,
+  "line": null
+ },
+ "print(1 if True else 2, \"yes\" if 0 else \"no\")": {
+  "out": "1 no\n",
+  "error": null,
+  "line": null
+ },
+ "x = 5\nif x > 3:\n    print(\"big\")\nelif x > 1:\n    print(\"mid\")\nelse:\n    print(\"small\")": {
+  "out": "big\n",
+  "error": null,
+  "line": null
+ },
+ "x = 2\nif x > 3:\n    print(\"big\")\nelif x > 1:\n    print(\"mid\")\nelse:\n    print(\"small\")": {
+  "out": "mid\n",
+  "error": null,
+  "line": null
+ },
+ "x = 0\nif x > 3:\n    print(\"big\")\nelif x > 1:\n    print(\"mid\")\nelse:\n    print(\"small\")": {
+  "out": "small\n",
+  "error": null,
+  "line": null
+ },
+ "if []:\n    print(\"a\")\nif [0]:\n    print(\"b\")\nif \"\":\n    print(\"c\")\nif \" \":\n    print(\"d\")\nif 0.0:\n    print(\"e\")\nif None:\n    print(\"f\")\nif {}:\n    print(\"g\")\nif (0,):\n    print(\"h\")": {
+  "out": "b\nd\nh\n",
+  "error": null,
+  "line": null
+ },
+ "a = None\nprint(a is None, a is not None, a == None, 1 is 1)": {
+  "out": "True False True True\n",
+  "error": null,
+  "line": null
+ },
+ "print(not (1 < 2 and 2 < 3), 1 < 2 and not 2 < 1)": {
+  "out": "False True\n",
+  "error": null,
+  "line": null
+ },
+ "print(bool(0), bool(1), bool(\"a\"), bool([]), bool([0]), bool(None), bool(0.0), bool({}))": {
+  "out": "False True True False True False False False\n",
+  "error": null,
+  "line": null
+ },
+ "x = 5\nprint(0 < x < 10, x in [1, 5], x not in (1, 2), x == 5 or 1 / 0)": {
+  "out": "True True True True\n",
+  "error": null,
+  "line": null
+ },
+ "print(3 > \"a\")": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "print([1, 2] < [1, 3], (1, 2) < (1, 2, 0), [] < [0])": {
+  "out": "True True True\n",
+  "error": null,
+  "line": null
+ },
+ "print((1, 2) == (1, 2), [1] == [1], [1] == (1,), {\"a\": 1} == {\"a\": 1})": {
+  "out": "True True False True\n",
+  "error": null,
+  "line": null
+ },
+ "x = 3\nif x == 3:\nprint(\"a\")": {
+  "out": "",
+  "error": "IndentationError",
+  "line": 3
+ },
+ "for i in range(3):\n    print(i)": {
+  "out": "0\n1\n2\n",
+  "error": null,
+  "line": null
+ },
+ "for i in range(2, 5):\n    print(i)": {
+  "out": "2\n3\n4\n",
+  "error": null,
+  "line": null
+ },
+ "for i in range(10, 0, -3):\n    print(i)": {
+  "out": "10\n7\n4\n1\n",
+  "error": null,
+  "line": null
+ },
+ "for i in range(0):\n    print(i)\nprint(\"done\")": {
+  "out": "done\n",
+  "error": null,
+  "line": null
+ },
+ "for c in \"abc\":\n    print(c)": {
+  "out": "a\nb\nc\n",
+  "error": null,
+  "line": null
+ },
+ "for x in [3, 1, 2]:\n    print(x * 2)": {
+  "out": "6\n2\n4\n",
+  "error": null,
+  "line": null
+ },
+ "for k in {\"a\": 1, \"b\": 2}:\n    print(k)": {
+  "out": "a\nb\n",
+  "error": null,
+  "line": null
+ },
+ "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)": {
+  "out": "5050\n",
+  "error": null,
+  "line": null
+ },
+ "i = 0\nwhile i < 3:\n    print(i)\n    i += 1": {
+  "out": "0\n1\n2\n",
+  "error": null,
+  "line": null
+ },
+ "i = 0\nwhile True:\n    i += 1\n    if i == 4:\n        break\nprint(i)": {
+  "out": "4\n",
+  "error": null,
+  "line": null
+ },
+ "for i in range(6):\n    if i % 2 == 0:\n        continue\n    if i == 5:\n        break\n    print(i)": {
+  "out": "1\n3\n",
+  "error": null,
+  "line": null
+ },
+ "for i in range(3):\n    for j in range(3):\n        if j == 2:\n            break\n        print(i, j)": {
+  "out": "0 0\n0 1\n1 0\n1 1\n2 0\n2 1\n",
+  "error": null,
+  "line": null
+ },
+ "for i in range(3):\n    pass\nprint(i)": {
+  "out": "2\n",
+  "error": null,
+  "line": null
+ },
+ "n = 5\nwhile n > 0:\n    n -= 2\nprint(n)": {
+  "out": "-1\n",
+  "error": null,
+  "line": null
+ },
+ "for i in range(3):\n    print(i, end=\" \")\nprint()": {
+  "out": "0 1 2 \n",
+  "error": null,
+  "line": null
+ },
+ "print(1, 2, 3, sep=\"-\")": {
+  "out": "1-2-3\n",
+  "error": null,
+  "line": null
+ },
+ "print(\"a\", end=\"\")\nprint(\"b\")": {
+  "out": "ab\n",
+  "error": null,
+  "line": null
+ },
+ "for i, c in enumerate(\"ab\"):\n    print(i, c)": {
+  "out": "0 a\n1 b\n",
+  "error": null,
+  "line": null
+ },
+ "for i, c in enumerate([\"x\", \"y\"], 1):\n    print(i, c)": {
+  "out": "1 x\n2 y\n",
+  "error": null,
+  "line": null
+ },
+ "for a, b in zip([1, 2, 3], \"ab\"):\n    print(a, b)": {
+  "out": "1 a\n2 b\n",
+  "error": null,
+  "line": null
+ },
+ "for a, b in [(1, 2), (3, 4)]:\n    print(a + b)": {
+  "out": "3\n7\n",
+  "error": null,
+  "line": null
+ },
+ "x = [1, 2, 3]\nfor v in x:\n    if v == 1:\n        x.append(9)\n    print(v)": {
+  "out": "1\n2\n3\n9\n",
+  "error": null,
+  "line": null
+ },
+ "for i in range(3):\n    print(i)\nelse_ = 1\nprint(else_)": {
+  "out": "0\n1\n2\n1\n",
+  "error": null,
+  "line": null
+ },
+ "print(list(range(5)), list(range(5, 0, -2)), len(range(10)), range(3)[1], 3 in range(5), 7 in range(5))": {
+  "out": "[0, 1, 2, 3, 4] [5, 3, 1] 10 1 True False\n",
+  "error": null,
+  "line": null
+ },
+ "for i in 5:\n    pass": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "while 1 / 0:\n    pass": {
+  "out": "",
+  "error": "ZeroDivisionError",
+  "line": 1
+ },
+ "break": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "for i in range(1.5):\n    pass": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "for i in range(0, 5, 0):\n    pass": {
+  "out": "",
+  "error": "ValueError",
+  "line": 1
+ },
+ "def f():\n    print(\"hi\")\nf()": {
+  "out": "hi\n",
+  "error": null,
+  "line": null
+ },
+ "def add(a, b):\n    return a + b\nprint(add(2, 3))": {
+  "out": "5\n",
+  "error": null,
+  "line": null
+ },
+ "def f(a, b=2):\n    return a * b\nprint(f(3), f(3, 4), f(b=5, a=1))": {
+  "out": "6 12 5\n",
+  "error": null,
+  "line": null
+ },
+ "def f():\n    pass\nprint(f())": {
+  "out": "None\n",
+  "error": null,
+  "line": null
+ },
+ "def f(x):\n    if x > 0:\n        return \"pos\"\n    return \"non-pos\"\nprint(f(1), f(-1))": {
+  "out": "pos non-pos\n",
+  "error": null,
+  "line": null
+ },
+ "def fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\nprint(fact(10))": {
+  "out": "3628800\n",
+  "error": null,
+  "line": null
+ },
+ "def fib(n):\n    return n if n < 2 else fib(n - 1) + fib(n - 2)\nprint(fib(15))": {
+  "out": "610\n",
+  "error": null,
+  "line": null
+ },
+ "x = 10\ndef f():\n    return x + 1\nprint(f())": {
+  "out": "11\n",
+  "error": null,
+  "line": null
+ },
+ "x = 10\ndef f():\n    x = 1\n    return x\nprint(f(), x)": {
+  "out": "1 10\n",
+  "error": null,
+  "line": null
+ },
+ "x = 10\ndef f():\n    global x\n    x = 99\nf()\nprint(x)": {
+  "out": "99\n",
+  "error": null,
+  "line": null
+ },
+ "x = 10\ndef f():\n    x += 1\nf()": {
+  "out": "",
+  "error": "UnboundLocalError",
+  "line": 3
+ },
+ "def f():\n    print(y)\n    y = 1\nf()": {
+  "out": "",
+  "error": "UnboundLocalError",
+  "line": 2
+ },
+ "def f(a):\n    return a\nf()": {
+  "out": "",
+  "error": "TypeError",
+  "line": 3
+ },
+ "def f(a):\n    return a\nf(1, 2)": {
+  "out": "",
+  "error": "TypeError",
+  "line": 3
+ },
+ "def f(a):\n    return a\nf(b=1)": {
+  "out": "",
+  "error": "TypeError",
+  "line": 3
+ },
+ "def f(a, b):\n    return (a, b)\nprint(f(b=1, a=2))": {
+  "out": "(2, 1)\n",
+  "error": null,
+  "line": null
+ },
+ "def outer():\n    n = 5\n    def inner():\n        return n * 2\n    return inner()\nprint(outer())": {
+  "out": "10\n",
+  "error": null,
+  "line": null
+ },
+ "def f(items=[]):\n    items.append(1)\n    return items\nprint(f(), f())": {
+  "out": "[1, 1] [1, 1]\n",
+  "error": null,
+  "line": null
+ },
+ "def f(n):\n    return f(n + 1)\nf(0)": {
+  "out": "",
+  "error": "RecursionError",
+  "line": null
+ },
+ "def stats(a):\n    return min(a), max(a), len(a)\nlo, hi, n = stats([3, 1, 2])\nprint(lo, hi, n)": {
+  "out": "1 3 3\n",
+  "error": null,
+  "line": null
+ },
+ "def twice(f_, x):\n    return f_(f_(x))\ndef inc(x):\n    return x + 1\nprint(twice(inc, 5))": {
+  "out": "7\n",
+  "error": null,
+  "line": null
+ },
+ "f = 5\nf()": {
+  "out": "",
+  "error": "TypeError",
+  "line": 2
+ },
+ "print(undefined_name)": {
+  "out": "",
+  "error": "NameError",
+  "line": 1
+ },
+ "x = 1\nprint(x)\nprint(y)": {
+  "out": "1\n",
+  "error": "NameError",
+  "line": 3
+ },
+ "def f(:\n    pass": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "def f()\n    pass": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "def f(a=1, b):\n    pass": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "return 1": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "print(len)": {
+  "out": "<built-in function len>\n",
+  "error": null,
+  "line": null
+ },
+ "x = [1, 2, 3]\nprint(x[0], x[-1], x[1:], x[:2], x[::-1], x[::2], len(x))": {
+  "out": "1 3 [2, 3] [1, 2] [3, 2, 1] [1, 3] 3\n",
+  "error": null,
+  "line": null
+ },
+ "x = [3, 1, 2]\nx.sort()\nprint(x)\nx.sort(reverse=True)\nprint(x)": {
+  "out": "[1, 2, 3]\n[3, 2, 1]\n",
+  "error": null,
+  "line": null
+ },
+ "x = [3, 1, 2]\nprint(sorted(x), sorted(x, reverse=True), x)": {
+  "out": "[1, 2, 3] [3, 2, 1] [3, 1, 2]\n",
+  "error": null,
+  "line": null
+ },
+ "x = []\nx.append(1)\nx.append(\"a\")\nx.extend([2, 3])\nx.insert(0, 9)\nprint(x)": {
+  "out": "[9, 1, 'a', 2, 3]\n",
+  "error": null,
+  "line": null
+ },
+ "x = [1, 2, 3, 2]\nprint(x.pop(), x.pop(0), x, x.count(2), x.index(2))": {
+  "out": "2 1 [2, 3] 1 0\n",
+  "error": null,
+  "line": null
+ },
+ "x = [1, 2, 3]\nx.remove(2)\nx.reverse()\nprint(x)": {
+  "out": "[3, 1]\n",
+  "error": null,
+  "line": null
+ },
+ "x = [1, 2]\nx[0] = 5\nx[-1] += 1\nprint(x)": {
+  "out": "[5, 3]\n",
+  "error": null,
+  "line": null
+ },
+ "x = [[1, 2], [3, 4]]\nprint(x[1][0], len(x))": {
+  "out": "3 2\n",
+  "error": null,
+  "line": null
+ },
+ "a = [1]\nb = a\nb.append(2)\nprint(a, a is b, a == [1, 2])": {
+  "out": "[1, 2] True True\n",
+  "error": null,
+  "line": null
+ },
+ "a = [1]\nb = a.copy()\nb.append(2)\nprint(a, b)": {
+  "out": "[1] [1, 2]\n",
+  "error": null,
+  "line": null
+ },
+ "print([1, 2] + [3], [0] * 3, [1, 2] * 2)": {
+  "out": "[1, 2, 3] [0, 0, 0] [1, 2, 1, 2]\n",
+  "error": null,
+  "line": null
+ },
+ "print(2 in [1, 2], 5 in [1, 2], \"a\" in [\"a\"], [1] in [[1]])": {
+  "out": "True False True True\n",
+  "error": null,
+  "line": null
+ },
+ "x = (1, 2, 3)\nprint(x, x[0], x[-1], x[1:], len(x), x + (4,), (1,), ())": {
+  "out": "(1, 2, 3) 1 3 (2, 3) 3 (1, 2, 3, 4) (1,) ()\n",
+  "error": null,
+  "line": null
+ },
+ "a, b = 1, 2\na, b = b, a\nprint(a, b)": {
+  "out": "2 1\n",
+  "error": null,
+  "line": null
+ },
+ "a, b, c = [1, 2, 3]\nprint(a + b + c)": {
+  "out": "6\n",
+  "error": null,
+  "line": null
+ },
+ "first, second = \"ab\"\nprint(first, second)": {
+  "out": "a b\n",
+  "error": null,
+  "line": null
+ },
+ "a, b = 1, 2, 3": {
+  "out": "",
+  "error": "ValueError",
+  "line": 1
+ },
+ "a, b, c = 1, 2": {
+  "out": "",
+  "error": "ValueError",
+  "line": 1
+ },
+ "d = {\"a\": 1, \"b\": 2}\nprint(d[\"a\"], d.get(\"z\"), d.get(\"z\", 0), len(d), \"a\" in d, \"z\" in d)": {
+  "out": "1 None 0 2 True False\n",
+  "error": null,
+  "line": null
+ },
+ "d = {}\nd[\"x\"] = 1\nd[\"y\"] = 2\nd[\"x\"] += 5\nprint(d)": {
+  "out": "{'x': 6, 'y': 2}\n",
+  "error": null,
+  "line": null
+ },
+ "d = {\"a\": 1, \"b\": 2}\nprint(list(d.keys()), list(d.values()), list(d.items()))": {
+  "out": "['a', 'b'] [1, 2] [('a', 1), ('b', 2)]\n",
+  "error": null,
+  "line": null
+ },
+ "d = {\"a\": 1, \"b\": 2}\nfor k, v in d.items():\n    print(k, v)": {
+  "out": "a 1\nb 2\n",
+  "error": null,
+  "line": null
+ },
+ "d = {1: \"a\", 2.0: \"b\", True: \"c\"}\nprint(d)": {
+  "out": "{1: 'c', 2.0: 'b'}\n",
+  "error": null,
+  "line": null
+ },
+ "d = {(1, 2): \"p\"}\nprint(d[(1, 2)])": {
+  "out": "p\n",
+  "error": null,
+  "line": null
+ },
+ "d = {\"a\": 1}\nprint(d.pop(\"a\"), d, d.pop(\"z\", None))": {
+  "out": "1 {} None\n",
+  "error": null,
+  "line": null
+ },
+ "d = {\"a\": 1}\nd.update({\"b\": 2, \"a\": 3})\nprint(d, d.setdefault(\"c\", 9), d)": {
+  "out": "{'a': 3, 'b': 2, 'c': 9} 9 {'a': 3, 'b': 2, 'c': 9}\n",
+  "error": null,
+  "line": null
+ },
+ "d = {\"a\": 1}\nprint(d[\"b\"])": {
+  "out": "",
+  "error": "KeyError",
+  "line": 2
+ },
+ "x = [1, 2]\nprint(x[2])": {
+  "out": "",
+  "error": "IndexError",
+  "line": 2
+ },
+ "x = [1, 2]\nx[5] = 1": {
+  "out": "",
+  "error": "IndexError",
+  "line": 2
+ },
+ "x = []\nx.pop()": {
+  "out": "",
+  "error": "IndexError",
+  "line": 2
+ },
+ "x = [1]\nx.remove(5)": {
+  "out": "",
+  "error": "ValueError",
+  "line": 2
+ },
+ "x = (1, 2)\nx[0] = 5": {
+  "out": "",
+  "error": "TypeError",
+  "line": 2
+ },
+ "d = {[1]: 2}": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "x = [1, 2, 3]\nprint(x[\"a\"])": {
+  "out": "",
+  "error": "TypeError",
+  "line": 2
+ },
+ "print(min([]))": {
+  "out": "",
+  "error": "ValueError",
+  "line": 1
+ },
+ "print(max(), 1)": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "print(list(\"abc\"), tuple([1, 2]), list((1, 2)), dict([(\"a\", 1)]), list(range(3)))": {
+  "out": "['a', 'b', 'c'] (1, 2) [1, 2] {'a': 1} [0, 1, 2]\n",
+  "error": null,
+  "line": null
+ },
+ "print(any([0, 1]), all([1, 0]), any([]), all([]))": {
+  "out": "True False False True\n",
+  "error": null,
+  "line": null
+ },
+ "print(list(reversed([1, 2, 3])), list(enumerate(\"ab\")), list(zip([1, 2], [3, 4])))": {
+  "out": "[3, 2, 1] [(0, 'a'), (1, 'b')] [(1, 3), (2, 4)]\n",
+  "error": null,
+  "line": null
+ },
+ "print(sorted(\"bca\"), sorted([3, 1, 2]), sorted((2, 1)), sorted([[2, 1], [1, 5]]), sorted([\"b\", \"a\"]))": {
+  "out": "['a', 'b', 'c'] [1, 2, 3] [1, 2] [[1, 5], [2, 1]] ['a', 'b']\n",
+  "error": null,
+  "line": null
+ },
+ "print([1, \"a\", None, True, 1.5, (1,), {\"k\": [2]}])": {
+  "out": "[1, 'a', None, True, 1.5, (1,), {'k': [2]}]\n",
+  "error": null,
+  "line": null
+ },
+ "print(ord(\"a\"), chr(98))": {
+  "out": "97 b\n",
+  "error": null,
+  "line": null
+ },
+ "x = [1, 2, 3, 4, 5]\nprint(x[1:4:2], x[::-2], x[-2:], x[:-2], x[10:], x[3:1])": {
+  "out": "[2, 4] [5, 3, 1] [4, 5] [1, 2, 3] [] []\n",
+  "error": null,
+  "line": null
+ },
+ "x = [0]\nprint(x[-1])\nprint(x[-2])": {
+  "out": "0\n",
+  "error": "IndexError",
+  "line": 3
+ },
+ "print(sorted([3, \"a\"]))": {
+  "out": "",
+  "error": "TypeError",
+  "line": 1
+ },
+ "x = (1, 2": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "x = \"abc": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "if x = 1:\n    pass": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "x = 5 +": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "print(\"a\" \"b\"": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "x = 1 2": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "for i in range(3)\n    print(i)": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "while True print(1)": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "x = [1, 2\ny = 3": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "  x = 1": {
+  "out": "",
+  "error": "IndentationError",
+  "line": 1
+ },
+ "if True:\n        x = 1\n    y = 2": {
+  "out": "",
+  "error": "IndentationError",
+  "line": 3
+ },
+ "if True:\npass": {
+  "out": "",
+  "error": "IndentationError",
+  "line": 2
+ },
+ "x = 1\n    y = 2": {
+  "out": "",
+  "error": "IndentationError",
+  "line": 2
+ },
+ "foo(1) = 2": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "1 = x": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "print(\"hi\"": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "else:\n    pass": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "def f():\nreturn 1": {
+  "out": "",
+  "error": "IndentationError",
+  "line": 2
+ },
+ "x = $": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "x = 3x": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "a = [1, 2, 3)": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ },
+ "print(1))": {
+  "out": "",
+  "error": "SyntaxError",
+  "line": 1
+ }
+}

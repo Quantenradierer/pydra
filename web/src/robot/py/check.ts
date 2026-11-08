@@ -5,8 +5,8 @@ import { RbError, suggest } from './errors.ts';
 export interface CheckEnv {
   /** Names that exist and are usable: builtins, equipped parts, the player's own definitions are added by the checker. */
   known: Iterable<string>;
-  /** Names that exist in the game but are not equipped: name -> the friendly message (already translated). */
-  notEquipped: ReadonlyMap<string, string>;
+  /** Names that exist in the game but are not equipped: name -> the error parameters (`kind` picks the friendly text). */
+  notEquipped: ReadonlyMap<string, Record<string, string | number>>;
 }
 
 /**
@@ -53,9 +53,9 @@ export function checkProgram(ast: Stmt[], env: CheckEnv): RbError | undefined {
   let found: RbError | undefined;
   const fail = (e: Expr & { kind: 'name' }) => {
     if (found) return;
-    const msg = env.notEquipped.get(e.name);
-    if (msg !== undefined) {
-      found = new RbError('NameError', 'not-equipped', { name: e.name, message: msg }, e.line, `name '${e.name}' is not defined`, e.col);
+    const missing = env.notEquipped.get(e.name);
+    if (missing !== undefined) {
+      found = new RbError('NameError', 'not-equipped', { name: e.name, ...missing }, e.line, `name '${e.name}' is not defined`, e.col);
       return;
     }
     const hint = suggest(e.name, defined);

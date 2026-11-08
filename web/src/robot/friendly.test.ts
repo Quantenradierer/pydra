@@ -53,7 +53,7 @@ describe('friendly errors', () => {
 });
 
 describe('checkProgram', () => {
-  const env = { known: ['fire', 'forward', 'print'], notEquipped: new Map([['move_north', 'Your wheels can\'t move north.']]) };
+  const env = { known: ['fire', 'forward', 'print'], notEquipped: new Map([['move_north', { kind: 'move-absolute', dir: 'north' }]]) };
 
   it('finds unknown names anywhere, with a hint', () => {
     const e = checkProgram(parse('forward()\nif False:\n    foward()'), env)!;
@@ -66,6 +66,6 @@ describe('checkProgram', () => {
 
   it('reports parts that are not equipped', () => {
     const e = checkProgram(parse('move_north()'), env)!;
-    expect([e.code, e.params.message]).toEqual(['not-equipped', "Your wheels can't move north."]);
+    expect([e.code, e.params.kind]).toEqual(['not-equipped', 'move-absolute']);
   });
 });

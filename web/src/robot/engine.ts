@@ -36,8 +36,8 @@ export type Intent =
   /** A hit on the tile in front. */
   | { type: 'melee'; damage: number }
   | { type: 'shield' }
-  /** A lost tick (an action that was not charged); `message` is shown in the replay. */
-  | { type: 'fizzle'; message: string };
+  /** A lost tick: an action that was not charged. The replay shows "Shield still charging (1 tick left)". */
+  | { type: 'fizzle'; part: string; reason: 'charging' | 'overheated'; ticks: number };
 
 export interface Robot {
   id: string;
@@ -63,7 +63,7 @@ export type GameEvent =
   | { type: 'damage'; robot: string; amount: number }
   | { type: 'bump'; robot: string; reason: 'wall' | 'rubble' | 'pit' | 'robot' | 'edge' }
   | { type: 'shield'; robot: string }
-  | { type: 'fizzle'; robot: string; message: string }
+  | { type: 'fizzle'; robot: string; part: string; reason: 'charging' | 'overheated'; ticks: number }
   | { type: 'death'; robot: string };
 
 export type Outcome = 'win' | 'loss';
@@ -196,7 +196,7 @@ export class World {
       else if (i.type === 'shield') {
         r.shieldPending = true;
         events.push({ type: 'shield', robot: r.id });
-      } else if (i.type === 'fizzle') events.push({ type: 'fizzle', robot: r.id, message: i.message });
+      } else if (i.type === 'fizzle') events.push({ type: 'fizzle', robot: r.id, part: i.part, reason: i.reason, ticks: i.ticks });
     }
 
     // Moves.

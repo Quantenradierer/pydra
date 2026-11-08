@@ -74,10 +74,15 @@ export function judge(battle: BattleResult, needs: Needs | undefined, regression
   return { battle, won: true };
 }
 
+/** One fight: a single layout of an enemy, judged against the enemy's extra conditions. `trace` records the line-by-line trace for the viewer. */
+export function fightLayout(enemy: EnemyData, layout: LayoutSpec, build: Build, script: string, regression = false, trace = false): FightReport {
+  return judge(runBattle({ build, script, layout, ...(trace ? { trace } : {}) }), enemy.needs, regression, script);
+}
+
 /** Fights an enemy in all its layouts with the player's build and script. */
 /** `regression`: an earlier enemy re-run for a newer script; the line limit does not apply (it was the old twist). */
 export function fightEnemy(enemy: EnemyData, all: readonly EnemyData[], build: Build, script: string, regression = false): EnemyReport {
-  const fights = layoutsOf(enemy, all).map((layout) => judge(runBattle({ build, script, layout }), enemy.needs, regression, script));
+  const fights = layoutsOf(enemy, all).map((layout) => fightLayout(enemy, layout, build, script, regression));
   const lines = codeLines(script);
   const tooLong = !regression && enemy.needs?.maxLines !== undefined && lines > enemy.needs.maxLines;
   return {

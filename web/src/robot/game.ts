@@ -13,6 +13,7 @@ import { CHALLENGES, type Challenge } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import type { EnemyData } from './content/types.ts';
 import { fightEnemy, type EnemyReport } from './fight.ts';
+import { buildQueue, type QueueItem } from './variations.ts';
 import { dailySeed, today, TRAINING_FROM, trainingFight } from './training.ts';
 import type { RbError } from './py/errors.ts';
 
@@ -242,6 +243,17 @@ export class RobotGame {
     return true;
   }
 
+  /** The earlier enemies of the chapter that a script must still beat (empty for side missions and training fights). */
+  earlierEnemies(enemy: EnemyData): EnemyData[] {
+    return enemy.regression === false ? [] : this.enemies.filter((e) => e.chapter === enemy.chapter && e.regression !== false && this.enemies.indexOf(e) < this.enemies.indexOf(enemy));
+  }
+
+  /** All fights the robot meets after the first one: other layouts of the enemy, then the earlier enemies of the chapter. */
+  variationQueue(step: Step): QueueItem[] {
+    const enemy = step.enemy!;
+    return buildQueue(enemy, this.earlierEnemies(enemy), this.enemies.includes(enemy) ? this.enemies : []);
+  }
+
   /**
    * Runs the robot against a battle step: all its layouts, plus a re-run of the
    * earlier enemies of the chapter. A win only counts when nothing earlier broke.
@@ -266,7 +278,7 @@ export class RobotGame {
     }
 
     const report = fightEnemy(enemy, this.enemies, build, script);
-    const earlier = enemy.regression === false ? [] : this.enemies.filter((e) => e.chapter === enemy.chapter && e.regression !== false && this.enemies.indexOf(e) < this.enemies.indexOf(enemy));
+    const earlier = this.earlierEnemies(enemy);
     const broken = report.won ? earlier.filter((e) => !fightEnemy(e, this.enemies, build, script, true).won).map((e) => e.id) : [];
     const won = report.won && broken.length === 0;
     const already = p.solved.includes(id);

@@ -6,7 +6,7 @@
  */
 import { addonsFor, CHASSIS, type Build } from './build.ts';
 const buildHp = (b: Build): number => CHASSIS[b.chassis].hp;
-import { MAX_TICKS, World, type GameEvent, type Intent, type Outcome, type Pos, type Dir } from './engine.ts';
+import { World, type GameEvent, type Intent, type Outcome, type Pos, type Dir } from './engine.ts';
 import { buildLayout, type EnemyDef, type LayoutSpec } from './layout.ts';
 import { createEnv, type Env, type Step } from './parts.ts';
 import { checkProgram } from './py/check.ts';
@@ -67,6 +67,14 @@ class Brain {
     readonly program: Program,
     private env: Env,
   ) {}
+
+  /** Runs free statements (say, assignments) up to the next action; used once after the winning tick. */
+  runFree() {
+    if (this.queue.length === 0 && !this.ended) {
+      const r = this.program.runUntilAction(STEP_BUDGET, this.resume);
+      if (r.kind === 'action') this.ended = true;
+    }
+  }
 
   /** The intent for this tick and the line it came from. */
   next(): { intent: Intent; line: number | null } {
@@ -160,7 +168,7 @@ export function runBattle(input: BattleInput): BattleResult {
   let budgetLine: number | undefined;
   let reason: EndReason = 'timeout';
 
-  while (world.tick < MAX_TICKS) {
+  while (world.tick < world.maxTicks) {
     bubbles.length = 0;
     for (const log of logs.values()) log.length = 0;
     const intents = new Map<string, Intent>();
@@ -195,6 +203,12 @@ export function runBattle(input: BattleInput): BattleResult {
       reason = outcome === 'win' ? 'win' : world.player.hp <= 0 ? 'dead' : 'timeout';
       break;
     }
+  }
+  if (reason === 'win') {
+    // The script may still say() something after its last action ("done" after a loop).
+    bubbles.length = 0;
+    brains.get('player')?.runFree();
+    frames.at(-1)!.bubbles.push(...bubbles);
   }
   const outcome: Outcome = reason === 'win' ? 'win' : 'loss';
   return {

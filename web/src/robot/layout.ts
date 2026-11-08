@@ -4,6 +4,7 @@ import { Rng } from './rng.ts';
 /** An enemy as the data files describe it; the digit (or `D`) in the map picks it. */
 export interface EnemyDef {
   hp: number;
+  armor?: number;
   /** Facing; defaults to the side that faces the player. */
   face?: Dir;
   /** Parts: gear object names, locomotion. Enemies use the same parts as the player. */
@@ -69,6 +70,7 @@ export interface LayoutSpec {
   map: readonly string[];
   enemies: readonly EnemyDef[];
   seed: number;
+  maxTicks?: number;
   /** Whether the seed may mirror the map left to right. */
   mirror?: boolean;
 }
@@ -97,9 +99,9 @@ export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCro
     const id = `enemy${i + 1}`;
     defOf[id] = def;
     const facing = def.face ? (mirrored ? MIRROR[def.face] : def.face) : towards(e.pos, parsed.player.pos);
-    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, canCross: { rubble: def.locomotion === 'legs' } });
+    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: def.armor ?? 0, canCross: { rubble: def.locomotion === 'legs' } });
   });
-  return { setup: { tiles: parsed.tiles, robots, seed: spec.seed }, mapRows: rows, mirrored, enemyDefs: [...spec.enemies], defOf };
+  return { setup: { tiles: parsed.tiles, robots, seed: spec.seed, ...(spec.maxTicks ? { maxTicks: spec.maxTicks } : {}) }, mapRows: rows, mirrored, enemyDefs: [...spec.enemies], defOf };
 }
 
 export { DELTA };

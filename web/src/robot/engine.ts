@@ -53,6 +53,8 @@ export interface Robot {
   /** Set by a shield action; becomes `shieldUp` at the end of the tick. */
   shieldPending: boolean;
   hitsTaken: number;
+  /** Subtracted from every hit (a hit of 1 on armor 1 does nothing). */
+  armor: number;
   /** Where the last hit came from, as the side of this robot ("N", "E", ...), or null. */
   lastHit: Dir | null;
 }
@@ -74,6 +76,7 @@ export interface RobotSetup {
   pos: Pos;
   facing: Dir;
   hp: number;
+  armor?: number;
   canCross?: { rubble?: boolean; pit?: boolean };
 }
 
@@ -81,6 +84,8 @@ export interface WorldSetup {
   tiles: Tile[][];
   robots: RobotSetup[];
   seed: number;
+  /** Ticks until the fight is lost; defaults to MAX_TICKS. */
+  maxTicks?: number;
 }
 
 export class World {
@@ -91,12 +96,14 @@ export class World {
   readonly rng: Rng;
   /** Ticks resolved so far. */
   tick = 0;
+  readonly maxTicks: number;
 
   constructor(setup: WorldSetup) {
     this.tiles = setup.tiles.map((row) => [...row]);
     this.height = this.tiles.length;
     this.width = this.tiles[0]?.length ?? 0;
     this.rng = new Rng(setup.seed);
+    this.maxTicks = setup.maxTicks ?? MAX_TICKS;
     this.robots = setup.robots.map((r) => ({
       id: r.id,
       team: r.team,
@@ -108,6 +115,7 @@ export class World {
       shieldUp: false,
       shieldPending: false,
       hitsTaken: 0,
+      armor: r.armor ?? 0,
       lastHit: null,
     }));
   }
@@ -148,7 +156,7 @@ export class World {
     const enemiesDown = enemies.every((r) => r.hp <= 0);
     if (playerDown) return 'loss';
     if (enemiesDown) return 'win';
-    return this.tick >= MAX_TICKS ? 'loss' : undefined;
+    return this.tick >= this.maxTicks ? 'loss' : undefined;
   }
 
   /** Whether a robot may enter a tile (ignoring other robots). */
@@ -233,8 +241,10 @@ export class World {
         target.shieldUp = false;
         return false;
       }
+      const dealt = Math.max(0, amount - target.armor);
+      if (dealt === 0) return true;
       const old = damage.get(target);
-      damage.set(target, { amount: (old?.amount ?? 0) + amount, from: old?.from ?? from });
+      damage.set(target, { amount: (old?.amount ?? 0) + dealt, from: old?.from ?? from });
       return true;
     };
     for (const r of live) {

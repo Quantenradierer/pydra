@@ -3,7 +3,7 @@ import { fillCode, runFight, zone, type ZoneName } from './helpers.ts';
 
 /**
  * Dead-control smoke test: visits the Robot Battler screens (task map, the work screen in every zone, with drawers and the
- * hint panel open, before and after a fight, challenges, Training Grounds) and presses every visible, enabled button and
+ * before and after a fight, challenges, Training Grounds) and presses every visible, enabled button and
  * summary once. A press must change something (the DOM, the route, a text field or the saved game); a control that
  * does nothing has to be disabled instead.
  */
@@ -93,7 +93,6 @@ async function workScreens(page: Page, zones: ZoneName[]) {
       await zone(page, z);
     };
     await press(page, `work ${z}`, () => at());
-    if (z === 'task' || z === 'code') await press(page, `work ${z} + all hints`, () => at(async () => (await page.getByTestId('robot-hint').click(), await page.getByTestId('robot-hint-next').click())));
     // After a lost fight (the starter script is one line short) and after a win.
     const fought = (code: string) => async () => {
       await openStep(page, 'one-more-line')();
@@ -133,12 +132,6 @@ test('desktop: no control of the Robot Battler screens is a no-op', async ({ pag
     await start(page);
     await page.getByTestId('robot-training').click();
     await page.getByTestId('robot-train-daily').click();
-  });
-  await press(page, 'training fight + hint', async () => {
-    await start(page);
-    await page.getByTestId('robot-training').click();
-    await page.getByTestId('robot-train-daily').click();
-    await page.getByTestId('robot-hint').click();
   });
   for (const id of ['lu-first-shot', 'pr-tile', 'gl-foward', 'ws-square', 'cn-row-3']) {
     await press(page, `challenge ${id}`, openStep(page, id));

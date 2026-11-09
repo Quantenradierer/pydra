@@ -288,7 +288,7 @@ for (const [device, viewport] of [
     await expect(page.getByTestId('robot-where')).toHaveText(/^Zeile 1 · Schritt 1 von \d+$/);
     await expect(narration).toContainText('kostet keine Runde');
     await expect(page.getByTestId('robot-vars')).toContainText('d = ');
-    await expect(page.locator('.robot-listing li[data-line="1"] .robot-hint')).toContainText('distance() →');
+    await expect(page.locator('.robot-listing li[data-line="1"] .robot-note-inline')).toContainText('distance() →');
     await expect(page.getByTestId('robot-sensors')).toContainText('distance()');
     await expect(page.getByTestId('robot-position')).toHaveText(/^Runde 1 von \d+$/);
 
@@ -555,46 +555,13 @@ test('the same screens in English', async ({ page }) => {
   await expect(page.getByTestId('robot-improve')).toHaveText('Improve script');
 });
 
-for (const [device, viewport] of [
-  ['phone', { width: 360, height: 740 }],
-  ['desktop', { width: 1280, height: 800 }],
-] as const) {
-  test(`on a ${device}: pressing Hinweis shows the new hint at once, in view, from both buttons`, async ({ page }) => {
-    await page.setViewportSize(viewport);
-    await page.goto('/');
-    await page.getByTestId('start-robot').click();
-    await page.getByTestId('robot-step-first-contact').click();
-    const hints = page.getByTestId('robot-hints');
-    await expect(hints).toBeHidden();
-
-    // From the Task zone: hint 1 (the idea) is in view and announced by its heading.
-    await zone(page, 'task');
-    await page.getByTestId('robot-hint').click();
-    await expect(hints).toBeInViewport();
-    await expect(page.getByTestId('robot-hint-title')).toHaveText('Hinweis 1 von 2');
-    await expect(page.getByTestId('robot-hint-title')).toBeFocused();
-    await expect(page.getByTestId('robot-hint-1')).toContainText('Das hilft:');
-    await expect(page.getByTestId('robot-hint-1')).toBeInViewport();
-    // The catch is on the task card only, never repeated in a hint.
-    await expect(page.getByText('Der Code ist schon fertig', { exact: false })).toHaveCount(1);
-    await page.getByTestId('robot-hint-close').click();
-    await expect(hints).toBeHidden();
-
-    // From the Code zone: the second hint appears there, in view, with no zone switch.
-    await zone(page, 'code');
-    await page.getByTestId('robot-hint-code').click();
-    await expect(page.getByTestId('robot-hint-2')).toBeInViewport();
-    await expect(page.getByTestId('robot-hint-2')).toContainText('forward()');
-    await expect(page.getByTestId('robot-hint-title')).toHaveText('Hinweis 2 von 2');
-    await expect(page.getByTestId('robot-hint-next')).toBeDisabled();
-    await expect(page.getByTestId('robot-hint-next')).toHaveText('Alle Hinweise gezeigt');
-    await expect(page.getByTestId('robot-code')).toBeVisible();
-    await page.screenshot({ path: `${process.env.SHOTS ?? 'test-results'}/hint-${device}.png` });
-    // With all hints shown the button only toggles the panel (it is never a dead click).
-    await page.getByTestId('robot-hint-close').click();
-    await expect(page.getByTestId('robot-hint-code')).toHaveText('Hinweise ansehen');
-    await page.getByTestId('robot-hint-code').click();
-    await expect(hints).toBeInViewport();
-    expect(((await stored(page, 'robot')) as { hints: Record<string, number> }).hints['first-contact']).toBe(2);
-  });
-}
+test('there are no hints anywhere in the work screen', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('start-robot').click();
+  await page.getByTestId('robot-step-first-contact').click();
+  await expect(page.getByTestId('robot-hint')).toHaveCount(0);
+  await zone(page, 'code');
+  await expect(page.getByTestId('robot-hint-code')).toHaveCount(0);
+  await expect(page.getByTestId('robot-hints')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /Hinweis/ })).toHaveCount(0);
+});

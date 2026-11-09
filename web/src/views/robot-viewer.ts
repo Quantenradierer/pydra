@@ -79,7 +79,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   const layer = createRobotLayer(battle, battle.tiles[0]?.length ?? 1, battle.tiles.length, (id) => (id === 'player' ? t('robot.you') : t('robot.enemy')));
   const position = h('p', { class: 'run-position', 'data-testid': 'robot-position', 'aria-live': 'off' });
   const where = h('p', { class: 'robot-where', 'data-testid': 'robot-where', 'aria-live': 'off' });
-  const listing = h('ol', { class: 'robot-listing', 'data-testid': 'robot-listing' }, ...source.map((l, i) => h('li', { 'data-line': String(i + 1) }, h('code', {}, l || ' '), h('span', { class: 'robot-hint' }))));
+  const listing = h('ol', { class: 'robot-listing', 'data-testid': 'robot-listing' }, ...source.map((l, i) => h('li', { 'data-line': String(i + 1) }, h('code', {}, l || ' '), h('span', { class: 'robot-note-inline' }))));
   const narration = h('ul', { class: 'robot-narration', 'data-testid': 'robot-narration', 'aria-live': 'polite' });
   const vars = h('ul', { class: 'robot-vars', 'data-testid': 'robot-vars' });
   const stack = h('ol', { class: 'robot-stack', 'data-testid': 'robot-stack' });
@@ -126,7 +126,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
       li.classList.toggle('branch-true', shown.branch === 'true');
       li.classList.toggle('branch-false', shown.branch === 'false');
       li.classList.toggle('seen', hint !== undefined);
-      li.querySelector('.robot-hint')!.textContent = shown.text;
+      li.querySelector('.robot-note-inline')!.textContent = shown.text;
     }
     listing.dataset.active = active == null ? '' : String(active);
 

@@ -10,11 +10,6 @@ const fight = (id: string, de: string, en: string, mix: string[], catchDe: strin
   id,
   title: T(de, en),
   catchLine: T(catchDe, catchEn),
-  idea: T(
-    boss ? 'Dein Skript aus den Kapiteln 3 und 4 muss alles können: Seiten ansehen, Schilde beachten, laufen und an Wänden abbiegen.' : 'Dein Skript aus Kapitel 4 sollte diese Kämpfe schaffen. Fehlt ihm etwas aus Kapitel 3, sieh dir den verlorenen Kampf noch einmal an.',
-    boss ? 'Your script from Chapters 3 and 4 has to do it all: look sideways, respect shields, walk and turn at walls.' : 'Your Chapter 4 script should win these fights. If it lacks something from Chapter 3, watch the lost fight again.',
-  ),
-  skeleton: FINAL,
   enemies: [],
   maps: [],
   mix,

@@ -5,8 +5,6 @@ const fight = (id: string, de: string, en: string, mix: string[], catchDe: strin
   id,
   title: T(de, en),
   catchLine: T(catchDe, catchEn),
-  idea: T('Dein bester Code aus Kapitel 2 sollte alle Kämpfe schaffen. Prüfe, ob er auch für andere Attrappen allgemein genug ist.', 'Your best Chapter 2 code should win every fight. Check that it is general enough for other dummies too.'),
-  skeleton: ARMY,
   enemies: [],
   maps: [],
   mix,

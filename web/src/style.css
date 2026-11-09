@@ -2791,12 +2791,12 @@ progress {
 .robot-listing li.branch-false {
   border-left-color: var(--red);
 }
-.robot-hint {
+.robot-note-inline {
   margin-left: 1.2rem;
   font-style: italic;
   opacity: 0.85;
 }
-.robot-hint:empty {
+.robot-note-inline:empty {
   display: none;
 }
 .robot-replay {

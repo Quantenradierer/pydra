@@ -21,7 +21,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, line/tick step both ways, restart, speed slider (default very slow, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Paused at start; the listing lives in the Code zone, the arena in the Fight zone | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
 | **Variation queue**: after Run the first fight plays; then all other layouts of the enemy and every layout of the earlier chapter enemies (`RobotGame.variationQueue`, `variations.ts`) play one after another (auto-advance, can be switched off), chips show progress/result, Skip / Skip all / Next, and a summary lists won/lost with the reason (script error line, budget, destroyed, timeout, unmet rule) and a "Watch" button per fight | `variations.ts`, `views/robot.ts` (`variationQueue`) |
 | **62 battles**: Chapter 0 (9, incl. Backstep Dummy), 1 (9), 2 (10, incl. Growing Shots), Proving Grounds I (6), **Chapter 3 (10)**, **Chapter 4 (9)**, **Proving Grounds II (8 fights + boss Final Exam)**; three layouts each | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts` |
-| Build/code/battle/improve loop; "never a blank file" persistence; regression re-test of earlier enemies of the chapter on every run; stars; 2-step hint ladder (idea, code skeleton) shown in one hint panel; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
+| Build/code/battle/improve loop; "never a blank file" persistence; regression re-test of earlier enemies of the chapter on every run; stars; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
 | **29 challenges**: 3 Line Up, 7 Predict, 9 Glitch, 5 Workshop (paint brush), 5 Constraint (line limits, `without`, no repeated number) | `content/challenges.ts`, `challenges.ts` |
 | **Training Grounds** (from Chapter 2): endless seeded fights built from the frame of the latest chapter, plus a daily fight (seed from the date); every generated fight has a winning script and is tested for 60 seeds | `training.ts`, `RobotGame.trainingStep/runTraining` |
 | Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`, `variations.test.ts`) (every enemy is won by its solution, regression-safe, and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot.spec.ts` (zones, loop, builder, line-up, Chapter 3, Chapter 4 to the certificate, Training Grounds, stepping view on phone and desktop, call stack, variation queue and summary) | |
@@ -44,9 +44,9 @@ code again after a lost fight = Improve):
 
 | Zone | Contains | Sticky action |
 | --- | --- | --- |
-| **Task** (`zone-task`) | enemy pictures and the catch | Hint, "On to the script" |
+| **Task** (`zone-task`) | enemy pictures and the catch | "On to the script" |
 | **Robot** (`zone-robot`) | the robot picture with tappable sockets + inspector, drawer *All parts* (chassis / drive / gear lists) | "On to the script" |
-| **Code** (`zone-code`) | the editor, or the highlighted line-by-line listing during a fight (button *Edit script* / *Show the run*), the error box; drawers *Commands* (API of the equipped parts) and *Versions* | **Start fight** (`robot-run`), Hint |
+| **Code** (`zone-code`) | the editor, or the highlighted line-by-line listing during a fight (button *Edit script* / *Show the run*), the error box; drawers *Commands* (API of the equipped parts) and *Versions* | **Start fight** (`robot-run`) |
 | **Fight** (`zone-fight`) | result banner (+ stars, *Next* or *Improve script*), queue bar (progress, state, Skip / Next fight), arena, tick counter, "what happens now"; drawers *Fights* (picker, auto-advance, summary with won/lost rows) and *More* (speed, scrub slider, variables, call stack, sensors, log) | Play + line / tick stepping (viewer controls) |
 
 * **Desktop (>= 960 px)**: Task over Robot on the left, Code in the middle, Fight on the right; the page never scrolls, only a zone body
@@ -57,7 +57,7 @@ code again after a lost fight = Improve):
   the opener. The robot screen re-renders only the Robot zone and the commands drawer on a build change (the fight is kept).
 * The queue renders into the zones through a `Mount` (arena, controls, more, listing); the viewer (`robot-viewer.ts`) returns those
   parts separately (`el` = arena + narration, `controls`, `more`, `listing`).
-* **Hints**: both *Hint* buttons (Task and Code zone) open the same **hint panel** (`rb-hint-panel`, floats above the work screen, `role=region`, heading focused, newest hint outlined, closes with the button, Esc or the zone buttons). Hint 1 = the idea (`idea`), hint 2 = the code skeleton; the catch is only on the task card. The first hint costs a star. At the end the button reads "Hinweise ansehen" (toggles the panel) and the panel's "Noch ein Hinweis" button becomes the disabled "Alle Hinweise gezeigt". Old saves: `cards` is ignored, 3 hints become 2. Challenges have no hints.
+* **No hints.** There are no hint buttons, panels or hint data: the player works from the task card (the catch) alone.
 * Challenges (line-up, predict, glitch, workshop, constraint) use one full-height zone: content scrolls, the check button and
   "to the tasks" stay at the bottom; the commands are a closed `<details>`.
 * Task map: only playable tasks are listed; finished tasks and locked tasks fold into "N done" / "N still locked".
@@ -125,7 +125,7 @@ build ─▶ createEnv (parts.ts): globals + objects (host functions)       tick
   usable again `N` ticks later; a shield raised on tick t blocks on tick t+1.
 * **Engine** – `World.step(intents)`: turns/shields, then moves (conflicts fail), then all attacks at once, damage applied
   together; win = all enemies down and the player standing; time out (200 ticks, or `maxTicks`) = loss.
-* **Progress** – `RobotGame` (`game.ts`) stores `{build, script, history, solved, stars, hints, misses, runs, wins}` under
+* **Progress** – `RobotGame` (`game.ts`) stores `{build, script, history, solved, stars, misses, runs, wins}` under
   `pydra.v1.robot` (`GAME_DATA_KEYS`), parsed defensively. `stats()` feeds Home and the points context; a first win calls
   `onPoints({type:'level', game:'robot', id, clean})`. Parts unlock by chapter (`UNLOCK_CHAPTER` in `build.ts`, level =
   chapter of the first unsolved main battle).
@@ -137,8 +137,7 @@ An enemy is a plain object (`content/types.ts` → `EnemyData`) appended to `ENE
 
 ```ts
 {
-  id: 'peekaboo', title: T('Guck-guck', 'Peekaboo'), catchLine: T('…', '…'), idea: T('…', '…'), // catchLine = the task card; hint 1 = idea (must add something the catch does not say), hint 2 = skeleton
-  skeleton: 'if see() == "enemy":\n    ???',        // hint 2
+  id: 'peekaboo', title: T('Guck-guck', 'Peekaboo'), catchLine: T('…', '…'), // catchLine = the task card
   enemies: [{ hp: 2, armor: 0, face: 'W', gear: ['blaster','eyes'], script: 'fire()', regen: { every: 2, amount: 1 } }],   // 'D' = enemies[0], '1'-'9' = n-th
   maps: [mk(8, 8, ['^', 3, 7], ['D', 3, 4]), …],     // 1-3 ASCII layouts (. # ~ rubble o pit, ^ > v < player, D/1-9 enemies)
   maxTicks: 30,                                       // optional, loses at this tick
@@ -193,8 +192,7 @@ in the fight view (`robot.narr.start`): a **Schritt** (step) is one line of the 
 
 ## Dead-controls smoke test
 
-`e2e/robot-controls.spec.ts` visits the task map, the work screen in every zone (phone: tab by tab) with the hint panel,
-after a lost and a won fight, the drawers (parts, commands, versions, fights, details), challenges and the Training. It
+`e2e/robot-controls.spec.ts` visits the task map, the work screen in every zone (phone: tab by tab) after a lost and a won fight, the drawers (parts, commands, versions, fights, details), challenges and the Training. It
 presses every visible, enabled, uncovered button and summary and requires that the DOM, the route, a text field or the
 saved game changes; otherwise the control must be disabled. Found and fixed: the replay buttons "Zeile zurück", "Eine
 Runde zurück", "Von vorn" at the start and "Zum Ende" / forward at the end did nothing, now disabled.

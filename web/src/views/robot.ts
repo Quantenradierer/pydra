@@ -11,7 +11,7 @@ import type { EnemyReport, FightReport } from '../robot/fight.ts';
 import { evaluateQueue, playItem, type LossReason, type QueueItem } from '../robot/variations.ts';
 import { createViewer, type Speed, type Viewer } from './robot-viewer.ts';
 import { friendlyError } from '../robot/friendly.ts';
-import { MAX_HINTS, type RunReport, type Step } from '../robot/game.ts';
+import { type RunReport, type Step } from '../robot/game.ts';
 import { precheck as precheckFn, type BattleResult } from '../robot/battle.ts';
 import type { RbError } from '../robot/py/errors.ts';
 import { subpageHeader } from './header.ts';
@@ -453,14 +453,12 @@ export function robotScreen(app: App): Screen {
     run: () => RunReport | undefined;
     next: () => { label: string; go: () => void } | undefined;
     back: () => void;
-    /** Training fights are not stored: their hints live only on the screen. */
+    /** Training fights are not stored. */
     training?: boolean;
   }
 
   function showBattle(step: Step, opts: BattleOpts = taskOpts(step)) {
     const enemy = step.enemy!;
-    let localHint = 0;
-    const hintCount = () => (opts.training ? localHint : game.hint(step.id));
     const work = createWork(t, stepHeader(step, opts.back));
     const Z = work.zones;
     let ran = false;
@@ -469,59 +467,10 @@ export function robotScreen(app: App): Screen {
     const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { class: cls, 'data-testid': id, onclick }, label);
     const goCode = () => (work.show('code', true), area.focus());
 
-    // ---- Hints: one panel above the work screen, whichever zone the button was pressed in
-    const hintBtns: HTMLButtonElement[] = [];
-    let hintOpener: HTMLElement | undefined;
-    const hintTitle = h('h3', { id: 'rb-hint-title', tabindex: -1, 'data-testid': 'robot-hint-title' });
-    const hintList = h('div', { class: 'rb-hint-list', 'aria-live': 'polite' });
-    const hintMore = btn('', 'robot-hint-next', () => askHint(hintMore));
-    const hintClose = btn(t('work.close'), 'robot-hint-close', () => closeHints());
-    const hintPanel = h('aside', { class: 'rb-hint-panel', id: 'rb-hint-panel', role: 'region', 'aria-labelledby': 'rb-hint-title', hidden: true, 'data-testid': 'robot-hints' }, h('header', {}, hintTitle, hintClose), hintList, h('footer', {}, hintMore));
-    hintPanel.addEventListener('keydown', (e) => (e as KeyboardEvent).key === 'Escape' && (e.stopPropagation(), closeHints()));
-    const hintBody = (n: number): Node => (n === 1 ? h('p', {}, t('robot.hint.1', { text: enemy.idea[lang] })) : h('div', {}, h('p', {}, t('robot.hint.2')), h('pre', {}, h('code', {}, enemy.skeleton))));
-    function renderHints(reveal = false) {
-      const shown = hintCount();
-      hintTitle.textContent = shown > 0 ? t('robot.hint.title', { n: shown, max: MAX_HINTS }) : t('robot.hint');
-      hintList.replaceChildren(...Array.from({ length: shown }, (_, i) => h('section', { class: i === shown - 1 && reveal ? 'rb-hint new' : 'rb-hint', 'data-testid': `robot-hint-${i + 1}` }, hintBody(i + 1))));
-      const all = shown >= MAX_HINTS;
-      hintMore.textContent = t(all ? 'robot.hint.done' : shown > 0 ? 'robot.hint.next' : 'robot.hint');
-      hintMore.disabled = all;
-      hintMore.setAttribute('aria-disabled', String(all));
-      const label = all ? t('robot.hint.view') : shown > 0 ? t('work.hint.count', { n: shown, max: MAX_HINTS }) : t('robot.hint');
-      for (const b of hintBtns) {
-        b.textContent = label;
-        b.setAttribute('aria-expanded', String(!hintPanel.hidden));
-      }
-    }
-    function openHints() {
-      hintPanel.hidden = false;
-      renderHints(true);
-      hintTitle.focus({ preventScroll: true });
-      hintList.lastElementChild?.scrollIntoView?.({ block: 'nearest' });
-    }
-    function closeHints() {
-      hintPanel.hidden = true;
-      renderHints();
-      hintOpener?.focus({ preventScroll: true });
-    }
-    /** Reveals the next hint (a star is spent on the first) and shows it right away; with none left the button just toggles the panel. */
-    function askHint(from?: HTMLElement) {
-      hintOpener = from && hintBtns.includes(from as HTMLButtonElement) ? from : hintOpener;
-      if (hintCount() >= MAX_HINTS) return hintPanel.hidden ? openHints() : closeHints();
-      if (opts.training) localHint += 1;
-      else game.nextHint(step.id);
-      openHints();
-    }
-    const hintButton = (id: string) => {
-      const b = btn(t('robot.hint'), id, () => askHint(b)) as HTMLButtonElement;
-      b.setAttribute('aria-controls', 'rb-hint-panel');
-      hintBtns.push(b);
-      return b;
-    };
     Z.task.body.append(
       h('div', { class: 'robot-card robot-catch' }, h('div', { class: 'robot-foes', 'data-testid': 'robot-foes' }, ...enemy.enemies.map((def) => iconEl(specOf(enemyBuild(def)), 56, { enemy: true, label: () => t('robot.enemy') }))), h('div', {}, h('h3', {}, t('robot.catch')), h('p', { 'data-testid': 'robot-catch' }, enemy.catchLine[lang]))),
     );
-    Z.task.actions.append(hintButton('robot-hint'), btn(t('work.toCode'), 'robot-to-code', goCode, 'robot-run rb-only-tabs'));
+    Z.task.actions.append(btn(t('work.toCode'), 'robot-to-code', goCode, 'robot-run rb-only-tabs'));
 
     // ---- Robot: the picture with tappable sockets, and the full parts list in a drawer
     const partsBtn = btn(t('work.parts'), 'robot-build-open');
@@ -557,7 +506,7 @@ export function robotScreen(app: App): Screen {
       viewBtn.textContent = t(edit ? 'work.follow' : 'work.edit');
       if (edit) area.focus();
     }
-    Z.code.actions.append(btn(t('robot.run'), 'robot-run', () => (game.setScript(area.value), fight()), 'robot-run'), viewBtn, hintButton('robot-hint-code'));
+    Z.code.actions.append(btn(t('robot.run'), 'robot-run', () => (game.setScript(area.value), fight()), 'robot-run'), viewBtn);
 
     // ---- Fight: result, queue bar, arena; controls at the bottom; details in drawers
     const result = h('div', { class: 'robot-result', 'data-testid': 'robot-result' }, h('p', { 'data-testid': 'robot-outcome', 'aria-live': 'polite' }, t('robot.outcome.idle')));
@@ -654,9 +603,7 @@ export function robotScreen(app: App): Screen {
     });
     work.phase('build');
     showWork(work.el);
-    work.el.append(hintPanel);
     work.show(game.progress().solved.includes(step.id) ? 'code' : 'task');
-    renderHints();
     renderHistory();
   }
 
@@ -776,7 +723,7 @@ export function robotScreen(app: App): Screen {
         break;
       }
       case 'workshop': {
-        const area = editor(c.skeleton, () => {}, 'robot-workshop-code');
+        const area = editor('', () => {}, 'robot-workshop-code');
         challengeShell(
           step,
           [prompt, h('p', { class: 'robot-note' }, t('robot.workshop.note')), apiFold({ ...START_BUILD }), area],

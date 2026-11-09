@@ -40,10 +40,6 @@ export interface EnemyData {
   title: Text;
   /** The pre-battle card: the catch in one sentence. */
   catchLine: Text;
-  /** Hint 1: the concept that helps. It must say something the catch does not (the catch is on screen already). */
-  idea: Text;
-  /** Hint 2: a partial code skeleton (language-neutral). */
-  skeleton: string;
   enemies: EnemyDef[];
   /** One ASCII map per layout (1-3); layout i uses seed SEEDS[i]. */
   maps: string[][];

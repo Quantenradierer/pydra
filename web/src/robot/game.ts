@@ -1,6 +1,6 @@
 /**
  * Robot Battler's progress on top of storage: the one robot (build and
- * script), the version history, which steps are solved, stars and hints.
+ * script), the version history, which steps are solved and stars.
  * Every change is saved straight away. A step is an enemy (a battle) or one of
  * the challenges that sit between the enemies.
  */
@@ -57,8 +57,6 @@ export interface RobotProgress {
   solved: string[];
   /** Best stars (1-3) by enemy id. */
   stars: Record<string, number>;
-  /** Hints shown so far (0-MAX_HINTS) by enemy id. */
-  hints: Record<string, number>;
   /** Failed runs by step id, until it is solved. */
   misses: Record<string, number>;
   /** All runs and the ones that won: the "% right" on Home. */
@@ -69,12 +67,9 @@ export interface RobotProgress {
   current?: string;
 }
 
-export const emptyProgress = (): RobotProgress => ({ build: { ...START_BUILD, gear: [...START_BUILD.gear] }, script: STARTER_SCRIPT, history: [], solved: [], stars: {}, hints: {}, misses: {}, runs: 0, wins: 0, training: { wins: 0, seed: 1, daily: '' } });
+export const emptyProgress = (): RobotProgress => ({ build: { ...START_BUILD, gear: [...START_BUILD.gear] }, script: STARTER_SCRIPT, history: [], solved: [], stars: {}, misses: {}, runs: 0, wins: 0, training: { wins: 0, seed: 1, daily: '' } });
 
 const isCount = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 0;
-/** The hint ladder: 1 = the idea that helps, 2 = a code skeleton. */
-export const MAX_HINTS = 2;
-
 const record = (v: unknown, max: number, ids: Set<string>): Record<string, number> => {
   if (typeof v !== 'object' || v === null) return {};
   return Object.fromEntries(Object.entries(v).filter(([k, n]) => ids.has(k) && isCount(n) && n <= max)) as Record<string, number>;
@@ -95,8 +90,6 @@ export function parseProgress(raw: unknown, steps: readonly Step[]): RobotProgre
   }
   if (Array.isArray(r.solved)) out.solved = [...new Set(r.solved.filter((id): id is string => ids.has(id as string)))];
   out.stars = record(r.stars, 3, ids);
-  // Old saves stored up to 3 hints (the ladder has 2 steps now): keep the star penalty, clamp the count.
-  out.hints = Object.fromEntries(Object.entries(record(r.hints, 3, ids)).map(([k, n]) => [k, Math.min(MAX_HINTS, n)]));
   out.misses = record(r.misses, 1000, ids);
   if (isCount(r.runs)) out.runs = r.runs;
   if (isCount(r.wins) && r.wins <= out.runs) out.wins = r.wins;
@@ -207,18 +200,6 @@ export class RobotGame {
     return (table[id] ?? 99) <= this.level() && (kind !== 'gear' || ((STAR_GATE as Record<string, number>)[id] ?? 0) <= this.stats().stars);
   }
 
-  hint(id: string): number {
-    return this.progress().hints[id] ?? 0;
-  }
-
-  /** Shows the next hint (at most MAX_HINTS) and remembers that hints were used. */
-  nextHint(id: string): number {
-    const p = this.progress();
-    const n = Math.min(MAX_HINTS, (p.hints[id] ?? 0) + 1);
-    this.save({ ...p, hints: { ...p.hints, [id]: n } });
-    return n;
-  }
-
   history(): HistoryEntry[] {
     return this.progress().history;
   }
@@ -272,8 +253,7 @@ export class RobotGame {
     const won = report.won && broken.length === 0;
     const already = p.solved.includes(id);
     const firstWin = won && !already;
-    const hints = p.hints[id] ?? 0;
-    const stars = won ? Math.max(1, 1 + (report.lines <= enemy.par ? 1 : 0) + (report.damage === 0 ? 1 : 0) - (hints > 0 ? 1 : 0)) : 0;
+    const stars = won ? Math.max(1, 1 + (report.lines <= enemy.par ? 1 : 0) + (report.damage === 0 ? 1 : 0)) : 0;
     const clean = (p.misses[id] ?? 0) === 0;
     p = {
       ...p,
@@ -322,8 +302,7 @@ export class RobotGame {
     const error = precheck(p.build, p.script);
     if (error) return { step, error, broken: [], won: false, firstWin: false, stars: 0 };
     const report = fightEnemy(step.enemy, [], p.build, p.script);
-    const hints = p.hints[step.id] ?? 0;
-    const stars = report.won ? Math.max(1, 1 + (report.lines <= step.enemy.par ? 1 : 0) + (report.damage === 0 ? 1 : 0) - (hints > 0 ? 1 : 0)) : 0;
+    const stars = report.won ? Math.max(1, 1 + (report.lines <= step.enemy.par ? 1 : 0) + (report.damage === 0 ? 1 : 0)) : 0;
     if (report.won) {
       const daily = step.id.startsWith('training-daily-') ? step.id.slice('training-daily-'.length) : p.training.daily;
       this.save({ ...p, training: { ...p.training, wins: p.training.wins + 1, daily } });

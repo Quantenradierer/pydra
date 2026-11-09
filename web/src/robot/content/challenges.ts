@@ -42,7 +42,6 @@ export interface Workshop extends Base {
   map: string[];
   /** Tiles to paint, "x,y". Exactly these. */
   target: string[];
-  skeleton: string;
   solution: string;
 }
 
@@ -158,7 +157,6 @@ export const CHALLENGES: readonly Challenge[] = [
     prompt: T('Male mit dem Pinsel ein Quadrat aus 3 × 3 Feldern (nur der Rand). Der Roboter startet unten links bei (1, 6). brush.down() setzt den Pinsel auf.', 'Draw a square of 3 × 3 tiles (just the outline) with the brush. The robot starts at the bottom left, (1, 6). brush.down() puts the brush down.'),
     map: far(['^', 1, 6]),
     target: square(1, 4, 2),
-    skeleton: 'brush.down()\nforward()\nforward()\nturn_right()\n???',
     solution: 'brush.down()\nforward()\nforward()\nturn_right()\nforward()\nforward()\nturn_right()\nforward()\nforward()\nturn_right()\nforward()\nforward()',
   },
   {
@@ -169,7 +167,6 @@ export const CHALLENGES: readonly Challenge[] = [
     prompt: T('Male jedes zweite Feld in der Spalte nach oben: (3, 7), (3, 5), (3, 3). Mit brush.up() hebst du den Pinsel an.', 'Paint every second tile up the column: (3, 7), (3, 5), (3, 3). brush.up() lifts the brush.'),
     map: far(['^', 3, 7]),
     target: ['3,7', '3,5', '3,3'],
-    skeleton: 'brush.down()\nbrush.up()\nforward()\n???',
     solution: 'brush.down()\nbrush.up()\nforward()\nforward()\nbrush.down()\nbrush.up()\nforward()\nforward()\nbrush.down()',
   },
   {
@@ -264,7 +261,6 @@ export const CHALLENGES: readonly Challenge[] = [
     prompt: T('Male mit dem Pinsel drei Treppenstufen: hoch, rechts, hoch, rechts … Der Roboter startet bei (1, 6) und schaut nach oben.', 'Draw three steps with the brush: up, right, up, right … The robot starts at (1, 6) looking up.'),
     map: far(['^', 1, 6]),
     target: ['1,6', '1,5', '2,5', '2,4', '3,4', '3,3', '4,3'],
-    skeleton: 'brush.down()\nfor i in range(3):\n    forward()\n    turn_right()\n    ???\n    turn_left()',
     solution: 'brush.down()\nfor i in range(3):\n    forward()\n    turn_right()\n    forward()\n    turn_left()',
   },
   {
@@ -275,7 +271,6 @@ export const CHALLENGES: readonly Challenge[] = [
     prompt: T('Male eine Spirale: erst 1 Feld, dann 2, 3, 4, nach jedem Stück rechts abbiegen. Start bei (3, 4), Blick nach oben.', 'Draw a spiral: 1 tile, then 2, 3, 4, turning right after each piece. Start at (3, 4) looking up.'),
     map: far(['^', 3, 4]),
     target: ['3,4', '3,3', '4,3', '5,3', '5,4', '5,5', '5,6', '4,6', '3,6', '2,6', '1,6'],
-    skeleton: 'brush.down()\nfor i in range(1, 5):\n    forward(???)\n    turn_right()',
     solution: 'brush.down()\nfor i in range(1, 5):\n    forward(i)\n    turn_right()',
   },
   {
@@ -337,7 +332,6 @@ export const CHALLENGES: readonly Challenge[] = [
     prompt: T('Male Streifen die Spalte hoch: Pinsel runter, wenn i % 3 == 0 ist, sonst hoch. Start (3, 7), Blick nach oben.', 'Paint stripes up the column: brush down when i % 3 == 0, otherwise up. Start at (3, 7), looking up.'),
     map: far(['^', 3, 7]),
     target: ['3,7', '3,6', '3,4', '3,3', '3,1', '3,0'],
-    skeleton: 'for i in range(7):\n    if i % 3 == 0:\n        ???\n    else:\n        brush.up()\n    forward()',
     solution: 'for i in range(7):\n    if i % 3 == 0:\n        brush.down()\n    else:\n        brush.up()\n    forward()',
   },
   // ---- Chapter 4

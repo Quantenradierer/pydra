@@ -509,3 +509,46 @@
 .robot-chapter-name {
   font-size: 1rem;
 }
+.rb-zone .robot-result .rb-stars {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+@media (min-width: 960px) {
+  .rb-zone .robot-result p {
+    -webkit-line-clamp: 4;
+  }
+}
+
+/* Challenges: one zone that fills the viewport. */
+.rb-chal {
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto;
+}
+.rb-chal .rb-single {
+  display: flex;
+  flex: 1;
+  height: auto;
+}
+.rb-chal .robot-card {
+  margin: 0;
+}
+.rb-chal .robot-api-fold {
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0 0.7rem;
+}
+.rb-chal .robot-api-fold summary {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.rb-chal .robot-api-fold dl {
+  margin: 0 0 0.5rem;
+}
+.rb-chal textarea.robot-code {
+  flex: none;
+  min-height: 9rem;
+}

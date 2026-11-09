@@ -460,14 +460,14 @@ export function robotScreen(app: App): Screen {
 
   // ---------------------------------------------------------------- a battle step
 
-  function outcomeFor(run: RunReport, report: EnemyReport, enemyStep: Step): { text: string; ok: boolean; extra: Node[] } {
+  function outcomeFor(run: RunReport, report: EnemyReport, enemyStep: Step): { text: string; ok: boolean; extra: Node[]; rule?: Node } {
     const enemy = enemyStep.enemy!;
     const n = report.fights.length;
     const lost = report.fights.filter((f) => !f.won).length;
     const extra: Node[] = [];
     if (run.won) {
-      extra.push(h('p', { 'data-testid': 'robot-stars' }, `${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)} ${t('robot.stars', { n: run.stars })}`), h('p', { class: 'robot-note' }, t('robot.stars.rule', { par: enemy.par })));
-      return { text: t(run.firstWin ? 'robot.outcome.firstWin' : 'robot.outcome.win', { n }), ok: true, extra };
+      extra.push(h('p', { 'data-testid': 'robot-stars', class: 'rb-stars' }, `${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)} ${t('robot.stars', { n: run.stars })}`));
+      return { text: t(run.firstWin ? 'robot.outcome.firstWin' : 'robot.outcome.win', { n }), ok: true, extra, rule: h('p', { class: 'robot-note' }, t('robot.stars.rule', { par: enemy.par })) };
     }
     if (run.broken.length > 0) {
       const names = run.broken.map((id) => titleOf(game.step(id)!)).join(', ');
@@ -628,7 +628,7 @@ export function robotScreen(app: App): Screen {
         return;
       }
       const report = run.report!;
-      const { text, ok, extra } = outcomeFor(run, report, step);
+      const { text, ok, extra, rule } = outcomeFor(run, report, step);
       stop();
       ran = true;
       lost = !ok;
@@ -656,7 +656,7 @@ export function robotScreen(app: App): Screen {
         ].filter((n): n is HTMLElement => n !== null),
       );
       queueHolder.replaceChildren(queue.bar);
-      fightsDrawer.set(...[regression, queue.panel].filter((n): n is HTMLElement => n !== null));
+      fightsDrawer.set(...[rule ?? null, regression, queue.panel].filter((n): n is HTMLElement => n !== null));
       fightsBtn.hidden = moreBtn.hidden = false;
       viewBtn.hidden = false;
       showEditor(false);
@@ -733,11 +733,23 @@ export function robotScreen(app: App): Screen {
     return h('p', { class: ok ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-feedback', role: 'status' }, t(ok ? 'robot.right' : 'robot.wrong'));
   }
 
+  /** A challenge fills the viewport like the work screen: content scrolls, the check button and the way back stay at the bottom. */
+  function challengeShell(step: Step, content: (Node | null)[], check: HTMLElement, out: HTMLElement) {
+    const back = h('button', { class: 'run-control', 'data-testid': 'robot-to-map', onclick: showMap }, t('robot.toMap'));
+    const body = h('div', { class: 'rb-zone-body' }, ...content, out);
+    const actions = h('div', { class: 'rb-zone-actions' }, check, back);
+    check.addEventListener('click', () => setTimeout(() => out.scrollIntoView?.({ block: 'nearest' }), 0));
+    showWork(h('div', { class: 'rb-work rb-chal', 'data-testid': 'robot-challenge' }, h('div', { class: 'rb-top' }, stepHeader(step)), h('section', { class: 'rb-zone rb-single' }, body, actions)));
+  }
+
+  /** The commands of the build, folded away. */
+  const apiFold = (build: Build) => h('details', { class: 'robot-api-fold' }, h('summary', {}, t('robot.api')), apiList(build));
+
   function showChallenge(step: Step) {
     const c: Challenge = step.challenge!;
     const out = h('div', { 'data-testid': 'robot-result' });
-    const back = h('button', { class: 'run-control', 'data-testid': 'robot-to-map', onclick: showMap }, t('robot.toMap'));
-    const head = [stepHeader(step), h('p', { class: 'robot-card', 'data-testid': 'robot-prompt' }, c.prompt[lang])];
+    const prompt = h('p', { class: 'robot-card', 'data-testid': 'robot-prompt' }, c.prompt[lang]);
+    const checkBtn = (label: string, onclick: () => void) => h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick }, label);
     switch (c.kind) {
       case 'lineup': {
         let order = shuffledLines(c);
@@ -755,44 +767,51 @@ export function robotScreen(app: App): Screen {
             ),
           );
         draw();
-        show(...head, list, h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick: () => out.replaceChildren(feedback(checkLineUp(c, order), step)) }, t('robot.lineup.check')), out, back);
+        challengeShell(step, [prompt, list], checkBtn(t('robot.lineup.check'), () => out.replaceChildren(feedback(checkLineUp(c, order), step))), out);
         break;
       }
       case 'predict': {
         const input = h('input', { type: 'text', class: 'robot-answer', 'aria-label': t('robot.predict.answer'), autocomplete: 'off', 'data-testid': 'robot-answer' }) as HTMLInputElement;
         let misses = 0;
-        show(
-          ...head,
-          h('h3', {}, t('robot.predict.script')),
-          h('pre', { class: 'robot-listing-static' }, h('code', {}, c.script)),
-          input,
-          h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick: () => {
+        challengeShell(
+          step,
+          [prompt, h('h3', {}, t('robot.predict.script')), h('pre', { class: 'robot-listing-static' }, h('code', {}, c.script)), input],
+          checkBtn(t('robot.lineup.check'), () => {
             const ok = checkPredict(c, input.value);
             misses += ok ? 0 : 1;
             out.replaceChildren(feedback(ok, step), ...(misses >= 2 ? [h('p', { 'data-testid': 'robot-was' }, t('robot.predict.was', { answer: predictAnswer(c) }))] : []));
-          } }, t('robot.lineup.check')),
+          }),
           out,
-          back,
         );
         break;
       }
       case 'glitch': {
         const bugged = injectGlitch(c, game.script());
         const area = editor(bugged, () => {}, 'robot-glitch-code');
-        show(...head, h('p', { class: 'robot-note' }, t('robot.glitch.note')), area, h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick: () => out.replaceChildren(...glitchResult(c, area.value, step)) }, t('robot.glitch.fix')), out, back);
+        challengeShell(step, [prompt, h('p', { class: 'robot-note' }, t('robot.glitch.note')), area], checkBtn(t('robot.glitch.fix'), () => out.replaceChildren(...glitchResult(c, area.value, step))), out);
         break;
       }
       case 'workshop': {
         const area = editor(c.skeleton, () => {}, 'robot-workshop-code');
-        show(...head, h('p', { class: 'robot-note' }, t('robot.workshop.note')), apiList({ ...START_BUILD }), area, h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick: () => {
-          const r = checkWorkshop(c, area.value);
-          out.replaceChildren(r.error ? h('p', { class: 'robot-loss', role: 'alert' }, r.error) : feedback(r.ok, step), workshopPicture(c.target, t('robot.workshop.target')), workshopPicture(r.trail, t('robot.workshop.yours')));
-        } }, t('robot.workshop.run')), out, back);
+        challengeShell(
+          step,
+          [prompt, h('p', { class: 'robot-note' }, t('robot.workshop.note')), apiFold({ ...START_BUILD }), area],
+          checkBtn(t('robot.workshop.run'), () => {
+            const r = checkWorkshop(c, area.value);
+            out.replaceChildren(r.error ? h('p', { class: 'robot-loss', role: 'alert' }, r.error) : feedback(r.ok, step), workshopPicture(c.target, t('robot.workshop.target')), workshopPicture(r.trail, t('robot.workshop.yours')));
+          }),
+          out,
+        );
         break;
       }
       case 'constraint': {
         const area = editor(game.script(), (text) => game.setScript(text), 'robot-constraint-code');
-        show(...head, h('p', { class: 'robot-note' }, [c.maxLines !== undefined ? t('robot.constraint.rule', { n: c.maxLines }) : '', c.rule ? c.rule[lang] : ''].filter(Boolean).join(' ')), apiList(game.build()), area, h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick: () => out.replaceChildren(...constraintResult(c, area.value, step)) }, t('robot.run')), out, back);
+        challengeShell(
+          step,
+          [prompt, h('p', { class: 'robot-note' }, [c.maxLines !== undefined ? t('robot.constraint.rule', { n: c.maxLines }) : '', c.rule ? c.rule[lang] : ''].filter(Boolean).join(' ')), apiFold(game.build()), area],
+          checkBtn(t('robot.lineup.check'), () => out.replaceChildren(...constraintResult(c, area.value, step))),
+          out,
+        );
         break;
       }
     }

@@ -71,6 +71,7 @@ test('a challenge: Line Up, and English texts', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 2 }).first()).toHaveText('Chapter 0: Commands in a row');
   await page.getByTestId('robot-step-lu-first-shot').click();
   await expect(page.getByTestId('robot-lineup')).toBeVisible();
+  expect(await pageScrolls(page)).toBe(false);
   // Wrong order first.
   await page.getByTestId('robot-check').click();
   await expect(page.getByTestId('robot-feedback')).toHaveText('Not quite yet. Try again.');

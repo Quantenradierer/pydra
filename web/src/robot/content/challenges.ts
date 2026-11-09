@@ -27,7 +27,6 @@ export interface Constraint extends Base {
   maxLines?: number;
   /** Further rules (`without`, `noRepeatedNumber`, ...) and how they read to the player. */
   needs?: Needs;
-  rule?: Text;
   solution: string;
   /** A script that wins the enemy but breaks the rule (the tests check that it is refused). */
   violation?: string;
@@ -114,7 +113,6 @@ export const CHALLENGES: readonly Challenge[] = [
     after: 'twin-armor',
     title: T('Sonderregel: Keine Zahl zweimal', 'Special rule: No number twice'),
     prompt: T('Schlage die Doppelpanzer noch einmal, aber keine Zahl darf zweimal im Code stehen.', 'Beat Twin Armor again, but no number may be written twice in the code.'),
-    rule: T('Regel: Keine Zahl steht zweimal im Code. Gib ihr einen Namen.', 'Rule: no number is written twice in the code. Give it a name.'),
     enemy: 'twin-armor',
     needs: { noRepeatedNumber: true },
     solution: 'say("Hi")\nforward(4)\nforward(distance() - 1)\nfire()\nfire()\nfire()\nfire()\nfire()\nfire()\nturn_right()\nfire()\nfire()\nfire()\nfire()\nfire()\nfire()',
@@ -179,7 +177,6 @@ export const CHALLENGES: readonly Challenge[] = [
     after: 'maze-runner',
     title: T('Sonderregel: Labyrinth ohne for', 'Special rule: Maze without for'),
     prompt: T('Schlage den Labyrinthläufer noch einmal, ohne ein einziges for und mit höchstens 8 Zeilen.', 'Beat the Maze Runner again without a single for, in at most 8 lines.'),
-    rule: T('Regel: kein for im Code.', 'Rule: no for in the code.'),
     enemy: 'maze-runner',
     maxLines: 8,
     needs: { without: ['for'] },

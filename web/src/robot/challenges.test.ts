@@ -3,6 +3,17 @@ import { START_BUILD } from './build.ts';
 import { CHALLENGES, checkConstraint, checkGlitch, injectGlitch } from './challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import { DEFAULT_BUILD } from './fight.ts';
+import { fightOf } from './game.ts';
+
+describe('challenge task text', () => {
+  it('says the rule once: the task sentence is the prompt, nothing repeats it', () => {
+    for (const c of CHALLENGES) {
+      const catchLine = fightOf(c, ENEMIES).catchLine;
+      expect(catchLine.de, c.id).toBe(c.prompt.de);
+      expect(catchLine.en, c.id).toBe(c.prompt.en);
+    }
+  });
+});
 
 describe('challenges', () => {
   it('have unique ids and sit after an existing enemy', () => {

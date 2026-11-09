@@ -38,7 +38,7 @@ export interface Step {
 export function fightOf(c: Challenge, enemies: readonly EnemyData[]): EnemyData {
   const base = enemies.find((e) => e.id === c.enemy)!;
   const rule = c.kind === 'constraint' ? { ...base.needs, ...(c.maxLines !== undefined ? { maxLines: c.maxLines } : {}), ...c.needs } : base.needs;
-  const catchLine = c.kind === 'constraint' && c.rule ? { de: `${c.prompt.de} ${c.rule.de}`, en: `${c.prompt.en} ${c.rule.en}` } : c.prompt;
+  const catchLine = c.prompt;
   return { ...base, id: c.id, title: c.title, catchLine, regression: false, ...(rule ? { needs: rule } : {}), ...(c.kind === 'constraint' ? { solution: c.solution } : {}) };
 }
 

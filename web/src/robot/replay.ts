@@ -1,11 +1,26 @@
 import type { BattleResult, Frame } from './battle.ts';
 import type { Pos, Tile } from './engine.ts';
 import type { MessageKey, Params } from '../i18n.ts';
+import { muzzleOf, specOf } from './art/compose.ts';
+import { turnedPoint } from './art/sockets.ts';
 
 export const CELL = 40;
 
 const COLORS: Record<Tile, string> = { floor: '#22324a', wall: '#6f7f95', rubble: '#8a6d3b', pit: '#070b11' };
 const FACING_ANGLE = { N: -Math.PI / 2, E: 0, S: Math.PI / 2, W: Math.PI } as const;
+
+/** Where a shot leaves the robot: its weapon's muzzle (cannon for strong shots), turned with the robot. */
+function muzzleStart(battle: BattleResult, frame: Frame, by: string, from: Pos): { x: number; y: number } {
+  const c = center(from);
+  const build = battle.builds?.[by];
+  const robot = frame.robots.find((r) => r.id === by);
+  if (!build || !robot) return c;
+  const weapon = build.gear.includes('cannon') ? 'cannon' : 'blaster';
+  const m = muzzleOf(specOf(build), weapon);
+  if (!m) return c;
+  const p = turnedPoint(m, robot.facing);
+  return { x: c.x + ((p.x - 50) / 100) * CELL * 0.9, y: c.y + ((p.y - 50) / 100) * CELL * 0.9 };
+}
 
 const center = (p: Pos, cell = CELL) => ({ x: p.x * cell + cell / 2, y: p.y * cell + cell / 2 });
 
@@ -21,6 +36,8 @@ export interface DrawExtras {
   callouts?: readonly Callout[];
   /** Show the positions only: the shots and bubbles of this frame belong to the tick that has not resolved yet. */
   quiet?: boolean;
+  /** A canvas above the robot layer for bubbles and calls (without it they go on the board canvas). */
+  over?: HTMLCanvasElement;
 }
 
 const CALLOUT_COLORS = { action: '#4fc3f7', sensor: '#7bd88f', say: '#ffffff' } as const;
@@ -103,7 +120,7 @@ export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index
   // Shots and hits first, so robots draw on top.
   for (const e of frame.events) {
     if (e.type === 'shot') {
-      const a = center(e.from);
+      const a = muzzleStart(battle, frame, e.by, e.from);
       const b = center(e.to);
       ctx.strokeStyle = e.blocked ? '#9fb4cc' : '#ffd43b';
       ctx.lineWidth = 4;
@@ -120,62 +137,30 @@ export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index
       ctx.fill();
     }
   }
-  for (const r of frame.robots) {
-    const c = center(r.pos);
-    const dead = r.hp <= 0;
-    ctx.globalAlpha = dead ? 0.25 : 1;
-    ctx.fillStyle = r.id === 'player' ? '#4fc3f7' : '#ef6c6c';
-    if (r.id === 'player') {
-      ctx.beginPath();
-      ctx.arc(c.x, c.y, CELL * 0.34, 0, Math.PI * 2);
-      ctx.fill();
-    } else {
-      ctx.fillRect(c.x - CELL * 0.32, c.y - CELL * 0.32, CELL * 0.64, CELL * 0.64);
-    }
-    ctx.fillStyle = '#ffffff';
-    ctx.save();
-    ctx.translate(c.x, c.y);
-    ctx.rotate(FACING_ANGLE[r.facing]);
-    ctx.beginPath();
-    ctx.moveTo(CELL * 0.3, 0);
-    ctx.lineTo(CELL * 0.05, -CELL * 0.12);
-    ctx.lineTo(CELL * 0.05, CELL * 0.12);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-    if (r.shieldUp && !dead) {
-      ctx.strokeStyle = '#ffd43b';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(c.x, c.y, CELL * 0.45, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.lineWidth = 1;
-    }
-    // Hit points.
-    const w = CELL * 0.7;
-    ctx.fillStyle = '#0b121b';
-    ctx.fillRect(c.x - w / 2, r.pos.y * CELL + 2, w, 5);
-    ctx.fillStyle = r.hp / r.maxHp > 0.4 ? '#5fd37a' : '#ef6c6c';
-    ctx.fillRect(c.x - w / 2, r.pos.y * CELL + 2, w * (r.hp / r.maxHp), 5);
-    ctx.globalAlpha = 1;
+  // Speech bubbles and calls go on the canvas above the robots when there is one.
+  const top = extras.over;
+  if (top) {
+    top.width = canvas.width;
+    top.height = canvas.height;
   }
-  // Speech bubbles.
-  ctx.font = 'bold 12px sans-serif';
-  ctx.textBaseline = 'middle';
+  const ctx2 = (top ?? canvas).getContext('2d');
+  if (!ctx2) return;
+  ctx2.font = 'bold 12px sans-serif';
+  ctx2.textBaseline = 'middle';
   for (const b of frame.bubbles) {
     const r = frame.robots.find((x) => x.id === b.robot);
     if (!r) continue;
     const c = center(r.pos);
     const text = b.text.length > 18 ? `${b.text.slice(0, 17)}…` : b.text;
-    const w = ctx.measureText(text).width + 12;
+    const w = ctx2.measureText(text).width + 12;
     const x = Math.min(Math.max(c.x - w / 2, 2), canvas.width - w - 2);
     const y = Math.max(r.pos.y * CELL - 12, 2);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(x, y, w, 18);
-    ctx.fillStyle = '#14202e';
-    ctx.fillText(text, x + 6, y + 9);
+    ctx2.fillStyle = '#ffffff';
+    ctx2.fillRect(x, y, w, 18);
+    ctx2.fillStyle = '#14202e';
+    ctx2.fillText(text, x + 6, y + 9);
   }
-  drawOverlay(ctx, canvas, frame, extras);
+  drawOverlay(ctx2, canvas, frame, extras);
 }
 
 type T = (key: MessageKey, params?: Params) => string;

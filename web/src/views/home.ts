@@ -1,6 +1,7 @@
 import { GAME_ROUTES, type App, type GameRoute, type Screen } from '../app.ts';
 import { LESSONS, type LessonId } from '../content/lessons.ts';
 import { h, svg } from '../dom.ts';
+import { iconEl, specOf } from '../robot/art/compose.ts';
 import { logoArt } from '../hydra/view.ts';
 import { GEAR, SPEECH_BUBBLE } from '../icons.ts';
 import { levelInfo, titleKey } from '../points/levels.ts';
@@ -76,7 +77,7 @@ export function homeScreen(app: App): Screen {
           'aria-describedby': `stats-${route}`,
           onclick: () => app.navigate(route),
         },
-        h('span', { class: 'lesson-title' }, t(`lesson.${route}.title`)),
+        h('span', { class: 'lesson-title' }, route === 'robot' ? iconEl(specOf(app.services.robot.build()), 40, { label: () => t('robot.you') }) : null, t(`lesson.${route}.title`)),
         h('span', { class: 'lesson-description' }, t(`lesson.${route}.description`)),
       ),
       h(

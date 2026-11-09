@@ -451,3 +451,9 @@ test('the build screen draws the robot from its parts: tap sockets to plug parts
   await expect(page.getByTestId('robot-part-wheels')).toHaveCount(0);
   await expect(page.getByTestId('robot-locomotion-legs')).toBeChecked();
 });
+
+test('the hidden dev gallery shows every chassis and part', async ({ page }) => {
+  await page.goto('/#/dev/robots');
+  await expect(page.getByTestId('robot-gallery')).toBeVisible();
+  expect(await page.locator('[data-testid=robot-gallery] svg.rb').count()).toBeGreaterThan(100);
+});

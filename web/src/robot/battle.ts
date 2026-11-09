@@ -63,6 +63,8 @@ export interface BattleResult {
   /** Everything print() wrote, as bubbles also. */
   mapRows: string[];
   tiles: Tile[][];
+  /** What each robot was built from (for the pictures: the replay draws every robot from its parts). */
+  builds?: Record<string, Build>;
 }
 
 class Brain {
@@ -146,6 +148,8 @@ export function runBattle(input: BattleInput): BattleResult {
   const { build, script, layout } = input;
   const built = buildLayout(layout, buildHp(build), { canCross: { rubble: build.locomotion !== 'wheels', pit: false }, armor: locomotionArmor(build.locomotion), plates: build.gear.includes('plates') });
   const world = new World(built.setup);
+  const builds: Record<string, Build> = { player: build };
+  for (const r of world.robots) if (r.team === 'enemy') builds[r.id] = enemyBuild(built.defOf[r.id]!);
   const bubbles: Frame['bubbles'] = [];
   const logs = new Map<string, string[]>();
   const brains = new Map<string, Brain>();
@@ -202,6 +206,7 @@ export function runBattle(input: BattleInput): BattleResult {
       damageTaken: 0,
       mapRows: built.mapRows,
       tiles: world.tiles.map((row) => [...row]),
+      builds,
     };
   }
   for (const r of world.robots.filter((x) => x.team === 'enemy')) {
@@ -286,5 +291,6 @@ export function runBattle(input: BattleInput): BattleResult {
     damageTaken: world.player.maxHp - world.player.hp,
     mapRows: built.mapRows,
     tiles: world.tiles.map((row) => [...row]),
+    builds,
   };
 }

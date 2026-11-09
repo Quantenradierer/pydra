@@ -2,6 +2,7 @@ import { h } from '../dom.ts';
 import type { MessageKey, Params } from '../i18n.ts';
 import type { BattleResult } from '../robot/battle.ts';
 import { describeMotion, narrateEvents } from '../robot/narration.ts';
+import { createRobotLayer } from '../robot/art/arena.ts';
 import { describeFrame, drawFrame, type Callout } from '../robot/replay.ts';
 import { buildBeats, nextBeat, prevBeat, stackNames, stateAt, type Beat, type LineHint } from '../robot/stepper.ts';
 
@@ -67,6 +68,8 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   let playedToEnd = false;
 
   const canvas = h('canvas', { class: 'robot-canvas', role: 'img', 'aria-label': t('robot.canvas'), 'data-testid': 'robot-canvas' }) as HTMLCanvasElement;
+  const over = h('canvas', { class: 'robot-over', 'aria-hidden': 'true' }) as HTMLCanvasElement;
+  const layer = createRobotLayer(battle, battle.tiles[0]?.length ?? 1, battle.tiles.length, (id) => (id === 'player' ? t('robot.you') : t('robot.enemy')));
   const position = h('p', { class: 'run-position', 'data-testid': 'robot-position', 'aria-live': 'off' });
   const where = h('p', { class: 'robot-where', 'data-testid': 'robot-where', 'aria-live': 'off' });
   const listing = h('ol', { class: 'robot-listing', 'data-testid': 'robot-listing' }, ...source.map((l, i) => h('li', { 'data-line': String(i + 1) }, h('code', {}, l || ' '), h('span', { class: 'robot-hint' }))));
@@ -94,8 +97,9 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     // The arena: a line shows the world as it was when the tick began; the resolve beat plays the action out.
     const resolved = beat.kind === 'resolve' || beat.after === true || beat.kind === 'start';
     const frameIndex = beat.kind === 'line' && !beat.after ? beat.tick - 1 : beat.tick;
-    drawFrame(canvas, battle, frameIndex, o.trail, { callouts: calloutsOf(beat), ...(beat.kind === 'resolve' ? { prev: frames[beat.tick - 1]! } : {}), ...(resolved ? {} : { quiet: true }) });
+    drawFrame(canvas, battle, frameIndex, o.trail, { over, callouts: calloutsOf(beat), ...(beat.kind === 'resolve' ? { prev: frames[beat.tick - 1]! } : {}), ...(resolved ? {} : { quiet: true }) });
 
+    layer.update(frames[Math.min(frameIndex, lastTick)]!, beat.kind === 'resolve' ? frames[beat.tick - 1] : undefined, !resolved);
     position.textContent = t('robot.tick', { n: beat.tick, total: lastTick });
     where.textContent = beat.kind === 'start' ? t('robot.where.start', { total: lastBeat }) : beat.kind === 'resolve' ? t('robot.where.arena', { tick: beat.tick, n: index, total: lastBeat }) : t('robot.where', { line: beat.line ?? 0, n: index, total: lastBeat });
     slider.value = String(index);
@@ -192,7 +196,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   const el = h(
     'section',
     { class: 'robot-replay', 'aria-label': t('robot.replay') },
-    h('div', { class: 'robot-stage' }, h('div', { class: 'robot-arena' }, canvas, h('div', { class: 'robot-counter' }, position, where)), h('div', { class: 'robot-side-panel' }, h('h3', {}, t('robot.code')), listing)),
+    h('div', { class: 'robot-stage' }, h('div', { class: 'robot-arena' }, h('div', { class: 'robot-board' }, canvas, layer.el, over), h('div', { class: 'robot-counter' }, position, where)), h('div', { class: 'robot-side-panel' }, h('h3', {}, t('robot.code')), listing)),
     h(
       'div',
       { class: 'run-controls robot-controls' },

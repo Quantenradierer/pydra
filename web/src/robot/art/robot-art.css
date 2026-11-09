@@ -180,7 +180,7 @@
   filter: grayscale(1);
 }
 .rb-unit.dead .rb-turn {
-  transform: scale(0.82) rotate(var(--rb-deg, 0deg)) !important;
+  transform: rotate(var(--rb-deg, 0deg)) scale(1.1) !important;
 }
 
 /* Effects hooked to engine events (classes set by the viewer for the tick that is shown). */
@@ -273,3 +273,18 @@
 .robot-option { display: flex; align-items: center; gap: 0.5rem; }
 .robot-build summary { gap: 0.6rem; }
 .rb-lochit text { font-size: 6.4px; font-weight: 700; fill: var(--rb-stage-line); text-anchor: middle; pointer-events: none; }
+
+/* Arena: the board holds the tile canvas, the robot layer and the canvas for bubbles and calls. */
+.robot-board { position: relative; width: 100%; max-width: 28rem; line-height: 0; }
+.robot-board canvas { display: block; width: 100%; height: auto; max-width: none; }
+.robot-board .robot-over { position: absolute; inset: 0; pointer-events: none; background: none; }
+.rb-unit .rb-turn { position: absolute; inset: 0; }
+.rb-unit .rb { width: 100%; height: 100%; }
+.rb-hp { position: absolute; left: 12%; right: 12%; top: 3%; height: 7%; min-height: 3px; background: #0b121b; border-radius: 2px; overflow: hidden; }
+.rb-hp i { display: block; height: 100%; background: #5fd37a; transition: width 0.25s; }
+.rb-hp i.low { background: #ef6c6c; }
+.rb-unit.dead .rb-hp { display: none; }
+.robot-foes { display: flex; flex-wrap: wrap; gap: 0.4rem; float: right; margin: 0 0 0.3rem 0.6rem; }
+.robot-twist::after { content: ''; display: block; clear: both; }
+.lesson-title .rb-icon { display: inline-grid; vertical-align: middle; margin-right: 0.6rem; }
+.robot-card-note summary { display: flex; align-items: center; gap: 0.5rem; }

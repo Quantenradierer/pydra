@@ -16,6 +16,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | Python interpreter for the teaching subset, **resumable** (generators pause at action calls, per-tick step budget), friendly errors (de/en) with did-you-mean, pre-battle checker, CPython golden tests (200 snippets) | `py/` (`lexer`, `parser`, `interp`, `builtins`, `values`, `check`, `errors`), `friendly.ts`, `messages-errors.ts` |
 | Parts as host objects: wheels, spider legs, **treads** (+3 armor, 2-tick turns, `push()`), blaster (+ burst Mk II), cannon, eyes (+ wide-angle, shield scanner), hammer, shield, GPS, **armor plates** (optional, 12 stars), `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
 | Battle runner recording frames (positions, events, script line, sensor reads, say() bubbles) | `battle.ts` |
+| Robot art: registry + sockets + renderer, used by the build screen, arena, cards, Home (see *Robot art*) | `robot/art/`, `views/robot-bench.ts`, `views/robot-gallery.ts` |
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
 | **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, line/tick step both ways, restart, speed slider (default very slow, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Paused at start; phone stacks arena above code | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
 | **Variation queue**: after Run the first fight plays; then all other layouts of the enemy and every layout of the earlier chapter enemies (`RobotGame.variationQueue`, `variations.ts`) play one after another (auto-advance, can be switched off), chips show progress/result, Skip / Skip all / Next, and a summary lists won/lost with the reason (script error line, budget, destroyed, timeout, unmet rule) and a "Watch" button per fight | `variations.ts`, `views/robot.ts` (`variationQueue`) |
@@ -45,6 +46,34 @@ stars on the right; the fight queue folds earlier enemies' chips, won fights and
 chevrons on all foldable sections; wording (Kämpfe instead of "Aufstellungen/set-ups", "Roboter bauen", clearer next steps).
 Remaining: the viewer is still long on phones (arena above code, then six panels); no keyboard shortcut for stepping; the
 `<textarea>` has no line numbers; challenge screens (line-up, predict) have not been restyled beyond bigger arrow buttons.
+
+## Robot art (modular images)
+
+Everything that shows a robot or a part - build screen, part lists and icons, arena, replay, enemy card, concept cards,
+Home card - goes through **one renderer**: `web/src/robot/art/compose.ts` (`robotSvg` / `robotEl` / `iconEl`). Top-down SVG,
+100 x 100 box, the robot faces east; the arena rotates the whole picture for N/E/S/W. No binary images, no fonts.
+
+* `types.ts` - `ChassisArt` (hull SVG, six named **sockets** `top front back left right underside`, each with `x, y, rot, scale, layer`,
+  plus the gear `slots` in fill order), `PartArt` (`draw(tier)`, `fits` sockets, optional `muzzle`), `RobotSpec`.
+* `sockets.ts` - socket transform, `anchorPoint` (a part point in the chassis box), `assignSockets` (which gear sits in which slot:
+  a small backtracking match over `fits`), `emptySockets`, `paintOrder` (layer order; the locomotion layer is behind the body).
+* `chassis/{light,medium,heavy}.ts`, `parts/*.ts` (wheels, legs, treads, hover, blaster, cannon, eyes, hammer, shield, gps, plates) -
+  **one file per image**; `registry.ts` is the list. `heavy` and `hover` are art for Chapter 5+ (the game has no such ids yet).
+* Palette and state classes: `robot-art.css` (CSS variables `--rb-*`; shapes use `f-body f-hi f-lo f-metal f-dark f-acc f-glow f-hot f-light`
+  and `ln`; the enemy palette is `.rb-enemy`). The robot always sits on a dark "stage" (`.rb-stage`), so it reads in light and dark mode.
+  Tiers: Mk II blaster, wide and scanner eyes are drawn differently (`Tier` argument).
+* Build screen (`views/robot-bench.ts`): the big robot has tap targets on every socket and the drive strip; empty slots are dashed plug
+  outlines; tapping one lists the gear that would click into it (`gearForSocket`), tapping a part offers "Remove", tapping the strip
+  chooses the drive. New parts get the snap-in animation (`.rb-snap`, off with `prefers-reduced-motion`).
+* Arena (`robot/art/arena.ts`): an absolutely positioned layer over the board canvas; each robot is built from `BattleResult.builds`,
+  moves/turns with CSS transitions, shows HP, shield bubble (`shield-up`), the destroyed state (`dead`) and one-tick effects from the
+  engine events (`fx-fire` muzzle flash, `fx-smash` hammer swing, `fx-hit` flash, `fx-move`). Shots start at the weapon's muzzle.
+* Dev gallery: `#/dev/robots` (not linked anywhere) shows every chassis and part at 24-240 px, player and enemy, in light and dark.
+
+**Adding the artwork for a new part is an art-only change**: write `parts/<id>.ts` exporting a `PartArt` (draw around the origin, +x
+pointing away from the robot, use the `kit.ts` helpers and `f-*` classes) and add it to `PART_LIST` in `registry.ts`; check it in the
+gallery. For a new chassis add `chassis/<id>.ts` and a line in `CHASSIS_ART`. The game side (`build.ts`, `parts.ts`) only needs the id.
+`art.test.ts` fails if a game part id has no art.
 
 ## Architecture
 

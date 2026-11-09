@@ -17,9 +17,19 @@ import { precheck as precheckFn, type BattleResult } from '../robot/battle.ts';
 import type { RbError } from '../robot/py/errors.ts';
 import { subpageHeader } from './header.ts';
 import { benchEl } from './robot-bench.ts';
-import { iconEl, partIconSpec, chassisIconSpec, robotEl, specOf } from '../robot/art/compose.ts';
+import { iconEl, partIconSpec, chassisIconSpec, specOf } from '../robot/art/compose.ts';
+import { enemyBuild } from '../robot/battle.ts';
+import type { RobotSpec } from '../robot/art/types.ts';
 
 const GEAR_ORDER: GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps', 'plates'];
+
+/** The picture on a part's concept card. */
+function cardIcon(id: string): RobotSpec {
+  const part = id.replace('part-', '');
+  if (part === 'wide') return { ...partIconSpec('eyes'), wide: true };
+  if (part === 'burst') return { ...partIconSpec('blaster'), mark: 2 };
+  return partIconSpec(part);
+}
 
 /** Robot Battler: a map of tasks, and for each task the build / code / battle / improve loop. */
 export function robotScreen(app: App): Screen {
@@ -113,7 +123,7 @@ export function robotScreen(app: App): Screen {
         const box = h(
           'details',
           { class: `robot-card-note${unseen ? ' new' : ''}`, 'data-testid': `robot-card-${c.id}`, open: unseen },
-          h('summary', {}, `${t('robot.card')}: ${c.title[lang]}`),
+          h('summary', {}, c.kind === 'part' ? iconEl(cardIcon(c.id), 36) : null, h('span', {}, `${t('robot.card')}: ${c.title[lang]}`)),
           h('p', {}, c.idea[lang]),
           h('h4', {}, t('robot.card.example')),
           h('pre', {}, h('code', {}, c.example)),
@@ -519,7 +529,13 @@ export function robotScreen(app: App): Screen {
     const build = game.build();
     show(
       stepHeader(step, opts.back),
-      h('section', { class: 'robot-card robot-twist' }, h('h3', {}, t('robot.twist')), h('p', { 'data-testid': 'robot-twist' }, enemy.twist[lang])),
+      h(
+        'section',
+        { class: 'robot-card robot-twist' },
+        h('div', { class: 'robot-foes', 'data-testid': 'robot-foes' }, ...enemy.enemies.map((def) => iconEl(specOf(enemyBuild(def)), 64, { enemy: true, label: () => t('robot.enemy') }))),
+        h('h3', {}, t('robot.twist')),
+        h('p', { 'data-testid': 'robot-twist' }, enemy.twist[lang]),
+      ),
       opts.training ? null : cardsBlock(step.chapter),
       h('section', { class: 'robot-editor' }, h('h3', {}, t('robot.code')), h('p', { class: 'robot-note' }, t('robot.code.hint')), (area = editor(game.script(), (text) => game.setScript(text)))),
       h(

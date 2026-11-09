@@ -303,7 +303,7 @@ for (const [device, viewport] of [
     await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '3');
     await expect(narration).toContainText('ist ein Befehl');
     await page.getByTestId('robot-step').click();
-    await expect(page.getByTestId('robot-where')).toContainText('Arena · Runde 1');
+    await expect(page.getByTestId('robot-where')).toContainText('Arena · Schritt');
     await expect(narration).toContainText('fährt von');
 
     // Restart goes back to the start; the speed button cycles through the speeds and keeps its value.
@@ -383,7 +383,7 @@ test('the task map: a Continue button leads to the next task and finished chapte
   await page.goto('/');
   await page.getByTestId('start-robot').click();
   await expect(page.getByTestId('robot-continue')).toContainText('Los geht’s');
-  await expect(page.getByTestId('robot-continue')).toContainText('Erster Kontakt');
+  await expect(page.getByTestId('robot-continue')).toContainText('Aufgabe 1');
   await expect(page.getByTestId('robot-chapter-1')).not.toHaveAttribute('open', '');
   await page.getByTestId('robot-continue').click();
   await expect(page.getByTestId('robot-catch')).toContainText('Ziel: Zerstöre den Gegner');
@@ -391,7 +391,7 @@ test('the task map: a Continue button leads to the next task and finished chapte
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
   await expect(page.getByTestId('robot-continue')).toContainText('Weiter geht’s');
-  await expect(page.getByTestId('robot-continue')).toContainText('Eine Zeile mehr');
+  await expect(page.getByTestId('robot-continue')).toContainText('Aufgabe 2');
 });
 
 test('the build screen draws the robot from its parts: tap sockets to plug parts in and out, swap the drive', async ({ page }) => {

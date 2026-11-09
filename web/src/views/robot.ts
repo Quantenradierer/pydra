@@ -37,6 +37,11 @@ export function robotScreen(app: App): Screen {
   };
 
   const titleOf = (s: Step) => (s.enemy ? s.enemy.title[lang] : s.challenge!.title[lang]);
+  /** What the page calls a task: its number in the chapter ("Aufgabe 3", like the pills); bug hunts and training fights say what they are. */
+  const taskLabel = (s: Step) => {
+    const n = game.steps.filter((x) => x.chapter === s.chapter).indexOf(s) + 1;
+    return s.kind === 'battle' && s.enemy && n > 0 && !s.id.startsWith('training-') ? t('robot.taskNo', { n }) : titleOf(s);
+  };
   const errorText = (e: RbError) => friendlyError(e, lang);
   const rawError = (e: RbError) => h('details', { class: 'robot-original' }, h('summary', {}, t('robot.original')), h('code', {}, `${e.type}: ${e.detail}`));
   const errorBox = (e: RbError) =>
@@ -101,7 +106,7 @@ export function robotScreen(app: App): Screen {
       );
     });
     const resume = upNext
-      ? h('button', { class: 'primary robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(upNext.id), showStep(upNext.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, titleOf(upNext)))
+      ? h('button', { class: 'primary robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(upNext.id), showStep(upNext.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, taskLabel(upNext)))
       : null;
     show(
       subpageHeader(app, t('lesson.robot.title')),
@@ -531,7 +536,7 @@ export function robotScreen(app: App): Screen {
       run: () => game.run(step.id, true),
       next: () => {
         const n = nextStep(step);
-        return n ? { label: `${t('robot.next')}: ${titleOf(n)}`, go: () => (game.open(n.id), showStep(n.id)) } : undefined;
+        return n ? { label: `${t('robot.next')}: ${taskLabel(n)}`, go: () => (game.open(n.id), showStep(n.id)) } : undefined;
       },
       back: () => (game.open(step.id), showMap()),
     };

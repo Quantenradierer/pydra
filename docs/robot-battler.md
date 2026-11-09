@@ -18,8 +18,8 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | Battle runner recording frames (positions, events, script line, sensor reads, say() bubbles) | `battle.ts` |
 | Robot art: registry + sockets + renderer, used by the build screen, arena, cards, Home (see *Robot art*) | `robot/art/`, `views/robot-bench.ts`, `views/robot-gallery.ts` |
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
-| **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, one step (line or round), restart, to the end, speed slider (default very slow, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Paused at start; the listing replaces the editor in the same box, the arena sits under the task sentence | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
-| **Variation queue**: after Run the first fight plays; then all other layouts of the enemy and every layout of the earlier chapter enemies (`RobotGame.variationQueue`, `variations.ts`) play one after another (auto-advance, can be switched off), chips show progress/result, Skip / Skip all / Next, and a summary lists won/lost with the reason (script error line, budget, destroyed, timeout, unmet rule) and a "Watch" button per fight | `variations.ts`, `views/robot.ts` (`variationQueue`) |
+| **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, one step (line or round), restart, to the end, speed button (default 800 ms per step, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Plays at once when the fight starts; the listing replaces the editor in the same box, the arena sits under the task sentence | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
+| **Fight pills**: after Run the first fight plays; the other layouts of the enemy and every layout of the earlier chapter enemies (`RobotGame.variationQueue`, `variations.ts`) are one pill each (results shown with the verdict, tap to watch), with the reason a fight was lost | `variations.ts`, `views/robot.ts` (`variationQueue`) |
 | **62 battles**: Chapter 0 (9, incl. Backstep Dummy), 1 (9), 2 (10, incl. Growing Shots), Proving Grounds I (6), **Chapter 3 (10)**, **Chapter 4 (9)**, **Proving Grounds II (8 fights + boss Final Exam)**; three layouts each | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts` |
 | Build/code/battle/improve loop; "never a blank file" persistence; regression re-test of earlier enemies of the chapter on every run; stars; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
 | **Challenges** (the player always writes or edits code; Line Up and Predict were removed, as were hints): Workshop (painting) was removed: everything in Robot Battler is write the script, press Fight, watch the robot battle. 6 Glitch and 4 Constraint remain, and both are real fights on the normal battle screen (see below); Constraint (line limits, `without`, no repeated number) | `content/challenges.ts`, `challenges.ts` |
@@ -38,51 +38,50 @@ Chapter 3 and 4 fights (their frames are the only ones one script can win togeth
 ### Screen layout (information architecture)
 
 **One task = one page, the same pattern as the other games** (`views/robot.ts` `showBattle`; styles `robot-work.css`; texts
-`robot/messages-work.ts`). There are **no zones, no step indicator, no tab bar, no zone titles** (the first version had them; the UX audit
-`docs/robot-ux-audit.md` removed them). Shared pieces reused from the other games: `game-bar` (back arrow + level pills, `views/level-strip.ts`
-`levelStrip`, also used by puzzle / order / predict), the `.run-controls` icon buttons (↺ ▶ → ⇥), `button.primary`, the `verdict correct|wrong` line, `.level-dot`
-pills, and the native-`<dialog>` bottom sheet `views/robot-sheet.ts` (`createSheet`, also the editor's help sheet).
+`robot/messages-work.ts`, `messages-ui.ts`). Nothing on it is decoration: every element is something the player asked for.
+Shared pieces reused from the other games: `game-bar` (back arrow + level pills, `views/level-strip.ts`), the `.run-controls` icon buttons,
+`button.primary`, the `verdict correct|wrong` line, `.level-dot` pills, and the native-`<dialog>` bottom sheet `views/robot-sheet.ts`.
 
-Top to bottom on a phone (one scrolling column, ~830-900 px at 360x740 instead of the old five stacked chrome rows):
+Top to bottom on a phone (one scrolling column):
 
-1. **Header** (`game-bar`): back + the pills 1..N of the chapter's tasks (`level-strip`: solved green, locked greyed, current filled). The h1 is
-   there for screen readers only (like the other games); the task name is the bold first words of the task sentence.
-2. **Task**: pictures (your robot, ⚔, the enemies, `Teile` button -> parts sheet) and the sentence (`robot-catch`).
-3. **Arena**: a **preview** with both robots before the first fight (the viewer in `preview` mode: controls disabled, no counter), the
-   fight afterwards (same widget).
-4. **Run controls**: ↺ restart, ▶/⏸, → step, ⇥ end, plus `⋯` (Mehr). One row, 44 px. "What happens now" under it, and the **fight pills**
-   (one round pill per fight, ✓/✗ when seen, dashed = earlier enemy) with a one-line state (`Kampf 2 von 6` + won/lost + the reason).
-5. **Verdict** (`robot-outcome`, `verdict correct|wrong`, stars inline `robot-stars`), hidden until a fight was played.
-6. **Script**: the editor (strip + `?` help button), or the highlighted listing in the same box while a fight shows (tap it to edit).
-7. **ONE primary button** (`button.primary`): `Kampf starten` (`robot-run`); after a win `Weiter: <task>` (`robot-next`, or *Back to the tasks*
-   without a next task); after a loss `Skript verbessern` (`robot-improve`: shows the editor and focuses it). Editing the script (or focusing
-   the editor) turns it back into `Kampf starten`.
+1. **Header** (`game-bar`): back + the pills 1..N of the chapter's tasks. The h1 (task name) is there for screen readers only.
+2. **Task** (`robot-catch`): one goal sentence (`robot.goal.one|many`: destroy the enemy, you win when it is destroyed and your robot still
+   stands) + the task's catch line (`catchLine`), and the **Ausrüstung / Equipment** button (parts sheet). There is no chapter or task name
+   on the page, no picture of the two robots (that row, with the old "Teile" = parts button that read as "Share!", was removed).
+3. **Arena**: a preview with both robots before the first fight; the fight afterwards (same widget).
+4. **Run controls**: ↺ restart, ▶/⏸ play / pause, → step (one code line), ⇥ to the end, and the **speed button** (`⏱ mittel`, cycles
+   langsam 1200 ms / mittel 800 / schnell 450 / sehr schnell 150 per step; `SPEED_MS`, `DEFAULT_SPEED`). "What happens now" under it.
+5. **Fight pills** and `Kampf k von n · läuft|gewonnen|verloren` (hidden while the fight plays, shown with the verdict).
+6. **Script**: the editor (suggestion strip + `?` help sheet) or, while a fight shows, the listing with the executing line highlighted.
+7. **Verdict** (`robot-outcome`, stars, the star rule) and **ONE primary button**: `Kampf starten` -> while the fight plays `Zum Ergebnis`
+   (skips to the end) -> after a win `Weiter: Aufgabe n` (or back to the tasks) / after a loss `Skript verbessern`. Editing the script (or
+   focusing the editor) stops the fight, hides the verdict and makes it `Kampf starten` again.
 
-**Desktop (>= 960 px)**: the same elements in two columns (left: task, arena, controls, pills, verdict; right: script + primary); the page
-does not scroll at 1280x800. No navigation of any kind besides the pills.
+**Desktop (>= 960 px)**: two columns (left: task, arena, controls, pills; right: script, verdict, primary); the page does not scroll at 1280x800.
 
-Sheets (modal `<dialog>`, Esc / x / backdrop close, focus goes back to the opener): **Teile** (`robot-parts-sheet`: robot picture with tappable
-sockets + inspector, and the chassis / drive / gear lists), **Help** (`robot-code-sheet`, behind the `?`: templates and the command list, title once),
-**Mehr** (`robot-more-sheet`: *Kämpfe* with summary / next / skip / all / auto-advance, *Tempo & Variablen* with speed, step size line / round, variables, call stack,
-sensors, log, and *Versionen* only once a version exists; the button only exists after a fight or with versions).
+**The fight (rb19)**: pressing `Kampf starten` plays the first fight at once, slowly (`variationQueue` calls `viewer.play()`; before this
+fix the fight loaded *paused* and the verdict showed at once, so "nothing happened"). Each step lights the code line, shows the call pill and
+the move / shot on the arena and a sentence of narration; a command line is followed by its round. The verdict, the stars and the points
+(`RobotGame.run(id, true)` returns `award()`, which the screen calls when the verdict shows, so the +XP toast does not spoil the result)
+come when the fight reached its end or was skipped. The result of the other layouts / earlier enemies is computed up front and shown on the
+fight pills together with the verdict; tapping a pill plays that fight. Nothing advances by itself.
 
-* The viewer (`robot-viewer.ts`) returns `el` (arena + counter), `explain` (narration), `controls`, `more` and `listing`; the queue mounts them
-  (`Mount`). Step size is a toggle (`robot-grain-line|tick`), the scrub slider is gone.
-* **No hints.** There are no hint buttons, panels or hint data: the player works from the task sentence alone.
-* Challenges (glitch, constraint) and Training use the same page (Training has no pills).
-* **Task map**: `Weiter: <task>` as one big primary card, the Training button, then one fold per chapter: the chapter in progress is open and shows
-  round pills 1..N (the name is the pill's label / title; dashed = side mission, ringed = next); finished and locked chapters are closed.
-* Labels (the zone names Aufgabe / Roboter / Skript / Kampf are gone): `Teile`, `Mehr`, `Kämpfe`, `Tempo & Variablen`, `Versionen`, `Hilfe`.
+**Removed in rb19 (never asked for)**: the two-robots row and the "Teile" button above the arena (the equipment button remains, renamed),
+the *Mehr* sheet (fights summary, next / skip / skip all, **"Automatisch weiter"** / `robot.vq.auto`, speed slider, step size, variables, call
+stack, sensors, log, script versions), the variation-queue menu, the chapter / task name as text on the task page (the map's start card and the
+primary button say `Aufgabe n`). There is no share, export or achievement UI in Robot Battler (the `+XP` toast is the app-wide points system
+and now comes with the verdict). Script history is still stored by `RobotGame` but has no screen.
 
-Tests: `e2e/robot.spec.ts` (`expectOneNavigation`: the level strip and the primary button exist exactly once, no `rb-steps` / zone tabs; desktop
-no-scroll; phone one column and primary states), `e2e/robot-controls.spec.ts` (dead controls: task page before / after a lost and a won fight, the three
-sheets, challenges, Training), `e2e/helpers.ts` (`fillCode`, `runFight`, `openSheet`, `closeSheets`; the old `zone()` helper is gone).
-**UX review (rb17)**: fresh-eyes screenshots of every screen (phone 360x740, 360x420 with keyboard, desktop, de/en) and the other games. Fixed:
-all level pills, the back arrow and the game-bar icon buttons (shared by all games), the fight pills, the editor `?` button and the *Mehr* checkbox row are now
->= 44 px; the "what happens now" box no longer cuts a sentence off (it grows, min 3 lines); the listing that replaces the editor has the editor's height (the
-primary button no longer jumps after a fight); the desktop arena is smaller so the page still does not scroll after a fight; the fight-pill ring is no longer
-clipped. Tests: `e2e/robot-ux.spec.ts`.
-Not changed: the Home screen (shared by all games). Still open: no keyboard shortcut for stepping.
+**Inserting code** (`suggest.ts` `insertSnippet`, pure, unit-tested): commands and block snippets never share a line with other code.
+Empty line: goes there (one level in after a line ending with `:`); a partly typed word that the snippet completes is replaced; behind
+code or mid-line: a new line below with the current indent (+4 after a colon); a selection is replaced; operators and sensor values
+(`x = ` + `distance()`) go in at the caret. Block snippets leave the caret in their body.
+
+Tests: `e2e/robot-fight.spec.ts` (samples the arena at several times during a fight: robot positions, highlighted line and step counter
+change, no verdict at t=0, verdict last; pause / step / speed / skip; points toast only with the verdict; no share / automatic / pictures
+row / chapter name), `e2e/robot.spec.ts` (`expectOneNavigation`, desktop no-scroll, phone one column), `e2e/robot-controls.spec.ts` (dead
+controls), `e2e/robot-ux.spec.ts`, `e2e/robot-editor.spec.ts` (tap forward() then backward() = two lines), `e2e/helpers.ts` (`startFight`, `runFight` = start + skip).
+Not changed: the Home screen (shared by all games). Still open: no keyboard shortcut for stepping; a lost fight can run all 200 rounds (use "Zum Ergebnis").
 
 ## Robot art (modular images)
 
@@ -240,7 +239,7 @@ in the fight view (`robot.narr.start`): a **Schritt** (step) is one line of the 
 | Originalfehler / Original error | Python-Meldung / Python message |
 | Was passiert / What happens (log) | Verlauf / Log |
 | Protokoll | Verlauf |
-| Mehr / More (the one sheet) | Details / Details (old) |
+| Teile / Parts (button, read as "Share!") | Ausrüstung / Equipment |
 | Bereiche / Areas; "Dein Weg in vier Schritten" | Bildschirmteile / Screen parts; "Wo du gerade bist" |
 | Steckplatz / Platz (mixed) | Platz |
 | Code / Script (mixed, en tab) | Script (en tab and text), Skript (de) |

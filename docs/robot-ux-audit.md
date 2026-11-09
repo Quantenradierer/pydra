@@ -110,3 +110,8 @@ Shots: `<scratchpad>/shots2/{a..e}-{de,en}-{phone,desk}-*.png` (360x740 and 1280
 
 Cleanup: `work.*` zone / phase / tab messages, `robot.outcome.idle`, the step-back messages, the old `.robot-step*`, `.robot-api*`, `.robot-history*`, `.rb-zone*`,
 `.rb-tabs`, `.rb-steps` styles and the three duplicated level-strip builders (puzzle, order, predict) are gone.
+
+## rb19 (4th complaint) - superseded rows
+
+The *Mehr* sheet, the step-size toggle, the second sheet sections, the queue menu and the "Teile" button named in the rows above no longer
+exist; see `docs/robot-battler.md` ("Removed in rb19"). The fight now plays at once and the verdict follows the playback.

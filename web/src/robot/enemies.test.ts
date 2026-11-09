@@ -31,7 +31,7 @@ describe('enemy data', () => {
       });
 
       if (prev && e.breaks !== false && prev.chapter === e.chapter) {
-        it('is NOT won by the previous solution (the twist breaks old code)', () => {
+        it('is NOT won by the previous solution (the catch breaks old code)', () => {
           const r = fightEnemy(e, ENEMIES, fullBuild(e.solutionBuild ?? prev.solutionBuild), prev.solution);
           expect(r.won).toBe(false);
         });

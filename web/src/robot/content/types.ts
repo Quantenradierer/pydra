@@ -38,9 +38,9 @@ export interface EnemyData {
   /** 0-4 for the chapters; 25 = Proving Grounds I ("chapter 2.5"), 45 = Proving Grounds II. */
   chapter: number;
   title: Text;
-  /** The pre-battle card: the twist in one sentence. */
-  twist: Text;
-  /** Hint 2: the concept that helps. Hint 1 is the twist again, hint 3 is `skeleton`. */
+  /** The pre-battle card: the catch in one sentence. */
+  catchLine: Text;
+  /** Hint 2: the concept that helps. Hint 1 is the catch again, hint 3 is `skeleton`. */
   idea: Text;
   /** Hint 3: a partial code skeleton (language-neutral). */
   skeleton: string;
@@ -52,7 +52,7 @@ export interface EnemyData {
   /** A script that beats this enemy (and every earlier enemy of the chapter) with `solutionBuild`. */
   solution: string;
   solutionBuild?: Partial<Build>;
-  /** Pieces the twist should break: false when the previous solution may also win (practice enemies). */
+  /** Pieces the catch should break: false when the previous solution may also win (practice enemies). */
   breaks?: boolean;
   /** Lines of a clean solution: fewer or equal lines earns the "few lines" star. */
   par: number;

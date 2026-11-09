@@ -11,7 +11,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'tank-dummy',
     title: T('Panzer-Attrappe', 'Tank Dummy'),
-    twist: T('Die Attrappe hat 5 Leben. Fünfmal fire() untereinander ist zu lang: höchstens 4 Zeilen.', 'The dummy has 5 hit points. Five fire() lines are too long: at most 4 lines.'),
+    catchLine: T('Die Attrappe hat 5 Leben. Fünfmal fire() untereinander ist zu lang: höchstens 4 Zeilen.', 'The dummy has 5 hit points. Five fire() lines are too long: at most 4 lines.'),
     idea: T('Eine for-Schleife wiederholt Zeilen: for i in range(5): und darunter, eingerückt, fire().', 'A for loop repeats lines: for i in range(5): and below it, indented, fire().'),
     skeleton: 'forward(4)\nfor i in range(5):\n    ???',
     enemies: [{ hp: 5 }],
@@ -24,7 +24,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'dummy-row',
     title: T('Attrappenreihe', 'Dummy Row'),
-    twist: T('Fünf Attrappen stehen in einem Gang hintereinander, je 2 Leben.', 'Five dummies stand one behind the other in a corridor, 2 hit points each.'),
+    catchLine: T('Fünf Attrappen stehen in einem Gang hintereinander, je 2 Leben.', 'Five dummies stand one behind the other in a corridor, 2 hit points each.'),
     idea: T('Die Zahl in range() sagt, wie oft die Schleife läuft. Zähle die Treffer zusammen.', 'The number in range() says how often the loop runs. Add up the hits you need.'),
     skeleton: 'forward(4)\nfor i in range(???):\n    fire()',
     enemies: [{ hp: 2 }],
@@ -36,7 +36,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'step-counter',
     title: T('Schrittzähler', 'Step Counter'),
-    twist: T('Die Attrappen halten zusammen 12 Treffer aus, und die Zahl soll nur einmal im Code stehen.', 'The dummies last 12 hits together, and the number should appear only once in the code.'),
+    catchLine: T('Die Attrappen halten zusammen 12 Treffer aus, und die Zahl soll nur einmal im Code stehen.', 'The dummies last 12 hits together, and the number should appear only once in the code.'),
     idea: T('Speichere die Zahl in einer Variablen und nimm sie in range(): range(shots).', 'Store the number in a variable and use it in range(): range(shots).'),
     skeleton: 'shots = 12\nforward(4)\nfor i in range(???):\n    fire()',
     enemies: [{ hp: 2 }, { hp: 3 }],
@@ -48,7 +48,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'after-the-loop',
     title: T('Nach der Schleife', 'After the Loop'),
-    twist: T('Dein Roboter soll genau einmal „done“ sagen: erst wenn alles erledigt ist.', 'Your robot must say "done" exactly once: only when everything is finished.'),
+    catchLine: T('Dein Roboter soll genau einmal „done“ sagen: erst wenn alles erledigt ist.', 'Your robot must say "done" exactly once: only when everything is finished.'),
     idea: T('Was eingerückt ist, gehört zur Schleife. Was nicht mehr eingerückt ist, kommt erst danach.', 'What is indented belongs to the loop. What is not indented runs after it.'),
     skeleton: 'for i in range(shots):\n    fire()\nsay("done")   # eingerückt oder nicht?',
     enemies: [{ hp: 6 }],
@@ -60,7 +60,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'double-loop',
     title: T('Doppelschleife', 'Double Loop'),
-    twist: T('Zusätzlich steht rechts eine zähe Attrappe (6 Leben).', 'There is also a tough dummy on the right (6 hit points).'),
+    catchLine: T('Zusätzlich steht rechts eine zähe Attrappe (6 Leben).', 'There is also a tough dummy on the right (6 hit points).'),
     idea: T('Zwei Schleifen hintereinander: erst eine Seite, dann turn_right(), dann die zweite Schleife.', 'Two loops in a row: one side first, then turn_right(), then the second loop.'),
     skeleton: '... (erste Schleife)\nturn_right()\nfor i in range(???):\n    fire()',
     enemies: [{ hp: 2 }, { hp: 3 }, { hp: 12 }],
@@ -72,7 +72,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'square-patrol',
     title: T('Quadratstreife', 'Square Patrol'),
-    twist: T('Seitenmission: Vier Attrappen stehen an den vier Seiten eines Quadrats. Starte mit neuem Code.', 'Side mission: four dummies stand on the four sides of a square. Start with fresh code.'),
+    catchLine: T('Seitenmission: Vier Attrappen stehen an den vier Seiten eines Quadrats. Starte mit neuem Code.', 'Side mission: four dummies stand on the four sides of a square. Start with fresh code.'),
     idea: T('Dasselbe vier Mal: fahren, schießen, rechts abbiegen. Das ist eine Schleife mit range(4).', 'The same thing four times: drive, shoot, turn right. That is a loop with range(4).'),
     skeleton: 'for i in range(4):\n    forward(2)\n    ???\n    turn_right()',
     enemies: [{ hp: 2 }],
@@ -86,7 +86,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'spiral-hallway',
     title: T('Spiralgang', 'Spiral Hallway'),
-    twist: T('Seitenmission: Der Weg wird mit jeder Kurve länger (1, 2, 3 Felder).', 'Side mission: the way gets longer with every turn (1, 2, 3 tiles).'),
+    catchLine: T('Seitenmission: Der Weg wird mit jeder Kurve länger (1, 2, 3 Felder).', 'Side mission: the way gets longer with every turn (1, 2, 3 tiles).'),
     idea: T('Die Schleifenvariable zählt mit: for i in range(1, 4): ergibt 1, 2, 3, also forward(i).', 'The loop variable counts along: for i in range(1, 4): gives 1, 2, 3, so use forward(i).'),
     skeleton: 'for i in range(1, 4):\n    forward(???)\n    fire()\n    fire()\n    turn_right()',
     enemies: [{ hp: 2 }],
@@ -100,7 +100,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'staircase',
     title: T('Treppe', 'Staircase'),
-    twist: T('Seitenmission: Eine Treppe aus Geröll. Nur Spinnenbeine kommen darüber.', 'Side mission: a staircase of rubble. Only spider legs get over it.'),
+    catchLine: T('Seitenmission: Eine Treppe aus Geröll. Nur Spinnenbeine kommen darüber.', 'Side mission: a staircase of rubble. Only spider legs get over it.'),
     idea: T('Rüste Spinnenbeine aus. move_north() und move_east() gehen in feste Richtungen; der Block „hoch, rechts“ wiederholt sich.', 'Equip spider legs. move_north() and move_east() go in fixed directions; the block "up, right" repeats.'),
     skeleton: 'for i in range(3):\n    move_north()\n    ???\nfire()\nfire()',
     enemies: [{ hp: 2 }],
@@ -115,7 +115,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'growing-shots',
     title: T('Wachsende Schüsse', 'Growing Shots'),
-    twist: T('Seitenmission: Mit der Kanone sollen die Schüsse mit jeder Runde stärker werden: erst Stärke 1, dann 2, dann 3 (zusammen 6 Schaden).', 'Side mission: with the cannon the shots should grow with every round: power 1 first, then 2, then 3 (6 damage in all).'),
+    catchLine: T('Seitenmission: Mit der Kanone sollen die Schüsse mit jeder Runde stärker werden: erst Stärke 1, dann 2, dann 3 (zusammen 6 Schaden).', 'Side mission: with the cannon the shots should grow with every round: power 1 first, then 2, then 3 (6 damage in all).'),
     idea: T('Die Schleifenvariable zählt mit: for i in range(1, 4): ergibt 1, 2, 3, also fire(i). Nach dem Schuss lädt die Kanone nach: ein paar wait().', 'The loop variable counts along: for i in range(1, 4): gives 1, 2, 3, so use fire(i). The cannon recharges after a shot: a few wait() calls.'),
     skeleton: 'forward(4)\nfor i in range(1, 4):\n    fire(???)\n    wait()\n    wait()',
     enemies: [{ hp: 6 }],
@@ -130,7 +130,7 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'dummy-army',
     title: T('Attrappenarmee', 'Dummy Army'),
-    twist: T('Boss: Beide Seiten brauchen je 12 Treffer. Der Code darf nur 6 Zeilen lang sein.', 'Boss: both sides need 12 hits each. The code may only be 6 lines long.'),
+    catchLine: T('Boss: Beide Seiten brauchen je 12 Treffer. Der Code darf nur 6 Zeilen lang sein.', 'Boss: both sides need 12 hits each. The code may only be 6 lines long.'),
     idea: T('Eine Schleife in einer Schleife: außen die Seiten (range(2)), innen die Schüsse.', 'A loop inside a loop: sides on the outside (range(2)), shots on the inside.'),
     skeleton: 'shots = 12\nforward(4)\nfor side in range(2):\n    for i in range(shots):\n        ???\n    turn_right()',
     enemies: [{ hp: 2 }, { hp: 3 }, { hp: 12 }],

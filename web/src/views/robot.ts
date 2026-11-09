@@ -508,10 +508,10 @@ export function robotScreen(app: App): Screen {
     const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { class: cls, 'data-testid': id, onclick }, label);
     const goCode = () => (work.show('code', true), area.focus());
 
-    // ---- Task: the enemy, the twist, hints and the concept cards
+    // ---- Task: the enemy, the catch, hints and the concept cards
     const hintBox = h('div', { class: 'robot-hints', 'data-testid': 'robot-hints' });
     const hintText = (n: number): Node =>
-      n === 1 ? h('p', {}, t('robot.hint.1', { text: enemy.twist[lang] })) : n === 2 ? h('p', {}, t('robot.hint.2', { text: enemy.idea[lang] })) : h('div', {}, h('p', {}, t('robot.hint.3')), h('pre', {}, h('code', {}, enemy.skeleton)));
+      n === 1 ? h('p', {}, t('robot.hint.1', { text: enemy.catchLine[lang] })) : n === 2 ? h('p', {}, t('robot.hint.2', { text: enemy.idea[lang] })) : h('div', {}, h('p', {}, t('robot.hint.3')), h('pre', {}, h('code', {}, enemy.skeleton)));
     const hintBtn = btn(t('robot.hint'), 'robot-hint', () => askHint());
     function renderHints() {
       const shown = hintCount();
@@ -531,7 +531,7 @@ export function robotScreen(app: App): Screen {
       cardsBtn.replaceChildren(t('work.cards'), unseen > 0 ? h('span', { class: 'rb-badge' }, t('work.cards.new')) : '');
     };
     Z.task.body.append(
-      h('div', { class: 'robot-card robot-twist' }, h('div', { class: 'robot-foes', 'data-testid': 'robot-foes' }, ...enemy.enemies.map((def) => iconEl(specOf(enemyBuild(def)), 56, { enemy: true, label: () => t('robot.enemy') }))), h('div', {}, h('h3', {}, t('robot.twist')), h('p', { 'data-testid': 'robot-twist' }, enemy.twist[lang]))),
+      h('div', { class: 'robot-card robot-catch' }, h('div', { class: 'robot-foes', 'data-testid': 'robot-foes' }, ...enemy.enemies.map((def) => iconEl(specOf(enemyBuild(def)), 56, { enemy: true, label: () => t('robot.enemy') }))), h('div', {}, h('h3', {}, t('robot.catch')), h('p', { 'data-testid': 'robot-catch' }, enemy.catchLine[lang]))),
       hintBox,
     );
     if (cardList.length > 0) {

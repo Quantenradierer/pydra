@@ -8,7 +8,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'first-contact',
     title: T('Erster Kontakt', 'First Contact'),
-    twist: T('Der Code ist schon fertig: Drück auf „Kampf“ und schau zu.', 'The code is already written: press "Battle" and watch.'),
+    catchLine: T('Der Code ist schon fertig: Drück auf „Kampf“ und schau zu.', 'The code is already written: press "Battle" and watch.'),
     idea: T('Jede Zeile ist ein Befehl. Der Roboter führt sie von oben nach unten aus.', 'Every line is a command. The robot runs them from top to bottom.'),
     skeleton: 'forward()\nfire()',
     enemies: [{ hp: 1 }],
@@ -20,7 +20,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'one-more-line',
     title: T('Eine Zeile mehr', 'One More Line'),
-    twist: T('Diese Attrappe hält 2 Treffer aus.', 'This dummy takes 2 hits.'),
+    catchLine: T('Diese Attrappe hält 2 Treffer aus.', 'This dummy takes 2 hits.'),
     idea: T('Ein Befehl pro Schuss: Schreib fire() zweimal untereinander.', 'One command per shot: write fire() twice, one under the other.'),
     skeleton: 'forward()\nfire()\n???',
     enemies: [{ hp: 2 }],
@@ -31,7 +31,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'backstep-dummy',
     title: T('Rückwärts-Attrappe', 'Backstep Dummy'),
-    twist: T('Seitenmission: Diese Attrappe steht direkt vor dir und schlägt mit einem Hammer zu. Du darfst keinen Schaden nehmen.', 'Side mission: this dummy stands right in front of you and swings a hammer. You must take no damage.'),
+    catchLine: T('Seitenmission: Diese Attrappe steht direkt vor dir und schlägt mit einem Hammer zu. Du darfst keinen Schaden nehmen.', 'Side mission: this dummy stands right in front of you and swings a hammer. You must take no damage.'),
     idea: T('backward() fährt rückwärts, ohne dass du dich drehst. Der Hammer reicht nur ein Feld weit: geh zwei Felder weg, dann schieß.', 'backward() drives backwards without turning. The hammer only reaches one tile: back off, then shoot.'),
     skeleton: 'backward()\n???\nfire()',
     enemies: [{ hp: 2, gear: ['hammer'], script: 'while True:\n    smash()' }],
@@ -45,7 +45,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'training-dummy',
     title: T('Übungsattrappe', 'Training Dummy'),
-    twist: T('Die Attrappe steht weit weg: Der Blaster reicht nur 5 Felder.', 'The dummy stands far away: the blaster only reaches 5 tiles.'),
+    catchLine: T('Die Attrappe steht weit weg: Der Blaster reicht nur 5 Felder.', 'The dummy stands far away: the blaster only reaches 5 tiles.'),
     idea: T('Fahr näher heran, bevor du schießt. Die Reihenfolge der Zeilen zählt.', 'Drive closer before you shoot. The order of the lines matters.'),
     skeleton: 'forward()\n???\nfire()\nfire()',
     enemies: [{ hp: 2 }],
@@ -56,7 +56,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'corner-dummy',
     title: T('Eckattrappe', 'Corner Dummy'),
-    twist: T('Die Attrappe steht rechts von dir, nicht geradeaus.', 'The dummy is to your right, not straight ahead.'),
+    catchLine: T('Die Attrappe steht rechts von dir, nicht geradeaus.', 'The dummy is to your right, not straight ahead.'),
     idea: T('turn_right() dreht den Roboter auf der Stelle. Geschossen wird dorthin, wohin er schaut.', 'turn_right() turns the robot on the spot. Shots fly where it looks.'),
     skeleton: 'forward()\nforward()\n???\nfire()\nfire()',
     enemies: [{ hp: 2 }],
@@ -67,7 +67,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'u-turn',
     title: T('Wendemanöver', 'U-Turn'),
-    twist: T('Die Attrappe steht links, aber du schaust nach rechts.', 'The dummy is on the left, but you look right.'),
+    catchLine: T('Die Attrappe steht links, aber du schaust nach rechts.', 'The dummy is on the left, but you look right.'),
     idea: T('Zwei Drehungen hintereinander ergeben eine halbe Runde.', 'Two turns in a row make a half turn.'),
     skeleton: '... (dein Code von vorher)\nturn_right()\n???\nfire()\nfire()',
     enemies: [{ hp: 2 }],
@@ -78,7 +78,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'twin-dummies',
     title: T('Zwillingsattrappen', 'Twin Dummies'),
-    twist: T('Zwei Attrappen auf einmal, links und rechts.', 'Two dummies at once, left and right.'),
+    catchLine: T('Zwei Attrappen auf einmal, links und rechts.', 'Two dummies at once, left and right.'),
     idea: T('Du kannst alle Befehle aneinanderreihen: erst die eine, dann die andere Seite.', 'You can chain all the commands: first one side, then the other.'),
     skeleton: '... (links und rechts nacheinander)',
     enemies: [{ hp: 2 }],
@@ -90,7 +90,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'wall-dummy',
     title: T('Mauer-Attrappe', 'Wall Dummy'),
-    twist: T('Eine Mauer versperrt den Weg; die Attrappe steht dahinter.', 'A wall blocks the way; the dummy stands behind it.'),
+    catchLine: T('Eine Mauer versperrt den Weg; die Attrappe steht dahinter.', 'A wall blocks the way; the dummy stands behind it.'),
     idea: T('Schüsse prallen an Mauern ab. Fahr außen herum: drehen, fahren, wieder drehen.', 'Shots stop at walls. Go around: turn, drive, turn again.'),
     skeleton: '... (dein Code von vorher)\nturn_right()\nturn_right()\nforward()\n???\nturn_left()\nfire()',
     enemies: [{ hp: 2 }],
@@ -102,7 +102,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'obstacle-course',
     title: T('Hindernisparcours', 'Obstacle Course'),
-    twist: T('Boss: Drei zähe Attrappen (3 Treffer) an drei Orten, dazu die Mauer.', 'Boss: three tough dummies (3 hits) in three places, plus the wall.'),
+    catchLine: T('Boss: Drei zähe Attrappen (3 Treffer) an drei Orten, dazu die Mauer.', 'Boss: three tough dummies (3 hits) in three places, plus the wall.'),
     idea: T('Alles, was du gelernt hast, in einer Reihenfolge. Pro Attrappe ein Schuss mehr.', 'Everything you learned, in one order. One more shot per dummy.'),
     skeleton: '... (jede fire()-Gruppe um eine Zeile erweitern)',
     enemies: [{ hp: 3 }],

@@ -45,7 +45,7 @@ code again after a lost fight = Improve):
 
 | Zone | Contains | Sticky action |
 | --- | --- | --- |
-| **Task** (`zone-task`) | enemy pictures, the twist, hints, drawer *Cards* (badge "new" while unread) | Hint, "On to the script" |
+| **Task** (`zone-task`) | enemy pictures, the catch, hints, drawer *Cards* (badge "new" while unread) | Hint, "On to the script" |
 | **Robot** (`zone-robot`) | the robot picture with tappable sockets + inspector, drawer *All parts* (chassis / drive / gear lists) | "On to the script" |
 | **Code** (`zone-code`) | the editor, or the highlighted line-by-line listing during a fight (button *Edit script* / *Show the run*), the error box; drawers *Commands* (API of the equipped parts) and *Versions* | **Start fight** (`robot-run`), Hint |
 | **Fight** (`zone-fight`) | result banner (+ stars, *Next* or *Improve script*), queue bar (progress, state, Skip / Next fight), arena, tick counter, "what happens now"; drawers *Fights* (picker, auto-advance, summary with won/lost rows) and *More* (speed, scrub slider, variables, call stack, sensors, log) | Play + line / tick stepping (viewer controls) |
@@ -137,7 +137,7 @@ An enemy is a plain object (`content/types.ts` → `EnemyData`) appended to `ENE
 
 ```ts
 {
-  id: 'peekaboo', title: T('Guck-guck', 'Peekaboo'), twist: T('…', '…'), idea: T('…', '…'), // hint 1 = twist, 2 = idea
+  id: 'peekaboo', title: T('Guck-guck', 'Peekaboo'), catchLine: T('…', '…'), idea: T('…', '…'), // hint 1 = idea, 2 = skeleton
   skeleton: 'if see() == "enemy":\n    ???',        // hint 3
   enemies: [{ hp: 2, armor: 0, face: 'W', gear: ['blaster','eyes'], script: 'fire()', regen: { every: 2, amount: 1 } }],   // 'D' = enemies[0], '1'-'9' = n-th
   maps: [mk(8, 8, ['^', 3, 7], ['D', 3, 4]), …],     // 1-3 ASCII layouts (. # ~ rubble o pit, ^ > v < player, D/1-9 enemies)
@@ -180,4 +180,4 @@ pick the new total up automatically.
    (needed for Chapter 8).
 4. **Tests to add with new content**: nothing new is needed for enemies/challenges (the data-driven tests pick them up);
    add golden snippets to `py/golden-snippets.ts` and run `npm run golden -w web` for every new Python feature. Rules that are
-   the point of a twist deserve an explicit case in `chapters.test.ts` (see Bubble: blind shooting; Gatekeeper: waiting).
+   the point of a catch deserve an explicit case in `chapters.test.ts` (see Bubble: blind shooting; Gatekeeper: waiting).

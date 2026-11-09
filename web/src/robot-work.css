@@ -198,15 +198,15 @@
 .rb-zone .robot-card {
   margin: 0;
 }
-.robot-twist {
+.robot-catch {
   display: flex;
   gap: 0.7rem;
   align-items: center;
 }
-.robot-twist h3 {
+.robot-catch h3 {
   margin: 0 0 0.2rem;
 }
-.robot-twist p {
+.robot-catch p {
   margin: 0;
 }
 .robot-foes {

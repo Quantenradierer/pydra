@@ -1,10 +1,10 @@
 import { chapter, T } from './helpers.ts';
 
 const ARMY = 'shots = 12\nforward(4)\nfor side in range(2):\n    for i in range(shots):\n        fire()\n    turn_right()';
-const fight = (id: string, de: string, en: string, mix: string[], twistDe: string, twistEn: string) => ({
+const fight = (id: string, de: string, en: string, mix: string[], catchDe: string, catchEn: string) => ({
   id,
   title: T(de, en),
-  twist: T(twistDe, twistEn),
+  catchLine: T(catchDe, catchEn),
   idea: T('Dein bester Code aus Kapitel 2 sollte alle Kämpfe schaffen. Prüfe, ob er auch für andere Attrappen allgemein genug ist.', 'Your best Chapter 2 code should win every fight. Check that it is general enough for other dummies too.'),
   skeleton: ARMY,
   enemies: [],

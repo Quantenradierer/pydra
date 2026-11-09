@@ -111,7 +111,7 @@ export function trainingFight(seed: number, level: number, id = `training-${seed
     id,
     chapter: l,
     title: T(`Training Nr. ${seed}`, `Training #${seed}`),
-    twist: T(`Ein zufälliger Kampf (${g.text}) mit dem, was du in den Kapiteln bis ${l} gelernt hast.`, `A random fight (${g.text}) with what you learned up to Chapter ${l}.`),
+    catchLine: T(`Ein zufälliger Kampf (${g.text}) mit dem, was du in den Kapiteln bis ${l} gelernt hast.`, `A random fight (${g.text}) with what you learned up to Chapter ${l}.`),
     idea: T('Dein bestes Skript des Kapitels sollte das schaffen. Wenn nicht, ist es noch nicht allgemein genug.', 'Your best script of the chapter should manage this. If not, it is not general enough yet.'),
     skeleton: g.solution,
     enemies: g.enemies,

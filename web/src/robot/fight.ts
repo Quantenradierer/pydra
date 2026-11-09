@@ -80,7 +80,7 @@ export function fightLayout(enemy: EnemyData, layout: LayoutSpec, build: Build, 
 }
 
 /** Fights an enemy in all its layouts with the player's build and script. */
-/** `regression`: an earlier enemy re-run for a newer script; the line limit does not apply (it was the old twist). */
+/** `regression`: an earlier enemy re-run for a newer script; the line limit does not apply (it was the old catch). */
 export function fightEnemy(enemy: EnemyData, all: readonly EnemyData[], build: Build, script: string, regression = false): EnemyReport {
   const fights = layoutsOf(enemy, all).map((layout) => fightLayout(enemy, layout, build, script, regression));
   const lines = codeLines(script);

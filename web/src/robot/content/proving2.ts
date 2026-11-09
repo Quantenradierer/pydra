@@ -6,10 +6,10 @@ const FINAL =
   'while alive():\n    if see() == "enemy":\n        if enemy_shielded():\n            shield.activate()\n        else:\n            fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()';
 const BUILD = { gear: ['blaster', 'eyes', 'shield'] as ('blaster' | 'eyes' | 'shield')[], addons: ['wide', 'scanner'] as ('wide' | 'scanner')[] };
 
-const fight = (id: string, de: string, en: string, mix: string[], twistDe: string, twistEn: string, boss = false): Omit<EnemyData, 'chapter'> => ({
+const fight = (id: string, de: string, en: string, mix: string[], catchDe: string, catchEn: string, boss = false): Omit<EnemyData, 'chapter'> => ({
   id,
   title: T(de, en),
-  twist: T(twistDe, twistEn),
+  catchLine: T(catchDe, catchEn),
   idea: T(
     boss ? 'Dein Skript aus den Kapiteln 3 und 4 muss alles können: Seiten ansehen, Schilde beachten, laufen und an Wänden abbiegen.' : 'Dein Skript aus Kapitel 4 sollte diese Kämpfe schaffen. Fehlt ihm etwas aus Kapitel 3, sieh dir den verlorenen Kampf noch einmal an.',
     boss ? 'Your script from Chapters 3 and 4 has to do it all: look sideways, respect shields, walk and turn at walls.' : 'Your Chapter 4 script should win these fights. If it lacks something from Chapter 3, watch the lost fight again.',

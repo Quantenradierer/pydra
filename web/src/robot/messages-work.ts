@@ -4,7 +4,6 @@ export const WORK_DE = {
   'work.parts': 'Ausrüstung',
   'work.edit': 'Skript ändern',
   'work.improve': 'Skript verbessern',
-  'work.fights': 'Kämpfe',
 };
 
 export const WORK_EN = {
@@ -12,7 +11,6 @@ export const WORK_EN = {
   'work.parts': 'Equipment',
   'work.edit': 'Edit script',
   'work.improve': 'Improve script',
-  'work.fights': 'Fights',
 };
 
 /** Texts of the script editor's suggestions (popup and insert bar). */

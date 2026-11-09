@@ -28,8 +28,8 @@ describe('default gear', () => {
     it(`${label(c)}: every reference solution wins with the default gear (and passes the pre-battle check)`, () => {
       for (const e of ENEMIES.filter((x) => x.chapter === c)) {
         expect(precheck(DEFAULT_BUILD, e.solution), `${e.id} precheck`).toBeUndefined();
-        const r = fightEnemy(e, ENEMIES, DEFAULT_BUILD, e.solution);
-        expect(r.won, `${e.id}: ${JSON.stringify(r.fights.map((f) => [f.battle.reason, f.unmet]))}`).toBe(true);
+        const r = fightEnemy(e, DEFAULT_BUILD, e.solution);
+        expect(r.won, `${e.id}: ${JSON.stringify([r.fight.battle.reason, r.fight.unmet])}`).toBe(true);
       }
     });
   }
@@ -57,8 +57,8 @@ describe('other gear', () => {
     it(`the same solutions still win with ${name}`, () => {
       expect(buildProblem(build)).toBeUndefined();
       for (const e of ENEMIES) {
-        const r = fightEnemy(e, ENEMIES, build, e.solution);
-        expect(r.won, `${e.id} with ${name}: ${JSON.stringify(r.fights.map((f) => [f.battle.reason, f.unmet, f.battle.error?.message]))}`).toBe(true);
+        const r = fightEnemy(e, build, e.solution);
+        expect(r.won, `${e.id} with ${name}: ${JSON.stringify([r.fight.battle.reason, r.fight.unmet, r.fight.battle.error?.message])}`).toBe(true);
       }
     });
   }
@@ -67,7 +67,7 @@ describe('other gear', () => {
     const mk2: Build = { ...START_BUILD, chassis: 'medium', blasterMark: 2 };
     for (const id of ['first-contact', 'one-more-line', 'training-dummy', 'hello-robot', 'far-dummy']) {
       const e = ENEMIES.find((x) => x.id === id)!;
-      expect(fightEnemy(e, ENEMIES, mk2, e.solution).won, id).toBe(true);
+      expect(fightEnemy(e, mk2, e.solution).won, id).toBe(true);
     }
   });
 

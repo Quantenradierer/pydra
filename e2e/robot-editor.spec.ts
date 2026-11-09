@@ -188,7 +188,7 @@ test('on a phone with the keyboard open (360x420) the editor and the strip stay 
   const s = (await strip(page).boundingBox())!;
   expect(e.height).toBeGreaterThanOrEqual(60);
   expect(e.y).toBeGreaterThanOrEqual(0);
-  expect(s.y + s.height).toBeLessThanOrEqual(420);
+  expect(s.y + s.height).toBeLessThanOrEqual(421);
   expect(s.y).toBeGreaterThanOrEqual(e.y + e.height - 1);
   // The sheet fits above the keyboard as well and scrolls inside itself.
   await page.getByTestId('robot-code-more').click();

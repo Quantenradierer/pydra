@@ -16,10 +16,10 @@ export function injectGlitch(c: Glitch, script: string): string {
 }
 
 export function checkGlitch(c: Glitch, script: string, build: Build): boolean {
-  return fightEnemy(enemyOf(c.enemy), ENEMIES, build, script, true).won;
+  return fightEnemy(enemyOf(c.enemy), build, script).won;
 }
 
 export function checkConstraint(c: Constraint, script: string, build: Build): boolean {
   const enemy = { ...enemyOf(c.enemy), needs: { ...enemyOf(c.enemy).needs, ...(c.maxLines !== undefined ? { maxLines: c.maxLines } : {}), ...c.needs } };
-  return fightEnemy(enemy, ENEMIES, build, script).won;
+  return fightEnemy(enemy, build, script).won;
 }

@@ -78,22 +78,6 @@ describe('RobotGame', () => {
     expect(setup().game.run('training-dummy')).toBeUndefined();
   });
 
-  it('re-tests earlier enemies: a win that breaks an old one does not count', () => {
-    const hello = ENEMIES.find((e) => e.id === 'hello-robot')!;
-    const far = { ...ENEMIES.find((e) => e.id === 'far-dummy')!, needs: undefined };
-    const game = new RobotGame(new AppStorage(new MemoryKeyValue(), CONTENT), [hello, far], []);
-    game.setScript(hello.solution);
-    expect(game.run('hello-robot')!.won).toBe(true);
-    // Beats the far dummy but no longer says hello: Hello Robot would be lost again.
-    game.setScript('forward(4)\nfire()\nfire()');
-    const r = game.run('far-dummy')!;
-    expect(r.report!.won).toBe(true);
-    expect(r).toMatchObject({ won: false, broken: ['hello-robot'] });
-    expect(game.progress().solved).toEqual(['hello-robot']);
-    game.setScript(far.solution);
-    expect(game.run('far-dummy')).toMatchObject({ won: true, broken: [] });
-  });
-
   it('reports problems before the fight', () => {
     const { game } = setup();
     game.setScript('foward()\nfire()');
@@ -130,7 +114,7 @@ describe('RobotGame', () => {
     game.setScript(ENEMIES[1]!.solution);
     game.run('one-more-line');
     const step = game.step('gl-foward')!;
-    expect(step.enemy?.regression).toBe(false);
+    expect(step.enemy?.side).toBe(true);
     game.setScript('foward()\nfire()\nfire()');
     expect(game.run('gl-foward')?.error).toBeDefined();
     game.setScript(ENEMIES[1]!.solution);

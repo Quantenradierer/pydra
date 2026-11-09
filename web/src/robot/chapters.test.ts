@@ -4,7 +4,7 @@ import { START_BUILD, type Build } from './build.ts';
 import { DEFAULT_BUILD, fightEnemy } from './fight.ts';
 
 const enemy = (id: string) => ENEMIES.find((e) => e.id === id)!;
-const run = (id: string, script: string, build: Build = DEFAULT_BUILD) => fightEnemy(enemy(id), ENEMIES, build, script);
+const run = (id: string, script: string, build: Build = DEFAULT_BUILD) => fightEnemy(enemy(id), build, script);
 const SHIELD_BUILD: Build = { ...START_BUILD, chassis: 'medium', gear: ['blaster', 'eyes', 'shield'] };
 const LOOP = (inner: string) =>
   `for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n${inner.replace(/^/gm, '        ')}`;
@@ -13,7 +13,7 @@ describe('Chapter 3', () => {
   it('Bubble: blind shooting wastes shots on the shield', () => {
     const r = run('bubble', LOOP('fire()'));
     expect(r.won).toBe(false);
-    expect(r.fights.some((f) => f.unmet === 'waste')).toBe(true);
+    expect(r.fight.unmet).toBe('waste');
   });
   it('Gatekeeper: the plain script wins with the starting gear; a shield is an optional way to lose less', () => {
     const waiting = LOOP('if enemy_shielded():\n    wait()\nelse:\n    fire()');
@@ -47,9 +47,8 @@ describe('Proving Grounds II', () => {
     const r = run('final-exam', enemy('hide-and-seek').solution);
     expect(r.won).toBe(false);
   });
-  it('the final script wins all eighteen fights of the Final Exam', () => {
+  it('the final script wins the Final Exam', () => {
     const r = run('final-exam', enemy('final-exam').solution);
-    expect(r.fights).toHaveLength(18);
     expect(r.won).toBe(true);
   });
 });
@@ -58,7 +57,7 @@ describe('the two late additions', () => {
   it('Backstep Dummy: standing still wins but takes damage, backing off takes none', () => {
     const r = run('backstep-dummy', 'fire()\nfire()');
     expect(r.won).toBe(false);
-    expect(r.fights.every((f) => f.battle.outcome === 'win' && f.unmet === 'damage')).toBe(true);
+    expect([r.fight.battle.outcome, r.fight.unmet]).toEqual(['win', 'damage']);
     expect(run('backstep-dummy', 'backward()\nfire()\nfire()').won).toBe(true);
   });
   it('Growing Shots: six plain shots are not enough, the loop variable decides', () => {

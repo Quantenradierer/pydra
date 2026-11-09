@@ -2612,20 +2612,6 @@ progress {
   font-size: 0.9rem;
   margin: 0.2rem 0;
 }
-.robot-layouts {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-.robot .layout.won {
-  border-color: var(--green);
-}
-.robot .layout.lost {
-  border-color: var(--red);
-}
-.robot .layout[aria-pressed='true'] {
-  outline: 2px solid var(--focus);
-}
 .robot-canvas {
   width: 100%;
   height: auto;
@@ -2713,41 +2699,6 @@ progress {
 .robot-narration-line code {
   font-weight: 700;
 }
-.robot-queue {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.5rem;
-  margin-top: 0.6rem;
-}
-.robot-queue h3 {
-  margin: 0;
-}
-.robot-vq-head {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 0.8rem;
-  align-items: baseline;
-}
-.robot-vq-progress {
-  margin: 0;
-  font-weight: 700;
-}
-.robot-vq-state {
-  border-radius: 1rem;
-  padding: 0.05rem 0.6rem;
-  border: 2px solid var(--muted);
-  font-size: 0.9rem;
-}
-.robot-vq-state[data-state='won'] {
-  border-color: var(--green);
-}
-.robot-vq-state[data-state='lost'] {
-  border-color: var(--red);
-}
-.robot .layout.old {
-  border-style: dashed;
-}
-
 /* Robot Battler: its buttons carry words, not icons. */
 .robot .run-control {
   width: auto;
@@ -2765,8 +2716,7 @@ progress {
 .robot summary::-webkit-details-marker {
   display: none;
 }
-.robot-chapter > summary::before,
-.robot-vq-won > summary::before {
+.robot-chapter > summary::before {
   content: '▸';
   flex: none;
   margin-right: 0.5rem;

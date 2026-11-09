@@ -8,11 +8,10 @@ import type { PointsEvent } from '../points/state.ts';
 import type { AppStorage } from '../storage.ts';
 import { addonsFor, buildProblem, parseBuild, START_BUILD, type Build } from './build.ts';
 import { precheck } from './battle.ts';
-import { CHALLENGES, type Challenge } from './content/challenges.ts';
+import { CHALLENGES, GLITCH_PROMPT, type Challenge } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import type { EnemyData } from './content/types.ts';
 import { fightEnemy, type EnemyReport } from './fight.ts';
-import { buildQueue, type QueueItem } from './variations.ts';
 import { dailySeed, today, TRAINING_FROM, trainingFight } from './training.ts';
 import type { RbError } from './py/errors.ts';
 
@@ -33,13 +32,13 @@ export interface Step {
 
 /**
  * A challenge is a fight like any other: the enemy it is fought against, as a side fight of its own
- * (never part of the chapter's regression run). A special rule is part of the fight's conditions.
+ * (a side mission). A special rule is part of the fight's conditions.
  */
 export function fightOf(c: Challenge, enemies: readonly EnemyData[]): EnemyData {
   const base = enemies.find((e) => e.id === c.enemy)!;
   const rule = c.kind === 'constraint' ? { ...base.needs, ...(c.maxLines !== undefined ? { maxLines: c.maxLines } : {}), ...c.needs } : base.needs;
-  const catchLine = c.prompt;
-  return { ...base, id: c.id, title: c.title, catchLine, regression: false, ...(rule ? { needs: rule } : {}), ...(c.kind === 'constraint' ? { solution: c.solution } : {}) };
+  const catchLine = c.kind === 'glitch' ? GLITCH_PROMPT : c.prompt;
+  return { ...base, id: c.id, title: c.title, catchLine, side: true, ...(rule ? { needs: rule } : {}), ...(c.kind === 'constraint' ? { solution: c.solution } : {}) };
 }
 
 /** Enemies in order, each followed by the challenges that sit after it. */
@@ -114,7 +113,7 @@ export function parseProgress(raw: unknown, steps: readonly Step[]): RobotProgre
 
 /** The chapter whose parts are unlocked: the chapter of the first enemy that is not solved (side missions do not hold anyone back). */
 export function unlockLevel(solved: readonly string[], steps: readonly Step[]): number {
-  const open = steps.find((s) => s.kind === 'battle' && s.enemy!.regression !== false && !solved.includes(s.id));
+  const open = steps.find((s) => s.kind === 'battle' && !s.enemy!.side && !solved.includes(s.id));
   const chapter = open ? open.chapter : Math.max(...steps.map((s) => s.chapter));
   return chapter === 25 ? 2 : chapter === 45 ? 4 : chapter;
 }
@@ -123,7 +122,7 @@ export function isUnlocked(step: Step, solved: readonly string[], steps: readonl
   if (solved.includes(step.id)) return true;
   if (step.challenge) return solved.includes(step.challenge.after);
   const index = steps.indexOf(step);
-  return steps.slice(0, index).every((s) => s.kind !== 'battle' || s.enemy!.regression === false || solved.includes(s.id));
+  return steps.slice(0, index).every((s) => s.kind !== 'battle' || s.enemy!.side || solved.includes(s.id));
 }
 
 export interface RunReport {
@@ -131,9 +130,7 @@ export interface RunReport {
   /** A problem found before the fights (syntax, unknown name, part not equipped): nothing was run. */
   error?: RbError;
   report?: EnemyReport;
-  /** Earlier enemies of the chapter that the script no longer beats. */
-  broken: string[];
-  /** The step counted as solved now (a win that broke nothing). */
+  /** The step counted as solved now. */
   won: boolean;
   firstWin: boolean;
   stars: number;
@@ -146,7 +143,7 @@ export class RobotGame {
 
   constructor(
     private storage: AppStorage,
-    private enemies: readonly EnemyData[] = ENEMIES,
+    enemies: readonly EnemyData[] = ENEMIES,
     challenges: readonly Challenge[] = CHALLENGES,
     private onPoints: (event: PointsEvent) => void = () => {},
     private now: () => number = Date.now,
@@ -175,7 +172,7 @@ export class RobotGame {
   open(id?: string): Step {
     const p = this.progress();
     const wanted = id ? this.step(id) : undefined;
-    const firstOpen = this.steps.find((s) => s.kind === 'battle' && s.enemy!.regression !== false && !p.solved.includes(s.id));
+    const firstOpen = this.steps.find((s) => s.kind === 'battle' && !s.enemy!.side && !p.solved.includes(s.id));
     const step = (wanted && isUnlocked(wanted, p.solved, this.steps) ? wanted : undefined) ?? (p.current ? this.step(p.current) : undefined) ?? firstOpen ?? this.steps[0]!;
     if (p.current !== step.id) this.save({ ...p, current: step.id });
     return step;
@@ -221,20 +218,8 @@ export class RobotGame {
     return true;
   }
 
-  /** The earlier enemies of the chapter that a script must still beat (empty for side missions and training fights). */
-  earlierEnemies(enemy: EnemyData): EnemyData[] {
-    return enemy.regression === false ? [] : this.enemies.filter((e) => e.chapter === enemy.chapter && e.regression !== false && this.enemies.indexOf(e) < this.enemies.indexOf(enemy));
-  }
-
-  /** All fights the robot meets after the first one: other layouts of the enemy, then the earlier enemies of the chapter. */
-  variationQueue(step: Step): QueueItem[] {
-    const enemy = step.enemy!;
-    return buildQueue(enemy, this.earlierEnemies(enemy), this.enemies.includes(enemy) || step.challenge ? this.enemies : []);
-  }
-
   /**
-   * Runs the robot against a battle step: all its layouts, plus a re-run of the
-   * earlier enemies of the chapter. A win only counts when nothing earlier broke. With `deferPoints` the points of a first win
+   * Runs the robot against a battle step: its one fight. With `deferPoints` the points of a first win
    * wait in `RunReport.award` until the screen has shown the verdict.
    */
   run(id: string, deferPoints = false): RunReport | undefined {
@@ -253,13 +238,11 @@ export class RobotGame {
     if (error) {
       p = { ...p, history: stamp('error'), runs: p.runs + 1, misses: { ...p.misses, [id]: (p.misses[id] ?? 0) + (p.solved.includes(id) ? 0 : 1) } };
       this.save(p);
-      return { step, error, broken: [], won: false, firstWin: false, stars: 0 };
+      return { step, error, won: false, firstWin: false, stars: 0 };
     }
 
-    const report = fightEnemy(enemy, this.enemies, build, script);
-    const earlier = this.earlierEnemies(enemy);
-    const broken = report.won ? earlier.filter((e) => !fightEnemy(e, this.enemies, build, script, true).won).map((e) => e.id) : [];
-    const won = report.won && broken.length === 0;
+    const report = fightEnemy(enemy, build, script);
+    const won = report.won;
     const already = p.solved.includes(id);
     const firstWin = won && !already;
     const stars = won ? Math.max(1, 1 + (report.lines <= enemy.par ? 1 : 0) + (report.damage === 0 ? 1 : 0)) : 0;
@@ -277,7 +260,7 @@ export class RobotGame {
     const award = firstWin ? () => this.onPoints({ type: 'level', game: 'robot', id, clean }) : undefined;
     // The screen plays the fight first and hands out the points (and their toast) when the verdict shows.
     if (award && !deferPoints) award();
-    return { step, report, broken, won, firstWin, stars, ...(award && deferPoints ? { award } : {}) };
+    return { step, report, won, firstWin, stars, ...(award && deferPoints ? { award } : {}) };
   }
 
   // ---- Training Grounds
@@ -311,14 +294,14 @@ export class RobotGame {
     if (!step.enemy || !this.canTrain()) return undefined;
     const p = this.progress();
     const error = precheck(p.build, p.script);
-    if (error) return { step, error, broken: [], won: false, firstWin: false, stars: 0 };
-    const report = fightEnemy(step.enemy, [], p.build, p.script);
+    if (error) return { step, error, won: false, firstWin: false, stars: 0 };
+    const report = fightEnemy(step.enemy, p.build, p.script);
     const stars = report.won ? Math.max(1, 1 + (report.lines <= step.enemy.par ? 1 : 0) + (report.damage === 0 ? 1 : 0)) : 0;
     if (report.won) {
       const daily = step.id.startsWith('training-daily-') ? step.id.slice('training-daily-'.length) : p.training.daily;
       this.save({ ...p, training: { ...p.training, wins: p.training.wins + 1, daily } });
     }
-    return { step, report, broken: [], won: report.won, firstWin: false, stars };
+    return { step, report, won: report.won, firstWin: false, stars };
   }
 
   stats(): { done: number; total: number; runs: number; percent: number; stars: number } {

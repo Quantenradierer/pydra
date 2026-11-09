@@ -12,20 +12,20 @@ describe('Training Grounds', () => {
     it(`generates fights at level ${level} that their own script wins, for 60 seeds`, () => {
       for (let seed = 1; seed <= 60; seed++) {
         const f = trainingFight(seed, level);
-        const r = fightEnemy(f.enemy, [], DEFAULT_BUILD, f.solution);
-        expect(r.won, `seed ${seed}: ${JSON.stringify(r.fights.map((x) => [x.battle.reason, x.battle.error?.message]))}`).toBe(true);
+        const r = fightEnemy(f.enemy, DEFAULT_BUILD, f.solution);
+        expect(r.won, `seed ${seed}: ${JSON.stringify([r.fight.battle.reason, r.fight.battle.error?.message])}`).toBe(true);
       }
     });
   }
   it('is deterministic per seed and varies between seeds', () => {
     expect(trainingFight(5, 3)).toEqual(trainingFight(5, 3));
-    const maps = new Set(Array.from({ length: 30 }, (_, i) => trainingFight(i + 1, 3).enemy.maps[0]!.join('/')));
+    const maps = new Set(Array.from({ length: 30 }, (_, i) => trainingFight(i + 1, 3).enemy.map.join('/')));
     expect(maps.size).toBeGreaterThan(5);
   });
   it('is not won by an empty script', () => {
     for (let seed = 1; seed <= 20; seed++) for (const level of [2, 3, 4]) {
       const f = trainingFight(seed, level);
-      expect(fightEnemy(f.enemy, [], DEFAULT_BUILD, 'wait()').won).toBe(false);
+      expect(fightEnemy(f.enemy, DEFAULT_BUILD, 'wait()').won).toBe(false);
     }
   });
   it('has one daily seed per date', () => {
@@ -42,7 +42,7 @@ describe('RobotGame training', () => {
     expect(g.canTrain()).toBe(false);
     const kv = new MemoryKeyValue();
     const storage = new AppStorage(kv, CONTENT);
-    storage.setGameData({ solved: ENEMIES.filter((e) => e.chapter < 2 && e.regression !== false).map((e) => e.id) }, 'robot');
+    storage.setGameData({ solved: ENEMIES.filter((e) => e.chapter < 2 && !e.side).map((e) => e.id) }, 'robot');
     const g2 = new RobotGame(storage, ENEMIES, CHALLENGES, () => {}, () => new Date(2026, 10, 8, 12).getTime());
     expect(g2.canTrain()).toBe(true);
     const step = g2.trainingStep('daily');

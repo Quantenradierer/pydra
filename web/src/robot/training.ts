@@ -106,7 +106,7 @@ function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]
     };
   }
   const src = pickFrom(rng.pick(['maze-runner', 'hide-and-seek']));
-  return { enemies: src.enemies, map: src.maps[rng.int(src.maps.length)]!, solution: pickFrom('hide-and-seek').solution, text: src.id === 'maze-runner' ? { de: 'ein Gegner hinter Ecken', en: 'an enemy around corners' } : { de: 'ein Gegner, der sich versteckt', en: 'an enemy that hides' } };
+  return { enemies: src.enemies, map: src.map, solution: pickFrom('hide-and-seek').solution, text: src.id === 'maze-runner' ? { de: 'ein Gegner hinter Ecken', en: 'an enemy around corners' } : { de: 'ein Gegner, der sich versteckt', en: 'an enemy that hides' } };
 }
 
 /** The fight of a seed for a player whose latest unlocked chapter is `level` (2-4). */
@@ -120,10 +120,10 @@ export function trainingFight(seed: number, level: number, id = `training-${seed
     title: T(`Training Nr. ${seed}`, `Training #${seed}`),
     catchLine: T(`Ein zufälliger Kampf (${g.text.de}) mit dem, was du in den Kapiteln bis ${l} gelernt hast.`, `A random fight (${g.text.en}) with what you learned up to Chapter ${l}.`),
     enemies: g.enemies,
-    maps: [g.map],
+    map: g.map,
     solution: g.solution,
     breaks: false,
-    regression: false,
+    side: true,
     par: g.solution.split('\n').length,
   };
   return { enemy, solution: g.solution };

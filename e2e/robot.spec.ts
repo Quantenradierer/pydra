@@ -33,8 +33,6 @@ for (const [device, viewport] of [
     await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()');
     await runFight(page);
     await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
-    // The fight pills show their results together with the verdict.
-    await expect(page.getByTestId('robot-layout-1')).toContainText('✗');
     // ... a loss sends the player back to the same script; one more line wins.
     await fillCode(page, 'forward()\nfire()\nfire()');
     await runFight(page);
@@ -67,7 +65,7 @@ test('a bug hunt is a robot fight: the bug is put into your script, fix it and w
   await expect(page.getByRole('heading', { level: 2 }).first()).toHaveText('Chapter 0: Commands in a row');
   await page.getByTestId('robot-step-gl-foward').click();
   await expect(page.getByTestId('robot-code')).toHaveValue('foward()\nfire()\nfire()');
-  await expect(page.getByTestId('robot-catch')).toContainText('spelled differently');
+  await expect(page.getByTestId('robot-catch')).toContainText('The script has a bug. Find it.');
   await runFight(page);
   await expect(page.getByTestId('robot-error')).toContainText('Line 1');
   await fillCode(page, 'forward()\nfire()\nfire()');
@@ -335,7 +333,7 @@ test('a function call is highlighted line by line: the call, then the line insid
   await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '2');
 });
 
-test('the fight pills: the first fight plays, the verdict counts all fights, a pill replays another one', async ({ page }) => {
+test('one fight per task: it plays at once, the verdict comes when it ends, a lost fight says why', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()\nfire()' })));
   await page.reload();
@@ -344,28 +342,12 @@ test('the fight pills: the first fight plays, the verdict counts all fights, a p
   await startFight(page);
   await expect(page.getByTestId('robot-play')).toHaveAttribute('aria-label', 'Pause');
   await page.getByTestId('robot-skip').click();
-  await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
-  await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 1 von \d+$/);
-  const total = Number((await page.getByTestId('robot-vq-progress').textContent())!.match(/von (\d+)/)![1]);
-  expect(total).toBeGreaterThan(3);
-  await expect(page.getByTestId('robot-vq-state')).toHaveText('gewonnen');
-  await expect(page.getByTestId('robot-layout-1')).toContainText('✓');
-  // The earlier enemy is one of the pills; tapping it plays that fight.
-  await page.getByTestId('robot-vq-chip-first-contact#1').click();
-  await expect(page.getByTestId('robot-vq-chip-first-contact#1')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('.robot-listing li')).toHaveCount(3);
-  await expect(page.getByTestId('robot-play')).toHaveAttribute('aria-label', 'Pause');
-  // No queue menu: nothing advances by itself, there is no "automatic" option.
+  await expect(page.getByTestId('robot-outcome')).toHaveText(/^Gewonnen!/);
+  // Nothing advances by itself, there is no "automatic" option.
   await expect(page.getByText(/Automatisch weiter/)).toHaveCount(0);
-});
-
-test('a lost fight says which fights were lost and why', async ({ page }) => {
-  await openStep(page, 'one-more-line', 'forward()\nfire()', ['first-contact']);
-  await page.getByTestId('robot-skip').click();
-  await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
-  await expect(page.getByTestId('robot-layout-1')).toContainText('✗');
-  await expect(page.getByTestId('robot-vq-state')).toHaveText('verloren');
-  await expect(page.getByTestId('robot-vq-reason')).toContainText('Die Zeit lief ab');
+  await fillCode(page, 'forward()\nfire()');
+  await runFight(page);
+  await expect(page.getByTestId('robot-outcome')).toContainText('Die Zeit lief ab');
 });
 
 test('English texts in the stepping view', async ({ page }) => {
@@ -375,7 +357,6 @@ test('English texts in the stepping view', async ({ page }) => {
   await page.getByTestId('robot-step').click();
   await expect(page.getByTestId('robot-narration')).toContainText('is a command: it costs one round');
   await expect(page.getByTestId('robot-where')).toHaveText(/^Line 1 · step 1 of \d+$/);
-  await expect(page.getByTestId('robot-vq-progress')).toContainText('Fight 1 of');
   await expect(page.getByTestId('robot-speed')).toHaveText('⏱ medium');
 });
 
@@ -386,7 +367,7 @@ test('the task map: a Continue button leads to the next task and finished chapte
   await expect(page.getByTestId('robot-continue')).toContainText('Aufgabe 1');
   await expect(page.getByTestId('robot-chapter-1')).not.toHaveAttribute('open', '');
   await page.getByTestId('robot-continue').click();
-  await expect(page.getByTestId('robot-catch')).toContainText('Ziel: Zerstöre den Gegner');
+  await expect(page.getByTestId('robot-catch')).toContainText('Zerstöre den Gegner.');
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();

@@ -3,16 +3,14 @@ import { h, svg } from '../dom.ts';
 import { BACK } from '../icons.ts';
 import type { MessageKey } from '../i18n.ts';
 import { apiEntries } from '../robot/api.ts';
-import { START_BUILD, INTRODUCED_IN, CHASSIS, addonsFor, type Build, type GearId } from '../robot/build.ts';
+import { INTRODUCED_IN, CHASSIS, addonsFor, type Build, type GearId } from '../robot/build.ts';
 import { checkGlitch, injectGlitch } from '../robot/challenges.ts';
-import type { Challenge } from '../robot/content/challenges.ts';
 import type { EnemyData } from '../robot/content/types.ts';
 import type { EnemyReport, FightReport } from '../robot/fight.ts';
-import { evaluateQueue, playItem, type LossReason, type QueueItem } from '../robot/variations.ts';
+import { fightEnemy } from '../robot/fight.ts';
 import { createViewer, DEFAULT_SPEED, type Speed, type Viewer } from './robot-viewer.ts';
 import { friendlyError } from '../robot/friendly.ts';
 import { type RunReport, type Step } from '../robot/game.ts';
-import { precheck as precheckFn, type BattleResult } from '../robot/battle.ts';
 import type { RbError } from '../robot/py/errors.ts';
 import { createEditor, type Editor } from './robot-editor.ts';
 import { subpageHeader } from './header.ts';
@@ -76,11 +74,11 @@ export function robotScreen(app: App): Screen {
       const open = game.unlocked(s.id);
       const stars = p.stars[s.id] ?? 0;
       const state = solved ? t('robot.step.solved') : open ? '' : t('robot.step.locked');
-      const label = [titleOf(s), s.enemy?.regression === false ? t('robot.side') : '', state, stars > 0 ? t('robot.step.stars', { n: stars }) : ''].filter(Boolean).join(', ');
+      const label = [titleOf(s), s.enemy?.side ? t('robot.side') : '', state, stars > 0 ? t('robot.step.stars', { n: stars }) : ''].filter(Boolean).join(', ');
       return h(
         'button',
         {
-          class: `level-dot${solved ? ' solved' : ''}${s.kind === 'battle' && s.enemy?.regression !== false ? '' : ' side'}${s.id === upNext?.id ? ' next' : ''}`,
+          class: `level-dot${solved ? ' solved' : ''}${s.kind !== 'battle' || s.enemy?.side ? ' side' : ''}${s.id === upNext?.id ? ' next' : ''}`,
           'aria-label': `${i + 1}: ${label}`,
           title: label,
           'data-testid': `robot-step-${s.id}`,
@@ -99,7 +97,7 @@ export function robotScreen(app: App): Screen {
       const done = list.filter((s) => p.solved.includes(s.id)).length;
       const anyOpen = list.some((s) => game.unlocked(s.id));
       // Only the main path keeps a chapter open; side missions wait inside the folded chapter.
-      const inProgress = list.some((s) => s.kind === 'battle' && s.enemy?.regression !== false && game.unlocked(s.id) && !p.solved.includes(s.id));
+      const inProgress = list.some((s) => s.kind === 'battle' && !s.enemy?.side && game.unlocked(s.id) && !p.solved.includes(s.id));
       return h(
         'details',
         { class: `robot-chapter${done === list.length ? ' complete' : ''}${anyOpen ? '' : ' locked'}`, open: inProgress, 'data-testid': `robot-chapter-${chapter}` },
@@ -203,7 +201,7 @@ export function robotScreen(app: App): Screen {
     return createEditor(t as (key: MessageKey) => string, initial, build, onInput, testId, () => apiEntries(build()).map((e) => ({ sig: e.sig, desc: t(`robot.api.${e.id}` as MessageKey) })));
   }
 
-  // ---------------------------------------------------------------- the variation queue
+  // ---------------------------------------------------------------- the fight
 
   /** Why a fight was not won, in words. */
   function unmetText(unmet: NonNullable<FightReport['unmet']>, enemy: EnemyData): string {
@@ -228,137 +226,40 @@ export function robotScreen(app: App): Screen {
     }
   }
 
-  function lossText(reason: LossReason, enemy: EnemyData): string {
-    switch (reason.code) {
-      case 'error':
-        return t('robot.outcome.stop', { line: reason.line, message: errorText(reason.error) });
-      case 'budget':
-        return t('robot.outcome.budget', { line: reason.line, message: t('robot.err.loop-budget') });
-      case 'dead':
-        return t('robot.vq.dead');
-      case 'timeout':
-        return t('robot.vq.timeout');
-      case 'unmet':
-        return unmetText(reason.unmet, enemy);
-    }
-  }
-
-  /**
-   * The fights of a run: the first fight of the enemy plays at once, slowly, line by line; the other layouts of the enemy and
-   * the earlier enemies of the chapter are one round pill each (tap one to watch it). Their results are computed up front but
-   * only shown once the verdict is (`revealAll`). There is no queue menu: nothing advances by itself.
-   */
+  /** Where the one fight of a task is shown. */
   interface Mount {
     arena: HTMLElement;
     explain: HTMLElement;
     controls: HTMLElement;
     listing: HTMLElement;
   }
-  interface QueueHooks {
-    /** A fight reached its end (playing or skipping): the first time, the page shows the verdict. */
-    onFinished(): void;
-  }
-  function variationQueue(items: QueueItem[], build: Build, script: string, mount: Mount, hooks: QueueHooks): { status: HTMLElement; chips: HTMLElement; toEnd: () => void; revealAll: () => void; dispose: () => void } {
-    const outcomes = evaluateQueue(items, build, script);
-    const done = new Set<number>();
-    let current = 0;
-    let viewer: Viewer | undefined;
-    const progress = h('span', { class: 'robot-vq-progress', 'data-testid': 'robot-vq-progress' });
-    const stateTag = h('span', { class: 'robot-vq-state', 'data-testid': 'robot-vq-state' });
-    const reasonBox = h('p', { class: 'robot-note', 'data-testid': 'robot-vq-reason' });
-    const status = h('div', { class: 'robot-queue', 'data-testid': 'robot-queue' }, h('div', { class: 'robot-vq-head' }, progress, stateTag), reasonBox);
-    const chips = h('div', { class: 'robot-layouts', role: 'group', 'aria-label': t('work.fights'), 'data-testid': 'robot-vq-chips' });
-    const labelOf = (item: QueueItem) => (item.regression ? `${item.enemy.title[lang]} ${item.n}` : t('robot.layout', { n: item.n }));
 
-    function paint() {
-      const item = items[current]!;
-      const out = outcomes[current]!;
-      const finished = done.has(current);
-      progress.textContent = t('robot.vq.short', { k: current + 1, n: items.length });
-      progress.title = t(item.regression ? 'robot.vq.progress.old' : 'robot.vq.progress', { k: current + 1, n: items.length, title: item.enemy.title[lang], v: item.n, m: item.of });
-      const state = finished ? (out.won ? 'won' : 'lost') : 'running';
-      stateTag.textContent = t(`robot.vq.state.${state}` as MessageKey);
-      stateTag.dataset.state = state;
-      reasonBox.textContent = finished && out.reason ? lossText(out.reason, item.enemy) : '';
-      reasonBox.hidden = reasonBox.textContent === '';
-      chips.replaceChildren(
-        ...items.map((it, i) => {
-          const o = outcomes[i]!;
-          const seen = done.has(i);
-          const state = seen ? (o.won ? 'won' : 'lost') : 'pending';
-          return h(
-            'button',
-            {
-              class: `level-dot layout${seen ? (o.won ? ' won' : ' lost') : ''}${it.regression ? ' old' : ''}`,
-              'data-testid': it.regression ? `robot-vq-chip-${it.key}` : `robot-layout-${it.n}`,
-              'aria-pressed': String(i === current),
-              'aria-label': `${labelOf(it)}, ${t(`robot.vq.state.${state}` as MessageKey)}`,
-              title: labelOf(it),
-              onclick: () => load(i),
-            },
-            seen ? (o.won ? '✓' : '✗') : String(i + 1),
-          );
-        }),
-      );
-    }
-
-    function load(i: number) {
-      viewer?.dispose();
-      current = Math.max(0, Math.min(items.length - 1, i));
-      const item = items[current]!;
-      const at = current;
-      const report = playItem(item, build, script, true);
-      viewer = createViewer(report.battle, script, {
-        t,
-        speed,
-        onEnd: () => {
-          done.add(at);
-          hooks.onFinished();
-          paint();
-        },
-      });
-      mount.arena.replaceChildren(viewer.el);
-      mount.explain.replaceChildren(viewer.explain);
-      mount.controls.replaceChildren(viewer.controls);
-      mount.listing.replaceChildren(viewer.listing);
-      paint();
-      viewer.play();
-    }
-
-    load(0);
-    return {
-      status,
-      chips,
-      toEnd: () => viewer?.toEnd(),
-      revealAll: () => (items.forEach((_, i) => done.add(i)), paint()),
-      dispose: () => viewer?.dispose(),
-    };
+  /** Plays the task's one fight on the arena, slowly, line by line. `onFinished` fires when it reached its end (playing or skipping). */
+  function playFight(enemy: EnemyData, build: Build, script: string, mount: Mount, onFinished: () => void): { toEnd: () => void; dispose: () => void } {
+    const viewer: Viewer = createViewer(fightEnemy(enemy, build, script, true).fight.battle, script, { t, speed, onEnd: onFinished });
+    mount.arena.replaceChildren(viewer.el);
+    mount.explain.replaceChildren(viewer.explain);
+    mount.controls.replaceChildren(viewer.controls);
+    mount.listing.replaceChildren(viewer.listing);
+    viewer.play();
+    return { toEnd: () => viewer.toEnd(), dispose: () => viewer.dispose() };
   }
 
   // ---------------------------------------------------------------- a battle step
 
-  function outcomeFor(run: RunReport, report: EnemyReport, enemyStep: Step): { text: string; ok: boolean; extra: Node[]; rule?: Node } {
-    const enemy = enemyStep.enemy!;
-    const n = report.fights.length;
-    const lost = report.fights.filter((f) => !f.won).length;
+  function outcomeFor(run: RunReport, report: EnemyReport, enemy: EnemyData): { text: string; ok: boolean; extra: Node[]; rule?: Node } {
     const extra: Node[] = [];
-    if (run.won) {
-      return { text: t(run.firstWin ? 'robot.outcome.firstWin' : 'robot.outcome.win', { n }), ok: true, extra, rule: h('p', { class: 'robot-note' }, t('robot.stars.rule', { par: enemy.par })) };
-    }
-    if (run.broken.length > 0) {
-      const names = run.broken.map((id) => titleOf(game.step(id)!)).join(', ');
-      return { text: t('robot.regression.broken', { names }), ok: false, extra };
-    }
+    if (run.won) return { text: t(run.firstWin ? 'robot.outcome.firstWin' : 'robot.outcome.win'), ok: true, extra, rule: h('p', { class: 'robot-note' }, t('robot.stars.rule', { par: enemy.par })) };
     if (report.tooLong) return { text: t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 }), ok: false, extra };
-    const failed = report.fights.find((f) => !f.won)!;
-    const b = failed.battle;
-    if (failed.unmet) return { text: unmetText(failed.unmet, enemy), ok: false, extra };
+    const { fight } = report;
+    const b = fight.battle;
+    if (fight.unmet) return { text: unmetText(fight.unmet, enemy), ok: false, extra };
     if (b.error) {
       extra.push(rawError(b.error));
       return { text: t('robot.outcome.stop', { line: b.error.line, message: errorText(b.error) }), ok: false, extra };
     }
     if (b.budgetLine !== undefined) return { text: t('robot.outcome.budget', { line: b.budgetLine, message: t('robot.err.loop-budget') }), ok: false, extra };
-    return { text: t('robot.outcome.lost', { lost, n }), ok: false, extra };
+    return { text: t(b.reason === 'dead' ? 'robot.outcome.dead' : 'robot.outcome.timeout'), ok: false, extra };
   }
 
   /** How a battle screen runs its fight and where it leads: the task map, or the Training Grounds. */
@@ -371,8 +272,8 @@ export function robotScreen(app: App): Screen {
   }
 
   /**
-   * One task = one page, like every other game: header with the level pills, the task sentence with the pictures, the arena
-   * (a preview before the first fight), the four run controls, the script editor and ONE primary button:
+   * One task = one page, like every other game: header with the level pills (the only list), the equipment row, the goal line, the arena
+   * (a preview before the fight), the run controls, the script editor and ONE primary button:
    * "Kampf starten", then "Weiter" after a win or "Skript verbessern" after a loss. No zones, steps or tabs.
    */
   function showBattle(step: Step, opts: BattleOpts = taskOpts(step)) {
@@ -380,27 +281,25 @@ export function robotScreen(app: App): Screen {
     /** idle: the script can be run; playing: the fight is on the arena and the verdict is still hidden; won / lost: the verdict shows. */
     let state: 'idle' | 'playing' | 'won' | 'lost' = 'idle';
     let nextAction: { label: string; go: () => void } | undefined;
-    let queue: ReturnType<typeof variationQueue> | undefined;
+    let fighting: ReturnType<typeof playFight> | undefined;
     let ed: Editor | undefined;
     let area: HTMLTextAreaElement;
-    const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { type: 'button', class: cls, 'data-testid': id, onclick }, label);
     const sheetClose = t('work.close');
 
-    // ---- the task: what to do and what winning means, and the equipment (the only way to change the robot)
+    // ---- the equipment row (the only way to change the robot) and the goal line
     const partsSheet = createSheet(t('robot.build'), sheetClose, 'robot-parts-sheet');
-    const partsBtn = btn(t('work.parts'), 'robot-build-open', partsSheet.open, 'run-control rb-equip');
-    partsBtn.setAttribute('aria-haspopup', 'dialog');
-    const task = h(
-      'section',
-      { class: 'rb-task' },
-      h('p', { class: 'rb-task-text', 'data-testid': 'robot-catch' }, goalText(enemy), ' ', h('span', { class: 'rb-task-hint' }, enemy.catchLine[lang])),
-      partsBtn,
-    );
+    const equipIcons = h('span', { class: 'rb-equip-icons', 'aria-hidden': 'true' });
+    const partsBtn = h('button', { type: 'button', class: 'run-control rb-equip', 'data-testid': 'robot-build-open', 'aria-haspopup': 'dialog', onclick: partsSheet.open }, h('span', { class: 'rb-equip-label' }, t('work.parts')), equipIcons);
+    const equipRow = h('div', { class: 'rb-equip-row', 'data-testid': 'robot-equipment' }, partsBtn);
+    /** The goal in plain words, and what is special about this task: two short sentences at most. */
+    const task = h('p', { class: 'rb-task-text', 'data-testid': 'robot-catch' }, goalText(enemy), ' ', h('span', { class: 'rb-task-hint' }, enemy.catchLine[lang]));
 
     function drawRobot() {
       const focused = (document.activeElement as HTMLElement | null)?.dataset?.testid;
       const { bench, parts } = buildPanel(drawRobot);
       partsSheet.body.replaceChildren(bench, parts);
+      const b = game.build();
+      equipIcons.replaceChildren(...[b.locomotion, ...b.gear].map((id) => iconEl(partIconSpec(id), 22)));
       ed?.refresh();
       if (state === 'idle') drawPreview();
       if (focused) root.querySelector<HTMLElement>(`[data-testid="${focused}"]`)?.focus({ preventScroll: true });
@@ -411,8 +310,6 @@ export function robotScreen(app: App): Screen {
     const explainHolder = h('div', { class: 'rb-explain' });
     const controlsHolder = h('div', { class: 'rb-controls-holder' });
     const controlRow = h('div', { class: 'rb-controlrow' }, controlsHolder);
-    const statusHolder = h('div', { class: 'robot-queue-holder' });
-    const chipsHolder = h('div', { class: 'rb-chips' });
     const result = h('div', { class: 'robot-result', 'data-testid': 'robot-result', hidden: true });
     const listingMount = h('div');
 
@@ -443,7 +340,7 @@ export function robotScreen(app: App): Screen {
     }
     primary.addEventListener('click', () => {
       if (state === 'idle') return (game.setScript(area.value), fight());
-      if (state === 'playing') return queue?.toEnd();
+      if (state === 'playing') return fighting?.toEnd();
       if (state === 'lost') return showEditor(true);
       if (nextAction) nextAction.go();
       else opts.back();
@@ -452,11 +349,9 @@ export function robotScreen(app: App): Screen {
     function toIdle() {
       if (state === 'idle') return;
       stop();
-      queue = undefined;
+      fighting = undefined;
       state = 'idle';
       result.hidden = true;
-      statusHolder.replaceChildren();
-      chipsHolder.replaceChildren();
       paintPrimary();
       drawPreview();
     }
@@ -465,9 +360,7 @@ export function robotScreen(app: App): Screen {
     /** The arena before the first fight: both robots on the field, the controls waiting. */
     function drawPreview() {
       try {
-        const first = game.variationQueue(step)[0];
-        if (!first) return;
-        const viewer = createViewer(playItem(first, game.build(), '', true).battle, '', { t, speed, preview: true });
+        const viewer = createViewer(fightEnemy(enemy, game.build(), '', true).fight.battle, '', { t, speed, preview: true });
         arenaHolder.replaceChildren(viewer.el);
         explainHolder.replaceChildren();
         controlsHolder.replaceChildren(viewer.controls);
@@ -487,22 +380,19 @@ export function robotScreen(app: App): Screen {
         return;
       }
       const report = run.report!;
-      const { text, ok, extra, rule } = outcomeFor(run, report, step);
+      const { text, ok, extra, rule } = outcomeFor(run, report, enemy);
       stop();
       // The fight plays first; the verdict (and the points) only come when it has been watched or skipped.
       state = 'playing';
       result.hidden = true;
-      statusHolder.hidden = chipsHolder.hidden = true;
       let revealed = false;
       const reveal = () => {
         if (revealed) return;
         revealed = true;
         run.award?.();
-        queue?.revealAll();
         state = ok ? 'won' : 'lost';
         nextAction = ok ? opts.next() : undefined;
         result.hidden = false;
-        statusHolder.hidden = chipsHolder.hidden = false;
         result.replaceChildren(
           h('p', { class: `verdict ${ok ? 'correct' : 'wrong'}`, 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text, run.won ? h('span', { class: 'rb-stars', 'data-testid': 'robot-stars', title: t('robot.stars', { n: run.stars }) }, ` ${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)}`) : null),
           ...(report.tooLong ? [h('p', { class: 'robot-loss' }, t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 }))] : []),
@@ -513,20 +403,18 @@ export function robotScreen(app: App): Screen {
         // On a phone the verdict and the button sit below the arena: bring them into view (nothing moves when they are already visible).
         requestAnimationFrame(() => primary.scrollIntoView({ block: 'nearest' }));
       };
-      queue = variationQueue(game.variationQueue(step), game.build(), game.script(), { arena: arenaHolder, explain: explainHolder, controls: controlsHolder, listing: listingMount }, { onFinished: reveal });
-      cleanup = queue.dispose;
-      statusHolder.replaceChildren(queue.status);
-      chipsHolder.replaceChildren(queue.chips);
+      fighting = playFight(enemy, game.build(), game.script(), { arena: arenaHolder, explain: explainHolder, controls: controlsHolder, listing: listingMount }, reveal);
+      cleanup = fighting.dispose;
       paintPrimary();
       showEditor(false);
       requestAnimationFrame(() => arenaHolder.scrollIntoView({ block: 'start' }));
     }
 
-    const left = h('div', { class: 'rb-main' }, task, arenaHolder, controlRow, explainHolder, chipsHolder, statusHolder);
+    const left = h('div', { class: 'rb-main' }, task, arenaHolder, controlRow, explainHolder);
     const right = h('div', { class: 'rb-code' }, errorHolder, ed.el, listingHolder, result, primary);
     const page = h('div', { class: 'rb-page', 'data-testid': 'robot-work' }, left, right, partsSheet.dialog);
     drawRobot();
-    showWork(h('div', { class: 'rb-work' }, stepBar(step, opts), page));
+    showWork(h('div', { class: 'rb-work' }, stepBar(step, opts), equipRow, page));
   }
 
   /** The task in one or two sentences: what to do and what winning means (the catch of this task follows in the page). */

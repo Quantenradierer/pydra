@@ -1,4 +1,3 @@
-import type { Build } from '../build.ts';
 import type { EnemyDef } from '../layout.ts';
 
 /** A text in both languages. */
@@ -32,7 +31,7 @@ export interface Needs {
 }
 
 /**
- * One battle-type step: an enemy with three layouts. The data files are plain
+ * One battle-type step: an enemy on one map (one challenge = one fight). The data files are plain
  * objects so a new enemy needs no code, see docs/robot-battler.md.
  */
 export interface EnemyData {
@@ -43,20 +42,19 @@ export interface EnemyData {
   /** The pre-battle card: the catch in one sentence. */
   catchLine: Text;
   enemies: EnemyDef[];
-  /** One ASCII map per layout (1-3); layout i uses seed SEEDS[i]. */
-  maps: string[][];
+  /** The ASCII map of the fight. */
+  map: string[];
   maxTicks?: number;
   needs?: Needs;
-  /** A script that beats this enemy (and every earlier enemy of the chapter) with the default build: no battle needs special gear. */
+  /** A script that beats this enemy with the default build: no battle needs special gear. */
   solution: string;
   /** Pieces the catch should break: false when the previous solution may also win (practice enemies). */
   breaks?: boolean;
   /** Lines of a clean solution: fewer or equal lines earns the "few lines" star. */
   par: number;
-  /** Fights of Proving Grounds: take one map of each of these other enemies instead: the first, or the n-th with "id#n". */
-  mix?: string[];
-  /** false: a side mission with its own set-up; it is not part of the chapter's regression run. */
-  regression?: boolean;
+  /** A side mission with its own set-up: it does not hold back the next main task. */
+  side?: boolean;
 }
 
-export const SEEDS = [11, 22, 33] as const;
+/** The seed of the one fight of every challenge. */
+export const SEED = 11;

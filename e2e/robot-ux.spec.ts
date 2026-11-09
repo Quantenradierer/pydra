@@ -53,11 +53,11 @@ for (const size of SIZES) {
   });
 }
 
-test('the run controls incl. the speed button and the fight pills are at least 44 px high', async ({ page }) => {
+test('the run controls incl. the speed button and the equipment button are at least 44 px high', async ({ page }) => {
   await start(page);
   await runFight(page);
   const small = await page.evaluate(() =>
-    [...document.querySelectorAll<HTMLElement>('.rb-controlrow button, .rb-chips button, .rb-primary, .rb-equip')]
+    [...document.querySelectorAll<HTMLElement>('.rb-controlrow button, .rb-primary, .rb-equip')]
       .filter((e) => e.getBoundingClientRect().height > 0 && e.getBoundingClientRect().height < 43.5)
       .map((e) => `${e.dataset.testid ?? e.className} ${Math.round(e.getBoundingClientRect().height)}`),
   );

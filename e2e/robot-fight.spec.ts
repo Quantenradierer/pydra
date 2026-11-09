@@ -76,7 +76,7 @@ test('the points toast of a first win only comes with the verdict', async ({ pag
 });
 
 test('nothing on the task page is decoration: no share, no automatic menu, no pictures row, the title is a task sentence', async ({ page }) => {
-  for (const [lang, goal] of [['de', 'Ziel: Zerstöre den Gegner'], ['en', 'Goal: destroy the enemy']] as const) {
+  for (const [lang, goal] of [['de', 'Zerstöre den Gegner.'], ['en', 'Destroy the enemy.']] as const) {
     await page.goto('/');
     await page.evaluate((l) => localStorage.setItem('pydra.v1.language', JSON.stringify(l)), lang);
     await openTask(page);

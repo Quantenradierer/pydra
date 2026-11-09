@@ -1,6 +1,6 @@
 /*
- * Robot Battler task page: the same pattern as the other games. Header (back + level pills), then one column: task, arena,
- * run controls, fight pills, verdict, script editor, ONE primary button. No zones, steps or tabs.
+ * Robot Battler task page: the same pattern as the other games. Header (back + level pills = the only list), then one column:
+ * equipment row, goal line, arena, run controls, script editor, verdict, ONE primary button. No zones, steps or tabs.
  * On a desktop (>= 960px) the same elements sit in two columns and the page does not scroll.
  */
 #app:has(.robot-workmode) {
@@ -33,10 +33,6 @@
 .game-bar .level-strip {
   margin: 0;
 }
-.rb-task {
-  display: grid;
-  gap: 0.3rem;
-}
 .rb-task-text {
   margin: 0;
   line-height: 1.35;
@@ -44,10 +40,20 @@
 .rb-task-hint {
   color: var(--muted);
 }
+/* The equipment: one compact row under the level pills, the equipped parts as small icons */
+.rb-equip-row {
+  display: flex;
+}
 .robot .rb-equip {
-  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   min-height: 2.75rem;
-  padding: 0.2rem 0.9rem;
+  padding: 0.2rem 0.8rem;
+}
+.rb-equip-icons {
+  display: inline-flex;
+  gap: 0.2rem;
 }
 .rb-arena {
   display: flex;
@@ -121,72 +127,6 @@
   padding: 0;
   font-size: 1.15rem;
   line-height: 1;
-}
-/* Fight pills: the same round pills as the levels */
-.rb-chips .robot-layouts {
-  display: flex;
-  gap: 0.3rem;
-  padding: 3px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.rb-chips:empty {
-  display: none;
-}
-.robot .rb-chips .level-dot {
-  width: 2.75rem;
-  min-width: 2.75rem;
-  height: 2.75rem;
-  min-height: 0;
-  border-radius: 50%;
-  padding: 0;
-}
-.robot .rb-chips .level-dot.won {
-  border-color: var(--green);
-  color: var(--green);
-}
-.robot .rb-chips .level-dot.lost {
-  border-color: var(--red);
-  color: var(--red);
-}
-.robot .rb-chips .level-dot.old {
-  border-style: dashed;
-}
-.robot .rb-chips .level-dot[aria-pressed='true'] {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
-}
-.robot-queue {
-  display: grid;
-  gap: 0.15rem;
-}
-.robot-vq-head {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-width: 0;
-}
-.robot-vq-progress {
-  flex: 1;
-  min-width: 0;
-  font-size: 0.82rem;
-  color: var(--muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.robot-vq-state {
-  flex: none;
-  font-size: 0.78rem;
-  padding: 0 0.5rem;
-}
-.robot-queue .robot-note {
-  margin: 0;
-  font-size: 0.82rem;
-}
-.robot-queue-holder:empty {
-  display: none;
 }
 /* The verdict line: result and stars together */
 .rb-code .robot-result {

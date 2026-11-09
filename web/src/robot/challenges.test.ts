@@ -1,17 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { START_BUILD } from './build.ts';
 import { CHALLENGES, checkConstraint, checkGlitch, injectGlitch } from './challenges.ts';
+import { GLITCH_PROMPT } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import { DEFAULT_BUILD } from './fight.ts';
 import { fightOf } from './game.ts';
 
 describe('challenge task text', () => {
-  it('says the rule once: the task sentence is the prompt, nothing repeats it', () => {
+  it('a bug hunt says only that there is a bug; a special rule says its rule once', () => {
     for (const c of CHALLENGES) {
       const catchLine = fightOf(c, ENEMIES).catchLine;
-      expect(catchLine.de, c.id).toBe(c.prompt.de);
-      expect(catchLine.en, c.id).toBe(c.prompt.en);
+      const want = c.kind === 'glitch' ? GLITCH_PROMPT : c.prompt;
+      expect(catchLine, c.id).toEqual(want);
     }
+    expect(GLITCH_PROMPT.de).toBe('Das Skript hat einen Fehler. Finde ihn.');
   });
 });
 

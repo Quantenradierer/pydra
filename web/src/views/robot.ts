@@ -387,6 +387,7 @@ export function robotScreen(app: App): Screen {
     }
 
     function showSummary() {
+      picker.open = false;
       const won = outcomes.filter((o) => o.won).length;
       const row = (o: (typeof outcomes)[number], i: number) =>
         h(
@@ -453,7 +454,8 @@ export function robotScreen(app: App): Screen {
     }
 
     const bar = h('div', { class: 'robot-queue', 'data-testid': 'robot-queue' }, h('div', { class: 'robot-vq-head' }, progress, stateTag), h('div', { class: 'robot-vq-bar' }, skipBtn, nextBtn), reasonBox);
-    const panel = h('div', { class: 'robot-queue-panel', 'data-testid': 'robot-queue-panel' }, chips, h('div', { class: 'robot-actions' }, allBtn, h('label', { class: 'robot-option' }, autoBox, t('robot.vq.auto'))), summary);
+    const picker = h('details', { class: 'robot-fold', open: true, 'data-testid': 'robot-vq-picker' }, h('summary', {}, t('work.pick')), chips, h('div', { class: 'robot-actions' }, allBtn, h('label', { class: 'robot-option' }, autoBox, t('robot.vq.auto'))));
+    const panel = h('div', { class: 'robot-queue-panel', 'data-testid': 'robot-queue-panel' }, summary, picker);
     load(0, false);
     return { bar, panel, dispose: () => (cancelAuto(), viewer?.dispose()) };
   }

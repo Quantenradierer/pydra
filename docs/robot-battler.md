@@ -18,14 +18,14 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | Battle runner recording frames (positions, events, script line, sensor reads, say() bubbles) | `battle.ts` |
 | Robot art: registry + sockets + renderer, used by the build screen, arena, cards, Home (see *Robot art*) | `robot/art/`, `views/robot-bench.ts`, `views/robot-gallery.ts` |
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
-| **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, line/tick step both ways, restart, speed slider (default very slow, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Paused at start; phone stacks arena above code | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
+| **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, line/tick step both ways, restart, speed slider (default very slow, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Paused at start; the listing lives in the Code zone, the arena in the Fight zone | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
 | **Variation queue**: after Run the first fight plays; then all other layouts of the enemy and every layout of the earlier chapter enemies (`RobotGame.variationQueue`, `variations.ts`) play one after another (auto-advance, can be switched off), chips show progress/result, Skip / Skip all / Next, and a summary lists won/lost with the reason (script error line, budget, destroyed, timeout, unmet rule) and a "Watch" button per fight | `variations.ts`, `views/robot.ts` (`variationQueue`) |
 | **62 battles**: Chapter 0 (9, incl. Backstep Dummy), 1 (9), 2 (10, incl. Growing Shots), Proving Grounds I (6), **Chapter 3 (10)**, **Chapter 4 (9)**, **Proving Grounds II (8 fights + boss Final Exam)**; three layouts each | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts` |
 | Build/code/battle/improve loop; "never a blank file" persistence; regression re-test of earlier enemies of the chapter on every run; stars; 3-step hint ladder; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
 | **29 challenges**: 3 Line Up, 7 Predict, 9 Glitch, 5 Workshop (paint brush), 5 Constraint (line limits, `without`, no repeated number) | `content/challenges.ts`, `challenges.ts` |
 | **Concept cards**: one per chapter 0-4 and one per new part (cannon, legs, wide-angle + scanner, hammer, shield, GPS, treads, burst blaster); open until read, then a click away | `content/cards.ts`, `cardsBlock()` in the view |
 | **Training Grounds** (from Chapter 2): endless seeded fights built from the frame of the latest chapter, plus a daily fight (seed from the date); every generated fight has a winning script and is tested for 60 seeds | `training.ts`, `RobotGame.trainingStep/runTraining` |
-| Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`, `variations.test.ts`) (every enemy is won by its solution, regression-safe, and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot.spec.ts` (loop, builder, line-up, Chapter 3, Chapter 4 to the certificate, Training Grounds, stepping view on phone and desktop, call stack, variation queue and summary) | |
+| Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`, `variations.test.ts`) (every enemy is won by its solution, regression-safe, and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot.spec.ts` (zones, loop, builder, line-up, Chapter 3, Chapter 4 to the certificate, Training Grounds, stepping view on phone and desktop, call stack, variation queue and summary) | |
 
 Deviations from the doc, on purpose: chassis HP is 8/12 (the table), not "10 default"; battles run on the main thread (they
 are tiny: the engine is pure and worker-ready, see Remaining work); the editor is a `<textarea>` (no CodeMirror
@@ -36,16 +36,39 @@ Chapter 3 uses a 9x8 arena (robot at (4, 6)) so left and right are symmetric; it
 extras are side missions (`regression: false`) with their own set-up, like the Chapter 2 extras. Proving Grounds II mixes
 Chapter 3 and 4 fights (their frames are the only ones one script can win together); `id#n` in `mix` picks layout n.
 
-### UI/UX pass (review at 360/820/1280 px, de/en, light/dark; shots in the scratchpad `shots/`)
+### Screen layout (information architecture)
 
-Fixed: battle screen order is task → concept card → code → Run/Hint → result, with commands, robot builder and history as
-folded sections (the code editor used to sit below a 12-entry command list); the textarea grows with the script; all
-controls are at least 44 px; viewer controls are a wrapping grid with a primary Play button; the task map has a Continue /
-"Los geht's" button, chapters fold (finished or fully locked ones are closed) and rows show title + kind on the left, state and
-stars on the right; the fight queue folds earlier enemies' chips, won fights and lost fights beyond four into `<details>`;
-chevrons on all foldable sections; wording (Kämpfe instead of "Aufstellungen/set-ups", "Roboter bauen", clearer next steps).
-Remaining: the viewer is still long on phones (arena above code, then six panels); no keyboard shortcut for stepping; the
-`<textarea>` has no line numbers; challenge screens (line-up, predict) have not been restyled beyond bigger arrow buttons.
+The battle screen (`views/robot.ts` `showBattle`, shell in `views/robot-work.ts`, styles in `robot-work.css`, texts `robot/messages-work.ts`)
+has **four zones**, each with a plain title and a one-line purpose, plus a **step indicator** (`Bauen / Skript / Kampf / Verbessern`,
+en `Build / Code / Fight / Improve`, `aria-current="step"`, set from where the player is: robot zone = Build, code = Code, a fight = Fight,
+code again after a lost fight = Improve):
+
+| Zone | Contains | Sticky action |
+| --- | --- | --- |
+| **Task** (`zone-task`) | enemy pictures, the twist, hints, drawer *Cards* (badge "new" while unread) | Hint, "On to the script" |
+| **Robot** (`zone-robot`) | the robot picture with tappable sockets + inspector, drawer *All parts* (chassis / drive / gear lists) | "On to the script" |
+| **Code** (`zone-code`) | the editor, or the highlighted line-by-line listing during a fight (button *Edit script* / *Show the run*), the error box; drawers *Commands* (API of the equipped parts) and *Versions* | **Start fight** (`robot-run`), Hint |
+| **Fight** (`zone-fight`) | result banner (+ stars, *Next* or *Improve script*), queue bar (progress, state, Skip / Next fight), arena, tick counter, "what happens now"; drawers *Fights* (picker, auto-advance, summary with won/lost rows) and *More* (speed, scrub slider, variables, call stack, sensors, log) | Play + line / tick stepping (viewer controls) |
+
+* **Desktop (>= 960 px)**: Task over Robot on the left, Code in the middle, Fight on the right; the page never scrolls, only a zone body
+  can (the Robot zone by ~30 px at 1280x800).
+* **Phone / tablet portrait**: one zone fills the screen, a bottom tab bar (`zone-tab-*`, 46 px) switches; switching moves focus to the zone
+  heading, Run moves to Fight, "Improve script" back to Code. A step starts on Task (on Code if it is already solved).
+* Drawers (`work.drawer`) replace the body of their zone, keep the sticky actions, close with the button or Esc and give focus back to
+  the opener. The robot screen re-renders only the Robot zone and the commands drawer on a build change (the fight is kept).
+* The queue renders into the zones through a `Mount` (arena, controls, more, listing); the viewer (`robot-viewer.ts`) returns those
+  parts separately (`el` = arena + narration, `controls`, `more`, `listing`).
+* Challenges (line-up, predict, glitch, workshop, constraint) use one full-height zone: content scrolls, the check button and
+  "to the tasks" stay at the bottom; the commands are a closed `<details>`.
+* Task map: only playable tasks are listed; finished tasks and locked tasks fold into "N done" / "N still locked".
+
+Naming: Task, Robot, Code/Script, Fight (Aufgabe, Roboter, Skript, Kampf) on every screen; primary buttons: *Start fight*, *Play*, *Next: ...*,
+*Improve script*. Page height beyond the viewport, before -> after (360x740 phone / 1280x800 desktop, de): task map 1257 -> 37 / 947 -> 0; level
+636 -> 0 / 418 -> 0; code 1810 -> 0 / 1550 -> 0; running fight 3557 -> 0 (fight zone body scrolls 100) / 2787 -> 0 (0); queue summary
+4423 -> 0 (drawer 512) / 3390 -> 0 (drawer 124); workshop challenge 1514 -> 0 / 1259 -> 0. Shots: scratchpad `shots2/before-*`, `after-*`, `cur-*`.
+Not changed: the Home screen (shared by all games, 1858 px on a phone). Tests: `e2e/robot.spec.ts` (helpers `zone`, `fillCode`, `runFight`,
+`openDrawer`, `closeDrawer` in `e2e/helpers.ts`; desktop no-scroll test, phone zone navigation / focus / 44 px / small fight scroll test).
+Still open: no keyboard shortcut for stepping; the `<textarea>` has no line numbers; arrow keys do not move between the bottom tabs.
 
 ## Robot art (modular images)
 

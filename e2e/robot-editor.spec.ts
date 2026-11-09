@@ -209,3 +209,29 @@ test('in English: the strip, the button and the sheet are translated', async ({ 
   await expect(page.getByTestId('robot-code-help')).toContainText('drives tiles forward');
   await expect(page.getByTestId('snippet-group-compare')).toHaveText('Comparisons');
 });
+
+test('tapping forward() then backward() in the strip makes two lines, not forward()backward()', async ({ page }) => {
+  await openFirstFight(page);
+  const box = await codeBox(page);
+  await box.fill('');
+  await box.focus();
+  await chips(page).filter({ hasText: /^forward\(1\)$/ }).click();
+  await chips(page).filter({ hasText: /^backward\(1\)$/ }).click();
+  await expect(box).toHaveValue('forward()\nbackward()');
+  // Mid-line, with the caret inside the first call: still a new line below it.
+  await box.evaluate((el: HTMLTextAreaElement) => el.setSelectionRange(5, 5));
+  await chips(page).filter({ hasText: /^turn_left\(\)$/ }).click();
+  await expect(box).toHaveValue('forward()\nturn_left()\nbackward()');
+});
+
+test('the help sheet inserts a command on a new line below a non-empty line', async ({ page }) => {
+  await openFirstFight(page);
+  const box = await codeBox(page);
+  await box.fill('while True:');
+  await box.focus();
+  await box.evaluate((el: HTMLTextAreaElement) => el.setSelectionRange(11, 11));
+  await page.getByTestId('robot-code-more').click();
+  await page.getByTestId('snippet-group-move').click();
+  await page.getByTestId('snippet').filter({ hasText: /^forward\(1\)$/ }).click();
+  await expect(box).toHaveValue('while True:\n    forward()');
+});

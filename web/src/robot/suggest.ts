@@ -188,6 +188,8 @@ export interface Snippet {
   label: string;
   /** The template; `$0` marks the caret. Lines after the first are indented like the line the caret is on. */
   text: string;
+  /** Goes in at the caret like a word (an operator), never on a line of its own. */
+  inline?: boolean;
 }
 
 export interface SnippetGroup {
@@ -213,7 +215,7 @@ export function snippetGroups(build: Build): SnippetGroup[] {
         { label: 'x = …', text: 'x = $0' },
       ],
     },
-    { id: 'compare', snippets: ['==', '!=', '<', '>', '<=', '>=', 'and', 'or', 'not'].map((o) => ({ label: o, text: o === 'not' ? 'not $0' : ` ${o} $0` })) },
+    { id: 'compare', snippets: ['==', '!=', '<', '>', '<=', '>=', 'and', 'or', 'not'].map((o) => ({ label: o, text: o === 'not' ? 'not $0' : ` ${o} $0`, inline: true })) },
   ];
   const move: Snippet[] =
     build.locomotion === 'legs'
@@ -236,19 +238,66 @@ export function snippetGroups(build: Build): SnippetGroup[] {
   return groups;
 }
 
-/** Inserts a template at the selection: continuation lines take the indent of the current line; the caret lands on `$0`. */
-export function insertSnippet(text: string, start: number, end: number, snippet: Snippet): { text: string; caret: number } {
-  const lineStart = text.lastIndexOf('\n', start - 1) + 1;
-  const indent = /^[ \t]*/.exec(text.slice(lineStart, start))![0];
-  const lineBlank = text.slice(lineStart, start).trim() === '';
-  const body = snippet.text.split('\n').join('\n' + indent);
-  const at = body.indexOf('$0');
-  const clean = body.replace('$0', '');
-  // A new line is started when the caret sits behind code and the template is a statement (not an operator or a call).
-  const statement = /^(if|elif|else|while|for|def|return|x =)/.test(snippet.text);
-  const lead = statement && !lineBlank ? '\n' + indent : '';
-  const out = text.slice(0, start) + lead + clean + text.slice(end);
-  return { text: out, caret: start + lead.length + (at < 0 ? clean.length : at) };
+/**
+ * Inserts a template; pure. Statements (commands, if / while / for / def ...) never end up on the same line as other code:
+ * - the caret sits on an empty (or only indented) line: the statement goes there; right after a line that ends with `:` an
+ *   unindented empty line gets one more level;
+ * - the caret sits right behind a partly typed word that the template completes (`fo` -> `forward()`): the word is replaced;
+ * - otherwise (behind code, in the middle of a line): a NEW line below the current line, with its indent, plus 4 spaces when
+ *   the line ends with a colon. The line itself is never split;
+ * - a selection is replaced first.
+ * Operators (`inline`) and values where one is expected (`x = ` then `distance()`) go in at the caret. `$0` marks the caret,
+ * so a block snippet leaves it inside its body.
+ */
+export function insertSnippet(source: string, start: number, end: number, snippet: Snippet): { text: string; caret: number } {
+  let text = source.slice(0, start) + source.slice(end);
+  const caret0 = start;
+  const lineStartOf = (i: number) => text.lastIndexOf('\n', i - 1) + 1;
+  const lineEndOf = (i: number) => {
+    const n = text.indexOf('\n', i);
+    return n < 0 ? text.length : n;
+  };
+  /** Replaces text[from, to) by `prefix` + the template (continuation lines take `indent`). */
+  const put = (from: number, to: number, snip: string, indent: string, prefix = '') => {
+    const body = snip.split('\n').join('\n' + indent);
+    const at = body.indexOf('$0');
+    const clean = body.replace('$0', '');
+    return { text: text.slice(0, from) + prefix + clean + text.slice(to), caret: from + prefix.length + (at < 0 ? clean.length : at) };
+  };
+  const ls = lineStartOf(caret0);
+  const le = lineEndOf(caret0);
+  const before = text.slice(ls, caret0);
+  const rest = text.slice(caret0, le);
+  const lineIndent = /^[ \t]*/.exec(text.slice(ls, le))![0];
+  const codeOf = (line: string) => line.replace(/#.*$/, '').trimEnd();
+
+  // Operators and values that continue an expression: right at the caret.
+  const expectsValue = /(?:[=(,+\-*/<>%]|\b(?:and|or|not|if|elif|while|return|in))\s*$/.test(before);
+  // Only sensors and the like are values; commands (forward, fire, ...) are statements and always get a line of their own.
+  const isValue = /^(?:see|see_left|see_right|distance|hp|alive|enemy_shielded|range|len|\w+\.(?:is_charged|is_up|heat|position|facing|integrity|cooldown|mark))\(/.test(snippet.text);
+  if (snippet.inline || (expectsValue && isValue && !/:\s*$/.test(before))) {
+    const prev = text[caret0 - 1];
+    const startsBlank = snippet.text.startsWith(' ');
+    const glued = prev !== undefined && /\s/.test(prev);
+    const lead = startsBlank && glued ? snippet.text.slice(1) : snippet.text;
+    const sp = !startsBlank && prev !== undefined && !/[\s(]/.test(prev) ? ' ' : '';
+    return put(caret0, caret0, lead, lineIndent, sp);
+  }
+
+  const word = /[A-Za-z_]\w*$/.exec(before)?.[0] ?? '';
+  const beforeWord = before.slice(0, before.length - word.length);
+  if (word !== '' && beforeWord.trim() === '' && rest.trim() === '' && snippet.text.toLowerCase().includes(word.toLowerCase())) {
+    return put(ls, le, snippet.text, beforeWord, beforeWord);
+  }
+  if (before.trim() === '' && rest.trim() === '') {
+    // An empty line: its own indent, or one level in when the line above ends with a colon.
+    const above = ls > 0 ? text.slice(lineStartOf(ls - 1), ls - 1) : '';
+    const indent = lineIndent === '' && codeOf(above).endsWith(':') ? /^[ \t]*/.exec(above)![0] + '    ' : lineIndent;
+    return put(ls, le, snippet.text, indent, indent);
+  }
+  // Behind code or in the middle of a line: a new line below it.
+  const indent = lineIndent + (codeOf(text.slice(ls, le)).endsWith(':') ? '    ' : '');
+  return put(le, le, snippet.text, indent, '\n' + indent);
 }
 
 /** What the one-line strip offers when nothing is being typed: the most useful next templates for the build's gear. */

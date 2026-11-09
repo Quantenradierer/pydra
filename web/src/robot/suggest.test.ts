@@ -75,20 +75,65 @@ describe('snippets', () => {
     expect(move.snippets.map((s) => s.label)).toContain('move_north(1)');
     expect(snippetGroups(START_BUILD).find((g) => g.id === 'eyes')!.snippets.map((s) => s.label)).toContain('see_left()');
   });
-  it('insert at the caret, indent continuation lines and place the caret', () => {
-    const forLoop = snippetGroups(START_BUILD)[0]!.snippets.find((s) => s.label === 'for')!;
-    expect(insertSnippet('', 0, 0, forLoop)).toEqual({ text: 'for i in range(3):\n    ', caret: 23 });
-    const r = insertSnippet('while alive():\n    ', 19, 19, forLoop);
-    expect(r.text).toBe('while alive():\n    for i in range(3):\n        ');
-    expect(r.caret).toBe(r.text.length);
-  });
-  it('start a new line when a statement is inserted behind code, and replace a selection', () => {
-    const ifs = snippetGroups(START_BUILD)[0]!.snippets[0]!;
-    expect(insertSnippet('forward()', 9, 9, ifs).text).toBe('forward()\nif alive():\n    ');
-    const call = snippetGroups(START_BUILD).find((g) => g.id === 'move')!.snippets[0]!;
-    expect(insertSnippet('abc', 0, 3, call)).toEqual({ text: 'forward()', caret: 8 });
-  });
+  describe('insertSnippet', () => {
+    const g = snippetGroups(START_BUILD);
+    const snip = (group: string, label: string) => g.find((x) => x.id === group)!.snippets.find((s) => s.label === label)!;
+    const fwd = snip('move', 'forward(1)');
+    const back = snip('move', 'backward(1)');
+    const ifs = snip('flow', 'if');
+    const forLoop = snip('flow', 'for');
+    const at = (text: string, caret: number, s = fwd, end = caret) => insertSnippet(text, caret, end, s);
 
+    it('empty line: the snippet goes there, the caret lands on $0', () => {
+      expect(at('', 0)).toEqual({ text: 'forward()', caret: 8 });
+      expect(at('fire()\n', 7)).toEqual({ text: 'fire()\nforward()', caret: 15 });
+      expect(at('', 0, forLoop)).toEqual({ text: 'for i in range(3):\n    ', caret: 23 });
+    });
+    it('keeps the indent of an empty indented line, and adds one level after a colon line', () => {
+      const r = at('while alive():\n    ', 19, forLoop);
+      expect(r.text).toBe('while alive():\n    for i in range(3):\n        ');
+      expect(r.caret).toBe(r.text.length);
+      expect(at('while alive():\n', 15).text).toBe('while alive():\n    forward()');
+    });
+    it('end of a non-empty line: a NEW line below, never forward()backward()', () => {
+      expect(at('forward()', 9, back)).toEqual({ text: 'forward()\nbackward()', caret: 19 });
+      expect(at('forward()', 9, ifs).text).toBe('forward()\nif alive():\n    ');
+    });
+    it('tapping forward() then backward() gives two lines (the caret sits inside the first call)', () => {
+      const one = at('', 0);
+      const two = at(one.text, one.caret, back);
+      expect(two.text).toBe('forward()\nbackward()');
+      const three = at(two.text, two.caret, fwd);
+      expect(three.text).toBe('forward()\nbackward()\nforward()');
+    });
+    it('mid-line: below the whole line, the line is not split; text below stays', () => {
+      expect(at('forward()\nfire()', 4, back).text).toBe('forward()\nbackward()\nfire()');
+      expect(at('  forward()\nfire()', 5, back).text).toBe('  forward()\n  backward()\nfire()');
+    });
+    it('after a colon: the new line is indented by 4 more, a block snippet puts the caret in its body', () => {
+      const r = at('while alive():', 14, fwd);
+      expect(r.text).toBe('while alive():\n    forward()');
+      const nested = at('while alive():', 14, ifs);
+      expect(nested.text).toBe('while alive():\n    if alive():\n        ');
+      expect(nested.caret).toBe(nested.text.length);
+      expect(at('    if x:', 9, back).text).toBe('    if x:\n        backward()');
+    });
+    it('partial word: the typed word is replaced', () => {
+      expect(at('fo', 2)).toEqual({ text: 'forward()', caret: 8 });
+      expect(at('    for', 7, forLoop).text).toBe('    for i in range(3):\n        ');
+      expect(at('forward()\nback', 14, back).text).toBe('forward()\nbackward()');
+    });
+    it('selection: the selected text is replaced', () => {
+      expect(at('abc', 0, fwd, 3)).toEqual({ text: 'forward()', caret: 8 });
+      expect(at('fire()\nabc\nfire()', 7, back, 10).text).toBe('fire()\nbackward()\nfire()');
+    });
+    it('values go inline where one is expected, operators at the caret', () => {
+      const dist = { label: 'distance()', text: 'distance()$0' };
+      expect(at('x = ', 4, dist).text).toBe('x = distance()');
+      expect(at('if d', 4, snip('compare', '<')).text).toBe('if d < ');
+      expect(at('if d ', 5, snip('compare', '<')).text).toBe('if d < ');
+    });
+  });
   it('offers the next sensible commands on a fresh line (equipped gear first, no unequipped parts)', () => {
     for (const text of ['', 'forward()\n', 'if alive():\n    ']) {
       const c = completionAt(text, text.length, START_BUILD)!;

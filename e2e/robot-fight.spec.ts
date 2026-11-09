@@ -119,3 +119,11 @@ test('a bug hunt always has its bug: a script that does not win gets the prepare
   await page.getByTestId('level-3').click();
   await expect(page.getByTestId('robot-code')).toHaveValue('foward()\nfire()\nfire()\nsay("x")');
 });
+
+test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next button when it changes chapter', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact', 'one-more-line', 'backstep-dummy', 'training-dummy', 'corner-dummy', 'u-turn', 'twin-dummies', 'wall-dummy', 'obstacle-course', 'gl-foward', 'gl-parens', 'gl-indent', 'cn-row-3', 'cn-tank-3'], script: 'forward()', runs: 0, wins: 0 })));
+  await page.reload();
+  await page.getByTestId('start-robot').click();
+  await expect(page.getByTestId('robot-continue')).toContainText('Kapitel 1: Zahlen und Variablen · Aufgabe 1');
+});

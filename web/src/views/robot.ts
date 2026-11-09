@@ -38,9 +38,11 @@ export function robotScreen(app: App): Screen {
 
   const titleOf = (s: Step) => (s.enemy ? s.enemy.title[lang] : s.challenge!.title[lang]);
   /** What the page calls a task: its number in the chapter ("Aufgabe 3", like the pills); bug hunts and training fights say what they are. */
-  const taskLabel = (s: Step) => {
+  const taskLabel = (s: Step, withChapter = false) => {
     const n = game.steps.filter((x) => x.chapter === s.chapter).indexOf(s) + 1;
-    return s.kind === 'battle' && s.enemy && n > 0 && !s.id.startsWith('training-') ? t('robot.taskNo', { n }) : titleOf(s);
+    if (!(s.kind === 'battle' && s.enemy && n > 0 && !s.id.startsWith('training-'))) return titleOf(s);
+    // "Aufgabe 1" alone is ambiguous between chapters: name the chapter where the player does not already know it.
+    return withChapter ? `${t(`robot.chapter.${s.chapter}` as MessageKey)} · ${t('robot.taskNo', { n })}` : t('robot.taskNo', { n });
   };
   const errorText = (e: RbError) => friendlyError(e, lang);
   const rawError = (e: RbError) => h('details', { class: 'robot-original' }, h('summary', {}, t('robot.original')), h('code', {}, `${e.type}: ${e.detail}`));
@@ -106,7 +108,7 @@ export function robotScreen(app: App): Screen {
       );
     });
     const resume = upNext
-      ? h('button', { class: 'primary robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(upNext.id), showStep(upNext.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, taskLabel(upNext)))
+      ? h('button', { class: 'primary robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(upNext.id), showStep(upNext.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, taskLabel(upNext, true)))
       : null;
     show(
       subpageHeader(app, t('lesson.robot.title')),
@@ -538,7 +540,7 @@ export function robotScreen(app: App): Screen {
       run: () => game.run(step.id, true),
       next: () => {
         const n = nextStep(step);
-        return n ? { label: `${t('robot.next')}: ${taskLabel(n)}`, go: () => (game.open(n.id), showStep(n.id)) } : undefined;
+        return n ? { label: `${t('robot.next')}: ${taskLabel(n, n.chapter !== step.chapter)}`, go: () => (game.open(n.id), showStep(n.id)) } : undefined;
       },
       back: () => (game.open(step.id), showMap()),
     };

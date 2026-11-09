@@ -596,12 +596,18 @@ export function robotScreen(app: App): Screen {
     return h('div', { class: 'game-bar' }, header, strip);
   }
 
+  const glitchSeen = new Set<string>();
   function showStep(id: string) {
     const step = game.step(id)!;
     game.open(id);
     const c = step.challenge;
     // A bug hunt starts from the player's own working script with the bug put in (unless they are already mid-fix).
-    if (c?.kind === 'glitch' && !game.progress().solved.includes(id) && checkGlitch(c, game.script(), game.build())) game.setScript(injectGlitch(c, game.script()));
+    // A script that does not win this fight has no place for the bug: the prepared script with the bug is put in (once per visit, so a fix in progress stays).
+    if (c?.kind === 'glitch' && !game.progress().solved.includes(id)) {
+      if (checkGlitch(c, game.script(), game.build())) game.setScript(injectGlitch(c, game.script()));
+      else if (!glitchSeen.has(id)) game.setScript(c.fallback);
+      glitchSeen.add(id);
+    }
     showBattle(step);
     root.querySelector<HTMLElement>('[data-testid="robot-step-title"]')?.focus();
   }

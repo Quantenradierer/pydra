@@ -109,3 +109,13 @@ test('on a phone the verdict and the next button are scrolled into view when the
   await expect(page.getByTestId('robot-next')).toBeInViewport({ ratio: 0.9 });
   await expect(page.getByTestId('robot-outcome')).toBeInViewport({ ratio: 0.9 });
 });
+
+test('a bug hunt always has its bug: a script that does not win gets the prepared buggy script, a fix in progress stays', async ({ page }) => {
+  await openTask(page, 'one-more-line', '', ['first-contact', 'one-more-line']);
+  await page.getByTestId('level-3').click();
+  await expect(page.getByTestId('robot-code')).toHaveValue('foward()\nfire()\nfire()');
+  await page.getByTestId('robot-code').fill('foward()\nfire()\nfire()\nsay("x")');
+  await page.getByTestId('level-2').click();
+  await page.getByTestId('level-3').click();
+  await expect(page.getByTestId('robot-code')).toHaveValue('foward()\nfire()\nfire()\nsay("x")');
+});

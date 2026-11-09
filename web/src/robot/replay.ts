@@ -1,6 +1,5 @@
 import type { BattleResult, Frame } from './battle.ts';
 import type { Pos, Tile } from './engine.ts';
-import type { MessageKey, Params } from '../i18n.ts';
 import { muzzleOf, specOf } from './art/compose.ts';
 import { turnedPoint } from './art/sockets.ts';
 
@@ -157,46 +156,4 @@ export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index
     ctx2.fillText(text, x + 6, y + 9);
   }
   drawOverlay(ctx2, canvas, frame, extras);
-}
-
-type T = (key: MessageKey, params?: Params) => string;
-
-/** What happened in a frame, as sentences (also for screen readers). */
-export function describeFrame(frame: Frame, t: T): string[] {
-  const enemies = frame.robots.filter((r) => r.id !== 'player').length;
-  const who = (id: string) => (id === 'player' ? t('robot.you') : enemies > 1 ? `${t('robot.enemy')} ${id.replace('enemy', '')}` : t('robot.enemy'));
-  const out: string[] = [];
-  for (const e of frame.events) {
-    switch (e.type) {
-      case 'shot':
-        out.push(t(e.hit ? (e.blocked ? 'robot.ev.shot.blocked' : 'robot.ev.shot.hit') : 'robot.ev.shot.miss', { who: who(e.by) }));
-        break;
-      case 'smash':
-        out.push(t(e.hit ? (e.blocked ? 'robot.ev.smash.blocked' : 'robot.ev.smash.hit') : 'robot.ev.smash.miss', { who: who(e.by) }));
-        break;
-      case 'damage':
-        out.push(t('robot.ev.damage', { who: who(e.robot), amount: e.amount }));
-        break;
-      case 'push':
-        out.push(t('robot.ev.push', { who: who(e.by), target: who(e.target) }));
-        break;
-      case 'heal':
-        out.push(t('robot.ev.heal', { who: who(e.robot), amount: e.amount }));
-        break;
-      case 'death':
-        out.push(t('robot.ev.death', { who: who(e.robot) }));
-        break;
-      case 'shield':
-        out.push(t('robot.ev.shield', { who: who(e.robot) }));
-        break;
-      case 'bump':
-        out.push(t(`robot.ev.bump.${e.reason}` as MessageKey, { who: who(e.robot) }));
-        break;
-      case 'fizzle':
-        out.push(t(`robot.ev.fizzle.${e.reason}` as MessageKey, { part: t(`robot.part.${e.part}` as MessageKey), ticks: e.ticks }));
-        break;
-    }
-  }
-  for (const b of frame.bubbles) out.push(t('robot.ev.said', { who: who(b.robot), text: b.text }));
-  return out;
 }

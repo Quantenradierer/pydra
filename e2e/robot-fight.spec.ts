@@ -16,7 +16,7 @@ const sample = (page: Page) =>
   page.evaluate(() => ({
     robots: [...document.querySelectorAll<HTMLElement>('.rb-unit')].map((u) => `${u.dataset.robot}:${u.style.left},${u.style.top}`).join(' '),
     line: document.querySelector('.robot-listing li.active')?.getAttribute('data-line') ?? '',
-    where: document.querySelector('[data-testid="robot-where"]')?.textContent ?? '',
+    where: `${document.querySelector('.robot-listing li.active')?.getAttribute('data-line') ?? ''}|${document.querySelector('[data-testid="robot-position"]')?.textContent ?? ''}|${document.querySelector('[data-testid="robot-narration"]')?.textContent ?? ''}`,
     hint: [...document.querySelectorAll('.robot-listing .robot-note-inline')].map((e) => e.textContent).join('|'),
     verdict: document.querySelector('[data-testid="robot-outcome"]') !== null && !document.querySelector('[data-testid="robot-result"]')!.hasAttribute('hidden'),
   }));
@@ -98,7 +98,7 @@ test('a lost fight whose script ended does not play 200 empty rounds: the waitin
   await startFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Verloren', { timeout: 15_000 });
   expect(Date.now() - t0).toBeLessThan(12_000);
-  await expect(page.getByTestId('robot-narration')).toContainText('Dein Skript ist zu Ende');
+  await expect(page.getByTestId('robot-narration')).toHaveText('');
 });
 
 test('on a phone the verdict and the next button are scrolled into view when the fight ends', async ({ page }) => {

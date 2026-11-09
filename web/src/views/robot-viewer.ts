@@ -1,7 +1,7 @@
 import { h } from '../dom.ts';
 import type { MessageKey, Params } from '../i18n.ts';
 import type { BattleResult } from '../robot/battle.ts';
-import { describeMotion, narrateEvents } from '../robot/narration.ts';
+import { describeAction } from '../robot/narration.ts';
 import { createRobotLayer } from '../robot/art/arena.ts';
 import { drawFrame, type Callout } from '../robot/replay.ts';
 import { buildBeats, idleRunEnd, isIdleBeat, nextBeat, stateAt, type Beat, type LineHint } from '../robot/stepper.ts';
@@ -85,9 +85,8 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   const over = h('canvas', { class: 'robot-over', 'aria-hidden': 'true' }) as HTMLCanvasElement;
   const layer = createRobotLayer(battle, battle.tiles[0]?.length ?? 1, battle.tiles.length, (id) => (id === 'player' ? t('robot.you') : t('robot.enemy')));
   const position = h('p', { class: 'run-position', 'data-testid': 'robot-position', 'aria-live': 'off' });
-  const where = h('p', { class: 'robot-where', 'data-testid': 'robot-where', 'aria-live': 'off' });
   const listing = h('ol', { class: 'robot-listing', 'data-testid': 'robot-listing' }, ...source.map((l, i) => h('li', { 'data-line': String(i + 1) }, h('code', {}, l || ' '), h('span', { class: 'robot-note-inline' }))));
-  const narration = h('ul', { class: 'robot-narration', 'data-testid': 'robot-narration', 'aria-live': 'polite' });
+  const narration = h('p', { class: 'robot-narration', 'data-testid': 'robot-narration', 'aria-live': 'polite' });
   const playBtn = h('button', { class: 'run-control robot-play', 'data-testid': 'robot-play', 'aria-label': t('robot.play'), title: t('robot.play') }, '▶');
 
   /** The calls to put on the arena: the ones of this line, or the tick's command once it plays out. */
@@ -110,7 +109,6 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
 
     layer.update(frames[Math.min(frameIndex, lastTick)]!, beat.kind === 'resolve' ? frames[beat.tick - 1] : undefined, !resolved);
     position.textContent = t('robot.tick', { n: beat.tick, total: lastTick });
-    where.textContent = beat.kind === 'start' ? t('robot.where.start', { total: lastBeat }) : beat.kind === 'resolve' ? t('robot.where.arena', { tick: beat.tick, n: index, total: lastBeat }) : t('robot.where', { line: beat.line ?? 0, n: index, total: lastBeat });
     // A control that cannot move any further is disabled instead of doing nothing.
     for (const b of backButtons) b.disabled = idle || index <= 0;
     for (const b of forwardButtons) b.disabled = idle || index >= lastBeat;
@@ -130,12 +128,8 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     }
     listing.dataset.active = active == null ? '' : String(active);
 
-    // In words: what this line did.
-    const sentences = beat.kind === 'start' ? [t('robot.narr.start')] : isIdleBeat(beats, frames, index) ? [t('robot.narr.idle')] : beat.kind === 'resolve' ? [t('robot.narr.resolve'), ...describeMotion(frames[beat.tick - 1], frames[beat.tick]!, t)] : narrateEvents(beat.events, t);
-    narration.replaceChildren(
-      ...(beat.kind === 'line' && active != null ? [h('li', { class: 'robot-narration-line' }, h('code', {}, `${t('robot.line', { line: active })}: ${(source[active - 1] ?? '').trim()}`))] : []),
-      ...sentences.map((s) => h('li', {}, s)),
-    );
+    // In words: what the action of this round did (one short line, only once it plays out).
+    narration.textContent = beat.kind === 'resolve' ? (describeAction(frames[beat.tick - 1], frames[beat.tick]!, t) ?? '') : '';
 
     paintSpeed();
   }
@@ -225,7 +219,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   const el = h(
     'section',
     { class: 'robot-replay', 'aria-label': t('robot.replay') },
-    h('div', { class: 'robot-arena' }, board, ...(idle ? [] : [h('div', { class: 'robot-counter' }, position, where)])),
+    h('div', { class: 'robot-arena' }, board, ...(idle ? [] : [h('div', { class: 'robot-counter' }, position)])),
   );
   const explain = h('div', { class: 'robot-explain' }, narration);
   const controls = h(

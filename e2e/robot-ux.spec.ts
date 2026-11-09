@@ -36,7 +36,7 @@ for (const size of SIZES) {
     expect(await smallTargets(page)).toEqual([]);
   });
 
-  test(`${size.name}: the narration is never cut off and the script box keeps its size after a fight`, async ({ page }) => {
+  test(`${size.name}: the narration is one line and the script box keeps its size after a fight`, async ({ page }) => {
     await page.setViewportSize(size);
     await start(page);
     const box = page.locator('.robot-editor-box');
@@ -44,7 +44,7 @@ for (const size of SIZES) {
     await runFight(page);
     await expect(page.getByTestId('robot-outcome')).toBeVisible();
     const clipped = await page.evaluate(() => {
-      const e = document.querySelector<HTMLElement>('.rb-explain .robot-explain');
+      const e = document.querySelector<HTMLElement>('.rb-explain .robot-narration');
       return e ? e.scrollHeight - e.clientHeight : 0;
     });
     expect(clipped).toBeLessThanOrEqual(1);

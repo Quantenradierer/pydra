@@ -279,30 +279,27 @@ for (const [device, viewport] of [
     const narration = page.getByTestId('robot-narration');
     // Slow by default; back at the start nothing has run yet.
     await expect(page.getByTestId('robot-speed')).toHaveText('⏱ mittel');
-    await expect(page.getByTestId('robot-where')).toContainText('Schritt 0 von');
+    await expect(narration).toHaveText('');
     await expect(page.locator('.robot-listing li.active')).toHaveCount(0);
 
     // Line 1: a sensor call that costs no tick, and a variable that changes.
     await page.getByTestId('robot-step').click();
     await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '1');
-    await expect(page.getByTestId('robot-where')).toHaveText(/^Zeile 1 · Schritt 1 von \d+$/);
-    await expect(narration).toContainText('kostet keine Runde');
+    await expect(narration).toHaveText('');
     await expect(page.locator('.robot-listing li[data-line="1"] .robot-note-inline')).toContainText('distance() →');
     await expect(page.getByTestId('robot-position')).toHaveText(/^Runde 1 von \d+$/);
 
     // Line 2: the branch that was taken is lit up and explained.
     await page.getByTestId('robot-step').click();
     await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '2');
-    await expect(narration).toContainText('Die Bedingung ist wahr');
     await expect(page.locator('.robot-listing li[data-line="2"]')).toHaveClass(/branch-true/);
 
     // Line 3: the command; stepping on plays it out in the arena (move) and the log tells it.
     await page.getByTestId('robot-step').click();
     await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '3');
-    await expect(narration).toContainText('ist ein Befehl');
     await page.getByTestId('robot-step').click();
-    await expect(page.getByTestId('robot-where')).toContainText('Arena · Schritt');
-    await expect(narration).toContainText('fährt von');
+    // The action plays out: one short sentence, no coordinates, no filler.
+    await expect(narration).toHaveText('Du fährst einen Schritt vor.');
 
     // Restart goes back to the start; the speed button cycles through the speeds and keeps its value.
     await page.getByTestId('robot-restart').click();
@@ -355,8 +352,9 @@ test('English texts in the stepping view', async ({ page }) => {
   await page.evaluate(() => localStorage.setItem('pydra.v1.language', JSON.stringify('en')));
   await openStep(page, 'first-contact', 'forward()\nfire()');
   await page.getByTestId('robot-step').click();
-  await expect(page.getByTestId('robot-narration')).toContainText('is a command: it costs one round');
-  await expect(page.getByTestId('robot-where')).toHaveText(/^Line 1 · step 1 of \d+$/);
+  await page.getByTestId('robot-step').click();
+  await expect(page.getByTestId('robot-narration')).toHaveText('You drive one step ahead.');
+  await expect(page.getByTestId('robot-position')).toHaveText(/^Round 1 of \d+$/);
   await expect(page.getByTestId('robot-speed')).toHaveText('⏱ medium');
 });
 

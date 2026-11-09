@@ -362,7 +362,7 @@ test('the variation queue: first fight, then the other variations and earlier en
   await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 1 von \d+$/);
   const total = Number((await page.getByTestId('robot-vq-progress').textContent())!.match(/von (\d+)/)![1]);
   expect(total).toBeGreaterThan(3);
-  await expect(page.getByTestId('robot-vq-state')).toHaveText('läuft');
+  await expect(page.getByTestId('robot-vq-state')).toHaveText('zum Ansehen');
   // Watch the first fight to its end: its result lights up in the queue.
   await page.getByTestId('robot-end').click();
   await expect(page.getByTestId('robot-vq-state')).toHaveText('gewonnen');

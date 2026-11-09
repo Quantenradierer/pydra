@@ -1,4 +1,4 @@
-import { mk, T } from './helpers.ts';
+import { T } from './helpers.ts';
 import type { Needs, Text } from './types.ts';
 
 /** Where a challenge sits in the order: after this step (an enemy id), so it is offered once that enemy is solved. */
@@ -19,15 +19,6 @@ export interface Glitch extends Base {
   fallback: string;
 }
 
-/** Solve a small puzzle in a separate script, without an enemy: paint the target pattern. */
-export interface Workshop extends Base {
-  kind: 'workshop';
-  map: string[];
-  /** Tiles to paint, "x,y". Exactly these. */
-  target: string[];
-  solution: string;
-}
-
 /** Beat an old enemy under a rule. */
 export interface Constraint extends Base {
   kind: 'constraint';
@@ -42,39 +33,9 @@ export interface Constraint extends Base {
   violation?: string;
 }
 
-export type Challenge = Glitch | Workshop | Constraint;
-
-const square = (x: number, y: number, size: number): string[] => {
-  const out: string[] = [];
-  for (let i = 0; i <= size; i++) out.push(`${x + i},${y}`, `${x + i},${y + size}`, `${x},${y + i}`, `${x + size},${y + i}`);
-  return [...new Set(out)];
-};
-
-/** Hp-99 dummy in the corner so a workshop run never ends early. */
-const far = (...items: [string, number, number][]) => mk(8, 8, ['D', 7, 0], ...items);
+export type Challenge = Glitch | Constraint;
 
 export const CHALLENGES: readonly Challenge[] = [
-  // ---- Chapter 0: write a script that paints
-  {
-    kind: 'workshop',
-    id: 'ws-step',
-    after: 'training-dummy',
-    title: T('Werkstatt: Drei Felder', 'Workshop: Three tiles'),
-    prompt: T('Male die drei Felder (3, 7), (3, 6) und (3, 5). Der Roboter startet bei (3, 7) und schaut nach oben. Mit brush.down() setzt du den Pinsel auf.', 'Paint the three tiles (3, 7), (3, 6) and (3, 5). The robot starts at (3, 7) looking up. brush.down() puts the brush down.'),
-    map: far(['^', 3, 7]),
-    target: ['3,7', '3,6', '3,5'],
-    solution: 'brush.down()\nforward()\nforward()',
-  },
-  {
-    kind: 'workshop',
-    id: 'ws-corner',
-    after: 'u-turn',
-    title: T('Werkstatt: Um die Ecke', 'Workshop: Around the corner'),
-    prompt: T('Male einen Winkel: (3, 7), (3, 6), (3, 5), dann nach rechts (4, 5) und (5, 5).', 'Paint an angle: (3, 7), (3, 6), (3, 5), then to the right (4, 5) and (5, 5).'),
-    map: far(['^', 3, 7]),
-    target: ['3,7', '3,6', '3,5', '4,5', '5,5'],
-    solution: 'brush.down()\nforward()\nforward()\nturn_right()\nforward()\nforward()',
-  },
   {
     kind: 'glitch',
     id: 'gl-foward',
@@ -104,26 +65,6 @@ export const CHALLENGES: readonly Challenge[] = [
     enemy: 'tank-dummy',
     bug: { from: '    fire()', to: 'fire()' },
     fallback: 'forward(4)\nfor i in range(5):\nfire()',
-  },
-  {
-    kind: 'workshop',
-    id: 'ws-square',
-    after: 'wall-dummy',
-    title: T('Werkstatt: Quadrat malen', 'Workshop: Draw a square'),
-    prompt: T('Male mit dem Pinsel ein Quadrat aus 3 × 3 Feldern (nur der Rand). Der Roboter startet unten links bei (1, 6). brush.down() setzt den Pinsel auf.', 'Draw a square of 3 × 3 tiles (just the outline) with the brush. The robot starts at the bottom left, (1, 6). brush.down() puts the brush down.'),
-    map: far(['^', 1, 6]),
-    target: square(1, 4, 2),
-    solution: 'brush.down()\nforward()\nforward()\nturn_right()\nforward()\nforward()\nturn_right()\nforward()\nforward()\nturn_right()\nforward()\nforward()',
-  },
-  {
-    kind: 'workshop',
-    id: 'ws-line',
-    after: 'twin-armor',
-    title: T('Werkstatt: Gestrichelte Linie', 'Workshop: Dashed line'),
-    prompt: T('Male jedes zweite Feld in der Spalte nach oben: (3, 7), (3, 5), (3, 3). Mit brush.up() hebst du den Pinsel an.', 'Paint every second tile up the column: (3, 7), (3, 5), (3, 3). brush.up() lifts the brush.'),
-    map: far(['^', 3, 7]),
-    target: ['3,7', '3,5', '3,3'],
-    solution: 'brush.down()\nbrush.up()\nforward()\nforward()\nbrush.down()\nbrush.up()\nforward()\nforward()\nbrush.down()',
   },
   {
     kind: 'constraint',
@@ -181,26 +122,6 @@ export const CHALLENGES: readonly Challenge[] = [
   },
   // ---- Chapter 2
   {
-    kind: 'workshop',
-    id: 'ws-stairs',
-    after: 'staircase',
-    title: T('Werkstatt: Treppe malen', 'Workshop: Draw stairs'),
-    prompt: T('Male mit dem Pinsel drei Treppenstufen: hoch, rechts, hoch, rechts … Der Roboter startet bei (1, 6) und schaut nach oben.', 'Draw three steps with the brush: up, right, up, right … The robot starts at (1, 6) looking up.'),
-    map: far(['^', 1, 6]),
-    target: ['1,6', '1,5', '2,5', '2,4', '3,4', '3,3', '4,3'],
-    solution: 'brush.down()\nfor i in range(3):\n    forward()\n    turn_right()\n    forward()\n    turn_left()',
-  },
-  {
-    kind: 'workshop',
-    id: 'ws-spiral',
-    after: 'spiral-hallway',
-    title: T('Werkstatt: Spirale malen', 'Workshop: Draw a spiral'),
-    prompt: T('Male eine Spirale: erst 1 Feld, dann 2, 3, 4, nach jedem Stück rechts abbiegen. Start bei (3, 4), Blick nach oben.', 'Draw a spiral: 1 tile, then 2, 3, 4, turning right after each piece. Start at (3, 4) looking up.'),
-    map: far(['^', 3, 4]),
-    target: ['3,4', '3,3', '4,3', '5,3', '5,4', '5,5', '5,6', '4,6', '3,6', '2,6', '1,6'],
-    solution: 'brush.down()\nfor i in range(1, 5):\n    forward(i)\n    turn_right()',
-  },
-  {
     kind: 'glitch',
     id: 'gl-indent-2',
     after: 'double-loop',
@@ -240,16 +161,6 @@ export const CHALLENGES: readonly Challenge[] = [
     enemy: 'bubble',
     bug: { from: ':\n', to: '\n' },
     fallback: 'for i in range(8):\n    if see() == "enemy"\n        fire()',
-  },
-  {
-    kind: 'workshop',
-    id: 'ws-zebra',
-    after: 'not-today',
-    title: T('Werkstatt: Zebrastreifen', 'Workshop: Zebra crossing'),
-    prompt: T('Male Streifen die Spalte hoch: Pinsel runter, wenn i % 3 == 0 ist, sonst hoch. Start (3, 7), Blick nach oben.', 'Paint stripes up the column: brush down when i % 3 == 0, otherwise up. Start at (3, 7), looking up.'),
-    map: far(['^', 3, 7]),
-    target: ['3,7', '3,6', '3,4', '3,3', '3,1', '3,0'],
-    solution: 'for i in range(7):\n    if i % 3 == 0:\n        brush.down()\n    else:\n        brush.up()\n    forward()',
   },
   // ---- Chapter 4
   {

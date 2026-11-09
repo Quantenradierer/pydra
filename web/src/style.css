@@ -2966,24 +2966,6 @@ progress {
   padding-left: 1.1rem;
   font-size: 0.9rem;
 }
-.robot-pixels {
-  display: grid;
-  grid-template-columns: repeat(8, 1.1rem);
-  gap: 1px;
-}
-.robot-pixels i {
-  width: 1.1rem;
-  height: 1.1rem;
-  background: var(--code-bg);
-  border-radius: 2px;
-}
-.robot-pixels i.on {
-  background: var(--green);
-}
-.robot-picture {
-  display: inline-block;
-  margin: 0.5rem 1rem 0 0;
-}
 .robot-history ol {
   padding-left: 1.1rem;
 }

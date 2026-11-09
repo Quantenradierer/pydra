@@ -31,12 +31,23 @@ export interface Step {
   challenge?: Challenge;
 }
 
+/**
+ * A challenge is a fight like any other: the enemy it is fought against, as a side fight of its own
+ * (never part of the chapter's regression run). A special rule is part of the fight's conditions.
+ */
+export function fightOf(c: Challenge, enemies: readonly EnemyData[]): EnemyData {
+  const base = enemies.find((e) => e.id === c.enemy)!;
+  const rule = c.kind === 'constraint' ? { ...base.needs, ...(c.maxLines !== undefined ? { maxLines: c.maxLines } : {}), ...c.needs } : base.needs;
+  const catchLine = c.kind === 'constraint' && c.rule ? { de: `${c.prompt.de} ${c.rule.de}`, en: `${c.prompt.en} ${c.rule.en}` } : c.prompt;
+  return { ...base, id: c.id, title: c.title, catchLine, regression: false, ...(rule ? { needs: rule } : {}), ...(c.kind === 'constraint' ? { solution: c.solution } : {}) };
+}
+
 /** Enemies in order, each followed by the challenges that sit after it. */
 export function buildSteps(enemies: readonly EnemyData[] = ENEMIES, challenges: readonly Challenge[] = CHALLENGES): Step[] {
   const steps: Step[] = [];
   for (const e of enemies) {
     steps.push({ id: e.id, kind: 'battle', chapter: e.chapter, enemy: e });
-    for (const c of challenges) if (c.after === e.id) steps.push({ id: c.id, kind: c.kind, chapter: e.chapter, challenge: c });
+    for (const c of challenges) if (c.after === e.id) steps.push({ id: c.id, kind: c.kind, chapter: e.chapter, challenge: c, enemy: fightOf(c, enemies) });
   }
   return steps;
 }
@@ -216,7 +227,7 @@ export class RobotGame {
   /** All fights the robot meets after the first one: other layouts of the enemy, then the earlier enemies of the chapter. */
   variationQueue(step: Step): QueueItem[] {
     const enemy = step.enemy!;
-    return buildQueue(enemy, this.earlierEnemies(enemy), this.enemies.includes(enemy) ? this.enemies : []);
+    return buildQueue(enemy, this.earlierEnemies(enemy), this.enemies.includes(enemy) || step.challenge ? this.enemies : []);
   }
 
   /**
@@ -303,23 +314,6 @@ export class RobotGame {
       this.save({ ...p, training: { ...p.training, wins: p.training.wins + 1, daily } });
     }
     return { step, report, broken: [], won: report.won, firstWin: false, stars };
-  }
-
-  /** A challenge was solved (the screen checked it). Pays once. */
-  complete(id: string): boolean {
-    const step = this.step(id);
-    const p = this.progress();
-    if (!step?.challenge || p.solved.includes(id) || !this.unlocked(id)) return false;
-    this.save({ ...p, solved: [...p.solved, id], runs: p.runs + 1, wins: p.wins + 1 });
-    this.onPoints({ type: 'level', game: 'robot', id, clean: (p.misses[id] ?? 0) === 0 });
-    return true;
-  }
-
-  /** A wrong try in a challenge. */
-  miss(id: string) {
-    const p = this.progress();
-    if (p.solved.includes(id)) return;
-    this.save({ ...p, misses: { ...p.misses, [id]: (p.misses[id] ?? 0) + 1 }, runs: p.runs + 1 });
   }
 
   stats(): { done: number; total: number; runs: number; percent: number; stars: number } {

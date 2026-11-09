@@ -91,7 +91,7 @@ function drawOverlay(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, f
 }
 
 /** Draws one frame of a battle on a canvas: tiles, robots with HP, shots, hits and speech bubbles. */
-export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index: number, trail: ReadonlySet<string> = new Set(), extras: DrawExtras = {}): void {
+export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index: number, extras: DrawExtras = {}): void {
   const shown = battle.frames[Math.min(index, battle.frames.length - 1)]!;
   const frame: Frame = extras.quiet ? { ...shown, events: [], bubbles: [] } : shown;
   const rows = battle.tiles.length;
@@ -110,10 +110,6 @@ export function drawFrame(canvas: HTMLCanvasElement, battle: BattleResult, index
       if (tile === 'rubble') {
         ctx.fillStyle = '#b89452';
         for (const [dx, dy] of [[0.25, 0.3], [0.6, 0.25], [0.4, 0.65], [0.75, 0.7]] as const) ctx.fillRect(x * CELL + dx * CELL, y * CELL + dy * CELL, 5, 5);
-      }
-      if (trail.has(`${x},${y}`)) {
-        ctx.fillStyle = 'rgba(120, 220, 140, 0.55)';
-        ctx.fillRect(x * CELL + 6, y * CELL + 6, CELL - 12, CELL - 12);
       }
     }
   }

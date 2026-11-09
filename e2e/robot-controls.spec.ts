@@ -133,12 +133,12 @@ test('desktop: no control of the Robot Battler screens is a no-op', async ({ pag
     await page.getByTestId('robot-training').click();
     await page.getByTestId('robot-train-daily').click();
   });
-  for (const id of ['ws-step', 'gl-foward', 'ws-square', 'cn-row-3']) {
+  for (const id of ['gl-foward', 'cn-row-3']) {
     await press(page, `challenge ${id}`, openStep(page, id));
   }
-  await press(page, 'challenge after a check', async () => {
-    await openStep(page, 'ws-step')();
-    await page.getByTestId('robot-check').click();
+  await press(page, 'challenge after a fight', async () => {
+    await openStep(page, 'cn-row-3')();
+    await runFight(page);
   });
   expect(dead, dead.join('\n')).toEqual([]);
 });

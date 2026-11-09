@@ -56,8 +56,6 @@ export interface BattleResult {
   /** A Python error that stopped the player's script (reason "error"), or the line of a budget stop. */
   error?: RbError;
   budgetLine?: number;
-  /** Tiles painted with the workshop brush, "x,y". */
-  trail: string[];
   /** HP the player lost over the battle. */
   damageTaken: number;
   /** Everything print() wrote, as bubbles also. */
@@ -120,8 +118,6 @@ export interface BattleInput {
   build: Build;
   script: string;
   layout: LayoutSpec;
-  /** Workshop mode: the player gets the paint `brush` and the result lists the painted tiles. */
-  brush?: boolean;
   /** Record `Frame.trace` for the player's script (the line-by-line viewer needs it; fast checks do not). */
   trace?: boolean;
 }
@@ -159,21 +155,12 @@ export function runBattle(input: BattleInput): BattleResult {
     if (tickTrace.length < TRACE_CAP) tickTrace.push(ev);
     else if (!cut) (cut = true), tickTrace.push({ k: 'cut' });
   };
-  const trail = new Set<string>();
-  let brushDown = false;
-  const paint = () => {
-    if (brushDown) trail.add(`${world.player.pos.x},${world.player.pos.y}`);
-  };
 
   const addBrain = (id: string, b: Build, source: string | undefined, strict: boolean) => {
     if (source === undefined) return;
     const sensorLog: string[] = [];
     logs.set(id, sensorLog);
     const env = createEnv({ world, id, build: b, sensorLog, say: (text) => bubbles.push({ robot: id, text }) });
-    if (input.brush && id === 'player') {
-      const m = (name: string, down: boolean) => ({ kind: 'host' as const, name, call: () => ((brushDown = down), paint(), null) });
-      env.globals.brush = { kind: 'object', name: 'brush', names: () => ['down', 'up'], get: (a: string) => (a === 'down' ? m('down', true) : a === 'up' ? m('up', false) : undefined) };
-    }
     const program = new Program(parse(source), {
       globals: env.globals,
       known: [...env.notEquipped.keys()],
@@ -202,7 +189,6 @@ export function runBattle(input: BattleInput): BattleResult {
         },
       ],
       error: e,
-      trail: [],
       damageTaken: 0,
       mapRows: built.mapRows,
       tiles: world.tiles.map((row) => [...row]),
@@ -265,7 +251,6 @@ export function runBattle(input: BattleInput): BattleResult {
       break;
     }
     const events = world.step(intents);
-    paint();
     frames.push(snapshot(events, lines, [...bubbles], sensors));
     const outcome = world.outcome();
     if (outcome) {
@@ -287,7 +272,6 @@ export function runBattle(input: BattleInput): BattleResult {
     frames,
     ...(error ? { error } : {}),
     ...(budgetLine !== undefined ? { budgetLine } : {}),
-    trail: [...trail],
     damageTaken: world.player.maxHp - world.player.hp,
     mapRows: built.mapRows,
     tiles: world.tiles.map((row) => [...row]),

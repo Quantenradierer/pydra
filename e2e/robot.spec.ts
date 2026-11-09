@@ -61,28 +61,27 @@ for (const [device, viewport] of [
   });
 }
 
-test('a challenge: Workshop (write the script), and English texts', async ({ page }) => {
+test('a bug hunt is a robot fight: the bug is put into your script, fix it and watch the fight; English texts', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => {
     localStorage.setItem('pydra.v1.language', JSON.stringify('en'));
     const solved = ['first-contact', 'one-more-line', 'training-dummy'];
-    localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: 'forward()\nfire()', runs: 3, wins: 3 }));
+    localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: 'forward()\nfire()\nfire()', runs: 3, wins: 3 }));
   });
   await page.reload();
   await page.getByTestId('start-robot').click();
   await expect(page.getByRole('heading', { level: 2 }).first()).toHaveText('Chapter 0: Commands in a row');
-  await page.getByTestId('robot-step-ws-step').click();
-  await expect(page.getByTestId('robot-workshop-code')).toBeVisible();
-  await expect(page.getByTestId('robot-workshop-code')).toHaveValue('');
-  expect(await pageScrolls(page)).toBe(false);
-  // Nothing written yet: not right.
-  await page.getByTestId('robot-check').click();
-  await expect(page.getByTestId('robot-feedback')).toHaveText('Not quite yet. Try again.');
-  await page.getByTestId('robot-workshop-code').fill('brush.down()\nforward()\nforward()');
-  await page.getByTestId('robot-check').click();
-  await expect(page.getByTestId('robot-feedback')).toHaveText('Right!');
-  await page.getByTestId('robot-to-map').click();
-  await expect(page.getByTestId('robot-step-ws-step')).toContainText('done');
+  await page.getByTestId('robot-step-gl-foward').click();
+  await expect(page.getByTestId('robot-code')).toHaveValue('foward()\nfire()\nfire()');
+  await expect(page.getByTestId('robot-catch')).toContainText('spelled differently');
+  await runFight(page);
+  await expect(page.getByTestId('robot-error')).toContainText('Line 1');
+  await fillCode(page, 'forward()\nfire()\nfire()');
+  await runFight(page);
+  await expect(page.getByTestId('robot-outcome')).toContainText('Won');
+  await page.getByTestId('robot-end').click();
+  await page.getByRole('button', { name: 'Back', exact: true }).click();
+  await expect(page.getByTestId('robot-step-gl-foward')).toContainText('done');
 });
 
 test('the builder: every part can be equipped at any time; new parts are only marked "neu"', async ({ page }) => {

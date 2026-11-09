@@ -20,7 +20,6 @@ export interface Speed {
 export interface ViewerOptions {
   t: T;
   speed: Speed;
-  trail?: ReadonlySet<string>;
   /** The viewer reached its last step; `byPlay` is true when playing got there by itself. */
   onEnd?: (byPlay: boolean) => void;
   /** The user pressed one of the controls. */
@@ -106,7 +105,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     // The arena: a line shows the world as it was when the tick began; the resolve beat plays the action out.
     const resolved = beat.kind === 'resolve' || beat.after === true || beat.kind === 'start';
     const frameIndex = beat.kind === 'line' && !beat.after ? beat.tick - 1 : beat.tick;
-    drawFrame(canvas, battle, frameIndex, o.trail, { over, callouts: calloutsOf(beat), ...(beat.kind === 'resolve' ? { prev: frames[beat.tick - 1]! } : {}), ...(resolved ? {} : { quiet: true }) });
+    drawFrame(canvas, battle, frameIndex, { over, callouts: calloutsOf(beat), ...(beat.kind === 'resolve' ? { prev: frames[beat.tick - 1]! } : {}), ...(resolved ? {} : { quiet: true }) });
 
     layer.update(frames[Math.min(frameIndex, lastTick)]!, beat.kind === 'resolve' ? frames[beat.tick - 1] : undefined, !resolved);
     position.textContent = t('robot.tick', { n: beat.tick, total: lastTick });

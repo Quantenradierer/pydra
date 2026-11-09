@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildProblem, GEAR, START_BUILD, type Build, type GearId } from './build.ts';
-import { challengeById, checkConstraint, checkGlitch, checkWorkshop, injectGlitch } from './challenges.ts';
+import { challengeById, checkConstraint, checkGlitch, injectGlitch } from './challenges.ts';
 import { CHALLENGES } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import { DEFAULT_BUILD, fightEnemy } from './fight.ts';
@@ -35,7 +35,6 @@ describe('default gear', () => {
 
   it('every challenge can be solved with the default gear', () => {
     for (const c of CHALLENGES) {
-      if (c.kind === 'workshop') expect(checkWorkshop(c, c.solution).ok, c.id).toBe(true);
       if (c.kind === 'constraint') expect(checkConstraint(c, c.solution, DEFAULT_BUILD), c.id).toBe(true);
       if (c.kind === 'glitch') {
         const good = ENEMIES.find((e) => e.id === c.enemy)!.solution;
@@ -77,6 +76,6 @@ describe('other gear', () => {
     for (const chassis of ['light', 'medium'] as const)
       for (const locomotion of ['wheels', 'legs', 'treads'] as const)
         for (const g of GEAR) expect(game.setBuild({ ...START_BUILD, chassis, locomotion, gear: [g] }), `${chassis}/${locomotion}/${g}`).toBe(true);
-    expect(challengeById('ws-step')).toBeDefined();
+    expect(challengeById('gl-foward')).toBeDefined();
   });
 });

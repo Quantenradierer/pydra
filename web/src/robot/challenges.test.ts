@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { START_BUILD } from './build.ts';
-import { CHALLENGES, checkConstraint, checkGlitch, checkWorkshop, injectGlitch } from './challenges.ts';
+import { CHALLENGES, checkConstraint, checkGlitch, injectGlitch } from './challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import { DEFAULT_BUILD } from './fight.ts';
 
@@ -21,11 +21,6 @@ describe('challenges', () => {
           expect(checkGlitch(c, buggy, build)).toBe(false);
           expect(checkGlitch(c, good, build)).toBe(true);
           expect(checkGlitch(c, c.fallback, build), 'the fallback must be broken too').toBe(false);
-          break;
-        }
-        case 'workshop': {
-          expect(checkWorkshop(c, '').ok).toBe(false);
-          expect(checkWorkshop(c, c.solution).ok).toBe(true);
           break;
         }
         case 'constraint': {

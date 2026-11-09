@@ -114,14 +114,25 @@ describe('RobotGame', () => {
     expect(game.build().addons).toEqual(['wide', 'scanner']);
   });
 
-  it('pays a challenge once', () => {
+  it('plays a challenge as a fight and pays it once', () => {
     const { game, events } = setup();
     game.run('first-contact');
     game.setScript(ENEMIES[1]!.solution);
     game.run('one-more-line');
-    expect(game.complete('gl-foward')).toBe(true);
-    expect(game.complete('gl-foward')).toBe(false);
-    expect(events.at(-1)).toEqual({ type: 'level', game: 'robot', id: 'gl-foward', clean: true });
+    const step = game.step('gl-foward')!;
+    expect(step.enemy?.regression).toBe(false);
+    game.setScript('foward()\nfire()\nfire()');
+    expect(game.run('gl-foward')?.error).toBeDefined();
+    game.setScript(ENEMIES[1]!.solution);
+    expect(game.run('gl-foward')?.firstWin).toBe(true);
+    expect(game.run('gl-foward')?.firstWin).toBe(false);
+    expect(events.filter((e) => e.type === 'level' && e.id === 'gl-foward')).toEqual([{ type: 'level', game: 'robot', id: 'gl-foward', clean: false }]);
+  });
+
+  it('ignores steps of removed task types in old saves', () => {
+    const p = parseProgress({ script: 'x', solved: ['ws-step', 'first-contact'], stars: { 'ws-step': 2 } }, buildSteps());
+    expect(p.solved).toEqual(['first-contact']);
+    expect(p.stars).toEqual({});
   });
 
   it('reads damaged progress defensively', () => {

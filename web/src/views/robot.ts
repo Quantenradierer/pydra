@@ -4,7 +4,7 @@ import { BACK } from '../icons.ts';
 import type { MessageKey } from '../i18n.ts';
 import { apiEntries } from '../robot/api.ts';
 import { START_BUILD, INTRODUCED_IN, CHASSIS, addonsFor, type Build, type GearId } from '../robot/build.ts';
-import { checkConstraint, checkGlitch, checkWorkshop, injectGlitch } from '../robot/challenges.ts';
+import { checkGlitch, injectGlitch } from '../robot/challenges.ts';
 import type { Challenge } from '../robot/content/challenges.ts';
 import type { EnemyData } from '../robot/content/types.ts';
 import type { EnemyReport, FightReport } from '../robot/fight.ts';
@@ -649,102 +649,13 @@ export function robotScreen(app: App): Screen {
     );
   }
 
-  // ---------------------------------------------------------------- challenges
-
-  function feedback(ok: boolean, step: Step) {
-    if (ok) game.complete(step.id);
-    else game.miss(step.id);
-    return h('p', { class: ok ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-feedback', role: 'status' }, t(ok ? 'robot.right' : 'robot.wrong'));
-  }
-
-  /** A challenge fills the viewport like the work screen: content scrolls, the check button and the way back stay at the bottom. */
-  function challengeShell(step: Step, content: (Node | null)[], check: HTMLElement, out: HTMLElement) {
-    const back = h('button', { class: 'run-control', 'data-testid': 'robot-to-map', onclick: showMap }, t('robot.toMap'));
-    const body = h('div', { class: 'rb-zone-body' }, ...content, out);
-    const actions = h('div', { class: 'rb-zone-actions' }, check, back);
-    check.addEventListener('click', () => setTimeout(() => out.scrollIntoView?.({ block: 'nearest' }), 0));
-    showWork(h('div', { class: 'rb-work rb-chal', 'data-testid': 'robot-challenge' }, h('div', { class: 'rb-top' }, stepHeader(step)), h('section', { class: 'rb-zone rb-single' }, body, actions)));
-  }
-
-  /** The commands of the build, folded away. */
-  const apiFold = (build: Build) => h('details', { class: 'robot-api-fold' }, h('summary', {}, t('robot.api')), apiList(build));
-
-  function showChallenge(step: Step) {
-    const c: Challenge = step.challenge!;
-    const out = h('div', { 'data-testid': 'robot-result' });
-    const prompt = h('p', { class: 'robot-card', 'data-testid': 'robot-prompt' }, c.prompt[lang]);
-    const checkBtn = (label: string, onclick: () => void) => h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick }, label);
-    switch (c.kind) {
-      case 'glitch': {
-        const bugged = injectGlitch(c, game.script());
-        const { area, el: areaEl } = editor(bugged, () => game.build(), () => {}, 'robot-glitch-code');
-        challengeShell(step, [prompt, h('p', { class: 'robot-note' }, t('robot.glitch.note')), areaEl], checkBtn(t('robot.glitch.fix'), () => out.replaceChildren(...glitchResult(c, area.value, step))), out);
-        break;
-      }
-      case 'workshop': {
-        const { area, el: areaEl } = editor('', () => START_BUILD, () => {}, 'robot-workshop-code');
-        challengeShell(
-          step,
-          [prompt, h('p', { class: 'robot-note' }, t('robot.workshop.note')), apiFold({ ...START_BUILD }), areaEl],
-          checkBtn(t('robot.workshop.run'), () => {
-            const r = checkWorkshop(c, area.value);
-            out.replaceChildren(r.error ? h('p', { class: 'robot-loss', role: 'alert' }, r.error) : feedback(r.ok, step), workshopPicture(c.target, t('robot.workshop.target')), workshopPicture(r.trail, t('robot.workshop.yours')));
-          }),
-          out,
-        );
-        break;
-      }
-      case 'constraint': {
-        const { area, el: areaEl } = editor(game.script(), () => game.build(), (text) => game.setScript(text), 'robot-constraint-code');
-        challengeShell(
-          step,
-          [prompt, h('p', { class: 'robot-note' }, [c.maxLines !== undefined ? t('robot.constraint.rule', { n: c.maxLines }) : '', c.rule ? c.rule[lang] : ''].filter(Boolean).join(' ')), apiFold(game.build()), areaEl],
-          checkBtn(t('robot.check'), () => out.replaceChildren(...constraintResult(c, area.value, step))),
-          out,
-        );
-        break;
-      }
-    }
-  }
-
-  function glitchResult(c: Extract<Challenge, { kind: 'glitch' }>, script: string, step: Step): Node[] {
-    const build = game.build();
-    try {
-      const { precheckError } = precheckOf(build, script);
-      if (precheckError) return [errorBox(precheckError)];
-    } catch {
-      // fall through to the battle
-    }
-    return [feedback(checkGlitch(c, script, build), step)];
-  }
-
-  function constraintResult(c: Extract<Challenge, { kind: 'constraint' }>, script: string, step: Step): Node[] {
-    game.setScript(script);
-    const { precheckError } = precheckOf(game.build(), script);
-    if (precheckError) return [errorBox(precheckError)];
-    return [feedback(checkConstraint(c, script, game.build()), step)];
-  }
-
-  function precheckOf(build: Build, script: string): { precheckError?: RbError } {
-    const e = precheckFn(build, script);
-    return e ? { precheckError: e } : {};
-  }
-
-  function workshopPicture(tiles: readonly string[], label: string): HTMLElement {
-    const set = new Set(tiles);
-    return h(
-      'figure',
-      { class: 'robot-picture' },
-      h('figcaption', {}, label),
-      h('div', { class: 'robot-pixels', role: 'img', 'aria-label': label }, ...Array.from({ length: 64 }, (_, i) => h('i', { class: set.has(`${i % 8},${Math.floor(i / 8)}`) ? 'on' : '' }))),
-    );
-  }
-
   function showStep(id: string) {
     const step = game.step(id)!;
     game.open(id);
-    if (step.kind === 'battle') showBattle(step);
-    else showChallenge(step);
+    const c = step.challenge;
+    // A bug hunt starts from the player's own working script with the bug put in (unless they are already mid-fix).
+    if (c?.kind === 'glitch' && !game.progress().solved.includes(id) && checkGlitch(c, game.script(), game.build())) game.setScript(injectGlitch(c, game.script()));
+    showBattle(step);
     root.querySelector<HTMLElement>('[data-testid="robot-step-title"]')?.focus();
   }
 

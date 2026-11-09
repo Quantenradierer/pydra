@@ -1981,7 +1981,7 @@ textarea {
  * than in the other games, so the whole program fits below it.
  */
 .game.order .arena-box {
-  max-width: calc(28dvh * var(--ratio));
+  max-width: calc(25dvh * var(--ratio));
 }
 
 .game .order-slot {

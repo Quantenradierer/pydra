@@ -48,48 +48,52 @@ export function robotScreen(app: App): Screen {
   function showMap() {
     const p = game.progress();
     const chapters = [...new Set(game.steps.map((s) => s.chapter))];
-    const sections = chapters.map((chapter) =>
-      h(
-        'section',
-        { class: 'robot-chapter' },
-        h('h2', {}, t(`robot.chapter.${chapter}` as MessageKey)),
+    const upNext = game.steps.find((st) => game.unlocked(st.id) && !p.solved.includes(st.id) && (st.kind === 'battle' || st.challenge));
+    const sections = chapters.map((chapter) => {
+      const list = game.steps.filter((s) => s.chapter === chapter);
+      const done = list.filter((s) => p.solved.includes(s.id)).length;
+      const anyOpen = list.some((s) => game.unlocked(s.id));
+      const isOpen = list.some((s) => game.unlocked(s.id) && !p.solved.includes(s.id));
+      return h(
+        'details',
+        { class: `robot-chapter${done === list.length ? ' complete' : ''}${anyOpen ? '' : ' locked'}`, open: isOpen, 'data-testid': `robot-chapter-${chapter}` },
+        h('summary', {}, h('h2', { class: 'robot-chapter-name' }, t(`robot.chapter.${chapter}` as MessageKey)), h('span', { class: 'robot-chapter-count' }, anyOpen ? t('robot.chapter.count', { done, n: list.length }) : t('robot.step.locked'))),
         h(
           'ul',
           { class: 'robot-steps' },
-          ...game.steps
-            .filter((s) => s.chapter === chapter)
-            .map((s) => {
-              const solved = p.solved.includes(s.id);
-              const open = game.unlocked(s.id);
-              const stars = p.stars[s.id] ?? 0;
-              const state = solved ? t('robot.step.solved') : open ? '' : t('robot.step.locked');
-              return h(
-                'li',
-                {},
-                h(
-                  'button',
-                  {
-                    class: `robot-step${solved ? ' solved' : ''}${s.kind === 'battle' ? '' : ' challenge'}`,
-                    'data-testid': `robot-step-${s.id}`,
-                    disabled: !open,
-                    onclick: () => {
-                      game.open(s.id);
-                      showStep(s.id);
-                    },
+          ...list.map((s) => {
+            const solved = p.solved.includes(s.id);
+            const open = game.unlocked(s.id);
+            const stars = p.stars[s.id] ?? 0;
+            const state = solved ? t('robot.step.solved') : open ? '' : t('robot.step.locked');
+            return h(
+              'li',
+              {},
+              h(
+                'button',
+                {
+                  class: `robot-step${solved ? ' solved' : ''}${s.kind === 'battle' ? '' : ' challenge'}${s.id === upNext?.id ? ' next' : ''}`,
+                  'data-testid': `robot-step-${s.id}`,
+                  disabled: !open,
+                  onclick: () => {
+                    game.open(s.id);
+                    showStep(s.id);
                   },
-                  h('span', { class: 'robot-kind' }, t(`robot.kind.${s.kind}` as MessageKey)),
-                  h('span', { class: 'robot-title' }, titleOf(s)),
-                  s.enemy?.regression === false ? h('span', { class: 'robot-side' }, t('robot.side')) : null,
-                  h('span', { class: 'robot-state' }, [state, stars > 0 ? '★'.repeat(stars) : ''].filter(Boolean).join(' ')),
-                ),
-              );
-            }),
+                },
+                h('span', { class: 'robot-main' }, h('span', { class: 'robot-title' }, titleOf(s)), h('span', { class: 'robot-kind' }, [t(`robot.kind.${s.kind}` as MessageKey), s.enemy?.regression === false ? t('robot.side') : ''].filter(Boolean).join(' · '))),
+                h('span', { class: 'robot-state' }, [solved ? `✓ ${state}` : state, stars > 0 ? '★'.repeat(stars) : ''].filter(Boolean).join(' ')),
+              ),
+            );
+          }),
         ),
-      ),
-    );
+      );
+    });
+    const resume = upNext
+      ? h('button', { class: 'robot-run robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(upNext.id), showStep(upNext.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, titleOf(upNext)))
+      : null;
     show(
       subpageHeader(app, t('lesson.robot.title')),
-      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, p.solved.includes('final-exam') ? h('p', { class: 'robot-win', 'data-testid': 'robot-certificate' }, `🎓 ${t('robot.certificate')}`) : null, game.canTrain() ? h('button', { class: 'run-control', 'data-testid': 'robot-training', onclick: showTraining }, t('robot.training')) : null, ...sections),
+      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, resume, p.solved.includes('final-exam') ? h('p', { class: 'robot-win', 'data-testid': 'robot-certificate' }, `🎓 ${t('robot.certificate')}`) : null, game.canTrain() ? h('button', { class: 'run-control', 'data-testid': 'robot-training', onclick: showTraining }, t('robot.training')) : null, ...sections),
     );
   }
 

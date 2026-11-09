@@ -398,3 +398,18 @@ test('English texts in the stepping view', async ({ page }) => {
   await expect(page.getByTestId('robot-vq-progress')).toContainText('Fight 1 of');
   await expect(page.getByTestId('robot-speed-label')).toHaveText('very slow');
 });
+
+test('the task map: a Continue button leads to the next task and finished chapters fold away', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('start-robot').click();
+  await expect(page.getByTestId('robot-continue')).toContainText('Los geht’s');
+  await expect(page.getByTestId('robot-continue')).toContainText('Erster Kontakt');
+  await expect(page.getByTestId('robot-chapter-1')).not.toHaveAttribute('open', '');
+  await page.getByTestId('robot-continue').click();
+  await expect(page.getByTestId('robot-step-title')).toHaveText('Erster Kontakt');
+  await page.getByTestId('robot-run').click();
+  await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
+  await page.getByRole('button', { name: 'Zurück', exact: true }).click();
+  await expect(page.getByTestId('robot-continue')).toContainText('Weiter geht’s');
+  await expect(page.getByTestId('robot-continue')).toContainText('Eine Zeile mehr');
+});

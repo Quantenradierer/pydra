@@ -2508,6 +2508,59 @@ progress {
 .robot h3 {
   margin: 0.4rem 0 0.3rem;
 }
+.robot-map {
+  display: grid;
+  gap: 0.7rem;
+}
+.robot-chapter {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0 0.7rem;
+}
+.robot-chapter > summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 0.8rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+.robot-chapter.locked {
+  opacity: 0.6;
+}
+.robot-chapter.complete > summary .robot .robot-chapter-name {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.robot-chapter-count {
+  color: var(--green);
+}
+.robot-chapter-count {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.robot-chapter .robot-steps {
+  padding-bottom: 0.7rem !important;
+}
+.robot-continue {
+  display: grid;
+  gap: 0.1rem;
+  text-align: left;
+  padding: 0.8rem 1rem;
+  font-size: 1.1rem;
+}
+.robot-continue small {
+  font-weight: 400;
+  opacity: 0.9;
+}
+.robot-step.next {
+  border-color: var(--accent);
+  border-width: 2px;
+}
 .robot-chapter .robot-steps {
   list-style: none;
   margin: 0;
@@ -2517,19 +2570,22 @@ progress {
 }
 .robot-step {
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   gap: 0.2rem 0.6rem;
   text-align: left;
-  padding: 0.6rem 0.8rem;
+  padding: 0.5rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--fg);
   font: inherit;
-  min-height: 2.75rem;
+  min-height: 3rem;
   cursor: pointer;
+}
+.robot-main {
+  display: grid;
 }
 .robot-step.solved {
   border-color: var(--green);
@@ -2538,13 +2594,12 @@ progress {
   border-style: dashed;
 }
 .robot-step:disabled {
-  opacity: 0.55;
+  opacity: 0.65;
   cursor: not-allowed;
 }
 .robot-kind {
   font-size: 0.8rem;
   color: var(--muted);
-  min-width: 5.5rem;
 }
 .robot-title {
   font-weight: 600;
@@ -2552,6 +2607,7 @@ progress {
 }
 .robot-state,
 .robot-side {
+  white-space: nowrap;
   font-size: 0.85rem;
   color: var(--muted);
 }

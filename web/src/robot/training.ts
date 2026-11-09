@@ -118,7 +118,7 @@ export function trainingFight(seed: number, level: number, id = `training-${seed
     id,
     chapter: l,
     title: T(`Training Nr. ${seed}`, `Training #${seed}`),
-    catchLine: T(`Ein zufälliger Kampf (${g.text.de}) mit dem, was du in den Kapiteln bis ${l} gelernt hast.`, `A random fight (${g.text.en}) with what you learned up to Chapter ${l}.`),
+    catchLine: T(`Zufall: ${g.text.de}.`, `Random: ${g.text.en}.`),
     enemies: g.enemies,
     map: g.map,
     solution: g.solution,

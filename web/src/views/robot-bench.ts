@@ -87,7 +87,7 @@ export function benchEl(o: BenchOptions): HTMLElement {
       h('ul', { class: 'robot-picks' }, ...list.map((g) => card(g, partName(g), h('button', { class: 'run-control', 'data-testid': `robot-pick-${g}`, onclick: () => (o.select(undefined), o.apply({ ...build, gear: [...build.gear, g] })) }, t('robot.bench.plug'))))),
       h('div', { class: 'robot-pick-actions' }, close()),
     );
-  } else inspector.append(h('p', { class: 'robot-note' }, t('robot.bench.help')));
+  }
 
   return h('div', { class: 'robot-bench', 'data-testid': 'robot-bench' }, h('div', { class: 'rb-stage robot-bench-stage' }, robot), inspector);
 }

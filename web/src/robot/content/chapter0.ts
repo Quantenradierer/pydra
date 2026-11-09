@@ -8,7 +8,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'first-contact',
     title: T('Erster Kontakt', 'First Contact'),
-    catchLine: T('Der Code ist schon fertig: Starte den Kampf und schau zu.', 'The code is already written: press "Start fight" and watch.'),
+    catchLine: T('Der Code ist schon fertig.', 'The code is already written.'),
     enemies: [{ hp: 1 }],
     map: mk(8, 8, P(), ['D', 3, 4]),
     solution: 'forward()\nfire()',

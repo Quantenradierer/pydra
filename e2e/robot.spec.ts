@@ -344,7 +344,7 @@ test('one fight per task: it plays at once, the verdict comes when it ends, a lo
   await expect(page.getByText(/Automatisch weiter/)).toHaveCount(0);
   await fillCode(page, 'forward()\nfire()');
   await runFight(page);
-  await expect(page.getByTestId('robot-outcome')).toContainText('Die Zeit lief ab');
+  await expect(page.getByTestId('robot-outcome')).toContainText('Zeit abgelaufen');
 });
 
 test('English texts in the stepping view', async ({ page }) => {

@@ -159,7 +159,7 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
   const tabs = h('div', { class: 'robot-snippet-tabs', role: 'group', 'aria-label': t('robot.sug.bar') });
   const row = h('div', { class: 'robot-snippet-row' });
   const cmds = h('dl', { class: 'robot-sheet-cmds', 'data-testid': `${testId}-help` });
-  helpSheet.body.append(tabs, row, h('h3', {}, t('robot.sug.cmds')), cmds);
+  helpSheet.body.append(tabs, row, cmds);
   const insertFromSheet = (s: Snippet) => {
     sheet.close();
     area.setSelectionRange(...sheetSel);

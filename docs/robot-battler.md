@@ -64,7 +64,7 @@ Top to bottom on a phone (one scrolling column):
 
 **The fight (rb19)**: pressing `Kampf starten` plays the fight at once, slowly (`playFight` calls `viewer.play()`; before this
 fix the fight loaded *paused* and the verdict showed at once, so "nothing happened"). Each step lights the code line, shows the call pill and
-the move / shot on the arena and a sentence of narration; a command line is followed by its round. The verdict, the stars and the points
+the move / shot on the arena; a command line is followed by its round. The verdict, the stars and the points
 (`RobotGame.run(id, true)` returns `award()`, which the screen calls when the verdict shows, so the +XP toast does not spoil the result)
 come when the fight reached its end or was skipped. Nothing advances by itself. A lost fight says why in the verdict line (unmet rule, error with line, `robot.outcome.dead|timeout`).
 
@@ -89,7 +89,7 @@ Not changed: the Home screen (shared by all games). Still open: no keyboard shor
 
 **rb20 playtest fixes** (hostile first-time play at 360x740 and 1280x800, de and en, screenshots every 500 ms during fights):
 * A lost fight whose script had ended played 200 empty rounds at 800 ms (~160 s of nothing). `stepper.ts` `isIdleBeat` / `idleRunEnd`: a run of rounds with no line,
-  no event and no speech is one step ("Dein Skript ist zu Ende ..." / `robot.narr.idle`), the playback and the → button jump over it; any fight is played at the fastest speed
+  no event and no speech is one step (the narration line stays empty), the playback and the → button jump over it; any fight is played at the fastest speed
   after `SLOW_STEPS` (40) steps so a never-ending loop does not take minutes (the first steps stay at the chosen speed).
 * On a phone the verdict and the primary button were below the fold when a fight ended: the page now scrolls them into view (`scrollIntoView({block:'nearest'})`, no move when visible).
 * A bug hunt opened with a script that does not win showed the text "forward() is spelled differently" but no bug: that script is replaced once per visit by the challenge's `fallback`
@@ -234,9 +234,8 @@ on the default build), `e2e/robot.spec.ts` (builder without locks, "neu" tag, Ch
 ## Wording audit (German / English UI)
 
 Rules: German in Du-form with the plain imperative (`Starte`, `Wähle`, `Versuche`, never `Drück`/`Klick`); short, concrete
-words; no English terms in the German UI except the part names (Blaster, GPS, Mk II). One vocabulary for time, explained once
-in the fight view (`robot.narr.start`): a **Schritt** (step) is one line of the script or one move in the arena; a **Runde**
-(round) is what an action command such as `fire()` costs, then the arena moves. "Tick" does not appear in the UI any more
+words; no English terms in the German UI except the part names (Blaster, GPS, Mk II). Time is a **Runde** (round: what an
+action command such as `fire()` costs, then the arena moves); the only counter on screen is `Runde n von m`. "Tick" does not appear in the UI any more
 (`clock.tick()` is the Python function name and stays).
 
 | Old term (de / en) | New term (de / en) |
@@ -286,3 +285,18 @@ Runde zurück", "Von vorn" at the start and "Zum Ende" / forward at the end did 
 4. **Tests to add with new content**: nothing new is needed for enemies/challenges (the data-driven tests pick them up);
    add golden snippets to `py/golden-snippets.ts` and run `npm run golden -w web` for every new Python feature. Rules that are
    the point of a catch deserve an explicit case in `chapters.test.ts` (see Bubble: blind shooting; Gatekeeper: waiting).
+
+## rb22: no filler text
+
+* **Fight narration** is ONE short line under the controls (keys `say.*`, `narration.ts` `describeAction`, unit-tested in
+  `narration.test.ts`): what the player's action just did ("Du fährst einen Schritt vor.", "Du schießt: Treffer!", "Du stößt an die Wand.",
+  "Du schießt: daneben."). It shows only once the action plays out (the round's arena beat) and is empty otherwise; the highlighted line
+  and the arena already say the rest. No coordinates, no generic sentences, no box. The old `robot.narr.*`, `robot.where*`,
+  `robot.motion.*`, `robot.ev.*` texts, `describeFrame` and the `Arena · Schritt n von m` label are deleted; the only counter is `Runde n von m`.
+* **Audit of every screen** (map, task, fight, win / loss / error verdicts, glitch, constraint, training, help and equipment sheets; de and en;
+  360x740 and 1280x800; screenshots and a text dump per state). Removed or shortened: "Starte den Kampf und schau zu" (the button says it),
+  "Nächste Aufgabe frei" (the `Weiter` button says it), the star rule on a three-star win (still shown below three stars), the equipment
+  instruction paragraph (`robot.bench.help`), the help sheet's repeated heading "Befehle deines Roboters", the training intro and the
+  training task text (now `Zufall: <enemy>.`), "Die Gegner sind besiegt, aber ..." prefixes in the verdict, "Die Zeit lief ab, bevor der
+  Gegner besiegt war" (now "Zeit abgelaufen."). Task goals that carry a rule or a catch (line limits, hit counts) stay: they are the task.
+* e2e `no filler sentences` guards the removals.

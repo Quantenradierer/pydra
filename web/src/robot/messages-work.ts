@@ -18,7 +18,6 @@ const SUG = {
   'robot.sug.list': ['Vorschläge', 'Suggestions'],
   'robot.sug.off': ['nicht angebaut', 'not built in'],
   'robot.sug.bar': ['Einfügen', 'Insert'],
-  'robot.sug.cmds': ['Befehle deines Roboters', 'Commands of your robot'],
   'robot.sug.close': ['Schließen', 'Close'],
   'robot.sug.help': ['Hilfe', 'Help'],
   'robot.sug.var': ['Name aus deinem Skript', 'name from your script'],

@@ -63,3 +63,16 @@ test('the run controls incl. the speed button and the equipment button are at le
   );
   expect(small).toEqual([]);
 });
+
+test('no filler sentences: the goal is one line, the verdict says only the result, sheets have no instruction paragraph', async ({ page }) => {
+  await start(page);
+  const main = page.locator('main.robot');
+  await expect(main).not.toContainText('Starte den Kampf');
+  await expect(page.getByTestId('robot-narration')).toHaveCount(0);
+  await runFight(page);
+  await expect(page.getByTestId('robot-outcome')).toHaveText(/^Gewonnen!/);
+  await expect(main).not.toContainText('Nächste Aufgabe frei');
+  await expect(main).not.toContainText('Schritt');
+  await page.getByTestId('robot-equipment').click();
+  await expect(page.getByTestId('robot-bench')).not.toContainText('Tippe auf');
+});

@@ -249,7 +249,7 @@ export function robotScreen(app: App): Screen {
 
   function outcomeFor(run: RunReport, report: EnemyReport, enemy: EnemyData): { text: string; ok: boolean; extra: Node[]; rule?: Node } {
     const extra: Node[] = [];
-    if (run.won) return { text: t(run.firstWin ? 'robot.outcome.firstWin' : 'robot.outcome.win'), ok: true, extra, rule: h('p', { class: 'robot-note' }, t('robot.stars.rule', { par: enemy.par })) };
+    if (run.won) return { text: t(run.firstWin ? 'robot.outcome.firstWin' : 'robot.outcome.win'), ok: true, extra, ...(run.stars < 3 ? { rule: h('p', { class: 'robot-note' }, t('robot.stars.rule', { par: enemy.par })) } : {}) };
     if (report.tooLong) return { text: t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 }), ok: false, extra };
     const { fight } = report;
     const b = fight.battle;

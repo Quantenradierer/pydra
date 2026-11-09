@@ -1,121 +1,74 @@
-import { chapter, maze, mk, T, wallCol } from './helpers.ts';
+import { chapter, mk, T } from './helpers.ts';
 
-const P = (): ['^', number, number] => ['^', 3, 9];
-const arena = (...items: [string, number, number][]) => mk(8, 10, P(), ...items);
-const corridor = [...wallCol(2, 0, 8), ...wallCol(4, 0, 8)];
-const gapped = [...wallCol(2, 0, 8), ...wallCol(4, 0, 5), ...wallCol(4, 7, 8)];
-const dummies = (hps: number[], from = 1): [string, number, number][] => hps.map((_, i) => ['D', 3, from + i]);
+const P: ['^', number, number] = ['^', 3, 9];
+const NORTH: [string, number, number] = ['D', 3, 2];
+const EAST: [string, number, number] = ['D', 7, 5];
+const WEST: [string, number, number] = ['D', 0, 5];
+const BIG: [string, number, number] = ['2', 3, 1];
+const arena = (...items: [string, number, number][]) => mk(8, 10, P, ...items);
 
-/** Chapter 2: for loops. The chain tank -> row -> counter -> after -> double -> army shares one frame (robot at (3, 9), forward(4)); square, spiral and staircase are side missions with their own set-up. */
+/** Each solution is the one before plus new lines (a loop around old lines adds only the `for` line). */
+const L = (n: number) => `for i in range(${n}):\n    fire()`;
+const S1 = `forward(4)\n${L(5)}`;
+const S2 = `${S1}\nturn_right()\n${L(5)}`;
+const S3 = `${S2}\nsay("done")`;
+const S4 = S3.replace('say("done")', `turn_right()\nturn_right()\n${L(5)}\nsay("done")`);
+const S5 = S4.replace(`forward(4)\n${L(5)}`, `forward(4)\nfor k in range(4):\n    for i in range(5):\n        fire()`);
+
+/**
+ * Chapter 2: for loops. One 8x10 arena (robot at (3, 9), `forward(4)` brings it to (3, 5)); every challenge adds one thing:
+ * the dummies north, east and west get a loop each, then a loop around a loop. The old lines stay.
+ */
 export const CHAPTER_2 = chapter(2, [
   {
     id: 'tank-dummy',
     title: T('Panzer-Attrappe', 'Tank Dummy'),
-    catchLine: T('Die Attrappe hat 5 Leben. Höchstens 4 Zeilen Code.', 'The dummy has 5 HP. At most 4 lines of code.'),
+    catchLine: T('Die Attrappe hat 5 Leben. Schreib eine for-Schleife.', 'The dummy has 5 HP. Write a for loop.'),
     enemies: [{ hp: 5 }],
-    map: arena(['D', 3, 2]),
-    needs: { maxLines: 4 },
-    solution: 'forward(4)\nfor i in range(5):\n    fire()',
+    map: arena(NORTH),
+    needs: { uses: ['for'] },
+    solution: S1,
     breaks: false,
     par: 3,
   },
   {
-    id: 'dummy-row',
-    title: T('Attrappenreihe', 'Dummy Row'),
-    catchLine: T('Fünf Attrappen stehen in einem Gang hintereinander, je 2 Leben.', 'Five dummies stand one behind the other in a corridor, 2 hit points each.'),
-    enemies: [{ hp: 2 }],
-    map: arena(...corridor, ...dummies([2, 2, 2, 2, 2])),
-    needs: { maxLines: 4 },
-    solution: 'forward(4)\nfor i in range(10):\n    fire()',
-    par: 3,
-  },
-  {
-    id: 'step-counter',
-    title: T('Schrittzähler', 'Step Counter'),
-    catchLine: T('Zusammen 12 Treffer. Die Zahl darf nur einmal im Code stehen.', '12 hits in all. The number may appear only once in the code.'),
-    enemies: [{ hp: 2 }, { hp: 3 }],
-    map: arena(...corridor, ['2', 3, 1], ['2', 3, 2], ['D', 3, 3], ['D', 3, 4], ['D', 3, 5]),
-    needs: { maxLines: 4 },
-    solution: 'shots = 12\nforward(4)\nfor i in range(shots):\n    fire()',
-    par: 4,
+    id: 'dummy-right',
+    title: T('Attrappe rechts', 'Dummy on the Right'),
+    catchLine: T('Dieselbe Attrappe steht nochmal rechts von dir.', 'The same kind of dummy stands on your right.'),
+    enemies: [{ hp: 5 }],
+    map: arena(NORTH, EAST),
+    needs: { uses: ['for'] },
+    solution: S2,
+    par: 6,
   },
   {
     id: 'after-the-loop',
     title: T('Nach der Schleife', 'After the Loop'),
-    catchLine: T('Dein Roboter soll genau einmal „done“ sagen: erst wenn alles erledigt ist.', 'Your robot must say "done" exactly once: only when everything is finished.'),
-    enemies: [{ hp: 6 }],
-    map: arena(...corridor, ['D', 3, 3], ['D', 3, 4]),
-    needs: { maxLines: 5, sayOnce: 'done' },
-    solution: 'shots = 12\nforward(4)\nfor i in range(shots):\n    fire()\nsay("done")',
-    par: 5,
-  },
-  {
-    id: 'double-loop',
-    title: T('Doppelschleife', 'Double Loop'),
-    catchLine: T('Zusätzlich steht rechts eine zähe Attrappe (6 Leben).', 'There is also a tough dummy on the right (6 hit points).'),
-    enemies: [{ hp: 2 }, { hp: 3 }, { hp: 12 }],
-    map: arena(...gapped, ['2', 3, 1], ['2', 3, 2], ['D', 3, 3], ['D', 3, 4], ['D', 3, 5], ['3', 7, 6]),
-    needs: { maxLines: 7 },
-    solution: 'shots = 12\nforward(4)\nfor i in range(shots):\n    fire()\nturn_right()\nfor i in range(shots):\n    fire()',
+    catchLine: T('Sag genau einmal „done“: erst wenn alles erledigt ist.', 'Say "done" exactly once: only when everything is finished.'),
+    enemies: [{ hp: 5 }],
+    map: arena(NORTH, EAST),
+    needs: { sayOnce: 'done' },
+    solution: S3,
     par: 7,
   },
   {
-    id: 'square-patrol',
-    title: T('Quadratstreife', 'Square Patrol'),
-    catchLine: T('Vier Attrappen stehen rund um dich.', 'Four dummies stand around you.'),
-    enemies: [{ hp: 2 }],
-    map: mk(8, 8, ['^', 2, 6], ['D', 2, 3], ['D', 5, 4], ['D', 4, 7], ['D', 1, 6]),
-    needs: { maxLines: 5 },
-    solution: 'for i in range(4):\n    forward(2)\n    fire()\n    fire()\n    turn_right()',
-    side: true,
-    breaks: false,
-    par: 5,
-  },
-  {
-    id: 'spiral-hallway',
-    title: T('Spiralgang', 'Spiral Hallway'),
-    catchLine: T('Seitenmission: Der Weg wird mit jeder Kurve länger (1, 2, 3 Felder).', 'Side mission: the way gets longer with every turn (1, 2, 3 tiles).'),
-    enemies: [{ hp: 2 }],
-    map: mk(8, 10, ['>', 3, 5], ['D', 6, 5], ['D', 4, 9], ['D', 0, 7]),
-    needs: { maxLines: 5 },
-    solution: 'for i in range(1, 4):\n    forward(i)\n    fire()\n    fire()\n    turn_right()',
-    side: true,
-    breaks: false,
-    par: 5,
-  },
-  {
-    id: 'staircase',
-    title: T('Treppe', 'Staircase'),
-    catchLine: T('Ein schmaler Gang führt als Treppe nach oben.', 'A narrow corridor climbs like a staircase.'),
-    enemies: [{ hp: 2 }],
-    map: maze(8, 8, [[1, 6], [1, 5], [2, 5], [2, 4], [3, 4], [3, 3], [4, 3], [4, 1]], [['^', 1, 6], ['D', 4, 1]]),
-    needs: { maxLines: 7 },
-    solution: 'for i in range(3):\n    forward()\n    turn_right()\n    forward()\n    turn_left()\nfire()\nfire()',
-    side: true,
-    breaks: false,
-    par: 7,
-  },
-  {
-    id: 'growing-shots',
-    title: T('Wachsende Schüsse', 'Growing Shots'),
-    catchLine: T('Erst 1 Schuss, dann 2, dann 3. Höchstens 5 Zeilen, mit Schleifenvariable.', 'First 1 shot, then 2, then 3. At most 5 lines, use the loop variable.'),
-    enemies: [{ hp: 6 }],
-    map: arena(['D', 3, 3]),
-    needs: { maxLines: 5, uses: ['range(i)'] },
-    solution: 'forward(4)\nfor i in range(1, 4):\n    for j in range(i):\n        fire()',
-    side: true,
-    breaks: false,
-    par: 4,
+    id: 'dummy-left',
+    title: T('Attrappe links', 'Dummy on the Left'),
+    catchLine: T('Eine dritte Attrappe steht links. „done“ kommt weiter ganz zum Schluss.', 'A third dummy stands on the left. "done" still comes last.'),
+    enemies: [{ hp: 5 }],
+    map: arena(NORTH, EAST, WEST),
+    needs: { sayOnce: 'done' },
+    solution: S4,
+    par: 11,
   },
   {
     id: 'dummy-army',
     title: T('Attrappenarmee', 'Dummy Army'),
-    catchLine: T('Boss: je 12 Treffer pro Seite. Höchstens 6 Zeilen.', 'Boss: 12 hits on each side. At most 6 lines.'),
-    enemies: [{ hp: 2 }, { hp: 3 }, { hp: 12 }],
-    map: arena(...gapped, ['2', 3, 1], ['2', 3, 2], ['D', 3, 3], ['D', 3, 4], ['D', 3, 5], ['3', 7, 6]),
-    needs: { maxLines: 6 },
-    solution: 'shots = 12\nforward(4)\nfor side in range(2):\n    for i in range(shots):\n        fire()\n    turn_right()',
-    par: 6,
+    catchLine: T('Boss: Hinter der ersten steht eine mit 15 Leben. Höchstens 15 Zeilen.', 'Boss: behind the first one stands one with 15 HP. At most 12 lines.'),
+    enemies: [{ hp: 5 }, { hp: 15 }],
+    map: arena(NORTH, EAST, WEST, BIG),
+    needs: { sayOnce: 'done', maxLines: 12 },
+    solution: S5,
+    par: 12,
   },
 ]);
-void dummies;

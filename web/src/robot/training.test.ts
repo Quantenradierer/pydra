@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CONTENT } from '../content/lessons.ts';
 import { AppStorage, MemoryKeyValue } from '../storage.ts';
-import { CHALLENGES } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import { RobotGame } from './game.ts';
 import { fightEnemy, DEFAULT_BUILD } from './fight.ts';
@@ -36,14 +35,14 @@ describe('Training Grounds', () => {
 });
 
 describe('RobotGame training', () => {
-  const game = () => new RobotGame(new AppStorage(new MemoryKeyValue(), CONTENT), ENEMIES, CHALLENGES, () => {}, () => new Date(2026, 10, 8, 12).getTime());
+  const game = () => new RobotGame(new AppStorage(new MemoryKeyValue(), CONTENT), ENEMIES, () => {}, () => new Date(2026, 10, 8, 12).getTime());
   it('opens with Chapter 2 and counts wins; the daily fight once per day', () => {
     const g = game();
     expect(g.canTrain()).toBe(false);
     const kv = new MemoryKeyValue();
     const storage = new AppStorage(kv, CONTENT);
-    storage.setGameData({ solved: ENEMIES.filter((e) => e.chapter < 2 && !e.side).map((e) => e.id) }, 'robot');
-    const g2 = new RobotGame(storage, ENEMIES, CHALLENGES, () => {}, () => new Date(2026, 10, 8, 12).getTime());
+    storage.setGameData({ solved: ENEMIES.filter((e) => e.chapter < 2).map((e) => e.id) }, 'robot');
+    const g2 = new RobotGame(storage, ENEMIES, () => {}, () => new Date(2026, 10, 8, 12).getTime());
     expect(g2.canTrain()).toBe(true);
     const step = g2.trainingStep('daily');
     expect(step.id).toBe('training-daily-2026-11-08');

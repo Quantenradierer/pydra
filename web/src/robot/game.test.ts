@@ -3,31 +3,28 @@ import { CONTENT } from '../content/lessons.ts';
 import { AppStorage, MemoryKeyValue } from '../storage.ts';
 import type { PointsEvent } from '../points/state.ts';
 import { ENEMIES } from './content/index.ts';
-import { CHALLENGES } from './content/challenges.ts';
 import { buildSteps, isUnlocked, parseProgress, RobotGame, STARTER_SCRIPT } from './game.ts';
 
 function setup() {
   const kv = new MemoryKeyValue();
   const events: PointsEvent[] = [];
-  const game = new RobotGame(new AppStorage(kv, CONTENT), ENEMIES, CHALLENGES, (e) => events.push(e), () => 1000);
+  const game = new RobotGame(new AppStorage(kv, CONTENT), ENEMIES, (e) => events.push(e), () => 1000);
   return { kv, game, events };
 }
 
 describe('steps', () => {
   const steps = buildSteps();
 
-  it('are all enemies and challenges in order, each challenge after its enemy', () => {
-    expect(steps.filter((s) => s.kind === 'battle')).toHaveLength(ENEMIES.length);
-    expect(steps.filter((s) => s.kind !== 'battle')).toHaveLength(CHALLENGES.length);
-    for (const s of steps.filter((x) => x.challenge)) expect(steps.findIndex((x) => x.id === s.challenge!.after)).toBeLessThan(steps.indexOf(s));
+  it('are the enemies in order, one challenge each, nothing else', () => {
+    expect(steps.map((s) => s.id)).toEqual(ENEMIES.map((e) => e.id));
+    expect(new Set(steps.map((s) => s.id)).size).toBe(steps.length);
   });
 
-  it('unlock one battle at a time; side missions and challenges never block', () => {
+  it('unlock one after the other, no gaps', () => {
     expect(isUnlocked(steps[0]!, [], steps)).toBe(true);
     expect(isUnlocked(steps.find((s) => s.id === 'one-more-line')!, [], steps)).toBe(false);
     expect(isUnlocked(steps.find((s) => s.id === 'one-more-line')!, ['first-contact'], steps)).toBe(true);
-    expect(isUnlocked(steps.find((s) => s.id === 'gl-foward')!, ['first-contact'], steps)).toBe(false);
-    expect(isUnlocked(steps.find((s) => s.id === 'gl-foward')!, ['first-contact', 'one-more-line'], steps)).toBe(true);
+    expect(isUnlocked(steps.find((s) => s.id === 'training-dummy')!, ['first-contact'], steps)).toBe(false);
   });
 });
 
@@ -108,19 +105,31 @@ describe('RobotGame', () => {
     expect(game.build().addons).toEqual(['wide', 'scanner']);
   });
 
-  it('plays a challenge as a fight and pays it once', () => {
-    const { game, events } = setup();
+  it('keeps ONE script: winning, moving on and opening the next challenge never changes it', () => {
+    const { game } = setup();
+    const mine = 'forward()\nfire()\n# my own note\nsay("x")';
+    game.setScript(mine);
     game.run('first-contact');
-    game.setScript(ENEMIES[1]!.solution);
+    expect(game.script()).toBe(mine);
+    game.open('one-more-line');
+    expect(game.script()).toBe(mine);
     game.run('one-more-line');
-    const step = game.step('gl-foward')!;
-    expect(step.enemy?.side).toBe(true);
-    game.setScript('foward()\nfire()\nfire()');
-    expect(game.run('gl-foward')?.error).toBeDefined();
-    game.setScript(ENEMIES[1]!.solution);
-    expect(game.run('gl-foward')?.firstWin).toBe(true);
-    expect(game.run('gl-foward')?.firstWin).toBe(false);
-    expect(events.filter((e) => e.type === 'level' && e.id === 'gl-foward')).toEqual([{ type: 'level', game: 'robot', id: 'gl-foward', clean: false }]);
+    expect(game.script()).toBe(mine);
+  });
+
+  it('an old save with removed challenge ids does not crash and keeps its script and build', () => {
+    const old = { script: 'forward()\nfire()\nfire()', build: { chassis: 'medium', locomotion: 'wheels', gear: ['blaster', 'eyes'], addons: [], blasterMark: 1 }, solved: ['first-contact', 'backstep-dummy', 'gl-foward', 'cn-row-3', 'one-more-line'], stars: { 'gl-foward': 3, 'one-more-line': 2 }, misses: { 'cn-row-3': 4 }, current: 'gl-foward', history: [{ at: 1, script: 'x', step: 'gl-foward', result: 'won' }] };
+    const kv = new MemoryKeyValue();
+    const storage = new AppStorage(kv, CONTENT);
+    storage.setGameData(old, 'robot');
+    const game = new RobotGame(storage);
+    const p = game.progress();
+    expect(p.script).toBe(old.script);
+    expect(p.solved).toEqual(['first-contact', 'one-more-line']);
+    expect(p.current).toBeUndefined();
+    expect(game.open().id).toBe('training-dummy');
+    expect(game.stats().done).toBe(2);
+    expect(game.script()).toBe(old.script);
   });
 
   it('ignores steps of removed task types in old saves', () => {

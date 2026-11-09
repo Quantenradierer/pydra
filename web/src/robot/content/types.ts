@@ -52,8 +52,6 @@ export interface EnemyData {
   breaks?: boolean;
   /** Lines of a clean solution: fewer or equal lines earns the "few lines" star. */
   par: number;
-  /** A side mission with its own set-up: it does not hold back the next main task. */
-  side?: boolean;
 }
 
 /** The seed of the one fight of every challenge. */

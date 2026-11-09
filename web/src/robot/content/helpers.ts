@@ -40,3 +40,6 @@ export function maze(w: number, h: number, path: [number, number][], items: [str
   for (const [sym, x, y] of items) rows[y]![x] = sym;
   return rows.map((r) => r.join(''));
 }
+
+/** The number of lines of a reference solution (its `par`). */
+export const lineCount = (script: string): number => script.split('\n').length;

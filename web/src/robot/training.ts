@@ -5,6 +5,7 @@
  * Every fight carries a script that wins it, so the generator is testable.
  */
 import { ENEMIES } from './content/index.ts';
+import { FINAL_SCRIPT } from './content/proving2.ts';
 import { mk, T, wallCol } from './content/helpers.ts';
 import type { EnemyData } from './content/types.ts';
 import type { EnemyDef } from './layout.ts';
@@ -105,8 +106,8 @@ function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]
       text: regen ? { de: 'ein Gegner, der sich heilt', en: 'an enemy that heals itself' } : { de: 'ein weit entfernter Gegner', en: 'a far-away enemy' },
     };
   }
-  const src = pickFrom(rng.pick(['maze-runner', 'hide-and-seek']));
-  return { enemies: src.enemies, map: src.map, solution: pickFrom('hide-and-seek').solution, text: src.id === 'maze-runner' ? { de: 'ein Gegner hinter Ecken', en: 'an enemy around corners' } : { de: 'ein Gegner, der sich versteckt', en: 'an enemy that hides' } };
+  const src = pickFrom('maze-runner');
+  return { enemies: src.enemies, map: src.map, solution: FINAL_SCRIPT, text: { de: 'ein Gegner, der seitlich steht', en: 'an enemy to the side' } };
 }
 
 /** The fight of a seed for a player whose latest unlocked chapter is `level` (2-4). */
@@ -123,7 +124,6 @@ export function trainingFight(seed: number, level: number, id = `training-${seed
     map: g.map,
     solution: g.solution,
     breaks: false,
-    side: true,
     par: g.solution.split('\n').length,
   };
   return { enemy, solution: g.solution };

@@ -457,9 +457,6 @@ dialog.robot-sheet::backdrop {
   height: 2.75rem;
   min-height: 2.75rem;
 }
-.robot .robot-pills .level-dot.side {
-  border-style: dashed;
-}
 .robot .robot-pills .level-dot.next {
   border-color: var(--accent);
   border-width: 3px;

@@ -14,7 +14,7 @@ describe('enemy data', () => {
   for (const e of ENEMIES) {
     describe(e.id, () => {
       const index = ENEMIES.indexOf(e);
-      const prev = [...ENEMIES.slice(0, index)].reverse().find((o) => !o.side);
+      const prev = ENEMIES[index - 1];
 
       it('is won by its solution', () => {
         const r = fightEnemy(e, DEFAULT_BUILD, e.solution);

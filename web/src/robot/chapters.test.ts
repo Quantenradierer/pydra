@@ -9,63 +9,58 @@ const SHIELD_BUILD: Build = { ...START_BUILD, chassis: 'medium', gear: ['blaster
 const LOOP = (inner: string) =>
   `for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n${inner.replace(/^/gm, '        ')}`;
 
+describe('Chapter 2', () => {
+  it('Tank Dummy: five plain shots are not a loop, so they do not count', () => {
+    expect(run('tank-dummy', 'forward(4)\nfire()\nfire()\nfire()\nfire()\nfire()').won).toBe(false);
+  });
+  it('After the Loop: "done" inside the loop is said too often', () => {
+    expect(run('after-the-loop', 'forward(4)\nfor i in range(5):\n    fire()\n    say("done")\nturn_right()\nfor i in range(5):\n    fire()').won).toBe(false);
+  });
+  it('Dummy Army: a loop around the first loop wins within the line limit; the line limit is real', () => {
+    expect(run('dummy-army', enemy('dummy-army').solution).won).toBe(true);
+    const spam = 'forward(4)\n' + 'fire()\n'.repeat(20) + 'turn_right()\nfor i in range(5):\n    fire()\nturn_right()\nturn_right()\nfor i in range(5):\n    fire()\nsay("done")';
+    const r = run('dummy-army', spam);
+    expect([r.fight.battle.outcome, r.tooLong]).toEqual(['win', true]);
+  });
+});
+
 describe('Chapter 3', () => {
   it('Bubble: blind shooting wastes shots on the shield', () => {
-    const r = run('bubble', LOOP('fire()'));
+    const r = run('bubble', enemy('bubble').solution.replace('if enemy_shielded():\n            wait()\n        else:\n            fire()', 'fire()').replace('        fire()\n        fire()', '        fire()'));
     expect(r.won).toBe(false);
     expect(r.fight.unmet).toBe('waste');
   });
-  it('Gatekeeper: the plain script wins with the starting gear; a shield is an optional way to lose less', () => {
-    const waiting = LOOP('if enemy_shielded():\n    wait()\nelse:\n    fire()');
-    const plain = run('gatekeeper', waiting);
-    expect(plain.won).toBe(true);
-    expect(run('gatekeeper', enemy('gatekeeper').solution).won).toBe(true);
-    const shielded = run('gatekeeper', LOOP('if enemy_shielded():\n    shield.activate()\nelse:\n    fire()'), SHIELD_BUILD);
-    expect(shielded.won).toBe(true);
-    expect(shielded.damage).toBeLessThan(plain.damage);
+  it('Bubble: waiting while the shield is up wins', () => {
+    expect(run('bubble', enemy('bubble').solution).won).toBe(true);
   });
-  it('Charger: the plain script wins with the starting gear; the hammer is an optional way to lose less', () => {
-    const plain = run('charger', enemy('charger').solution);
-    const hammer = run('charger', LOOP('if distance() == 1:\n    smash()\nelif enemy_shielded():\n    wait()\nelse:\n    fire()'), { ...START_BUILD, chassis: 'medium', gear: ['blaster', 'eyes', 'hammer'] });
-    expect(plain.won && hammer.won).toBe(true);
-    expect(hammer.damage).toBeLessThanOrEqual(plain.damage);
+  it('Peekaboo: code that only fires ahead loses once an enemy is on the side', () => {
+    expect(run('wall-or-not', 'fire()\nfire()').won).toBe(false);
   });
-  it('Peekaboo: code that only fires ahead loses the sideways layout', () => {
-    expect(run('peekaboo', 'fire()\nfire()').won).toBe(false);
+  it('Health Check: without saying "low" the sniper fight is not won', () => {
+    const r = run('health-check', enemy('bubble').solution);
+    expect([r.fight.battle.outcome, r.fight.unmet]).toEqual(['win', 'sayPrefix']);
+    expect(run('health-check', enemy('health-check').solution).won).toBe(true);
   });
-  it('Rhythm Dummy: the clock rhythm wins, the scanner is not allowed', () => {
-    expect(run('rhythm-dummy', LOOP('if enemy_shielded():\n    wait()\nelse:\n    fire()')).won).toBe(false);
-  });
-  it('Order Matters: the wide check first never says critical', () => {
-    const wrong = 'for i in range(12):\n    if hp() < 10:\n        say("hurt")\n    elif hp() < 5:\n        say("critical")\n    fire()';
-    expect(run('order-matters', wrong).won).toBe(false);
+  it('Health Check: the sniper also wins with a shield, a hammer or other gear added', () => {
+    expect(run('bubble', enemy('bubble').solution, SHIELD_BUILD).won).toBe(true);
   });
 });
 
-describe('Proving Grounds II', () => {
-  it('the Chapter 4 boss script is not enough for the Final Exam (no shield awareness)', () => {
-    const r = run('final-exam', enemy('hide-and-seek').solution);
-    expect(r.won).toBe(false);
+describe('Chapter 4', () => {
+  it('Regenerator: the old script stops after two shots and loses', () => {
+    expect(run('regenerator', enemy('far-far-dummy').solution).won).toBe(false);
   });
+  it('Countdown: no for, and "Liftoff!" exactly once', () => {
+    expect(run('countdown', enemy('countdown').solution.replace('while n > 0:', 'for n in range(5):')).won).toBe(false);
+    expect(run('countdown', enemy('regenerator').solution).won).toBe(false);
+  });
+  it('Break Out: needs while True and break', () => {
+    expect(run('break-out', enemy('maze-runner').solution).won).toBe(false);
+  });
+});
+
+describe('Practice Fields and Exams', () => {
   it('the final script wins the Final Exam', () => {
-    const r = run('final-exam', enemy('final-exam').solution);
-    expect(r.won).toBe(true);
-  });
-});
-
-describe('the two late additions', () => {
-  it('Backstep Dummy: standing still wins but takes damage, backing off takes none', () => {
-    const r = run('backstep-dummy', 'fire()\nfire()');
-    expect(r.won).toBe(false);
-    expect([r.fight.battle.outcome, r.fight.unmet]).toEqual(['win', 'damage']);
-    expect(run('backstep-dummy', 'backward()\nfire()\nfire()').won).toBe(true);
-  });
-  it('Growing Shots: six plain shots are not enough, the loop variable decides', () => {
-    expect(run('growing-shots', 'forward(4)\nfor i in range(6):\n    fire()').won).toBe(false);
-    expect(run('growing-shots', enemy('growing-shots').solution).won).toBe(true);
-  });
-  it('Staircase: wheels climb it with turns; spider legs are an optional shortcut', () => {
-    expect(run('staircase', enemy('staircase').solution).won).toBe(true);
-    expect(run('staircase', 'for i in range(3):\n    move_north()\n    move_east()\nfire()\nfire()', { ...START_BUILD, locomotion: 'legs' }).won).toBe(true);
+    expect(run('final-exam', enemy('final-exam').solution).won).toBe(true);
   });
 });

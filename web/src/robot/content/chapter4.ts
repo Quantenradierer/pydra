@@ -1,106 +1,68 @@
-import { chapter, maze, mk, T } from './helpers.ts';
+import { chapter, lineCount, mk, T } from './helpers.ts';
 
-/** The Chapter 4 frame: an open hall 8 wide and 14 tall, the medium robot at (3, 12) looking north. Dummies stand far away, so walking is part of the job. */
+/** The Chapter 4 frame: an open hall 8 wide and 14 tall, the robot at (3, 12) looking north. Things are added one by one. */
 const hall = (...items: [string, number, number][]) => mk(8, 14, ['^', 3, 12], ...items);
+const FAR: [string, number, number] = ['D', 3, 5];
+const HEALER: [string, number, number] = ['2', 3, 2];
+const SIDE: [string, number, number] = ['3', 0, 10];
 
-/** Chapter 4: while loops and booleans. The script ends as `while alive():` with decisions inside. */
+const REGEN = { hp: 6, regen: { every: 2, amount: 1 } };
+
+/** Each solution is the one before plus new lines. */
+const S1 = 'while see() != "enemy":\n    forward()\nfire()\nfire()';
+const S2 = `${S1}\nforward(3)\nwhile alive():\n    fire()`;
+const S3 = S2.replace('while alive():', 'n = 5\nwhile n > 0:\n    say(n)\n    fire()\n    n = n - 1\nsay("Liftoff!")\nwhile alive():');
+const S4 = S3.replace('forward(3)', 'turn_left()\nwhile see() == "enemy":\n    fire()\nturn_right()\nforward(3)');
+const S5 = S4.replace('forward(3)', 'while True:\n    if see() == "enemy":\n        break\n    forward()\nforward(3)');
+
+/** Chapter 4: while loops and booleans. One open hall; every challenge adds ONE thing, and its solution is the one before plus new lines. */
 export const CHAPTER_4 = chapter(4, [
   {
     id: 'far-far-dummy',
     title: T('Ganz-weit-weg-Attrappe', 'Far-Far Dummy'),
-    catchLine: T('Die Attrappe steht weit weg, jedes Mal anders.', 'The dummy stands far away, differently every time.'),
+    catchLine: T('Die Attrappe steht weit weg. Geh, bis du sie siehst.', 'The dummy stands far away. Walk until you see it.'),
     enemies: [{ hp: 2 }],
-    map: hall(['D', 3, 5]),
-    solution: 'while see() != "enemy":\n    forward()\nfire()\nfire()',
-    par: 4,
-  },
-  {
-    id: 'run-to-the-wall',
-    title: T('Lauf zur Wand', 'Run to the Wall'),
-    catchLine: T('Die Attrappe steht oben an der Wand. Lauf, bis die Wand vor dir ist.', 'The dummy is at the top wall. Run until the wall is ahead.'),
-    enemies: [{ hp: 2 }],
-    map: hall(['D', 6, 0]),
-    solution: 'while distance() != 1:\n    forward()\nturn_right()\nfire()\nfire()',
-    side: true,
-    breaks: false,
-    par: 5,
+    map: hall(FAR),
+    solution: S1,
+    par: lineCount(S1),
   },
   {
     id: 'regenerator',
     title: T('Regenerator', 'Regenerator'),
-    catchLine: T('Der Gegner heilt sich alle zwei Runden um 1 Leben.', 'The enemy heals 1 HP every two rounds.'),
-    enemies: [{ hp: 6, regen: { every: 2, amount: 1 } }],
-    map: hall(['D', 3, 5]),
-    solution: 'while see() != "enemy":\n    forward()\nwhile alive():\n    fire()',
-    par: 5,
+    catchLine: T('Dahinter heilt sich ein Gegner alle zwei Runden um 1 Leben.', 'Behind it, an enemy heals 1 HP every two rounds.'),
+    enemies: [{ hp: 2 }, REGEN],
+    map: hall(FAR, HEALER),
+    solution: S2,
+    par: lineCount(S2),
   },
   {
     id: 'countdown',
     title: T('Countdown', 'Countdown'),
     catchLine: T('Zähl von 5 herunter, schieß, sag am Ende „Liftoff!“. Ohne for.', 'Count down from 5, shoot, say "Liftoff!" at the end. No for.'),
-    enemies: [{ hp: 5 }],
-    map: mk(8, 14, ['^', 3, 12], ['D', 3, 9]),
+    enemies: [{ hp: 2 }, REGEN],
+    map: hall(FAR, HEALER),
     needs: { sayOnce: 'Liftoff!', uses: ['while'], without: ['for'] },
-    solution: 'n = 5\nwhile n > 0:\n    say(n)\n    fire()\n    n = n - 1\nsay("Liftoff!")',
-    side: true,
-    breaks: false,
-    par: 7,
+    solution: S3,
+    par: lineCount(S3),
   },
   {
     id: 'maze-runner',
-    title: T('Labyrinthläufer', 'Maze Runner'),
-    catchLine: T('Die Attrappe steht am Ende eines Gangs mit Kurven.', 'The dummy stands at the end of a winding corridor.'),
-    enemies: [{ hp: 2 }],
-    map: maze(8, 14, [[3, 12], [3, 6], [6, 6]], [['^', 3, 12], ['D', 6, 6]]),
-    solution: 'while alive():\n    if see() == "enemy":\n        fire()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()',
-    par: 8,
-  },
-  {
-    id: 'patroller',
-    title: T('Streifenposten', 'Patroller'),
-    catchLine: T('Der Posten läuft quer durch deine Schusslinie. Nicht bewegen.', 'The patroller crosses your line of fire. Do not move.'),
-    enemies: [
-      { hp: 2, locomotion: 'wheels', gear: ['eyes'], face: 'E', script: 'while True:\n    forward(2)\n    wait()\n    wait()\n    forward(2)\n    turn_right()\n    turn_right()\n    forward(2)\n    wait()\n    wait()\n    forward(2)\n    turn_right()\n    turn_right()' },
-    ],
-    map: maze(8, 12, [[3, 10], [3, 5]], [['^', 3, 10], ['D', 1, 5]], [[1, 5], [2, 5], [4, 5], [5, 5]]),
-    needs: { uses: ['while'], without: ['forward'] },
-    solution: 'while see() != "enemy":\n    wait()\nfire()\nfire()',
-    side: true,
-    breaks: false,
-    par: 4,
-  },
-  {
-    id: 'sentry-duty',
-    title: T('Wachdienst', 'Sentry Duty'),
-    catchLine: T('Ein Gegner marschiert auf dich zu. Nimm keinen Schaden.', 'An enemy marches at you. Take no damage.'),
-    enemies: [{ hp: 4, gear: ['hammer', 'eyes'], script: 'while True:\n    if see() == "enemy" and distance() == 1:\n        smash()\n    else:\n        forward()' }],
-    map: maze(8, 14, [[3, 12], [3, 0]], [['^', 3, 12], ['D', 3, 0]]),
-    needs: { maxDamage: 0, uses: ['while'] },
-    solution: 'while see() != "enemy":\n    wait()\nwhile alive():\n    fire()',
-    side: true,
-    breaks: false,
-    par: 4,
+    title: T('Seitenwache', 'Side Guard'),
+    catchLine: T('Links, weit weg, steht noch einer. Schieß, solange du ihn siehst.', 'Far to the left stands one more enemy. Shoot while you see it.'),
+    enemies: [{ hp: 2 }, REGEN, { hp: 2 }],
+    map: hall(FAR, HEALER, SIDE),
+    needs: { sayOnce: 'Liftoff!', uses: ['while'], without: ['for'] },
+    solution: S4,
+    par: lineCount(S4),
   },
   {
     id: 'break-out',
     title: T('Ausbruch', 'Break Out'),
     catchLine: T('Schreib eine Endlosschleife und verlass sie mit break.', 'Write an endless loop and leave it with break.'),
-    enemies: [{ hp: 2 }],
-    map: hall(['D', 3, 4]),
-    needs: { uses: ['while True', 'break'] },
-    solution: 'while True:\n    if see() == "enemy":\n        break\n    forward()\nfire()\nfire()',
-    side: true,
-    breaks: false,
-    par: 6,
-  },
-  {
-    id: 'hide-and-seek',
-    title: T('Versteckspiel', 'Hide & Seek'),
-    catchLine: T('Boss: Der Gegner versteckt sich in einer Nische am Gang.', 'Boss: the enemy hides in a niche beside the corridor.'),
-    enemies: [{ hp: 3, script: 'while True:\n    if see() == "enemy":\n        fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    else:\n        wait()' }],
-    map: maze(8, 14, [[4, 12], [4, 6]], [['^', 4, 12], ['D', 2, 9]], [[3, 9]]),
-    solution:
-      'while alive():\n    if see() == "enemy":\n        fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()',
-    par: 12,
+    enemies: [{ hp: 2 }, REGEN, { hp: 2 }],
+    map: hall(FAR, HEALER, SIDE),
+    needs: { sayOnce: 'Liftoff!', uses: ['while True', 'break'], without: ['for'] },
+    solution: S5,
+    par: lineCount(S5),
   },
 ]);

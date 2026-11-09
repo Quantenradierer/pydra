@@ -4,11 +4,11 @@ import { BACK } from '../icons.ts';
 import type { MessageKey } from '../i18n.ts';
 import { apiEntries } from '../robot/api.ts';
 import { INTRODUCED_IN, CHASSIS, addonsFor, type Build, type GearId } from '../robot/build.ts';
-import { checkGlitch, injectGlitch } from '../robot/challenges.ts';
 import type { EnemyData } from '../robot/content/types.ts';
 import type { EnemyReport, FightReport } from '../robot/fight.ts';
 import { fightEnemy } from '../robot/fight.ts';
 import { createViewer, DEFAULT_SPEED, type Speed, type Viewer } from './robot-viewer.ts';
+import { parseMap } from '../robot/layout.ts';
 import { friendlyError } from '../robot/friendly.ts';
 import { type RunReport, type Step } from '../robot/game.ts';
 import type { RbError } from '../robot/py/errors.ts';
@@ -34,11 +34,11 @@ export function robotScreen(app: App): Screen {
     cleanup = undefined;
   };
 
-  const titleOf = (s: Step) => (s.enemy ? s.enemy.title[lang] : s.challenge!.title[lang]);
-  /** What the page calls a task: its number in the chapter ("Aufgabe 3", like the pills); bug hunts and training fights say what they are. */
+  const titleOf = (s: Step) => s.enemy!.title[lang];
+  /** What the page calls a task: its number in the chapter ("Aufgabe 3", like the pills); training fights say what they are. */
   const taskLabel = (s: Step, withChapter = false) => {
     const n = game.steps.filter((x) => x.chapter === s.chapter).indexOf(s) + 1;
-    if (!(s.kind === 'battle' && s.enemy && n > 0 && !s.id.startsWith('training-'))) return titleOf(s);
+    if (!(n > 0 && !s.id.startsWith('training-'))) return titleOf(s);
     // "Aufgabe 1" alone is ambiguous between chapters: name the chapter where the player does not already know it.
     return withChapter ? `${t(`robot.chapter.${s.chapter}` as MessageKey)} · ${t('robot.taskNo', { n })}` : t('robot.taskNo', { n });
   };
@@ -67,18 +67,18 @@ export function robotScreen(app: App): Screen {
   function showMap() {
     const p = game.progress();
     const chapters = [...new Set(game.steps.map((s) => s.chapter))];
-    const upNext = game.steps.find((st) => game.unlocked(st.id) && !p.solved.includes(st.id) && (st.kind === 'battle' || st.challenge));
+    const upNext = game.steps.find((st) => game.unlocked(st.id) && !p.solved.includes(st.id));
     /** One round pill per task (1..N of its chapter), like the level pills of every game; the name is its label. */
     const pill = (s: Step, i: number) => {
       const solved = p.solved.includes(s.id);
       const open = game.unlocked(s.id);
       const stars = p.stars[s.id] ?? 0;
       const state = solved ? t('robot.step.solved') : open ? '' : t('robot.step.locked');
-      const label = [titleOf(s), s.enemy?.side ? t('robot.side') : '', state, stars > 0 ? t('robot.step.stars', { n: stars }) : ''].filter(Boolean).join(', ');
+      const label = [titleOf(s), state, stars > 0 ? t('robot.step.stars', { n: stars }) : ''].filter(Boolean).join(', ');
       return h(
         'button',
         {
-          class: `level-dot${solved ? ' solved' : ''}${s.kind !== 'battle' || s.enemy?.side ? ' side' : ''}${s.id === upNext?.id ? ' next' : ''}`,
+          class: `level-dot${solved ? ' solved' : ''}${s.id === upNext?.id ? ' next' : ''}`,
           'aria-label': `${i + 1}: ${label}`,
           title: label,
           'data-testid': `robot-step-${s.id}`,
@@ -96,8 +96,7 @@ export function robotScreen(app: App): Screen {
       const list = game.steps.filter((s) => s.chapter === chapter);
       const done = list.filter((s) => p.solved.includes(s.id)).length;
       const anyOpen = list.some((s) => game.unlocked(s.id));
-      // Only the main path keeps a chapter open; side missions wait inside the folded chapter.
-      const inProgress = list.some((s) => s.kind === 'battle' && !s.enemy?.side && game.unlocked(s.id) && !p.solved.includes(s.id));
+      const inProgress = list.some((s) => game.unlocked(s.id) && !p.solved.includes(s.id));
       return h(
         'details',
         { class: `robot-chapter${done === list.length ? ' complete' : ''}${anyOpen ? '' : ' locked'}`, open: inProgress, 'data-testid': `robot-chapter-${chapter}` },
@@ -419,7 +418,7 @@ export function robotScreen(app: App): Screen {
 
   /** The task in one or two sentences: what to do and what winning means (the catch of this task follows in the page). */
   function goalText(enemy: EnemyData): string {
-    const n = enemy.enemies.length;
+    const n = parseMap(enemy.map).enemies.length;
     return t(n === 1 ? 'robot.goal.one' : 'robot.goal.many', { n });
   }
 
@@ -460,7 +459,7 @@ export function robotScreen(app: App): Screen {
   /** The next unsolved battle after this step, for the "Next" button. */
   function nextStep(step: Step): Step | undefined {
     const i = game.steps.indexOf(step);
-    return game.steps.slice(i + 1).find((s) => s.kind === 'battle' && game.unlocked(s.id) && !game.progress().solved.includes(s.id));
+    return game.steps.slice(i + 1).find((s) => game.unlocked(s.id) && !game.progress().solved.includes(s.id));
   }
 
   /** The header of a task: back, the level pills of its chapter (like the other games), no title row. */
@@ -486,18 +485,10 @@ export function robotScreen(app: App): Screen {
     return h('div', { class: 'game-bar' }, header, strip);
   }
 
-  const glitchSeen = new Set<string>();
   function showStep(id: string) {
     const step = game.step(id)!;
     game.open(id);
-    const c = step.challenge;
-    // A bug hunt starts from the player's own working script with the bug put in (unless they are already mid-fix).
-    // A script that does not win this fight has no place for the bug: the prepared script with the bug is put in (once per visit, so a fix in progress stays).
-    if (c?.kind === 'glitch' && !game.progress().solved.includes(id)) {
-      if (checkGlitch(c, game.script(), game.build())) game.setScript(injectGlitch(c, game.script()));
-      else if (!glitchSeen.has(id)) game.setScript(c.fallback);
-      glitchSeen.add(id);
-    }
+    // Nothing here touches the script: it is the player's one script, whatever challenge is opened.
     showBattle(step);
     root.querySelector<HTMLElement>('[data-testid="robot-step-title"]')?.focus();
   }

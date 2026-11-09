@@ -1,120 +1,70 @@
-import { chapter, mk, T } from './helpers.ts';
+import { chapter, lineCount, mk, T } from './helpers.ts';
 
-/** The Chapter 3 frame: an 9x8 arena, the (medium) robot at (4, 6) looking north. Enemies stand ahead, to the right or to the left. */
+/** The Chapter 3 frame: a 9x8 arena, the robot at (4, 6) looking north. Dummies are added ahead, right and left, then a shielded one and a sniper (both in the column ahead). */
 const arena = (...items: [string, number, number][]) => mk(9, 8, ['^', 4, 6], ...items);
+const AHEAD: [string, number, number] = ['D', 4, 3];
+const RIGHT: [string, number, number] = ['D', 7, 6];
+const LEFT: [string, number, number] = ['D', 1, 6];
+const SHIELDED: [string, number, number] = ['2', 4, 2];
+const SNIPER: [string, number, number] = ['3', 4, 1];
 
 const SHIELD_DUMMY = { hp: 3, gear: ['shield'], script: 'while True:\n    shield.activate()\n    wait()' };
+const SNIPER_DEF = { hp: 5, script: 'while True:\n    fire()' };
 
-/** Chapter 3: if / elif / else. One script grows from "fire ahead" to a loop with decisions. Side missions have their own set-up. */
+/** Each solution is the one before plus new lines (a block around old lines adds only its `if` / `for` line). */
+const S1 = 'if see() == "enemy":\n    fire()';
+const S2 = 'for i in range(30):\n    if see() == "enemy":\n        fire()\n    elif see_right() == "enemy":\n        turn_right()';
+const S3 = `${S2}\n    else:\n        turn_right()`;
+const S4 = S3.replace('        fire()', '        if enemy_shielded():\n            wait()\n        else:\n            fire()');
+const S5 = S4.replace('    if see() == "enemy":', '    if hp() < 6:\n        say("low")\n    if see() == "enemy":');
+
+/** Chapter 3: if / elif / else. One 9x8 arena; every challenge adds ONE thing to it, and its solution is the one before plus new lines. */
 export const CHAPTER_3 = chapter(3, [
   {
     id: 'peekaboo',
     title: T('Guck-guck', 'Peekaboo'),
-    catchLine: T('Die Attrappe steht mal geradeaus, mal rechts. Schau erst nach.', 'The dummy is ahead one time, to the right the next. Look first.'),
-    enemies: [{ hp: 2 }],
-    map: arena(['D', 7, 6]),
-    solution: 'if see() == "enemy":\n    fire()\n    fire()\nelse:\n    turn_right()\n    fire()\n    fire()',
-    par: 6,
+    catchLine: T('Schau erst nach: Schieß nur, wenn du einen Gegner siehst.', 'Look first: fire only when you see an enemy.'),
+    enemies: [{ hp: 1 }],
+    map: arena(AHEAD),
+    solution: S1,
+    par: lineCount(S1),
   },
   {
     id: 'wall-or-not',
-    title: T('Mauer oder nicht', 'Wall or Not'),
-    catchLine: T('Mal versperrt eine Mauer den Weg. Rechts daneben ist Platz.', 'Sometimes a wall blocks the way. There is room on its right.'),
-    enemies: [{ hp: 2 }],
-    map: arena(['D', 4, 3]),
-    solution: 'if see() == "wall":\n    turn_right()\nfire()\nfire()',
-    side: true,
-    breaks: false,
-    par: 4,
+    title: T('Rechts oder geradeaus', 'Right or Ahead'),
+    catchLine: T('Eine zweite Attrappe steht rechts. Prüfe beides, immer wieder.', 'A second dummy is on the right. Check both, again and again.'),
+    enemies: [{ hp: 1 }],
+    map: arena(AHEAD, RIGHT),
+    solution: S2,
+    par: lineCount(S2),
   },
   {
     id: 'three-way',
     title: T('Drei Wege', 'Three-Way'),
-    catchLine: T('Die Attrappe kann auch links stehen.', 'The dummy can also stand on the left.'),
-    enemies: [{ hp: 2 }],
-    map: arena(['D', 1, 6]),
-    solution: 'if see_right() == "enemy":\n    turn_right()\nelif see_left() == "enemy":\n    turn_left()\nfire()\nfire()',
-    par: 6,
+    catchLine: T('Eine dritte steht links, hinter deinem Rücken. Sonst dreh dich.', 'A third one is on the left, behind you. Otherwise turn.'),
+    enemies: [{ hp: 1 }],
+    map: arena(AHEAD, RIGHT, LEFT),
+    solution: S3,
+    par: lineCount(S3),
   },
   {
     id: 'bubble',
     title: T('Blase', 'Bubble'),
-    catchLine: T('Blase hebt jede zweite Runde ihr Schild: Schüsse darauf sind verschwendet.', 'Bubble raises its shield every other round: shots at it are wasted.'),
-    enemies: [SHIELD_DUMMY],
-    map: arena(['D', 4, 2]),
+    catchLine: T('Ein Schild steht jede zweite Runde. Schüsse darauf sind verschwendet.', 'A shield goes up every other round: shots at it are wasted.'),
+    enemies: [{ hp: 1 }, SHIELD_DUMMY],
+    map: arena(AHEAD, RIGHT, LEFT, SHIELDED),
     needs: { noWaste: true },
-    solution: 'for i in range(8):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()',
-    par: 10,
-  },
-  {
-    id: 'rhythm-dummy',
-    title: T('Rhythmus-Attrappe', 'Rhythm Dummy'),
-    catchLine: T('Das Schild geht jede zweite Runde hoch. Dein Scanner ist kaputt.', 'The shield rises every other round. Your scanner is broken.'),
-    enemies: [{ ...SHIELD_DUMMY, hp: 4 }],
-    map: arena(['D', 4, 3]),
-    needs: { noWaste: true, uses: ['clock'], without: ['enemy_shielded'] },
-    solution: 'for i in range(10):\n    if clock.tick() % 2 == 0:\n        fire()\n    else:\n        wait()',
-    side: true,
-    breaks: false,
-    par: 5,
-  },
-  {
-    id: 'charger',
-    title: T('Stürmer', 'Charger'),
-    catchLine: T('Der Stürmer rennt auf dich zu und schlägt zu. Triff ihn früh.', 'The charger runs at you and smashes. Hit it early.'),
-    enemies: [{ hp: 4, gear: ['hammer', 'eyes'], script: 'while True:\n    if see() == "enemy" and distance() == 1:\n        smash()\n    else:\n        forward()' }],
-    map: arena(['D', 4, 1]),
-    needs: { maxDamage: 3 },
-    solution:
-      'for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()',
-    breaks: false,
-    par: 10,
-  },
-  {
-    id: 'order-matters',
-    title: T('Reihenfolge zählt', 'Order Matters'),
-    catchLine: T('Ein Scharfschütze trifft dich. Sag „critical“ unter 5 Leben.', 'A sniper hits you. Say "critical" below 5 HP.'),
-    enemies: [{ hp: 6, script: 'while True:\n    fire()' }],
-    map: arena(['D', 4, 1]),
-    needs: { sayPrefix: 'critical', sayIfHpBelow: 5 },
-    solution: 'for i in range(12):\n    if hp() < 5:\n        say("critical")\n    elif hp() < 10:\n        say("hurt")\n    fire()',
-    side: true,
-    breaks: false,
-    par: 7,
+    solution: S4,
+    par: lineCount(S4),
   },
   {
     id: 'health-check',
     title: T('Gesundheitscheck', 'Health Check'),
-    catchLine: T('Derselbe Scharfschütze. Sag „low“ unter 6 Leben.', 'The same sniper. Say "low" below 6 HP.'),
-    enemies: [{ hp: 5, script: 'while True:\n    fire()' }],
-    map: arena(['D', 4, 1]),
+    catchLine: T('Ein Scharfschütze trifft dich. Sag „low“ unter 6 Leben.', 'A sniper hits you. Say "low" below 6 HP.'),
+    enemies: [{ hp: 1 }, SHIELD_DUMMY, SNIPER_DEF],
+    map: arena(AHEAD, RIGHT, LEFT, SHIELDED, SNIPER),
     needs: { sayPrefix: 'low', sayIfHpBelow: 6 },
-    solution: 'for i in range(12):\n    if hp() < 6:\n        say("low")\n    fire()',
-    side: true,
-    breaks: false,
-    par: 5,
-  },
-  {
-    id: 'not-today',
-    title: T('Nicht heute', 'Not Today'),
-    catchLine: T('Die Attrappe steht irgendwo um dich herum. Dreh dich, bis du sie siehst.', 'The dummy is somewhere around you. Turn until you see it.'),
-    enemies: [{ hp: 2 }],
-    map: arena(['D', 4, 7]),
-    solution: 'for i in range(10):\n    if see() != "enemy":\n        turn_right()\n    else:\n        fire()',
-    side: true,
-    breaks: false,
-    par: 5,
-  },
-  {
-    id: 'gatekeeper',
-    title: T('Torwächter', 'Gatekeeper'),
-    catchLine: T('Boss: Schild im Takt von drei Runden. Höchstens 6 Leben verlieren.', 'Boss: a shield on a three-round beat. Lose at most 6 HP.'),
-    enemies: [{ hp: 4, gear: ['blaster', 'shield'], script: 'while True:\n    if clock.tick() % 3 == 0:\n        shield.activate()\n    else:\n        fire()' }],
-    map: arena(['D', 4, 1]),
-    needs: { maxDamage: 6, noWaste: true },
-    solution:
-      'for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()',
-    breaks: false,
-    par: 11,
+    solution: S5,
+    par: lineCount(S5),
   },
 ]);

@@ -2,13 +2,12 @@
  * Robot Battler's progress on top of storage: the one robot (build and
  * script), the version history, which steps are solved and stars.
  * Every change is saved straight away. A step is an enemy (a battle) or one of
- * the challenges that sit between the enemies.
+ * the challenges, one after the other.
  */
 import type { PointsEvent } from '../points/state.ts';
 import type { AppStorage } from '../storage.ts';
 import { addonsFor, buildProblem, parseBuild, START_BUILD, type Build } from './build.ts';
 import { precheck } from './battle.ts';
-import { CHALLENGES, GLITCH_PROMPT, type Challenge } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import type { EnemyData } from './content/types.ts';
 import { fightEnemy, type EnemyReport } from './fight.ts';
@@ -19,36 +18,16 @@ import type { RbError } from './py/errors.ts';
 export const STARTER_SCRIPT = 'forward()\nfire()';
 export const MAX_HISTORY = 30;
 
-export type StepKind = 'battle' | Challenge['kind'];
-
+/** One challenge: an enemy on one map. The player's script is not part of it: it is one script for the whole game. */
 export interface Step {
   id: string;
-  kind: StepKind;
-  /** Chapter of the step (a challenge: the chapter of the enemy it follows). */
   chapter: number;
   enemy?: EnemyData;
-  challenge?: Challenge;
 }
 
-/**
- * A challenge is a fight like any other: the enemy it is fought against, as a side fight of its own
- * (a side mission). A special rule is part of the fight's conditions.
- */
-export function fightOf(c: Challenge, enemies: readonly EnemyData[]): EnemyData {
-  const base = enemies.find((e) => e.id === c.enemy)!;
-  const rule = c.kind === 'constraint' ? { ...base.needs, ...(c.maxLines !== undefined ? { maxLines: c.maxLines } : {}), ...c.needs } : base.needs;
-  const catchLine = c.kind === 'glitch' ? GLITCH_PROMPT : c.prompt;
-  return { ...base, id: c.id, title: c.title, catchLine, side: true, ...(rule ? { needs: rule } : {}), ...(c.kind === 'constraint' ? { solution: c.solution } : {}) };
-}
-
-/** Enemies in order, each followed by the challenges that sit after it. */
-export function buildSteps(enemies: readonly EnemyData[] = ENEMIES, challenges: readonly Challenge[] = CHALLENGES): Step[] {
-  const steps: Step[] = [];
-  for (const e of enemies) {
-    steps.push({ id: e.id, kind: 'battle', chapter: e.chapter, enemy: e });
-    for (const c of challenges) if (c.after === e.id) steps.push({ id: c.id, kind: c.kind, chapter: e.chapter, challenge: c, enemy: fightOf(c, enemies) });
-  }
-  return steps;
+/** The challenges in play order. */
+export function buildSteps(enemies: readonly EnemyData[] = ENEMIES): Step[] {
+  return enemies.map((e) => ({ id: e.id, chapter: e.chapter, enemy: e }));
 }
 
 export interface HistoryEntry {
@@ -111,18 +90,17 @@ export function parseProgress(raw: unknown, steps: readonly Step[]): RobotProgre
   return out;
 }
 
-/** The chapter whose parts are unlocked: the chapter of the first enemy that is not solved (side missions do not hold anyone back). */
+/** The chapter whose parts are unlocked: the chapter of the first challenge that is not solved. */
 export function unlockLevel(solved: readonly string[], steps: readonly Step[]): number {
-  const open = steps.find((s) => s.kind === 'battle' && !s.enemy!.side && !solved.includes(s.id));
+  const open = steps.find((s) => !solved.includes(s.id));
   const chapter = open ? open.chapter : Math.max(...steps.map((s) => s.chapter));
   return chapter === 25 ? 2 : chapter === 45 ? 4 : chapter;
 }
 
 export function isUnlocked(step: Step, solved: readonly string[], steps: readonly Step[]): boolean {
   if (solved.includes(step.id)) return true;
-  if (step.challenge) return solved.includes(step.challenge.after);
   const index = steps.indexOf(step);
-  return steps.slice(0, index).every((s) => s.kind !== 'battle' || s.enemy!.side || solved.includes(s.id));
+  return steps.slice(0, index).every((s) => solved.includes(s.id));
 }
 
 export interface RunReport {
@@ -144,11 +122,10 @@ export class RobotGame {
   constructor(
     private storage: AppStorage,
     enemies: readonly EnemyData[] = ENEMIES,
-    challenges: readonly Challenge[] = CHALLENGES,
     private onPoints: (event: PointsEvent) => void = () => {},
     private now: () => number = Date.now,
   ) {
-    this.steps = buildSteps(enemies, challenges);
+    this.steps = buildSteps(enemies);
   }
 
   progress(): RobotProgress {
@@ -172,7 +149,7 @@ export class RobotGame {
   open(id?: string): Step {
     const p = this.progress();
     const wanted = id ? this.step(id) : undefined;
-    const firstOpen = this.steps.find((s) => s.kind === 'battle' && !s.enemy!.side && !p.solved.includes(s.id));
+    const firstOpen = this.steps.find((s) => !p.solved.includes(s.id));
     const step = (wanted && isUnlocked(wanted, p.solved, this.steps) ? wanted : undefined) ?? (p.current ? this.step(p.current) : undefined) ?? firstOpen ?? this.steps[0]!;
     if (p.current !== step.id) this.save({ ...p, current: step.id });
     return step;
@@ -274,7 +251,7 @@ export class RobotGame {
   trainingStep(seed: number | 'daily'): Step {
     const date = today(this.now());
     const fight = trainingFight(seed === 'daily' ? dailySeed(date) : seed, this.level(), seed === 'daily' ? `training-daily-${date}` : `training-${seed}`);
-    return { id: fight.enemy.id, kind: 'battle', chapter: fight.enemy.chapter, enemy: fight.enemy };
+    return { id: fight.enemy.id, chapter: fight.enemy.chapter, enemy: fight.enemy };
   }
 
   /** The seed of the next endless fight; it moves on after every call. */

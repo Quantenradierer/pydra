@@ -4,7 +4,6 @@
  * random numbers and positions). A daily fight uses a seed made from the date.
  * Every fight carries a script that wins it, so the generator is testable.
  */
-import type { Build } from './build.ts';
 import { ENEMIES } from './content/index.ts';
 import { mk, T, wallCol } from './content/helpers.ts';
 import type { EnemyData } from './content/types.ts';
@@ -16,12 +15,10 @@ export const TRAINING_FROM = 2;
 
 export interface TrainingFight {
   enemy: EnemyData;
-  /** A script that wins it, with the build it needs. */
+  /** A script that wins it with the default build. */
   solution: string;
-  build: Partial<Build>;
 }
 
-const WIDE: Partial<Build> = { addons: ['wide', 'scanner'] };
 const SHIELD_SCRIPT = 'while True:\n    shield.activate()\n    wait()';
 const SNIPER_SCRIPT = 'while True:\n    fire()';
 const LOOK_AROUND =
@@ -66,7 +63,6 @@ function loops(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; 
     enemies,
     map,
     solution,
-    build: {},
     text: right > 0 ? `${ahead} dummies ahead, a tough one on the right` : `${ahead} dummies in a row`,
   };
 }
@@ -81,7 +77,7 @@ function decisions(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef
     ['D', rng.between(7, 8), 6],
     ['D', rng.between(0, 1), 6],
   ] as [string, number, number][]);
-  return { enemies: [def], map: arena(place), solution: LOOK_AROUND, build: WIDE, text: kind };
+  return { enemies: [def], map: arena(place), solution: LOOK_AROUND, text: kind };
 }
 
 function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; map: string[]; text: string } {
@@ -94,12 +90,11 @@ function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]
       enemies: [{ hp, ...(regen ? { regen: { every: 2, amount: 1 } } : {}) }],
       map: mk(8, 14, ['^', 3, 12], ['D', 3, y]),
       solution: 'while alive():\n    if see() == "enemy":\n        fire()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()',
-      build: {},
-      text: regen ? 'regenerator' : 'far dummy',
+        text: regen ? 'regenerator' : 'far dummy',
     };
   }
   const src = pickFrom(rng.pick(['maze-runner', 'hide-and-seek']));
-  return { enemies: src.enemies, map: src.maps[rng.int(src.maps.length)]!, solution: pickFrom('hide-and-seek').solution, build: WIDE, text: src.id };
+  return { enemies: src.enemies, map: src.maps[rng.int(src.maps.length)]!, solution: pickFrom('hide-and-seek').solution, text: src.id };
 }
 
 /** The fight of a seed for a player whose latest unlocked chapter is `level` (2-4). */
@@ -115,10 +110,9 @@ export function trainingFight(seed: number, level: number, id = `training-${seed
     enemies: g.enemies,
     maps: [g.map],
     solution: g.solution,
-    ...(g.build ? { solutionBuild: g.build } : {}),
     breaks: false,
     regression: false,
     par: g.solution.split('\n').length,
   };
-  return { enemy, solution: g.solution, build: g.build };
+  return { enemy, solution: g.solution };
 }

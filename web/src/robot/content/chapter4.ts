@@ -2,8 +2,6 @@ import { chapter, maze, mk, T } from './helpers.ts';
 
 /** The Chapter 4 frame: an open hall 8 wide and 14 tall, the medium robot at (3, 12) looking north. Dummies stand far away, so walking is part of the job. */
 const hall = (...items: [string, number, number][]) => mk(8, 14, ['^', 3, 12], ...items);
-const SIDES = { addons: ['wide', 'scanner'] as ('wide' | 'scanner')[] };
-const GPS = { gear: ['blaster', 'eyes', 'gps'] as ('blaster' | 'eyes' | 'gps')[], ...SIDES };
 
 /** Chapter 4: while loops and booleans. The script ends as `while alive():` with decisions inside. */
 export const CHAPTER_4 = chapter(4, [
@@ -13,19 +11,16 @@ export const CHAPTER_4 = chapter(4, [
     catchLine: T('Die Attrappe steht weit weg, jedes Mal anders. Wie viele Felder, weißt du nicht.', 'The dummy stands far away, differently every time. You do not know how many tiles it takes.'),
     enemies: [{ hp: 2 }],
     maps: [hall(['D', 3, 5]), hall(['D', 3, 2]), hall(['D', 3, 0])],
-    solutionBuild: SIDES,
     solution: 'while see() != "enemy":\n    forward()\nfire()\nfire()',
     par: 4,
   },
   {
     id: 'run-to-the-wall',
     title: T('Lauf zur Wand', 'Run to the Wall'),
-    catchLine: T('Seitenmission: Die Attrappe steht ganz oben in der Ecke an der Wand. Das GPS sagt dir, wo du bist.', 'Side mission: the dummy stands in the corner at the top wall. The GPS tells you where you are.'),
+    catchLine: T('Seitenmission: Die Attrappe steht ganz oben in der Ecke an der Wand. Laufe, bis die Wand vor dir ist. (Das GPS zeigt dir auch, wo du bist, ist aber kein Muss.)', 'Side mission: the dummy stands in the corner at the top wall. Run until the wall is ahead of you. (The GPS also shows where you are, but you do not need it.)'),
     enemies: [{ hp: 2 }],
     maps: [hall(['D', 6, 0]), hall(['D', 5, 0]), hall(['D', 7, 0])],
-    needs: { uses: ['gps'] },
-    solutionBuild: GPS,
-    solution: 'while gps.position()[1] > 0:\n    forward()\nturn_right()\nfire()\nfire()',
+    solution: 'while distance() != 1:\n    forward()\nturn_right()\nfire()\nfire()',
     regression: false,
     breaks: false,
     par: 5,
@@ -36,7 +31,6 @@ export const CHAPTER_4 = chapter(4, [
     catchLine: T('Der Regenerator heilt sich alle zwei Runden um 1 Leben. Eine feste Zahl Schüsse reicht nie sicher.', 'The Regenerator heals 1 hit point every two rounds. A fixed number of shots is never certain to be enough.'),
     enemies: [{ hp: 6, regen: { every: 2, amount: 1 } }],
     maps: [hall(['D', 3, 5]), hall(['D', 3, 3]), hall(['D', 3, 6])],
-    solutionBuild: SIDES,
     solution: 'while see() != "enemy":\n    forward()\nwhile alive():\n    fire()',
     par: 5,
   },
@@ -47,7 +41,6 @@ export const CHAPTER_4 = chapter(4, [
     enemies: [{ hp: 5 }],
     maps: [mk(8, 14, ['^', 3, 12], ['D', 3, 9])],
     needs: { sayOnce: 'Liftoff!', uses: ['while'], without: ['for'] },
-    solutionBuild: SIDES,
     solution: 'n = 5\nwhile n > 0:\n    say(n)\n    fire()\n    n = n - 1\nsay("Liftoff!")',
     regression: false,
     breaks: false,
@@ -63,7 +56,6 @@ export const CHAPTER_4 = chapter(4, [
       maze(8, 14, [[3, 12], [3, 8], [6, 8], [6, 11]], [['^', 3, 12], ['D', 6, 11]]),
       maze(8, 14, [[1, 12], [1, 7], [5, 7], [5, 10]], [['^', 1, 12], ['D', 5, 10]]),
     ],
-    solutionBuild: SIDES,
     solution: 'while alive():\n    if see() == "enemy":\n        fire()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()',
     par: 8,
   },
@@ -76,7 +68,6 @@ export const CHAPTER_4 = chapter(4, [
     ],
     maps: [maze(8, 12, [[3, 10], [3, 5]], [['^', 3, 10], ['D', 1, 5]], [[1, 5], [2, 5], [4, 5], [5, 5]])],
     needs: { uses: ['while'], without: ['forward'] },
-    solutionBuild: SIDES,
     solution: 'while see() != "enemy":\n    wait()\nfire()\nfire()',
     regression: false,
     breaks: false,
@@ -89,7 +80,6 @@ export const CHAPTER_4 = chapter(4, [
     enemies: [{ hp: 4, gear: ['hammer', 'eyes'], script: 'while True:\n    if see() == "enemy" and distance() == 1:\n        smash()\n    else:\n        forward()' }],
     maps: [maze(8, 14, [[3, 12], [3, 0]], [['^', 3, 12], ['D', 3, 0]]), maze(8, 14, [[3, 12], [3, 2]], [['^', 3, 12], ['D', 3, 2]])],
     needs: { maxDamage: 0, uses: ['while'] },
-    solutionBuild: SIDES,
     solution: 'while see() != "enemy":\n    wait()\nwhile alive():\n    fire()',
     regression: false,
     breaks: false,
@@ -102,7 +92,6 @@ export const CHAPTER_4 = chapter(4, [
     enemies: [{ hp: 2 }],
     maps: [hall(['D', 3, 4]), hall(['D', 3, 1])],
     needs: { uses: ['while True', 'break'] },
-    solutionBuild: SIDES,
     solution: 'while True:\n    if see() == "enemy":\n        break\n    forward()\nfire()\nfire()',
     regression: false,
     breaks: false,
@@ -118,7 +107,6 @@ export const CHAPTER_4 = chapter(4, [
       maze(8, 14, [[3, 12], [3, 5]], [['^', 3, 12], ['D', 5, 8]], [[4, 8]]),
       maze(8, 14, [[1, 12], [1, 7], [6, 7]], [['^', 1, 12], ['D', 4, 5]], [[4, 6]]),
     ],
-    solutionBuild: SIDES,
     solution:
       'while alive():\n    if see() == "enemy":\n        fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()',
     par: 12,

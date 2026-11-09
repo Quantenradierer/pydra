@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { START_BUILD } from './build.ts';
 import { ENEMIES } from './content/index.ts';
-import { fullBuild } from './fight.ts';
+import { DEFAULT_BUILD } from './fight.ts';
 import { RobotGame } from './game.ts';
 import { CHALLENGES } from './content/challenges.ts';
 import { AppStorage, MemoryKeyValue } from '../storage.ts';
@@ -39,7 +39,7 @@ describe('buildQueue', () => {
 
 describe('evaluateQueue', () => {
   const e = enemy('armored-dummy');
-  const sol = fullBuild(e.solutionBuild);
+  const sol = DEFAULT_BUILD;
 
   it('every fight is won by the enemy\'s solution, with ticks and damage', () => {
     const out = evaluateQueue(buildQueue(e, earlierOf('armored-dummy'), ENEMIES), sol, e.solution);
@@ -71,9 +71,9 @@ describe('evaluateQueue', () => {
   it('a regression fight a new script loses is reported against the old enemy', () => {
     // Chapter 1: an unrelated one-liner beats nothing earlier.
     const q = buildQueue(e, earlierOf('armored-dummy'), ENEMIES);
-    const out = evaluateQueue(q, fullBuild(undefined), 'fire()');
+    const out = evaluateQueue(q, DEFAULT_BUILD, 'fire()');
     const lostOld = out.filter((o) => o.item.regression && !o.won);
     expect(lostOld.length).toBeGreaterThan(0);
-    expect(lostOld.every((o) => lossReason(playItem(o.item, fullBuild(undefined), 'fire()')) !== undefined)).toBe(true);
+    expect(lostOld.every((o) => lossReason(playItem(o.item, DEFAULT_BUILD, 'fire()')) !== undefined)).toBe(true);
   });
 });

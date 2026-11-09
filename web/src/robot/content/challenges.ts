@@ -155,7 +155,7 @@ export const CHALLENGES: readonly Challenge[] = [
     prompt: T('Eine Variable ist an einer Stelle anders geschrieben als bei ihrer Erfindung. Finde sie.', 'A variable is spelled differently from where it was created. Find it.'),
     enemy: 'sign-dummy',
     bug: { from: 'forward(steps)', to: 'forward(step)' },
-    fallback: 'steps = distance() - 1\nforward(4)\nforward(step)\nfire(3)',
+    fallback: 'steps = distance() - 1\nforward(4)\nforward(step)\nfire()',
   },
   {
     kind: 'glitch',
@@ -176,8 +176,8 @@ export const CHALLENGES: readonly Challenge[] = [
     rule: T('Regel: Keine Zahl steht zweimal im Code. Gib ihr einen Namen.', 'Rule: no number is written twice in the code. Give it a name.'),
     enemy: 'twin-armor',
     needs: { noRepeatedNumber: true },
-    solution: 'say("Hi")\npower = 3\nforward(4)\nforward(distance() - 1)\nfire(power)\nwait()\nwait()\nfire(power)\nwait()\nwait()\nfire(power)\nturn_right()\nwait()\nfire(power)\nwait()\nwait()\nfire(power)\nwait()\nwait()\nfire(power)',
-    violation: 'say("Hi")\npower = 3\nforward(4)\nforward(distance() - 1)\nfire(3)\nwait()\nwait()\nfire(power)\nwait()\nwait()\nfire(power)\nturn_right()\nwait()\nfire(power)\nwait()\nwait()\nfire(power)\nwait()\nwait()\nfire(power)',
+    solution: 'say("Hi")\nforward(4)\nforward(distance() - 1)\nfire()\nfire()\nfire()\nfire()\nfire()\nfire()\nturn_right()\nfire()\nfire()\nfire()\nfire()\nfire()\nfire()',
+    violation: 'say("Hi")\nforward(4)\nforward(distance() - 1)\nfire()\nfire()\nfire()\nfire()\nfire()\nfire()\nturn_right()\nfire()\nfire()\nfire()\nfire()\nfire()\nfire()\nsay(4)',
   },
   // ---- Chapter 2
   {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { START_BUILD } from './build.ts';
 import { ENEMIES } from './content/index.ts';
-import { fightEnemy, fullBuild } from './fight.ts';
+import { fightEnemy, DEFAULT_BUILD } from './fight.ts';
 
 const chapters = [...new Set(ENEMIES.map((e) => e.chapter))];
 
@@ -18,21 +18,21 @@ describe('enemy data', () => {
       const prev = [...ENEMIES.slice(0, index)].reverse().find((o) => o.regression !== false);
 
       it('is won by its solution in every layout', () => {
-        const r = fightEnemy(e, ENEMIES, fullBuild(e.solutionBuild), e.solution);
+        const r = fightEnemy(e, ENEMIES, DEFAULT_BUILD, e.solution);
         expect(r.fights.map((f) => [f.won, f.battle.reason, f.unmet]), JSON.stringify(r.fights.map((f) => f.battle.error?.message))).toEqual(r.fights.map(() => [true, 'win', undefined]));
         expect(r.won).toBe(true);
       });
 
       it('is won by its solution together with all earlier enemies of the chapter (regression)', () => {
         for (const o of earlier) {
-          const r = fightEnemy(o, ENEMIES, fullBuild(e.solutionBuild), e.solution, true);
+          const r = fightEnemy(o, ENEMIES, DEFAULT_BUILD, e.solution, true);
           expect(r.won, `${e.id} script vs ${o.id}`).toBe(true);
         }
       });
 
       if (prev && e.breaks !== false && prev.chapter === e.chapter) {
         it('is NOT won by the previous solution (the catch breaks old code)', () => {
-          const r = fightEnemy(e, ENEMIES, fullBuild(e.solutionBuild ?? prev.solutionBuild), prev.solution);
+          const r = fightEnemy(e, ENEMIES, DEFAULT_BUILD, prev.solution);
           expect(r.won).toBe(false);
         });
       }

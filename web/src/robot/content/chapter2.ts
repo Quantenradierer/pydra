@@ -1,4 +1,4 @@
-import { chapter, mk, T, wallCol } from './helpers.ts';
+import { chapter, maze, mk, T, wallCol } from './helpers.ts';
 
 const P = (): ['^', number, number] => ['^', 3, 9];
 const arena = (...items: [string, number, number][]) => mk(8, 10, P(), ...items);
@@ -86,28 +86,26 @@ export const CHAPTER_2 = chapter(2, [
   {
     id: 'staircase',
     title: T('Treppe', 'Staircase'),
-    catchLine: T('Seitenmission: Eine Treppe aus Geröll. Nur Spinnenbeine kommen darüber.', 'Side mission: a staircase of rubble. Only spider legs get over it.'),
+    catchLine: T('Seitenmission: Ein schmaler Gang führt als Treppe nach oben: hoch, rechts, hoch, rechts … Am Ende wartet die Attrappe.', 'Side mission: a narrow corridor leads up like a staircase: up, right, up, right … The dummy waits at the end.'),
     enemies: [{ hp: 2 }],
-    maps: [mk(8, 8, ['^', 1, 6], ['D', 4, 1], ['~', 1, 5], ['~', 2, 4], ['~', 3, 3])],
-    needs: { maxLines: 5 },
-    solutionBuild: { locomotion: 'legs' },
-    solution: 'for i in range(3):\n    move_north()\n    move_east()\nfire()\nfire()',
+    maps: [maze(8, 8, [[1, 6], [1, 5], [2, 5], [2, 4], [3, 4], [3, 3], [4, 3], [4, 1]], [['^', 1, 6], ['D', 4, 1]])],
+    needs: { maxLines: 7 },
+    solution: 'for i in range(3):\n    forward()\n    turn_right()\n    forward()\n    turn_left()\nfire()\nfire()',
     regression: false,
     breaks: false,
-    par: 5,
+    par: 7,
   },
   {
     id: 'growing-shots',
     title: T('Wachsende Schüsse', 'Growing Shots'),
-    catchLine: T('Seitenmission: Mit der Kanone sollen die Schüsse mit jeder Runde stärker werden: erst Stärke 1, dann 2, dann 3 (zusammen 6 Schaden).', 'Side mission: with the cannon the shots should grow with every round: power 1 first, then 2, then 3 (6 damage in all).'),
+    catchLine: T('Seitenmission: Die Schüsse sollen mit jeder Runde mehr werden: erst 1 Schuss, dann 2, dann 3 (zusammen 6 Treffer). Der Code darf nur 5 Zeilen lang sein und muss die Schleifenvariable benutzen.', 'Side mission: the shots should grow with every round: 1 shot first, then 2, then 3 (6 hits in all). The code may only be 5 lines long and must use the loop variable.'),
     enemies: [{ hp: 6 }],
     maps: [arena(['D', 3, 3]), arena(['D', 3, 2]), arena(['D', 3, 3])],
-    needs: { maxLines: 5, uses: ['fire(i)'] },
-    solutionBuild: { gear: ['cannon', 'eyes'] },
-    solution: 'forward(4)\nfor i in range(1, 4):\n    fire(i)\n    wait()\n    wait()',
+    needs: { maxLines: 5, uses: ['range(i)'] },
+    solution: 'forward(4)\nfor i in range(1, 4):\n    for j in range(i):\n        fire()',
     regression: false,
     breaks: false,
-    par: 5,
+    par: 4,
   },
   {
     id: 'dummy-army',

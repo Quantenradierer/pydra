@@ -13,6 +13,8 @@ export interface Needs {
   say?: boolean;
   /** One of the bubbles must start with this text. */
   sayPrefix?: string;
+  /** `sayPrefix` only counts when the robot's HP really falls below this (a sturdier chassis may never get there). */
+  sayIfHpBelow?: number;
   /** The script may have at most this many lines of code (blank lines and comments do not count). */
   maxLines?: number;
   /** Exactly one bubble must read exactly this (a say() after a loop, not inside it). */
@@ -45,9 +47,8 @@ export interface EnemyData {
   maps: string[][];
   maxTicks?: number;
   needs?: Needs;
-  /** A script that beats this enemy (and every earlier enemy of the chapter) with `solutionBuild`. */
+  /** A script that beats this enemy (and every earlier enemy of the chapter) with the default build: no battle needs special gear. */
   solution: string;
-  solutionBuild?: Partial<Build>;
   /** Pieces the catch should break: false when the previous solution may also win (practice enemies). */
   breaks?: boolean;
   /** Lines of a clean solution: fewer or equal lines earns the "few lines" star. */

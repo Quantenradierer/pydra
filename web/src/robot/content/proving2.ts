@@ -3,8 +3,7 @@ import type { EnemyData } from './types.ts';
 
 /** The one script that carries Chapters 3 and 4: look around, respect shields, walk, turn at walls. */
 const FINAL =
-  'while alive():\n    if see() == "enemy":\n        if enemy_shielded():\n            shield.activate()\n        else:\n            fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()';
-const BUILD = { gear: ['blaster', 'eyes', 'shield'] as ('blaster' | 'eyes' | 'shield')[], addons: ['wide', 'scanner'] as ('wide' | 'scanner')[] };
+  'while alive():\n    if see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()';
 
 const fight = (id: string, de: string, en: string, mix: string[], catchDe: string, catchEn: string, boss = false): Omit<EnemyData, 'chapter'> => ({
   id,
@@ -14,7 +13,6 @@ const fight = (id: string, de: string, en: string, mix: string[], catchDe: strin
   maps: [],
   mix,
   needs: { noWaste: true },
-  solutionBuild: BUILD,
   solution: FINAL,
   breaks: false,
   par: 14,

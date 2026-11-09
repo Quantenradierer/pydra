@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { START_BUILD } from './build.ts';
 import { CHALLENGES, checkConstraint, checkGlitch, checkWorkshop, injectGlitch } from './challenges.ts';
 import { ENEMIES } from './content/index.ts';
-import { fullBuild } from './fight.ts';
+import { DEFAULT_BUILD } from './fight.ts';
 
 describe('challenges', () => {
   it('have unique ids and sit after an existing enemy', () => {
@@ -17,7 +17,7 @@ describe('challenges', () => {
           const good = enemyScript(c.enemy);
           const buggy = injectGlitch(c, good);
           expect(buggy).not.toBe(good);
-          const build = fullBuild(enemyOf(c.enemy).solutionBuild);
+          const build = DEFAULT_BUILD;
           expect(checkGlitch(c, buggy, build)).toBe(false);
           expect(checkGlitch(c, good, build)).toBe(true);
           expect(checkGlitch(c, c.fallback, build), 'the fallback must be broken too').toBe(false);
@@ -29,7 +29,7 @@ describe('challenges', () => {
           break;
         }
         case 'constraint': {
-          const build = fullBuild(enemyOf(c.enemy).solutionBuild);
+          const build = DEFAULT_BUILD;
           const breaking = c.violation ?? `${c.solution}\nwait()`;
           expect(checkConstraint(c, c.solution, build)).toBe(true);
           expect(checkConstraint(c, breaking, build)).toBe(false);

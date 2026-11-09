@@ -4,7 +4,7 @@ import { AppStorage, MemoryKeyValue } from '../storage.ts';
 import { CHALLENGES } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import { RobotGame } from './game.ts';
-import { fightEnemy, fullBuild } from './fight.ts';
+import { fightEnemy, DEFAULT_BUILD } from './fight.ts';
 import { dailySeed, today, trainingFight } from './training.ts';
 
 describe('Training Grounds', () => {
@@ -12,7 +12,7 @@ describe('Training Grounds', () => {
     it(`generates fights at level ${level} that their own script wins, for 60 seeds`, () => {
       for (let seed = 1; seed <= 60; seed++) {
         const f = trainingFight(seed, level);
-        const r = fightEnemy(f.enemy, [], fullBuild(f.build), f.solution);
+        const r = fightEnemy(f.enemy, [], DEFAULT_BUILD, f.solution);
         expect(r.won, `seed ${seed}: ${JSON.stringify(r.fights.map((x) => [x.battle.reason, x.battle.error?.message]))}`).toBe(true);
       }
     });
@@ -25,7 +25,7 @@ describe('Training Grounds', () => {
   it('is not won by an empty script', () => {
     for (let seed = 1; seed <= 20; seed++) for (const level of [2, 3, 4]) {
       const f = trainingFight(seed, level);
-      expect(fightEnemy(f.enemy, [], fullBuild(f.build), 'wait()').won).toBe(false);
+      expect(fightEnemy(f.enemy, [], DEFAULT_BUILD, 'wait()').won).toBe(false);
     }
   });
   it('has one daily seed per date', () => {

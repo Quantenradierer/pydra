@@ -129,7 +129,7 @@ export interface BattleInput {
 /** The build an enemy fights with (same parts as the player could get). */
 export function enemyBuild(def: EnemyDef): Build {
   const gear = (def.gear ?? ['blaster', 'eyes']) as Build['gear'];
-  return { chassis: 'medium', locomotion: def.locomotion ?? 'wheels', gear, addons: addonsFor(99), blasterMark: 1 };
+  return { chassis: 'medium', locomotion: def.locomotion ?? 'wheels', gear, addons: addonsFor(gear), blasterMark: 1 };
 }
 
 /** Errors found before the battle starts: syntax, unknown names, parts that are not equipped. */

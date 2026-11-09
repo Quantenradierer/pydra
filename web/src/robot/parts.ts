@@ -5,7 +5,7 @@
  * script; status methods answer at once. Using an action that is not charged
  * costs the tick but does not crash.
  */
-import { addonsFor, CHASSIS, type Build, type GearId } from './build.ts';
+import { CHASSIS, type Build, type GearId } from './build.ts';
 import { DIRS, opposite, step as stepPos, turnLeft, turnRight, type Dir, type Intent, type World } from './engine.ts';
 import { RbError } from './py/errors.ts';
 import { ActionRequest, PyTuple, repr, type HostFunction, type HostObject, type Value } from './py/values.ts';
@@ -209,8 +209,9 @@ export function createEnv(rc: RobotContext): Env {
     return { what: found ? (found.what === 'robot' ? 'enemy' : found.what) : 'empty', distance: found ? found.distance : 0, robot: found?.robot };
   };
   if (has('eyes')) {
-    const wide = build.addons.includes('wide');
-    const scanner = build.addons.includes('scanner');
+    // Wide-angle sensors and the shield scanner come with every pair of eyes.
+    const wide = true;
+    const scanner = true;
     const methods: Record<string, HostFunction> = {
       ...common('eyes'),
       see: fn('see', () => log('see()', look(me().facing).what)),
@@ -223,11 +224,11 @@ export function createEnv(rc: RobotContext): Env {
       methods.see_right = fn('see_right', () => log('see_right()', look(turnRight(me().facing)).what));
       globals.see_left = methods.see_left;
       globals.see_right = methods.see_right;
-    } else for (const n of ['see_left', 'see_right']) notEquipped.set(n, { kind: 'part', need: 'wide' });
+    }
     if (scanner) {
       methods.enemy_shielded = fn('enemy_shielded', () => log('enemy_shielded()', Boolean(look(me().facing).robot?.shieldUp)));
       globals.enemy_shielded = methods.enemy_shielded;
-    } else notEquipped.set('enemy_shielded', { kind: 'part', need: 'scanner' });
+    }
     globals.eyes = obj('eyes', methods);
   } else {
     notEquipped.set('eyes', { kind: 'part', need: 'eyes' });
@@ -255,4 +256,4 @@ export function createEnv(rc: RobotContext): Env {
 /** The hit points a build starts with. */
 export const buildHp = (build: Build): number => CHASSIS[build.chassis].hp;
 
-export { addonsFor, DIRS, stepPos };
+export { DIRS, stepPos };

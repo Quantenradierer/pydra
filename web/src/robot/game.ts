@@ -6,7 +6,7 @@
  */
 import type { PointsEvent } from '../points/state.ts';
 import type { AppStorage } from '../storage.ts';
-import { buildProblem, parseBuild, START_BUILD, STAR_GATE, UNLOCK_CHAPTER, type Build } from './build.ts';
+import { addonsFor, buildProblem, parseBuild, START_BUILD, type Build } from './build.ts';
 import { precheck } from './battle.ts';
 import { CHALLENGES, type Challenge } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
@@ -187,17 +187,12 @@ export class RobotGame {
     return unlockLevel(this.progress().solved, this.steps);
   }
 
-  /** Saves a build if it is legal at the current chapter; returns false (and saves nothing) otherwise. */
+  /** Saves a build if it is legal (slots, no duplicates); any part may be equipped at any time. Returns false (and saves nothing) otherwise. */
   setBuild(build: Build): boolean {
-    if (buildProblem(build, this.level(), this.stats().stars)) return false;
-    this.save({ ...this.progress(), build });
+    const full: Build = { ...build, addons: addonsFor(build.gear) };
+    if (buildProblem(full)) return false;
+    this.save({ ...this.progress(), build: full });
     return true;
-  }
-
-  /** Parts the player may pick now. */
-  can(kind: 'chassis' | 'locomotion' | 'gear' | 'addon', id: string): boolean {
-    const table = UNLOCK_CHAPTER[kind] as Record<string, number>;
-    return (table[id] ?? 99) <= this.level() && (kind !== 'gear' || ((STAR_GATE as Record<string, number>)[id] ?? 0) <= this.stats().stars);
   }
 
   history(): HistoryEntry[] {

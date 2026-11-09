@@ -2,9 +2,6 @@ import { chapter, mk, T, wallCol } from './helpers.ts';
 
 /** The Chapter 3 frame: an 9x8 arena, the (medium) robot at (4, 6) looking north. Enemies stand ahead, to the right or to the left. */
 const arena = (...items: [string, number, number][]) => mk(9, 8, ['^', 4, 6], ...items);
-const WIDE = { addons: ['wide', 'scanner'] as ('wide' | 'scanner')[] };
-const HAMMER = { gear: ['blaster', 'eyes', 'hammer'] as ('blaster' | 'eyes' | 'hammer')[], ...WIDE };
-const SHIELD = { gear: ['blaster', 'eyes', 'shield'] as ('blaster' | 'eyes' | 'shield')[], ...WIDE };
 
 const SHIELD_DUMMY = { hp: 3, gear: ['shield'], script: 'while True:\n    shield.activate()\n    wait()' };
 
@@ -16,7 +13,6 @@ export const CHAPTER_3 = chapter(3, [
     catchLine: T('Die Attrappe steht mal geradeaus, mal rechts von dir. Dein Code muss erst nachsehen.', 'The dummy stands ahead one time and to your right the next. Your code has to look first.'),
     enemies: [{ hp: 2 }],
     maps: [arena(['D', 4, 2]), arena(['D', 7, 6]), arena(['D', 4, 3])],
-    solutionBuild: WIDE,
     solution: 'if see() == "enemy":\n    fire()\n    fire()\nelse:\n    turn_right()\n    fire()\n    fire()',
     par: 6,
   },
@@ -26,7 +22,6 @@ export const CHAPTER_3 = chapter(3, [
     catchLine: T('Seitenmission: Mal versperrt eine Mauer den Weg, mal steht die Attrappe frei. Hinter der Mauer ist rechts Platz.', 'Side mission: sometimes a wall blocks the way, sometimes the dummy stands in the open. There is room to the right of the wall.'),
     enemies: [{ hp: 2 }],
     maps: [arena(['D', 4, 3]), arena(['D', 7, 6], ...wallCol(4, 4, 4)), arena(['D', 8, 6], ['#', 4, 3])],
-    solutionBuild: WIDE,
     solution: 'if see() == "wall":\n    turn_right()\nfire()\nfire()',
     regression: false,
     breaks: false,
@@ -38,7 +33,6 @@ export const CHAPTER_3 = chapter(3, [
     catchLine: T('Jetzt kann die Attrappe auch links stehen. Mit Weitwinkel-Augen siehst du zur Seite.', 'Now the dummy can also stand on the left. Wide-angle eyes let you look sideways.'),
     enemies: [{ hp: 2 }],
     maps: [arena(['D', 4, 2]), arena(['D', 7, 6]), arena(['D', 1, 6])],
-    solutionBuild: WIDE,
     solution: 'if see_right() == "enemy":\n    turn_right()\nelif see_left() == "enemy":\n    turn_left()\nfire()\nfire()',
     par: 6,
   },
@@ -49,7 +43,6 @@ export const CHAPTER_3 = chapter(3, [
     enemies: [SHIELD_DUMMY],
     maps: [arena(['D', 4, 2]), arena(['D', 7, 6]), arena(['D', 1, 6])],
     needs: { noWaste: true },
-    solutionBuild: WIDE,
     solution: 'for i in range(8):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()',
     par: 10,
   },
@@ -60,7 +53,6 @@ export const CHAPTER_3 = chapter(3, [
     enemies: [{ ...SHIELD_DUMMY, hp: 4 }],
     maps: [arena(['D', 4, 3])],
     needs: { noWaste: true, uses: ['clock'], without: ['enemy_shielded'] },
-    solutionBuild: WIDE,
     solution: 'for i in range(10):\n    if clock.tick() % 2 == 0:\n        fire()\n    else:\n        wait()',
     regression: false,
     breaks: false,
@@ -69,22 +61,22 @@ export const CHAPTER_3 = chapter(3, [
   {
     id: 'charger',
     title: T('Stürmer', 'Charger'),
-    catchLine: T('Der Stürmer rennt auf dich zu (8 Leben) und schlägt zu, sobald er neben dir steht. Der Hammer lohnt sich.', 'The Charger runs at you (8 hit points) and smashes you once it stands next to you. The hammer pays off.'),
-    enemies: [{ hp: 8, gear: ['hammer', 'eyes'], script: 'while True:\n    if see() == "enemy" and distance() == 1:\n        smash()\n    else:\n        forward()' }],
+    catchLine: T('Der Stürmer rennt auf dich zu (4 Leben) und schlägt zu, sobald er neben dir steht. Triff ihn früh genug. (Der Hammer hilft im Nahkampf, ist aber kein Muss.)', 'The Charger runs at you (4 hit points) and smashes you once it stands next to you. Hit it early enough. (The hammer helps up close, but you do not need it.)'),
+    enemies: [{ hp: 4, gear: ['hammer', 'eyes'], script: 'while True:\n    if see() == "enemy" and distance() == 1:\n        smash()\n    else:\n        forward()' }],
     maps: [arena(['D', 4, 1]), arena(['D', 8, 6]), arena(['D', 0, 6])],
-    solutionBuild: HAMMER,
+    needs: { maxDamage: 3 },
     solution:
-      'for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n        if distance() == 1:\n            smash()\n        elif enemy_shielded():\n            wait()\n        else:\n            fire()',
-    par: 13,
+      'for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()',
+    breaks: false,
+    par: 10,
   },
   {
     id: 'order-matters',
     title: T('Reihenfolge zählt', 'Order Matters'),
     catchLine: T('Seitenmission: Ein Scharfschütze trifft dich jede Runde. Dein Roboter soll „critical“ sagen, sobald er unter 5 Leben fällt.', 'Side mission: a sniper hits you every round. Your robot must say "critical" as soon as it drops below 5 HP.'),
-    enemies: [{ hp: 9, script: 'while True:\n    fire()' }],
+    enemies: [{ hp: 6, script: 'while True:\n    fire()' }],
     maps: [arena(['D', 4, 1])],
-    needs: { sayPrefix: 'critical' },
-    solutionBuild: WIDE,
+    needs: { sayPrefix: 'critical', sayIfHpBelow: 5 },
     solution: 'for i in range(12):\n    if hp() < 5:\n        say("critical")\n    elif hp() < 10:\n        say("hurt")\n    fire()',
     regression: false,
     breaks: false,
@@ -94,10 +86,9 @@ export const CHAPTER_3 = chapter(3, [
     id: 'health-check',
     title: T('Gesundheitscheck', 'Health Check'),
     catchLine: T('Seitenmission: Derselbe Scharfschütze. Sag „low“, wenn du unter 6 Leben hast, und gewinne.', 'Side mission: the same sniper. Say "low" when you are below 6 HP, and win.'),
-    enemies: [{ hp: 8, script: 'while True:\n    fire()' }],
+    enemies: [{ hp: 5, script: 'while True:\n    fire()' }],
     maps: [arena(['D', 4, 1])],
-    needs: { sayPrefix: 'low' },
-    solutionBuild: WIDE,
+    needs: { sayPrefix: 'low', sayIfHpBelow: 6 },
     solution: 'for i in range(12):\n    if hp() < 6:\n        say("low")\n    fire()',
     regression: false,
     breaks: false,
@@ -109,7 +100,6 @@ export const CHAPTER_3 = chapter(3, [
     catchLine: T('Seitenmission: Die Attrappe steht irgendwo um dich herum, auch hinter dir. Dreh dich, solange du sie nicht siehst.', 'Side mission: the dummy stands somewhere around you, even behind you. Turn as long as you do not see it.'),
     enemies: [{ hp: 2 }],
     maps: [arena(['D', 4, 7]), arena(['D', 0, 6]), arena(['D', 7, 6])],
-    solutionBuild: WIDE,
     solution: 'for i in range(10):\n    if see() != "enemy":\n        turn_right()\n    else:\n        fire()',
     regression: false,
     breaks: false,
@@ -118,13 +108,13 @@ export const CHAPTER_3 = chapter(3, [
   {
     id: 'gatekeeper',
     title: T('Torwächter', 'Gatekeeper'),
-    catchLine: T('Boss: zufällige Seite, Schild im Takt von drei Runden, und er schießt zurück. Du darfst höchstens 4 Leben verlieren.', 'Boss: random side, a shield on a three-round beat, and it shoots back. You may lose at most 4 HP.'),
-    enemies: [{ hp: 6, gear: ['blaster', 'shield'], script: 'while True:\n    if clock.tick() % 3 == 0:\n        shield.activate()\n    else:\n        fire()' }],
+    catchLine: T('Boss: zufällige Seite, Schild im Takt von drei Runden, und er schießt zurück. Du darfst höchstens 6 Leben verlieren. (Ein eigenes Schild fängt Treffer ab, ist aber kein Muss.)', 'Boss: random side, a shield on a three-round beat, and it shoots back. You may lose at most 6 HP. (Your own shield catches hits, but you do not need it.)'),
+    enemies: [{ hp: 4, gear: ['blaster', 'shield'], script: 'while True:\n    if clock.tick() % 3 == 0:\n        shield.activate()\n    else:\n        fire()' }],
     maps: [arena(['D', 4, 1]), arena(['D', 8, 6]), arena(['D', 0, 6])],
-    needs: { maxDamage: 4, noWaste: true },
-    solutionBuild: SHIELD,
+    needs: { maxDamage: 6, noWaste: true },
     solution:
-      'for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n        if enemy_shielded():\n            shield.activate()\n        else:\n            fire()',
+      'for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()',
+    breaks: false,
     par: 11,
   },
 ]);

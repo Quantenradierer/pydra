@@ -11,8 +11,6 @@ type T = (key: MessageKey, params?: Params) => string;
 export interface BenchOptions {
   t: T;
   build: Build;
-  /** What the player has unlocked. */
-  can(kind: 'locomotion' | 'gear', id: string): boolean;
   /** Tries a new build (the screen explains refusals). */
   apply(next: Build): void;
   /** What is picked on the robot (kept by the screen across redraws). */
@@ -25,9 +23,9 @@ export interface BenchOptions {
 const slotName = (t: T, s: SocketName) => t(`robot.socket.${s}` as MessageKey);
 
 /** The gear that would click into `socket` if the player added it now. */
-export function gearForSocket(build: Build, socket: SocketName, can: (g: GearId) => boolean): { here: GearId[]; elsewhere: GearId[] } {
+export function gearForSocket(build: Build, socket: SocketName): { here: GearId[]; elsewhere: GearId[] } {
   const chassis = chassisArt(build.chassis);
-  const free = GEAR.filter((g) => !build.gear.includes(g) && can(g));
+  const free = GEAR.filter((g) => !build.gear.includes(g));
   const here: GearId[] = [];
   const elsewhere: GearId[] = [];
   for (const g of free) (assignSockets(chassis, [...build.gear, g], partArt).get(g) === socket ? here : elsewhere).push(g);
@@ -67,8 +65,7 @@ export function benchEl(o: BenchOptions): HTMLElement {
       h('h4', {}, t('robot.bench.loco')),
       h('ul', { class: 'robot-picks' }, ...LOCOMOTIONS.map((l: LocomotionId) => {
         const current = build.locomotion === l;
-        const ok = o.can('locomotion', l);
-        return card(l, t(`robot.locoName.${l}` as MessageKey), current ? h('span', { class: 'robot-tag' }, t('robot.bench.current')) : h('button', { class: 'run-control', disabled: !ok, 'data-testid': `robot-pick-${l}`, onclick: () => o.apply({ ...build, locomotion: l }) }, ok ? t('robot.bench.plug') : t('robot.build.locked')), t(`robot.loco.${l}` as MessageKey).split(':')[1]?.trim() ?? '');
+        return card(l, t(`robot.locoName.${l}` as MessageKey), current ? h('span', { class: 'robot-tag' }, t('robot.bench.current')) : h('button', { class: 'run-control', 'data-testid': `robot-pick-${l}`, onclick: () => o.apply({ ...build, locomotion: l }) }, t('robot.bench.plug')), t(`robot.loco.${l}` as MessageKey).split(':')[1]?.trim() ?? '');
       })),
     );
   } else if (selectedPart && selectedPart !== build.locomotion) {
@@ -82,7 +79,7 @@ export function benchEl(o: BenchOptions): HTMLElement {
     inspector.append(h('h4', {}, t(`robot.locoName.${build.locomotion}` as MessageKey)), h('p', {}, t(`robot.loco.${build.locomotion}` as MessageKey)), h('div', { class: 'robot-pick-actions' }, close()));
   } else if (o.selected && chassis.slots.includes(o.selected as SocketName)) {
     const sel = o.selected as SocketName;
-    const { here, elsewhere } = gearForSocket(build, sel, (g) => o.can('gear', g));
+    const { here, elsewhere } = gearForSocket(build, sel);
     const list = here.length > 0 ? here : elsewhere;
     inspector.append(
       h('h4', {}, t('robot.bench.empty', { slot: slotName(t, sel) })),

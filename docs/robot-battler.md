@@ -14,7 +14,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | --- | --- |
 | Deterministic grid/tick engine: HP, armor, walls, rubble, pits, simultaneous resolution, shields, regeneration, push, armor plates, seeded RNG, tick limit | `engine.ts`, `rng.ts`, `layout.ts` (ASCII maps, seeded mirroring) |
 | Python interpreter for the teaching subset, **resumable** (generators pause at action calls, per-tick step budget), friendly errors (de/en) with did-you-mean, pre-battle checker, CPython golden tests (200 snippets) | `py/` (`lexer`, `parser`, `interp`, `builtins`, `values`, `check`, `errors`), `friendly.ts`, `messages-errors.ts` |
-| Parts as host objects: wheels, spider legs, **treads** (+3 armor, 2-tick turns, `push()`), blaster (+ burst Mk II), cannon, eyes (+ wide-angle, shield scanner), hammer, shield, GPS, **armor plates** (optional, 12 stars), `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
+| Parts as host objects: wheels, spider legs, **treads** (+3 armor, 2-tick turns, `push()`), blaster (+ burst Mk II), cannon, eyes (+ wide-angle, shield scanner), hammer, shield, GPS, **armor plates** (free like all gear), `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
 | Battle runner recording frames (positions, events, script line, sensor reads, say() bubbles) | `battle.ts` |
 | Robot art: registry + sockets + renderer, used by the build screen, arena, cards, Home (see *Robot art*) | `robot/art/`, `views/robot-bench.ts`, `views/robot-gallery.ts` |
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
@@ -30,8 +30,8 @@ Deviations from the doc, on purpose: chassis HP is 8/12 (the table), not "10 def
 are tiny: the engine is pure and worker-ready, see Remaining work); the editor is a `<textarea>` (no CodeMirror
 dependency); `wait()` costs one tick ("free" in the doc means "needs no part"); `distance()` returns 0 when nothing is in
 range; a win ends the battle at once, but free statements right after the winning action (e.g. `say("done")`) still run.
-Chapter 3 uses a 9x8 arena (robot at (4, 6)) so left and right are symmetric; its final build is blaster + eyes + shield
-(the medium chassis has three slots), so the hammer is an alternative for the Charger, not a requirement. Chapter 3-4
+Chapter 3 uses a 9x8 arena (robot at (4, 6)) so left and right are symmetric; every fight is won with the default build; shield and hammer are optional
+(the medium chassis has three slots). Chapter 3-4
 extras are side missions (`regression: false`) with their own set-up, like the Chapter 2 extras. Proving Grounds II mixes
 Chapter 3 and 4 fights (their frames are the only ones one script can win together); `id#n` in `mix` picks layout n.
 
@@ -127,7 +127,7 @@ build ─▶ createEnv (parts.ts): globals + objects (host functions)       tick
   together; win = all enemies down and the player standing; time out (200 ticks, or `maxTicks`) = loss.
 * **Progress** – `RobotGame` (`game.ts`) stores `{build, script, history, solved, stars, misses, runs, wins}` under
   `pydra.v1.robot` (`GAME_DATA_KEYS`), parsed defensively. `stats()` feeds Home and the points context; a first win calls
-  `onPoints({type:'level', game:'robot', id, clean})`. Parts unlock by chapter (`UNLOCK_CHAPTER` in `build.ts`, level =
+  `onPoints({type:'level', game:'robot', id, clean})`. Gear is free (see *Free gear* below); `INTRODUCED_IN` in `build.ts` only says which chapter introduces a part (level =
   chapter of the first unsolved main battle).
 * **PWA/offline** – nothing is fetched; all content is bundled in the main chunk and precached like the rest.
 
@@ -143,7 +143,7 @@ An enemy is a plain object (`content/types.ts` → `EnemyData`) appended to `ENE
   maxTicks: 30,                                       // optional, loses at this tick
   needs: { say: true, sayPrefix: 'Distance: ', sayOnce: 'done', maxLines: 6,
            maxDamage: 4, noWaste: true, uses: ['while'], without: ['for'], noRepeatedNumber: true },
-  solution: '…', solutionBuild: { gear: ['cannon','eyes'] },  // a script that beats this and all earlier enemies of the chapter
+  solution: '…',                                      // a script that beats this and all earlier enemies of the chapter with the DEFAULT build (light chassis, wheels, blaster + eyes)
   breaks: true,                                       // the previous solution must NOT win (set false for practice enemies)
   regression: false,                                  // side mission with its own set-up, not part of the chapter run
   par: 5,                                             // lines for the "few lines" star
@@ -160,6 +160,27 @@ A challenge (`content/challenges.ts`) sits `after` an enemy id and has `kind` gl
 logic and checks are in `challenges.ts`.
 Every new step also needs nothing else: `RobotGame` builds its step list from the two data files, and Home/points/profile
 pick the new total up automatically.
+
+## Free gear
+
+The player can equip **any** part at any time (chassis, drive, gear, Mk II); only slot count and duplicates are refused. No
+`locked` state exists any more (`buildProblem` returns `slots` / `duplicate` only, `RobotGame.can` is gone, the 12-star gate of
+the armor plates is gone). Chapters only *introduce* parts: `INTRODUCED_IN` (`build.ts`) puts a small "neu / new" tag on the part
+in the builder in the chapter that brings it. The eyes' wide-angle and scanner add-ons are part of every pair of eyes
+(`see_left()`, `see_right()`, `enemy_shielded()` work from Chapter 0; `addonsFor(gear)`).
+
+**Rule for content: no battle or challenge needs a specific part.** `EnemyData.solution` must win with the *default build*
+(`DEFAULT_BUILD` = `START_BUILD`: light chassis, wheels, blaster + eyes); `solutionBuild` no longer exists and rules such as
+`uses: ['gps']`, a power argument, or HP-based sayings that only a weak chassis reaches are avoided (`needs.sayIfHpBelow`
+makes "say X when HP < n" count only when the robot's HP really fell that low). Parts that a chapter is "about" are optional
+shortcuts: Chapter 1 now works with the blaster (the cannon is an extra, armor is no longer used by the dummies), Staircase is a
+walled staircase that wheels climb with turns (spider legs are the `move_north()` shortcut), Growing Shots uses a nested loop
+instead of `fire(i)`, Charger / Gatekeeper / Run to the Wall are won with blaster, eyes and wheels (hammer, shield, GPS lower
+the damage or save code). The burst blaster (Mk II) is a different tool, not a drop-in: scripts must watch `blaster.heat()`.
+Tests: `gear.test.ts` (per chapter: every reference solution wins with the default build; the same solutions still win with
+the medium chassis and with each other part added; challenges are solvable with the default build; nothing is locked in the
+builder), `chapters.test.ts` (optional-gear alternatives: shield, hammer, spider legs), `enemies.test.ts` (all solutions run
+on the default build), `e2e/robot.spec.ts` (builder without locks, "neu" tag, Chapter 3 and 4 on the starting robot).
 
 ## Wording audit (German / English UI)
 
@@ -206,7 +227,7 @@ Runde zurück", "Von vorn" at the start and "Zum Ende" / forward at the end did 
 2. **Not built from the design doc**: Crate Courier and Battery Sorter (need a gripper and crates: the engine has no items);
    the other ~18 optional gear items (railgun, flamethrower, hook, EMP, mines, boomerang, ears, thermal camera, analyzer,
    hacking module, smoke, cloak, decoy, turbo, jump jets, teleporter, scout drone, repair drone) and cosmetics earned with
-   stars - armor plates (`STAR_GATE` in `build.ts`) is the template for a passive item, `parts.ts` for an active one;
+   stars - armor plates (`plates` in `build.ts`) is the template for a passive item, `parts.ts` for an active one;
    Throwback and bonus enemies; the gauntlet is now visible as the variation queue (every enemy, not only the boss); the trace is not shown for *enemy* scripts (only the player's); reading the enemy's
    source after beating it (tier >= 3); seeded `mirror` layouts for Chapters 3+ (the Chapter 3-4 layouts are fixed so that
    each side is tested on purpose); script history has no diff view.

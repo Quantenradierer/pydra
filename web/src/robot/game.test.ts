@@ -100,17 +100,18 @@ describe('RobotGame', () => {
     expect(game.script()).toBe(STARTER_SCRIPT);
   });
 
-  it('only accepts legal builds for the chapter, and unlocks parts as chapters are done', () => {
+  it('lets the player equip any part at any time, only slots and duplicates are refused', () => {
     const { game } = setup();
-    expect(game.setBuild({ chassis: 'light', locomotion: 'legs', gear: ['cannon', 'eyes'], addons: [], blasterMark: 1 })).toBe(false);
-    expect(game.can('gear', 'cannon')).toBe(false);
-    for (const e of ENEMIES.filter((x) => x.chapter === 0)) {
-      game.setScript(e.solution);
-      expect(game.run(e.id)!.won, e.id).toBe(true);
-    }
-    expect(game.level()).toBe(1);
-    expect(game.setBuild({ chassis: 'light', locomotion: 'wheels', gear: ['cannon', 'eyes'], addons: [], blasterMark: 1 })).toBe(true);
+    expect(game.level()).toBe(0);
+    expect(game.setBuild({ chassis: 'light', locomotion: 'legs', gear: ['cannon', 'eyes'], addons: [], blasterMark: 1 })).toBe(true);
+    expect(game.setBuild({ chassis: 'light', locomotion: 'treads', gear: ['hammer', 'shield'], addons: [], blasterMark: 1 })).toBe(true);
+    expect(game.setBuild({ chassis: 'medium', locomotion: 'wheels', gear: ['blaster', 'gps', 'plates'], addons: [], blasterMark: 2 })).toBe(true);
+    expect(game.build().blasterMark).toBe(2);
     expect(game.setBuild({ chassis: 'light', locomotion: 'wheels', gear: ['cannon', 'eyes', 'blaster'], addons: [], blasterMark: 1 })).toBe(false);
+    expect(game.setBuild({ chassis: 'medium', locomotion: 'wheels', gear: ['eyes', 'eyes'], addons: [], blasterMark: 1 })).toBe(false);
+    // The eyes' wide-angle and scanner add-ons come with the eyes.
+    game.setBuild({ chassis: 'light', locomotion: 'wheels', gear: ['eyes'], addons: [], blasterMark: 1 });
+    expect(game.build().addons).toEqual(['wide', 'scanner']);
   });
 
   it('pays a challenge once', () => {

@@ -69,7 +69,9 @@ export function judge(battle: BattleResult, needs: Needs | undefined, regression
   if (!regression && needs?.noRepeatedNumber && repeatsNumber(script)) return { battle, won: false, unmet: 'repeat' };
   const said = battle.frames.flatMap((f) => f.bubbles.filter((b) => b.robot === 'player').map((b) => b.text));
   if (needs?.say && said.length === 0) return { battle, won: false, unmet: 'say' };
-  if (needs?.sayPrefix && !said.some((t) => t.startsWith(needs.sayPrefix!))) return { battle, won: false, unmet: 'sayPrefix' };
+  const lowest = Math.min(...battle.frames.flatMap((f) => f.robots.filter((r) => r.id === 'player').map((r) => r.hp)));
+  const needsPrefix = needs?.sayPrefix !== undefined && (needs.sayIfHpBelow === undefined || lowest < needs.sayIfHpBelow);
+  if (needsPrefix && !said.some((t) => t.startsWith(needs!.sayPrefix!))) return { battle, won: false, unmet: 'sayPrefix' };
   if (!regression && needs?.sayOnce && said.filter((t) => t === needs.sayOnce).length !== 1) return { battle, won: false, unmet: 'sayOnce' };
   return { battle, won: true };
 }
@@ -94,4 +96,5 @@ export function fightEnemy(enemy: EnemyData, all: readonly EnemyData[], build: B
   };
 }
 
-export const fullBuild = (partial: Partial<Build> | undefined): Build => ({ ...START_BUILD, chassis: 'medium', addons: [], ...partial });
+/** The robot every battle must be winnable with: the starting build (light chassis, wheels, blaster and eyes). */
+export const DEFAULT_BUILD: Build = START_BUILD;

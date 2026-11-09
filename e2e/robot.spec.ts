@@ -85,7 +85,7 @@ test('a challenge: Workshop (write the script), and English texts', async ({ pag
   await expect(page.getByTestId('robot-step-ws-step')).toContainText('done');
 });
 
-test('the builder: parts unlock with the chapters and decide which commands exist', async ({ page }) => {
+test('the builder: every part can be equipped at any time; new parts are only marked "neu"', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()' })));
   await page.goto('/#/');
@@ -93,22 +93,13 @@ test('the builder: parts unlock with the chapters and decide which commands exis
   await page.getByTestId('start-robot').click();
   await page.getByTestId('robot-step-one-more-line').click();
   await openDrawer(page, 'robot', 'robot-build-open');
-  // Chapter 0: cannon and spider legs are still locked.
-  await expect(page.getByTestId('robot-gear-cannon')).toBeDisabled();
-  await expect(page.getByTestId('robot-locomotion-legs')).toBeDisabled();
+  // Chapter 0: nothing is locked, not even the cannon, spider legs, treads or the shield.
+  for (const id of ['robot-gear-cannon', 'robot-gear-hammer', 'robot-gear-shield', 'robot-gear-gps', 'robot-gear-plates', 'robot-locomotion-legs', 'robot-locomotion-treads', 'robot-chassis-medium']) {
+    await expect(page.getByTestId(id), id).toBeEnabled();
+  }
+  await expect(page.getByTestId('robot-new')).toHaveCount(0);
   await expect(page.getByTestId('robot-api')).toContainText('forward(steps)');
   await expect(page.getByTestId('robot-api')).not.toContainText('fire(power)');
-
-  // Chapter 1 unlocks them.
-  await page.evaluate(() => {
-    const solved = ['first-contact', 'one-more-line', 'training-dummy', 'corner-dummy', 'u-turn', 'twin-dummies', 'wall-dummy', 'obstacle-course', 'hello-robot', 'far-dummy'];
-    localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: 'say("Hi")\nforward(4)\nfire(3)' }));
-  });
-  await page.goto('/#/');
-  await page.reload();
-  await page.getByTestId('start-robot').click();
-  await page.getByTestId('robot-step-armored-dummy').click();
-  await openDrawer(page, 'robot', 'robot-build-open');
   // Both weapons do not fit next to the eyes on a light chassis: swap the blaster for the cannon.
   await page.getByTestId('robot-gear-cannon').click();
   await expect(page.getByTestId('robot-build-note')).toHaveText('Alle Plätze sind belegt: Nimm erst ein Teil heraus.');
@@ -116,13 +107,31 @@ test('the builder: parts unlock with the chapters and decide which commands exis
   await page.getByTestId('robot-gear-blaster').uncheck();
   await page.getByTestId('robot-gear-cannon').check();
   await expect(page.getByTestId('robot-api')).toContainText('fire(power)');
-  await fillCode(page, 'say("Hi")\nforward(4)\nfire(3)\nwait()\nwait()\nfire(3)');
+  // The cannon needs a power; the old blaster-only code stops at line 1 with a friendly message.
+  await fillCode(page, 'forward()\nfire()');
+  await runFight(page);
+  await expect(page.getByTestId('robot-outcome')).toContainText('Das Skript hat in Zeile 2 angehalten: fire() will');
+  // Back to the blaster: the default gear wins the same fight.
+  await openDrawer(page, 'robot', 'robot-build-open');
+  await page.getByTestId('robot-gear-cannon').uncheck();
+  await page.getByTestId('robot-gear-blaster').check();
+  await fillCode(page, 'forward()\nfire()\nfire()');
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
-  // The old blaster-only code stops at line 1 with a friendly message: the cannon needs a power.
-  await fillCode(page, 'fire()');
+
+  // Chapter 1 only marks the cannon as new; it is still just a part.
+  await page.evaluate(() => {
+    const solved = ['first-contact', 'one-more-line', 'training-dummy', 'corner-dummy', 'u-turn', 'twin-dummies', 'wall-dummy', 'obstacle-course', 'hello-robot', 'far-dummy'];
+    localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: 'say("Hi")\nforward(4)\nfire()\nfire()\nfire()\nfire()' }));
+  });
+  await page.goto('/#/');
+  await page.reload();
+  await page.getByTestId('start-robot').click();
+  await page.getByTestId('robot-step-armored-dummy').click();
+  await openDrawer(page, 'robot', 'robot-build-open');
+  await expect(page.getByTestId('robot-new').first()).toHaveText('neu');
   await runFight(page);
-  await expect(page.getByTestId('robot-outcome')).toContainText('Das Skript hat in Zeile 1 angehalten: fire() will');
+  await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
 });
 
 const BEFORE_CHAPTER_3 = [
@@ -132,17 +141,18 @@ const BEFORE_CHAPTER_3 = [
   'pg1-a', 'pg1-b', 'pg1-c', 'pg1-d', 'pg1-e', 'drill-sergeant',
 ];
 const CHAPTER_3 = ['peekaboo', 'three-way', 'bubble', 'charger', 'gatekeeper'];
-const SHIELD_BUILD = { chassis: 'medium', locomotion: 'wheels', gear: ['blaster', 'eyes', 'shield'], addons: ['wide', 'scanner'], blasterMark: 1 };
+/** The starting robot: every task is won with it. */
+const DEFAULT_BUILD = { chassis: 'light', locomotion: 'wheels', gear: ['blaster', 'eyes'], addons: ['wide', 'scanner'], blasterMark: 1 };
 
 const LOOK = (inner: string) =>
   `for i in range(30):\n    if see_right() == "enemy":\n        turn_right()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see() == "enemy":\n${inner}`;
 const BUBBLE = LOOK('        if enemy_shielded():\n            wait()\n        else:\n            fire()');
-const GATEKEEPER = LOOK('        if enemy_shielded():\n            shield.activate()\n        else:\n            fire()');
+const GATEKEEPER = BUBBLE;
 const MAZE = 'while alive():\n    if see() == "enemy":\n        fire()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()';
 const FINAL =
-  'while alive():\n    if see() == "enemy":\n        if enemy_shielded():\n            shield.activate()\n        else:\n            fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()';
+  'while alive():\n    if see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()';
 
-async function preset(page: import('@playwright/test').Page, solved: string[], script: string, build: object = SHIELD_BUILD) {
+async function preset(page: import('@playwright/test').Page, solved: string[], script: string, build: object = DEFAULT_BUILD) {
   await page.evaluate(([s, sc, b]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: sc, build: b, runs: 40, wins: 40 })), [solved, script, build] as const);
   await page.goto('/#/');
   await page.reload();
@@ -180,7 +190,7 @@ test('Chapter 3: if / elif decisions and the shield boss', async ({ page }) => {
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
 
-  // Gatekeeper (boss): waiting costs too much health, the own shield wins.
+  // Gatekeeper (boss): the starting robot wins by waiting while the shield is up; its own shield is optional.
   await page.evaluate(([s]) => {
     const p = JSON.parse(localStorage.getItem('pydra.v1.robot')!);
     localStorage.setItem('pydra.v1.robot', JSON.stringify({ ...p, solved: s }));
@@ -189,9 +199,9 @@ test('Chapter 3: if / elif decisions and the shield boss', async ({ page }) => {
   await page.reload();
   await page.getByTestId('start-robot').click();
   await page.getByTestId('robot-step-gatekeeper').click();
-  await fillCode(page, BUBBLE);
+  await fillCode(page, LOOK('        fire()'));
   await runFight(page);
-  await expect(page.getByTestId('robot-outcome')).toContainText('zu viel Schaden');
+  await expect(page.getByTestId('robot-outcome')).toContainText('Schild geschossen');
   await fillCode(page, GATEKEEPER);
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');

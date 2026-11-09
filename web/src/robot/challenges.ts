@@ -2,7 +2,7 @@ import { START_BUILD, type Build } from './build.ts';
 import { runBattle } from './battle.ts';
 import { CHALLENGES, type Challenge, type Constraint, type Glitch, type Workshop } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
-import { fightEnemy, fullBuild } from './fight.ts';
+import { fightEnemy, DEFAULT_BUILD } from './fight.ts';
 
 export { CHALLENGES };
 export type { Challenge };

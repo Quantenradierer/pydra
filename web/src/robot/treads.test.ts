@@ -7,9 +7,8 @@ const layout = (map: string[], hp = 3, script?: string, maxTicks?: number) => ({
 const player = (r: ReturnType<typeof runBattle>, i = -1) => r.frames.at(i)!.robots.find((x) => x.id === 'player')!;
 
 describe('treads', () => {
-  it('unlock in Chapter 4 and survive a build round trip', () => {
-    expect(buildProblem(treads, 3)).toBe('locked');
-    expect(buildProblem(treads, 4)).toBeUndefined();
+  it('are free to equip and survive a build round trip', () => {
+    expect(buildProblem(treads)).toBeUndefined();
     expect(parseBuild(JSON.parse(JSON.stringify(treads)))).toEqual(treads);
   });
 

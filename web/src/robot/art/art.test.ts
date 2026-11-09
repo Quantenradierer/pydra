@@ -101,7 +101,7 @@ describe('composition', () => {
     const mk1 = robotSvg(specOf(build({ gear: ['blaster'] })));
     const mk2 = robotSvg(specOf(build({ gear: ['blaster'], blasterMark: 2 })));
     expect(mk2).not.toBe(mk1);
-    const eyes = robotSvg(specOf(build({ gear: ['eyes'] })));
+    const eyes = robotSvg(specOf(build({ gear: ['eyes'], addons: [] })));
     const wide = robotSvg(specOf(build({ gear: ['eyes'], addons: ['wide'] })));
     const scan = robotSvg(specOf(build({ gear: ['eyes'], addons: ['wide', 'scanner'] })));
     expect(new Set([eyes, wide, scan]).size).toBe(3);

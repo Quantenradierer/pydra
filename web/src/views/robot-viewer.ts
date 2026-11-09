@@ -28,7 +28,14 @@ export interface ViewerOptions {
 }
 
 export interface Viewer {
+  /** The arena with the tick counter and "what happens now". */
   el: HTMLElement;
+  /** The script with the running line (lives in the Code zone). */
+  listing: HTMLElement;
+  /** Play / step buttons (sticky at the bottom of the Fight zone). */
+  controls: HTMLElement;
+  /** Speed, position, variables, call stack, sensors and log (a drawer). */
+  more: HTMLElement;
   atEnd(): boolean;
   play(): void;
   pause(): void;
@@ -193,26 +200,32 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   render();
   playedToEnd = index >= lastBeat;
 
+  const board = h('div', { class: 'robot-board' }, canvas, layer.el, over);
+  board.style.setProperty('--aspect', String((battle.tiles[0]?.length ?? 1) / Math.max(1, battle.tiles.length)));
   const el = h(
     'section',
     { class: 'robot-replay', 'aria-label': t('robot.replay') },
-    h('div', { class: 'robot-stage' }, h('div', { class: 'robot-arena' }, h('div', { class: 'robot-board' }, canvas, layer.el, over), h('div', { class: 'robot-counter' }, position, where)), h('div', { class: 'robot-side-panel' }, h('h3', {}, t('robot.code')), listing)),
-    h(
-      'div',
-      { class: 'run-controls robot-controls' },
-      btn('robot.restart', 'robot-restart', () => go(0)),
-      btn('robot.step.lineBack', 'robot-line-back', () => go(prevBeat(beats, index, 'line'))),
-      btn('robot.back', 'robot-back', () => go(prevBeat(beats, index, 'tick'))),
-      playBtn,
-      btn('robot.step.line', 'robot-line-forward', () => go(nextBeat(beats, index, 'line'))),
-      btn('robot.forward', 'robot-forward', () => go(nextBeat(beats, index, 'tick'))),
-      btn('robot.end', 'robot-end', () => go(lastBeat)),
-    ),
+    h('div', { class: 'robot-arena' }, board, h('div', { class: 'robot-counter' }, position, where)),
+    h('div', { class: 'robot-explain' }, narration),
+  );
+  const controls = h(
+    'div',
+    { class: 'run-controls robot-controls' },
+    playBtn,
+    btn('robot.step.lineBack', 'robot-line-back', () => go(prevBeat(beats, index, 'line'))),
+    btn('robot.step.line', 'robot-line-forward', () => go(nextBeat(beats, index, 'line'))),
+    btn('robot.restart', 'robot-restart', () => go(0)),
+    btn('robot.back', 'robot-back', () => go(prevBeat(beats, index, 'tick'))),
+    btn('robot.forward', 'robot-forward', () => go(nextBeat(beats, index, 'tick'))),
+    btn('robot.end', 'robot-end', () => go(lastBeat)),
+  );
+  const more = h(
+    'div',
+    { class: 'robot-more' },
     h('label', { class: 'robot-speed' }, h('span', {}, `${t('robot.speed')}: `), speedSlider, speedLabel),
     slider,
-    h('div', { class: 'robot-explain' }, h('h3', {}, t('robot.narr.title')), narration),
     h('div', { class: 'robot-cols' }, h('div', {}, h('h3', {}, t('robot.vars')), vars), h('div', {}, h('h3', {}, t('robot.stack')), stack)),
     h('div', { class: 'robot-cols' }, h('div', {}, h('h3', {}, t('robot.sensors')), sensors), h('div', {}, h('h3', {}, t('robot.log')), log)),
   );
-  return { el, atEnd: () => index >= lastBeat, play, pause, playing: () => timer !== undefined, dispose: pause };
+  return { el, listing, controls, more, atEnd: () => index >= lastBeat, play, pause, playing: () => timer !== undefined, dispose: pause };
 }

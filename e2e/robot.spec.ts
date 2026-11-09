@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { stored } from './helpers.ts';
+import { closeDrawer, codeBox, fillCode, openDrawer, runFight, stored, zone } from './helpers.ts';
 
 for (const [device, viewport] of [
   ['phone', { width: 360, height: 640 }],
@@ -17,7 +17,7 @@ for (const [device, viewport] of [
     // First Contact: the code is already there, just press the button (a win in under a minute).
     await page.getByTestId('robot-step-first-contact').click();
     await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()');
-    await page.getByTestId('robot-run').click();
+    await runFight(page);
     await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
     await expect(page.getByTestId('robot-stars')).toContainText('★★★');
     // The replay: scrub to the end and see the highlighted line and the log.
@@ -32,21 +32,21 @@ for (const [device, viewport] of [
     // One More Line: the same script now loses (the dummy takes 2 hits) ...
     await page.getByTestId('robot-next').click();
     await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()');
-    await page.getByTestId('robot-run').click();
+    await runFight(page);
     await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
     // The queue shows a result once the fight has been watched to its end.
     await expect(page.getByTestId('robot-layout-1')).not.toContainText('✗');
     await page.getByTestId('robot-end').click();
     await expect(page.getByTestId('robot-layout-1')).toContainText('✗');
     // ... a loss sends the player back to the same script; one more line wins.
-    await page.getByTestId('robot-code').fill('forward()\nfire()\nfire()');
-    await page.getByTestId('robot-run').click();
+    await fillCode(page, 'forward()\nfire()\nfire()');
+    await runFight(page);
     await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
     await expect(page.getByTestId('robot-history')).toBeAttached();
 
     // A typo gets a friendly message with the line.
-    await page.getByTestId('robot-code').fill('forward()\nfoward()');
-    await page.getByTestId('robot-run').click();
+    await fillCode(page, 'forward()\nfoward()');
+    await runFight(page);
     await expect(page.getByTestId('robot-error')).toContainText('Zeile 2: Dein Roboter kennt „foward“ nicht. Meintest du forward()?');
 
     // The map shows the progress, and the points arrived.
@@ -96,7 +96,7 @@ test('the builder: parts unlock with the chapters and decide which commands exis
   await page.reload();
   await page.getByTestId('start-robot').click();
   await page.getByTestId('robot-step-one-more-line').click();
-  await page.getByTestId('robot-build').locator('summary').click();
+  await openDrawer(page, 'robot', 'robot-build-open');
   // Chapter 0: cannon and spider legs are still locked.
   await expect(page.getByTestId('robot-gear-cannon')).toBeDisabled();
   await expect(page.getByTestId('robot-locomotion-legs')).toBeDisabled();
@@ -112,7 +112,7 @@ test('the builder: parts unlock with the chapters and decide which commands exis
   await page.reload();
   await page.getByTestId('start-robot').click();
   await page.getByTestId('robot-step-armored-dummy').click();
-  await page.getByTestId('robot-build').locator('summary').click();
+  await openDrawer(page, 'robot', 'robot-build-open');
   // Both weapons do not fit next to the eyes on a light chassis: swap the blaster for the cannon.
   await page.getByTestId('robot-gear-cannon').click();
   await expect(page.getByTestId('robot-build-note')).toHaveText('Alle Plätze sind belegt: Nimm erst ein Teil heraus.');
@@ -120,12 +120,12 @@ test('the builder: parts unlock with the chapters and decide which commands exis
   await page.getByTestId('robot-gear-blaster').uncheck();
   await page.getByTestId('robot-gear-cannon').check();
   await expect(page.getByTestId('robot-api')).toContainText('fire(power)');
-  await page.getByTestId('robot-code').fill('say("Hi")\nforward(4)\nfire(3)\nwait()\nwait()\nfire(3)');
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, 'say("Hi")\nforward(4)\nfire(3)\nwait()\nwait()\nfire(3)');
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   // The old blaster-only code stops at line 1 with a friendly message: the cannon needs a power.
-  await page.getByTestId('robot-code').fill('fire()');
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, 'fire()');
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Das Skript hat in Zeile 1 angehalten: fire() will');
 });
 
@@ -155,8 +155,8 @@ async function preset(page: import('@playwright/test').Page, solved: string[], s
 
 async function win(page: import('@playwright/test').Page, id: string, script: string) {
   await page.getByTestId(`robot-step-${id}`).click();
-  await page.getByTestId('robot-code').fill(script);
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, script);
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
 }
 
@@ -165,6 +165,7 @@ test('Chapter 3: the concept card, if / elif decisions and the shield boss', asy
   await preset(page, BEFORE_CHAPTER_3, 'forward(4)\nfire()');
   await page.getByTestId('robot-step-peekaboo').click();
   // The chapter's concept card is open until it is read, and parts show their own cards.
+  await openDrawer(page, 'task', 'robot-cards-open');
   await expect(page.getByTestId('robot-card-ch3')).toHaveAttribute('open', '');
   await expect(page.getByTestId('robot-card-part-hammer')).toBeVisible();
   await page.getByTestId('robot-card-gotit-ch3').click();
@@ -172,23 +173,23 @@ test('Chapter 3: the concept card, if / elif decisions and the shield boss', asy
   expect(((await stored(page, 'robot')) as { cards: string[] }).cards).toEqual(['ch3']);
 
   // Old code loses a layout (the dummy is on the right sometimes) ...
-  await page.getByTestId('robot-code').fill('fire()\nfire()');
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, 'fire()\nfire()');
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
   // ... an if / else wins, and Three-Way and Bubble follow the same script.
-  await page.getByTestId('robot-code').fill('if see() == "enemy":\n    fire()\n    fire()\nelse:\n    turn_right()\n    fire()\n    fire()');
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, 'if see() == "enemy":\n    fire()\n    fire()\nelse:\n    turn_right()\n    fire()\n    fire()');
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
   await win(page, 'three-way', 'if see_right() == "enemy":\n    turn_right()\nelif see_left() == "enemy":\n    turn_left()\nfire()\nfire()');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
   // Bubble: blind shooting wastes shots on the shield and is refused with a reason ...
   await page.getByTestId('robot-step-bubble').click();
-  await page.getByTestId('robot-code').fill(LOOK('        fire()'));
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, LOOK('        fire()'));
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Schild geschossen');
-  await page.getByTestId('robot-code').fill(BUBBLE);
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, BUBBLE);
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
 
   // Gatekeeper (boss): waiting costs too much health, the own shield wins.
@@ -200,11 +201,11 @@ test('Chapter 3: the concept card, if / elif decisions and the shield boss', asy
   await page.reload();
   await page.getByTestId('start-robot').click();
   await page.getByTestId('robot-step-gatekeeper').click();
-  await page.getByTestId('robot-code').fill(BUBBLE);
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, BUBBLE);
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('zu viel Schaden');
-  await page.getByTestId('robot-code').fill(GATEKEEPER);
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, GATEKEEPER);
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await expect(page.getByTestId('robot-stars')).toBeVisible();
 });
@@ -215,8 +216,8 @@ test('Chapter 4 to the Basics Certificate, in English', async ({ page }) => {
   await preset(page, [...BEFORE_CHAPTER_3, ...CHAPTER_3], GATEKEEPER);
   const english = async (id: string, script: string) => {
     await page.getByTestId(`robot-step-${id}`).click();
-    await page.getByTestId('robot-code').fill(script);
-    await page.getByTestId('robot-run').click();
+    await fillCode(page, script);
+    await runFight(page);
     await expect(page.getByTestId('robot-outcome')).toContainText('Won!');
     await page.getByRole('button', { name: 'Back', exact: true }).click();
   };
@@ -225,11 +226,11 @@ test('Chapter 4 to the Basics Certificate, in English', async ({ page }) => {
   await english('regenerator', 'while see() != "enemy":\n    forward()\nwhile alive():\n    fire()');
   // The old script cannot get around a corner; the maze loop can (and keeps winning the earlier fights).
   await page.getByTestId('robot-step-maze-runner').click();
-  await page.getByTestId('robot-code').fill('while see() != "enemy":\n    forward()\nwhile alive():\n    fire()');
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, 'while see() != "enemy":\n    forward()\nwhile alive():\n    fire()');
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Lost');
-  await page.getByTestId('robot-code').fill(MAZE);
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, MAZE);
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Won!');
   await page.getByRole('button', { name: 'Back', exact: true }).click();
   await english('hide-and-seek', FINAL);
@@ -249,11 +250,11 @@ test('the Training Grounds: random fights from Chapter 2 on', async ({ page }) =
   await page.getByTestId('robot-training').click();
   await expect(page.getByTestId('robot-training-stats')).toContainText('0 Trainingskämpfe');
   await page.getByTestId('robot-train-new').click();
-  await page.getByTestId('robot-run').click();
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
   // Training #1 is a row of dummies; the matching loop wins.
-  await page.getByTestId('robot-code').fill('shots = 4\nforward(4)\nfor i in range(shots):\n    fire()');
-  await page.getByTestId('robot-run').click();
+  await fillCode(page, 'shots = 4\nforward(4)\nfor i in range(shots):\n    fire()');
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByTestId('robot-next').click();
   await expect(page.getByTestId('robot-step-title')).toContainText('Training Nr. 2');
@@ -268,8 +269,8 @@ async function openStep(page: import('@playwright/test').Page, step: string, scr
   await page.reload();
   await page.getByTestId('start-robot').click();
   await page.getByTestId(`robot-step-${step}`).click();
-  await page.getByTestId('robot-run').click();
-  await expect(page.getByTestId('robot-listing')).toBeVisible();
+  await runFight(page);
+  await expect(page.getByTestId('robot-play')).toBeVisible();
 }
 
 for (const [device, viewport] of [
@@ -320,17 +321,24 @@ for (const [device, viewport] of [
 
     // Play at top speed: it runs to the end by itself, and the slider keeps its value.
     await page.getByTestId('robot-restart').click();
+    await openDrawer(page, 'fight', 'robot-more-open');
     await page.getByTestId('robot-speed').fill('5');
     await expect(page.getByTestId('robot-speed-label')).toHaveText('sehr schnell');
+    await closeDrawer(page, 'fight');
     await page.getByTestId('robot-play').click();
     await expect(page.getByTestId('robot-play')).toHaveText('Abspielen', { timeout: 10_000 });
     await expect(page.getByTestId('robot-log')).toContainText('schießt und trifft');
 
-    // The code and the arena stack on a phone and sit side by side on a desktop; nothing scrolls sideways.
-    const canvas = (await page.getByTestId('robot-canvas').boundingBox())!;
-    const code = (await page.getByTestId('robot-listing').boundingBox())!;
-    if (device === 'phone') expect(code.y).toBeGreaterThanOrEqual(canvas.y + canvas.height - 1);
-    else expect(code.x).toBeGreaterThanOrEqual(canvas.x + canvas.width - 1);
+    // On a desktop the highlighted code sits left of the arena; on a phone it lives in the Code zone. Nothing scrolls sideways.
+    if (device === 'desktop') {
+      const canvas = (await page.getByTestId('robot-canvas').boundingBox())!;
+      const code = (await page.getByTestId('robot-listing').boundingBox())!;
+      expect(code.x + code.width).toBeLessThanOrEqual(canvas.x + 1);
+    } else {
+      await expect(page.getByTestId('robot-listing')).toBeHidden();
+      await zone(page, 'code');
+      await expect(page.getByTestId('robot-listing')).toBeVisible();
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 }
@@ -347,7 +355,7 @@ test('a function call shows in the call stack with its argument and the local va
 test('the variation queue: first fight, then the other variations and earlier enemies, with a summary', async ({ page }) => {
   test.setTimeout(90_000);
   await openStep(page, 'one-more-line', 'forward()\nfire()\nfire()', ['first-contact']);
-  const queue = page.getByTestId('robot-queue');
+  const queue = page.getByTestId('robot-queue-panel');
   await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 1 von (\d+): .*, Variante 1 von \d+$/);
   const total = Number((await page.getByTestId('robot-vq-progress').textContent())!.match(/von (\d+):/)![1]);
   expect(total).toBeGreaterThan(3);
@@ -359,9 +367,12 @@ test('the variation queue: first fight, then the other variations and earlier en
   // Go on to the next variation, then let the rest play on its own at top speed (auto-advance).
   await page.getByTestId('robot-vq-next').click();
   await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 2 von/);
+  await openDrawer(page, 'fight', 'robot-more-open');
   // "Next fight" starts it playing at once; speed it up and the rest follows by itself.
   await expect(page.getByTestId('robot-play')).toHaveText('Pause');
   await page.getByTestId('robot-speed').fill('5');
+  await closeDrawer(page, 'fight');
+  await openDrawer(page, 'fight', 'robot-vq-open');
   await expect(page.getByTestId('robot-vq-summary')).toContainText(`${total} von ${total} Kämpfen gewonnen`, { timeout: 60_000 });
   await expect(page.getByTestId('robot-vq-verdict')).toHaveText('Dein Skript schlägt alle Varianten und alle früheren Gegner.');
   // The earlier enemy is part of the queue and can be watched again from the summary.
@@ -376,6 +387,7 @@ test('the variation queue: first fight, then the other variations and earlier en
 test('the queue summary says which variations were lost and why, and skipping shows it at once', async ({ page }) => {
   await openStep(page, 'one-more-line', 'forward()\nfire()', ['first-contact']);
   await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
+  await openDrawer(page, 'fight', 'robot-vq-open');
   await page.getByTestId('robot-vq-all').click();
   const summary = page.getByTestId('robot-vq-summary');
   await expect(summary).toContainText('Kämpfen gewonnen');
@@ -409,7 +421,7 @@ test('the task map: a Continue button leads to the next task and finished chapte
   await expect(page.getByTestId('robot-chapter-1')).not.toHaveAttribute('open', '');
   await page.getByTestId('robot-continue').click();
   await expect(page.getByTestId('robot-step-title')).toHaveText('Erster Kontakt');
-  await page.getByTestId('robot-run').click();
+  await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
   await expect(page.getByTestId('robot-continue')).toContainText('Weiter geht’s');
@@ -423,7 +435,7 @@ test('the build screen draws the robot from its parts: tap sockets to plug parts
   await page.reload();
   await page.getByTestId('start-robot').click();
   await page.getByTestId('robot-step-armored-dummy').click();
-  await page.getByTestId('robot-build').locator('summary').click();
+  await zone(page, 'robot');
   const art = page.locator('.robot-bench-stage svg.rb');
   // The start build: wheels, blaster, eyes.
   await expect(art).toHaveAttribute('data-loco', 'wheels');
@@ -442,7 +454,7 @@ test('the build screen draws the robot from its parts: tap sockets to plug parts
   await page.getByTestId('robot-pick-cannon').click();
   await expect(art).toHaveAttribute('data-gear', /cannon/);
   await expect(page.getByTestId('robot-part-cannon')).toBeVisible();
-  await expect(page.getByTestId('robot-gear-cannon')).toBeChecked();
+  await expect(page.getByTestId('robot-gear-cannon')).toBeChecked(); // (the full list is a drawer; attached is enough)
   // Swap the drive: the picture changes.
   await page.getByTestId('robot-socket-underside').dispatchEvent('click');
   await page.getByTestId('robot-pick-legs').click();
@@ -456,4 +468,94 @@ test('the hidden dev gallery shows every chassis and part', async ({ page }) => 
   await page.goto('/#/dev/robots');
   await expect(page.getByTestId('robot-gallery')).toBeVisible();
   expect(await page.locator('[data-testid=robot-gallery] svg.rb').count()).toBeGreaterThan(100);
+});
+
+/** True when the page itself (not a zone inside it) scrolls vertically. */
+const pageScrolls = (page: import('@playwright/test').Page) => page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight + 1);
+
+test('desktop 1280x800: task, robot, code and fight sit side by side and the page does not scroll', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await openStep(page, 'one-more-line', 'forward()\nfire()', ['first-contact']);
+  for (const z of ['task', 'robot', 'code', 'fight'] as const) await expect(page.getByTestId(`zone-${z}`)).toBeVisible();
+  await expect(page.getByTestId('zone-tabs')).toBeHidden();
+  expect(await pageScrolls(page)).toBe(false);
+  // The arena, its controls and the result are all on the screen without scrolling the page.
+  for (const id of ['robot-canvas', 'robot-play', 'robot-outcome', 'robot-run']) {
+    const box = (await page.getByTestId(id).boundingBox())!;
+    expect(box.y + box.height, id).toBeLessThanOrEqual(800);
+  }
+  // Opening a drawer replaces the body of its zone, never the page layout.
+  await page.getByTestId('robot-api-open').click();
+  await expect(page.getByTestId('robot-api')).toBeVisible();
+  expect(await pageScrolls(page)).toBe(false);
+});
+
+test('phone 360x740: one zone fills the screen, the bottom bar switches, the page does not scroll and the fight zone barely does', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await page.goto('/');
+  await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()', runs: 1, wins: 1 })));
+  await page.reload();
+  await page.getByTestId('start-robot').click();
+  await page.getByTestId('robot-step-one-more-line').click();
+  // The step indicator and the bottom bar are always there; the task zone comes first.
+  await expect(page.getByTestId('robot-steps').locator('li')).toHaveCount(4);
+  await expect(page.getByTestId('robot-phase-build')).toHaveAttribute('aria-current', 'step');
+  await expect(page.getByTestId('zone-task')).toBeVisible();
+  for (const z of ['robot', 'code', 'fight'] as const) await expect(page.getByTestId(`zone-${z}`)).toBeHidden();
+  for (const tab of await page.locator('[data-testid^=zone-tab-]').all()) expect((await tab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  // Task -> Code by the primary button; focus lands in the editor.
+  await page.getByTestId('robot-to-code').click();
+  await expect(page.getByTestId('zone-code')).toBeVisible();
+  await expect(page.getByTestId('robot-code')).toBeFocused();
+  await expect(page.getByTestId('robot-phase-code')).toHaveAttribute('aria-current', 'step');
+  // The tab bar switches, and focus moves to the zone heading.
+  await page.getByTestId('zone-tab-robot').click();
+  await expect(page.getByTestId('zone-robot')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Roboter' })).toBeFocused();
+  await expect(page.getByTestId('robot-phase-build')).toHaveAttribute('aria-current', 'step');
+  await expect(page.getByTestId('zone-tab-robot')).toHaveAttribute('aria-current', 'true');
+  // Run: the fight zone comes forward with the fight phase; the primary action is Play.
+  await runFight(page);
+  await expect(page.getByTestId('zone-fight')).toBeVisible();
+  await expect(page.getByTestId('robot-phase-fight')).toHaveAttribute('aria-current', 'step');
+  await expect(page.getByTestId('robot-play')).toBeVisible();
+  expect(await pageScrolls(page)).toBe(false);
+  const body = await page.getByTestId('zone-fight').locator('.rb-zone-body').evaluate((el) => el.scrollHeight - el.clientHeight);
+  expect(body).toBeLessThanOrEqual(160);
+  for (const id of ['robot-play', 'robot-run', 'robot-vq-open']) {
+    const box = await page.getByTestId(id).boundingBox();
+    if (box) expect(box.height, id).toBeGreaterThanOrEqual(43.5);
+  }
+  // A lost fight offers "improve": back to the code, phase 4.
+  await expect(page.getByTestId('robot-outcome')).toHaveAttribute('data-state', 'lost');
+  await page.getByTestId('robot-improve').click();
+  await expect(page.getByTestId('zone-code')).toBeVisible();
+  await expect(page.getByTestId('robot-code')).toBeFocused();
+  await expect(page.getByTestId('robot-phase-improve')).toHaveAttribute('aria-current', 'step');
+  // Drawers: open from the editor, close with Escape, focus returns to the opener.
+  await page.getByTestId('robot-api-open').click();
+  await expect(page.getByTestId('robot-api')).toBeVisible();
+  await expect(page.getByTestId('robot-code')).toBeHidden();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('robot-api')).toBeHidden();
+  await expect(page.getByTestId('robot-api-open')).toBeFocused();
+  expect(await pageScrolls(page)).toBe(false);
+});
+
+test('the same screens in English', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await page.goto('/');
+  await page.evaluate(() => {
+    localStorage.setItem('pydra.v1.language', JSON.stringify('en'));
+    localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()', runs: 1, wins: 1 }));
+  });
+  await page.reload();
+  await page.getByTestId('start-robot').click();
+  await page.getByTestId('robot-step-one-more-line').click();
+  await expect(page.getByTestId('robot-steps')).toHaveText(/1Build2Code3Fight4Improve/);
+  await expect(page.getByTestId('zone-tab-fight')).toHaveText('Fight');
+  await expect(page.getByRole('heading', { level: 2, name: 'Task' })).toBeVisible();
+  await runFight(page);
+  await expect(page.getByTestId('robot-outcome')).toContainText('Lost');
+  await expect(page.getByTestId('robot-improve')).toHaveText('Improve script');
 });

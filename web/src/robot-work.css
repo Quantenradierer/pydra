@@ -1,0 +1,511 @@
+/* Robot Battler work screen: four zones (Task | Robot | Code | Fight), a step indicator and a bottom tab bar on phones. */
+#app:has(.robot-workmode) {
+  max-width: 1440px;
+}
+.robot-workmode {
+  gap: 0;
+}
+.robot-workmode > .rb-work {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.rb-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.8rem;
+}
+.rb-top .subpage-header {
+  flex: 1 1 12rem;
+  min-width: 0;
+  margin: 0;
+}
+.rb-top h1 {
+  font-size: 1.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rb-steps {
+  list-style: none;
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  flex: 1 1 100%;
+}
+.rb-steps li {
+  flex: 1;
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.3rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.rb-steps li.current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+.rb-step-n {
+  font-weight: 700;
+}
+.rb-zones {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+.rb-zone {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.rb-work[data-active='task'] .rb-zone[data-zone='task'],
+.rb-work[data-active='robot'] .rb-zone[data-zone='robot'],
+.rb-work[data-active='code'] .rb-zone[data-zone='code'],
+.rb-work[data-active='fight'] .rb-zone[data-zone='fight'] {
+  display: flex;
+}
+.rb-zone-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+.rb-zone-head h2 {
+  margin: 0;
+  font-size: 1.02rem;
+}
+.rb-zone-head p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.rb-zone-titles {
+  min-width: 0;
+  flex: 1;
+}
+.rb-zone-tools {
+  flex: none;
+}
+.rb-zone-tools {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: flex-end;
+}
+.rb-work .rb-zone-tools button {
+  min-height: 2.75rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+}
+.rb-zone-body,
+.rb-drawer {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.6rem 0.7rem;
+}
+.rb-zone-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.rb-zone-body[hidden],
+.rb-drawer[hidden] {
+  display: none;
+}
+.rb-drawer > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.rb-drawer h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.rb-zone-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem 0.7rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.rb-zone-actions:empty {
+  display: none;
+}
+.rb-work .rb-zone-actions button {
+  min-height: 2.75rem;
+}
+.rb-zone-actions .robot-run,
+.rb-zone-actions .robot-next {
+  flex: 1 1 8rem;
+}
+.rb-badge {
+  margin-left: 0.4rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: #14202e;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.rb-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.3rem;
+}
+.rb-work .rb-tab {
+  min-height: 2.9rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rb-work .rb-tab[aria-current='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.rb-tab-icon {
+  display: none;
+}
+
+/* Zone contents */
+.rb-zone .robot-card {
+  margin: 0;
+}
+.robot-twist {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+.robot-twist h3 {
+  margin: 0 0 0.2rem;
+}
+.robot-twist p {
+  margin: 0;
+}
+.robot-foes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  flex: none;
+}
+.rb-zone .robot-bench {
+  margin: 0;
+}
+.rb-zone .robot-bench-stage {
+  width: min(100%, 16rem, 34dvh);
+}
+.rb-zone textarea.robot-code {
+  flex: 1;
+  min-height: 7rem;
+  resize: none;
+}
+.rb-zone textarea.robot-code[hidden] {
+  display: none;
+}
+.robot-listing-holder {
+  flex: 1;
+}
+.robot-listing-holder .robot-listing {
+  font-size: 1rem;
+}
+.robot-error-holder:empty {
+  display: none;
+}
+.rb-zone .robot-result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.6rem;
+  background: var(--code-bg);
+}
+.rb-zone .robot-result p {
+  margin: 0;
+  flex: 1 1 10rem;
+  font-size: 0.88rem;
+  line-height: 1.3;
+}
+.rb-work .rb-zone .robot-result .robot-next {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.88rem;
+}
+.rb-zone .robot-queue {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.2rem 0.5rem;
+  align-items: center;
+}
+.rb-zone .robot-vq-head {
+  display: grid;
+  gap: 0.15rem;
+  justify-items: start;
+  min-width: 0;
+}
+.rb-zone .robot-vq-progress {
+  margin: 0;
+  max-width: 100%;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rb-zone .robot-vq-state {
+  font-size: 0.75rem;
+  padding: 0 0.5rem;
+}
+.rb-zone .robot-queue .robot-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.8rem;
+}
+.robot-vq-bar {
+  display: flex;
+  gap: 0.3rem;
+}
+.rb-work .robot-vq-bar button {
+  min-height: 2.75rem;
+  font-size: 0.82rem;
+  padding: 0.2rem 0.5rem;
+}
+.rb-zone .robot-viewer .robot-replay {
+  gap: 0.4rem;
+}
+.rb-zone .robot-board {
+  width: min(100%, 28rem, calc(var(--board-h, 40dvh) * var(--aspect, 1)));
+  margin: 0 auto;
+}
+.rb-zone .robot-counter {
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+.rb-zone .robot-explain {
+  max-height: 3.9rem;
+  overflow: auto;
+  font-size: 0.9rem;
+  background: var(--code-bg);
+  border-radius: 0.6rem;
+  padding: 0.3rem 0.6rem;
+}
+.rb-zone .robot-narration {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rb-zone .robot-explain li {
+  margin: 0.1rem 0;
+}
+.robot-controls-holder {
+  width: 100%;
+}
+.rb-zone-actions .robot-controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.35rem;
+  width: 100%;
+}
+.rb-zone-actions .robot-controls .run-control {
+  padding-inline: 0.2rem;
+  font-size: 0.8rem;
+  line-height: 1.15;
+}
+.rb-zone-actions .robot-controls .robot-play {
+  grid-column: span 2;
+  order: 0;
+  font-size: 1rem;
+}
+.rb-more .robot-cols,
+.robot-more .robot-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.robot-more > * + * {
+  margin-top: 0.6rem;
+}
+.rb-zone .robot-vq-rows li {
+  flex-wrap: wrap;
+}
+.rb-drawer .robot-api dd {
+  margin-bottom: 0.4rem;
+}
+
+/* Desktop and wide tablets: the zones sit side by side, the tab bar is gone. */
+@media (min-width: 960px) {
+  .rb-tabs {
+    display: none;
+  }
+  .rb-top {
+    flex-wrap: nowrap;
+  }
+  .rb-top .subpage-header {
+    flex: 1 1 auto;
+  }
+  .rb-steps {
+    flex: 0 1 34rem;
+  }
+  .rb-zones {
+    display: grid;
+    grid-template-columns: minmax(17rem, 21rem) minmax(20rem, 1fr) minmax(26rem, 1.25fr);
+    grid-template-rows: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 0.6rem;
+  }
+  .rb-work .rb-zone {
+    display: flex;
+  }
+  .rb-zone[data-zone='task'] {
+    grid-area: 1 / 1;
+  }
+  .rb-zone[data-zone='robot'] {
+    grid-area: 2 / 1;
+  }
+  .rb-zone[data-zone='code'] {
+    grid-area: 1 / 2 / span 2;
+  }
+  .rb-zone[data-zone='fight'] {
+    grid-area: 1 / 3 / span 2;
+  }
+  .rb-only-tabs {
+    display: none !important;
+  }
+  .rb-zone .robot-bench-stage {
+    width: min(100%, 12rem, 22dvh);
+  }
+  .rb-zone .robot-board {
+    --board-h: calc(100dvh - 31rem);
+  }
+}
+@media (max-width: 959px) {
+  .rb-zone .robot-board {
+    --board-h: calc(100dvh - 31rem);
+  }
+}
+
+/* Compact rows so that the arena keeps its size on a phone. */
+.rb-zone-head p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rb-zone .robot-result p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (max-width: 959px) {
+  .rb-zone .robot-vq-head {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .rb-zone .robot-vq-progress {
+    -webkit-line-clamp: 1;
+  }
+  .rb-zone .robot-result p {
+    -webkit-line-clamp: 2;
+  }
+  .rb-zone-head {
+    padding-block: 0.35rem 0.25rem;
+  }
+  .rb-zone-body {
+    gap: 0.4rem;
+    padding-block: 0.4rem;
+  }
+  .rb-zone .robot-board {
+    --board-h: max(13rem, calc(100dvh - 33rem));
+  }
+}
+@media (max-width: 959px) {
+  .rb-zone .robot-vq-progress {
+    flex: 1;
+    min-width: 0;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .rb-zone .robot-vq-state {
+    flex: none;
+  }
+  .rb-zone .robot-result {
+    flex-wrap: nowrap;
+  }
+  .rb-zone .robot-result p {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .rb-work .rb-zone .robot-result .robot-next {
+    max-width: 9rem;
+    line-height: 1.15;
+  }
+  .rb-zone .robot-explain {
+    max-height: 3.4rem;
+  }
+}
+
+/* Task map: only what can be played now is listed; finished and locked tasks fold away. */
+.robot-chapter-body {
+  display: grid;
+  gap: 0.4rem;
+  padding-bottom: 0.7rem;
+}
+.robot-chapter .robot-chapter-body .robot-steps {
+  padding-bottom: 0 !important;
+}
+.robot-fold > summary {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.robot-fold[open] > summary {
+  margin-bottom: 0.2rem;
+}
+.robot-fold .robot-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.robot-map {
+  gap: 0.5rem;
+}
+.robot-chapter-name {
+  font-size: 1rem;
+}

@@ -67,3 +67,41 @@ export async function dailyCorrectSlot(page: Page): Promise<number> {
   const item = data.run.items[data.run.index]!;
   return item.order.indexOf(DAILY_ANSWERS.get(item.id)!);
 }
+
+export type ZoneName = 'task' | 'robot' | 'code' | 'fight';
+
+/** Robot Battler work screen: shows a zone (on a phone via the bottom bar; on a desktop all zones are visible). */
+export async function zone(page: Page, name: ZoneName) {
+  const tab = page.getByTestId(`zone-tab-${name}`);
+  if (await tab.isVisible()) await tab.click();
+}
+
+/** The script editor, switching to the Code zone and from the line-by-line listing back to the editor. */
+export async function codeBox(page: Page) {
+  await zone(page, 'code');
+  const code = page.getByTestId('robot-code');
+  if (!(await code.isVisible())) await page.getByTestId('robot-view-toggle').click();
+  return code;
+}
+
+export async function fillCode(page: Page, text: string) {
+  await (await codeBox(page)).fill(text);
+}
+
+/** Presses the Run button of the Code zone (the fight zone then comes forward). */
+export async function runFight(page: Page) {
+  await zone(page, 'code');
+  await page.getByTestId('robot-run').click();
+}
+
+/** Opens a drawer by its opener button (in the given zone) and returns nothing; close it with `closeDrawer`. */
+export async function openDrawer(page: Page, z: ZoneName, opener: string) {
+  await zone(page, z);
+  const button = page.getByTestId(opener);
+  if ((await button.getAttribute('aria-expanded')) !== 'true') await button.click();
+}
+
+/** Closes the open drawer of a zone. */
+export async function closeDrawer(page: Page, z: ZoneName) {
+  await page.getByTestId(`zone-${z}`).locator('.rb-drawer:not([hidden]) [data-testid="drawer-close"]').click();
+}

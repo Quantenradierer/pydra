@@ -16,6 +16,7 @@ import { Trainer } from './trainer.ts';
 import { UpdateManager, watchForUpdates } from './update.ts';
 import './style.css';
 import './robot/art/robot-art.css';
+import './robot-work.css';
 
 const storage = new AppStorage(localStorage, CONTENT);
 

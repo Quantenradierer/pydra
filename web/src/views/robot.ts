@@ -16,6 +16,8 @@ import type { RunReport, Step } from '../robot/game.ts';
 import { precheck as precheckFn, type BattleResult } from '../robot/battle.ts';
 import type { RbError } from '../robot/py/errors.ts';
 import { subpageHeader } from './header.ts';
+import { benchEl } from './robot-bench.ts';
+import { iconEl, partIconSpec, chassisIconSpec, robotEl, specOf } from '../robot/art/compose.ts';
 
 const GEAR_ORDER: GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps', 'plates'];
 
@@ -131,6 +133,9 @@ export function robotScreen(app: App): Screen {
   /** The panel closes when the screen redraws after a change; remember to open it again, with the last note. */
   let buildOpen = false;
   let buildNote = '';
+  /** What is picked on the robot picture, and which parts were just plugged in (they snap in once). */
+  let benchSel: string | undefined;
+  let snapIds: string[] = [];
 
   function buildPanel(onChange: () => void): HTMLElement {
     const build = game.build();
@@ -142,6 +147,7 @@ export function robotScreen(app: App): Screen {
     const apply = (next: Build) => {
       const withAddons: Build = { ...next, addons: next.gear.includes('eyes') ? addonsFor(game.level()) : [] };
       buildOpen = true;
+      snapIds = [...withAddons.gear.filter((g) => !build.gear.includes(g)), ...(withAddons.locomotion !== build.locomotion ? [withAddons.locomotion] : []), ...(withAddons.blasterMark === 2 && build.blasterMark !== 2 ? ['blaster'] : [])];
       buildNote = game.setBuild(withAddons) ? '' : withAddons.gear.length > CHASSIS[withAddons.chassis].slots ? t('robot.build.full') : t('robot.build.locked');
       onChange();
     };
@@ -150,12 +156,28 @@ export function robotScreen(app: App): Screen {
         'label',
         { class: `robot-option${ok ? '' : ' locked'}` },
         h('input', { type: 'radio', name, value, checked, disabled: !ok, 'data-testid': `robot-${name}-${value}`, onchange: change }),
+        iconEl(name === 'chassis' ? chassisIconSpec(value) : partIconSpec(value), 40),
         label,
       );
+    const snap = snapIds;
+    snapIds = [];
     return h(
       'details',
       { class: 'robot-build', 'data-testid': 'robot-build', open: buildOpen },
-      h('summary', {}, t('robot.build')),
+      h('summary', {}, iconEl(specOf(build), 36), h('span', {}, t('robot.build'))),
+      benchEl({
+        t,
+        build,
+        can: (kind, id) => game.can(kind, id),
+        apply,
+        selected: benchSel,
+        select: (sel) => {
+          benchSel = sel;
+          buildOpen = true;
+          onChange();
+        },
+        snap,
+      }),
       h('fieldset', {}, h('legend', {}, t('robot.build.chassis')), ...(['light', 'medium'] as const).map((c) => radio('chassis', c, t(`robot.chassis.${c}`), build.chassis === c, game.can('chassis', c) && (c === 'light' || build.gear.length <= CHASSIS[c].slots), () => apply({ ...build, chassis: c })))),
       h('fieldset', {}, h('legend', {}, t('robot.build.locomotion')), ...(['wheels', 'legs', 'treads'] as const).map((l) => radio('locomotion', l, t(`robot.loco.${l}`), build.locomotion === l, game.can('locomotion', l), () => apply({ ...build, locomotion: l })))),
       h(
@@ -169,6 +191,7 @@ export function robotScreen(app: App): Screen {
             'label',
             { class: `robot-option${ok ? '' : ' locked'}` },
             h('input', { type: 'checkbox', checked: on, disabled: !ok && !on, 'data-testid': `robot-gear-${g}`, onchange: (e: Event) => apply({ ...build, gear: (e.target as HTMLInputElement).checked ? [...build.gear, g] : build.gear.filter((x) => x !== g) }) }),
+            iconEl(partIconSpec(g), 40),
             t(`robot.gear.${g}`),
           );
         }),

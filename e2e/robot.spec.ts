@@ -415,3 +415,39 @@ test('the task map: a Continue button leads to the next task and finished chapte
   await expect(page.getByTestId('robot-continue')).toContainText('Weiter geht’s');
   await expect(page.getByTestId('robot-continue')).toContainText('Eine Zeile mehr');
 });
+
+test('the build screen draws the robot from its parts: tap sockets to plug parts in and out, swap the drive', async ({ page }) => {
+  await page.goto('/');
+  const solved = ['first-contact', 'one-more-line', 'training-dummy', 'corner-dummy', 'u-turn', 'twin-dummies', 'wall-dummy', 'obstacle-course', 'hello-robot', 'far-dummy'];
+  await page.evaluate((s) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()' })), solved);
+  await page.reload();
+  await page.getByTestId('start-robot').click();
+  await page.getByTestId('robot-step-armored-dummy').click();
+  await page.getByTestId('robot-build').locator('summary').click();
+  const art = page.locator('.robot-bench-stage svg.rb');
+  // The start build: wheels, blaster, eyes.
+  await expect(art).toHaveAttribute('data-loco', 'wheels');
+  await expect(art).toHaveAttribute('data-gear', 'blaster eyes');
+  await expect(page.getByTestId('robot-part-blaster')).toBeVisible();
+  await expect(page.getByTestId('robot-part-eyes')).toBeVisible();
+  // Tap the blaster, take it out: an empty socket (plug outline) appears.
+  await page.getByTestId('robot-part-blaster').dispatchEvent('click');
+  await page.getByTestId('robot-unplug-blaster').click();
+  await expect(art).toHaveAttribute('data-gear', 'eyes');
+  await expect(page.getByTestId('robot-part-blaster')).toHaveCount(0);
+  await expect(page.locator('.rb-plug')).toHaveCount(1);
+  // Tap the empty socket: the parts that fit are offered; plug the cannon in.
+  await page.locator('.rb-plug').dispatchEvent('click');
+  await expect(page.getByTestId('robot-inspector')).toContainText('Leerer Steckplatz');
+  await page.getByTestId('robot-pick-cannon').click();
+  await expect(art).toHaveAttribute('data-gear', /cannon/);
+  await expect(page.getByTestId('robot-part-cannon')).toBeVisible();
+  await expect(page.getByTestId('robot-gear-cannon')).toBeChecked();
+  // Swap the drive: the picture changes.
+  await page.getByTestId('robot-socket-underside').dispatchEvent('click');
+  await page.getByTestId('robot-pick-legs').click();
+  await expect(art).toHaveAttribute('data-loco', 'legs');
+  await expect(page.getByTestId('robot-part-legs')).toHaveCount(1);
+  await expect(page.getByTestId('robot-part-wheels')).toHaveCount(0);
+  await expect(page.getByTestId('robot-locomotion-legs')).toBeChecked();
+});

@@ -65,9 +65,9 @@ export function robotSvg(spec: RobotSpec, o: RenderOptions = {}): string {
   const parts = paintOrder(placed).map((p) => p.svg).join('');
   const plugs = o.sockets && o.sockets !== 'none' ? emptySockets(chassis, assigned).map((n) => plug(n, chassis.sockets[n], o)).join('') : '';
   // Tap target for the locomotion: a strip along the lower hull edge (the wheels themselves are under the body).
-  const loco = interactive ? `<g class="rb-lochit" role="button" tabindex="0" aria-label="${esc(o.label?.('socket', 'underside') ?? 'underside')}" data-socket="underside" data-testid="robot-socket-underside"><rect x="14" y="76" width="72" height="20" rx="10"/></g>` : '';
+  const loco = interactive ? `<g class="rb-lochit" role="button" tabindex="0" aria-label="${esc(o.label?.('socket', 'underside') ?? 'underside')}" data-socket="underside" data-testid="robot-socket-underside"><rect x="16" y="82" width="68" height="12" rx="6"/><text x="50" y="90.4" text-anchor="middle">${esc(o.label?.('robot', 'drive') ?? '')}</text></g>` : '';
   const name = o.label?.('robot', spec.chassis) ?? `${spec.chassis} robot`;
-  return `<svg class="rb${o.enemy ? ' rb-enemy' : ''}" viewBox="0 0 100 100" role="img" aria-label="${esc(name)}" data-chassis="${spec.chassis}" data-loco="${spec.locomotion}" data-gear="${spec.gear.join(' ')}"><circle class="rb-bubble" cx="50" cy="50" r="44"/>${parts}${plugs}${loco}</svg>`;
+  return `<svg class="rb${o.enemy ? ' rb-enemy' : ''}" viewBox="7 9 86 86" role="img" aria-label="${esc(name)}" data-chassis="${spec.chassis}" data-loco="${spec.locomotion}" data-gear="${spec.gear.join(' ')}"><circle class="rb-bubble" cx="50" cy="50" r="44"/>${parts}${plugs}${loco}</svg>`;
 }
 
 export const robotEl = (spec: RobotSpec, o: RenderOptions = {}): SVGSVGElement => svg(robotSvg(spec, o));
@@ -79,4 +79,23 @@ export function muzzleOf(spec: RobotSpec, gearId: string): { x: number; y: numbe
   const at = assignSockets(chassis, spec.gear, partArt).get(gearId);
   if (!art?.muzzle || !at) return undefined;
   return anchorPoint(chassis.sockets[at], art.muzzle);
+}
+
+/** A part shown alone for shelves and cards: a light robot that carries only that part (or a bare medium one for a drive). */
+export function partIconSpec(id: string): RobotSpec {
+  const art = partArt(id);
+  return art?.kind === 'locomotion' ? { chassis: 'medium', locomotion: id, gear: [] } : { chassis: 'light', locomotion: 'wheels', gear: [id] };
+}
+
+export const chassisIconSpec = (id: string): RobotSpec => ({ chassis: id, locomotion: 'wheels', gear: [] });
+
+/** A small framed robot or part icon for lists. */
+export function iconEl(spec: RobotSpec, size = 44, o: RenderOptions = {}): HTMLElement {
+  const el = document.createElement('span');
+  el.className = 'rb-stage rb-icon';
+  el.style.width = `${size}px`;
+  el.style.height = `${size}px`;
+  el.setAttribute('aria-hidden', 'true');
+  el.append(robotEl(spec, o));
+  return el;
 }

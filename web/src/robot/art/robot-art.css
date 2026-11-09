@@ -256,3 +256,20 @@
 .rb-sample { padding: 0; box-sizing: content-box; }
 .rb-row { break-inside: avoid; }
 .rb-theme { columns: 1; }
+
+/* Build bench and part icons. */
+.rb-icon { flex: none; padding: 2px; border-radius: 0.5rem; }
+.robot-bench { display: grid; gap: 0.6rem; margin: 0.4rem 0 0.8rem; }
+.robot-bench-stage { width: min(100%, 22rem); aspect-ratio: 1; justify-self: center; padding: 0.4rem; }
+.robot-inspector { min-height: 3rem; }
+.robot-inspector h4 { margin: 0 0 0.3rem; }
+.robot-inspector p { margin: 0 0 0.4rem; }
+.robot-picks { list-style: none; margin: 0 0 0.4rem; padding: 0; display: grid; gap: 0.4rem; }
+.robot-pick { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem; border: 1px solid var(--border); border-radius: 0.6rem; background: var(--surface); }
+.robot-pick-text { display: grid; flex: 1; min-width: 0; }
+.robot-pick-text small { color: var(--muted); }
+.robot-pick-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.robot-tag { font-size: 0.85rem; color: var(--muted); padding: 0 0.4rem; }
+.robot-option { display: flex; align-items: center; gap: 0.5rem; }
+.robot-build summary { gap: 0.6rem; }
+.rb-lochit text { font-size: 6.4px; font-weight: 700; fill: var(--rb-stage-line); text-anchor: middle; pointer-events: none; }

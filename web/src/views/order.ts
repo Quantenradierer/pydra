@@ -9,6 +9,7 @@ import { highlight } from '../highlight.ts';
 import type { MessageKey } from '../i18n.ts';
 import { richText } from '../rich-text.ts';
 import { subpageHeader } from './header.ts';
+import { levelStrip } from './level-strip.ts';
 import { huntInfo, huntOutcomeText } from './hunt.ts';
 
 /**
@@ -30,29 +31,17 @@ export function orderScreen(app: App): Screen {
   // ---------------------------------------------------------------- level strip
   const progress = game.progress();
   const open = unlockedOrder(progress, game.levels);
-  const strip = h(
-    'nav',
-    { class: 'level-strip', 'aria-label': t('game.levels') },
-    ...game.levels.map((l, i) => {
-      const solved = progress.solved.includes(l.id);
-      const label = t(solved ? 'game.levelSolved' : open[i] ? 'game.level' : 'game.levelLocked', { n: i + 1 });
-      return h(
-        'button',
-        {
-          class: `level-dot${solved ? ' solved' : ''}`,
-          'aria-label': label,
-          title: label,
-          'aria-current': l === level ? 'step' : undefined,
-          disabled: !open[i],
-          'data-testid': `level-${i + 1}`,
-          onclick: () => {
-            game.open(l.id);
-            app.render();
-          },
-        },
-        String(i + 1),
-      );
-    }),
+  const strip = levelStrip(
+    t,
+    game.levels.map((l, i) => ({
+      solved: progress.solved.includes(l.id),
+      open: open[i]!,
+      current: l === level,
+      go: () => {
+        game.open(l.id);
+        app.render();
+      },
+    })),
   );
 
   // ---------------------------------------------------------------- run controls

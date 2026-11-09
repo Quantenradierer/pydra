@@ -10,7 +10,7 @@ export const CHAPTER_4 = chapter(4, [
   {
     id: 'far-far-dummy',
     title: T('Ganz-weit-weg-Attrappe', 'Far-Far Dummy'),
-    catchLine: T('Die Attrappe steht weit weg, jedes Mal anders. Wie viele Schritte, weißt du nicht.', 'The dummy stands far away, differently every time. You do not know how many steps it takes.'),
+    catchLine: T('Die Attrappe steht weit weg, jedes Mal anders. Wie viele Felder, weißt du nicht.', 'The dummy stands far away, differently every time. You do not know how many tiles it takes.'),
     idea: T('while wiederholt, solange die Bedingung stimmt: while see() != "enemy": forward() fährt, bis du sie siehst.', 'while repeats as long as the condition holds: while see() != "enemy": forward() drives until you see it.'),
     skeleton: 'while see() != "enemy":\n    ???\nfire()\nfire()',
     enemies: [{ hp: 2 }],
@@ -37,7 +37,7 @@ export const CHAPTER_4 = chapter(4, [
   {
     id: 'regenerator',
     title: T('Regenerator', 'Regenerator'),
-    catchLine: T('Der Regenerator heilt sich alle zwei Ticks um 1 Leben. Eine feste Zahl Schüsse reicht nie sicher.', 'The Regenerator heals 1 hit point every two ticks. A fixed number of shots is never certain to be enough.'),
+    catchLine: T('Der Regenerator heilt sich alle zwei Runden um 1 Leben. Eine feste Zahl Schüsse reicht nie sicher.', 'The Regenerator heals 1 hit point every two rounds. A fixed number of shots is never certain to be enough.'),
     idea: T('Schieß, solange du lebst: while alive(): fire() hört erst auf, wenn der Kampf vorbei ist.', 'Shoot as long as you live: while alive(): fire() only stops when the fight is over.'),
     skeleton: 'while see() != "enemy":\n    forward()\nwhile ???:\n    fire()',
     enemies: [{ hp: 6, regen: { every: 2, amount: 1 } }],
@@ -128,7 +128,7 @@ export const CHAPTER_4 = chapter(4, [
     id: 'hide-and-seek',
     title: T('Versteckspiel', 'Hide & Seek'),
     catchLine: T('Boss: Der Gegner versteckt sich in einer Nische neben dem Gang und schießt auf alles, was vorbeikommt. Links, rechts, mal hinter einer Kurve.', 'Boss: the enemy hides in a niche beside the corridor and shoots at everything passing by. Left, right, sometimes around a bend.'),
-    idea: T('Schau bei jedem Schritt zur Seite: elif see_left() == "enemy": turn_left(). Die Reihenfolge entscheidet, was zuerst gilt.', 'Look to the side at every step: elif see_left() == "enemy": turn_left(). The order decides what counts first.'),
+    idea: T('Schau bei jeder Runde zur Seite: elif see_left() == "enemy": turn_left(). Die Reihenfolge entscheidet, was zuerst gilt.', 'Look to the side every round: elif see_left() == "enemy": turn_left(). The order decides what counts first.'),
     skeleton: 'while alive():\n    if see() == "enemy":\n        fire()\n    elif see_left() == "enemy":\n        ???\n    elif see_right() == "enemy":\n        ???\n    elif ...',
     enemies: [{ hp: 3, script: 'while True:\n    if see() == "enemy":\n        fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    else:\n        wait()' }],
     maps: [

@@ -21,11 +21,11 @@ const fight = (id: string, de: string, en: string, mix: string[], catchDe: strin
  * general script can win them all). Boss: Drill Sergeant.
  */
 export const PROVING_1 = chapter(25, [
-  fight('pg1-a', 'Übungsplatz 1', 'Proving Grounds 1', ['tank-dummy', 'dummy-row'], 'Zwei Kämpfe hintereinander: Panzer und Reihe.', 'Two fights in a row: tank and row.'),
-  fight('pg1-b', 'Übungsplatz 2', 'Proving Grounds 2', ['dummy-row', 'step-counter'], 'Reihe und Schrittzähler.', 'Row and step counter.'),
-  fight('pg1-c', 'Übungsplatz 3', 'Proving Grounds 3', ['step-counter', 'after-the-loop'], 'Schrittzähler und Nach der Schleife.', 'Step counter and after the loop.'),
-  fight('pg1-d', 'Übungsplatz 4', 'Proving Grounds 4', ['after-the-loop', 'double-loop'], 'Nach der Schleife und Doppelschleife.', 'After the loop and double loop.'),
-  fight('pg1-e', 'Übungsplatz 5', 'Proving Grounds 5', ['tank-dummy', 'double-loop', 'dummy-army'], 'Panzer, Doppelschleife und Armee.', 'Tank, double loop and army.'),
+  fight('pg1-a', 'Übungsplatz 1', 'Practice Field 1', ['tank-dummy', 'dummy-row'], 'Zwei Kämpfe hintereinander: Panzer und Reihe.', 'Two fights in a row: tank and row.'),
+  fight('pg1-b', 'Übungsplatz 2', 'Practice Field 2', ['dummy-row', 'step-counter'], 'Reihe und Schrittzähler.', 'Row and step counter.'),
+  fight('pg1-c', 'Übungsplatz 3', 'Practice Field 3', ['step-counter', 'after-the-loop'], 'Schrittzähler und Nach der Schleife.', 'Step counter and after the loop.'),
+  fight('pg1-d', 'Übungsplatz 4', 'Practice Field 4', ['after-the-loop', 'double-loop'], 'Nach der Schleife und Doppelschleife.', 'After the loop and double loop.'),
+  fight('pg1-e', 'Übungsplatz 5', 'Practice Field 5', ['tank-dummy', 'double-loop', 'dummy-army'], 'Panzer, Doppelschleife und Armee.', 'Tank, double loop and army.'),
   fight(
     'drill-sergeant',
     'Ausbilder',

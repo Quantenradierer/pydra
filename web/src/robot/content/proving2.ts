@@ -26,7 +26,7 @@ const fight = (id: string, de: string, en: string, mix: string[], catchDe: strin
 });
 
 /**
- * Proving Grounds II ("chapter 4.5"): eight mixed fights and the boss Final Exam.
+ * Practice Field II / Exams ("chapter 4.5"): eight mixed fights and the boss Final Exam.
  * Each fight takes one layout from each of the listed Chapter 3 and 4 enemies
  * ("id#2" = the second layout), so the same general script has to win them all.
  */

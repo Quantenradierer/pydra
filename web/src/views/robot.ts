@@ -568,7 +568,7 @@ export function robotScreen(app: App): Screen {
     const listingMount = h('div');
     listingHolder.append(listingMount);
     Z.fight.body.append(result, queueHolder, arenaHolder);
-    const firstRun = btn(t('robot.run'), 'robot-run-fight', () => (game.setScript(area.value), fight()), 'robot-run');
+    const firstRun = btn(t('robot.run'), 'robot-run-fight', () => (game.setScript(area.value), fight()), 'robot-run rb-only-tabs');
     controlsHolder.append(firstRun);
     Z.fight.actions.append(controlsHolder);
     const fightsBtn = btn('', 'robot-vq-open');

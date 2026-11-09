@@ -162,6 +162,43 @@ logic and checks are in `challenges.ts` (predict answers are computed by running
 Every new step also needs nothing else: `RobotGame` builds its step list from the two data files, and Home/points/profile
 pick the new total up automatically.
 
+## Wording audit (German / English UI)
+
+Rules: German in Du-form with the plain imperative (`Starte`, `Wähle`, `Versuche`, never `Drück`/`Klick`); short, concrete
+words; no English terms in the German UI except the part names (Blaster, GPS, Mk II). One vocabulary for time, explained once
+in the fight view (`robot.narr.start`): a **Schritt** (step) is one line of the script or one move in the arena; a **Runde**
+(round) is what an action command such as `fire()` costs, then the arena moves. "Tick" does not appear in the UI any more
+(`clock.tick()` is the Python function name and stays).
+
+| Old term (de / en) | New term (de / en) |
+|---|---|
+| Tick / tick | Runde / round |
+| Variante / variation | Spielfeld / map |
+| Trainingsgelände / Training Grounds | Training / Training |
+| Übungsplatz II / Proving Grounds II | Prüfungen / Exams |
+| Proving Grounds I | Übungsplatz I / Practice Field I |
+| Auflage / Constraint | Sonderregel / Special rule |
+| Glitch / Line up / Battle (kind labels, en) | Bug hunt / Put in order / Fight |
+| Burst-Blaster / Burst blaster | Salven-Blaster / Salvo blaster |
+| Originalfehler / Original error | Python-Meldung / Python message |
+| Was passiert / What happens (log) | Verlauf / Log |
+| Protokoll | Verlauf |
+| Mehr / More (details drawer) | Details / Details |
+| Bereiche / Areas; "Dein Weg in vier Schritten" | Bildschirmteile / Screen parts; "Wo du gerade bist" |
+| Steckplatz / Platz (mixed) | Platz |
+| Code / Script (mixed, en tab) | Script (en tab and text), Skript (de) |
+| Drück / Klick / Versuch (colloquial) | Starte / Wähle / Versuche |
+| Der Dreh / The twist | Der Haken / The catch |
+| Karteikarten / concept cards | removed |
+
+## Dead-controls smoke test
+
+`e2e/robot-controls.spec.ts` visits the task map, the work screen in every zone (phone: tab by tab) with the hint panel,
+after a lost and a won fight, the drawers (parts, commands, versions, fights, details), challenges and the Training. It
+presses every visible, enabled, uncovered button and summary and requires that the DOM, the route, a text field or the
+saved game changes; otherwise the control must be disabled. Found and fixed: the replay buttons "Zeile zurück", "Eine
+Runde zurück", "Von vorn" at the start and "Zum Ende" / forward at the end did nothing, now disabled.
+
 ## Remaining work
 
 1. **Engineering** (not started, deliberately left): run battles in a **Web Worker** (`runBattle`/`fightEnemy` are pure; move

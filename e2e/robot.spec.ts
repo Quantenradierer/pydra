@@ -24,7 +24,7 @@ for (const [device, viewport] of [
     await page.getByTestId('robot-restart').click();
     await page.getByTestId('robot-forward').click();
     await expect(page.locator('.robot-listing li.active')).toHaveCount(1);
-    await expect(page.getByTestId('robot-position')).toHaveText('Tick 1 von 2');
+    await expect(page.getByTestId('robot-position')).toHaveText('Runde 1 von 2');
     await page.getByTestId('robot-end').click();
     await expect(page.getByTestId('robot-log')).toContainText('schießt und trifft');
     expect(((await stored(page, 'robot')) as { solved: string[] }).solved).toEqual(['first-contact']);
@@ -288,7 +288,7 @@ for (const [device, viewport] of [
     await expect(page.getByTestId('robot-vars')).toContainText('d = ');
     await expect(page.locator('.robot-listing li[data-line="1"] .robot-hint')).toContainText('distance() →');
     await expect(page.getByTestId('robot-sensors')).toContainText('distance()');
-    await expect(page.getByTestId('robot-position')).toHaveText(/^Tick 1 von \d+$/);
+    await expect(page.getByTestId('robot-position')).toHaveText(/^Runde 1 von \d+$/);
 
     // Line 2: the branch that was taken is lit up and explained.
     await page.getByTestId('robot-line-forward').click();
@@ -301,14 +301,14 @@ for (const [device, viewport] of [
     await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '3');
     await expect(narration).toContainText('ist ein Befehl');
     await page.getByTestId('robot-line-forward').click();
-    await expect(page.getByTestId('robot-where')).toContainText('Arena · Tick 1');
+    await expect(page.getByTestId('robot-where')).toContainText('Arena · Runde 1');
     await expect(narration).toContainText('fährt von');
 
     // A tick back goes to the start of the fight; a tick forward jumps over the lines of the next tick.
     await page.getByTestId('robot-back').click();
-    await expect(page.getByTestId('robot-position')).toHaveText(/^Tick 0 von/);
+    await expect(page.getByTestId('robot-position')).toHaveText(/^Runde 0 von/);
     await page.getByTestId('robot-forward').click();
-    await expect(page.getByTestId('robot-position')).toHaveText(/^Tick 1 von/);
+    await expect(page.getByTestId('robot-position')).toHaveText(/^Runde 1 von/);
     await page.getByTestId('robot-end').click();
     await expect(page.getByTestId('robot-log')).toContainText('schießt und trifft');
 

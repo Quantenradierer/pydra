@@ -8,7 +8,7 @@ export const CHAPTER_0 = chapter(0, [
   {
     id: 'first-contact',
     title: T('Erster Kontakt', 'First Contact'),
-    catchLine: T('Der Code ist schon fertig: Drück auf „Kampf“ und schau zu.', 'The code is already written: press "Battle" and watch.'),
+    catchLine: T('Der Code ist schon fertig: Starte den Kampf und schau zu.', 'The code is already written: press "Start fight" and watch.'),
     idea: T('Jede Zeile ist ein Befehl. Der Roboter führt sie von oben nach unten aus.', 'Every line is a command. The robot runs them from top to bottom.'),
     skeleton: 'forward()\nfire()',
     enemies: [{ hp: 1 }],

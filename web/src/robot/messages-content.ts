@@ -1,8 +1,8 @@
-/** Texts for the second half of Robot Battler: chapters 3-4, Proving Grounds II, rules, Training Grounds. */
+/** Texts for the second half of Robot Battler: chapters 3-4, Practice Field II, rules, Training. */
 export const CONTENT_DE = {
   'robot.chapter.3': 'Kapitel 3: if / elif / else',
   'robot.chapter.4': 'Kapitel 4: while-Schleifen',
-  'robot.chapter.45': 'Übungsplatz II',
+  'robot.chapter.45': 'Prüfungen',
   'robot.outcome.damage': 'Die Gegner sind besiegt, aber dein Roboter hat zu viel Schaden genommen (erlaubt: höchstens {max} Leben).',
   'robot.outcome.waste': 'Gewonnen, aber du hast ins Schild geschossen: Schüsse auf ein gehobenes Schild sind verschwendet.',
   'robot.outcome.uses': 'Gewonnen, aber in dieser Aufgabe sollst du {words} benutzen.',
@@ -10,20 +10,20 @@ export const CONTENT_DE = {
   'robot.outcome.repeat': 'Gewonnen, aber eine Zahl steht zweimal im Code. Gib ihr einen Namen (eine Variable).',
   'robot.ev.heal': '{who} repariert sich um {amount} Leben.',
   'robot.certificate': 'Grundlagen-Zertifikat: Du hast die Abschlussprüfung bestanden.',
-  'robot.training': 'Trainingsgelände',
-  'robot.training.intro': 'Zufällige Kämpfe mit dem, was du schon gelernt hast. Dein Skript bleibt dasselbe; wie gut ist es wirklich?',
+  'robot.training': 'Training',
+  'robot.training.intro': 'Zufällige Kämpfe mit dem, was du schon gelernt hast. Dein Skript bleibt dasselbe: Wie gut ist es wirklich?',
   'robot.training.daily': 'Tageskampf',
   'robot.training.dailyDone': 'Tageskampf (heute geschafft)',
   'robot.training.new': 'Neuer Zufallskampf',
   'robot.training.stats': '{wins} Trainingskämpfe gewonnen',
   'robot.training.another': 'Noch ein Kampf',
-  'robot.training.locked': 'Das Trainingsgelände öffnet mit Kapitel 2.',
+  'robot.training.locked': 'Das Training öffnet mit Kapitel 2.',
 } as const;
 
 export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
   'robot.chapter.3': 'Chapter 3: if / elif / else',
   'robot.chapter.4': 'Chapter 4: while loops',
-  'robot.chapter.45': 'Proving Grounds II',
+  'robot.chapter.45': 'Exams',
   'robot.outcome.damage': 'The enemies are down, but your robot took too much damage (at most {max} HP allowed).',
   'robot.outcome.waste': 'Won, but you shot into the shield: shots at a raised shield are wasted.',
   'robot.outcome.uses': 'Won, but in this task you are meant to use {words}.',
@@ -31,12 +31,12 @@ export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
   'robot.outcome.repeat': 'Won, but a number is written twice in the code. Give it a name (a variable).',
   'robot.ev.heal': '{who} repairs itself by {amount} HP.',
   'robot.certificate': 'Basics Certificate: you passed the final exam.',
-  'robot.training': 'Training Grounds',
+  'robot.training': 'Training',
   'robot.training.intro': 'Random fights with what you have already learned. Your script stays the same; how good is it really?',
   'robot.training.daily': 'Daily fight',
   'robot.training.dailyDone': 'Daily fight (done today)',
   'robot.training.new': 'New random fight',
   'robot.training.stats': '{wins} training fights won',
   'robot.training.another': 'Another fight',
-  'robot.training.locked': 'The Training Grounds open with Chapter 2.',
+  'robot.training.locked': 'Training opens with Chapter 2.',
 };

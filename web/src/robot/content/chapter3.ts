@@ -51,7 +51,7 @@ export const CHAPTER_3 = chapter(3, [
   {
     id: 'bubble',
     title: T('Blase', 'Bubble'),
-    catchLine: T('Blase hebt jeden zweiten Tick ihr Schild: Schüsse darauf sind verschwendet.', 'Bubble raises its shield every other tick: shots at it are wasted.'),
+    catchLine: T('Blase hebt jede zweite Runde ihr Schild: Schüsse darauf sind verschwendet.', 'Bubble raises its shield every other round: shots at it are wasted.'),
     idea: T('Der Schild-Scanner meldet mit enemy_shielded(), ob das Schild oben ist. Pack die Entscheidung in eine Schleife und warte, solange es oben ist.', 'The shield scanner reports with enemy_shielded() whether the shield is up. Put the decision in a loop and wait while it is up.'),
     skeleton: 'for i in range(8):\n    ...\n    elif see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            ???',
     enemies: [SHIELD_DUMMY],
@@ -64,8 +64,8 @@ export const CHAPTER_3 = chapter(3, [
   {
     id: 'rhythm-dummy',
     title: T('Rhythmus-Attrappe', 'Rhythm Dummy'),
-    catchLine: T('Seitenmission: Das Schild geht jeden zweiten Tick hoch. Dein Scanner ist kaputt: nimm die Uhr.', 'Side mission: the shield goes up every other tick. Your scanner is broken: use the clock.'),
-    idea: T('clock.tick() % 2 == 0 ist an jedem geraden Tick wahr. % ist der Rest beim Teilen.', 'clock.tick() % 2 == 0 is true on every even tick. % is the remainder of a division.'),
+    catchLine: T('Seitenmission: Das Schild geht jede zweite Runde hoch. Dein Scanner ist kaputt: nimm die Uhr.', 'Side mission: the shield goes up every other round. Your scanner is broken: use the clock.'),
+    idea: T('clock.tick() % 2 == 0 ist in jeder geraden Runde wahr. % ist der Rest beim Teilen.', 'clock.tick() % 2 == 0 is true on every even round. % is the remainder of a division.'),
     skeleton: 'for i in range(10):\n    if clock.tick() % 2 == 0:\n        ???\n    else:\n        wait()',
     enemies: [{ ...SHIELD_DUMMY, hp: 4 }],
     maps: [arena(['D', 4, 3])],
@@ -92,7 +92,7 @@ export const CHAPTER_3 = chapter(3, [
   {
     id: 'order-matters',
     title: T('Reihenfolge zählt', 'Order Matters'),
-    catchLine: T('Seitenmission: Ein Scharfschütze trifft dich jeden Tick. Dein Roboter soll „critical“ sagen, sobald er unter 5 Leben fällt.', 'Side mission: a sniper hits you every tick. Your robot must say "critical" as soon as it drops below 5 HP.'),
+    catchLine: T('Seitenmission: Ein Scharfschütze trifft dich jede Runde. Dein Roboter soll „critical“ sagen, sobald er unter 5 Leben fällt.', 'Side mission: a sniper hits you every round. Your robot must say "critical" as soon as it drops below 5 HP.'),
     idea: T('Bei if / elif gewinnt die erste Bedingung, die stimmt. Prüfe den engeren Fall (hp() < 5) vor dem weiteren (hp() < 10).', 'In if / elif the first true condition wins. Check the narrower case (hp() < 5) before the wider one (hp() < 10).'),
     skeleton: 'for i in range(12):\n    if hp() < 5:\n        say("critical")\n    elif hp() < 10:\n        ???\n    fire()',
     enemies: [{ hp: 9, script: 'while True:\n    fire()' }],
@@ -136,7 +136,7 @@ export const CHAPTER_3 = chapter(3, [
   {
     id: 'gatekeeper',
     title: T('Torwächter', 'Gatekeeper'),
-    catchLine: T('Boss: zufällige Seite, Schild im Takt von drei Ticks, und er schießt zurück. Du darfst höchstens 4 Leben verlieren.', 'Boss: random side, a shield on a three-tick beat, and it shoots back. You may lose at most 4 HP.'),
+    catchLine: T('Boss: zufällige Seite, Schild im Takt von drei Runden, und er schießt zurück. Du darfst höchstens 4 Leben verlieren.', 'Boss: random side, a shield on a three-round beat, and it shoots back. You may lose at most 4 HP.'),
     idea: T('Wenn sein Schild oben ist, schießt er auf dich. Ersetze das wait() durch shield.activate(): dein eigenes Schild fängt den nächsten Treffer.', 'While its shield is up it shoots at you. Replace the wait() with shield.activate(): your own shield catches the next hit.'),
     skeleton: '        if enemy_shielded():\n            ???\n        else:\n            fire()',
     enemies: [{ hp: 6, gear: ['blaster', 'shield'], script: 'while True:\n    if clock.tick() % 3 == 0:\n        shield.activate()\n    else:\n        fire()' }],

@@ -24,7 +24,7 @@ export const CHAPTER_1 = chapter(1, [
   {
     id: 'far-dummy',
     title: T('Fernattrappe', 'Far Dummy'),
-    catchLine: T('Die Attrappe ist sehr weit weg: zwei Schritte reichen nicht.', 'The dummy is very far away: two steps are not enough.'),
+    catchLine: T('Die Attrappe ist sehr weit weg: zwei Felder reichen nicht.', 'The dummy is very far away: two tiles are not enough.'),
     idea: T('forward(4) fährt vier Felder mit einem Befehl. Die Zahl in den Klammern ist ein Argument.', 'forward(4) drives four tiles with one command. The number in the brackets is an argument.'),
     skeleton: 'say("Hi")\nforward(???)\nfire()\nfire()',
     enemies: [{ hp: 2 }],
@@ -36,8 +36,8 @@ export const CHAPTER_1 = chapter(1, [
   {
     id: 'armored-dummy',
     title: T('Panzerattrappe', 'Armored Dummy'),
-    catchLine: T('Ihre Panzerung schluckt 1 Schaden pro Treffer: Der Blaster richtet nichts aus.', 'Its armor absorbs 1 damage per hit: the blaster does nothing.'),
-    idea: T('Tausche den Blaster gegen die Kanone. fire(3) schießt mit Stärke 3, lädt aber 3 Ticks nach: dazwischen wait().', 'Swap the blaster for the cannon. fire(3) shoots with power 3 but needs 3 ticks to recharge: use wait() in between.'),
+    catchLine: T('Seine Panzerung schluckt 1 Schaden pro Treffer: Der Blaster richtet nichts aus.', 'Its armor absorbs 1 damage per hit: the blaster does nothing.'),
+    idea: T('Tausche den Blaster gegen die Kanone. fire(3) schießt mit Stärke 3, lädt aber 3 Runden nach: dazwischen wait().', 'Swap the blaster for the cannon. fire(3) shoots with power 3 but needs 3 rounds to recharge: use wait() in between.'),
     skeleton: 'say("Hi")\nforward(4)\nfire(3)\nwait()\nwait()\n???',
     enemies: [{ hp: 4, armor: 1 }],
     maps: [arena(['D', 3, 5]), arena(['D', 3, 4]), arena(['D', 3, 5])],

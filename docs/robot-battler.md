@@ -68,7 +68,7 @@ Naming: Task, Robot, Code/Script, Fight (Aufgabe, Roboter, Skript, Kampf) on eve
 4423 -> 0 (drawer 512) / 3390 -> 0 (drawer 124); workshop challenge 1514 -> 0 / 1259 -> 0. Shots: scratchpad `shots2/before-*`, `after-*`, `cur-*`.
 Not changed: the Home screen (shared by all games, 1858 px on a phone). Tests: `e2e/robot.spec.ts` (helpers `zone`, `fillCode`, `runFight`,
 `openDrawer`, `closeDrawer` in `e2e/helpers.ts`; desktop no-scroll test, phone zone navigation / focus / 44 px / small fight scroll test).
-Still open: no keyboard shortcut for stepping; the `<textarea>` has no line numbers; arrow keys do not move between the bottom tabs.
+Still open: no keyboard shortcut for stepping; arrow keys do not move between the bottom tabs.
 
 ## Robot art (modular images)
 
@@ -161,6 +161,25 @@ logic and checks are in `challenges.ts`.
 Every new step also needs nothing else: `RobotGame` builds its step list from the two data files, and Home/points/profile
 pick the new total up automatically.
 
+## Script editor suggestions
+
+The editor is still a plain `<textarea>`, with three tools around it (`views/robot-editor.ts`, DOM only; the logic is the pure
+module `robot/suggest.ts`, tested in `suggest.test.ts`, e2e in `e2e/robot-editor.spec.ts` on phone and desktop, de and en).
+They are tools, not answers: they list commands and Python shapes, never what a task needs, and no hint text comes back.
+
+- **Line numbers**: a gutter next to the text (`robot-code-lines`), scrolled together with it; lines do not wrap (`wrap=off`).
+- **Suggestion popup** (`robot-code-suggest`) while typing a word: commands of the build (`forward(steps)` with a short description
+  from the Commands drawer texts), part names (equipped ones first, parts not built in listed last and marked *nicht angebaut*),
+  keywords of the subset (`if elif else while for in def return True False and or not`), `range len print` and the script's own
+  names (assignments, loop variables, `def` names and parameters). After `part.` only that part's methods are offered
+  (`blaster.fire()`, `eyes.see()` ...). Nothing is offered in comments or strings, or for a word that is complete and unique.
+  Keys: arrows move, **Tab / Enter** accept, **Esc** closes, **Ctrl+Space** opens it by hand; with the popup closed Tab indents.
+  On a phone a tap on an entry accepts it (pointerdown keeps the keyboard up). A call with an argument puts the caret inside `()`.
+- **Insert bar** (`robot-code-bar`, a folded `<details>` *Einfügen* below the text): tabs by what the build offers (Python shapes,
+  comparisons, moving, then one tab per equipped gear, always-there commands); a tap inserts the template at the caret, indented
+  like the current line, statements start a new line. The open tab and fold state are kept while the page lives.
+- The build is read through a getter, so the lists follow the Robot zone. Workshop uses the starting build.
+
 ## Free gear
 
 The player can equip **any** part at any time (chassis, drive, gear, Mk II); only slot count and duplicates are refused. No
@@ -222,7 +241,7 @@ Runde zurück", "Von vorn" at the start and "Zum Ende" / forward at the end did 
 
 1. **Engineering** (not started, deliberately left): run battles in a **Web Worker** (`runBattle`/`fightEnemy` are pure; move
    them behind a worker with `postMessage`, keep `Frame` JSON-serialisable - `RbError` needs a plain-object form); a
-   **CodeMirror 6** editor with gutter line numbers and error marks (the textarea has neither). Everything fits in a few
+   **CodeMirror 6** editor with gutter line numbers and error marks (the textarea has gutter line numbers, but no error marks). Everything fits in a few
    milliseconds on the main thread today, so neither blocks a release.
 2. **Not built from the design doc**: Crate Courier and Battery Sorter (need a gripper and crates: the engine has no items);
    the other ~18 optional gear items (railgun, flamethrower, hook, EMP, mines, boomerang, ears, thermal camera, analyzer,

@@ -14,6 +14,7 @@ import { friendlyError } from '../robot/friendly.ts';
 import { type RunReport, type Step } from '../robot/game.ts';
 import { precheck as precheckFn, type BattleResult } from '../robot/battle.ts';
 import type { RbError } from '../robot/py/errors.ts';
+import { createEditor, type Editor } from './robot-editor.ts';
 import { subpageHeader } from './header.ts';
 import { benchEl } from './robot-bench.ts';
 import { createWork, type Phase } from './robot-work.ts';
@@ -212,20 +213,8 @@ export function robotScreen(app: App): Screen {
 
   // ---------------------------------------------------------------- the editor
 
-  function editor(initial: string, onInput: (text: string) => void, testId = 'robot-code'): HTMLTextAreaElement {
-    const area = h('textarea', { class: 'robot-code', rows: 4, spellcheck: false, autocapitalize: 'off', autocomplete: 'off', 'aria-label': t('robot.code'), 'data-testid': testId }) as HTMLTextAreaElement;
-    area.value = initial;
-    const fit = () => (area.rows = Math.max(5, Math.min(16, area.value.split('\n').length + 1)));
-    fit();
-    area.addEventListener('input', () => (fit(), onInput(area.value)));
-    area.addEventListener('keydown', (e) => {
-      if (e.key !== 'Tab' || e.shiftKey) return;
-      e.preventDefault();
-      area.setRangeText('    ', area.selectionStart, area.selectionEnd, 'end');
-      fit();
-      onInput(area.value);
-    });
-    return area;
+  function editor(initial: string, build: () => Build, onInput: (text: string) => void, testId = 'robot-code'): Editor {
+    return createEditor(t as (key: MessageKey) => string, initial, build, onInput, testId);
   }
 
   // ---------------------------------------------------------------- the variation queue
@@ -465,6 +454,7 @@ export function robotScreen(app: App): Screen {
     const Z = work.zones;
     let ran = false;
     let lost = false;
+    let ed: Editor;
     let area: HTMLTextAreaElement;
     const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { class: cls, 'data-testid': id, onclick }, label);
     const goCode = () => (work.show('code', true), area.focus());
@@ -496,14 +486,15 @@ export function robotScreen(app: App): Screen {
     // ---- Code: the editor (or the line-by-line listing during a fight), commands and versions
     const errorHolder = h('div', { class: 'robot-error-holder' });
     const listingHolder = h('div', { class: 'robot-listing-holder', hidden: true });
-    area = editor(game.script(), (text) => (game.setScript(text), ran && lost && work.phase('improve')));
+    ed = editor(game.script(), () => game.build(), (text) => (game.setScript(text), ran && lost && work.phase('improve')));
+    area = ed.area;
     area.addEventListener('focus', () => work.phase(ran && lost ? 'improve' : 'code'));
-    Z.code.body.append(errorHolder, area, listingHolder);
+    Z.code.body.append(errorHolder, ed.el, listingHolder);
     Z.code.tools.append(apiBtn, historyBtn);
     const viewBtn = btn(t('work.edit'), 'robot-view-toggle', () => showEditor(listingHolder.hidden === false), 'run-control');
     viewBtn.hidden = true;
     function showEditor(edit: boolean) {
-      area.hidden = !edit;
+      ed.el.hidden = !edit;
       listingHolder.hidden = edit;
       viewBtn.textContent = t(edit ? 'work.follow' : 'work.edit');
       if (edit) area.focus();
@@ -543,7 +534,7 @@ export function robotScreen(app: App): Screen {
                   'li',
                   {},
                   h('span', {}, `${titleOf(game.step(entry.step)!)} · ${t(`robot.history.${entry.result}` as MessageKey)} · ${entry.script.split('\n').filter((l) => l.trim()).length}`),
-                  h('button', { class: 'run-control', 'data-testid': `robot-restore-${i}`, onclick: () => (game.restore(i), (area.value = game.script()), renderHistory(), historyDrawer.close(), showEditor(true)) }, t('robot.history.restore')),
+                  h('button', { class: 'run-control', 'data-testid': `robot-restore-${i}`, onclick: () => (game.restore(i), ed.set(game.script()), renderHistory(), historyDrawer.close(), showEditor(true)) }, t('robot.history.restore')),
                 ),
               ).reverse(),
             ),
@@ -686,15 +677,15 @@ export function robotScreen(app: App): Screen {
     switch (c.kind) {
       case 'glitch': {
         const bugged = injectGlitch(c, game.script());
-        const area = editor(bugged, () => {}, 'robot-glitch-code');
-        challengeShell(step, [prompt, h('p', { class: 'robot-note' }, t('robot.glitch.note')), area], checkBtn(t('robot.glitch.fix'), () => out.replaceChildren(...glitchResult(c, area.value, step))), out);
+        const { area, el: areaEl } = editor(bugged, () => game.build(), () => {}, 'robot-glitch-code');
+        challengeShell(step, [prompt, h('p', { class: 'robot-note' }, t('robot.glitch.note')), areaEl], checkBtn(t('robot.glitch.fix'), () => out.replaceChildren(...glitchResult(c, area.value, step))), out);
         break;
       }
       case 'workshop': {
-        const area = editor('', () => {}, 'robot-workshop-code');
+        const { area, el: areaEl } = editor('', () => START_BUILD, () => {}, 'robot-workshop-code');
         challengeShell(
           step,
-          [prompt, h('p', { class: 'robot-note' }, t('robot.workshop.note')), apiFold({ ...START_BUILD }), area],
+          [prompt, h('p', { class: 'robot-note' }, t('robot.workshop.note')), apiFold({ ...START_BUILD }), areaEl],
           checkBtn(t('robot.workshop.run'), () => {
             const r = checkWorkshop(c, area.value);
             out.replaceChildren(r.error ? h('p', { class: 'robot-loss', role: 'alert' }, r.error) : feedback(r.ok, step), workshopPicture(c.target, t('robot.workshop.target')), workshopPicture(r.trail, t('robot.workshop.yours')));
@@ -704,10 +695,10 @@ export function robotScreen(app: App): Screen {
         break;
       }
       case 'constraint': {
-        const area = editor(game.script(), (text) => game.setScript(text), 'robot-constraint-code');
+        const { area, el: areaEl } = editor(game.script(), () => game.build(), (text) => game.setScript(text), 'robot-constraint-code');
         challengeShell(
           step,
-          [prompt, h('p', { class: 'robot-note' }, [c.maxLines !== undefined ? t('robot.constraint.rule', { n: c.maxLines }) : '', c.rule ? c.rule[lang] : ''].filter(Boolean).join(' ')), apiFold(game.build()), area],
+          [prompt, h('p', { class: 'robot-note' }, [c.maxLines !== undefined ? t('robot.constraint.rule', { n: c.maxLines }) : '', c.rule ? c.rule[lang] : ''].filter(Boolean).join(' ')), apiFold(game.build()), areaEl],
           checkBtn(t('robot.check'), () => out.replaceChildren(...constraintResult(c, area.value, step))),
           out,
         );

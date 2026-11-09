@@ -1,7 +1,7 @@
 import { ERRORS_DE, ERRORS_EN } from './robot/messages-errors.ts';
 import { CONTENT_DE, CONTENT_EN } from './robot/messages-content.ts';
 import { UI_DE, UI_EN } from './robot/messages-ui.ts';
-import { WORK_DE, WORK_EN } from './robot/messages-work.ts';
+import { SUG_DE, SUG_EN, WORK_DE, WORK_EN } from './robot/messages-work.ts';
 
 export const LANGS = ['de', 'en'] as const;
 export type Lang = (typeof LANGS)[number];
@@ -15,6 +15,7 @@ const de = {
   ...ERRORS_DE,
   ...UI_DE,
   ...WORK_DE,
+  ...SUG_DE,
   ...CONTENT_DE,
   'app.title': 'Pydra: Python Trainer',
   'app.tagline': 'Python-Grundlagen. Aufgaben mit Köpfchen.',
@@ -320,6 +321,7 @@ const en: Record<MessageKey, string> = {
   ...ERRORS_EN,
   ...UI_EN,
   ...WORK_EN,
+  ...SUG_EN,
   ...CONTENT_EN,
   'app.title': 'Pydra: Python Trainer',
   'app.tagline': 'Python basics, one head at a time.',

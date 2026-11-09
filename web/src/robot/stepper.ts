@@ -68,14 +68,6 @@ export function nextBeat(beats: readonly Beat[], index: number, to: 'line' | 'ti
   return last;
 }
 
-/** The previous beat of the kind; stepping back by a tick goes to the end of the previous tick (or the start). */
-export function prevBeat(beats: readonly Beat[], index: number, to: 'line' | 'tick'): number {
-  for (let i = index - 1; i >= 0; i--) {
-    if (to === 'line' || beats[i]!.kind !== 'line') return i;
-  }
-  return 0;
-}
-
 export interface StackFrame {
   fn: string;
   /** The arguments as they were passed ("steps=3"). */

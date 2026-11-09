@@ -4,7 +4,7 @@ import type { BattleResult } from '../robot/battle.ts';
 import { describeMotion, narrateEvents } from '../robot/narration.ts';
 import { createRobotLayer } from '../robot/art/arena.ts';
 import { describeFrame, drawFrame, type Callout } from '../robot/replay.ts';
-import { buildBeats, nextBeat, prevBeat, stackNames, stateAt, type Beat, type LineHint } from '../robot/stepper.ts';
+import { buildBeats, nextBeat, stackNames, stateAt, type Beat, type LineHint } from '../robot/stepper.ts';
 
 type T = (key: MessageKey, params?: Params) => string;
 
@@ -24,16 +24,20 @@ export interface ViewerOptions {
   onEnd?: (byPlay: boolean) => void;
   /** The user pressed one of the controls. */
   onUser?: () => void;
+  /** Only the arena before the first fight: the controls stay disabled. */
+  preview?: boolean;
 }
 
 export interface Viewer {
   /** The arena with the tick counter and "what happens now". */
   el: HTMLElement;
-  /** The script with the running line (lives in the Code zone). */
+  /** What happens now, in words (under the controls). */
+  explain: HTMLElement;
+  /** The script with the running line (replaces the editor while the fight shows). */
   listing: HTMLElement;
-  /** Play / step buttons (sticky at the bottom of the Fight zone). */
+  /** The four run controls, like in the other games: restart, play/pause, step, to the end. */
   controls: HTMLElement;
-  /** Speed, position, variables, call stack, sensors and log (a drawer). */
+  /** Speed, step size, variables, call stack, sensors and log (in the Details sheet). */
   more: HTMLElement;
   atEnd(): boolean;
   play(): void;
@@ -84,8 +88,9 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   const stack = h('ol', { class: 'robot-stack', 'data-testid': 'robot-stack' });
   const sensors = h('ul', { class: 'robot-sensors', 'data-testid': 'robot-sensors' });
   const log = h('ul', { class: 'robot-log', 'data-testid': 'robot-log' });
-  const slider = h('input', { type: 'range', min: 0, max: lastBeat, value: 0, 'aria-label': t('robot.replay'), 'data-testid': 'robot-slider' }) as HTMLInputElement;
-  const playBtn = h('button', { class: 'run-control robot-play', 'data-testid': 'robot-play' }, t('robot.play'));
+  const playBtn = h('button', { class: 'run-control robot-play', 'data-testid': 'robot-play', 'aria-label': t('robot.play'), title: t('robot.play') }, '▶');
+  /** One step of the step control: a code line, or a whole round (what the action of the line does). */
+  let grain: 'line' | 'tick' = 'line';
   const speedLabel = h('span', { class: 'robot-speed-label', 'data-testid': 'robot-speed-label' });
   const speedSlider = h('input', { type: 'range', min: 1, max: MAX_SPEED, value: speed.level, 'aria-label': t('robot.speed'), 'data-testid': 'robot-speed' }) as HTMLInputElement;
 
@@ -97,6 +102,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
 
   const backButtons: HTMLButtonElement[] = [];
   const forwardButtons: HTMLButtonElement[] = [];
+  const idle = o.preview === true;
   function render() {
     const beat = beats[index]!;
     const state = stateAt(beats, index);
@@ -110,10 +116,10 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     layer.update(frames[Math.min(frameIndex, lastTick)]!, beat.kind === 'resolve' ? frames[beat.tick - 1] : undefined, !resolved);
     position.textContent = t('robot.tick', { n: beat.tick, total: lastTick });
     where.textContent = beat.kind === 'start' ? t('robot.where.start', { total: lastBeat }) : beat.kind === 'resolve' ? t('robot.where.arena', { tick: beat.tick, n: index, total: lastBeat }) : t('robot.where', { line: beat.line ?? 0, n: index, total: lastBeat });
-    slider.value = String(index);
     // A control that cannot move any further is disabled instead of doing nothing.
-    for (const b of backButtons) b.disabled = index <= 0;
-    for (const b of forwardButtons) b.disabled = index >= lastBeat;
+    for (const b of backButtons) b.disabled = idle || index <= 0;
+    for (const b of forwardButtons) b.disabled = idle || index >= lastBeat;
+    playBtn.disabled = idle || (index >= lastBeat && !timer && lastBeat === 0);
 
     // The code: the running line, and what each line that ran produced.
     const active = beat.line;
@@ -166,7 +172,9 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   function pause() {
     if (timer) clearTimeout(timer);
     timer = undefined;
-    playBtn.textContent = t('robot.play');
+    playBtn.textContent = '▶';
+    playBtn.setAttribute('aria-label', t('robot.play'));
+    playBtn.title = t('robot.play');
   }
   function tickOn() {
     timer = setTimeout(() => {
@@ -190,29 +198,33 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   function play() {
     if (timer) return;
     if (index >= lastBeat) go(0);
-    playBtn.textContent = t('robot.pause');
+    playBtn.textContent = '⏸';
+    playBtn.setAttribute('aria-label', t('robot.pause'));
+    playBtn.title = t('robot.pause');
     tickOn();
   }
 
   playBtn.addEventListener('click', () => (o.onUser?.(), timer ? pause() : play()));
-  slider.addEventListener('input', () => (o.onUser?.(), pause(), go(Number(slider.value))));
   speedSlider.addEventListener('input', () => {
     speed.level = Number(speedSlider.value);
     speedLabel.textContent = t(`robot.speed.${speed.level}` as MessageKey);
   });
-  const btn = (label: MessageKey, id: string, fn: () => void, side?: 'back' | 'forward') => {
-    const b = h('button', { class: 'run-control', 'data-testid': id, onclick: () => (pause(), fn()) }, t(label)) as HTMLButtonElement;
-    if (side) (side === 'back' ? backButtons : forwardButtons).push(b);
+  const btn = (label: MessageKey, glyph: string, id: string, fn: () => void, side: 'back' | 'forward') => {
+    const b = h('button', { class: 'run-control', 'data-testid': id, 'aria-label': t(label), title: t(label), onclick: () => (o.onUser?.(), pause(), fn()) }, glyph) as HTMLButtonElement;
+    (side === 'back' ? backButtons : forwardButtons).push(b);
     return b;
   };
   const controlList = [
-    btn('robot.step.lineBack', 'robot-line-back', () => go(prevBeat(beats, index, 'line')), 'back'),
-    btn('robot.step.line', 'robot-line-forward', () => go(nextBeat(beats, index, 'line')), 'forward'),
-    btn('robot.restart', 'robot-restart', () => go(0), 'back'),
-    btn('robot.back', 'robot-back', () => go(prevBeat(beats, index, 'tick')), 'back'),
-    btn('robot.forward', 'robot-forward', () => go(nextBeat(beats, index, 'tick')), 'forward'),
-    btn('robot.end', 'robot-end', () => go(lastBeat), 'forward'),
+    btn('robot.restart', '↺', 'robot-restart', () => go(0), 'back'),
+    playBtn,
+    btn('robot.step', '→', 'robot-step', () => go(nextBeat(beats, index, grain)), 'forward'),
+    btn('robot.end', '⇥', 'robot-end', () => go(lastBeat), 'forward'),
   ];
+  const grainBtn = (g: 'line' | 'tick', label: MessageKey) => {
+    const b = h('button', { type: 'button', class: 'run-control', 'aria-pressed': String(grain === g), 'data-testid': `robot-grain-${g}`, onclick: () => ((grain = g), grains.forEach((x) => x.setAttribute('aria-pressed', String(x === b)))) }, t(label));
+    return b;
+  };
+  const grains: HTMLElement[] = [grainBtn('line', 'robot.grain.line'), grainBtn('tick', 'robot.grain.tick')];
   render();
   playedToEnd = index >= lastBeat;
 
@@ -221,22 +233,21 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   const el = h(
     'section',
     { class: 'robot-replay', 'aria-label': t('robot.replay') },
-    h('div', { class: 'robot-arena' }, board, h('div', { class: 'robot-counter' }, position, where)),
-    h('div', { class: 'robot-explain' }, narration),
+    h('div', { class: 'robot-arena' }, board, ...(idle ? [] : [h('div', { class: 'robot-counter' }, position, where)])),
   );
+  const explain = h('div', { class: 'robot-explain' }, narration);
   const controls = h(
     'div',
     { class: 'run-controls robot-controls' },
-    playBtn,
     ...controlList,
   );
   const more = h(
     'div',
     { class: 'robot-more' },
     h('label', { class: 'robot-speed' }, h('span', {}, `${t('robot.speed')}: `), speedSlider, speedLabel),
-    slider,
+    h('div', { class: 'robot-grain', role: 'group', 'aria-label': t('robot.grain') }, h('span', {}, `${t('robot.grain')}: `), ...grains),
     h('div', { class: 'robot-cols' }, h('div', {}, h('h3', {}, t('robot.vars')), vars), h('div', {}, h('h3', {}, t('robot.stack')), stack)),
     h('div', { class: 'robot-cols' }, h('div', {}, h('h3', {}, t('robot.sensors')), sensors), h('div', {}, h('h3', {}, t('robot.log')), log)),
   );
-  return { el, listing, controls, more, atEnd: () => index >= lastBeat, play, pause, playing: () => timer !== undefined, dispose: pause };
+  return { el, explain, listing, controls, more, atEnd: () => index >= lastBeat, play, pause, playing: () => timer !== undefined, dispose: pause };
 }

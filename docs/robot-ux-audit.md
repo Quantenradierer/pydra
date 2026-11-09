@@ -78,3 +78,35 @@ loss → `Skript verbessern`. Everything else is secondary (help `?`, parts `Tei
 **Implementation order:** (1) remove top step indicator and `Befehle` drawer (#1, #2, #5, P0, cheap); (2) fight layout and one primary
 (#8, #9, #10, #22); (3) merge task + robot + code into one page, remove tab bar (#3, #13); (4) map as pills (#15); (5) i18n and polish
 (#14, #20, #21). Keep ids (`robot-run`, `robot-code`, `robot-outcome`, …) so the e2e suite only needs the zone-navigation helpers changed.
+
+## Resolution (rb16-uxfix)
+
+All findings are resolved, except #16 (won't fix). The implementation follows the target design; where it deviates, the reason is given.
+Shots: `<scratchpad>/shots2/{a..e}-{de,en}-{phone,desk}-*.png` (360x740 and 1280x800, both languages), compared with the other games' shots.
+
+| # | Status | How |
+|---|---|---|
+| 1, 2 | resolved | `rb-steps`, `PHASES`, `aria-current="step"` on the steps and the whole `robot-work.ts` zone shell are deleted. The only step indicator is the level pills (`level-strip`, exactly once; e2e `expectOneNavigation`). |
+| 3 | resolved | One `game-bar` (back + pills), content, one primary button. No zone header, zone purpose lines, sticky action bar or tab bar. Chrome above the content: ~46 px. |
+| 4 | resolved | The h1 is screen-reader-only like in the other games; the task name appears once, as the bold start of the task sentence. No zone title, no card title, the label "Der Haken" is gone. |
+| 5 | resolved | The `Befehle` drawer (`robot-api-open`, `apiList`) is deleted; the `?` sheet is the only command list. |
+| 6 | resolved | `Versionen` is a section of the `Mehr` sheet and only exists once a version exists; the listing replaces the editor in the same box (tap it to edit), so there is no `Skript ändern` toggle button any more. |
+| 7 | resolved | `?` is an icon button at the left of the strip; the chip row (and the help tab row) fades out at the right edge. |
+| 8 | resolved | Order: arena (square, full width, ≤ 28 dvh high), one row of icon controls, then the rest; arena fully visible without scrolling. The queue is a row of round fight pills. |
+| 9 | resolved | Four icons (↺ ▶/⏸ → ⇥). Line vs round is a toggle in the `Mehr` sheet (`robot-grain-*`). The back-steps were dropped on purpose (restart + step replace them): **won't-fix: step back** (`prevBeat` was deleted). |
+| 10 | resolved | One `verdict correct|wrong` line with the stars; one primary: `Weiter: …` after a win, `Skript verbessern` after a loss. `Überspringen` / `Nächster Kampf` live in the `Mehr` sheet. |
+| 11 | resolved (deviation) | The listing replaces the editor **in the same box** (as in the target design's last sentence), not under the arena: the script is in one place only. |
+| 12 | resolved | The fights are the pills; `Details` is `Mehr` with the sections `Kämpfe`, `Tempo & Variablen`, `Versionen`; the scrub slider is deleted. |
+| 13 | resolved | Task, robot picture (`Teile` opens the parts sheet), arena and editor are one page. |
+| 14 | resolved | Pictures above the text; the training description is bilingual (`training.ts` `Words`, unit test `content-i18n.test.ts`). |
+| 15 | resolved | `Weiter: <Aufgabe>` card, one fold per chapter with round pills 1..N (name = label / title); only the chapter in progress is open, finished and locked ones are closed. Fresh game: ~620 px; the seeded all-chapters-in-progress shot is longer. |
+| 16 | won't fix | The Home screen is shared by all games and out of scope. |
+| 17 | resolved | The map uses `subpageHeader`; the work screens use the shared `game-bar` (the same as every other game); one type size per slot. |
+| 18 | resolved | `button.primary` (full width) and `.run-control` only; secondary actions are in the sheets. |
+| 19 | resolved | The arena shows both robots before the first fight (viewer in `preview` mode, controls disabled). |
+| 20 | resolved | `createSheet`: title once, no hint line, tab row fades. |
+| 21 | resolved / verified | All enemy and challenge texts exist in both languages (unit test `content-i18n.test.ts`); the remaining English text was the training description (#14). |
+| 22 | resolved | See #10. |
+
+Cleanup: `work.*` zone / phase / tab messages, `robot.outcome.idle`, the step-back messages, the old `.robot-step*`, `.robot-api*`, `.robot-history*`, `.rb-zone*`,
+`.rb-tabs`, `.rb-steps` styles and the three duplicated level-strip builders (puzzle, order, predict) are gone.

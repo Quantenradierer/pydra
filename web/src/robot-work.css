@@ -1,349 +1,264 @@
-/* Robot Battler work screen: four zones (Task | Robot | Code | Fight), a step indicator and a bottom tab bar on phones. */
+/*
+ * Robot Battler task page: the same pattern as the other games. Header (back + level pills), then one column: task, arena,
+ * run controls, fight pills, verdict, script editor, ONE primary button. No zones, steps or tabs.
+ * On a desktop (>= 960px) the same elements sit in two columns and the page does not scroll.
+ */
 #app:has(.robot-workmode) {
-  max-width: 1440px;
+  max-width: 640px;
 }
 .robot-workmode {
-  gap: 0;
+  height: auto;
+  min-height: calc(100dvh - 0.8rem);
+  gap: 0.4rem;
 }
-.robot-workmode > .rb-work {
-  flex: 1;
-  min-height: 0;
+.rb-work,
+.rb-page,
+.rb-main,
+.rb-code {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-}
-.rb-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.2rem 0.8rem;
-}
-.rb-top .subpage-header {
-  flex: 1 1 12rem;
+  gap: 0.5rem;
   min-width: 0;
+}
+.rb-work {
+  flex: 1;
+}
+.rb-page {
+  flex: 1;
+}
+.rb-main > *,
+.rb-code > * {
+  flex: none;
+}
+.game-bar .level-strip {
   margin: 0;
 }
-.rb-top h1 {
-  font-size: 1.15rem;
+.rb-task {
+  display: grid;
+  gap: 0.3rem;
+}
+.rb-pictures {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.rb-pictures .rb-you,
+.rb-pictures .robot-foes {
+  display: flex;
+  gap: 0.25rem;
+}
+.rb-pictures .robot-foes {
+  flex-wrap: wrap;
+}
+.rb-vs {
+  color: var(--muted);
+}
+.rb-pictures > button {
+  margin-left: auto;
+  min-height: 2.75rem;
+  padding: 0.2rem 0.8rem;
+}
+.rb-task-text {
+  margin: 0;
+  line-height: 1.35;
+}
+.rb-arena {
+  display: flex;
+  flex-direction: column;
+}
+.rb-arena .robot-replay {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+/* the position and the words of the step sit on one line */
+.rb-arena .robot-arena {
+  grid-template-columns: minmax(0, 1fr);
+}
+.rb-arena .robot-counter {
+  flex-wrap: nowrap;
+  gap: 0.6rem;
+}
+.rb-arena .robot-counter .run-position {
+  flex: none;
+  white-space: nowrap;
+}
+.rb-arena .robot-where {
+  min-width: 0;
+  text-align: right;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.rb-steps {
-  list-style: none;
-  display: flex;
-  gap: 0.25rem;
-  margin: 0;
-  padding: 0;
-  flex: 1 1 100%;
-}
-.rb-steps li {
-  flex: 1;
-  display: flex;
-  gap: 0.3rem;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem 0.3rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--muted);
-}
-.rb-steps li.current {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
-  font-weight: 700;
-}
-.rb-step-n {
-  font-weight: 700;
-}
-.rb-zones {
-  flex: 1;
-  min-height: 0;
-  position: relative;
-}
-.rb-zone {
-  display: none;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-}
-.rb-work[data-active='task'] .rb-zone[data-zone='task'],
-.rb-work[data-active='robot'] .rb-zone[data-zone='robot'],
-.rb-work[data-active='code'] .rb-zone[data-zone='code'],
-.rb-work[data-active='fight'] .rb-zone[data-zone='fight'] {
-  display: flex;
-}
-.rb-zone-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.5rem;
-  padding: 0.5rem 0.7rem 0.35rem;
-  border-bottom: 1px solid var(--border);
-}
-.rb-zone-head h2 {
-  margin: 0;
-  font-size: 1.02rem;
-}
-.rb-zone-head p {
-  margin: 0;
-  font-size: 0.78rem;
-  color: var(--muted);
-  line-height: 1.3;
-}
-.rb-zone-titles {
-  min-width: 0;
-  flex: 1;
-}
-.rb-zone-tools {
-  flex: none;
-}
-.rb-zone-tools {
-  display: flex;
-  gap: 0.3rem;
-  justify-content: flex-end;
-}
-.rb-work .rb-zone-tools button {
-  min-height: 2.75rem;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.85rem;
-}
-.rb-zone-body,
-.rb-drawer {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  padding: 0.6rem 0.7rem;
-}
-.rb-zone-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-.rb-zone-body[hidden],
-.rb-drawer[hidden] {
-  display: none;
-}
-.rb-drawer > header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
-}
-.rb-drawer h3 {
-  margin: 0;
-  font-size: 1rem;
-}
-.rb-zone-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  padding: 0.5rem 0.7rem;
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-}
-.rb-zone-actions:empty {
-  display: none;
-}
-.rb-work .rb-zone-actions button {
-  min-height: 2.75rem;
-}
-.rb-zone-actions .robot-run,
-.rb-zone-actions .robot-next {
-  flex: 1 1 8rem;
-}
-.rb-tabs {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.3rem;
-}
-.rb-work .rb-tab {
-  min-height: 2.9rem;
-  border: 1px solid var(--border);
-  border-radius: 0.7rem;
-  background: var(--surface);
-  color: var(--fg);
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-.rb-work .rb-tab[aria-current='true'] {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
-}
-.rb-tab-icon {
-  display: none;
-}
-
-/* Zone contents */
-.rb-zone .robot-card {
-  margin: 0;
-}
-.robot-catch {
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
-}
-.robot-catch h3 {
-  margin: 0 0 0.2rem;
-}
-.robot-catch p {
-  margin: 0;
-}
-.robot-foes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  flex: none;
-}
-.rb-zone .robot-bench {
-  margin: 0;
-}
-.rb-zone .robot-bench-stage {
-  width: min(100%, 16rem, 34dvh);
-}
-.rb-zone .robot-editor {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-.rb-zone .robot-editor[hidden] {
-  display: none;
-}
-.rb-zone .robot-editor-box {
-  flex: none;
-}
-.rb-zone textarea.robot-code {
-  resize: none;
-}
-.robot-listing-holder {
-  flex: 1;
-}
-.robot-listing-holder .robot-listing {
-  font-size: 1rem;
-}
-.robot-error-holder:empty {
-  display: none;
-}
-.rb-zone .robot-result {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem 0.6rem;
-  align-items: center;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.6rem;
-  background: var(--code-bg);
-}
-.rb-zone .robot-result p {
-  margin: 0;
-  flex: 1 1 10rem;
-  font-size: 0.88rem;
-  line-height: 1.3;
-}
-.rb-work .rb-zone .robot-result .robot-next {
-  flex: 0 0 auto;
-  padding: 0.3rem 0.9rem;
-  font-size: 0.88rem;
-}
-.rb-zone .robot-queue {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.2rem 0.5rem;
-  align-items: center;
-}
-.rb-zone .robot-vq-head {
-  display: grid;
-  gap: 0.15rem;
-  justify-items: start;
-  min-width: 0;
-}
-.rb-zone .robot-vq-progress {
-  margin: 0;
-  max-width: 100%;
-  font-size: 0.82rem;
-  font-weight: 600;
-  line-height: 1.25;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.rb-zone .robot-vq-state {
-  font-size: 0.75rem;
-  padding: 0 0.5rem;
-}
-.rb-zone .robot-queue .robot-note {
-  grid-column: 1 / -1;
-  margin: 0;
-  font-size: 0.8rem;
-}
-.robot-vq-bar {
-  display: flex;
-  gap: 0.3rem;
-}
-.rb-work .robot-vq-bar button {
-  min-height: 2.75rem;
-  font-size: 0.82rem;
-  padding: 0.2rem 0.5rem;
-}
-.rb-zone .robot-viewer .robot-replay {
-  gap: 0.4rem;
-}
-.rb-zone .robot-board {
-  width: min(100%, 28rem, calc(var(--board-h, 40dvh) * var(--aspect, 1)));
+.rb-arena .robot-board {
+  width: min(100%, 26rem, calc(28dvh * var(--aspect, 1)));
   margin: 0 auto;
 }
-.rb-zone .robot-counter {
+.rb-arena .robot-counter {
   justify-content: space-between;
   font-size: 0.85rem;
 }
-.rb-zone .robot-explain {
-  max-height: 3.9rem;
+.rb-explain:empty {
+  display: none;
+}
+.rb-explain .robot-explain {
+  min-height: 2.4rem;
+  max-height: 3.6rem;
   overflow: auto;
   font-size: 0.9rem;
   background: var(--code-bg);
   border-radius: 0.6rem;
   padding: 0.3rem 0.6rem;
 }
-.rb-zone .robot-narration {
+.rb-explain .robot-narration {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.rb-zone .robot-explain li {
+.rb-explain .robot-narration li {
   margin: 0.1rem 0;
 }
-.robot-controls-holder {
-  width: 100%;
+/* The four icon controls of every game plus "Mehr" */
+.rb-controlrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
-.rb-zone-actions .robot-controls {
+.rb-controls-holder .run-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+.robot .rb-controlrow .run-control {
+  width: 2.75rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+/* Fight pills: the same round pills as the levels */
+.rb-chips .robot-layouts {
+  display: flex;
+  gap: 0.3rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.rb-chips:empty {
+  display: none;
+}
+.robot .rb-chips .level-dot {
+  width: 2.1rem;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  min-height: 0;
+  border-radius: 50%;
+  padding: 0;
+}
+.robot .rb-chips .level-dot.won {
+  border-color: var(--green);
+  color: var(--green);
+}
+.robot .rb-chips .level-dot.lost {
+  border-color: var(--red);
+  color: var(--red);
+}
+.robot .rb-chips .level-dot.old {
+  border-style: dashed;
+}
+.robot .rb-chips .level-dot[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.robot-queue {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.35rem;
-  width: 100%;
+  gap: 0.15rem;
 }
-.rb-zone-actions .robot-controls .run-control {
-  padding-inline: 0.2rem;
-  font-size: 0.8rem;
-  line-height: 1.15;
+.robot-vq-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
 }
-.rb-zone-actions .robot-controls .robot-play {
-  grid-column: span 2;
-  order: 0;
+.robot-vq-progress {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.robot-vq-state {
+  flex: none;
+  font-size: 0.78rem;
+  padding: 0 0.5rem;
+}
+.robot-queue .robot-note {
+  margin: 0;
+  font-size: 0.82rem;
+}
+.robot-queue-holder:empty {
+  display: none;
+}
+/* The verdict line: result and stars together */
+.rb-main .robot-result {
+  display: grid;
+  gap: 0.3rem;
+}
+.robot-result[hidden] {
+  display: none;
+}
+.robot-result .verdict {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+.rb-stars {
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+/* The script */
+.rb-code .robot-editor[hidden],
+.robot-listing-holder[hidden],
+.robot-error-holder:empty {
+  display: none;
+}
+.rb-code .robot-editor-box,
+.robot-listing-holder {
+  height: clamp(5.5rem, 20dvh, 13.5rem);
+}
+.robot-listing-holder {
+  height: auto !important;
+  max-height: clamp(5.5rem, 24dvh, 13.5rem);
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--code-bg);
+  cursor: text;
+}
+.robot-listing-holder .robot-listing {
   font-size: 1rem;
+  margin: 0;
 }
-.rb-more .robot-cols,
+.rb-primary {
+  width: 100%;
+  min-height: 3rem;
+  font-size: 1.05rem;
+}
+.game .rb-primary {
+  min-height: 3rem;
+  padding: 0.5rem 1rem;
+}
+/* Sheets (parts, more) */
+.robot-sheet .robot-build {
+  margin-top: 0.8rem;
+}
+.robot-sheet-body > section + section {
+  margin-top: 0.8rem;
+}
+.robot-more-cols,
 .robot-more .robot-cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -352,124 +267,43 @@
 .robot-more > * + * {
   margin-top: 0.6rem;
 }
-.rb-zone .robot-vq-rows li {
+.robot-grain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.robot-grain .run-control[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.robot-sheet .robot-vq-rows li {
   flex-wrap: wrap;
 }
-.rb-drawer .robot-api dd {
-  margin-bottom: 0.4rem;
-}
 
-/* Desktop and wide tablets: the zones sit side by side, the tab bar is gone. */
+/* Desktop and wide tablets: the same elements in two columns, the page does not scroll. */
 @media (min-width: 960px) {
-  .rb-tabs {
-    display: none;
+  #app:has(.robot-workmode) {
+    max-width: 1100px;
   }
-  .rb-top {
-    flex-wrap: nowrap;
+  .robot-workmode {
+    height: calc(100dvh - 0.8rem);
+    min-height: 0;
   }
-  .rb-top .subpage-header {
-    flex: 1 1 auto;
-  }
-  .rb-steps {
-    flex: 0 1 34rem;
-  }
-  .rb-zones {
+  .rb-page {
     display: grid;
-    grid-template-columns: minmax(17rem, 21rem) minmax(20rem, 1fr) minmax(26rem, 1.25fr);
-    grid-template-rows: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    gap: 0.6rem;
+    grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 0.9fr);
+    gap: 1rem;
+    align-items: start;
+    min-height: 0;
   }
-  .rb-work .rb-zone {
-    display: flex;
+  .rb-arena .robot-board {
+    width: min(100%, 26rem, calc(34dvh * var(--aspect, 1)));
   }
-  .rb-zone[data-zone='task'] {
-    grid-area: 1 / 1;
-  }
-  .rb-zone[data-zone='robot'] {
-    grid-area: 2 / 1;
-  }
-  .rb-zone[data-zone='code'] {
-    grid-area: 1 / 2 / span 2;
-  }
-  .rb-zone[data-zone='fight'] {
-    grid-area: 1 / 3 / span 2;
-  }
-  .rb-only-tabs {
-    display: none !important;
-  }
-  .rb-zone .robot-bench-stage {
-    width: min(100%, 12rem, 22dvh);
-  }
-  .rb-zone .robot-board {
-    --board-h: calc(100dvh - 31rem);
-  }
-}
-@media (max-width: 959px) {
-  .rb-zone .robot-board {
-    --board-h: calc(100dvh - 31rem);
-  }
-}
-
-/* Compact rows so that the arena keeps its size on a phone. */
-.rb-zone-head p {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.rb-zone .robot-result p {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-@media (max-width: 959px) {
-  .rb-zone .robot-vq-head {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .rb-zone .robot-vq-progress {
-    -webkit-line-clamp: 1;
-  }
-  .rb-zone .robot-result p {
-    -webkit-line-clamp: 2;
-  }
-  .rb-zone-head {
-    padding-block: 0.35rem 0.25rem;
-  }
-  .rb-zone-body {
-    gap: 0.4rem;
-    padding-block: 0.4rem;
-  }
-  .rb-zone .robot-board {
-    --board-h: max(13rem, calc(100dvh - 33rem));
-  }
-}
-@media (max-width: 959px) {
-  .rb-zone .robot-vq-progress {
-    flex: 1;
-    min-width: 0;
-    display: block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .rb-zone .robot-vq-state {
-    flex: none;
-  }
-  .rb-zone .robot-result {
-    flex-wrap: nowrap;
-  }
-  .rb-zone .robot-result p {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-  .rb-work .rb-zone .robot-result .robot-next {
-    max-width: 9rem;
-    line-height: 1.15;
-  }
-  .rb-zone .robot-explain {
-    max-height: 3.4rem;
+  .rb-code .robot-editor-box,
+  .robot-listing-holder {
+    height: clamp(8rem, 42dvh, 22rem);
   }
 }
 
@@ -507,17 +341,6 @@
 .robot-chapter-name {
   font-size: 1rem;
 }
-.rb-zone .robot-result .rb-stars {
-  flex: 1 1 auto;
-  white-space: nowrap;
-  font-size: 0.85rem;
-}
-@media (min-width: 960px) {
-  .rb-zone .robot-result p {
-    -webkit-line-clamp: 4;
-  }
-}
-
 /* The script editor: fixed height, line numbers, ONE suggestion strip, help sheet */
 .robot-editor-box {
   position: relative;
@@ -694,15 +517,6 @@ dialog.robot-sheet::backdrop {
   color: var(--muted);
   line-height: 1.3;
 }
-@media (max-height: 520px) {
-  .rb-work .rb-zone-head p {
-    display: none;
-  }
-  /* The keyboard is up: the bottom tab bar gives its room to the editor and its strip. */
-  .rb-work:has(textarea.robot-code:focus) .rb-tabs {
-    display: none;
-  }
-}
 .robot-snippet-tabs,
 .robot-snippet-row {
   display: flex;
@@ -730,4 +544,59 @@ dialog.robot-sheet::backdrop {
   background: var(--accent);
   color: var(--on-accent);
   border-color: var(--accent);
+}
+
+/* A row that scrolls sideways fades out at the right edge, so a cut-off chip reads as "more". */
+.robot-snippet-tabs,
+.robot-strip-chips {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
+}
+
+.robot-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.robot-sheet-body ol[data-testid='robot-history'] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.robot-sheet-body ol[data-testid='robot-history'] li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.3rem 0;
+}
+
+/* Task map: a round pill per task (1..N), like the level pills of every game. */
+.robot-pills {
+  flex-wrap: wrap;
+  overflow: visible;
+  gap: 0.4rem;
+  padding: 0 0 0.7rem;
+}
+.robot .robot-pills .level-dot {
+  width: 2.75rem;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+}
+.robot .robot-pills .level-dot.side {
+  border-style: dashed;
+}
+.robot .robot-pills .level-dot.next {
+  border-color: var(--accent);
+  border-width: 3px;
+}
+.robot-continue.primary {
+  display: grid;
+  gap: 0.1rem;
+  text-align: left;
+  width: 100%;
+}
+textarea.robot-code {
+  resize: none;
 }

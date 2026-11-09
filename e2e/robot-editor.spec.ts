@@ -1,13 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
-import { codeBox, fillCode, runFight, zone } from './helpers.ts';
+import { codeBox, fillCode, runFight } from './helpers.ts';
 
-/** The script editor: fixed height, ONE suggestion strip under it, the help sheet behind "? Hilfe"; on desktop (keys) and phone (taps). */
+/** The script editor: fixed height, ONE suggestion strip under it, the help sheet behind "?"; on desktop (keys) and phone (taps). */
 
 async function openFirstFight(page: Page) {
   await page.goto('/');
   await page.getByTestId('start-robot').click();
   await page.getByTestId('robot-step-first-contact').click();
-  await zone(page, 'code');
 }
 
 const strip = (page: Page) => page.getByTestId('robot-code-strip');
@@ -17,7 +16,7 @@ const chips = (page: Page) => page.getByTestId('strip-chip');
 const heights = (page: Page) =>
   page.evaluate(() => {
     const q = (s: string) => document.querySelector(s) as HTMLElement;
-    return { doc: document.documentElement.scrollHeight, body: q('.rb-zone[data-zone="code"] .rb-zone-body').scrollHeight, editor: q('.robot-editor').getBoundingClientRect().height };
+    return { doc: document.documentElement.scrollHeight, editor: q('.robot-editor').getBoundingClientRect().height };
   });
 
 for (const [device, viewport] of [
@@ -191,10 +190,6 @@ test('on a phone with the keyboard open (360x420) the editor and the strip stay 
   expect(e.y).toBeGreaterThanOrEqual(0);
   expect(s.y + s.height).toBeLessThanOrEqual(420);
   expect(s.y).toBeGreaterThanOrEqual(e.y + e.height - 1);
-  // Not clipped by the scrolling zone either.
-  const zb = (await page.locator('.rb-zone[data-zone="code"] .rb-zone-body').boundingBox())!;
-  expect(s.y + s.height).toBeLessThanOrEqual(zb.y + zb.height + 1);
-  expect(e.y).toBeGreaterThanOrEqual(zb.y - 1);
   // The sheet fits above the keyboard as well and scrolls inside itself.
   await page.getByTestId('robot-code-more').click();
   const sb = (await page.getByTestId('robot-code-sheet').boundingBox())!;
@@ -209,7 +204,7 @@ test('in English: the strip, the button and the sheet are translated', async ({ 
   const box = await codeBox(page);
   await fillCode(page, '');
   await box.focus();
-  await expect(page.getByTestId('robot-code-more')).toHaveText('? Help');
+  await expect(page.getByTestId('robot-code-more')).toHaveText('?');
   await page.getByTestId('robot-code-more').click();
   await expect(page.getByTestId('robot-code-help')).toContainText('drives tiles forward');
   await expect(page.getByTestId('snippet-group-compare')).toHaveText('Comparisons');

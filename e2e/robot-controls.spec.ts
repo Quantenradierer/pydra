@@ -1,8 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
-import { fillCode, runFight, zone, type ZoneName } from './helpers.ts';
+import { closeSheets, fillCode, runFight } from './helpers.ts';
 
 /**
- * Dead-control smoke test: visits the Robot Battler screens (task map, the work screen in every zone, with drawers and the
+ * Dead-control smoke test: visits the Robot Battler screens (task map, the task page with its sheets,
  * before and after a fight, challenges, Training Grounds) and presses every visible, enabled button and
  * summary once. A press must change something (the DOM, the route, a text field or the saved game); a control that
  * does nothing has to be disabled instead.
@@ -37,15 +37,16 @@ const mark = (page: Page): Promise<string[]> =>
       const style = getComputedStyle(el);
       if (el.getClientRects().length === 0 || style.visibility === 'hidden' || el.closest('[hidden]') || !el.checkVisibility({ visibilityProperty: true, contentVisibilityAuto: true })) continue;
       if ((el as HTMLButtonElement).disabled || el.getAttribute('aria-disabled') === 'true') continue;
-      // The tab of the zone being shown is the current one, and what an open panel covers cannot be pressed at all.
-      if (el.getAttribute('aria-current') === 'true') continue;
+      // The current level pill and the chosen step size are already what they say, and what an open sheet covers cannot be pressed at all.
+      if (el.getAttribute('aria-current') === 'step' || (el.dataset.testid?.startsWith('robot-grain') && el.getAttribute('aria-pressed') === 'true')) continue;
       el.scrollIntoView({ block: 'nearest' });
       const box = el.getBoundingClientRect();
       const top = document.elementFromPoint(box.left + box.width / 2, box.top + Math.min(box.height / 2, 20));
       if (top !== el && !el.contains(top)) continue;
-      // The many task tiles all do the same; one representative is enough.
-      if (el.dataset.testid?.startsWith('robot-step-') && document.querySelector('[data-smoke-step]')) continue;
-      if (el.dataset.testid?.startsWith('robot-step-')) el.setAttribute('data-smoke-step', '1');
+      // The many task tiles and level pills all do the same; one representative is enough.
+      const tile = el.dataset.testid?.startsWith('robot-step-') || el.dataset.testid?.startsWith('level-');
+      if (tile && document.querySelector('[data-smoke-step]')) continue;
+      if (tile) el.setAttribute('data-smoke-step', '1');
       el.setAttribute('data-smoke', String(out.length));
       out.push(`${el.dataset.testid ?? el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') ?? el.textContent ?? '').trim().slice(0, 30)}"`);
     }
@@ -83,33 +84,26 @@ const openStep = (page: Page, id: string) => async () => {
   await step.click();
 };
 
-/** All the work-screen scenarios for the zones that are visible together (desktop) or one at a time (phone). */
-async function workScreens(page: Page, zones: ZoneName[]) {
-  for (const z of zones) {
-    const at = async (fn?: () => Promise<void>) => {
-      await openStep(page, 'one-more-line')();
-      await zone(page, 'task');
-      if (fn) await fn();
-      await zone(page, z);
-    };
-    await press(page, `work ${z}`, () => at());
-    // After a lost fight (the starter script is one line short) and after a win.
-    const fought = (code: string) => async () => {
-      await openStep(page, 'one-more-line')();
-      await fillCode(page, code);
-      await runFight(page);
-      await expect(page.getByTestId('robot-outcome')).toHaveAttribute('data-state', /won|lost/);
-      await zone(page, z);
-    };
-    if (z === 'fight') await press(page, `lost fight ${z}`, fought('forward()\nfire()'));
-    if (z === 'task' || z === 'fight') await press(page, `won fight ${z}`, fought('forward()\nfire()\nfire()'));
-    const openers: Record<ZoneName, string[]> = { task: [], robot: ['robot-build-open'], code: ['robot-api-open', 'robot-history-open'], fight: ['robot-vq-open', 'robot-more-open'] };
-    for (const opener of openers[z]) {
-      await press(page, `drawer ${opener}`, async () => {
-        await fought('forward()\nfire()\nfire()')();
-        await page.getByTestId(opener).click();
-      });
-    }
+/** All the scenarios of the task page: before a fight, after a lost and a won fight, and every sheet. */
+async function workScreens(page: Page) {
+  await press(page, 'task page', openStep(page, 'one-more-line'));
+  // After a lost fight (the starter script is one line short) and after a win.
+  const fought = (code: string) => async () => {
+    await openStep(page, 'one-more-line')();
+    await fillCode(page, code);
+    await runFight(page);
+    await expect(page.getByTestId('robot-outcome')).toHaveAttribute('data-state', /won|lost/);
+  };
+  await press(page, 'lost fight', fought('forward()\nfire()'));
+  await press(page, 'won fight', fought('forward()\nfire()\nfire()'));
+  // The parts and help sheets open before a fight (the help button belongs to the editor), "Mehr" after one.
+  for (const [opener, afterFight] of [['robot-build-open', false], ['robot-code-more', false], ['robot-more-open', true]] as const) {
+    await press(page, `sheet ${opener}`, async () => {
+      if (afterFight) await fought('forward()\nfire()\nfire()')();
+      else await openStep(page, 'one-more-line')();
+      await closeSheets(page);
+      await page.getByTestId(opener).click();
+    });
   }
 }
 
@@ -119,11 +113,11 @@ test('desktop: no control of the Robot Battler screens is a no-op', async ({ pag
   page.setDefaultTimeout(8000);
   await page.setViewportSize({ width: 1280, height: 800 });
   if (!process.env.SKIPMAP) await press(page, 'task map', () => start(page));
-  if (!process.env.SKIPMAP) await press(page, 'task map, chapter folds open', async () => {
+  if (!process.env.SKIPMAP) await press(page, 'task map, a finished chapter opened', async () => {
     await start(page);
-    await page.getByTestId('robot-fold-done').first().locator('summary').click().catch(() => {});
+    await page.getByTestId('robot-chapter-1').locator('summary').click();
   });
-  await workScreens(page, ['task']);
+  await workScreens(page);
   await press(page, 'training grounds', async () => {
     await start(page);
     await page.getByTestId('robot-training').click();
@@ -143,11 +137,11 @@ test('desktop: no control of the Robot Battler screens is a no-op', async ({ pag
   expect(dead, dead.join('\n')).toEqual([]);
 });
 
-test('phone: no control of the zoned work screen is a no-op', async ({ page }) => {
+test('phone: no control of the task page is a no-op', async ({ page }) => {
   test.setTimeout(900_000);
   dead.length = 0;
   page.setDefaultTimeout(8000);
   await page.setViewportSize({ width: 360, height: 740 });
-  await workScreens(page, ['task', 'robot', 'code', 'fight']);
+  await workScreens(page);
   expect(dead, dead.join('\n')).toEqual([]);
 });

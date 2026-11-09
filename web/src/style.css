@@ -2531,10 +2531,6 @@ progress {
 .robot-chapter.locked {
   opacity: 0.6;
 }
-.robot-chapter.complete > summary .robot .robot-chapter-name {
-  margin: 0;
-  font-size: 1.05rem;
-}
 .robot-chapter-count {
   color: var(--green);
 }
@@ -2542,9 +2538,6 @@ progress {
   font-size: 0.85rem;
   font-weight: 400;
   color: var(--muted);
-}
-.robot-chapter .robot-steps {
-  padding-bottom: 0.7rem !important;
 }
 .robot-continue {
   display: grid;
@@ -2557,60 +2550,6 @@ progress {
   font-weight: 400;
   opacity: 0.9;
 }
-.robot-step.next {
-  border-color: var(--accent);
-  border-width: 2px;
-}
-.robot-chapter .robot-steps {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.4rem;
-}
-.robot-step {
-  width: 100%;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.2rem 0.6rem;
-  text-align: left;
-  padding: 0.5rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--fg);
-  font: inherit;
-  min-height: 3rem;
-  cursor: pointer;
-}
-.robot-main {
-  display: grid;
-}
-.robot-step.solved {
-  border-color: var(--green);
-}
-.robot-step.challenge {
-  border-style: dashed;
-}
-.robot-step:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-.robot-kind {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-.robot-title {
-  font-weight: 600;
-  flex: 1;
-}
-.robot-state,
-.robot-side {
-  white-space: nowrap;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
 .robot-card,
 .robot-build,
 .robot-api,
@@ -2620,18 +2559,6 @@ progress {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 0.7rem 0.9rem;
-}
-.robot-build summary,
-.robot-api summary,
-.robot-history summary {
-  cursor: pointer;
-  font-weight: 600;
-  min-height: 2.75rem;
-  display: flex;
-  align-items: center;
-}
-.robot-api dl {
-  margin-top: 0.3rem;
 }
 .robot-catch h3 {
   margin-top: 0;
@@ -2650,22 +2577,7 @@ progress {
 .robot-option.locked {
   opacity: 0.55;
 }
-.robot-api dl {
-  margin: 0;
-  display: grid;
-  gap: 0.35rem;
-}
-.robot-api dt {
-  font-family: ui-monospace, monospace;
-  font-size: 0.9rem;
-}
-.robot-api dd {
-  margin: 0 0 0 0.8rem;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-.robot-code,
-.robot-answer {
+.robot-code {
   width: 100%;
   box-sizing: border-box;
   font-family: ui-monospace, 'Cascadia Code', monospace;
@@ -2677,23 +2589,6 @@ progress {
   background: var(--code-bg);
   color: var(--code-fg);
   tab-size: 4;
-}
-.robot-actions {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-}
-.robot-run,
-.robot-next {
-  background: var(--accent);
-  color: var(--on-accent);
-  border: 0;
-  border-radius: var(--radius);
-  padding: 0.7rem 1.2rem;
-  font: inherit;
-  font-weight: 700;
-  min-height: 2.75rem;
-  cursor: pointer;
 }
 .robot-win {
   color: var(--green);
@@ -2726,17 +2621,6 @@ progress {
 }
 .robot .layout[aria-pressed='true'] {
   outline: 2px solid var(--focus);
-}
-.robot-stage {
-  display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  gap: 0.8rem;
-  align-items: start;
-}
-@media (max-width: 640px) {
-  .robot-stage {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 .robot-canvas {
   width: 100%;
@@ -2803,28 +2687,6 @@ progress {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.7rem;
-}
-.robot .robot-controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
-  gap: 0.4rem;
-}
-.robot .robot-controls .run-control {
-  width: 100%;
-  padding-inline: 0.3rem;
-}
-.robot .robot-controls .robot-play {
-  grid-column: 1 / -1;
-  order: -1;
-  background: var(--accent);
-  color: var(--on-accent);
-  border-color: var(--accent);
-  font-weight: 700;
-  font-size: 1rem;
-}
-.robot-replay > input[type='range'] {
-  min-height: 2.75rem;
-  width: 100%;
 }
 .robot-speed {
   display: flex;
@@ -2949,12 +2811,6 @@ progress {
 .robot-vq-why {
   flex: 1 1 100%;
 }
-.robot-listing-static {
-  background: var(--code-bg);
-  padding: 0.6rem 0.8rem;
-  border-radius: 0.6rem;
-  overflow-x: auto;
-}
 .robot-cols {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
@@ -2965,15 +2821,6 @@ progress {
   margin: 0;
   padding-left: 1.1rem;
   font-size: 0.9rem;
-}
-.robot-history ol {
-  padding-left: 1.1rem;
-}
-.robot-history li {
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
-  margin: 0.3rem 0;
 }
 
 /* Robot Battler: its buttons carry words, not icons. */
@@ -2987,13 +2834,11 @@ progress {
 }
 
 
-.robot-vq-old,
 .robot-vq-won {
   border: 1px solid var(--border);
   border-radius: 0.6rem;
   padding: 0 0.6rem 0.5rem;
 }
-.robot-vq-old > summary,
 .robot-vq-won > summary {
   cursor: pointer;
   font-weight: 600;
@@ -3012,11 +2857,7 @@ progress {
 .robot summary::-webkit-details-marker {
   display: none;
 }
-.robot-build > summary::before,
-.robot-api > summary::before,
-.robot-history > summary::before,
 .robot-chapter > summary::before,
-.robot-vq-old > summary::before,
 .robot-vq-won > summary::before {
   content: '▸';
   flex: none;

@@ -17,7 +17,8 @@ import type { RbError } from '../robot/py/errors.ts';
 import { createEditor, type Editor } from './robot-editor.ts';
 import { subpageHeader } from './header.ts';
 import { benchEl } from './robot-bench.ts';
-import { createWork, type Phase } from './robot-work.ts';
+import { createSheet } from './robot-sheet.ts';
+import { levelStrip } from './level-strip.ts';
 import { iconEl, partIconSpec, chassisIconSpec, specOf } from '../robot/art/compose.ts';
 import { enemyBuild } from '../robot/battle.ts';
 
@@ -46,13 +47,15 @@ export function robotScreen(app: App): Screen {
     stop();
     root.classList.remove('robot-workmode');
     root.replaceChildren(...(children.filter(Boolean) as Node[]));
+    window.scrollTo(0, 0);
   }
 
-  /** The zoned work screen fills the viewport; the page itself does not scroll. */
+  /** The task page: on a desktop it fills the viewport in two columns; on a phone it is one column. */
   function showWork(el: HTMLElement) {
     stop();
     root.classList.add('robot-workmode');
     root.replaceChildren(el);
+    window.scrollTo(0, 0);
   }
 
   // ---------------------------------------------------------------- the map of tasks
@@ -61,63 +64,45 @@ export function robotScreen(app: App): Screen {
     const p = game.progress();
     const chapters = [...new Set(game.steps.map((s) => s.chapter))];
     const upNext = game.steps.find((st) => game.unlocked(st.id) && !p.solved.includes(st.id) && (st.kind === 'battle' || st.challenge));
-    /** One list of step buttons. */
-    const row = (list: Step[]): Node | null =>
-      list.length === 0
-        ? null
-        : h(
-            'ul',
-            { class: 'robot-steps' },
-            ...list.map((s) => {
-            const solved = p.solved.includes(s.id);
-            const open = game.unlocked(s.id);
-            const stars = p.stars[s.id] ?? 0;
-            const state = solved ? t('robot.step.solved') : open ? '' : t('robot.step.locked');
-            return h(
-              'li',
-              {},
-              h(
-                'button',
-                {
-                  class: `robot-step${solved ? ' solved' : ''}${s.kind === 'battle' ? '' : ' challenge'}${s.id === upNext?.id ? ' next' : ''}`,
-                  'data-testid': `robot-step-${s.id}`,
-                  disabled: !open,
-                  onclick: () => {
-                    game.open(s.id);
-                    showStep(s.id);
-                  },
-                },
-                h('span', { class: 'robot-main' }, h('span', { class: 'robot-title' }, titleOf(s)), h('span', { class: 'robot-kind' }, [t(`robot.kind.${s.kind}` as MessageKey), s.enemy?.regression === false ? t('robot.side') : ''].filter(Boolean).join(' · '))),
-                h('span', { class: 'robot-state' }, [solved ? `✓ ${state}` : state, stars > 0 ? '★'.repeat(stars) : ''].filter(Boolean).join(' ')),
-              ),
-            );
-          }),
-          );
-    /** Finished and locked steps fold away; what can be played now stays in sight. */
-    const fold = (list: Step[], key: MessageKey, id: string): Node | null =>
-      list.length === 0 ? null : h('details', { class: 'robot-fold', 'data-testid': id }, h('summary', {}, t(key, { n: list.length })), row(list));
+    /** One round pill per task (1..N of its chapter), like the level pills of every game; the name is its label. */
+    const pill = (s: Step, i: number) => {
+      const solved = p.solved.includes(s.id);
+      const open = game.unlocked(s.id);
+      const stars = p.stars[s.id] ?? 0;
+      const state = solved ? t('robot.step.solved') : open ? '' : t('robot.step.locked');
+      const label = [titleOf(s), s.enemy?.regression === false ? t('robot.side') : '', state, stars > 0 ? t('robot.step.stars', { n: stars }) : ''].filter(Boolean).join(', ');
+      return h(
+        'button',
+        {
+          class: `level-dot${solved ? ' solved' : ''}${s.kind === 'battle' && s.enemy?.regression !== false ? '' : ' side'}${s.id === upNext?.id ? ' next' : ''}`,
+          'aria-label': `${i + 1}: ${label}`,
+          title: label,
+          'data-testid': `robot-step-${s.id}`,
+          disabled: !open,
+          onclick: () => {
+            game.open(s.id);
+            showStep(s.id);
+          },
+        },
+        String(i + 1),
+      );
+    };
+    /** The tasks of a chapter; a chapter in progress is open, finished and locked ones fold away. */
     const sections = chapters.map((chapter) => {
       const list = game.steps.filter((s) => s.chapter === chapter);
       const done = list.filter((s) => p.solved.includes(s.id)).length;
       const anyOpen = list.some((s) => game.unlocked(s.id));
-      const isOpen = list.some((s) => game.unlocked(s.id) && !p.solved.includes(s.id));
+      // Only the main path keeps a chapter open; side missions wait inside the folded chapter.
+      const inProgress = list.some((s) => s.kind === 'battle' && s.enemy?.regression !== false && game.unlocked(s.id) && !p.solved.includes(s.id));
       return h(
         'details',
-        { class: `robot-chapter${done === list.length ? ' complete' : ''}${anyOpen ? '' : ' locked'}`, open: isOpen, 'data-testid': `robot-chapter-${chapter}` },
+        { class: `robot-chapter${done === list.length ? ' complete' : ''}${anyOpen ? '' : ' locked'}`, open: inProgress, 'data-testid': `robot-chapter-${chapter}` },
         h('summary', {}, h('h2', { class: 'robot-chapter-name' }, t(`robot.chapter.${chapter}` as MessageKey)), h('span', { class: 'robot-chapter-count' }, anyOpen ? t('robot.chapter.count', { done, n: list.length }) : t('robot.step.locked'))),
-        h(
-          'div',
-          { class: 'robot-chapter-body' },
-          ...[
-            fold(list.filter((s) => p.solved.includes(s.id)), 'work.map.done', 'robot-fold-done'),
-            row(list.filter((s) => !p.solved.includes(s.id) && game.unlocked(s.id))),
-            fold(list.filter((s) => !p.solved.includes(s.id) && !game.unlocked(s.id)), 'work.map.locked', 'robot-fold-locked'),
-          ],
-        ),
+        h('div', { class: 'level-strip robot-pills' }, ...list.map(pill)),
       );
     });
     const resume = upNext
-      ? h('button', { class: 'robot-run robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(upNext.id), showStep(upNext.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, titleOf(upNext)))
+      ? h('button', { class: 'primary robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(upNext.id), showStep(upNext.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, titleOf(upNext)))
       : null;
     show(
       subpageHeader(app, t('lesson.robot.title')),
@@ -206,11 +191,6 @@ export function robotScreen(app: App): Screen {
     return { bench, parts };
   }
 
-  /** The commands of the equipped parts, for a drawer. */
-  function apiList(build: Build): HTMLElement {
-    return h('dl', { class: 'robot-api', 'data-testid': 'robot-api' }, ...apiEntries(build).flatMap((e) => [h('dt', {}, h('code', {}, e.sig)), h('dd', {}, t(`robot.api.${e.id}` as MessageKey))]));
-  }
-
   // ---------------------------------------------------------------- the editor
 
   function editor(initial: string, build: () => Build, onInput: (text: string) => void, testId = 'robot-code'): Editor {
@@ -259,33 +239,32 @@ export function robotScreen(app: App): Screen {
 
   /**
    * The fights of a run, one after another: the first fight of the enemy, then its other variations and the
-   * earlier enemies of the chapter. Each plays in the line-by-line viewer; a queue bar shows the progress and
-   * a summary at the end says who won and why a loss happened.
+   * earlier enemies of the chapter. Each plays in the line-by-line viewer. `chips` are the fight pills under the
+   * controls (one per fight, ticked when seen); `panel` (summary, next/skip, auto-play) lives in the Mehr sheet.
    */
   interface Mount {
     arena: HTMLElement;
+    explain: HTMLElement;
     controls: HTMLElement;
     more: HTMLElement;
     listing: HTMLElement;
   }
   interface QueueHooks {
-    /** "Watch" in the summary: leave the drawer, show the fight. */
+    /** "Watch" in the summary: leave the sheet, show the fight. */
     watch(): void;
-    /** The state of the queue changed (fights seen / all won). */
-    progress(done: number, total: number, allWon: boolean): void;
   }
-  function variationQueue(items: QueueItem[], build: Build, script: string, tooLong: Node | null, mount: Mount, hooks: QueueHooks): { bar: HTMLElement; panel: HTMLElement; dispose: () => void } {
+  function variationQueue(items: QueueItem[], build: Build, script: string, tooLong: Node | null, mount: Mount, hooks: QueueHooks): { status: HTMLElement; chips: HTMLElement; panel: HTMLElement; dispose: () => void } {
     const outcomes = evaluateQueue(items, build, script);
     const done = new Set<number>();
     let current = 0;
     let auto = true;
-    let oldOpen = false;
     let viewer: Viewer | undefined;
     let autoTimer: ReturnType<typeof setTimeout> | undefined;
-    const progress = h('p', { class: 'robot-vq-progress', 'data-testid': 'robot-vq-progress' });
+    const progress = h('span', { class: 'robot-vq-progress', 'data-testid': 'robot-vq-progress' });
     const stateTag = h('span', { class: 'robot-vq-state', 'data-testid': 'robot-vq-state' });
     const reasonBox = h('p', { class: 'robot-note', 'data-testid': 'robot-vq-reason' });
-    const chips = h('div', { class: 'robot-layouts', role: 'group', 'data-testid': 'robot-vq-chips' });
+    const status = h('div', { class: 'robot-queue', 'data-testid': 'robot-queue' }, h('div', { class: 'robot-vq-head' }, progress, stateTag), reasonBox);
+    const chips = h('div', { class: 'robot-layouts', role: 'group', 'aria-label': t('work.fights'), 'data-testid': 'robot-vq-chips' });
     const summary = h('div', { class: 'robot-vq-summary', 'data-testid': 'robot-vq-summary' });
     const nextBtn = h('button', { class: 'run-control', 'data-testid': 'robot-vq-next', onclick: () => load(current + 1, true) }, t('robot.vq.next'));
     const skipBtn = h('button', { class: 'run-control', 'data-testid': 'robot-vq-skip', onclick: skip }, t('robot.vq.skip'));
@@ -301,45 +280,39 @@ export function robotScreen(app: App): Screen {
       const item = items[current]!;
       const out = outcomes[current]!;
       const finished = done.has(current);
-      progress.textContent = t(item.regression ? 'robot.vq.progress.old' : 'robot.vq.progress', { k: current + 1, n: items.length, title: item.enemy.title[lang], v: item.n, m: item.of });
-      progress.title = progress.textContent ?? '';
+      progress.textContent = t('robot.vq.short', { k: current + 1, n: items.length });
+      progress.title = t(item.regression ? 'robot.vq.progress.old' : 'robot.vq.progress', { k: current + 1, n: items.length, title: item.enemy.title[lang], v: item.n, m: item.of });
       const state = finished ? (out.won ? 'won' : 'lost') : 'running';
       stateTag.textContent = t(`robot.vq.state.${state}` as MessageKey);
       stateTag.dataset.state = state;
       reasonBox.textContent = finished && out.reason ? lossText(out.reason, item.enemy) : '';
-      const chipOf = (it: QueueItem, i: number) => {
+      reasonBox.hidden = reasonBox.textContent === '';
+      chips.replaceChildren(
+        ...items.map((it, i) => {
           const o = outcomes[i]!;
           const seen = done.has(i);
           const state = seen ? (o.won ? 'won' : 'lost') : 'pending';
           return h(
             'button',
             {
-              class: `run-control layout${seen ? (o.won ? ' won' : ' lost') : ''}${it.regression ? ' old' : ''}`,
+              class: `level-dot layout${seen ? (o.won ? ' won' : ' lost') : ''}${it.regression ? ' old' : ''}`,
               'data-testid': it.regression ? `robot-vq-chip-${it.key}` : `robot-layout-${it.n}`,
               'aria-pressed': String(i === current),
               'aria-label': `${labelOf(it)}, ${t(`robot.vq.state.${state}` as MessageKey)}`,
+              title: labelOf(it),
               onclick: () => load(i, false),
             },
-            `${seen ? (o.won ? '✓' : '✗') : '·'} ${labelOf(it)}`,
+            seen ? (o.won ? '✓' : '✗') : String(i + 1),
           );
-      };
-      const olds = items.flatMap((it, i) => (it.regression ? [chipOf(it, i)] : []));
-      const oldDone = items.filter((it, i) => it.regression && done.has(i) && outcomes[i]!.won).length;
-      chips.replaceChildren(
-        ...items.flatMap((it, i) => (it.regression ? [] : [chipOf(it, i)])),
-        ...(olds.length > 0
-          ? [h('details', { class: 'robot-vq-old', open: oldOpen || items[current]!.regression === true, 'data-testid': 'robot-vq-old', ontoggle: (e: Event) => (oldOpen = (e.target as HTMLDetailsElement).open) }, h('summary', {}, t('robot.vq.olds', { done: oldDone, n: olds.length })), h('div', { class: 'robot-layouts' }, ...olds))]
-          : []),
+        }),
       );
       const last = current >= items.length - 1;
       nextBtn.hidden = !finished || last;
       skipBtn.hidden = finished && last;
       allBtn.hidden = done.size >= items.length;
-      hooks.progress(done.size, items.length, outcomes.every((o) => o.won));
     }
 
     function showSummary() {
-      picker.open = false;
       const won = outcomes.filter((o) => o.won).length;
       const row = (o: (typeof outcomes)[number], i: number) =>
         h(
@@ -353,7 +326,7 @@ export function robotScreen(app: App): Screen {
       const lostRows = outcomes.flatMap((o, i) => (o.won ? [] : [row(o, i)]));
       const wonRows = outcomes.flatMap((o, i) => (o.won ? [row(o, i)] : []));
       summary.replaceChildren(
-        h('h3', {}, t('robot.vq.summary', { won, n: items.length })),
+        h('h4', {}, t('robot.vq.summary', { won, n: items.length })),
         h('p', { class: won === items.length ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-vq-verdict' }, t(won === items.length ? 'robot.vq.summary.ok' : 'robot.vq.summary.bad')),
         ...(tooLong ? [tooLong] : []),
         ...(lostRows.length > 0 ? [h('ul', { class: 'robot-vq-rows' }, ...lostRows.slice(0, 4))] : []),
@@ -385,6 +358,7 @@ export function robotScreen(app: App): Screen {
         },
       });
       mount.arena.replaceChildren(viewer.el);
+      mount.explain.replaceChildren(viewer.explain);
       mount.controls.replaceChildren(viewer.controls);
       mount.more.replaceChildren(viewer.more);
       mount.listing.replaceChildren(viewer.listing);
@@ -405,11 +379,9 @@ export function robotScreen(app: App): Screen {
       paint();
     }
 
-    const bar = h('div', { class: 'robot-queue', 'data-testid': 'robot-queue' }, h('div', { class: 'robot-vq-head' }, progress, stateTag), h('div', { class: 'robot-vq-bar' }, skipBtn, nextBtn), reasonBox);
-    const picker = h('details', { class: 'robot-fold', open: true, 'data-testid': 'robot-vq-picker' }, h('summary', {}, t('work.pick')), chips, h('div', { class: 'robot-actions' }, allBtn, h('label', { class: 'robot-option' }, autoBox, t('robot.vq.auto'))));
-    const panel = h('div', { class: 'robot-queue-panel', 'data-testid': 'robot-queue-panel' }, summary, picker);
+    const panel = h('div', { class: 'robot-queue-panel', 'data-testid': 'robot-queue-panel' }, summary, h('div', { class: 'robot-actions' }, skipBtn, nextBtn, allBtn, h('label', { class: 'robot-option' }, autoBox, t('robot.vq.auto'))));
     load(0, false);
-    return { bar, panel, dispose: () => (cancelAuto(), viewer?.dispose()) };
+    return { status, chips, panel, dispose: () => (cancelAuto(), viewer?.dispose()) };
   }
 
   // ---------------------------------------------------------------- a battle step
@@ -420,7 +392,6 @@ export function robotScreen(app: App): Screen {
     const lost = report.fights.filter((f) => !f.won).length;
     const extra: Node[] = [];
     if (run.won) {
-      extra.push(h('p', { 'data-testid': 'robot-stars', class: 'rb-stars' }, `${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)} ${t('robot.stars', { n: run.stars })}`));
       return { text: t(run.firstWin ? 'robot.outcome.firstWin' : 'robot.outcome.win', { n }), ok: true, extra, rule: h('p', { class: 'robot-note' }, t('robot.stars.rule', { par: enemy.par })) };
     }
     if (run.broken.length > 0) {
@@ -448,156 +419,200 @@ export function robotScreen(app: App): Screen {
     training?: boolean;
   }
 
+  /**
+   * One task = one page, like every other game: header with the level pills, the task sentence with the pictures, the arena
+   * (a preview before the first fight), the four run controls, the script editor and ONE primary button:
+   * "Kampf starten", then "Weiter" after a win or "Skript verbessern" after a loss. No zones, steps or tabs.
+   */
   function showBattle(step: Step, opts: BattleOpts = taskOpts(step)) {
     const enemy = step.enemy!;
-    const work = createWork(t, stepHeader(step, opts.back));
-    const Z = work.zones;
-    let ran = false;
-    let lost = false;
+    /** idle: the script can be run; won / lost: a fight was played and its result shows. */
+    let state: 'idle' | 'won' | 'lost' = 'idle';
+    let nextAction: { label: string; go: () => void } | undefined;
     let ed: Editor | undefined;
     let area: HTMLTextAreaElement;
-    const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { class: cls, 'data-testid': id, onclick }, label);
-    const goCode = () => (work.show('code', true), area.focus());
+    const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { type: 'button', class: cls, 'data-testid': id, onclick }, label);
+    const sheetClose = t('work.close');
 
-    Z.task.body.append(
-      h('div', { class: 'robot-card robot-catch' }, h('div', { class: 'robot-foes', 'data-testid': 'robot-foes' }, ...enemy.enemies.map((def) => iconEl(specOf(enemyBuild(def)), 56, { enemy: true, label: () => t('robot.enemy') }))), h('div', {}, h('h3', {}, t('robot.catch')), h('p', { 'data-testid': 'robot-catch' }, enemy.catchLine[lang]))),
+    // ---- the task: the pictures, the title and the sentence, "Teile" for the build
+    const partsSheet = createSheet(t('robot.build'), sheetClose, 'robot-parts-sheet');
+    const partsBtn = btn(t('work.parts'), 'robot-build-open', partsSheet.open);
+    partsBtn.setAttribute('aria-haspopup', 'dialog');
+    const youHolder = h('span', { class: 'rb-you' });
+    const task = h(
+      'section',
+      { class: 'rb-task' },
+      h(
+        'div',
+        { class: 'rb-pictures' },
+        youHolder,
+        h('span', { class: 'rb-vs', 'aria-hidden': 'true' }, '⚔'),
+        h('div', { class: 'robot-foes', 'data-testid': 'robot-foes' }, ...enemy.enemies.map((def) => iconEl(specOf(enemyBuild(def)), 44, { enemy: true, label: () => t('robot.enemy') }))),
+        partsBtn,
+      ),
+      h('p', { class: 'rb-task-text', 'data-testid': 'robot-catch' }, h('strong', {}, `${titleOf(step)}: `), enemy.catchLine[lang]),
     );
-    Z.task.actions.append(btn(t('work.toCode'), 'robot-to-code', goCode, 'robot-run rb-only-tabs'));
 
-    // ---- Robot: the picture with tappable sockets, and the full parts list in a drawer
-    const partsBtn = btn(t('work.parts'), 'robot-build-open');
-    Z.robot.tools.append(partsBtn);
-    const partsDrawer = work.drawer('robot', t('robot.build'), partsBtn);
-    const apiBtn = btn(t('work.commands'), 'robot-api-open');
-    const historyBtn = btn(t('work.versions'), 'robot-history-open');
-    const apiDrawer = work.drawer('code', t('robot.api'), apiBtn);
-    const historyDrawer = work.drawer('code', t('robot.history'), historyBtn);
     function drawRobot() {
       const focused = (document.activeElement as HTMLElement | null)?.dataset?.testid;
-      const { bench, parts } = buildPanel(() => (work.phase('build'), drawRobot()));
-      Z.robot.body.replaceChildren(bench);
-      partsDrawer.set(parts);
-      apiDrawer.set(apiList(game.build()));
+      const { bench, parts } = buildPanel(drawRobot);
+      partsSheet.body.replaceChildren(bench, parts);
+      youHolder.replaceChildren(iconEl(specOf(game.build()), 44, { label: () => t('robot.you') }));
       ed?.refresh();
+      if (state === 'idle') drawPreview();
       if (focused) root.querySelector<HTMLElement>(`[data-testid="${focused}"]`)?.focus({ preventScroll: true });
     }
-    drawRobot();
-    Z.robot.actions.append(btn(t('work.toCode'), 'robot-to-code-2', goCode, 'robot-run rb-only-tabs'));
 
-    // ---- Code: the editor (or the line-by-line listing during a fight), commands and versions
+    // ---- the arena, the run controls, the fight pills, the verdict
+    const arenaHolder = h('div', { class: 'robot-viewer rb-arena' });
+    const explainHolder = h('div', { class: 'rb-explain' });
+    const controlsHolder = h('div', { class: 'rb-controls-holder' });
+    const moreBtn = btn('⋯', 'robot-more-open', () => moreSheet.open());
+    moreBtn.setAttribute('aria-label', t('work.more'));
+    moreBtn.title = t('work.more');
+    moreBtn.setAttribute('aria-haspopup', 'dialog');
+    const controlRow = h('div', { class: 'rb-controlrow' }, controlsHolder, moreBtn);
+    const statusHolder = h('div', { class: 'robot-queue-holder' });
+    const chipsHolder = h('div', { class: 'rb-chips' });
+    const result = h('div', { class: 'robot-result', 'data-testid': 'robot-result', hidden: true });
+    const moreHolder = h('div');
+    const listingMount = h('div');
+
+    // ---- the "Mehr" sheet: the fights, speed and variables, the versions (only what exists)
+    const moreSheet = createSheet(t('work.more'), sheetClose, 'robot-more-sheet');
+    const fightsSection = h('section', { hidden: true, 'data-testid': 'robot-fights' }, h('h3', {}, t('work.fights')));
+    const fightsHolder = h('div');
+    fightsSection.append(fightsHolder);
+    const speedSection = h('section', { hidden: true }, h('h3', {}, t('work.speed')), moreHolder);
+    const historySection = h('section', { hidden: true, 'data-testid': 'robot-history-section' }, h('h3', {}, t('robot.history')));
+    const historyHolder = h('div');
+    historySection.append(historyHolder);
+    moreSheet.body.append(fightsSection, speedSection, historySection);
+
+    // ---- the script: the editor, or the listing with the running line while a fight is shown
     const errorHolder = h('div', { class: 'robot-error-holder' });
-    const listingHolder = h('div', { class: 'robot-listing-holder', hidden: true });
-    ed = editor(game.script(), () => game.build(), (text) => (game.setScript(text), ran && lost && work.phase('improve')));
+    const listingHolder = h('div', { class: 'robot-listing-holder', hidden: true, role: 'button', tabindex: 0, 'aria-label': t('work.edit'), title: t('work.edit'), 'data-testid': 'robot-view-toggle' });
+    listingHolder.append(listingMount);
+    listingHolder.addEventListener('click', () => showEditor(true));
+    listingHolder.addEventListener('keydown', (e) => ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') && (e.preventDefault(), showEditor(true)));
+    ed = editor(game.script(), () => game.build(), (text) => (game.setScript(text), toIdle()));
     area = ed.area;
-    area.addEventListener('focus', () => work.phase(ran && lost ? 'improve' : 'code'));
-    Z.code.body.append(errorHolder, ed.el, listingHolder);
-    Z.code.tools.append(apiBtn, historyBtn);
-    const viewBtn = btn(t('work.edit'), 'robot-view-toggle', () => showEditor(listingHolder.hidden === false), 'run-control');
-    viewBtn.hidden = true;
+    area.addEventListener('focus', toIdle);
+
     function showEditor(edit: boolean) {
       ed!.el.hidden = !edit;
       listingHolder.hidden = edit;
-      viewBtn.textContent = t(edit ? 'work.follow' : 'work.edit');
       if (edit) area.focus();
     }
-    Z.code.actions.append(btn(t('robot.run'), 'robot-run', () => (game.setScript(area.value), fight()), 'robot-run'), viewBtn);
 
-    // ---- Fight: result, queue bar, arena; controls at the bottom; details in drawers
-    const result = h('div', { class: 'robot-result', 'data-testid': 'robot-result' }, h('p', { 'data-testid': 'robot-outcome', 'aria-live': 'polite' }, t('robot.outcome.idle')));
-    const queueHolder = h('div', { class: 'robot-queue-holder' });
-    const arenaHolder = h('div', { class: 'robot-viewer' });
-    const controlsHolder = h('div', { class: 'robot-controls-holder' });
-    const moreHolder = h('div');
-    const listingMount = h('div');
-    listingHolder.append(listingMount);
-    Z.fight.body.append(result, queueHolder, arenaHolder);
-    const firstRun = btn(t('robot.run'), 'robot-run-fight', () => (game.setScript(area.value), fight()), 'robot-run rb-only-tabs');
-    controlsHolder.append(firstRun);
-    Z.fight.actions.append(controlsHolder);
-    const fightsBtn = btn('', 'robot-vq-open');
-    const moreBtn = btn(t('work.more'), 'robot-more-open');
-    fightsBtn.hidden = moreBtn.hidden = true;
-    Z.fight.tools.append(fightsBtn, moreBtn);
-    const fightsDrawer = work.drawer('fight', t('work.fights.title'), fightsBtn);
-    const moreDrawer = work.drawer('fight', t('work.more.title'), moreBtn);
-    moreDrawer.set(moreHolder);
+    // ---- the one primary button
+    const primary = h('button', { type: 'button', class: 'primary rb-primary' }) as HTMLButtonElement;
+    function paintPrimary() {
+      const label = state === 'idle' ? t('robot.run') : state === 'lost' ? t('work.improve') : (nextAction?.label ?? t('robot.toMap'));
+      primary.textContent = label;
+      primary.dataset.testid = state === 'idle' ? 'robot-run' : state === 'lost' ? 'robot-improve' : 'robot-next';
+      primary.setAttribute('data-testid', primary.dataset.testid);
+      primary.dataset.state = state;
+    }
+    primary.addEventListener('click', () => {
+      if (state === 'idle') return (game.setScript(area.value), fight());
+      if (state === 'lost') return showEditor(true);
+      if (nextAction) nextAction.go();
+      else opts.back();
+    });
+    /** Editing the script starts the next try: the primary is "Kampf starten" again. */
+    function toIdle() {
+      if (state === 'idle') return;
+      state = 'idle';
+      paintPrimary();
+    }
+    paintPrimary();
+
+    /** The arena before the first fight: both robots on the field, the controls waiting. */
+    function drawPreview() {
+      try {
+        const first = game.variationQueue(step)[0];
+        if (!first) return;
+        const viewer = createViewer(playItem(first, game.build(), '', true).battle, '', { t, speed, preview: true });
+        arenaHolder.replaceChildren(viewer.el);
+        explainHolder.replaceChildren();
+        controlsHolder.replaceChildren(viewer.controls);
+      } catch {
+        // no preview: the fight shows the arena
+      }
+    }
 
     function renderHistory() {
       const history = game.history();
-      historyDrawer.set(
-        history.length === 0
-          ? h('p', { 'data-testid': 'robot-history' }, t('robot.history.empty'))
-          : h(
-              'ol',
-              { 'data-testid': 'robot-history' },
-              ...history.map((entry, i) =>
-                h(
-                  'li',
-                  {},
-                  h('span', {}, `${titleOf(game.step(entry.step)!)} · ${t(`robot.history.${entry.result}` as MessageKey)} · ${entry.script.split('\n').filter((l) => l.trim()).length}`),
-                  h('button', { class: 'run-control', 'data-testid': `robot-restore-${i}`, onclick: () => (game.restore(i), ed!.set(game.script()), renderHistory(), historyDrawer.close(), showEditor(true)) }, t('robot.history.restore')),
-                ),
-              ).reverse(),
-            ),
+      historySection.hidden = history.length === 0;
+      moreBtn.hidden = history.length === 0 && state === 'idle' && !ranOnce;
+      historyHolder.replaceChildren(
+        h(
+          'ol',
+          { 'data-testid': 'robot-history' },
+          ...history
+            .map((entry, i) =>
+              h(
+                'li',
+                {},
+                h('span', {}, `${titleOf(game.step(entry.step)!)} · ${t(`robot.history.${entry.result}` as MessageKey)} · ${entry.script.split('\n').filter((l) => l.trim()).length}`),
+                h('button', { class: 'run-control', 'data-testid': `robot-restore-${i}`, onclick: () => (game.restore(i), ed!.set(game.script()), renderHistory(), moreSheet.close(), showEditor(true)) }, t('robot.history.restore')),
+              ),
+            )
+            .reverse(),
+        ),
       );
     }
+    let ranOnce = false;
 
     function fight() {
       const run = opts.run();
       if (!run) return;
-      renderHistory();
       errorHolder.replaceChildren();
       if (run.error) {
+        renderHistory();
         errorHolder.replaceChildren(errorBox(run.error));
-        work.show('code');
         showEditor(true);
+        errorHolder.scrollIntoView({ block: 'nearest' });
         return;
       }
       const report = run.report!;
       const { text, ok, extra, rule } = outcomeFor(run, report, step);
       stop();
-      ran = true;
-      lost = !ok;
-      moreDrawer.close();
-      fightsDrawer.close();
+      ranOnce = true;
+      moreSheet.close();
       const queue = variationQueue(
         game.variationQueue(step),
         game.build(),
         game.script(),
         report.tooLong ? h('p', { class: 'robot-loss' }, t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 })) : null,
-        { arena: arenaHolder, controls: controlsHolder, more: moreHolder, listing: listingMount },
-        {
-          watch: () => (fightsDrawer.close(), work.show('fight', true)),
-          progress: (done, total, allWon) => (fightsBtn.textContent = `${done >= total ? (allWon ? '✓ ' : '✗ ') : ''}${t('work.fights', { n: total })}`),
-        },
+        { arena: arenaHolder, explain: explainHolder, controls: controlsHolder, more: moreHolder, listing: listingMount },
+        { watch: () => (moreSheet.close(), arenaHolder.scrollIntoView({ block: 'start' })) },
       );
       cleanup = queue.dispose;
       const regression = enemy.regression === false ? null : h('p', { class: 'robot-note' }, run.broken.length === 0 && run.won ? t('robot.regression.ok') : '');
-      const next = run.won ? opts.next() : undefined;
+      state = ok ? 'won' : 'lost';
+      nextAction = ok ? opts.next() : undefined;
+      result.hidden = false;
       result.replaceChildren(
-        ...[
-          h('p', { class: ok ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text),
-          ...extra,
-          next ? btn(next.label, 'robot-next', next.go, 'robot-next') : btn(t('work.improve'), 'robot-improve', () => (work.show('code', true), showEditor(true)), 'robot-next'),
-        ].filter((n): n is HTMLElement => n !== null),
+        h('p', { class: `verdict ${ok ? 'correct' : 'wrong'}`, 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text, run.won ? h('span', { class: 'rb-stars', 'data-testid': 'robot-stars', title: t('robot.stars', { n: run.stars }) }, ` ${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)}`) : null),
+        ...extra,
       );
-      queueHolder.replaceChildren(queue.bar);
-      fightsDrawer.set(...[rule ?? null, regression, queue.panel].filter((n): n is HTMLElement => n !== null));
-      fightsBtn.hidden = moreBtn.hidden = false;
-      viewBtn.hidden = false;
+      statusHolder.replaceChildren(queue.status);
+      chipsHolder.replaceChildren(queue.chips);
+      fightsHolder.replaceChildren(...[rule ?? null, regression, queue.panel].filter((n): n is HTMLElement => n !== null));
+      fightsSection.hidden = speedSection.hidden = false;
+      paintPrimary();
+      renderHistory();
       showEditor(false);
-      work.phase('fight');
-      work.show('fight', true);
+      requestAnimationFrame(() => arenaHolder.scrollIntoView({ block: 'start' }));
     }
 
-    work.onZone((z) => {
-      if (z === 'robot') work.phase('build');
-      else if (z === 'code') work.phase(ran && lost ? 'improve' : 'code');
-      else if (z === 'fight') work.phase('fight');
-    });
-    work.phase('build');
-    showWork(work.el);
-    work.show(game.progress().solved.includes(step.id) ? 'code' : 'task');
+    const left = h('div', { class: 'rb-main' }, task, arenaHolder, controlRow, explainHolder, chipsHolder, statusHolder, result);
+    const right = h('div', { class: 'rb-code' }, errorHolder, ed.el, listingHolder, primary);
+    const page = h('div', { class: 'rb-page', 'data-testid': 'robot-work' }, left, right, partsSheet.dialog, moreSheet.dialog);
+    drawRobot();
+    showWork(h('div', { class: 'rb-work' }, stepBar(step, opts), page));
     renderHistory();
   }
 
@@ -628,7 +643,7 @@ export function robotScreen(app: App): Screen {
       h('p', { class: 'robot-card' }, t('robot.training.intro')),
       h('p', { 'data-testid': 'robot-training-stats' }, t('robot.training.stats', { wins: stats.wins })),
       h('div', { class: 'robot-actions' },
-        h('button', { class: 'robot-run', 'data-testid': 'robot-train-daily', onclick: () => play(game.trainingStep('daily')) }, t(stats.dailyDone ? 'robot.training.dailyDone' : 'robot.training.daily')),
+        h('button', { class: 'primary', 'data-testid': 'robot-train-daily', onclick: () => play(game.trainingStep('daily')) }, t(stats.dailyDone ? 'robot.training.dailyDone' : 'robot.training.daily')),
         h('button', { class: 'run-control', 'data-testid': 'robot-train-new', onclick: () => play(game.trainingStep(game.nextTrainingSeed())) }, t('robot.training.new')),
         h('button', { class: 'run-control', 'data-testid': 'robot-train-back', onclick: showMap }, t('robot.toMap')),
       ),
@@ -641,13 +656,27 @@ export function robotScreen(app: App): Screen {
     return game.steps.slice(i + 1).find((s) => s.kind === 'battle' && game.unlocked(s.id) && !game.progress().solved.includes(s.id));
   }
 
-  function stepHeader(step: Step, back: () => void = () => (game.open(step.id), showMap())): HTMLElement {
-    return h(
+  /** The header of a task: back, the level pills of its chapter (like the other games), no title row. */
+  function stepBar(step: Step, opts: BattleOpts): HTMLElement {
+    const header = h(
       'header',
       { class: 'subpage-header' },
-      h('button', { class: 'icon-button', 'aria-label': t('nav.back'), title: t('nav.back'), onclick: back }, svg(BACK)),
+      h('button', { class: 'icon-button', 'aria-label': t('nav.back'), title: t('nav.back'), onclick: opts.back }, svg(BACK)),
       h('h1', { tabindex: -1, 'data-testid': 'robot-step-title' }, titleOf(step)),
     );
+    if (opts.training) return h('div', { class: 'game-bar' }, header);
+    const progress = game.progress();
+    const chapter = game.steps.filter((s) => s.chapter === step.chapter);
+    const strip = levelStrip(
+      t,
+      chapter.map((s) => ({
+        solved: progress.solved.includes(s.id),
+        open: game.unlocked(s.id),
+        current: s.id === step.id,
+        go: () => (game.open(s.id), showStep(s.id)),
+      })),
+    );
+    return h('div', { class: 'game-bar' }, header, strip);
   }
 
   function showStep(id: string) {

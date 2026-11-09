@@ -1,4 +1,5 @@
 import { h } from '../dom.ts';
+import { createSheet } from './robot-sheet.ts';
 import type { MessageKey } from '../i18n.ts';
 import type { Build } from '../robot/build.ts';
 import { applySuggestion, completionAt, insertSnippet, nextSnippets, snippetGroups, type Completion, type Snippet } from '../robot/suggest.ts';
@@ -46,9 +47,10 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
   const strip = h('div', { class: 'robot-strip-chips', role: 'listbox', 'aria-label': t('robot.sug.list'), 'data-testid': `${testId}-strip` });
   strip.id = `${testId}-strip`;
   area.setAttribute('aria-controls', strip.id);
-  const more = h('button', { type: 'button', class: 'robot-strip-more', 'aria-haspopup': 'dialog', 'data-testid': `${testId}-more` }, t('robot.sug.more'));
-  const stripRow = h('div', { class: 'robot-strip' }, strip, more);
-  const sheet = h('dialog', { class: 'robot-sheet', 'aria-label': t('robot.sug.help'), 'data-testid': `${testId}-sheet` }) as HTMLDialogElement;
+  const more = h('button', { type: 'button', class: 'robot-strip-more', 'aria-haspopup': 'dialog', 'aria-label': t('robot.sug.help'), title: t('robot.sug.help'), 'data-testid': `${testId}-more` }, '?');
+  const stripRow = h('div', { class: 'robot-strip' }, more, strip);
+  const helpSheet = createSheet(t('robot.sug.help'), t('robot.sug.close'), `${testId}-sheet`);
+  const sheet = helpSheet.dialog;
   const el = h('div', { class: 'robot-editor' }, box, stripRow, sheet);
 
   let current: Completion | null = null;
@@ -157,9 +159,7 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
   const tabs = h('div', { class: 'robot-snippet-tabs', role: 'group', 'aria-label': t('robot.sug.bar') });
   const row = h('div', { class: 'robot-snippet-row' });
   const cmds = h('dl', { class: 'robot-sheet-cmds', 'data-testid': `${testId}-help` });
-  const body = h('div', { class: 'robot-sheet-body' }, tabs, row, h('h3', {}, t('robot.sug.help')), cmds);
-  const closeBtn = h('button', { type: 'button', class: 'robot-sheet-close', 'aria-label': t('robot.sug.close'), 'data-testid': `${testId}-sheet-close`, onclick: () => sheet.close() }, '×');
-  sheet.append(h('header', {}, h('h2', {}, t('robot.sug.help')), closeBtn), h('p', { class: 'robot-sheet-hint' }, t('robot.sug.hint')), body);
+  helpSheet.body.append(tabs, row, h('h3', {}, t('robot.sug.cmds')), cmds);
   const insertFromSheet = (s: Snippet) => {
     sheet.close();
     area.setSelectionRange(...sheetSel);
@@ -186,9 +186,6 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
     drawSheet();
     sheet.showModal();
   });
-  // A tap on the dimmed area closes the sheet.
-  sheet.addEventListener('click', (e) => e.target === sheet && sheet.close());
-
   drawStrip();
 
   return {

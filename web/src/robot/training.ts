@@ -37,7 +37,13 @@ const dateOf = (ms: number): string => {
 };
 export const today = dateOf;
 
-function loops(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; map: string[]; text: string } {
+/** A short description in both languages, for the catch line. */
+interface Words {
+  de: string;
+  en: string;
+}
+
+function loops(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; map: string[]; text: Words } {
   // A column of dummies ahead (3 steps blocked by the first), maybe a tough one to the right.
   const ahead = rng.between(2, 5);
   const hps: number[] = [];
@@ -63,11 +69,17 @@ function loops(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; 
     enemies,
     map,
     solution,
-    text: right > 0 ? `${ahead} dummies ahead, a tough one on the right` : `${ahead} dummies in a row`,
+    text: right > 0 ? { de: `${ahead} Attrappen vorn, ein zäher Gegner rechts`, en: `${ahead} dummies ahead, a tough one on the right` } : { de: `${ahead} Attrappen in einer Reihe`, en: `${ahead} dummies in a row` },
   };
 }
 
-function decisions(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; map: string[]; text: string } {
+const DECISION_WORDS: Record<'plain' | 'shield' | 'sniper', Words> = {
+  plain: { de: 'ein Gegner, der mal links, mal rechts, mal vorn steht', en: 'one enemy that stands left, right or ahead' },
+  shield: { de: 'ein Gegner mit Schild', en: 'an enemy with a shield' },
+  sniper: { de: 'ein Scharfschütze', en: 'a sniper' },
+};
+
+function decisions(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; map: string[]; text: Words } {
   const arena = (...items: [string, number, number][]) => mk(9, 8, ['^', 4, 6], ...items);
   const kind = rng.pick(['plain', 'shield', 'sniper'] as const);
   const hp = kind === 'sniper' ? rng.between(3, 6) : rng.between(2, 4);
@@ -77,10 +89,10 @@ function decisions(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef
     ['D', rng.between(7, 8), 6],
     ['D', rng.between(0, 1), 6],
   ] as [string, number, number][]);
-  return { enemies: [def], map: arena(place), solution: LOOK_AROUND, text: kind };
+  return { enemies: [def], map: arena(place), solution: LOOK_AROUND, text: DECISION_WORDS[kind] };
 }
 
-function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; map: string[]; text: string } {
+function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; map: string[]; text: Words } {
   const pickFrom = (id: string) => ENEMIES.find((e) => e.id === id)!;
   if (rng.chance(0.5)) {
     const regen = rng.chance(0.4);
@@ -90,11 +102,11 @@ function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]
       enemies: [{ hp, ...(regen ? { regen: { every: 2, amount: 1 } } : {}) }],
       map: mk(8, 14, ['^', 3, 12], ['D', 3, y]),
       solution: 'while alive():\n    if see() == "enemy":\n        fire()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()',
-        text: regen ? 'regenerator' : 'far dummy',
+      text: regen ? { de: 'ein Gegner, der sich heilt', en: 'an enemy that heals itself' } : { de: 'ein weit entfernter Gegner', en: 'a far-away enemy' },
     };
   }
   const src = pickFrom(rng.pick(['maze-runner', 'hide-and-seek']));
-  return { enemies: src.enemies, map: src.maps[rng.int(src.maps.length)]!, solution: pickFrom('hide-and-seek').solution, text: src.id };
+  return { enemies: src.enemies, map: src.maps[rng.int(src.maps.length)]!, solution: pickFrom('hide-and-seek').solution, text: src.id === 'maze-runner' ? { de: 'ein Gegner hinter Ecken', en: 'an enemy around corners' } : { de: 'ein Gegner, der sich versteckt', en: 'an enemy that hides' } };
 }
 
 /** The fight of a seed for a player whose latest unlocked chapter is `level` (2-4). */
@@ -106,7 +118,7 @@ export function trainingFight(seed: number, level: number, id = `training-${seed
     id,
     chapter: l,
     title: T(`Training Nr. ${seed}`, `Training #${seed}`),
-    catchLine: T(`Ein zufälliger Kampf (${g.text}) mit dem, was du in den Kapiteln bis ${l} gelernt hast.`, `A random fight (${g.text}) with what you learned up to Chapter ${l}.`),
+    catchLine: T(`Ein zufälliger Kampf (${g.text.de}) mit dem, was du in den Kapiteln bis ${l} gelernt hast.`, `A random fight (${g.text.en}) with what you learned up to Chapter ${l}.`),
     enemies: g.enemies,
     maps: [g.map],
     solution: g.solution,

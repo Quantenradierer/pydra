@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { START_BUILD } from './build.ts';
 import { runBattle } from './battle.ts';
 import type { LayoutSpec } from './layout.ts';
-import { buildBeats, hasTrace, nextBeat, prevBeat, stackNames, stateAt } from './stepper.ts';
+import { buildBeats, hasTrace, nextBeat, stackNames, stateAt } from './stepper.ts';
 
 const fight = (script: string, map = ['>..D']) => {
   const layout: LayoutSpec = { map, enemies: [{ hp: 1 }], seed: 1 };
@@ -18,16 +18,12 @@ describe('beats', () => {
     expect(beats[1]!.events.map((e) => e.k)).toEqual(['line', 'call', 'set']);
   });
 
-  it('steps by line and by tick, forwards and back', () => {
+  it('steps forward by line and by tick', () => {
     const beats = buildBeats(r.frames);
     expect(nextBeat(beats, 0, 'line')).toBe(1);
     expect(nextBeat(beats, 0, 'tick')).toBe(3);
     expect(nextBeat(beats, 3, 'tick')).toBe(6);
     expect(nextBeat(beats, 6, 'line')).toBe(6);
-    expect(prevBeat(beats, 6, 'tick')).toBe(3);
-    expect(prevBeat(beats, 3, 'tick')).toBe(0);
-    expect(prevBeat(beats, 3, 'line')).toBe(2);
-    expect(prevBeat(beats, 0, 'line')).toBe(0);
   });
 
   it('a multi-tick action gives resolve beats without lines; a result assigned later gets its own line beat', () => {

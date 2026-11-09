@@ -68,17 +68,17 @@ export async function dailyCorrectSlot(page: Page): Promise<number> {
   return item.order.indexOf(DAILY_ANSWERS.get(item.id)!);
 }
 
-export type ZoneName = 'task' | 'robot' | 'code' | 'fight';
-
-/** Robot Battler work screen: shows a zone (on a phone via the bottom bar; on a desktop all zones are visible). */
-export async function zone(page: Page, name: ZoneName) {
-  const tab = page.getByTestId(`zone-tab-${name}`);
-  if (await tab.isVisible()) await tab.click();
+/** Closes the open sheet (parts, more, help), if any: a modal sheet makes the page behind it inert. */
+export async function closeSheets(page: Page) {
+  while ((await page.locator('dialog[open]').count()) > 0) {
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(30);
+  }
 }
 
-/** The script editor, switching to the Code zone and from the line-by-line listing back to the editor. */
+/** The script editor; after a fight the listing shows the run, a tap on it brings the editor back. */
 export async function codeBox(page: Page) {
-  await zone(page, 'code');
+  await closeSheets(page);
   const code = page.getByTestId('robot-code');
   if (!(await code.isVisible())) await page.getByTestId('robot-view-toggle').click();
   return code;
@@ -88,20 +88,15 @@ export async function fillCode(page: Page, text: string) {
   await (await codeBox(page)).fill(text);
 }
 
-/** Presses the Run button of the Code zone (the fight zone then comes forward). */
+/** Presses the one primary button while it says "Kampf starten" (the first fight shows right on the page). */
 export async function runFight(page: Page) {
-  await zone(page, 'code');
+  await closeSheets(page);
   await page.getByTestId('robot-run').click();
 }
 
-/** Opens a drawer by its opener button (in the given zone) and returns nothing; close it with `closeDrawer`. */
-export async function openDrawer(page: Page, z: ZoneName, opener: string) {
-  await zone(page, z);
-  const button = page.getByTestId(opener);
-  if ((await button.getAttribute('aria-expanded')) !== 'true') await button.click();
-}
-
-/** Closes the open drawer of a zone. */
-export async function closeDrawer(page: Page, z: ZoneName) {
-  await page.getByTestId(`zone-${z}`).locator('.rb-drawer:not([hidden]) [data-testid="drawer-close"]').click();
+/** Opens a sheet by its opener button and returns the sheet; close it with `closeSheets`. */
+export async function openSheet(page: Page, opener: string) {
+  await closeSheets(page);
+  await page.getByTestId(opener).click();
+  return page.locator('dialog[open]');
 }

@@ -37,8 +37,8 @@ const mark = (page: Page): Promise<string[]> =>
       const style = getComputedStyle(el);
       if (el.getClientRects().length === 0 || style.visibility === 'hidden' || el.closest('[hidden]') || !el.checkVisibility({ visibilityProperty: true, contentVisibilityAuto: true })) continue;
       if ((el as HTMLButtonElement).disabled || el.getAttribute('aria-disabled') === 'true') continue;
-      // The current level pill and the chosen step size are already what they say, and what an open sheet covers cannot be pressed at all.
-      if (el.getAttribute('aria-current') === 'step' || (el.dataset.testid?.startsWith('robot-grain') && el.getAttribute('aria-pressed') === 'true')) continue;
+      // The current level pill and are already what they say, and what an open sheet covers cannot be pressed at all.
+      if (el.getAttribute('aria-current') === 'step') continue;
       el.scrollIntoView({ block: 'nearest' });
       const box = el.getBoundingClientRect();
       const top = document.elementFromPoint(box.left + box.width / 2, box.top + Math.min(box.height / 2, 20));
@@ -96,11 +96,10 @@ async function workScreens(page: Page) {
   };
   await press(page, 'lost fight', fought('forward()\nfire()'));
   await press(page, 'won fight', fought('forward()\nfire()\nfire()'));
-  // The parts and help sheets open before a fight (the help button belongs to the editor), "Mehr" after one.
-  for (const [opener, afterFight] of [['robot-build-open', false], ['robot-code-more', false], ['robot-more-open', true]] as const) {
+  // The two sheets: the equipment and the help (the help button belongs to the editor).
+  for (const opener of ['robot-build-open', 'robot-code-more']) {
     await press(page, `sheet ${opener}`, async () => {
-      if (afterFight) await fought('forward()\nfire()\nfire()')();
-      else await openStep(page, 'one-more-line')();
+      await openStep(page, 'one-more-line')();
       await closeSheets(page);
       await page.getByTestId(opener).click();
     });

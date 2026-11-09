@@ -9,7 +9,7 @@ import type { Challenge } from '../robot/content/challenges.ts';
 import type { EnemyData } from '../robot/content/types.ts';
 import type { EnemyReport, FightReport } from '../robot/fight.ts';
 import { evaluateQueue, playItem, type LossReason, type QueueItem } from '../robot/variations.ts';
-import { createViewer, type Speed, type Viewer } from './robot-viewer.ts';
+import { createViewer, DEFAULT_SPEED, type Speed, type Viewer } from './robot-viewer.ts';
 import { friendlyError } from '../robot/friendly.ts';
 import { type RunReport, type Step } from '../robot/game.ts';
 import { precheck as precheckFn, type BattleResult } from '../robot/battle.ts';
@@ -19,8 +19,7 @@ import { subpageHeader } from './header.ts';
 import { benchEl } from './robot-bench.ts';
 import { createSheet } from './robot-sheet.ts';
 import { levelStrip } from './level-strip.ts';
-import { iconEl, partIconSpec, chassisIconSpec, specOf } from '../robot/art/compose.ts';
-import { enemyBuild } from '../robot/battle.ts';
+import { iconEl, partIconSpec, chassisIconSpec } from '../robot/art/compose.ts';
 
 const GEAR_ORDER: GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps', 'plates'];
 
@@ -29,7 +28,7 @@ export function robotScreen(app: App): Screen {
   const { t, lang } = app;
   const game = app.services.robot;
   const root = h('main', { class: 'screen game robot' });
-  const speed: Speed = { level: 1 };
+  const speed: Speed = { level: DEFAULT_SPEED };
   /** Stops whatever is playing on the current screen (set by the battle screen). */
   let cleanup: (() => void) | undefined;
   const stop = () => {
@@ -238,43 +237,31 @@ export function robotScreen(app: App): Screen {
   }
 
   /**
-   * The fights of a run, one after another: the first fight of the enemy, then its other variations and the
-   * earlier enemies of the chapter. Each plays in the line-by-line viewer. `chips` are the fight pills under the
-   * controls (one per fight, ticked when seen); `panel` (summary, next/skip, auto-play) lives in the Mehr sheet.
+   * The fights of a run: the first fight of the enemy plays at once, slowly, line by line; the other layouts of the enemy and
+   * the earlier enemies of the chapter are one round pill each (tap one to watch it). Their results are computed up front but
+   * only shown once the verdict is (`revealAll`). There is no queue menu: nothing advances by itself.
    */
   interface Mount {
     arena: HTMLElement;
     explain: HTMLElement;
     controls: HTMLElement;
-    more: HTMLElement;
     listing: HTMLElement;
   }
   interface QueueHooks {
-    /** "Watch" in the summary: leave the sheet, show the fight. */
-    watch(): void;
+    /** A fight reached its end (playing or skipping): the first time, the page shows the verdict. */
+    onFinished(): void;
   }
-  function variationQueue(items: QueueItem[], build: Build, script: string, tooLong: Node | null, mount: Mount, hooks: QueueHooks): { status: HTMLElement; chips: HTMLElement; panel: HTMLElement; dispose: () => void } {
+  function variationQueue(items: QueueItem[], build: Build, script: string, mount: Mount, hooks: QueueHooks): { status: HTMLElement; chips: HTMLElement; toEnd: () => void; revealAll: () => void; dispose: () => void } {
     const outcomes = evaluateQueue(items, build, script);
     const done = new Set<number>();
     let current = 0;
-    let auto = true;
     let viewer: Viewer | undefined;
-    let autoTimer: ReturnType<typeof setTimeout> | undefined;
     const progress = h('span', { class: 'robot-vq-progress', 'data-testid': 'robot-vq-progress' });
     const stateTag = h('span', { class: 'robot-vq-state', 'data-testid': 'robot-vq-state' });
     const reasonBox = h('p', { class: 'robot-note', 'data-testid': 'robot-vq-reason' });
     const status = h('div', { class: 'robot-queue', 'data-testid': 'robot-queue' }, h('div', { class: 'robot-vq-head' }, progress, stateTag), reasonBox);
     const chips = h('div', { class: 'robot-layouts', role: 'group', 'aria-label': t('work.fights'), 'data-testid': 'robot-vq-chips' });
-    const summary = h('div', { class: 'robot-vq-summary', 'data-testid': 'robot-vq-summary' });
-    const nextBtn = h('button', { class: 'run-control', 'data-testid': 'robot-vq-next', onclick: () => load(current + 1, true) }, t('robot.vq.next'));
-    const skipBtn = h('button', { class: 'run-control', 'data-testid': 'robot-vq-skip', onclick: skip }, t('robot.vq.skip'));
-    const allBtn = h('button', { class: 'run-control', 'data-testid': 'robot-vq-all', onclick: skipAll }, t('robot.vq.all'));
-    const autoBox = h('input', { type: 'checkbox', checked: true, 'data-testid': 'robot-vq-auto', onchange: () => ((auto = autoBox.checked), !auto && cancelAuto()) }) as HTMLInputElement;
     const labelOf = (item: QueueItem) => (item.regression ? `${item.enemy.title[lang]} ${item.n}` : t('robot.layout', { n: item.n }));
-    const cancelAuto = () => {
-      if (autoTimer) clearTimeout(autoTimer);
-      autoTimer = undefined;
-    };
 
     function paint() {
       const item = items[current]!;
@@ -300,49 +287,15 @@ export function robotScreen(app: App): Screen {
               'aria-pressed': String(i === current),
               'aria-label': `${labelOf(it)}, ${t(`robot.vq.state.${state}` as MessageKey)}`,
               title: labelOf(it),
-              onclick: () => load(i, false),
+              onclick: () => load(i),
             },
             seen ? (o.won ? '✓' : '✗') : String(i + 1),
           );
         }),
       );
-      const last = current >= items.length - 1;
-      nextBtn.hidden = !finished || last;
-      skipBtn.hidden = finished && last;
-      allBtn.hidden = done.size >= items.length;
     }
 
-    function showSummary() {
-      const won = outcomes.filter((o) => o.won).length;
-      const row = (o: (typeof outcomes)[number], i: number) =>
-        h(
-          'li',
-          { class: o.won ? 'won' : 'lost', 'data-testid': `robot-vq-row-${o.item.key}` },
-          h('strong', {}, `${o.won ? '✓' : '✗'} ${o.item.regression ? `${t('robot.vq.old')}: ` : ''}${o.item.enemy.title[lang]} · ${t('robot.layout', { n: o.item.n })}`),
-          h('span', { class: 'robot-note' }, ` ${t('robot.vq.ticks', { n: o.ticks })}`),
-          o.reason ? h('span', { class: 'robot-vq-why' }, lossText(o.reason, o.item.enemy)) : null,
-          h('button', { class: 'run-control', 'data-testid': `robot-vq-watch-${o.item.key}`, onclick: () => (load(i, false), hooks.watch()) }, t('robot.vq.watch')),
-        );
-      const lostRows = outcomes.flatMap((o, i) => (o.won ? [] : [row(o, i)]));
-      const wonRows = outcomes.flatMap((o, i) => (o.won ? [row(o, i)] : []));
-      summary.replaceChildren(
-        h('h4', {}, t('robot.vq.summary', { won, n: items.length })),
-        h('p', { class: won === items.length ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-vq-verdict' }, t(won === items.length ? 'robot.vq.summary.ok' : 'robot.vq.summary.bad')),
-        ...(tooLong ? [tooLong] : []),
-        ...(lostRows.length > 0 ? [h('ul', { class: 'robot-vq-rows' }, ...lostRows.slice(0, 4))] : []),
-        ...(lostRows.length > 4 ? [h('details', { class: 'robot-vq-won', 'data-testid': 'robot-vq-more-lost' }, h('summary', {}, t('robot.vq.moreLost', { n: lostRows.length - 4 })), h('ul', { class: 'robot-vq-rows' }, ...lostRows.slice(4)))] : []),
-        ...(wonRows.length > 0 ? [h('details', { class: 'robot-vq-won', 'data-testid': 'robot-vq-won' }, h('summary', {}, t('robot.vq.wonList', { n: wonRows.length })), h('ul', { class: 'robot-vq-rows' }, ...wonRows))] : []),
-      );
-    }
-
-    function finish(i: number) {
-      done.add(i);
-      if (done.size >= items.length) showSummary();
-      if (i === current) paint();
-    }
-
-    function load(i: number, play: boolean) {
-      cancelAuto();
+    function load(i: number) {
       viewer?.dispose();
       current = Math.max(0, Math.min(items.length - 1, i));
       const item = items[current]!;
@@ -351,37 +304,28 @@ export function robotScreen(app: App): Screen {
       viewer = createViewer(report.battle, script, {
         t,
         speed,
-        onUser: cancelAuto,
-        onEnd: (byPlay) => {
-          finish(at);
-          if (byPlay && auto) autoTimer = setTimeout(() => (at < items.length - 1 ? load(at + 1, true) : undefined), 1500);
+        onEnd: () => {
+          done.add(at);
+          hooks.onFinished();
+          paint();
         },
       });
       mount.arena.replaceChildren(viewer.el);
       mount.explain.replaceChildren(viewer.explain);
       mount.controls.replaceChildren(viewer.controls);
-      mount.more.replaceChildren(viewer.more);
       mount.listing.replaceChildren(viewer.listing);
       paint();
-      if (play) viewer.play();
+      viewer.play();
     }
 
-    function skip() {
-      const playing = viewer?.playing() ?? false;
-      finish(current);
-      if (current < items.length - 1) load(current + 1, playing);
-    }
-    function skipAll() {
-      cancelAuto();
-      viewer?.pause();
-      items.forEach((_, i) => done.add(i));
-      showSummary();
-      paint();
-    }
-
-    const panel = h('div', { class: 'robot-queue-panel', 'data-testid': 'robot-queue-panel' }, summary, h('div', { class: 'robot-actions' }, skipBtn, nextBtn, allBtn, h('label', { class: 'robot-option' }, autoBox, t('robot.vq.auto'))));
-    load(0, false);
-    return { status, chips, panel, dispose: () => (cancelAuto(), viewer?.dispose()) };
+    load(0);
+    return {
+      status,
+      chips,
+      toEnd: () => viewer?.toEnd(),
+      revealAll: () => (items.forEach((_, i) => done.add(i)), paint()),
+      dispose: () => viewer?.dispose(),
+    };
   }
 
   // ---------------------------------------------------------------- a battle step
@@ -426,38 +370,30 @@ export function robotScreen(app: App): Screen {
    */
   function showBattle(step: Step, opts: BattleOpts = taskOpts(step)) {
     const enemy = step.enemy!;
-    /** idle: the script can be run; won / lost: a fight was played and its result shows. */
-    let state: 'idle' | 'won' | 'lost' = 'idle';
+    /** idle: the script can be run; playing: the fight is on the arena and the verdict is still hidden; won / lost: the verdict shows. */
+    let state: 'idle' | 'playing' | 'won' | 'lost' = 'idle';
     let nextAction: { label: string; go: () => void } | undefined;
+    let queue: ReturnType<typeof variationQueue> | undefined;
     let ed: Editor | undefined;
     let area: HTMLTextAreaElement;
     const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { type: 'button', class: cls, 'data-testid': id, onclick }, label);
     const sheetClose = t('work.close');
 
-    // ---- the task: the pictures, the title and the sentence, "Teile" for the build
+    // ---- the task: what to do and what winning means, and the equipment (the only way to change the robot)
     const partsSheet = createSheet(t('robot.build'), sheetClose, 'robot-parts-sheet');
-    const partsBtn = btn(t('work.parts'), 'robot-build-open', partsSheet.open);
+    const partsBtn = btn(t('work.parts'), 'robot-build-open', partsSheet.open, 'run-control rb-equip');
     partsBtn.setAttribute('aria-haspopup', 'dialog');
-    const youHolder = h('span', { class: 'rb-you' });
     const task = h(
       'section',
       { class: 'rb-task' },
-      h(
-        'div',
-        { class: 'rb-pictures' },
-        youHolder,
-        h('span', { class: 'rb-vs', 'aria-hidden': 'true' }, '⚔'),
-        h('div', { class: 'robot-foes', 'data-testid': 'robot-foes' }, ...enemy.enemies.map((def) => iconEl(specOf(enemyBuild(def)), 44, { enemy: true, label: () => t('robot.enemy') }))),
-        partsBtn,
-      ),
-      h('p', { class: 'rb-task-text', 'data-testid': 'robot-catch' }, h('strong', {}, `${titleOf(step)}: `), enemy.catchLine[lang]),
+      h('p', { class: 'rb-task-text', 'data-testid': 'robot-catch' }, goalText(enemy), ' ', h('span', { class: 'rb-task-hint' }, enemy.catchLine[lang])),
+      partsBtn,
     );
 
     function drawRobot() {
       const focused = (document.activeElement as HTMLElement | null)?.dataset?.testid;
       const { bench, parts } = buildPanel(drawRobot);
       partsSheet.body.replaceChildren(bench, parts);
-      youHolder.replaceChildren(iconEl(specOf(game.build()), 44, { label: () => t('robot.you') }));
       ed?.refresh();
       if (state === 'idle') drawPreview();
       if (focused) root.querySelector<HTMLElement>(`[data-testid="${focused}"]`)?.focus({ preventScroll: true });
@@ -467,27 +403,11 @@ export function robotScreen(app: App): Screen {
     const arenaHolder = h('div', { class: 'robot-viewer rb-arena' });
     const explainHolder = h('div', { class: 'rb-explain' });
     const controlsHolder = h('div', { class: 'rb-controls-holder' });
-    const moreBtn = btn('⋯', 'robot-more-open', () => moreSheet.open());
-    moreBtn.setAttribute('aria-label', t('work.more'));
-    moreBtn.title = t('work.more');
-    moreBtn.setAttribute('aria-haspopup', 'dialog');
-    const controlRow = h('div', { class: 'rb-controlrow' }, controlsHolder, moreBtn);
+    const controlRow = h('div', { class: 'rb-controlrow' }, controlsHolder);
     const statusHolder = h('div', { class: 'robot-queue-holder' });
     const chipsHolder = h('div', { class: 'rb-chips' });
     const result = h('div', { class: 'robot-result', 'data-testid': 'robot-result', hidden: true });
-    const moreHolder = h('div');
     const listingMount = h('div');
-
-    // ---- the "Mehr" sheet: the fights, speed and variables, the versions (only what exists)
-    const moreSheet = createSheet(t('work.more'), sheetClose, 'robot-more-sheet');
-    const fightsSection = h('section', { hidden: true, 'data-testid': 'robot-fights' }, h('h3', {}, t('work.fights')));
-    const fightsHolder = h('div');
-    fightsSection.append(fightsHolder);
-    const speedSection = h('section', { hidden: true }, h('h3', {}, t('work.speed')), moreHolder);
-    const historySection = h('section', { hidden: true, 'data-testid': 'robot-history-section' }, h('h3', {}, t('robot.history')));
-    const historyHolder = h('div');
-    historySection.append(historyHolder);
-    moreSheet.body.append(fightsSection, speedSection, historySection);
 
     // ---- the script: the editor, or the listing with the running line while a fight is shown
     const errorHolder = h('div', { class: 'robot-error-holder' });
@@ -508,23 +428,30 @@ export function robotScreen(app: App): Screen {
     // ---- the one primary button
     const primary = h('button', { type: 'button', class: 'primary rb-primary' }) as HTMLButtonElement;
     function paintPrimary() {
-      const label = state === 'idle' ? t('robot.run') : state === 'lost' ? t('work.improve') : (nextAction?.label ?? t('robot.toMap'));
+      const label = state === 'idle' ? t('robot.run') : state === 'playing' ? t('robot.skip') : state === 'lost' ? t('work.improve') : (nextAction?.label ?? t('robot.toMap'));
+      const id = state === 'idle' ? 'robot-run' : state === 'playing' ? 'robot-skip' : state === 'lost' ? 'robot-improve' : 'robot-next';
       primary.textContent = label;
-      primary.dataset.testid = state === 'idle' ? 'robot-run' : state === 'lost' ? 'robot-improve' : 'robot-next';
-      primary.setAttribute('data-testid', primary.dataset.testid);
+      primary.setAttribute('data-testid', id);
       primary.dataset.state = state;
     }
     primary.addEventListener('click', () => {
       if (state === 'idle') return (game.setScript(area.value), fight());
+      if (state === 'playing') return queue?.toEnd();
       if (state === 'lost') return showEditor(true);
       if (nextAction) nextAction.go();
       else opts.back();
     });
-    /** Editing the script starts the next try: the primary is "Kampf starten" again. */
+    /** Editing the script starts the next try: the fight on the arena stops, the verdict goes, the primary is "Kampf starten" again. */
     function toIdle() {
       if (state === 'idle') return;
+      stop();
+      queue = undefined;
       state = 'idle';
+      result.hidden = true;
+      statusHolder.replaceChildren();
+      chipsHolder.replaceChildren();
       paintPrimary();
+      drawPreview();
     }
     paintPrimary();
 
@@ -542,35 +469,11 @@ export function robotScreen(app: App): Screen {
       }
     }
 
-    function renderHistory() {
-      const history = game.history();
-      historySection.hidden = history.length === 0;
-      moreBtn.hidden = history.length === 0 && state === 'idle' && !ranOnce;
-      historyHolder.replaceChildren(
-        h(
-          'ol',
-          { 'data-testid': 'robot-history' },
-          ...history
-            .map((entry, i) =>
-              h(
-                'li',
-                {},
-                h('span', {}, `${titleOf(game.step(entry.step)!)} · ${t(`robot.history.${entry.result}` as MessageKey)} · ${entry.script.split('\n').filter((l) => l.trim()).length}`),
-                h('button', { class: 'run-control', 'data-testid': `robot-restore-${i}`, onclick: () => (game.restore(i), ed!.set(game.script()), renderHistory(), moreSheet.close(), showEditor(true)) }, t('robot.history.restore')),
-              ),
-            )
-            .reverse(),
-        ),
-      );
-    }
-    let ranOnce = false;
-
     function fight() {
       const run = opts.run();
       if (!run) return;
       errorHolder.replaceChildren();
       if (run.error) {
-        renderHistory();
         errorHolder.replaceChildren(errorBox(run.error));
         showEditor(true);
         errorHolder.scrollIntoView({ block: 'nearest' });
@@ -579,46 +482,53 @@ export function robotScreen(app: App): Screen {
       const report = run.report!;
       const { text, ok, extra, rule } = outcomeFor(run, report, step);
       stop();
-      ranOnce = true;
-      moreSheet.close();
-      const queue = variationQueue(
-        game.variationQueue(step),
-        game.build(),
-        game.script(),
-        report.tooLong ? h('p', { class: 'robot-loss' }, t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 })) : null,
-        { arena: arenaHolder, explain: explainHolder, controls: controlsHolder, more: moreHolder, listing: listingMount },
-        { watch: () => (moreSheet.close(), arenaHolder.scrollIntoView({ block: 'start' })) },
-      );
+      // The fight plays first; the verdict (and the points) only come when it has been watched or skipped.
+      state = 'playing';
+      result.hidden = true;
+      statusHolder.hidden = chipsHolder.hidden = true;
+      let revealed = false;
+      const reveal = () => {
+        if (revealed) return;
+        revealed = true;
+        run.award?.();
+        queue?.revealAll();
+        state = ok ? 'won' : 'lost';
+        nextAction = ok ? opts.next() : undefined;
+        result.hidden = false;
+        statusHolder.hidden = chipsHolder.hidden = false;
+        result.replaceChildren(
+          h('p', { class: `verdict ${ok ? 'correct' : 'wrong'}`, 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text, run.won ? h('span', { class: 'rb-stars', 'data-testid': 'robot-stars', title: t('robot.stars', { n: run.stars }) }, ` ${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)}`) : null),
+          ...(report.tooLong ? [h('p', { class: 'robot-loss' }, t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 }))] : []),
+          ...extra,
+          ...(rule ? [rule] : []),
+        );
+        paintPrimary();
+      };
+      queue = variationQueue(game.variationQueue(step), game.build(), game.script(), { arena: arenaHolder, explain: explainHolder, controls: controlsHolder, listing: listingMount }, { onFinished: reveal });
       cleanup = queue.dispose;
-      const regression = enemy.regression === false ? null : h('p', { class: 'robot-note' }, run.broken.length === 0 && run.won ? t('robot.regression.ok') : '');
-      state = ok ? 'won' : 'lost';
-      nextAction = ok ? opts.next() : undefined;
-      result.hidden = false;
-      result.replaceChildren(
-        h('p', { class: `verdict ${ok ? 'correct' : 'wrong'}`, 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text, run.won ? h('span', { class: 'rb-stars', 'data-testid': 'robot-stars', title: t('robot.stars', { n: run.stars }) }, ` ${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)}`) : null),
-        ...extra,
-      );
       statusHolder.replaceChildren(queue.status);
       chipsHolder.replaceChildren(queue.chips);
-      fightsHolder.replaceChildren(...[rule ?? null, regression, queue.panel].filter((n): n is HTMLElement => n !== null));
-      fightsSection.hidden = speedSection.hidden = false;
       paintPrimary();
-      renderHistory();
       showEditor(false);
       requestAnimationFrame(() => arenaHolder.scrollIntoView({ block: 'start' }));
     }
 
-    const left = h('div', { class: 'rb-main' }, task, arenaHolder, controlRow, explainHolder, chipsHolder, statusHolder, result);
-    const right = h('div', { class: 'rb-code' }, errorHolder, ed.el, listingHolder, primary);
-    const page = h('div', { class: 'rb-page', 'data-testid': 'robot-work' }, left, right, partsSheet.dialog, moreSheet.dialog);
+    const left = h('div', { class: 'rb-main' }, task, arenaHolder, controlRow, explainHolder, chipsHolder, statusHolder);
+    const right = h('div', { class: 'rb-code' }, errorHolder, ed.el, listingHolder, result, primary);
+    const page = h('div', { class: 'rb-page', 'data-testid': 'robot-work' }, left, right, partsSheet.dialog);
     drawRobot();
     showWork(h('div', { class: 'rb-work' }, stepBar(step, opts), page));
-    renderHistory();
+  }
+
+  /** The task in one or two sentences: what to do and what winning means (the catch of this task follows in the page). */
+  function goalText(enemy: EnemyData): string {
+    const n = enemy.enemies.length;
+    return t(n === 1 ? 'robot.goal.one' : 'robot.goal.many', { n });
   }
 
   function taskOpts(step: Step): BattleOpts {
     return {
-      run: () => game.run(step.id),
+      run: () => game.run(step.id, true),
       next: () => {
         const n = nextStep(step);
         return n ? { label: `${t('robot.next')}: ${titleOf(n)}`, go: () => (game.open(n.id), showStep(n.id)) } : undefined;

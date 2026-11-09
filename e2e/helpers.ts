@@ -88,10 +88,22 @@ export async function fillCode(page: Page, text: string) {
   await (await codeBox(page)).fill(text);
 }
 
-/** Presses the one primary button while it says "Kampf starten" (the first fight shows right on the page). */
-export async function runFight(page: Page) {
+/** Presses "Kampf starten": the fight starts playing on the arena at once and the verdict is hidden until it ends. */
+export async function startFight(page: Page) {
   await closeSheets(page);
   await page.getByTestId('robot-run').click();
+}
+
+/** Starts the fight and skips to its result ("Zum Ergebnis"), for tests that only care about the verdict. */
+export async function runFight(page: Page) {
+  await startFight(page);
+  const skip = page.getByTestId('robot-skip');
+  // A script with a typo shows its error instead of a fight.
+  await skip.or(page.getByTestId('robot-error')).first().waitFor();
+  if (await skip.isVisible()) {
+    await skip.click();
+    await expect(page.getByTestId('robot-outcome')).toBeVisible();
+  }
 }
 
 /** Opens a sheet by its opener button and returns the sheet; close it with `closeSheets`. */

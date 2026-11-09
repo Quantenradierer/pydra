@@ -137,6 +137,8 @@ export interface RunReport {
   won: boolean;
   firstWin: boolean;
   stars: number;
+  /** Only with `run(id, true)` on a first win: gives the points; call it when the verdict shows. */
+  award?: () => void;
 }
 
 export class RobotGame {
@@ -232,9 +234,10 @@ export class RobotGame {
 
   /**
    * Runs the robot against a battle step: all its layouts, plus a re-run of the
-   * earlier enemies of the chapter. A win only counts when nothing earlier broke.
+   * earlier enemies of the chapter. A win only counts when nothing earlier broke. With `deferPoints` the points of a first win
+   * wait in `RunReport.award` until the screen has shown the verdict.
    */
-  run(id: string): RunReport | undefined {
+  run(id: string, deferPoints = false): RunReport | undefined {
     const step = this.step(id);
     if (!step?.enemy || !this.unlocked(id)) return undefined;
     const enemy = step.enemy;
@@ -271,8 +274,10 @@ export class RobotGame {
       misses: won || already ? p.misses : { ...p.misses, [id]: (p.misses[id] ?? 0) + 1 },
     };
     this.save(p);
-    if (firstWin) this.onPoints({ type: 'level', game: 'robot', id, clean });
-    return { step, report, broken, won, firstWin, stars };
+    const award = firstWin ? () => this.onPoints({ type: 'level', game: 'robot', id, clean }) : undefined;
+    // The screen plays the fight first and hands out the points (and their toast) when the verdict shows.
+    if (award && !deferPoints) award();
+    return { step, report, broken, won, firstWin, stars, ...(award && deferPoints ? { award } : {}) };
   }
 
   // ---- Training Grounds

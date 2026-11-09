@@ -1,21 +1,17 @@
 /** Texts of the task page and its sheets, de / en. */
 export const WORK_DE = {
   'work.close': 'Schließen',
-  'work.parts': 'Teile',
+  'work.parts': 'Ausrüstung',
   'work.edit': 'Skript ändern',
   'work.improve': 'Skript verbessern',
-  'work.more': 'Mehr',
-  'work.speed': 'Tempo & Variablen',
   'work.fights': 'Kämpfe',
 };
 
 export const WORK_EN = {
   'work.close': 'Close',
-  'work.parts': 'Parts',
+  'work.parts': 'Equipment',
   'work.edit': 'Edit script',
   'work.improve': 'Improve script',
-  'work.more': 'More',
-  'work.speed': 'Speed & variables',
   'work.fights': 'Fights',
 };
 

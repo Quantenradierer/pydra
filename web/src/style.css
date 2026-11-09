@@ -2692,23 +2692,6 @@ progress {
   grid-template-columns: minmax(0, 1fr);
   gap: 0.7rem;
 }
-.robot-speed {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.robot-speed input {
-  flex: 1 1 6rem;
-  min-width: 0;
-  max-width: 14rem;
-  min-height: 2.75rem;
-}
-.robot-speed-label {
-  min-width: 6.5rem;
-}
-.robot-speed-label {
-  font-weight: 700;
-}
 .robot-explain {
   background: var(--code-bg);
   border-radius: 0.6rem;
@@ -2729,34 +2712,6 @@ progress {
 }
 .robot-narration-line code {
   font-weight: 700;
-}
-.robot-vars,
-.robot-stack {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-.robot-vars li,
-.robot-stack li {
-  background: var(--code-bg);
-  border-radius: 0.4rem;
-  padding: 0.15rem 0.5rem;
-  font-size: 0.9rem;
-}
-.robot-vars li.changed {
-  background: var(--yellow);
-  color: #14202e;
-  font-weight: 700;
-}
-.robot-stack {
-  flex-direction: column;
-  align-items: flex-start;
-}
-.robot-stack li.top {
-  outline: 2px solid var(--focus);
 }
 .robot-queue {
   display: grid;
@@ -2792,40 +2747,6 @@ progress {
 .robot .layout.old {
   border-style: dashed;
 }
-.robot-vq-rows {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.4rem;
-}
-.robot-vq-rows li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.2rem 0.6rem;
-  background: var(--code-bg);
-  border-radius: 0.6rem;
-  border-left: 4px solid var(--green);
-  padding: 0.4rem 0.6rem;
-}
-.robot-vq-rows li.lost {
-  border-left-color: var(--red);
-}
-.robot-vq-why {
-  flex: 1 1 100%;
-}
-.robot-cols {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 0.8rem;
-}
-.robot-sensors,
-.robot-log {
-  margin: 0;
-  padding-left: 1.1rem;
-  font-size: 0.9rem;
-}
 
 /* Robot Battler: its buttons carry words, not icons. */
 .robot .run-control {
@@ -2835,23 +2756,6 @@ progress {
   padding: 0.3rem 0.7rem;
   font-size: 0.9rem;
   line-height: 1.2;
-}
-
-
-.robot-vq-won {
-  border: 1px solid var(--border);
-  border-radius: 0.6rem;
-  padding: 0 0.6rem 0.5rem;
-}
-.robot-vq-won > summary {
-  cursor: pointer;
-  font-weight: 600;
-  min-height: 2.75rem;
-  display: flex;
-  align-items: center;
-}
-.robot-vq-won .robot-vq-rows {
-  margin-top: 0.2rem;
 }
 
 /* Robot Battler: foldable sections show a chevron (the flex summaries lose the default marker). */

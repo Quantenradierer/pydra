@@ -54,6 +54,16 @@ describe('RobotGame', () => {
     expect(game.stats()).toMatchObject({ done: 1, total: buildSteps().length });
   });
 
+  it('can hold the points back until the screen shows the verdict (after the fight was played)', () => {
+    const { game, events } = setup();
+    const r = game.run('first-contact', true)!;
+    expect(r.won).toBe(true);
+    expect(events).toEqual([]);
+    r.award!();
+    expect(events).toEqual([{ type: 'level', game: 'robot', id: 'first-contact', clean: true }]);
+    expect(game.run('first-contact', true)!.award).toBeUndefined();
+  });
+
   it('keeps the script after a win and after a loss, and a loss sends the player back to it', () => {
     const { game } = setup();
     game.run('first-contact');

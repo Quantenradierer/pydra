@@ -37,30 +37,17 @@
   display: grid;
   gap: 0.3rem;
 }
-.rb-pictures {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.rb-pictures .rb-you,
-.rb-pictures .robot-foes {
-  display: flex;
-  gap: 0.25rem;
-}
-.rb-pictures .robot-foes {
-  flex-wrap: wrap;
-}
-.rb-vs {
-  color: var(--muted);
-}
-.rb-pictures > button {
-  margin-left: auto;
-  min-height: 2.75rem;
-  padding: 0.2rem 0.8rem;
-}
 .rb-task-text {
   margin: 0;
   line-height: 1.35;
+}
+.rb-task-hint {
+  color: var(--muted);
+}
+.robot .rb-equip {
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0.2rem 0.9rem;
 }
 .rb-arena {
   display: flex;
@@ -116,7 +103,7 @@
 .rb-explain .robot-narration li {
   margin: 0.1rem 0;
 }
-/* The four icon controls of every game plus "Mehr" */
+/* The four icon controls of every game plus the speed */
 .rb-controlrow {
   display: flex;
   align-items: center;
@@ -127,7 +114,7 @@
   display: flex;
   gap: 0.25rem;
 }
-.robot .rb-controlrow .run-control {
+.robot .rb-controlrow .run-control:not(.robot-speed-btn) {
   width: 2.75rem;
   height: 2.75rem;
   min-height: 2.75rem;
@@ -202,7 +189,7 @@
   display: none;
 }
 /* The verdict line: result and stars together */
-.rb-main .robot-result {
+.rb-code .robot-result {
   display: grid;
   gap: 0.3rem;
 }
@@ -254,29 +241,6 @@
 }
 .robot-sheet-body > section + section {
   margin-top: 0.8rem;
-}
-.robot-more-cols,
-.robot-more .robot-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-}
-.robot-more > * + * {
-  margin-top: 0.6rem;
-}
-.robot-grain {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-}
-.robot-grain .run-control[aria-pressed='true'] {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
-}
-.robot-sheet .robot-vq-rows li {
-  flex-wrap: wrap;
 }
 
 /* Desktop and wide tablets: the same elements in two columns, the page does not scroll. */
@@ -551,24 +515,6 @@ dialog.robot-sheet::backdrop {
   mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
 }
 
-.robot-actions {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-}
-.robot-sheet-body ol[data-testid='robot-history'] {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.robot-sheet-body ol[data-testid='robot-history'] li {
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0.3rem 0;
-}
-
 /* Task map: a round pill per task (1..N), like the level pills of every game. */
 .robot-pills {
   flex-wrap: wrap;
@@ -597,4 +543,11 @@ dialog.robot-sheet::backdrop {
 }
 textarea.robot-code {
   resize: none;
+}
+
+.robot .rb-controlrow .robot-speed-btn {
+  min-height: 2.75rem;
+  padding: 0 0.8rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }

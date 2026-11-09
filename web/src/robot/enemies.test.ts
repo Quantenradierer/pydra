@@ -11,6 +11,18 @@ describe('enemy data', () => {
     for (const e of ENEMIES) if (!e.mix) expect(e.maps.length, e.id).toBeGreaterThanOrEqual(1);
   });
 
+  it('has hints that add something: the idea never repeats the catch shown on the task card', () => {
+    const norm = (t: string) => t.toLowerCase().replace(/[^a-zäöüß0-9()]+/g, ' ').trim();
+    for (const e of ENEMIES) {
+      for (const lang of ['de', 'en'] as const) {
+        expect(e.idea[lang].trim(), `${e.id} idea ${lang}`).not.toBe('');
+        expect(norm(e.idea[lang]), `${e.id} ${lang}`).not.toBe(norm(e.catchLine[lang]));
+        expect(norm(e.idea[lang]).includes(norm(e.catchLine[lang])) || norm(e.catchLine[lang]).includes(norm(e.idea[lang])), `${e.id} ${lang}`).toBe(false);
+      }
+      expect(e.skeleton.trim(), e.id).not.toBe('');
+    }
+  });
+
   for (const e of ENEMIES) {
     describe(e.id, () => {
       const earlier = e.regression === false ? [] : ENEMIES.filter((o) => o.chapter === e.chapter && o.regression !== false && ENEMIES.indexOf(o) < ENEMIES.indexOf(e));

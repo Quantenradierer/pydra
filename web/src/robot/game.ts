@@ -8,7 +8,6 @@ import type { PointsEvent } from '../points/state.ts';
 import type { AppStorage } from '../storage.ts';
 import { buildProblem, parseBuild, START_BUILD, STAR_GATE, UNLOCK_CHAPTER, type Build } from './build.ts';
 import { precheck } from './battle.ts';
-import { CARDS } from './content/cards.ts';
 import { CHALLENGES, type Challenge } from './content/challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import type { EnemyData } from './content/types.ts';
@@ -58,23 +57,24 @@ export interface RobotProgress {
   solved: string[];
   /** Best stars (1-3) by enemy id. */
   stars: Record<string, number>;
-  /** Hints shown so far (0-3) by enemy id. */
+  /** Hints shown so far (0-MAX_HINTS) by enemy id. */
   hints: Record<string, number>;
   /** Failed runs by step id, until it is solved. */
   misses: Record<string, number>;
   /** All runs and the ones that won: the "% right" on Home. */
   runs: number;
   wins: number;
-  /** Concept cards the player has read. */
-  cards: string[];
   /** Training Grounds: fights won, the next free seed, the date of the last daily fight won. */
   training: { wins: number; seed: number; daily: string };
   current?: string;
 }
 
-export const emptyProgress = (): RobotProgress => ({ build: { ...START_BUILD, gear: [...START_BUILD.gear] }, script: STARTER_SCRIPT, history: [], solved: [], stars: {}, hints: {}, misses: {}, runs: 0, wins: 0, cards: [], training: { wins: 0, seed: 1, daily: '' } });
+export const emptyProgress = (): RobotProgress => ({ build: { ...START_BUILD, gear: [...START_BUILD.gear] }, script: STARTER_SCRIPT, history: [], solved: [], stars: {}, hints: {}, misses: {}, runs: 0, wins: 0, training: { wins: 0, seed: 1, daily: '' } });
 
 const isCount = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 0;
+/** The hint ladder: 1 = the idea that helps, 2 = a code skeleton. */
+export const MAX_HINTS = 2;
+
 const record = (v: unknown, max: number, ids: Set<string>): Record<string, number> => {
   if (typeof v !== 'object' || v === null) return {};
   return Object.fromEntries(Object.entries(v).filter(([k, n]) => ids.has(k) && isCount(n) && n <= max)) as Record<string, number>;
@@ -95,11 +95,11 @@ export function parseProgress(raw: unknown, steps: readonly Step[]): RobotProgre
   }
   if (Array.isArray(r.solved)) out.solved = [...new Set(r.solved.filter((id): id is string => ids.has(id as string)))];
   out.stars = record(r.stars, 3, ids);
-  out.hints = record(r.hints, 3, ids);
+  // Old saves stored up to 3 hints (the ladder has 2 steps now): keep the star penalty, clamp the count.
+  out.hints = Object.fromEntries(Object.entries(record(r.hints, 3, ids)).map(([k, n]) => [k, Math.min(MAX_HINTS, n)]));
   out.misses = record(r.misses, 1000, ids);
   if (isCount(r.runs)) out.runs = r.runs;
   if (isCount(r.wins) && r.wins <= out.runs) out.wins = r.wins;
-  if (Array.isArray(r.cards)) out.cards = [...new Set(r.cards.filter((id): id is string => CARDS.some((c) => c.id === id)))];
   if (typeof r.training === 'object' && r.training !== null) {
     const t = r.training as Record<string, unknown>;
     out.training = { wins: isCount(t.wins) ? t.wins : 0, seed: isCount(t.seed) && t.seed > 0 ? t.seed : 1, daily: typeof t.daily === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(t.daily) ? t.daily : '' };
@@ -207,25 +207,14 @@ export class RobotGame {
     return (table[id] ?? 99) <= this.level() && (kind !== 'gear' || ((STAR_GATE as Record<string, number>)[id] ?? 0) <= this.stats().stars);
   }
 
-  /** Whether a concept card has been read. */
-  cardSeen(id: string): boolean {
-    return this.progress().cards.includes(id);
-  }
-
-  markCard(id: string) {
-    const p = this.progress();
-    if (!CARDS.some((c) => c.id === id) || p.cards.includes(id)) return;
-    this.save({ ...p, cards: [...p.cards, id] });
-  }
-
   hint(id: string): number {
     return this.progress().hints[id] ?? 0;
   }
 
-  /** Shows the next hint (at most 3) and remembers that hints were used. */
+  /** Shows the next hint (at most MAX_HINTS) and remembers that hints were used. */
   nextHint(id: string): number {
     const p = this.progress();
-    const n = Math.min(3, (p.hints[id] ?? 0) + 1);
+    const n = Math.min(MAX_HINTS, (p.hints[id] ?? 0) + 1);
     this.save({ ...p, hints: { ...p.hints, [id]: n } });
     return n;
   }

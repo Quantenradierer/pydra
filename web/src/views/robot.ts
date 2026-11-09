@@ -5,14 +5,13 @@ import type { MessageKey } from '../i18n.ts';
 import { apiEntries } from '../robot/api.ts';
 import { START_BUILD, UNLOCK_CHAPTER, CHASSIS, addonsFor, type Build, type GearId } from '../robot/build.ts';
 import { checkConstraint, checkGlitch, checkLineUp, checkPredict, checkWorkshop, injectGlitch, predictAnswer, shuffledLines } from '../robot/challenges.ts';
-import { cardsOfChapter } from '../robot/content/cards.ts';
 import type { Challenge } from '../robot/content/challenges.ts';
 import type { EnemyData } from '../robot/content/types.ts';
 import type { EnemyReport, FightReport } from '../robot/fight.ts';
 import { evaluateQueue, playItem, type LossReason, type QueueItem } from '../robot/variations.ts';
 import { createViewer, type Speed, type Viewer } from './robot-viewer.ts';
 import { friendlyError } from '../robot/friendly.ts';
-import type { RunReport, Step } from '../robot/game.ts';
+import { MAX_HINTS, type RunReport, type Step } from '../robot/game.ts';
 import { precheck as precheckFn, type BattleResult } from '../robot/battle.ts';
 import type { RbError } from '../robot/py/errors.ts';
 import { subpageHeader } from './header.ts';
@@ -20,17 +19,8 @@ import { benchEl } from './robot-bench.ts';
 import { createWork, type Phase } from './robot-work.ts';
 import { iconEl, partIconSpec, chassisIconSpec, specOf } from '../robot/art/compose.ts';
 import { enemyBuild } from '../robot/battle.ts';
-import type { RobotSpec } from '../robot/art/types.ts';
 
 const GEAR_ORDER: GearId[] = ['blaster', 'cannon', 'eyes', 'hammer', 'shield', 'gps', 'plates'];
-
-/** The picture on a part's concept card. */
-function cardIcon(id: string): RobotSpec {
-  const part = id.replace('part-', '');
-  if (part === 'wide') return { ...partIconSpec('eyes'), wide: true };
-  if (part === 'burst') return { ...partIconSpec('blaster'), mark: 2 };
-  return partIconSpec(part);
-}
 
 /** Robot Battler: a map of tasks, and for each task the build / code / battle / improve loop. */
 export function robotScreen(app: App): Screen {
@@ -131,35 +121,6 @@ export function robotScreen(app: App): Screen {
     show(
       subpageHeader(app, t('lesson.robot.title')),
       h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, resume, p.solved.includes('final-exam') ? h('p', { class: 'robot-win', 'data-testid': 'robot-certificate' }, `🎓 ${t('robot.certificate')}`) : null, game.canTrain() ? h('button', { class: 'run-control', 'data-testid': 'robot-training', onclick: showTraining }, t('robot.training')) : null, ...sections),
-    );
-  }
-
-  // ---------------------------------------------------------------- concept cards
-
-  /** The chapter's cards: unread ones are open with a "Got it" button, read ones stay one click away. */
-  function cardsBlock(chapter: number, onSeen: () => void): Node | null {
-    const cards = cardsOfChapter(chapter);
-    if (cards.length === 0) return null;
-    return h(
-      'section',
-      { class: 'robot-cards', 'data-testid': 'robot-cards' },
-      ...cards.map((c) => {
-        const unseen = !game.cardSeen(c.id);
-        const box = h(
-          'details',
-          { class: `robot-card-note${unseen ? ' new' : ''}`, 'data-testid': `robot-card-${c.id}`, open: unseen },
-          h('summary', {}, c.kind === 'part' ? iconEl(cardIcon(c.id), 36) : null, h('span', {}, `${t('robot.card')}: ${c.title[lang]}`)),
-          h('p', {}, c.idea[lang]),
-          h('h4', {}, t('robot.card.example')),
-          h('pre', {}, h('code', {}, c.example)),
-          h('p', {}, h('strong', {}, `${t('robot.card.try')}: `), c.tryIt[lang]),
-          unseen
-            ? h('button', { class: 'run-control', 'data-testid': `robot-card-gotit-${c.id}`, onclick: () => (game.markCard(c.id), box.removeAttribute('open'), box.classList.remove('new'), btnRemove(), onSeen()) }, t('robot.card.gotit'))
-            : null,
-        );
-        const btnRemove = () => box.querySelector('button')?.remove();
-        return box;
-      }),
     );
   }
 
@@ -508,39 +469,59 @@ export function robotScreen(app: App): Screen {
     const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { class: cls, 'data-testid': id, onclick }, label);
     const goCode = () => (work.show('code', true), area.focus());
 
-    // ---- Task: the enemy, the catch, hints and the concept cards
-    const hintBox = h('div', { class: 'robot-hints', 'data-testid': 'robot-hints' });
-    const hintText = (n: number): Node =>
-      n === 1 ? h('p', {}, t('robot.hint.1', { text: enemy.catchLine[lang] })) : n === 2 ? h('p', {}, t('robot.hint.2', { text: enemy.idea[lang] })) : h('div', {}, h('p', {}, t('robot.hint.3')), h('pre', {}, h('code', {}, enemy.skeleton)));
-    const hintBtn = btn(t('robot.hint'), 'robot-hint', () => askHint());
-    function renderHints() {
+    // ---- Hints: one panel above the work screen, whichever zone the button was pressed in
+    const hintBtns: HTMLButtonElement[] = [];
+    let hintOpener: HTMLElement | undefined;
+    const hintTitle = h('h3', { id: 'rb-hint-title', tabindex: -1, 'data-testid': 'robot-hint-title' });
+    const hintList = h('div', { class: 'rb-hint-list', 'aria-live': 'polite' });
+    const hintMore = btn('', 'robot-hint-next', () => askHint(hintMore));
+    const hintClose = btn(t('work.close'), 'robot-hint-close', () => closeHints());
+    const hintPanel = h('aside', { class: 'rb-hint-panel', id: 'rb-hint-panel', role: 'region', 'aria-labelledby': 'rb-hint-title', hidden: true, 'data-testid': 'robot-hints' }, h('header', {}, hintTitle, hintClose), hintList, h('footer', {}, hintMore));
+    hintPanel.addEventListener('keydown', (e) => (e as KeyboardEvent).key === 'Escape' && (e.stopPropagation(), closeHints()));
+    const hintBody = (n: number): Node => (n === 1 ? h('p', {}, t('robot.hint.1', { text: enemy.idea[lang] })) : h('div', {}, h('p', {}, t('robot.hint.2')), h('pre', {}, h('code', {}, enemy.skeleton))));
+    function renderHints(reveal = false) {
       const shown = hintCount();
-      hintBox.replaceChildren(...Array.from({ length: shown }, (_, i) => hintText(i + 1)));
-      hintBtn.textContent = shown > 0 ? t('work.hint.count', { n: shown }) : t('robot.hint');
+      hintTitle.textContent = shown > 0 ? t('robot.hint.title', { n: shown, max: MAX_HINTS }) : t('robot.hint');
+      hintList.replaceChildren(...Array.from({ length: shown }, (_, i) => h('section', { class: i === shown - 1 && reveal ? 'rb-hint new' : 'rb-hint', 'data-testid': `robot-hint-${i + 1}` }, hintBody(i + 1))));
+      const all = shown >= MAX_HINTS;
+      hintMore.textContent = t(all ? 'robot.hint.done' : shown > 0 ? 'robot.hint.next' : 'robot.hint');
+      hintMore.disabled = all;
+      hintMore.setAttribute('aria-disabled', String(all));
+      const label = all ? t('robot.hint.view') : shown > 0 ? t('work.hint.count', { n: shown, max: MAX_HINTS }) : t('robot.hint');
+      for (const b of hintBtns) {
+        b.textContent = label;
+        b.setAttribute('aria-expanded', String(!hintPanel.hidden));
+      }
     }
-    function askHint() {
-      if (opts.training) localHint = Math.min(3, localHint + 1);
-      else if (game.hint(step.id) < 3) game.nextHint(step.id);
+    function openHints() {
+      hintPanel.hidden = false;
+      renderHints(true);
+      hintTitle.focus({ preventScroll: true });
+      hintList.lastElementChild?.scrollIntoView?.({ block: 'nearest' });
+    }
+    function closeHints() {
+      hintPanel.hidden = true;
       renderHints();
-      work.show('task', true);
+      hintOpener?.focus({ preventScroll: true });
     }
-    const cardList = opts.training ? [] : cardsOfChapter(step.chapter);
-    const cardsBtn = btn('', 'robot-cards-open');
-    const cardsLabel = () => {
-      const unseen = cardList.filter((c) => !game.cardSeen(c.id)).length;
-      cardsBtn.replaceChildren(t('work.cards'), unseen > 0 ? h('span', { class: 'rb-badge' }, t('work.cards.new')) : '');
+    /** Reveals the next hint (a star is spent on the first) and shows it right away; with none left the button just toggles the panel. */
+    function askHint(from?: HTMLElement) {
+      hintOpener = from && hintBtns.includes(from as HTMLButtonElement) ? from : hintOpener;
+      if (hintCount() >= MAX_HINTS) return hintPanel.hidden ? openHints() : closeHints();
+      if (opts.training) localHint += 1;
+      else game.nextHint(step.id);
+      openHints();
+    }
+    const hintButton = (id: string) => {
+      const b = btn(t('robot.hint'), id, () => askHint(b)) as HTMLButtonElement;
+      b.setAttribute('aria-controls', 'rb-hint-panel');
+      hintBtns.push(b);
+      return b;
     };
     Z.task.body.append(
       h('div', { class: 'robot-card robot-catch' }, h('div', { class: 'robot-foes', 'data-testid': 'robot-foes' }, ...enemy.enemies.map((def) => iconEl(specOf(enemyBuild(def)), 56, { enemy: true, label: () => t('robot.enemy') }))), h('div', {}, h('h3', {}, t('robot.catch')), h('p', { 'data-testid': 'robot-catch' }, enemy.catchLine[lang]))),
-      hintBox,
     );
-    if (cardList.length > 0) {
-      Z.task.tools.append(cardsBtn);
-      const cardsDrawer = work.drawer('task', t('work.cards'), cardsBtn);
-      cardsLabel();
-      cardsDrawer.set(cardsBlock(step.chapter, cardsLabel)!);
-    }
-    Z.task.actions.append(hintBtn, btn(t('work.toCode'), 'robot-to-code', goCode, 'robot-run rb-only-tabs'));
+    Z.task.actions.append(hintButton('robot-hint'), btn(t('work.toCode'), 'robot-to-code', goCode, 'robot-run rb-only-tabs'));
 
     // ---- Robot: the picture with tappable sockets, and the full parts list in a drawer
     const partsBtn = btn(t('work.parts'), 'robot-build-open');
@@ -576,7 +557,7 @@ export function robotScreen(app: App): Screen {
       viewBtn.textContent = t(edit ? 'work.follow' : 'work.edit');
       if (edit) area.focus();
     }
-    Z.code.actions.append(btn(t('robot.run'), 'robot-run', () => (game.setScript(area.value), fight()), 'robot-run'), viewBtn, btn(t('robot.hint'), 'robot-hint-code', askHint));
+    Z.code.actions.append(btn(t('robot.run'), 'robot-run', () => (game.setScript(area.value), fight()), 'robot-run'), viewBtn, hintButton('robot-hint-code'));
 
     // ---- Fight: result, queue bar, arena; controls at the bottom; details in drawers
     const result = h('div', { class: 'robot-result', 'data-testid': 'robot-result' }, h('p', { 'data-testid': 'robot-outcome', 'aria-live': 'polite' }, t('robot.outcome.idle')));
@@ -673,6 +654,7 @@ export function robotScreen(app: App): Screen {
     });
     work.phase('build');
     showWork(work.el);
+    work.el.append(hintPanel);
     work.show(game.progress().solved.includes(step.id) ? 'code' : 'task');
     renderHints();
     renderHistory();

@@ -96,6 +96,9 @@ describe('RobotGame', () => {
     const { game } = setup();
     game.nextHint('first-contact');
     expect(game.hint('first-contact')).toBe(1);
+    game.nextHint('first-contact');
+    game.nextHint('first-contact');
+    expect(game.hint('first-contact')).toBe(2);
     expect(game.run('first-contact')!.stars).toBe(2);
   });
 
@@ -133,6 +136,10 @@ describe('RobotGame', () => {
   it('reads damaged progress defensively', () => {
     const steps = buildSteps();
     expect(parseProgress('junk', steps).script).toBe(STARTER_SCRIPT);
+    // Old saves: the removed concept-card list is ignored, three hints become two (still costing the star).
+    const old = parseProgress({ script: 'x', cards: ['ch0', 7], hints: { 'first-contact': 3, 'one-more-line': 1 } }, steps);
+    expect(old.hints).toEqual({ 'first-contact': 2, 'one-more-line': 1 });
+    expect('cards' in old).toBe(false);
     const p = parseProgress({ script: 'x', solved: ['first-contact', 'nope'], stars: { 'first-contact': 9 }, build: { chassis: 'huge' }, runs: 2, wins: 5 }, steps);
     expect(p.solved).toEqual(['first-contact']);
     expect(p.stars).toEqual({});

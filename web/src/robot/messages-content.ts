@@ -1,4 +1,4 @@
-/** Texts for the second half of Robot Battler: chapters 3-4, Proving Grounds II, rules, cards, Training Grounds. */
+/** Texts for the second half of Robot Battler: chapters 3-4, Proving Grounds II, rules, Training Grounds. */
 export const CONTENT_DE = {
   'robot.chapter.3': 'Kapitel 3: if / elif / else',
   'robot.chapter.4': 'Kapitel 4: while-Schleifen',
@@ -18,10 +18,6 @@ export const CONTENT_DE = {
   'robot.training.stats': '{wins} Trainingskämpfe gewonnen',
   'robot.training.another': 'Noch ein Kampf',
   'robot.training.locked': 'Das Trainingsgelände öffnet mit Kapitel 2.',
-  'robot.card': 'Karteikarte',
-  'robot.card.example': 'Beispiel',
-  'robot.card.try': 'Probier es aus',
-  'robot.card.gotit': 'Verstanden',
 } as const;
 
 export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
@@ -43,8 +39,4 @@ export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
   'robot.training.stats': '{wins} training fights won',
   'robot.training.another': 'Another fight',
   'robot.training.locked': 'The Training Grounds open with Chapter 2.',
-  'robot.card': 'Concept card',
-  'robot.card.example': 'Example',
-  'robot.card.try': 'Try it',
-  'robot.card.gotit': 'Got it',
 };

@@ -161,18 +161,10 @@ async function win(page: import('@playwright/test').Page, id: string, script: st
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
 }
 
-test('Chapter 3: the concept card, if / elif decisions and the shield boss', async ({ page }) => {
+test('Chapter 3: if / elif decisions and the shield boss', async ({ page }) => {
   await page.goto('/');
   await preset(page, BEFORE_CHAPTER_3, 'forward(4)\nfire()');
   await page.getByTestId('robot-step-peekaboo').click();
-  // The chapter's concept card is open until it is read, and parts show their own cards.
-  await openDrawer(page, 'task', 'robot-cards-open');
-  await expect(page.getByTestId('robot-card-ch3')).toHaveAttribute('open', '');
-  await expect(page.getByTestId('robot-card-part-hammer')).toBeVisible();
-  await page.getByTestId('robot-card-gotit-ch3').click();
-  await expect(page.getByTestId('robot-card-ch3')).not.toHaveAttribute('open', '');
-  expect(((await stored(page, 'robot')) as { cards: string[] }).cards).toEqual(['ch3']);
-
   // Old code loses a layout (the dummy is on the right sometimes) ...
   await fillCode(page, 'fire()\nfire()');
   await runFight(page);
@@ -560,3 +552,47 @@ test('the same screens in English', async ({ page }) => {
   await expect(page.getByTestId('robot-outcome')).toContainText('Lost');
   await expect(page.getByTestId('robot-improve')).toHaveText('Improve script');
 });
+
+for (const [device, viewport] of [
+  ['phone', { width: 360, height: 740 }],
+  ['desktop', { width: 1280, height: 800 }],
+] as const) {
+  test(`on a ${device}: pressing Hinweis shows the new hint at once, in view, from both buttons`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await page.getByTestId('start-robot').click();
+    await page.getByTestId('robot-step-first-contact').click();
+    const hints = page.getByTestId('robot-hints');
+    await expect(hints).toBeHidden();
+
+    // From the Task zone: hint 1 (the idea) is in view and announced by its heading.
+    await zone(page, 'task');
+    await page.getByTestId('robot-hint').click();
+    await expect(hints).toBeInViewport();
+    await expect(page.getByTestId('robot-hint-title')).toHaveText('Hinweis 1 von 2');
+    await expect(page.getByTestId('robot-hint-title')).toBeFocused();
+    await expect(page.getByTestId('robot-hint-1')).toContainText('Das hilft:');
+    await expect(page.getByTestId('robot-hint-1')).toBeInViewport();
+    // The catch is on the task card only, never repeated in a hint.
+    await expect(page.getByText('Der Code ist schon fertig', { exact: false })).toHaveCount(1);
+    await page.getByTestId('robot-hint-close').click();
+    await expect(hints).toBeHidden();
+
+    // From the Code zone: the second hint appears there, in view, with no zone switch.
+    await zone(page, 'code');
+    await page.getByTestId('robot-hint-code').click();
+    await expect(page.getByTestId('robot-hint-2')).toBeInViewport();
+    await expect(page.getByTestId('robot-hint-2')).toContainText('forward()');
+    await expect(page.getByTestId('robot-hint-title')).toHaveText('Hinweis 2 von 2');
+    await expect(page.getByTestId('robot-hint-next')).toBeDisabled();
+    await expect(page.getByTestId('robot-hint-next')).toHaveText('Alle Hinweise gezeigt');
+    await expect(page.getByTestId('robot-code')).toBeVisible();
+    await page.screenshot({ path: `${process.env.SHOTS ?? 'test-results'}/hint-${device}.png` });
+    // With all hints shown the button only toggles the panel (it is never a dead click).
+    await page.getByTestId('robot-hint-close').click();
+    await expect(page.getByTestId('robot-hint-code')).toHaveText('Hinweise ansehen');
+    await page.getByTestId('robot-hint-code').click();
+    await expect(hints).toBeInViewport();
+    expect(((await stored(page, 'robot')) as { hints: Record<string, number> }).hints['first-contact']).toBe(2);
+  });
+}

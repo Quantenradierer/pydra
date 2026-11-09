@@ -2612,7 +2612,6 @@ progress {
   color: var(--muted);
 }
 .robot-card,
-.robot-card-note,
 .robot-build,
 .robot-api,
 .robot-history,
@@ -2622,7 +2621,6 @@ progress {
   border-radius: var(--radius);
   padding: 0.7rem 0.9rem;
 }
-.robot-card-note summary,
 .robot-build summary,
 .robot-api summary,
 .robot-history summary {
@@ -3014,21 +3012,6 @@ progress {
   margin: 0.3rem 0;
 }
 
-.robot-cards {
-  display: grid;
-  gap: 0.6rem;
-}
-.robot-card-note.new {
-  border-color: var(--accent, currentColor);
-}
-.robot-card-note pre {
-  overflow-x: auto;
-  margin: 0.3rem 0;
-}
-.robot-card-note h4 {
-  margin: 0.5rem 0 0;
-}
-
 /* Robot Battler: its buttons carry words, not icons. */
 .robot .run-control {
   width: auto;
@@ -3065,7 +3048,6 @@ progress {
 .robot summary::-webkit-details-marker {
   display: none;
 }
-.robot-card-note > summary::before,
 .robot-build > summary::before,
 .robot-api > summary::before,
 .robot-history > summary::before,

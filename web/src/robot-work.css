@@ -160,15 +160,6 @@
 .rb-zone-actions .robot-next {
   flex: 1 1 8rem;
 }
-.rb-badge {
-  margin-left: 0.4rem;
-  padding: 0 0.4rem;
-  border-radius: 999px;
-  background: var(--yellow);
-  color: #14202e;
-  font-size: 0.7rem;
-  font-weight: 700;
-}
 .rb-tabs {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -551,4 +542,73 @@
 .rb-chal textarea.robot-code {
   flex: none;
   min-height: 9rem;
+}
+
+/* The hint panel: floats above the work screen so a new hint is always seen, in whichever zone the button was pressed. */
+.rb-hint-panel {
+  position: fixed;
+  z-index: 30;
+  left: 50%;
+  bottom: 7.5rem;
+  transform: translateX(-50%);
+  width: min(34rem, calc(100vw - 1.5rem));
+  max-height: min(55dvh, 28rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: 0 0.5rem 1.6rem rgb(0 0 0 / 0.35);
+}
+.rb-hint-panel[hidden] {
+  display: none;
+}
+.rb-hint-panel header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.rb-hint-panel h3 {
+  margin: 0;
+}
+.rb-hint-list {
+  overflow: auto;
+  display: grid;
+  gap: 0.5rem;
+}
+.rb-hint {
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+  background: var(--code-bg);
+}
+.rb-hint.new {
+  outline: 2px solid var(--accent);
+}
+.rb-hint p {
+  margin: 0 0 0.3rem;
+}
+.rb-hint pre {
+  margin: 0;
+  overflow-x: auto;
+}
+.rb-hint-panel footer {
+  display: flex;
+  gap: 0.5rem;
+}
+.rb-hint-panel button {
+  min-height: 2.75rem;
+}
+.rb-hint-panel button:disabled,
+.rb-hint-panel button[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: default;
+  border-style: dashed;
+}
+@media (min-width: 960px) {
+  .rb-hint-panel {
+    bottom: 5rem;
+  }
 }

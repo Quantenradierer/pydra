@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { START_BUILD } from './build.ts';
 import { runBattle } from './battle.ts';
 import type { LayoutSpec } from './layout.ts';
-import { buildBeats, hasTrace, nextBeat, stackNames, stateAt } from './stepper.ts';
+import { buildBeats, hasTrace, idleRunEnd, isIdleBeat, nextBeat, stackNames, stateAt } from './stepper.ts';
 
 const fight = (script: string, map = ['>..D']) => {
   const layout: LayoutSpec = { map, enemies: [{ hp: 1 }], seed: 1 };
@@ -79,5 +79,24 @@ describe('state at a beat', () => {
     const back = beats.findIndex((b) => b.tick === 3 && b.kind === 'line');
     expect(beats[back]!.line).toBe(4);
     expect(stateAt(beats, back).stack).toEqual([]);
+  });
+});
+
+describe('idle rounds (the script ended and nothing happens)', () => {
+  const r = fight('forward()', ['>...D']);
+  const beats = buildBeats(r.frames);
+
+  it('are resolve beats with no line, no events, no speech', () => {
+    expect(beats.filter((_, i) => isIdleBeat(beats, r.frames, i)).length).toBeGreaterThan(100);
+    expect(isIdleBeat(beats, r.frames, 0)).toBe(false);
+    expect(isIdleBeat(beats, r.frames, 1)).toBe(false); // the forward() line
+    expect(isIdleBeat(beats, r.frames, 2)).toBe(false); // its move
+  });
+
+  it('a run of them ends at its last beat, so the playback jumps over the waiting', () => {
+    const first = beats.findIndex((_, i) => isIdleBeat(beats, r.frames, i));
+    expect(first).toBeGreaterThan(0);
+    expect(idleRunEnd(beats, r.frames, first)).toBe(beats.length - 1);
+    expect(idleRunEnd(beats, r.frames, 1)).toBe(1);
   });
 });

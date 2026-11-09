@@ -56,6 +56,22 @@ export function buildBeats(frames: readonly Frame[]): Beat[] {
   return beats;
 }
 
+/** A round in which nothing at all happens: the script has ended (no line), no action, no event, no speech. */
+export function isIdleBeat(beats: readonly Beat[], frames: readonly Frame[], index: number): boolean {
+  const beat = beats[index];
+  if (!beat || beat.kind !== 'resolve' || beat.line !== null) return false;
+  const frame = frames[beat.tick];
+  return !!frame && frame.events.length === 0 && frame.bubbles.length === 0 && (frame.trace ?? []).length === 0;
+}
+
+/** The last beat of the run of idle rounds that starts at `index` (`index` itself when it is not idle). */
+export function idleRunEnd(beats: readonly Beat[], frames: readonly Frame[], index: number): number {
+  let i = index;
+  if (!isIdleBeat(beats, frames, i)) return i;
+  while (isIdleBeat(beats, frames, i + 1)) i++;
+  return i;
+}
+
 /** Without a trace (an old replay) every tick is a single resolve beat. */
 export const hasTrace = (frames: readonly Frame[]): boolean => frames.some((f) => f.trace !== undefined);
 

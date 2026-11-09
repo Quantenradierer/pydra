@@ -2798,3 +2798,10 @@ progress {
 .robot-error p {
   margin: 0;
 }
+.robot-original summary::after {
+  content: '▸';
+  margin-left: 0.4rem;
+}
+.robot-original[open] summary::after {
+  content: '▾';
+}

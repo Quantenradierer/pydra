@@ -3,9 +3,9 @@ import { startFight } from './helpers.ts';
 
 /** The fight is played, slowly, on the arena; the verdict only comes when it is over. And nothing on the task page is decoration. */
 
-async function openTask(page: Page, step = 'first-contact', script = 'forward()\nfire()') {
+async function openTask(page: Page, step = 'first-contact', script = 'forward()\nfire()', solved: string[] = []) {
   await page.goto('/');
-  await page.evaluate(([code]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: [], script: code, runs: 0, wins: 0 })), [script] as const);
+  await page.evaluate(([code, solved]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: code, runs: 0, wins: 0 })), [script, solved] as const);
   await page.reload();
   await page.getByTestId('start-robot').click();
   await page.getByTestId(`robot-step-${step}`).click();
@@ -90,4 +90,22 @@ test('nothing on the task page is decoration: no share, no automatic menu, no pi
     for (const word of ['teilen', 'share', 'automatisch', 'automatic', 'continue automatically', 'teile']) expect(text, word).not.toContain(word);
     await expect(page.locator('main.robot [data-testid*="share"], main.robot [aria-label*="hare"], main.robot [aria-label*="eilen"]')).toHaveCount(0);
   }
+});
+
+test('a lost fight whose script ended does not play 200 empty rounds: the waiting is one step, the verdict comes in seconds', async ({ page }) => {
+  await openTask(page, 'one-more-line', 'forward()\nfire()', ['first-contact']);
+  const t0 = Date.now();
+  await startFight(page);
+  await expect(page.getByTestId('robot-outcome')).toContainText('Verloren', { timeout: 15_000 });
+  expect(Date.now() - t0).toBeLessThan(12_000);
+  await expect(page.getByTestId('robot-narration')).toContainText('Dein Skript ist zu Ende');
+});
+
+test('on a phone the verdict and the next button are scrolled into view when the fight ends', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await openTask(page, 'first-contact', 'forward()\nforward()\nfire()\nfire()');
+  await startFight(page);
+  await expect(page.getByTestId('robot-outcome')).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByTestId('robot-next')).toBeInViewport({ ratio: 0.9 });
+  await expect(page.getByTestId('robot-outcome')).toBeInViewport({ ratio: 0.9 });
 });

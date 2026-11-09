@@ -508,6 +508,8 @@ export function robotScreen(app: App): Screen {
           ...(rule ? [rule] : []),
         );
         paintPrimary();
+        // On a phone the verdict and the button sit below the arena: bring them into view (nothing moves when they are already visible).
+        requestAnimationFrame(() => primary.scrollIntoView({ block: 'nearest' }));
       };
       queue = variationQueue(game.variationQueue(step), game.build(), game.script(), { arena: arenaHolder, explain: explainHolder, controls: controlsHolder, listing: listingMount }, { onFinished: reveal });
       cleanup = queue.dispose;

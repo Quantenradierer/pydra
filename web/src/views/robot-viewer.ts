@@ -4,7 +4,7 @@ import type { BattleResult } from '../robot/battle.ts';
 import { describeMotion, narrateEvents } from '../robot/narration.ts';
 import { createRobotLayer } from '../robot/art/arena.ts';
 import { drawFrame, type Callout } from '../robot/replay.ts';
-import { buildBeats, nextBeat, stateAt, type Beat, type LineHint } from '../robot/stepper.ts';
+import { buildBeats, idleRunEnd, isIdleBeat, nextBeat, stateAt, type Beat, type LineHint } from '../robot/stepper.ts';
 
 type T = (key: MessageKey, params?: Params) => string;
 
@@ -12,6 +12,8 @@ type T = (key: MessageKey, params?: Params) => string;
 export const SPEED_MS = [0, 1200, 800, 450, 150] as const;
 export const DEFAULT_SPEED = 2;
 export const MAX_SPEED = SPEED_MS.length - 1;
+/** Long fights (a loop that goes on for 200 rounds) play at the fastest speed after this many steps; the first ones stay followable. */
+export const SLOW_STEPS = 40;
 
 /** The speed lives outside the viewer so that it stays when the next fight of the queue loads. */
 export interface Speed {
@@ -129,7 +131,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     listing.dataset.active = active == null ? '' : String(active);
 
     // In words: what this line did.
-    const sentences = beat.kind === 'start' ? [t('robot.narr.start')] : beat.kind === 'resolve' ? [t('robot.narr.resolve'), ...describeMotion(frames[beat.tick - 1], frames[beat.tick]!, t)] : narrateEvents(beat.events, t);
+    const sentences = beat.kind === 'start' ? [t('robot.narr.start')] : isIdleBeat(beats, frames, index) ? [t('robot.narr.idle')] : beat.kind === 'resolve' ? [t('robot.narr.resolve'), ...describeMotion(frames[beat.tick - 1], frames[beat.tick]!, t)] : narrateEvents(beat.events, t);
     narration.replaceChildren(
       ...(beat.kind === 'line' && active != null ? [h('li', { class: 'robot-narration-line' }, h('code', {}, `${t('robot.line', { line: active })}: ${(source[active - 1] ?? '').trim()}`))] : []),
       ...sentences.map((s) => h('li', {}, s)),
@@ -157,14 +159,20 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     playBtn.setAttribute('aria-label', t('robot.play'));
     playBtn.title = t('robot.play');
   }
+  /** The beat after `from`: a long wait with nothing happening (script over) is one step, not 200. */
+  function advance(from: number): number {
+    const next = nextBeat(beats, from, 'line');
+    return isIdleBeat(beats, frames, from) ? idleRunEnd(beats, frames, next) : next;
+  }
   function tickOn() {
+    const wait = index >= SLOW_STEPS ? Math.min(SPEED_MS[speed.level]!, SPEED_MS[MAX_SPEED]!) : SPEED_MS[speed.level];
     timer = setTimeout(() => {
       timer = undefined;
       if (index >= lastBeat) {
         pause();
         return;
       }
-      index = nextBeat(beats, index, 'line');
+      index = advance(index);
       if (index >= lastBeat) {
         pause();
         playedToEnd = false;
@@ -174,7 +182,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
       }
       render();
       tickOn();
-    }, SPEED_MS[speed.level]);
+    }, wait);
   }
   function play() {
     if (timer) return;
@@ -205,7 +213,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   const controlList = [
     btn('robot.restart', '↺', 'robot-restart', () => go(0), 'back'),
     playBtn,
-    btn('robot.step', '→', 'robot-step', () => go(nextBeat(beats, index, 'line')), 'forward'),
+    btn('robot.step', '→', 'robot-step', () => go(advance(index)), 'forward'),
     btn('robot.end', '⇥', 'robot-end', () => go(lastBeat), 'forward'),
     speedBtn,
   ];

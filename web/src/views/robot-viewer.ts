@@ -96,6 +96,8 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     return calls.flatMap((e) => (e.k === 'call' ? [{ kind: e.kind, text: e.result !== undefined && e.kind === 'sensor' ? `${e.fn}(${e.args.join(', ')}) → ${e.result}` : `${e.fn}(${e.args.join(', ')})` }] : [])).slice(-3);
   }
 
+  const backButtons: HTMLButtonElement[] = [];
+  const forwardButtons: HTMLButtonElement[] = [];
   function render() {
     const beat = beats[index]!;
     const state = stateAt(beats, index);
@@ -110,6 +112,9 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     position.textContent = t('robot.tick', { n: beat.tick, total: lastTick });
     where.textContent = beat.kind === 'start' ? t('robot.where.start', { total: lastBeat }) : beat.kind === 'resolve' ? t('robot.where.arena', { tick: beat.tick, n: index, total: lastBeat }) : t('robot.where', { line: beat.line ?? 0, n: index, total: lastBeat });
     slider.value = String(index);
+    // A control that cannot move any further is disabled instead of doing nothing.
+    for (const b of backButtons) b.disabled = index <= 0;
+    for (const b of forwardButtons) b.disabled = index >= lastBeat;
 
     // The code: the running line, and what each line that ran produced.
     const active = beat.line;
@@ -196,7 +201,19 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     speed.level = Number(speedSlider.value);
     speedLabel.textContent = t(`robot.speed.${speed.level}` as MessageKey);
   });
-  const btn = (label: MessageKey, id: string, fn: () => void) => h('button', { class: 'run-control', 'data-testid': id, onclick: () => (pause(), fn()) }, t(label));
+  const btn = (label: MessageKey, id: string, fn: () => void, side?: 'back' | 'forward') => {
+    const b = h('button', { class: 'run-control', 'data-testid': id, onclick: () => (pause(), fn()) }, t(label)) as HTMLButtonElement;
+    if (side) (side === 'back' ? backButtons : forwardButtons).push(b);
+    return b;
+  };
+  const controlList = [
+    btn('robot.step.lineBack', 'robot-line-back', () => go(prevBeat(beats, index, 'line')), 'back'),
+    btn('robot.step.line', 'robot-line-forward', () => go(nextBeat(beats, index, 'line')), 'forward'),
+    btn('robot.restart', 'robot-restart', () => go(0), 'back'),
+    btn('robot.back', 'robot-back', () => go(prevBeat(beats, index, 'tick')), 'back'),
+    btn('robot.forward', 'robot-forward', () => go(nextBeat(beats, index, 'tick')), 'forward'),
+    btn('robot.end', 'robot-end', () => go(lastBeat), 'forward'),
+  ];
   render();
   playedToEnd = index >= lastBeat;
 
@@ -212,12 +229,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     'div',
     { class: 'run-controls robot-controls' },
     playBtn,
-    btn('robot.step.lineBack', 'robot-line-back', () => go(prevBeat(beats, index, 'line'))),
-    btn('robot.step.line', 'robot-line-forward', () => go(nextBeat(beats, index, 'line'))),
-    btn('robot.restart', 'robot-restart', () => go(0)),
-    btn('robot.back', 'robot-back', () => go(prevBeat(beats, index, 'tick'))),
-    btn('robot.forward', 'robot-forward', () => go(nextBeat(beats, index, 'tick'))),
-    btn('robot.end', 'robot-end', () => go(lastBeat)),
+    ...controlList,
   );
   const more = h(
     'div',

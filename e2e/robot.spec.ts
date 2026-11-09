@@ -365,6 +365,8 @@ test('the variation queue: first fight, then the other variations and earlier en
   await expect(page.getByTestId('robot-vq-summary')).toContainText(`${total} von ${total} Kämpfen gewonnen`, { timeout: 60_000 });
   await expect(page.getByTestId('robot-vq-verdict')).toHaveText('Dein Skript schlägt alle Varianten und alle früheren Gegner.');
   // The earlier enemy is part of the queue and can be watched again from the summary.
+  await expect(queue.getByTestId('robot-vq-row-first-contact#1')).toBeHidden(); // won fights are folded away
+  await queue.getByTestId('robot-vq-won').locator('summary').click();
   await expect(queue.getByTestId('robot-vq-row-first-contact#1')).toContainText('früherer Gegner');
   await queue.getByTestId('robot-vq-watch-first-contact#1').click();
   await expect(page.getByTestId('robot-vq-progress')).toContainText('früherer Gegner „');

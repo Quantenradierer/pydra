@@ -258,6 +258,7 @@ export function robotScreen(app: App): Screen {
     const done = new Set<number>();
     let current = 0;
     let auto = true;
+    let oldOpen = false;
     let viewer: Viewer | undefined;
     let autoTimer: ReturnType<typeof setTimeout> | undefined;
     const holder = h('div', { class: 'robot-viewer' });
@@ -285,8 +286,7 @@ export function robotScreen(app: App): Screen {
       stateTag.textContent = t(`robot.vq.state.${state}` as MessageKey);
       stateTag.dataset.state = state;
       reasonBox.textContent = finished && out.reason ? lossText(out.reason, item.enemy) : '';
-      chips.replaceChildren(
-        ...items.map((it, i) => {
+      const chipOf = (it: QueueItem, i: number) => {
           const o = outcomes[i]!;
           const seen = done.has(i);
           const state = seen ? (o.won ? 'won' : 'lost') : 'pending';
@@ -301,7 +301,14 @@ export function robotScreen(app: App): Screen {
             },
             `${seen ? (o.won ? '✓' : '✗') : '·'} ${labelOf(it)}`,
           );
-        }),
+      };
+      const olds = items.flatMap((it, i) => (it.regression ? [chipOf(it, i)] : []));
+      const oldDone = items.filter((it, i) => it.regression && done.has(i) && outcomes[i]!.won).length;
+      chips.replaceChildren(
+        ...items.flatMap((it, i) => (it.regression ? [] : [chipOf(it, i)])),
+        ...(olds.length > 0
+          ? [h('details', { class: 'robot-vq-old', open: oldOpen || items[current]!.regression === true, 'data-testid': 'robot-vq-old', ontoggle: (e: Event) => (oldOpen = (e.target as HTMLDetailsElement).open) }, h('summary', {}, t('robot.vq.olds', { done: oldDone, n: olds.length })), h('div', { class: 'robot-layouts' }, ...olds))]
+          : []),
       );
       const last = current >= items.length - 1;
       nextBtn.hidden = !finished || last;
@@ -311,24 +318,24 @@ export function robotScreen(app: App): Screen {
 
     function showSummary() {
       const won = outcomes.filter((o) => o.won).length;
+      const row = (o: (typeof outcomes)[number], i: number) =>
+        h(
+          'li',
+          { class: o.won ? 'won' : 'lost', 'data-testid': `robot-vq-row-${o.item.key}` },
+          h('strong', {}, `${o.won ? '✓' : '✗'} ${o.item.regression ? `${t('robot.vq.old')}: ` : ''}${o.item.enemy.title[lang]} · ${t('robot.layout', { n: o.item.n })}`),
+          h('span', { class: 'robot-note' }, ` ${t('robot.vq.ticks', { n: o.ticks })}`),
+          o.reason ? h('span', { class: 'robot-vq-why' }, lossText(o.reason, o.item.enemy)) : null,
+          h('button', { class: 'run-control', 'data-testid': `robot-vq-watch-${o.item.key}`, onclick: () => (load(i, false), holder.scrollIntoView?.({ block: 'center', behavior: 'smooth' })) }, t('robot.vq.watch')),
+        );
+      const lostRows = outcomes.flatMap((o, i) => (o.won ? [] : [row(o, i)]));
+      const wonRows = outcomes.flatMap((o, i) => (o.won ? [row(o, i)] : []));
       summary.replaceChildren(
         h('h3', {}, t('robot.vq.summary', { won, n: items.length })),
         h('p', { class: won === items.length ? 'robot-win' : 'robot-loss', 'data-testid': 'robot-vq-verdict' }, t(won === items.length ? 'robot.vq.summary.ok' : 'robot.vq.summary.bad')),
         ...(tooLong ? [tooLong] : []),
-        h(
-          'ul',
-          { class: 'robot-vq-rows' },
-          ...outcomes.map((o, i) =>
-            h(
-              'li',
-              { class: o.won ? 'won' : 'lost', 'data-testid': `robot-vq-row-${o.item.key}` },
-              h('strong', {}, `${o.won ? '✓' : '✗'} ${o.item.regression ? `${t('robot.vq.old')}: ` : ''}${o.item.enemy.title[lang]} · ${t('robot.layout', { n: o.item.n })}`),
-              h('span', { class: 'robot-note' }, ` ${t('robot.vq.ticks', { n: o.ticks })}`),
-              o.reason ? h('span', { class: 'robot-vq-why' }, lossText(o.reason, o.item.enemy)) : null,
-              h('button', { class: 'run-control', 'data-testid': `robot-vq-watch-${o.item.key}`, onclick: () => load(i, false) }, t('robot.vq.watch')),
-            ),
-          ),
-        ),
+        ...(lostRows.length > 0 ? [h('ul', { class: 'robot-vq-rows' }, ...lostRows.slice(0, 4))] : []),
+        ...(lostRows.length > 4 ? [h('details', { class: 'robot-vq-won', 'data-testid': 'robot-vq-more-lost' }, h('summary', {}, t('robot.vq.moreLost', { n: lostRows.length - 4 })), h('ul', { class: 'robot-vq-rows' }, ...lostRows.slice(4)))] : []),
+        ...(wonRows.length > 0 ? [h('details', { class: 'robot-vq-won', 'data-testid': 'robot-vq-won' }, h('summary', {}, t('robot.vq.wonList', { n: wonRows.length })), h('ul', { class: 'robot-vq-rows' }, ...wonRows))] : []),
       );
     }
 

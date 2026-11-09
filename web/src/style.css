@@ -3039,3 +3039,21 @@ progress {
   line-height: 1.2;
 }
 
+
+.robot-vq-old,
+.robot-vq-won {
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0 0.6rem 0.5rem;
+}
+.robot-vq-old > summary,
+.robot-vq-won > summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+}
+.robot-vq-won .robot-vq-rows {
+  margin-top: 0.2rem;
+}

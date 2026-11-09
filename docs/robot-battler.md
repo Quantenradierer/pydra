@@ -77,6 +77,11 @@ sensors, log, and *Versionen* only once a version exists; the button only exists
 Tests: `e2e/robot.spec.ts` (`expectOneNavigation`: the level strip and the primary button exist exactly once, no `rb-steps` / zone tabs; desktop
 no-scroll; phone one column and primary states), `e2e/robot-controls.spec.ts` (dead controls: task page before / after a lost and a won fight, the three
 sheets, challenges, Training), `e2e/helpers.ts` (`fillCode`, `runFight`, `openSheet`, `closeSheets`; the old `zone()` helper is gone).
+**UX review (rb17)**: fresh-eyes screenshots of every screen (phone 360x740, 360x420 with keyboard, desktop, de/en) and the other games. Fixed:
+all level pills, the back arrow and the game-bar icon buttons (shared by all games), the fight pills, the editor `?` button and the *Mehr* checkbox row are now
+>= 44 px; the "what happens now" box no longer cuts a sentence off (it grows, min 3 lines); the listing that replaces the editor has the editor's height (the
+primary button no longer jumps after a fight); the desktop arena is smaller so the page still does not scroll after a fight; the fight-pill ring is no longer
+clipped. Tests: `e2e/robot-ux.spec.ts`.
 Not changed: the Home screen (shared by all games). Still open: no keyboard shortcut for stepping.
 
 ## Robot art (modular images)

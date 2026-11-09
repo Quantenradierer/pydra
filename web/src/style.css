@@ -1365,8 +1365,8 @@ textarea {
 }
 
 .game .icon-button {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.75rem;
+  height: 2.75rem;
 }
 
 .game .level-strip {
@@ -1378,9 +1378,9 @@ textarea {
 }
 
 .game .level-dot {
-  min-width: 2.1rem;
-  width: 2.1rem;
-  height: 2.1rem;
+  min-width: 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
   min-height: 0;
   padding: 0;
   font-size: 0.85rem;
@@ -2572,7 +2572,11 @@ progress {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 2.25rem;
+  min-height: 2.75rem;
+}
+.robot-option input[type='checkbox'] {
+  width: 1.3rem;
+  height: 1.3rem;
 }
 .robot-option.locked {
   opacity: 0.55;

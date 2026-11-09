@@ -19,10 +19,10 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | Robot art: registry + sockets + renderer, used by the build screen, arena, cards, Home (see *Robot art*) | `robot/art/`, `views/robot-bench.ts`, `views/robot-gallery.ts` |
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
 | **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, one step (line or round), restart, to the end, speed button (default 800 ms per step, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Plays at once when the fight starts; the listing replaces the editor in the same box, the arena sits under the task sentence | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
-| **One fight per challenge** (rb21): every task (battle, bug hunt, special rule) is exactly one fight on one map; there is no fight list, no `Kampf k von n`, no earlier-enemy re-test. The level pills of the game bar are the only list | `fight.ts` (`fightEnemy`, `layoutOf`), `views/robot.ts` (`playFight`) |
-| **62 battles**: Chapter 0 (9, incl. Backstep Dummy), 1 (9), 2 (10, incl. Growing Shots), Practice Field I (6), **Chapter 3 (10)**, **Chapter 4 (9)**, **Exams (8 fights + boss Final Exam)**; one map each (`map`) | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts` |
+| **One fight per challenge** (rb21): every challenge is exactly one fight on one map; there is no fight list, no `Kampf k von n`, no earlier-enemy re-test. The level pills of the game bar are the only list | `fight.ts` (`fightEnemy`, `layoutOf`), `views/robot.ts` (`playFight`) |
+| **42 challenges** in one linear chain, no side branches: Chapter 0 (7), 1 (7), 2 (5), Practice Field I (5), Chapter 3 (5), Chapter 4 (5), Exams (7 + boss Final Exam); one map each (`map`). See *rb23: one script, one chain* | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts`, test `chain.test.ts` |
 | Build/code/battle/improve loop; "never a blank file" persistence; stars; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
-| **Challenges** (the player always writes or edits code; Line Up and Predict were removed, as were hints): Workshop (painting) was removed: everything in Robot Battler is write the script, press Fight, watch the robot battle. 6 Glitch and 4 Constraint remain, and both are real fights on the normal battle screen (see below); Constraint (line limits, `without`, no repeated number) | `content/challenges.ts`, `challenges.ts` |
+| **No other kinds of task** (rb23): there are no bug hunts (Glitch), special rules (Constraint) or side missions (`side`). Every task is a fight against an enemy on the normal battle screen; rules inside a fight stay as `needs` | `content/*.ts` |
 | **Training Grounds** (from Chapter 2): endless seeded fights built from the frame of the latest chapter, plus a daily fight (seed from the date); every generated fight has a winning script and is tested for 60 seeds | `training.ts`, `RobotGame.trainingStep/runTraining` |
 | Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`) (every enemy is won by its solution and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot-order.spec.ts` (page order, one list, no fight list, bug-hunt text), `e2e/robot.spec.ts` (one-page layout, loop, builder, bug-hunt fight, Chapter 3, Chapter 4 to the certificate, Training Grounds, stepping view on phone and desktop, call stack) | |
 
@@ -31,8 +31,7 @@ are tiny: the engine is pure and worker-ready, see Remaining work); the editor i
 dependency); `wait()` costs one tick ("free" in the doc means "needs no part"); `distance()` returns 0 when nothing is in
 range; a win ends the battle at once, but free statements right after the winning action (e.g. `say("done")`) still run.
 Chapter 3 uses a 9x8 arena (robot at (4, 6)) so left and right are symmetric; every fight is won with the default build; shield and hammer are optional
-(the medium chassis has three slots). Chapter 3-4
-extras are side missions (`side: true`) with their own set-up, like the Chapter 2 extras. Practice Field I and the Exams are review fights: each takes the map and enemies of one Chapter 2 / 3 / 4 enemy (`like` in `proving1.ts` / `proving2.ts`) and is won by one general script.
+(the medium chassis has three slots). Practice Field I and the Exams are review fights: each takes the map and enemies of one Chapter 2 / 3 / 4 enemy (`like` in `proving1.ts` / `proving2.ts`) and is won by one general script (the last solution of Chapter 2, `FINAL_SCRIPT` for the Exams).
 
 **One fight per challenge (rb21)**: an enemy has ONE `map` (it was three layouts) and the earlier enemies of the chapter are no longer re-run; the chosen map is the one that still teaches the topic (Peekaboo: enemy to the right, Three-Way: to the left). Old saves keep working: they only store solved ids, stars and script; ids that no longer exist are dropped by `parseProgress`.
 
@@ -50,7 +49,7 @@ Top to bottom on a phone (one scrolling column):
 2. **Equipment row** (`robot-equipment`): directly under the pills, one compact button "Ausrüstung / Equipment" with the equipped parts (drive + gear) as small
    icons; it opens the parts sheet.
 3. **Goal line** (`robot-catch`, at most two lines on a phone, `task-text.test.ts` limits it to 96 characters): `robot.goal.one|many` ("Zerstöre den Gegner.") + the
-   task's one short catch sentence (`catchLine`). A bug hunt says only "Das Skript hat einen Fehler. Finde ihn." (`GLITCH_PROMPT`); a special rule says its rule
+   task's one short catch sentence (`catchLine`). A rule inside a fight (line limit, say once) is part of the catch sentence;
    ("Höchstens 3 Zeilen Code."). Nothing generated, nothing about the bug.
 4. **Arena**: a preview with both robots before the fight; the fight afterwards (same widget).
 5. **Run controls**: ↺ restart, ▶/⏸ play / pause, → step (one code line), ⇥ to the end, and the **speed button** (`⏱ mittel`, cycles
@@ -68,7 +67,7 @@ the move / shot on the arena; a command line is followed by its round. The verdi
 (`RobotGame.run(id, true)` returns `award()`, which the screen calls when the verdict shows, so the +XP toast does not spoil the result)
 come when the fight reached its end or was skipped. Nothing advances by itself. A lost fight says why in the verdict line (unmet rule, error with line, `robot.outcome.dead|timeout`).
 
-**Removed in rb21**: the second list (fight pills, `Kampf k von n`, the loss reason per fight, `variations.ts`), the re-run of earlier chapter enemies (`broken`, `earlierEnemies`, `robot.regression.*`), the three layouts per enemy and `mix`, the 3-sentence goal block, the generated bug description of a bug hunt, the equipment button next to the text (it is the row under the pills now).
+**Removed in rb21**: the second list (fight pills, `Kampf k von n`, the loss reason per fight, `variations.ts`), the re-run of earlier chapter enemies (`broken`, `earlierEnemies`, `robot.regression.*`), the three layouts per enemy and `mix`, the 3-sentence goal block, the generated bug description of a bug hunt (the whole bug hunt type went in rb23), the equipment button next to the text (it is the row under the pills now).
 
 **Removed in rb19 (never asked for)**: the two-robots row and the "Teile" button above the arena (the equipment button remains, renamed),
 the *Mehr* sheet (fights summary, next / skip / skip all, **"Automatisch weiter"** / `robot.vq.auto`, speed slider, step size, variables, call
@@ -92,8 +91,8 @@ Not changed: the Home screen (shared by all games). Still open: no keyboard shor
   no event and no speech is one step (the narration line stays empty), the playback and the → button jump over it; any fight is played at the fastest speed
   after `SLOW_STEPS` (40) steps so a never-ending loop does not take minutes (the first steps stay at the chosen speed).
 * On a phone the verdict and the primary button were below the fold when a fight ended: the page now scrolls them into view (`scrollIntoView({block:'nearest'})`, no move when visible).
-* A bug hunt opened with a script that does not win showed the text "forward() is spelled differently" but no bug: that script is replaced once per visit by the challenge's `fallback`
-  (a fix in progress stays). The map card and the next button say "Kapitel 1: Zahlen und Variablen · Aufgabe 1" when the chapter is not the current one ("Aufgabe 1" alone was ambiguous).
+* (The bug-hunt fallback script of that fix is gone with the bug hunts, rb23.)
+  The map card and the next button say "Kapitel 1: Zahlen und Variablen · Aufgabe 1" when the chapter is not the current one ("Aufgabe 1" alone was ambiguous).
 * Constraint tasks said their rule twice (prompt + `rule` sentence): the `rule` field is gone. The `Python-Meldung` disclosure has an arrow (it looked like a dead label). The Training
   buttons have a gap. The armor plates label no longer says "ab 12 Sternen" (the lock was removed long ago).
 * Known and left: the strip chips are labelled `forward(1)` but insert `forward()` with the caret inside; the points toast (app-wide) stays 4.5 s and can cover the pills.
@@ -173,7 +172,6 @@ An enemy is a plain object (`content/types.ts` → `EnemyData`) appended to `ENE
            maxDamage: 4, noWaste: true, uses: ['while'], without: ['for'], noRepeatedNumber: true },
   solution: '…',                                      // a script that beats this enemy with the DEFAULT build (light chassis, wheels, blaster + eyes)
   breaks: true,                                       // the previous solution must NOT win (set false for practice enemies)
-  side: true,                                         // side mission with its own set-up, it does not hold back the next task
   par: 5,                                             // lines for the "few lines" star
 }
 ```
@@ -182,8 +180,7 @@ An enemy is a plain object (`content/types.ts` → `EnemyData`) appended to `ENE
 Enemy scripts use the same API as the player (`script`, `gear`, `locomotion`); a failing enemy script throws in tests.
 `layout.ts` can mirror a map per seed (`mirror: true` on the layout) – unused so far because Chapters 0-2 are fixed-pose.
 Chapter text: add `robot.chapter.N` in `messages-ui.ts`; `unlockLevel()` in `game.ts` maps chapter 25 (Proving Grounds I) to 2 and 45 (Proving Grounds II) to 4.
-`needs` rules: `maxDamage` (HP lost in the fight), `noWaste` (no shot into a raised shield), `uses` / `without` (words in the code, comments and strings ignored; `"while True"` and `"fire(i)"` work), `noRepeatedNumber`. A challenge (`content/challenges.ts`) sits `after` an enemy id and has `kind` glitch | constraint. Both are fights: `fightOf` (game.ts) derives a side-fight enemy (`side: true`, the rule sentence (a bug hunt: `GLITCH_PROMPT`) as catch line, a constraint's rules merged into `needs`) from the enemy they name, so they use the battle screen, the viewer, stars and history, and `game.run` pays them once. A glitch puts its bug into the player's own script when it opens (only if that script still wins); the player fixes it and fights. No multiple choice, ordering, predict-the-output or painting steps;
-logic and checks are in `challenges.ts`.
+`needs` rules: `maxDamage` (HP lost in the fight), `noWaste` (no shot into a raised shield), `uses` / `without` (words in the code, comments and strings ignored; `"while True"` and `"fire(i)"` work), `noRepeatedNumber`.
 Every new step also needs nothing else: `RobotGame` builds its step list from the two data files, and Home/points/profile
 pick the new total up automatically.
 
@@ -246,7 +243,6 @@ action command such as `fire()` costs, then the arena moves); the only counter o
 | Übungsplatz II / Proving Grounds II | Prüfungen / Exams |
 | Proving Grounds I | Übungsplatz I / Practice Field I |
 | Auflage / Constraint | Sonderregel / Special rule |
-| Glitch / Battle (kind labels, en) | Bug hunt / Fight |
 | Burst-Blaster / Burst blaster | Salven-Blaster / Salvo blaster |
 | Originalfehler / Original error | Python-Meldung / Python message |
 | Was passiert / What happens (log) | Verlauf / Log |
@@ -293,10 +289,51 @@ Runde zurück", "Von vorn" at the start and "Zum Ende" / forward at the end did 
   "Du schießt: daneben."). It shows only once the action plays out (the round's arena beat) and is empty otherwise; the highlighted line
   and the arena already say the rest. No coordinates, no generic sentences, no box. The old `robot.narr.*`, `robot.where*`,
   `robot.motion.*`, `robot.ev.*` texts, `describeFrame` and the `Arena · Schritt n von m` label are deleted; the only counter is `Runde n von m`.
-* **Audit of every screen** (map, task, fight, win / loss / error verdicts, glitch, constraint, training, help and equipment sheets; de and en;
+* **Audit of every screen** (map, task, fight, win / loss / error verdicts, training, help and equipment sheets; de and en;
   360x740 and 1280x800; screenshots and a text dump per state). Removed or shortened: "Starte den Kampf und schau zu" (the button says it),
   "Nächste Aufgabe frei" (the `Weiter` button says it), the star rule on a three-star win (still shown below three stars), the equipment
   instruction paragraph (`robot.bench.help`), the help sheet's repeated heading "Befehle deines Roboters", the training intro and the
   training task text (now `Zufall: <enemy>.`), "Die Gegner sind besiegt, aber ..." prefixes in the verdict, "Die Zeit lief ab, bevor der
   Gegner besiegt war" (now "Zeit abgelaufen."). Task goals that carry a rule or a catch (line limits, hit counts) stay: they are the task.
 * e2e `no filler sentences` guards the removals.
+
+## rb23: one script, one chain
+
+The player has **one script** (`RobotProgress.script`, saved on every edit). Nothing but the player's own editing changes it: opening a challenge, the
+pills, `Weiter`, a fight (win or loss), a reload and the map never rewrite it. There is no starter per challenge, no `solution` preload, no bug that is put
+into it. (A blank script becomes `STARTER_SCRIPT` = the First Contact solution, only because a blank file is never handed out; `restore()` is the player's own action.)
+Training fights read the script and never write it. e2e `the script is ONE script ...` (robot.spec.ts) and `game.test.ts` pin this down.
+
+**Removed**: all 15 `side: true` battles (Backstep Dummy, Square Patrol, Spiral Hallway, Staircase, Growing Shots, Wall or Not, Rhythm Dummy, Order Matters,
+Health Check, Not Today, Run to the Wall, Countdown, Patroller, Sentry Duty, Break Out; three of them came back as steps of a chain: `right-dummy`, `health-check`, `countdown`, `break-out`
+with a new map and solution), **9 Glitch** challenges (gl-foward, gl-parens, gl-indent, gl-variable, gl-text-plus-number, gl-indent-2, gl-equals, gl-colon, gl-infinite) and
+**5 Constraint** challenges (cn-row-3, cn-tank-3, cn-no-repeat, cn-double-5, cn-maze-no-for): 29 in all, 76 steps before, 42 now. With them went `content/challenges.ts`, `challenges.ts`, `challenges.test.ts`, `Step.kind` / `Step.challenge`,
+`fightOf`, the `challenges` argument of `RobotGame`, the `side` field of `EnemyData`, `robot.side`, the dashed `.level-dot.side` pill and the glitch code in
+`views/robot.ts` (`checkGlitch`, `injectGlitch`, `glitchSeen`). Old saves keep working: `parseProgress` drops ids that no longer exist (solved, stars, misses, current)
+and keeps the script, the build and the history (`game.test.ts`, e2e `an old save with removed challenge ids`). Training stays as it was.
+
+**The chain rule** (`chain.test.ts`, for Chapters 0-4): in a chapter every challenge adds exactly ONE thing to the one before (a hit point, a dummy, a wall,
+a rule, a branch, a block), and
+
+* `solution[n]` contains `solution[n-1]` as a subsequence of its lines (indentation ignored, so a new `for` / `if` that wraps old lines only adds its own line),
+* the old solution still runs on the new map without an error (it usually loses; `breaks` stays on),
+* the map is the same frame (size, start, every wall and every enemy of the last map are still there) and gets at most one more enemy.
+
+So the script never has to be rebuilt: what was right for challenge n-1 is the first part of what is right for n. Loops are therefore *added*:
+a second `for` for the next dummy, a `for` around the old loop for the big dummy. Rules that would force a rewrite (line limits that
+need a loop instead of lines) are used only where the old lines are kept (`maxLines` 12 in Dummy Army counts the old lines plus the one new `for`).
+Practice Field I and the Exams take the map of an earlier challenge and are won by ONE script each (checked in `chain.test.ts`).
+A chapter boundary may start something new (`say()`, `for`, `if`, `while`) but the script of the chapter before is still in the editor and still runs.
+
+| Chapter | Chain (new thing each) |
+| --- | --- |
+| 0 (7) | `first-contact` -> hp 2 -> a second dummy far behind -> a dummy on the right -> on the left -> top right -> a wall in front of it |
+| 1 (7) | greet (`say`) -> second dummy far away (`forward(2)`) -> count shots (`shots = shots + 1`, say it once) -> a dummy on the right measured with `distance()` -> say `"Distance: " + str(d)` -> far left -> top |
+| 2 (5) | a `for` loop for the tank -> a dummy on the right (second loop) -> `say("done")` once after the loops -> a dummy on the left -> a 15 HP dummy behind the first: a loop around the loop, at most 12 lines |
+| 3 (5) | `if see() == "enemy"` -> right dummy (`elif see_right()`, the loop) -> a dummy behind you (`else: turn_right()`) -> a shielded dummy (`enemy_shielded()`, no wasted shot) -> a sniper (`say("low")` below 6 HP) |
+| 4 (5) | walk until `see()` -> a regenerating dummy behind it (`while alive()`) -> countdown without `for` -> a guard on the left (`while see() == "enemy"`) -> `while True` + `break` |
+
+Dropped because they cannot be added to a chain without a rewrite: the Chapter 3 Charger and Gatekeeper (two enemies that fight back in the same lane as the dummies), Maze
+Runner / Hide & Seek / Sentry / Patroller (walls turn the open hall into a corridor and change the frame), Math Dummy / Armored Dummy (a line limit or a bigger number replaces lines),
+Twin Armor and Obstacle Course as they were (they moved dummies). Gear is still optional: every solution wins with the default build (`gear.test.ts`, which also runs them with the
+medium chassis and each other part). Ids that changed meaning keep their name where the position in the chain is the same (`training-dummy` is now the second dummy).

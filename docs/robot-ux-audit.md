@@ -115,3 +115,6 @@ Cleanup: `work.*` zone / phase / tab messages, `robot.outcome.idle`, the step-ba
 
 The *Mehr* sheet, the step-size toggle, the second sheet sections, the queue menu and the "Teile" button named in the rows above no longer
 exist; see `docs/robot-battler.md` ("Removed in rb19"). The fight now plays at once and the verdict follows the playback.
+
+
+*rb23: the Glitch and Constraint challenge types in rows 14 and 21 no longer exist (see `docs/robot-battler.md`, rb23).*

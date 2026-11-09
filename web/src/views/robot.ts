@@ -4,7 +4,7 @@ import { BACK } from '../icons.ts';
 import type { MessageKey } from '../i18n.ts';
 import { apiEntries } from '../robot/api.ts';
 import { START_BUILD, UNLOCK_CHAPTER, CHASSIS, addonsFor, type Build, type GearId } from '../robot/build.ts';
-import { checkConstraint, checkGlitch, checkLineUp, checkPredict, checkWorkshop, injectGlitch, predictAnswer, shuffledLines } from '../robot/challenges.ts';
+import { checkConstraint, checkGlitch, checkWorkshop, injectGlitch } from '../robot/challenges.ts';
 import type { Challenge } from '../robot/content/challenges.ts';
 import type { EnemyData } from '../robot/content/types.ts';
 import type { EnemyReport, FightReport } from '../robot/fight.ts';
@@ -682,40 +682,6 @@ export function robotScreen(app: App): Screen {
     const prompt = h('p', { class: 'robot-card', 'data-testid': 'robot-prompt' }, c.prompt[lang]);
     const checkBtn = (label: string, onclick: () => void) => h('button', { class: 'robot-run', 'data-testid': 'robot-check', onclick }, label);
     switch (c.kind) {
-      case 'lineup': {
-        let order = shuffledLines(c);
-        const list = h('ol', { class: 'robot-lineup', 'data-testid': 'robot-lineup', 'aria-label': t('robot.lineup.lines') });
-        const draw = () =>
-          list.replaceChildren(
-            ...order.map((line, i) =>
-              h(
-                'li',
-                { 'data-testid': `robot-line-${i}` },
-                h('code', {}, line),
-                h('button', { class: 'icon-button', 'aria-label': t('robot.lineup.up'), disabled: i === 0, 'data-testid': `robot-up-${i}`, onclick: () => ([order[i - 1], order[i]] = [order[i]!, order[i - 1]!], draw()) }, '↑'),
-                h('button', { class: 'icon-button', 'aria-label': t('robot.lineup.down'), disabled: i === order.length - 1, 'data-testid': `robot-down-${i}`, onclick: () => ([order[i + 1], order[i]] = [order[i]!, order[i + 1]!], draw()) }, '↓'),
-              ),
-            ),
-          );
-        draw();
-        challengeShell(step, [prompt, list], checkBtn(t('robot.lineup.check'), () => out.replaceChildren(feedback(checkLineUp(c, order), step))), out);
-        break;
-      }
-      case 'predict': {
-        const input = h('input', { type: 'text', class: 'robot-answer', 'aria-label': t('robot.predict.answer'), autocomplete: 'off', 'data-testid': 'robot-answer' }) as HTMLInputElement;
-        let misses = 0;
-        challengeShell(
-          step,
-          [prompt, h('h3', {}, t('robot.predict.script')), h('pre', { class: 'robot-listing-static' }, h('code', {}, c.script)), input],
-          checkBtn(t('robot.lineup.check'), () => {
-            const ok = checkPredict(c, input.value);
-            misses += ok ? 0 : 1;
-            out.replaceChildren(feedback(ok, step), ...(misses >= 2 ? [h('p', { 'data-testid': 'robot-was' }, t('robot.predict.was', { answer: predictAnswer(c) }))] : []));
-          }),
-          out,
-        );
-        break;
-      }
       case 'glitch': {
         const bugged = injectGlitch(c, game.script());
         const area = editor(bugged, () => {}, 'robot-glitch-code');
@@ -740,7 +706,7 @@ export function robotScreen(app: App): Screen {
         challengeShell(
           step,
           [prompt, h('p', { class: 'robot-note' }, [c.maxLines !== undefined ? t('robot.constraint.rule', { n: c.maxLines }) : '', c.rule ? c.rule[lang] : ''].filter(Boolean).join(' ')), apiFold(game.build()), area],
-          checkBtn(t('robot.lineup.check'), () => out.replaceChildren(...constraintResult(c, area.value, step))),
+          checkBtn(t('robot.check'), () => out.replaceChildren(...constraintResult(c, area.value, step))),
           out,
         );
         break;

@@ -22,9 +22,9 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | **Variation queue**: after Run the first fight plays; then all other layouts of the enemy and every layout of the earlier chapter enemies (`RobotGame.variationQueue`, `variations.ts`) play one after another (auto-advance, can be switched off), chips show progress/result, Skip / Skip all / Next, and a summary lists won/lost with the reason (script error line, budget, destroyed, timeout, unmet rule) and a "Watch" button per fight | `variations.ts`, `views/robot.ts` (`variationQueue`) |
 | **62 battles**: Chapter 0 (9, incl. Backstep Dummy), 1 (9), 2 (10, incl. Growing Shots), Proving Grounds I (6), **Chapter 3 (10)**, **Chapter 4 (9)**, **Proving Grounds II (8 fights + boss Final Exam)**; three layouts each | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts` |
 | Build/code/battle/improve loop; "never a blank file" persistence; regression re-test of earlier enemies of the chapter on every run; stars; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
-| **29 challenges**: 3 Line Up, 7 Predict, 9 Glitch, 5 Workshop (paint brush), 5 Constraint (line limits, `without`, no repeated number) | `content/challenges.ts`, `challenges.ts` |
+| **Challenges** (the player always writes or edits code; Line Up and Predict were removed, as were hints): 9 Glitch (fix the buggy script by editing it), 7 Workshop (paint brush, blank editor), 5 Constraint (line limits, `without`, no repeated number) | `content/challenges.ts`, `challenges.ts` |
 | **Training Grounds** (from Chapter 2): endless seeded fights built from the frame of the latest chapter, plus a daily fight (seed from the date); every generated fight has a winning script and is tested for 60 seeds | `training.ts`, `RobotGame.trainingStep/runTraining` |
-| Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`, `variations.test.ts`) (every enemy is won by its solution, regression-safe, and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot.spec.ts` (zones, loop, builder, line-up, Chapter 3, Chapter 4 to the certificate, Training Grounds, stepping view on phone and desktop, call stack, variation queue and summary) | |
+| Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`, `variations.test.ts`) (every enemy is won by its solution, regression-safe, and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot.spec.ts` (zones, loop, builder, Workshop challenge, Chapter 3, Chapter 4 to the certificate, Training Grounds, stepping view on phone and desktop, call stack, variation queue and summary) | |
 
 Deviations from the doc, on purpose: chassis HP is 8/12 (the table), not "10 default"; battles run on the main thread (they
 are tiny: the engine is pure and worker-ready, see Remaining work); the editor is a `<textarea>` (no CodeMirror
@@ -58,7 +58,7 @@ code again after a lost fight = Improve):
 * The queue renders into the zones through a `Mount` (arena, controls, more, listing); the viewer (`robot-viewer.ts`) returns those
   parts separately (`el` = arena + narration, `controls`, `more`, `listing`).
 * **No hints.** There are no hint buttons, panels or hint data: the player works from the task card (the catch) alone.
-* Challenges (line-up, predict, glitch, workshop, constraint) use one full-height zone: content scrolls, the check button and
+* Challenges (glitch, workshop, constraint - all of them need typed code) use one full-height zone: content scrolls, the check button and
   "to the tasks" stay at the bottom; the commands are a closed `<details>`.
 * Task map: only playable tasks are listed; finished tasks and locked tasks fold into "N done" / "N still locked".
 
@@ -156,8 +156,8 @@ Enemy scripts use the same API as the player (`script`, `gear`, `locomotion`); a
 `layout.ts` can mirror a map per seed (`mirror: true` on the layout) – unused so far because Chapters 0-2 are fixed-pose.
 Chapter text: add `robot.chapter.N` in `messages-ui.ts`; `unlockLevel()` in `game.ts` maps chapter 25 (Proving Grounds I) to 2 and 45 (Proving Grounds II) to 4.
 `needs` rules: `maxDamage` (HP lost per layout), `noWaste` (no shot into a raised shield), `uses` / `without` (words in the code, comments and strings ignored; `"while True"` and `"fire(i)"` work), `noRepeatedNumber`. A mixed Proving Grounds fight lists `mix: ['peekaboo#2', 'bubble']` (first layout, or the n-th with `#n`) and no maps of its own.
-A challenge (`content/challenges.ts`) sits `after` an enemy id and has `kind` lineup | predict | glitch | workshop | constraint;
-logic and checks are in `challenges.ts` (predict answers are computed by running the script, so they cannot be wrong).
+A challenge (`content/challenges.ts`) sits `after` an enemy id and has `kind` glitch | workshop | constraint (every kind needs code typed by the player; no multiple choice, ordering or predict-the-output steps);
+logic and checks are in `challenges.ts`.
 Every new step also needs nothing else: `RobotGame` builds its step list from the two data files, and Home/points/profile
 pick the new total up automatically.
 
@@ -177,7 +177,7 @@ in the fight view (`robot.narr.start`): a **Schritt** (step) is one line of the 
 | Übungsplatz II / Proving Grounds II | Prüfungen / Exams |
 | Proving Grounds I | Übungsplatz I / Practice Field I |
 | Auflage / Constraint | Sonderregel / Special rule |
-| Glitch / Line up / Battle (kind labels, en) | Bug hunt / Put in order / Fight |
+| Glitch / Battle (kind labels, en) | Bug hunt / Fight |
 | Burst-Blaster / Burst blaster | Salven-Blaster / Salvo blaster |
 | Originalfehler / Original error | Python-Meldung / Python message |
 | Was passiert / What happens (log) | Verlauf / Log |

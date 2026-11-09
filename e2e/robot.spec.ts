@@ -61,7 +61,7 @@ for (const [device, viewport] of [
   });
 }
 
-test('a challenge: Line Up, and English texts', async ({ page }) => {
+test('a challenge: Workshop (write the script), and English texts', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => {
     localStorage.setItem('pydra.v1.language', JSON.stringify('en'));
@@ -71,25 +71,18 @@ test('a challenge: Line Up, and English texts', async ({ page }) => {
   await page.reload();
   await page.getByTestId('start-robot').click();
   await expect(page.getByRole('heading', { level: 2 }).first()).toHaveText('Chapter 0: Commands in a row');
-  await page.getByTestId('robot-step-lu-first-shot').click();
-  await expect(page.getByTestId('robot-lineup')).toBeVisible();
+  await page.getByTestId('robot-step-ws-step').click();
+  await expect(page.getByTestId('robot-workshop-code')).toBeVisible();
+  await expect(page.getByTestId('robot-workshop-code')).toHaveValue('');
   expect(await pageScrolls(page)).toBe(false);
-  // Wrong order first.
+  // Nothing written yet: not right.
   await page.getByTestId('robot-check').click();
   await expect(page.getByTestId('robot-feedback')).toHaveText('Not quite yet. Try again.');
-  // Sort the lines with the arrow buttons (selection by bubble sort on the visible order).
-  const target = ['forward()', 'forward()', 'fire()', 'fire()'];
-  for (let pass = 0; pass < 8; pass++) {
-    const lines = await page.locator('.robot-lineup code').allTextContents();
-    const i = lines.findIndex((l, k) => l !== target[k]);
-    if (i < 0) break;
-    const j = lines.findIndex((l, k) => k > i && l === target[i]);
-    for (let k = j; k > i; k--) await page.getByTestId(`robot-up-${k}`).click();
-  }
+  await page.getByTestId('robot-workshop-code').fill('brush.down()\nforward()\nforward()');
   await page.getByTestId('robot-check').click();
   await expect(page.getByTestId('robot-feedback')).toHaveText('Right!');
   await page.getByTestId('robot-to-map').click();
-  await expect(page.getByTestId('robot-step-lu-first-shot')).toContainText('done');
+  await expect(page.getByTestId('robot-step-ws-step')).toContainText('done');
 });
 
 test('the builder: parts unlock with the chapters and decide which commands exist', async ({ page }) => {

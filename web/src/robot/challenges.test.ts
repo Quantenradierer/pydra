@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { START_BUILD } from './build.ts';
-import { CHALLENGES, checkConstraint, checkGlitch, checkLineUp, checkPredict, checkWorkshop, injectGlitch, predictAnswer, shuffledLines } from './challenges.ts';
+import { CHALLENGES, checkConstraint, checkGlitch, checkWorkshop, injectGlitch } from './challenges.ts';
 import { ENEMIES } from './content/index.ts';
 import { fullBuild } from './fight.ts';
 
@@ -13,21 +13,6 @@ describe('challenges', () => {
   for (const c of CHALLENGES) {
     it(`${c.id} can be solved, and is not solved from the start`, () => {
       switch (c.kind) {
-        case 'lineup': {
-          const shuffled = shuffledLines(c);
-          expect(shuffled.slice().sort()).toEqual(c.lines.slice().sort());
-          expect(shuffled).not.toEqual(c.lines);
-          expect(checkLineUp(c, shuffled)).toBe(false);
-          expect(checkLineUp(c, c.lines)).toBe(true);
-          break;
-        }
-        case 'predict': {
-          const answer = predictAnswer(c);
-          expect(answer).not.toBe('');
-          expect(checkPredict(c, answer)).toBe(true);
-          expect(checkPredict(c, 'nope')).toBe(false);
-          break;
-        }
         case 'glitch': {
           const good = enemyScript(c.enemy);
           const buggy = injectGlitch(c, good);

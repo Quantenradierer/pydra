@@ -9,23 +9,6 @@ interface Base {
   prompt: Text;
 }
 
-/** Drag the shuffled lines into an order that beats the enemy. */
-export interface LineUp extends Base {
-  kind: 'lineup';
-  enemy: string;
-  /** The lines in one correct order; the player gets them shuffled. */
-  lines: string[];
-}
-
-/** Say what the script will do, then run it. The answer is computed by running the script, so it cannot be wrong. */
-export interface Predict extends Base {
-  kind: 'predict';
-  script: string;
-  /** "tile": where does the robot stop ("x,y"); "say": the last bubble text. */
-  ask: 'tile' | 'say';
-  map: string[];
-}
-
 /** A bug in the script; fix it so the script beats the enemy. The bug is injected into the player's own script when it has the pattern. */
 export interface Glitch extends Base {
   kind: 'glitch';
@@ -59,7 +42,7 @@ export interface Constraint extends Base {
   violation?: string;
 }
 
-export type Challenge = LineUp | Predict | Glitch | Workshop | Constraint;
+export type Challenge = Glitch | Workshop | Constraint;
 
 const square = (x: number, y: number, size: number): string[] => {
   const out: string[] = [];
@@ -67,57 +50,30 @@ const square = (x: number, y: number, size: number): string[] => {
   return [...new Set(out)];
 };
 
-/** Hp-99 dummy in the corner so a workshop or predict run never ends early. */
+/** Hp-99 dummy in the corner so a workshop run never ends early. */
 const far = (...items: [string, number, number][]) => mk(8, 8, ['D', 7, 0], ...items);
 
 export const CHALLENGES: readonly Challenge[] = [
+  // ---- Chapter 0: write a script that paints
   {
-    kind: 'lineup',
-    id: 'lu-first-shot',
+    kind: 'workshop',
+    id: 'ws-step',
     after: 'training-dummy',
-    title: T('Zeilen ordnen: Annäherung', 'Put in order: Approach'),
-    prompt: T('Die Attrappe ist weit weg. Bring die Zeilen in eine Reihenfolge, mit der der Roboter sie zweimal trifft.', 'The dummy is far away. Put the lines in an order that lets the robot hit it twice.'),
-    enemy: 'training-dummy',
-    lines: ['forward()', 'forward()', 'fire()', 'fire()'],
-  },
-  {
-    kind: 'lineup',
-    id: 'lu-corner',
-    after: 'corner-dummy',
-    title: T('Zeilen ordnen: Um die Ecke', 'Put in order: Around the corner'),
-    prompt: T('Erst dahin fahren, dann drehen, dann schießen: Bring die Zeilen in die richtige Reihenfolge.', 'Drive first, then turn, then shoot: put the lines in the right order.'),
-    enemy: 'corner-dummy',
-    lines: ['forward()', 'forward()', 'turn_right()', 'fire()', 'fire()'],
-  },
-  {
-    kind: 'predict',
-    id: 'pr-tile',
-    after: 'training-dummy',
-    title: T('Vorhersage: Wo hält er an?', 'Predict: Where does it stop?'),
-    prompt: T('Der Roboter startet unten bei (3, 7) und schaut nach oben. Auf welchem Feld steht er am Ende? Schreib x,y.', 'The robot starts at (3, 7) looking up. Which tile does it end on? Write x,y.'),
-    script: 'forward()\nforward()\nturn_right()\nforward()',
-    ask: 'tile',
+    title: T('Werkstatt: Drei Felder', 'Workshop: Three tiles'),
+    prompt: T('Male die drei Felder (3, 7), (3, 6) und (3, 5). Der Roboter startet bei (3, 7) und schaut nach oben. Mit brush.down() setzt du den Pinsel auf.', 'Paint the three tiles (3, 7), (3, 6) and (3, 5). The robot starts at (3, 7) looking up. brush.down() puts the brush down.'),
     map: far(['^', 3, 7]),
+    target: ['3,7', '3,6', '3,5'],
+    solution: 'brush.down()\nforward()\nforward()',
   },
   {
-    kind: 'predict',
-    id: 'pr-tile-2',
+    kind: 'workshop',
+    id: 'ws-corner',
     after: 'u-turn',
-    title: T('Vorhersage: Hin und zurück', 'Predict: There and back'),
-    prompt: T('Wo steht der Roboter am Ende? Schreib x,y. (Der Start ist (3, 7), die Blickrichtung oben.)', 'Where does the robot end up? Write x,y. (It starts at (3, 7), looking up.)'),
-    script: 'forward()\nforward()\nforward()\nturn_right()\nturn_right()\nforward()',
-    ask: 'tile',
+    title: T('Werkstatt: Um die Ecke', 'Workshop: Around the corner'),
+    prompt: T('Male einen Winkel: (3, 7), (3, 6), (3, 5), dann nach rechts (4, 5) und (5, 5).', 'Paint an angle: (3, 7), (3, 6), (3, 5), then to the right (4, 5) and (5, 5).'),
     map: far(['^', 3, 7]),
-  },
-  {
-    kind: 'predict',
-    id: 'pr-say',
-    after: 'name-tag',
-    title: T('Vorhersage: Was sagt er?', 'Predict: What does it say?'),
-    prompt: T('Welchen Text zeigt die letzte Sprechblase? Schreib genau ab, was der Roboter sagt.', 'What does the last speech bubble say? Type exactly what the robot says.'),
-    script: 'x = 4\ny = x * 2 + 1\nsay("y is " + str(y))',
-    ask: 'say',
-    map: far(['^', 3, 7]),
+    target: ['3,7', '3,6', '3,5', '4,5', '5,5'],
+    solution: 'brush.down()\nforward()\nforward()\nturn_right()\nforward()\nforward()',
   },
   {
     kind: 'glitch',
@@ -190,36 +146,7 @@ export const CHALLENGES: readonly Challenge[] = [
     solution: 'forward(4)\nfor i in range(5):\n    fire()',
   },
   // ---- Chapter 0
-  {
-    kind: 'lineup',
-    id: 'lu-backstep',
-    after: 'backstep-dummy',
-    title: T('Zeilen ordnen: Rückzug', 'Put in order: Retreat'),
-    prompt: T('Der Hammer schlägt gleich zu. Bring die Zeilen so in Reihenfolge, dass der Roboter erst ausweicht und dann schießt.', 'The hammer is about to swing. Put the lines in an order so the robot backs off first and then shoots.'),
-    enemy: 'backstep-dummy',
-    lines: ['backward()', 'fire()', 'fire()'],
-  },
-  {
-    kind: 'predict',
-    id: 'pr-left-turn',
-    after: 'wall-dummy',
-    title: T('Vorhersage: Links abbiegen', 'Predict: Turning left'),
-    prompt: T('Der Roboter startet bei (3, 7) und schaut nach oben. Auf welchem Feld steht er am Ende? Schreib x,y.', 'The robot starts at (3, 7) looking up. Which tile does it end on? Write x,y.'),
-    script: 'forward()\nturn_left()\nforward()\nforward()',
-    ask: 'tile',
-    map: far(['^', 3, 7]),
-  },
   // ---- Chapter 1
-  {
-    kind: 'predict',
-    id: 'pr-value-x',
-    after: 'counter',
-    title: T('Vorhersage: Wert von x', 'Predict: The value of x'),
-    prompt: T('Was sagt der Roboter am Ende? Rechne Zeile für Zeile.', 'What does the robot say at the end? Work through it line by line.'),
-    script: 'x = 3\nx = x + 4\nx = x * 2\nsay(x)',
-    ask: 'say',
-    map: far(['^', 3, 7]),
-  },
   {
     kind: 'glitch',
     id: 'gl-variable',
@@ -305,16 +232,6 @@ export const CHALLENGES: readonly Challenge[] = [
     fallback: 'if see() = "enemy":\n    fire()\n    fire()\nelse:\n    turn_right()\n    fire()\n    fire()',
   },
   {
-    kind: 'predict',
-    id: 'pr-branch',
-    after: 'three-way',
-    title: T('Vorhersage: Welcher Zweig läuft?', 'Predict: Which branch runs?'),
-    prompt: T('Welchen Text sagt der Roboter? Nur ein Zweig von if / elif / else läuft.', 'What does the robot say? Only one branch of if / elif / else runs.'),
-    script: 'x = 7\nif x > 10:\n    say("big")\nelif x > 5:\n    say("medium")\nelse:\n    say("small")',
-    ask: 'say',
-    map: far(['^', 3, 7]),
-  },
-  {
     kind: 'glitch',
     id: 'gl-colon',
     after: 'bubble',
@@ -344,16 +261,6 @@ export const CHALLENGES: readonly Challenge[] = [
     enemy: 'far-far-dummy',
     bug: { from: '    forward()', to: '    wait()' },
     fallback: 'while see() != "enemy":\n    wait()\nfire()\nfire()',
-  },
-  {
-    kind: 'predict',
-    id: 'pr-loop-count',
-    after: 'regenerator',
-    title: T('Vorhersage: Wie oft läuft die Schleife?', 'Predict: How often does the loop run?'),
-    prompt: T('Was sagt der Roboter? Verfolge n und count bei jedem Durchlauf. (// teilt ganzzahlig.)', 'What does the robot say? Follow n and count on every pass. (// divides without a remainder.)'),
-    script: 'n = 10\ncount = 0\nwhile n > 1:\n    n = n // 2\n    count = count + 1\nsay(count)',
-    ask: 'say',
-    map: far(['^', 3, 7]),
   },
   {
     kind: 'constraint',

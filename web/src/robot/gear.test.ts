@@ -8,6 +8,7 @@ import { precheck } from './battle.ts';
 import { RobotGame } from './game.ts';
 import { AppStorage, MemoryKeyValue } from '../storage.ts';
 import { CONTENT } from '../content/lessons.ts';
+import { UI_DE, UI_EN } from './messages-ui.ts';
 
 /**
  * Gear is free: any part can be equipped at any time, and no battle or challenge needs one specific part.
@@ -77,5 +78,15 @@ describe('other gear', () => {
       for (const locomotion of ['wheels', 'legs', 'treads'] as const)
         for (const g of GEAR) expect(game.setBuild({ ...START_BUILD, chassis, locomotion, gear: [g] }), `${chassis}/${locomotion}/${g}`).toBe(true);
     expect(challengeById('gl-foward')).toBeDefined();
+  });
+});
+
+describe('gear labels', () => {
+  it('promise no lock: all gear is free, so no label says "from n stars"', () => {
+    for (const [key, de] of Object.entries(UI_DE)) {
+      if (!key.startsWith('robot.gear.')) continue;
+      expect(de, key).not.toMatch(/Stern/);
+      expect(UI_EN[key as keyof typeof UI_DE], key).not.toMatch(/star/i);
+    }
   });
 });

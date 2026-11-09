@@ -22,8 +22,7 @@ for (const [device, viewport] of [
     await fillCode(page, 'forward()\nfire()\nwait()');
     await expect(page.getByTestId('robot-code-lines')).toContainText('3');
 
-    // The bar is folded; open it, pick a group by what the gear offers, tap a template.
-    await page.getByTestId('robot-code-bar').locator('summary').click();
+    // The bar is always open: pick a group by what the gear offers, tap a template.
     await expect(page.getByTestId('snippet-group-eyes')).toBeVisible();
     await expect(page.getByTestId('snippet-group-cannon')).toHaveCount(0);
     await fillCode(page, '');
@@ -120,6 +119,48 @@ test('in English: suggestions and the bar are translated', async ({ page }) => {
   await box.pressSequentially('fo');
   await expect(page.getByTestId('robot-code-suggest').getByRole('option').first()).toContainText('drives tiles forward');
   await page.keyboard.press('Escape');
-  await page.getByTestId('robot-code-bar').locator('summary').click();
   await expect(page.getByTestId('snippet-group-compare')).toHaveText('Comparisons');
 });
+
+for (const [device, viewport] of [
+  ['phone', { width: 360, height: 740 }],
+  ['desktop', { width: 1280, height: 800 }],
+] as const) {
+  test(`on a ${device}: the help is visible on load, and a fresh line suggests the next commands`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await openFirstFight(page);
+    const inView = async (id: string) => {
+      const el = page.getByTestId(id);
+      await expect(el).toBeVisible();
+      const bb = (await el.boundingBox())!;
+      expect(bb.y + bb.height).toBeLessThanOrEqual(viewport.height);
+    };
+    await inView('robot-code-bar');
+    await inView('robot-code-hint');
+    await expect(page.getByTestId('robot-code-hint')).toHaveText('Tippe oder tippe auf einen Baustein');
+    await expect(page.getByTestId('robot-code-bar').locator('details')).toHaveCount(0);
+    const help = page.getByTestId('robot-code-help');
+    await expect(help).toBeVisible();
+    await expect(help).toContainText('Hilfe: Befehle');
+    await expect(help).toContainText('forward(steps)');
+    await expect(help).toContainText('fährt Felder vorwärts');
+    const chip = (await page.getByTestId('snippet').first().boundingBox())!;
+    expect(chip.height).toBeGreaterThanOrEqual(44);
+
+    // Entering the editor on an empty script, and a new line, open the popup by themselves; Enter still makes a new line.
+    const box = await codeBox(page);
+    const popup = page.getByTestId('robot-code-suggest');
+    await fillCode(page, '');
+    await page.getByTestId('robot-run').focus();
+    await box.focus();
+    await expect(popup).toBeVisible();
+    await expect(popup.getByRole('option').first()).toContainText('forward(steps)');
+    await box.pressSequentially('forward()\n');
+    await expect(popup).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(box).toHaveValue('forward()\n\n');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(box).toHaveValue('forward()\n\nbackward()');
+  });
+}

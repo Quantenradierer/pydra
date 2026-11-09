@@ -213,7 +213,7 @@
   width: min(100%, 16rem, 34dvh);
 }
 .rb-zone .robot-editor {
-  flex: 1;
+  flex: none;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -599,14 +599,42 @@
 .robot-snippets {
   flex: none;
   margin-top: 0.35rem;
+}
+.robot-editor-hint {
+  flex: none;
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.robot-help {
+  flex: none;
+  margin-top: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+}
+.robot-help h3 {
+  margin: 0 0 0.2rem;
   font-size: 0.9rem;
 }
-.robot-snippets summary {
-  cursor: pointer;
+.robot-help[hidden] {
+  display: none;
+}
+.robot-help dl {
+  margin: 0;
+}
+.robot-help dt,
+.robot-help dd {
+  margin: 0;
+}
+.robot-help dt {
+  margin-top: 0.25rem;
+}
+.robot-help dd {
   color: var(--muted);
-  min-height: 2rem;
-  display: flex;
-  align-items: center;
+  font-size: 0.82rem;
+  line-height: 1.3;
 }
 .robot-snippet-tabs,
 .robot-snippet-row {
@@ -615,11 +643,11 @@
   overflow-x: auto;
   padding-bottom: 0.3rem;
 }
-.robot-snippet-tab,
-.robot-snippet {
+.game .robot-snippet-tab,
+.game .robot-snippet {
   flex: none;
-  min-height: 2.25rem;
-  padding: 0.2rem 0.6rem;
+  min-height: 44px;
+  padding: 0.2rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   background: transparent;
@@ -629,7 +657,7 @@
 }
 .robot-snippet {
   font-family: ui-monospace, 'Cascadia Code', monospace;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 .robot-snippet-tab[aria-pressed='true'] {
   background: var(--accent);

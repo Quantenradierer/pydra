@@ -6,8 +6,8 @@ const legs: Build = { chassis: 'medium', locomotion: 'legs', gear: ['cannon', 's
 const names = (text: string, build: Build = START_BUILD, manual = false) => completionAt(text, text.length, build, { manual })?.items.map((i) => i.label) ?? [];
 
 describe('completionAt', () => {
-  it('stays quiet when nothing is typed, and on request offers everything', () => {
-    expect(completionAt('', 0, START_BUILD)).toBeNull();
+  it('stays quiet behind code, on a blank line offers the next commands, on request everything', () => {
+    expect(completionAt('fire() ', 7, START_BUILD)).toBeNull();
     expect(names('', START_BUILD, true)).toContain('forward(steps)');
   });
   it('matches by prefix first, then by substring, and offers the equipped commands', () => {
@@ -87,5 +87,18 @@ describe('snippets', () => {
     expect(insertSnippet('forward()', 9, 9, ifs).text).toBe('forward()\nif alive():\n    ');
     const call = snippetGroups(START_BUILD).find((g) => g.id === 'move')!.snippets[0]!;
     expect(insertSnippet('abc', 0, 3, call)).toEqual({ text: 'forward()', caret: 8 });
+  });
+
+  it('offers the next sensible commands on a fresh line (equipped gear first, no unequipped parts)', () => {
+    for (const text of ['', 'forward()\n', 'if alive():\n    ']) {
+      const c = completionAt(text, text.length, START_BUILD)!;
+      expect(c.fresh).toBe(true);
+      expect(c.items[0]!.kind).toBe('command');
+      expect(c.items.every((i) => i.equipped)).toBe(true);
+    }
+    expect(names('', START_BUILD)).toContain('forward(steps)');
+    // Behind code on the same line nothing opens by itself.
+    expect(completionAt('forward()', 9, START_BUILD)).toBeNull();
+    expect(completionAt('fo', 2, START_BUILD)!.fresh).toBeFalsy();
   });
 });

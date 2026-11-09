@@ -9,9 +9,16 @@ export interface Editor {
   area: HTMLTextAreaElement;
   /** Replaces the text from outside (restoring a version) and redraws the line numbers. */
   set(text: string): void;
+  /** Redraws the insert bar and the command help after the build changed. */
+  refresh(): void;
 }
 
-let barOpen = false;
+/** One line of the visible command help. */
+export interface HelpEntry {
+  sig: string;
+  desc: string;
+}
+
 let barGroup = 'flow';
 
 /**
@@ -19,7 +26,7 @@ let barGroup = 'flow';
  * tap on a phone) and an insert bar of templates organised by the gear of the build. The suggestions come from
  * robot/suggest.ts; this file is only the DOM around them.
  */
-export function createEditor(t: (key: MessageKey) => string, initial: string, build: () => Build, onInput: (text: string) => void, testId = 'robot-code'): Editor {
+export function createEditor(t: (key: MessageKey) => string, initial: string, build: () => Build, onInput: (text: string) => void, testId = 'robot-code', help: () => HelpEntry[] = () => []): Editor {
   const area = h('textarea', {
     class: 'robot-code',
     rows: 4,
@@ -40,6 +47,8 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
 
   let current: Completion | null = null;
   let active = 0;
+  /** The arrow keys were used: only then do Enter / Tab accept a suggestion on a fresh line. */
+  let picked = false;
 
   const fit = () => (area.rows = Math.max(5, Math.min(16, area.value.split('\n').length + 1)));
   const lines = () => {
@@ -84,14 +93,20 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
     const pad = parseFloat(getComputedStyle(area).paddingTop) || 0;
     const y = pad + (row + 1) * lh - area.scrollTop;
     const above = y > area.clientHeight / 2 && area.clientHeight > 0;
-    popup.style.top = above ? '' : `${Math.max(0, y)}px`;
-    popup.style.bottom = above ? `${Math.max(0, box.clientHeight - (y - lh))}px` : '';
+    // The popup stays inside the editor box (it must never cover the insert chips below): it takes the roomier side and scrolls.
+    const roomBelow = box.clientHeight - y;
+    const roomAbove = y - lh;
+    const useAbove = above ? roomAbove >= 80 || roomAbove >= roomBelow : roomBelow < 80 && roomAbove > roomBelow;
+    popup.style.maxHeight = `${Math.max(76, Math.floor((useAbove ? roomAbove : roomBelow) - 4))}px`;
+    popup.style.top = useAbove ? '' : `${Math.max(0, y)}px`;
+    popup.style.bottom = useAbove ? `${Math.max(0, box.clientHeight - (y - lh))}px` : '';
     const room = box.clientWidth - popup.offsetWidth;
     popup.style.left = `${Math.max(0, Math.min(gutter.offsetWidth + col * 8.8 + 8, room))}px`;
   }
   function refresh(manual = false) {
     current = area.selectionStart === area.selectionEnd ? completionAt(area.value, area.selectionStart, build(), { manual }) : null;
     active = 0;
+    picked = false;
     paint();
   }
   function accept(i: number) {
@@ -110,16 +125,20 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
   area.addEventListener('input', () => (changed(), refresh()));
   area.addEventListener('scroll', () => ((gutter.scrollTop = area.scrollTop), current && place()));
   area.addEventListener('blur', close);
-  area.addEventListener('click', close);
+  // A fresh line (or an empty script) shows what could come next as soon as the editor is entered or the caret moves.
+  area.addEventListener('focus', () => refresh());
+  area.addEventListener('click', () => refresh());
   area.addEventListener('keydown', (e) => {
     if (current && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const takes = !current.fresh || picked;
       const n = current.items.length;
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         active = (active + (e.key === 'ArrowDown' ? 1 : n - 1)) % n;
+        picked = true;
         return paint();
       }
-      if (e.key === 'Enter' || (e.key === 'Tab' && !e.shiftKey)) {
+      if (takes && (e.key === 'Enter' || (e.key === 'Tab' && !e.shiftKey))) {
         e.preventDefault();
         return accept(active);
       }
@@ -138,12 +157,14 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
     e.preventDefault();
     area.setRangeText('    ', area.selectionStart, area.selectionEnd, 'end');
     changed();
+    refresh();
   });
 
   // ---- the insert bar
   const groups = () => snippetGroups(build());
-  const bar = h('details', { class: 'robot-snippets', 'data-testid': `${testId}-bar` }, h('summary', {}, t('robot.sug.bar')));
-  bar.open = barOpen;
+  const bar = h('div', { class: 'robot-snippets', 'data-testid': `${testId}-bar` });
+  const hint = h('p', { class: 'robot-editor-hint', 'data-testid': `${testId}-hint` }, t('robot.sug.hint'));
+  const helpBox = h('section', { class: 'robot-help', 'aria-label': t('robot.sug.help'), 'data-testid': `${testId}-help` });
   const tabs = h('div', { class: 'robot-snippet-tabs', role: 'group', 'aria-label': t('robot.sug.bar') });
   const row = h('div', { class: 'robot-snippet-row' });
   const keepFocus = (b: HTMLElement) => b.addEventListener('pointerdown', (e) => e.preventDefault());
@@ -179,12 +200,15 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
         }),
     );
   }
+  function drawHelp() {
+    const entries = help();
+    helpBox.hidden = entries.length === 0;
+    helpBox.replaceChildren(h('h3', {}, t('robot.sug.help')), h('dl', {}, ...entries.flatMap((e) => [h('dt', {}, h('code', {}, e.sig)), h('dd', {}, e.desc)])));
+  }
   bar.append(tabs, row);
-  bar.addEventListener('toggle', () => (barOpen = bar.open));
   drawBar();
-  // The build can change while the editor stays (the Robot zone): redraw the bar when it is opened.
-  bar.addEventListener('toggle', () => bar.open && drawBar());
-  el.append(bar);
+  drawHelp();
+  el.append(bar, hint, helpBox);
 
   return {
     el,
@@ -195,6 +219,11 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
       fit();
       lines();
       drawBar();
+      drawHelp();
+    },
+    refresh() {
+      drawBar();
+      drawHelp();
     },
   };
 }

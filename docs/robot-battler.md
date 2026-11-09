@@ -174,9 +174,16 @@ They are tools, not answers: they list commands and Python shapes, never what a 
   (`blaster.fire()`, `eyes.see()` ...). Nothing is offered in comments or strings, or for a word that is complete and unique.
   Keys: arrows move, **Tab / Enter** accept, **Esc** closes, **Ctrl+Space** opens it by hand; with the popup closed Tab indents.
   On a phone a tap on an entry accepts it (pointerdown keeps the keyboard up). A call with an argument puts the caret inside `()`.
-- **Insert bar** (`robot-code-bar`, a folded `<details>` *Einfügen* below the text): tabs by what the build offers (Python shapes,
-  comparisons, moving, then one tab per equipped gear, always-there commands); a tap inserts the template at the caret, indented
-  like the current line, statements start a new line. The open tab and fold state are kept while the page lives.
+  The popup also opens **on focus, on a click, and on a blank line** (empty script, after Enter): then it shows what could come
+  next (equipped commands first, no unbuilt parts; `Completion.fresh`) and **Enter / Tab keep their normal job** until an arrow key
+  was used. The popup stays inside the editor box (it scrolls) so it never covers the insert chips.
+- **Insert bar** (`robot-code-bar`, **always open** right under the text, no fold): tabs by what the build offers (Python shapes,
+  comparisons, moving, then one tab per equipped gear, always-there commands) with 44 px chips; a tap inserts the template at the
+  caret, indented like the current line, statements start a new line. The open tab is kept while the page lives.
+- **One-line hint** (`robot-code-hint`, "Tippe oder tippe auf einen Baustein") and the visible **Hilfe: Befehle** list
+  (`robot-code-help`: signature + one-line explanation of every command of the equipped gear, same texts as the Commands drawer)
+  sit below the bar, without opening anything; both follow build changes (`Editor.refresh`). e2e checks they are visible on load
+  on 360x740 and 1280x800.
 - The build is read through a getter, so the lists follow the Robot zone. 
 
 ## Free gear

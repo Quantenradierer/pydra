@@ -31,6 +31,8 @@ export interface Completion {
   from: number;
   to: number;
   items: Suggestion[];
+  /** True when the caret sits on a blank line: the popup shows what could come next, and Enter / Tab keep their normal job. */
+  fresh?: boolean;
 }
 
 const KEYWORDS = ['if', 'elif', 'else', 'while', 'for', 'in', 'def', 'return', 'True', 'False', 'and', 'or', 'not'] as const;
@@ -138,7 +140,7 @@ export function completionAt(text: string, caret: number, build: Build, opts: { 
     pool = methodsOf(build, obj).map((c) => asSuggestion(c, `${obj}.`, 'method'));
     if (pool.length === 0) return null;
   } else {
-    if (word === '' && !opts.manual) return null;
+    if (word === '' && !opts.manual && line.trim() !== '') return null;
     // Digits cannot start a name: `3` then a letter is not a word.
     if (from > 0 && /\d/.test(text[from - 1]!)) return null;
     const equipped = new Set<GearId>(build.gear);
@@ -163,10 +165,11 @@ export function completionAt(text: string, caret: number, build: Build, opts: { 
     .filter(({ s }) => (seen.has(s.label) ? false : (seen.add(s.label), true)));
   // A word that is complete already (`fire` typed out) needs no popup, unless there is more to pick from.
   scored.sort((a, b) => Number(b.s.equipped) - Number(a.s.equipped) || (b.r === 0 ? 1 : 0) - (a.r === 0 ? 1 : 0) || b.r - a.r || a.i - b.i);
-  const items = scored.map(({ s }) => s);
+  const fresh = word === '' && !member && !opts.manual && line.trim() === '';
+  const items = scored.map(({ s }) => s).filter((s) => !fresh || (s.equipped && s.kind !== 'part'));
   if (items.length === 0) return null;
   if (!opts.manual && items.length === 1 && items[0]!.name === word && !member && items[0]!.back === 0) return null;
-  return { from, to: caret, items: items.slice(0, 40) };
+  return { from, to: caret, items: items.slice(0, 40), ...(fresh ? { fresh: true } : {}) };
 }
 
 /** Puts a suggestion into the text; returns the new text and caret. A call's `()` is not doubled when it is there already. */

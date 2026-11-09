@@ -72,6 +72,8 @@ const SUG = {
   'robot.sug.list': ['Vorschläge', 'Suggestions'],
   'robot.sug.off': ['nicht angebaut', 'not built in'],
   'robot.sug.bar': ['Einfügen', 'Insert'],
+  'robot.sug.hint': ['Tippe oder tippe auf einen Baustein', 'Type, or tap a block'],
+  'robot.sug.help': ['Hilfe: Befehle', 'Help: commands'],
   'robot.sug.var': ['Name aus deinem Skript', 'name from your script'],
   'robot.sug.group.flow': ['Python', 'Python'],
   'robot.sug.group.compare': ['Vergleiche', 'Comparisons'],

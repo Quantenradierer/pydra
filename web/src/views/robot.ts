@@ -214,7 +214,7 @@ export function robotScreen(app: App): Screen {
   // ---------------------------------------------------------------- the editor
 
   function editor(initial: string, build: () => Build, onInput: (text: string) => void, testId = 'robot-code'): Editor {
-    return createEditor(t as (key: MessageKey) => string, initial, build, onInput, testId);
+    return createEditor(t as (key: MessageKey) => string, initial, build, onInput, testId, () => apiEntries(build()).map((e) => ({ sig: e.sig, desc: t(`robot.api.${e.id}` as MessageKey) })));
   }
 
   // ---------------------------------------------------------------- the variation queue
@@ -454,7 +454,7 @@ export function robotScreen(app: App): Screen {
     const Z = work.zones;
     let ran = false;
     let lost = false;
-    let ed: Editor;
+    let ed: Editor | undefined;
     let area: HTMLTextAreaElement;
     const btn = (label: string, id: string, onclick: () => void = () => {}, cls = 'run-control') => h('button', { class: cls, 'data-testid': id, onclick }, label);
     const goCode = () => (work.show('code', true), area.focus());
@@ -478,6 +478,7 @@ export function robotScreen(app: App): Screen {
       Z.robot.body.replaceChildren(bench);
       partsDrawer.set(parts);
       apiDrawer.set(apiList(game.build()));
+      ed?.refresh();
       if (focused) root.querySelector<HTMLElement>(`[data-testid="${focused}"]`)?.focus({ preventScroll: true });
     }
     drawRobot();
@@ -494,7 +495,7 @@ export function robotScreen(app: App): Screen {
     const viewBtn = btn(t('work.edit'), 'robot-view-toggle', () => showEditor(listingHolder.hidden === false), 'run-control');
     viewBtn.hidden = true;
     function showEditor(edit: boolean) {
-      ed.el.hidden = !edit;
+      ed!.el.hidden = !edit;
       listingHolder.hidden = edit;
       viewBtn.textContent = t(edit ? 'work.follow' : 'work.edit');
       if (edit) area.focus();
@@ -534,7 +535,7 @@ export function robotScreen(app: App): Screen {
                   'li',
                   {},
                   h('span', {}, `${titleOf(game.step(entry.step)!)} · ${t(`robot.history.${entry.result}` as MessageKey)} · ${entry.script.split('\n').filter((l) => l.trim()).length}`),
-                  h('button', { class: 'run-control', 'data-testid': `robot-restore-${i}`, onclick: () => (game.restore(i), ed.set(game.script()), renderHistory(), historyDrawer.close(), showEditor(true)) }, t('robot.history.restore')),
+                  h('button', { class: 'run-control', 'data-testid': `robot-restore-${i}`, onclick: () => (game.restore(i), ed!.set(game.script()), renderHistory(), historyDrawer.close(), showEditor(true)) }, t('robot.history.restore')),
                 ),
               ).reverse(),
             ),

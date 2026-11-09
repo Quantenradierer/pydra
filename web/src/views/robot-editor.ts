@@ -1,30 +1,34 @@
 import { h } from '../dom.ts';
 import type { MessageKey } from '../i18n.ts';
 import type { Build } from '../robot/build.ts';
-import { applySuggestion, completionAt, insertSnippet, snippetGroups, type Completion, type Suggestion } from '../robot/suggest.ts';
+import { applySuggestion, completionAt, insertSnippet, nextSnippets, snippetGroups, type Completion, type Snippet } from '../robot/suggest.ts';
 
 export interface Editor {
-  /** The whole editor (line numbers, text, popup, insert bar): put this on the page. */
+  /** The whole editor (line numbers, text, suggestion strip, help sheet): put this on the page. */
   el: HTMLElement;
   area: HTMLTextAreaElement;
   /** Replaces the text from outside (restoring a version) and redraws the line numbers. */
   set(text: string): void;
-  /** Redraws the insert bar and the command help after the build changed. */
+  /** Redraws the strip and the help sheet after the build changed. */
   refresh(): void;
 }
 
-/** One line of the visible command help. */
+/** One line of the command help (in the sheet). */
 export interface HelpEntry {
   sig: string;
   desc: string;
 }
 
-let barGroup = 'flow';
+/** How many completions the strip shows. */
+const STRIP_MAX = 14;
+
+let sheetGroup = 'flow';
 
 /**
- * The script editor: a text area with line numbers, a suggestion popup while typing (arrows, Tab / Enter accept, Esc closes,
- * tap on a phone) and an insert bar of templates organised by the gear of the build. The suggestions come from
- * robot/suggest.ts; this file is only the DOM around them.
+ * The script editor: a text area of fixed height with line numbers, and under it ONE single-row suggestion strip (like the
+ * suggestion bar of a phone keyboard): completions while a word is typed, otherwise the most useful next templates for the gear.
+ * Nothing floats over the text and focusing opens nothing but the strip. The command list and the full template palette live
+ * in a bottom sheet behind the "Befehle" button. The suggestions come from robot/suggest.ts; this file is only the DOM around them.
  */
 export function createEditor(t: (key: MessageKey) => string, initial: string, build: () => Build, onInput: (text: string) => void, testId = 'robot-code', help: () => HelpEntry[] = () => []): Editor {
   const area = h('textarea', {
@@ -35,119 +39,108 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
     autocapitalize: 'off',
     autocomplete: 'off',
     'aria-label': t('robot.code'),
-    'aria-autocomplete': 'list',
     'data-testid': testId,
   }) as HTMLTextAreaElement;
   const gutter = h('div', { class: 'robot-gutter', 'aria-hidden': 'true', 'data-testid': `${testId}-lines` });
-  const popup = h('ul', { class: 'robot-suggest', role: 'listbox', 'aria-label': t('robot.sug.list'), 'data-testid': `${testId}-suggest`, hidden: true });
-  popup.id = `${testId}-suggest`;
-  area.setAttribute('aria-controls', popup.id);
-  const box = h('div', { class: 'robot-editor-box' }, gutter, area, popup);
-  const el = h('div', { class: 'robot-editor' }, box);
+  const box = h('div', { class: 'robot-editor-box' }, gutter, area);
+  const strip = h('div', { class: 'robot-strip-chips', role: 'listbox', 'aria-label': t('robot.sug.list'), 'data-testid': `${testId}-strip` });
+  strip.id = `${testId}-strip`;
+  area.setAttribute('aria-controls', strip.id);
+  const more = h('button', { type: 'button', class: 'robot-strip-more', 'aria-haspopup': 'dialog', 'data-testid': `${testId}-more` }, t('robot.sug.more'));
+  const stripRow = h('div', { class: 'robot-strip' }, strip, more);
+  const sheet = h('dialog', { class: 'robot-sheet', 'aria-label': t('robot.sug.help'), 'data-testid': `${testId}-sheet` }) as HTMLDialogElement;
+  const el = h('div', { class: 'robot-editor' }, box, stripRow, sheet);
 
   let current: Completion | null = null;
   let active = 0;
-  /** The arrow keys were used: only then do Enter / Tab accept a suggestion on a fresh line. */
-  let picked = false;
+  /** The caret as it was when the help sheet opened (closing the sheet gives the focus back, and some browsers reset the caret). */
+  let sheetSel: [number, number] = [0, 0];
 
-  const fit = () => (area.rows = Math.max(5, Math.min(16, area.value.split('\n').length + 1)));
   const lines = () => {
     const n = area.value.split('\n').length;
     gutter.textContent = Array.from({ length: n + 1 }, (_, i) => (i < n ? String(i + 1) : '')).join('\n');
     gutter.scrollTop = area.scrollTop;
   };
-  const changed = () => (fit(), lines(), onInput(area.value));
+  const changed = () => (lines(), onInput(area.value));
+  /** Keeps the text field and its strip together in view (phone keyboards cover the lower part of the page). */
+  const reveal = () => requestAnimationFrame(() => el.scrollIntoView({ block: 'nearest', inline: 'nearest' }));
+  const keepFocus = (b: HTMLElement) => b.addEventListener('pointerdown', (e) => e.preventDefault());
+  const chip = (cls: string, label: string, on: () => void, extra: Record<string, string> = {}) => {
+    const b = h('button', { type: 'button', class: cls, tabindex: -1, ...extra }, label);
+    // pointerdown, not click: the text area must keep the focus (and the phone keyboard its place).
+    keepFocus(b);
+    b.addEventListener('click', on);
+    return b;
+  };
 
-  // ---- the popup
-  function close() {
-    current = null;
-    popup.hidden = true;
-    area.removeAttribute('aria-activedescendant');
+  // ---- the strip
+  function put(s: Snippet) {
+    const r = insertSnippet(area.value, area.selectionStart, area.selectionEnd, s);
+    area.value = r.text;
+    area.setSelectionRange(r.caret, r.caret);
+    changed();
+    refresh();
+    area.focus({ preventScroll: true });
   }
-  function describe(s: Suggestion): string {
-    if (s.desc === null) return t('robot.sug.var');
-    const d = t(s.desc as MessageKey);
-    return s.equipped ? d : `${t('robot.sug.off')} · ${d}`;
-  }
-  function paint() {
-    if (!current) return close();
-    popup.replaceChildren(
-      ...current.items.map((s, i) => {
-        const li = h('li', { class: `robot-suggest-item${i === active ? ' active' : ''}${s.equipped ? '' : ' off'}`, role: 'option', id: `${popup.id}-${i}`, 'aria-selected': String(i === active), 'data-kind': s.kind }, h('code', {}, s.label), h('span', {}, describe(s)));
-        // pointerdown, not click: the text area must keep the focus (and the phone keyboard its place).
-        li.addEventListener('pointerdown', (e) => (e.preventDefault(), accept(i)));
-        return li;
-      }),
-    );
-    popup.hidden = false;
-    area.setAttribute('aria-activedescendant', `${popup.id}-${active}`);
-    popup.querySelector('.active')?.scrollIntoView({ block: 'nearest' });
-    place();
-  }
-  /** Puts the popup under the caret's line (above it in the lower half), at the caret's column. */
-  function place() {
-    const before = area.value.slice(0, area.selectionStart);
-    const row = before.split('\n').length - 1;
-    const col = before.length - (before.lastIndexOf('\n') + 1);
-    const lh = parseFloat(getComputedStyle(area).lineHeight) || 22;
-    const pad = parseFloat(getComputedStyle(area).paddingTop) || 0;
-    const y = pad + (row + 1) * lh - area.scrollTop;
-    const above = y > area.clientHeight / 2 && area.clientHeight > 0;
-    // The popup stays inside the editor box (it must never cover the insert chips below): it takes the roomier side and scrolls.
-    const roomBelow = box.clientHeight - y;
-    const roomAbove = y - lh;
-    const useAbove = above ? roomAbove >= 80 || roomAbove >= roomBelow : roomBelow < 80 && roomAbove > roomBelow;
-    popup.style.maxHeight = `${Math.max(76, Math.floor((useAbove ? roomAbove : roomBelow) - 4))}px`;
-    popup.style.top = useAbove ? '' : `${Math.max(0, y)}px`;
-    popup.style.bottom = useAbove ? `${Math.max(0, box.clientHeight - (y - lh))}px` : '';
-    const room = box.clientWidth - popup.offsetWidth;
-    popup.style.left = `${Math.max(0, Math.min(gutter.offsetWidth + col * 8.8 + 8, room))}px`;
+  function drawStrip() {
+    strip.replaceChildren();
+    if (current) {
+      const c = current;
+      c.items.slice(0, STRIP_MAX).forEach((s, i) => {
+        strip.append(
+          chip(`robot-chip${i === active ? ' active' : ''}${s.equipped ? '' : ' off'}`, s.label, () => accept(i), { role: 'option', 'aria-selected': String(i === active), 'data-testid': 'strip-chip', 'data-kind': s.kind, ...(s.equipped ? {} : { title: t('robot.sug.off') }) }),
+        );
+      });
+      strip.querySelector('.active')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      strip.dataset.mode = 'complete';
+    } else {
+      for (const s of nextSnippets(build())) strip.append(chip('robot-chip', s.label, () => put(s), { 'data-testid': 'strip-chip' }));
+      strip.dataset.mode = 'next';
+      strip.scrollLeft = 0;
+    }
   }
   function refresh(manual = false) {
-    current = area.selectionStart === area.selectionEnd ? completionAt(area.value, area.selectionStart, build(), { manual }) : null;
+    const c = area.selectionStart === area.selectionEnd ? completionAt(area.value, area.selectionStart, build(), { manual }) : null;
+    // A blank line is not "typing a word": the strip then shows the next templates.
+    current = c && !c.fresh ? c : null;
     active = 0;
-    picked = false;
-    paint();
+    drawStrip();
   }
   function accept(i: number) {
     if (!current) return;
     const r = applySuggestion(area.value, current, current.items[i]!);
     area.value = r.text;
     area.setSelectionRange(r.caret, r.caret);
-    close();
     changed();
+    refresh();
     area.focus({ preventScroll: true });
   }
 
   area.value = initial;
-  fit();
   lines();
   area.addEventListener('input', () => (changed(), refresh()));
-  area.addEventListener('scroll', () => ((gutter.scrollTop = area.scrollTop), current && place()));
-  area.addEventListener('blur', close);
-  // A fresh line (or an empty script) shows what could come next as soon as the editor is entered or the caret moves.
-  area.addEventListener('focus', () => refresh());
+  area.addEventListener('scroll', () => (gutter.scrollTop = area.scrollTop));
   area.addEventListener('click', () => refresh());
+  area.addEventListener('focus', () => (refresh(), reveal()));
+  window.visualViewport?.addEventListener('resize', () => document.activeElement === area && reveal());
   area.addEventListener('keydown', (e) => {
     if (current && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      const takes = !current.fresh || picked;
-      const n = current.items.length;
+      const n = Math.min(current.items.length, STRIP_MAX);
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         active = (active + (e.key === 'ArrowDown' ? 1 : n - 1)) % n;
-        picked = true;
-        return paint();
+        return drawStrip();
       }
-      if (takes && (e.key === 'Enter' || (e.key === 'Tab' && !e.shiftKey))) {
+      if (e.key === 'Enter' || (e.key === 'Tab' && !e.shiftKey)) {
         e.preventDefault();
         return accept(active);
       }
       if (e.key === 'Escape') {
         e.preventDefault();
         e.stopPropagation();
-        return close();
+        current = null;
+        return drawStrip();
       }
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'Home' || e.key === 'End') close();
     }
     if (e.key === ' ' && e.ctrlKey) {
       e.preventDefault();
@@ -160,70 +153,55 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
     refresh();
   });
 
-  // ---- the insert bar
-  const groups = () => snippetGroups(build());
-  const bar = h('div', { class: 'robot-snippets', 'data-testid': `${testId}-bar` });
-  const hint = h('p', { class: 'robot-editor-hint', 'data-testid': `${testId}-hint` }, t('robot.sug.hint'));
-  const helpBox = h('section', { class: 'robot-help', 'aria-label': t('robot.sug.help'), 'data-testid': `${testId}-help` });
+  // ---- the sheet: all templates by group, and the command list; a tap inserts and closes
   const tabs = h('div', { class: 'robot-snippet-tabs', role: 'group', 'aria-label': t('robot.sug.bar') });
   const row = h('div', { class: 'robot-snippet-row' });
-  const keepFocus = (b: HTMLElement) => b.addEventListener('pointerdown', (e) => e.preventDefault());
-  function drawBar() {
-    const gs = groups();
-    if (!gs.some((g) => g.id === barGroup)) barGroup = gs[0]!.id;
+  const cmds = h('dl', { class: 'robot-sheet-cmds', 'data-testid': `${testId}-help` });
+  const body = h('div', { class: 'robot-sheet-body' }, tabs, row, h('h3', {}, t('robot.sug.help')), cmds);
+  const closeBtn = h('button', { type: 'button', class: 'robot-sheet-close', 'aria-label': t('robot.sug.close'), 'data-testid': `${testId}-sheet-close`, onclick: () => sheet.close() }, '×');
+  sheet.append(h('header', {}, h('h2', {}, t('robot.sug.help')), closeBtn), h('p', { class: 'robot-sheet-hint' }, t('robot.sug.hint')), body);
+  const insertFromSheet = (s: Snippet) => {
+    sheet.close();
+    area.setSelectionRange(...sheetSel);
+    put(s);
+  };
+  function drawSheet() {
+    const gs = snippetGroups(build());
+    if (!gs.some((g) => g.id === sheetGroup)) sheetGroup = gs[0]!.id;
     tabs.replaceChildren(
-      ...gs.map((g) => {
-        const b = h('button', { type: 'button', class: 'robot-snippet-tab', 'aria-pressed': String(g.id === barGroup), 'data-testid': `snippet-group-${g.id}`, onclick: () => ((barGroup = g.id), drawBar()) }, t(`robot.sug.group.${g.id}` as MessageKey));
-        keepFocus(b);
-        return b;
+      ...gs.map((g) => h('button', { type: 'button', class: 'robot-snippet-tab', 'aria-pressed': String(g.id === sheetGroup), 'data-testid': `snippet-group-${g.id}`, onclick: () => ((sheetGroup = g.id), drawSheet()) }, t(`robot.sug.group.${g.id}` as MessageKey))),
+    );
+    row.replaceChildren(...gs.find((g) => g.id === sheetGroup)!.snippets.map((s) => h('button', { type: 'button', class: 'robot-snippet', 'data-testid': 'snippet', onclick: () => insertFromSheet(s) }, s.label)));
+    cmds.replaceChildren(
+      ...help().map((e) => {
+        const call = /^([\w.]+)\((.*)\)$/.exec(e.sig);
+        const text = call ? `${call[1]}(${call[2] ? '$0' : ''})${call[2] ? '' : '$0'}` : `${e.sig}$0`;
+        return h('button', { type: 'button', class: 'robot-cmd', 'data-testid': 'cmd', onclick: () => insertFromSheet({ label: e.sig, text }) }, h('code', {}, e.sig), h('span', {}, e.desc));
       }),
     );
-    row.replaceChildren(
-      ...gs
-        .find((g) => g.id === barGroup)!
-        .snippets.map((s) => {
-          const b = h('button', {
-            type: 'button',
-            class: 'robot-snippet',
-            'data-testid': 'snippet',
-            onclick: () => {
-              const r = insertSnippet(area.value, area.selectionStart, area.selectionEnd, s);
-              area.value = r.text;
-              area.setSelectionRange(r.caret, r.caret);
-              close();
-              changed();
-              area.focus({ preventScroll: true });
-            },
-          }, s.label);
-          keepFocus(b);
-          return b;
-        }),
-    );
   }
-  function drawHelp() {
-    const entries = help();
-    helpBox.hidden = entries.length === 0;
-    helpBox.replaceChildren(h('h3', {}, t('robot.sug.help')), h('dl', {}, ...entries.flatMap((e) => [h('dt', {}, h('code', {}, e.sig)), h('dd', {}, e.desc)])));
-  }
-  bar.append(tabs, row);
-  drawBar();
-  drawHelp();
-  el.append(bar, hint, helpBox);
+  more.addEventListener('pointerdown', (e) => e.preventDefault());
+  more.addEventListener('click', () => {
+    sheetSel = [area.selectionStart, area.selectionEnd];
+    drawSheet();
+    sheet.showModal();
+  });
+  // A tap on the dimmed area closes the sheet.
+  sheet.addEventListener('click', (e) => e.target === sheet && sheet.close());
+
+  drawStrip();
 
   return {
     el,
     area,
     set(text) {
       area.value = text;
-      close();
-      fit();
       lines();
-      drawBar();
-      drawHelp();
+      refresh();
     },
     refresh() {
-      drawBar();
-      drawHelp();
+      drawStrip();
+      if (sheet.open) drawSheet();
     },
   };
 }

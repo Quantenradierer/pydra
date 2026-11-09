@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { codeBox, fillCode, runFight, zone } from './helpers.ts';
 
-/** The script editor's suggestions: popup while typing, insert bar, line numbers; on desktop (keys) and phone (taps). */
+/** The script editor: fixed height, ONE suggestion strip under it, the help sheet behind "? Hilfe"; on desktop (keys) and phone (taps). */
 
 async function openFirstFight(page: Page) {
   await page.goto('/');
@@ -10,11 +10,21 @@ async function openFirstFight(page: Page) {
   await zone(page, 'code');
 }
 
+const strip = (page: Page) => page.getByTestId('robot-code-strip');
+const chips = (page: Page) => page.getByTestId('strip-chip');
+
+/** Scroll heights that must not change while the help is closed or the strip changes. */
+const heights = (page: Page) =>
+  page.evaluate(() => {
+    const q = (s: string) => document.querySelector(s) as HTMLElement;
+    return { doc: document.documentElement.scrollHeight, body: q('.rb-zone[data-zone="code"] .rb-zone-body').scrollHeight, editor: q('.robot-editor').getBoundingClientRect().height };
+  });
+
 for (const [device, viewport] of [
-  ['phone', { width: 360, height: 640 }],
+  ['phone', { width: 360, height: 740 }],
   ['desktop', { width: 1280, height: 800 }],
 ] as const) {
-  test(`on a ${device}: line numbers and the insert bar`, async ({ page }) => {
+  test(`on a ${device}: line numbers; the strip suggests the next templates and a tap inserts`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await openFirstFight(page);
     const box = await codeBox(page);
@@ -22,15 +32,14 @@ for (const [device, viewport] of [
     await fillCode(page, 'forward()\nfire()\nwait()');
     await expect(page.getByTestId('robot-code-lines')).toContainText('3');
 
-    // The bar is always open: pick a group by what the gear offers, tap a template.
-    await expect(page.getByTestId('snippet-group-eyes')).toBeVisible();
-    await expect(page.getByTestId('snippet-group-cannon')).toHaveCount(0);
+    // Nothing is typed: the strip shows the next templates of the gear (moving, weapon, eyes, Python).
     await fillCode(page, '');
-    await page.getByTestId('snippet-group-flow').click();
-    await page.getByTestId('snippet').filter({ hasText: /^for$/ }).click();
+    await expect(chips(page).first()).toHaveText('forward(1)');
+    await expect(chips(page).filter({ hasText: /^see\(\)$/ })).toHaveCount(1);
+    await expect(chips(page).filter({ hasText: /^for$/ })).toHaveCount(1);
+    await chips(page).filter({ hasText: /^for$/ }).click();
     await expect(box).toHaveValue('for i in range(3):\n    ');
-    await page.getByTestId('snippet-group-move').click();
-    await page.getByTestId('snippet').filter({ hasText: 'forward(1)' }).click();
+    await chips(page).first().click();
     await expect(box).toHaveValue('for i in range(3):\n    forward()');
     await expect(box).toBeFocused();
     await expect(page.getByTestId('robot-code-lines')).toContainText('2');
@@ -40,127 +49,168 @@ for (const [device, viewport] of [
     await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   });
 
-  test(`on a ${device}: the popup completes parts, methods and keywords`, async ({ page }) => {
+  test(`on a ${device}: while typing the strip completes parts, methods and keywords (keys)`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await openFirstFight(page);
     const box = await codeBox(page);
-    const popup = page.getByTestId('robot-code-suggest');
     await fillCode(page, '');
     await box.focus();
 
-    // Typing a prefix opens the popup with the commands and a short description.
     await box.pressSequentially('fo');
-    await expect(popup).toBeVisible();
-    await expect(popup.getByRole('option').first()).toContainText('forward(steps)');
-    await expect(popup.getByRole('option').first()).toContainText('fährt Felder vorwärts');
-    // Esc closes it without touching the text.
+    await expect(chips(page).first()).toHaveText('forward(steps)');
+    await expect(strip(page)).toHaveAttribute('data-mode', 'complete');
+    // Esc clears the completions (the strip falls back to the next templates) without touching the text.
     await page.keyboard.press('Escape');
-    await expect(popup).toBeHidden();
+    await expect(strip(page)).toHaveAttribute('data-mode', 'next');
     await expect(box).toHaveValue('fo');
 
-    // Arrows move, Enter accepts (the caret sits behind the parentheses of a call without arguments, inside otherwise).
+    // Arrows move through the chips, Enter accepts (caret behind `()` of a call without arguments, inside otherwise).
     await box.pressSequentially('r');
-    await expect(popup.getByRole('option').first()).toContainText('forward(steps)');
+    await expect(chips(page).first()).toHaveText('forward(steps)');
     await page.keyboard.press('ArrowDown');
-    await expect(popup.getByRole('option').nth(1)).toHaveAttribute('aria-selected', 'true');
+    await expect(chips(page).nth(1)).toHaveAttribute('aria-selected', 'true');
     await page.keyboard.press('ArrowUp');
     await page.keyboard.press('Enter');
     await expect(box).toHaveValue('forward()');
     expect(await box.evaluate((e: HTMLTextAreaElement) => e.selectionStart)).toBe(8);
 
-    // After a dot the methods of that part are offered; Tab accepts.
+    // After a dot the methods of that part are offered; Tab accepts the first chip.
     await fillCode(page, '');
     await box.focus();
     await box.pressSequentially('\nblaster.');
-    await expect(popup.getByRole('option')).toContainText(['blaster.fire()', 'blaster.is_charged()', 'blaster.cooldown()', 'blaster.mark()']);
+    await expect(chips(page)).toHaveText(['blaster.fire()', 'blaster.is_charged()', 'blaster.cooldown()', 'blaster.mark()']);
     await page.keyboard.press('Tab');
     await expect(box).toHaveValue('\nblaster.fire()');
 
-    // Local names and keywords; with the popup closed Tab indents again.
+    // Local names; with the completions cleared Tab indents again.
     await fillCode(page, 'count = 3\n');
     await box.focus();
     await box.press('Control+End');
     await box.pressSequentially('co');
-    await expect(popup.getByRole('option').first()).toContainText('count');
+    await expect(chips(page).first()).toHaveText('count');
     await page.keyboard.press('Escape');
     await box.press('Tab');
     await expect(box).toHaveValue('count = 3\nco    ');
   });
+
+  test(`on a ${device}: the editor has a fixed height and the strip is one row that never wraps`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await openFirstFight(page);
+    const box = await codeBox(page);
+    await fillCode(page, '');
+    const before = await heights(page);
+    const row = (await strip(page).boundingBox())!;
+    expect(row.height).toBeLessThanOrEqual(44);
+    const first = (await chips(page).first().boundingBox())!;
+    expect(first.height).toBeGreaterThanOrEqual(44 - 1);
+    // Twenty lines: the text scrolls inside, nothing grows.
+    await fillCode(page, Array.from({ length: 30 }, (_, i) => `wait()  # ${i}`).join('\n'));
+    await box.focus();
+    await box.pressSequentially('\nfo');
+    await expect(strip(page)).toHaveAttribute('data-mode', 'complete');
+    expect(await heights(page)).toEqual(before);
+    expect((await strip(page).boundingBox())!.height).toBeLessThanOrEqual(44);
+    // The strip scrolls sideways instead of wrapping.
+    expect(await strip(page).evaluate((e) => e.scrollWidth >= e.clientWidth)).toBe(true);
+    const ys = await chips(page).evaluateAll((els) => new Set(els.map((e) => Math.round(e.getBoundingClientRect().y))).size);
+    expect(ys).toBe(1);
+    // Focusing opens nothing else: no dialog, no popup.
+    await expect(page.getByTestId('robot-code-sheet')).toBeHidden();
+    await expect(page.locator('.robot-suggest')).toHaveCount(0);
+  });
+
+  test(`on a ${device}: the help sheet holds the command list and all templates, opens and closes without moving the page`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await openFirstFight(page);
+    const box = await codeBox(page);
+    await fillCode(page, '');
+    const before = await heights(page);
+    // The list is not inline.
+    await expect(page.getByTestId('robot-code-help')).toBeHidden();
+    await expect(page.getByTestId('robot-code-hint')).toHaveCount(0);
+
+    const more = page.getByTestId('robot-code-more');
+    await expect(more).toBeVisible();
+    await more.click();
+    const sheet = page.getByTestId('robot-code-sheet');
+    await expect(sheet).toBeVisible();
+    const bb = (await sheet.boundingBox())!;
+    expect(bb.y + bb.height).toBeLessThanOrEqual(viewport.height + 1);
+    expect(bb.height).toBeLessThanOrEqual(viewport.height * 0.75);
+    await expect(page.getByTestId('robot-code-help')).toContainText('forward(steps)');
+    await expect(page.getByTestId('robot-code-help')).toContainText('fährt Felder vorwärts');
+    await expect(page.getByTestId('snippet-group-eyes')).toBeVisible();
+    await expect(page.getByTestId('snippet-group-cannon')).toHaveCount(0);
+    // A tap on a command inserts and closes.
+    await page.getByTestId('cmd').filter({ hasText: 'backward(steps)' }).click();
+    await expect(sheet).toBeHidden();
+    await expect(box).toHaveValue('backward()');
+    expect(await box.evaluate((e: HTMLTextAreaElement) => e.selectionStart)).toBe(9);
+    // Templates by group; Esc and the close button close without inserting.
+    await box.press('Control+End');
+    await more.click();
+    await page.getByTestId('snippet-group-flow').click();
+    await page.getByTestId('snippet').filter({ hasText: /^while$/ }).click();
+    await expect(sheet).toBeHidden();
+    await expect(box).toHaveValue('backward()\nwhile alive():\n    ');
+    await more.click();
+    await page.keyboard.press('Escape');
+    await expect(sheet).toBeHidden();
+    await more.click();
+    await page.getByTestId('robot-code-sheet-close').click();
+    await expect(sheet).toBeHidden();
+    await expect(box).toHaveValue('backward()\nwhile alive():\n    ');
+    expect(await heights(page)).toEqual(before);
+  });
 }
 
-test('on a phone: tapping a suggestion accepts it, tapping elsewhere closes the popup', async ({ page }) => {
+test('on a phone: tapping a chip completes the word', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 640 });
   await openFirstFight(page);
   const box = await codeBox(page);
   await fillCode(page, '');
   await box.focus();
   await box.pressSequentially('see');
-  const popup = page.getByTestId('robot-code-suggest');
-  await expect(popup).toBeVisible();
-  const bb = await popup.boundingBox();
-  expect(bb!.x).toBeGreaterThanOrEqual(0);
-  expect(bb!.x + bb!.width).toBeLessThanOrEqual(360);
-  await popup.getByRole('option').filter({ hasText: 'see_left()' }).tap();
+  await expect(strip(page)).toHaveAttribute('data-mode', 'complete');
+  await chips(page).filter({ hasText: 'see_left()' }).tap();
   await expect(box).toHaveValue('see_left()');
-  await expect(popup).toBeHidden();
-  await box.pressSequentially('\nwh');
-  await expect(popup).toBeVisible();
-  await page.getByTestId('robot-run').evaluate((b) => (b as HTMLElement).focus());
-  await expect(popup).toBeHidden();
+  await expect(box).toBeFocused();
 });
 
-test('in English: suggestions and the bar are translated', async ({ page }) => {
+test('on a phone with the keyboard open (360x420) the editor and the strip stay in view together', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 420 });
+  await openFirstFight(page);
+  const box = await codeBox(page);
+  await fillCode(page, 'forward()\nfire()');
+  await box.focus();
+  await box.pressSequentially('\nfo');
+  await expect(chips(page).first()).toBeVisible();
+  const e = (await box.boundingBox())!;
+  const s = (await strip(page).boundingBox())!;
+  expect(e.height).toBeGreaterThanOrEqual(60);
+  expect(e.y).toBeGreaterThanOrEqual(0);
+  expect(s.y + s.height).toBeLessThanOrEqual(420);
+  expect(s.y).toBeGreaterThanOrEqual(e.y + e.height - 1);
+  // Not clipped by the scrolling zone either.
+  const zb = (await page.locator('.rb-zone[data-zone="code"] .rb-zone-body').boundingBox())!;
+  expect(s.y + s.height).toBeLessThanOrEqual(zb.y + zb.height + 1);
+  expect(e.y).toBeGreaterThanOrEqual(zb.y - 1);
+  // The sheet fits above the keyboard as well and scrolls inside itself.
+  await page.getByTestId('robot-code-more').click();
+  const sb = (await page.getByTestId('robot-code-sheet').boundingBox())!;
+  expect(sb.y).toBeGreaterThanOrEqual(0);
+  expect(sb.y + sb.height).toBeLessThanOrEqual(421);
+});
+
+test('in English: the strip, the button and the sheet are translated', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('pydra.v1.language', JSON.stringify('en')));
   await page.setViewportSize({ width: 1280, height: 800 });
   await openFirstFight(page);
   const box = await codeBox(page);
   await fillCode(page, '');
   await box.focus();
-  await box.pressSequentially('fo');
-  await expect(page.getByTestId('robot-code-suggest').getByRole('option').first()).toContainText('drives tiles forward');
-  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('robot-code-more')).toHaveText('? Help');
+  await page.getByTestId('robot-code-more').click();
+  await expect(page.getByTestId('robot-code-help')).toContainText('drives tiles forward');
   await expect(page.getByTestId('snippet-group-compare')).toHaveText('Comparisons');
 });
-
-for (const [device, viewport] of [
-  ['phone', { width: 360, height: 740 }],
-  ['desktop', { width: 1280, height: 800 }],
-] as const) {
-  test(`on a ${device}: the help is visible on load, and a fresh line suggests the next commands`, async ({ page }) => {
-    await page.setViewportSize(viewport);
-    await openFirstFight(page);
-    const inView = async (id: string) => {
-      const el = page.getByTestId(id);
-      await expect(el).toBeVisible();
-      const bb = (await el.boundingBox())!;
-      expect(bb.y + bb.height).toBeLessThanOrEqual(viewport.height);
-    };
-    await inView('robot-code-bar');
-    await inView('robot-code-hint');
-    await expect(page.getByTestId('robot-code-hint')).toHaveText('Tippe oder tippe auf einen Baustein');
-    await expect(page.getByTestId('robot-code-bar').locator('details')).toHaveCount(0);
-    const help = page.getByTestId('robot-code-help');
-    await expect(help).toBeVisible();
-    await expect(help).toContainText('Hilfe: Befehle');
-    await expect(help).toContainText('forward(steps)');
-    await expect(help).toContainText('fährt Felder vorwärts');
-    const chip = (await page.getByTestId('snippet').first().boundingBox())!;
-    expect(chip.height).toBeGreaterThanOrEqual(44);
-
-    // Entering the editor on an empty script, and a new line, open the popup by themselves; Enter still makes a new line.
-    const box = await codeBox(page);
-    const popup = page.getByTestId('robot-code-suggest');
-    await fillCode(page, '');
-    await page.getByTestId('robot-run').focus();
-    await box.focus();
-    await expect(popup).toBeVisible();
-    await expect(popup.getByRole('option').first()).toContainText('forward(steps)');
-    await box.pressSequentially('forward()\n');
-    await expect(popup).toBeVisible();
-    await page.keyboard.press('Enter');
-    await expect(box).toHaveValue('forward()\n\n');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Enter');
-    await expect(box).toHaveValue('forward()\n\nbackward()');
-  });
-}

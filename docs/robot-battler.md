@@ -162,29 +162,26 @@ pick the new total up automatically.
 
 ## Script editor suggestions
 
-The editor is still a plain `<textarea>`, with three tools around it (`views/robot-editor.ts`, DOM only; the logic is the pure
-module `robot/suggest.ts`, tested in `suggest.test.ts`, e2e in `e2e/robot-editor.spec.ts` on phone and desktop, de and en).
-They are tools, not answers: they list commands and Python shapes, never what a task needs, and no hint text comes back.
+The editor is a plain `<textarea>` of **fixed height** (`clamp(5.5rem, 31dvh, 13.5rem)`, about 9 lines on a tall phone, text scrolls
+inside) with line numbers, ONE suggestion strip under it and a help sheet (`views/robot-editor.ts`, DOM only; logic in the pure
+module `robot/suggest.ts`, `suggest.test.ts`; e2e `e2e/robot-editor.spec.ts` on phone, desktop, 360x420 keyboard simulation, de/en).
+They are tools, not answers: they list commands and Python shapes, never what a task needs.
 
-- **Line numbers**: a gutter next to the text (`robot-code-lines`), scrolled together with it; lines do not wrap (`wrap=off`).
-- **Suggestion popup** (`robot-code-suggest`) while typing a word: commands of the build (`forward(steps)` with a short description
-  from the Commands drawer texts), part names (equipped ones first, parts not built in listed last and marked *nicht angebaut*),
-  keywords of the subset (`if elif else while for in def return True False and or not`), `range len print` and the script's own
-  names (assignments, loop variables, `def` names and parameters). After `part.` only that part's methods are offered
-  (`blaster.fire()`, `eyes.see()` ...). Nothing is offered in comments or strings, or for a word that is complete and unique.
-  Keys: arrows move, **Tab / Enter** accept, **Esc** closes, **Ctrl+Space** opens it by hand; with the popup closed Tab indents.
-  On a phone a tap on an entry accepts it (pointerdown keeps the keyboard up). A call with an argument puts the caret inside `()`.
-  The popup also opens **on focus, on a click, and on a blank line** (empty script, after Enter): then it shows what could come
-  next (equipped commands first, no unbuilt parts; `Completion.fresh`) and **Enter / Tab keep their normal job** until an arrow key
-  was used. The popup stays inside the editor box (it scrolls) so it never covers the insert chips.
-- **Insert bar** (`robot-code-bar`, **always open** right under the text, no fold): tabs by what the build offers (Python shapes,
-  comparisons, moving, then one tab per equipped gear, always-there commands) with 44 px chips; a tap inserts the template at the
-  caret, indented like the current line, statements start a new line. The open tab is kept while the page lives.
-- **One-line hint** (`robot-code-hint`, "Tippe oder tippe auf einen Baustein") and the visible **Hilfe: Befehle** list
-  (`robot-code-help`: signature + one-line explanation of every command of the equipped gear, same texts as the Commands drawer)
-  sit below the bar, without opening anything; both follow build changes (`Editor.refresh`). e2e checks they are visible on load
-  on 360x740 and 1280x800.
-- The build is read through a getter, so the lists follow the Robot zone. 
+- **Line numbers** (`robot-code-lines`), scrolled with the text; no wrapping.
+- **Suggestion strip** (`robot-code-strip`, chips `strip-chip`): a single 44 px row directly under the text, horizontally
+  scrollable, never wraps, never grows. While a word is typed (or after `part.`) it shows the completions (`completionAt`; `data-mode="complete"`);
+  otherwise the most useful next templates for the gear (`nextSnippets`: moving, weapon, eyes, if/while/for/else, `data-mode="next"`).
+  No floating popup; focusing opens only the keyboard and the strip. Tap inserts (pointerdown keeps the focus). Keys: **Tab / Enter**
+  accept the active chip, **ArrowUp/Down** move through the chips, **Esc** clears the completions, **Ctrl+Space** asks for all;
+  without completions Tab indents.
+- **`? Hilfe` button** (`robot-code-more`) at the end of the strip opens a **bottom sheet** (`<dialog>`, `robot-code-sheet`, max 72 dvh,
+  scrolls inside itself, Esc / `×` / backdrop close): one small line, all templates by group (`snippet-group-*`, `snippet`) and the
+  **Hilfe: Befehle** list (`robot-code-help`, entries `cmd`, same texts as the Commands drawer). Tapping an entry inserts it
+  at the caret from before the sheet opened and closes it. Nothing of this is inline, so the page height is the same open or closed.
+- **Phone keyboard**: on focus and on `visualViewport` resize the editor and strip are scrolled into view together; with
+  `max-height: 520px` the zone subtitle and, while the editor is focused, the bottom tab bar give way (e2e at 360x420).
+- Page height (code zone body, 360x740): editor block 1189 px -> 280 px.
+- The build is read through a getter, so the strip and sheet follow the Robot zone (`Editor.refresh`).
 
 ## Free gear
 

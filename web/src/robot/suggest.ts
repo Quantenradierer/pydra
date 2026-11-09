@@ -250,3 +250,14 @@ export function insertSnippet(text: string, start: number, end: number, snippet:
   const out = text.slice(0, start) + lead + clean + text.slice(end);
   return { text: out, caret: start + lead.length + (at < 0 ? clean.length : at) };
 }
+
+/** What the one-line strip offers when nothing is being typed: the most useful next templates for the build's gear. */
+export function nextSnippets(build: Build): Snippet[] {
+  const groups = snippetGroups(build);
+  const by = (id: string) => groups.find((g) => g.id === id)?.snippets ?? [];
+  const weapon = ['blaster', 'cannon', 'hammer'].map((id) => by(id)[0]).filter((x): x is Snippet => !!x);
+  const flow = by('flow');
+  const pickFlow = (...labels: string[]) => labels.map((l) => flow.find((x) => x.label === l)).filter((x): x is Snippet => !!x);
+  const all = [...by('move').slice(0, 4), ...weapon.slice(0, 1), ...by('eyes').slice(0, 1), ...pickFlow('if', 'while', 'for', 'else'), ...by('basics').slice(0, 1)];
+  return all.filter((x, i) => all.findIndex((y) => y.label === x.label) === i);
+}

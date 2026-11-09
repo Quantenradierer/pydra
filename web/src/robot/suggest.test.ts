@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { START_BUILD, type Build } from './build.ts';
-import { applySuggestion, completionAt, insertSnippet, localNames, snippetGroups } from './suggest.ts';
+import { applySuggestion, completionAt, insertSnippet, localNames, nextSnippets, snippetGroups } from './suggest.ts';
 
 const legs: Build = { chassis: 'medium', locomotion: 'legs', gear: ['cannon', 'shield', 'gps'], addons: [], blasterMark: 1 };
 const names = (text: string, build: Build = START_BUILD, manual = false) => completionAt(text, text.length, build, { manual })?.items.map((i) => i.label) ?? [];
@@ -100,5 +100,17 @@ describe('snippets', () => {
     // Behind code on the same line nothing opens by itself.
     expect(completionAt('forward()', 9, START_BUILD)).toBeNull();
     expect(completionAt('fo', 2, START_BUILD)!.fresh).toBeFalsy();
+  });
+});
+
+describe('nextSnippets (the strip while nothing is typed)', () => {
+  it('starts with moving, then the weapon and the eyes, then Python shapes; no duplicates', () => {
+    const labels = nextSnippets(START_BUILD).map((s) => s.label);
+    expect(labels.slice(0, 2)).toEqual(['forward(1)', 'backward(1)']);
+    expect(labels).toContain('fire()');
+    expect(labels).toContain('see()');
+    expect(labels).toEqual(expect.arrayContaining(['if', 'while', 'for']));
+    expect(new Set(labels).size).toBe(labels.length);
+    expect(labels.length).toBeLessThanOrEqual(14);
   });
 });

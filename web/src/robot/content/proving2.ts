@@ -29,12 +29,12 @@ const fight = (id: string, de: string, en: string, like: string, catchDe: string
  * all won by the same general script.
  */
 export const PROVING_2 = chapter(45, [
-  fight('pg2-a', 'Prüfung 1', 'Test 1', 'wall-or-not', 'Geradeaus und rechts.', 'Ahead and right.'),
+  fight('pg2-a', 'Prüfung 1', 'Test 1', 'right-dummy', 'Geradeaus und rechts.', 'Ahead and right.'),
   fight('pg2-b', 'Prüfung 2', 'Test 2', 'three-way', 'Auch hinter dir.', 'Behind you, too.'),
   fight('pg2-c', 'Prüfung 3', 'Test 3', 'bubble', 'Ein Gegner hat einen Schild.', 'An enemy has a shield.'),
   fight('pg2-d', 'Prüfung 4', 'Test 4', 'health-check', 'Ein Scharfschütze.', 'A sniper.'),
   fight('pg2-e', 'Prüfung 5', 'Test 5', 'far-far-dummy', 'Eine weite Halle.', 'A wide hall.'),
   fight('pg2-f', 'Prüfung 6', 'Test 6', 'regenerator', 'Der Gegner heilt sich.', 'The enemy heals itself.'),
-  fight('pg2-g', 'Prüfung 7', 'Test 7', 'maze-runner', 'Ein Gegner steht seitlich.', 'An enemy stands to the side.'),
+  fight('pg2-g', 'Prüfung 7', 'Test 7', 'side-guard', 'Ein Gegner steht seitlich.', 'An enemy stands to the side.'),
   fight('final-exam', 'Abschlussprüfung', 'Final Exam', 'break-out', 'Boss: Bestehst du, bekommst du das Grundlagen-Zertifikat.', 'Boss: pass it and you earn the Basics Certificate.'),
 ]);

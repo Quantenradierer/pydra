@@ -74,7 +74,7 @@ export const CHAPTER_1 = chapter(1, [
     par: 20,
   },
   {
-    id: 'twin-armor',
+    id: 'far-left',
     title: T('Weit links', 'Far Left'),
     catchLine: T('Eine vierte steht links, weit weg.', 'A fourth one stands on the left, far away.'),
     enemies: [{ hp: 2 }],

@@ -33,7 +33,7 @@ const PARTS = [
 for (const lang of ['de', 'en'] as const) {
   test(`phone 360x740 (${lang}): header, pills, equipment, goal, arena, run controls, editor + strip, primary - top to bottom`, async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 740 });
-    await open(page, 'gl-foward', lang);
+    await open(page, 'one-more-line', lang);
     const tops: number[] = [];
     for (const [name, selector] of PARTS) {
       const box = await page.locator(selector).first().boundingBox();
@@ -59,7 +59,7 @@ for (const lang of ['de', 'en'] as const) {
 
 test('desktop 1280x800: pills, equipment, goal, arena in this order; the editor and the primary button are on the right', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await open(page, 'gl-foward', 'de');
+  await open(page, 'one-more-line', 'de');
   const box = async (selector: string) => (await page.locator(selector).first().boundingBox())!;
   const [pills, equip, goal, arena, controls, editor, primary] = await Promise.all(PARTS.filter(([n]) => !['header', 'suggestion strip'].includes(n)).map(([, s]) => box(s)));
   expect(equip!.y).toBeGreaterThan(pills!.y);
@@ -106,11 +106,21 @@ test('the equipment row shows the equipped parts as small icons and opens the sh
   await expect(page.locator('dialog[open]')).toBeVisible();
 });
 
-test('a bug hunt says only that there is a bug, nothing about it', async ({ page }) => {
-  for (const [lang, line] of [['de', 'Das Skript hat einen Fehler. Finde ihn.'], ['en', 'The script has a bug. Find it.']] as const) {
-    await open(page, 'gl-foward', lang);
-    await expect(page.getByTestId('robot-catch')).toHaveText(new RegExp(`${line.replace('.', '\\.')}$`));
-    const text = (await page.getByTestId('robot-catch').innerText()).toLowerCase();
-    for (const word of ['forward', 'foward', 'klammer', 'bracket', 'spelled', 'geschrieben']) expect(text, word).not.toContain(word);
+test('the pills of a chapter are 1..N in order, with no gaps, no dashed side pills and no bug hunts', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await open(page, 'training-dummy', 'de');
+  const pills = page.locator('[data-testid="level-strip"] .level-dot');
+  const n = await pills.count();
+  expect(n).toBe(7);
+  expect(await pills.allInnerTexts()).toEqual(Array.from({ length: n }, (_, i) => String(i + 1)));
+  await expect(page.locator('.level-dot.side')).toHaveCount(0);
+  // The map: every chapter counts its challenges, none is missing or extra.
+  await page.getByRole('button', { name: 'Zurück', exact: true }).click();
+  for (const [chapter, count] of [[0, 7], [1, 7], [2, 5]] as const) {
+    const section = page.getByTestId(`robot-chapter-${chapter}`);
+    await section.evaluate((d) => ((d as HTMLDetailsElement).open = true));
+    await expect(section.locator('.level-dot')).toHaveCount(count);
+    expect(await section.locator('.level-dot').allInnerTexts()).toEqual(Array.from({ length: count }, (_, i) => String(i + 1)));
   }
+  expect(await page.getByText(/Fehlersuche|Sonderregel|Nebenmission/).count()).toBe(0);
 });

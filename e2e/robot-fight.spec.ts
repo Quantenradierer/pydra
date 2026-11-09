@@ -1,3 +1,4 @@
+import { CH0 } from './robot-ids.ts';
 import { expect, test, type Page } from '@playwright/test';
 import { startFight } from './helpers.ts';
 
@@ -110,19 +111,20 @@ test('on a phone the verdict and the next button are scrolled into view when the
   await expect(page.getByTestId('robot-outcome')).toBeInViewport({ ratio: 0.9 });
 });
 
-test('a bug hunt always has its bug: a script that does not win gets the prepared buggy script, a fix in progress stays', async ({ page }) => {
+test('pills: moving between challenges (pills, next button) never rewrites the script, a fix in progress stays', async ({ page }) => {
   await openTask(page, 'one-more-line', '', ['first-contact', 'one-more-line']);
+  await page.getByTestId('robot-code').fill('forward()\nfire()\nfire()\nsay("x")');
   await page.getByTestId('level-3').click();
-  await expect(page.getByTestId('robot-code')).toHaveValue('foward()\nfire()\nfire()');
-  await page.getByTestId('robot-code').fill('foward()\nfire()\nfire()\nsay("x")');
+  await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()\nfire()\nsay("x")');
   await page.getByTestId('level-2').click();
+  await page.getByTestId('level-1').click();
   await page.getByTestId('level-3').click();
-  await expect(page.getByTestId('robot-code')).toHaveValue('foward()\nfire()\nfire()\nsay("x")');
+  await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()\nfire()\nsay("x")');
 });
 
 test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next button when it changes chapter', async ({ page }) => {
   await page.goto('/');
-  await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact', 'one-more-line', 'backstep-dummy', 'training-dummy', 'corner-dummy', 'u-turn', 'twin-dummies', 'wall-dummy', 'obstacle-course', 'gl-foward', 'gl-parens', 'gl-indent', 'cn-row-3', 'cn-tank-3'], script: 'forward()', runs: 0, wins: 0 })));
+  await page.evaluate((solved) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: 'forward()', runs: 0, wins: 0 })), CH0);
   await page.reload();
   await page.getByTestId('start-robot').click();
   await expect(page.getByTestId('robot-continue')).toContainText('Kapitel 1: Zahlen und Variablen · Aufgabe 1');

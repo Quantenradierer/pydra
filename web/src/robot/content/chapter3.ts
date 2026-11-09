@@ -30,7 +30,7 @@ export const CHAPTER_3 = chapter(3, [
     par: lineCount(S1),
   },
   {
-    id: 'wall-or-not',
+    id: 'right-dummy',
     title: T('Rechts oder geradeaus', 'Right or Ahead'),
     catchLine: T('Eine zweite Attrappe steht rechts. Prüfe beides, immer wieder.', 'A second dummy is on the right. Check both, again and again.'),
     enemies: [{ hp: 1 }],

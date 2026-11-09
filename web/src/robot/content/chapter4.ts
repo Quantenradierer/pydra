@@ -46,7 +46,7 @@ export const CHAPTER_4 = chapter(4, [
     par: lineCount(S3),
   },
   {
-    id: 'maze-runner',
+    id: 'side-guard',
     title: T('Seitenwache', 'Side Guard'),
     catchLine: T('Links, weit weg, steht noch einer. Schieß, solange du ihn siehst.', 'Far to the left stands one more enemy. Shoot while you see it.'),
     enemies: [{ hp: 2 }, REGEN, { hp: 2 }],

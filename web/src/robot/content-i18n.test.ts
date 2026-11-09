@@ -16,7 +16,7 @@ describe('every task text exists in German and in English', () => {
     for (const level of [2, 3, 4]) {
       for (let seed = 1; seed <= 30; seed++) {
         const { enemy } = trainingFight(seed, level);
-        expect(enemy.catchLine.de, `${level}/${seed}`).not.toMatch(/\b(dummies|ahead|enemy|tough|sniper|shield|regenerator|far dummy|maze-runner|hide-and-seek)\b/);
+        expect(enemy.catchLine.de, `${level}/${seed}`).not.toMatch(/\b(dummies|ahead|enemy|tough|sniper|shield|regenerator|far dummy|side-guard|hide-and-seek)\b/);
         expect(enemy.catchLine.en, `${level}/${seed}`).not.toMatch(/\b(Attrappen|Gegner|Scharfschütze|Schild)\b/);
       }
     }

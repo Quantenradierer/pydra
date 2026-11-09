@@ -34,7 +34,7 @@ describe('Chapter 3', () => {
     expect(run('bubble', enemy('bubble').solution).won).toBe(true);
   });
   it('Peekaboo: code that only fires ahead loses once an enemy is on the side', () => {
-    expect(run('wall-or-not', 'fire()\nfire()').won).toBe(false);
+    expect(run('right-dummy', 'fire()\nfire()').won).toBe(false);
   });
   it('Health Check: without saying "low" the sniper fight is not won', () => {
     const r = run('health-check', enemy('bubble').solution);
@@ -55,7 +55,7 @@ describe('Chapter 4', () => {
     expect(run('countdown', enemy('regenerator').solution).won).toBe(false);
   });
   it('Break Out: needs while True and break', () => {
-    expect(run('break-out', enemy('maze-runner').solution).won).toBe(false);
+    expect(run('break-out', enemy('side-guard').solution).won).toBe(false);
   });
 });
 

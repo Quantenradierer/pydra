@@ -106,7 +106,7 @@ function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]
       text: regen ? { de: 'ein Gegner, der sich heilt', en: 'an enemy that heals itself' } : { de: 'ein weit entfernter Gegner', en: 'a far-away enemy' },
     };
   }
-  const src = pickFrom('maze-runner');
+  const src = pickFrom('side-guard');
   return { enemies: src.enemies, map: src.map, solution: FINAL_SCRIPT, text: { de: 'ein Gegner, der seitlich steht', en: 'an enemy to the side' } };
 }
 

@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { closeSheets, fillCode, runFight } from './helpers.ts';
+import { CH0, CH1, CH2 } from './robot-ids.ts';
 
 /**
  * Dead-control smoke test: visits the Robot Battler screens (task map, the task page with its sheets,
@@ -8,14 +9,10 @@ import { closeSheets, fillCode, runFight } from './helpers.ts';
  * does nothing has to be disabled instead.
  */
 
-const SOLVED = [
-  'first-contact', 'one-more-line', 'training-dummy', 'corner-dummy', 'u-turn', 'twin-dummies', 'wall-dummy', 'obstacle-course',
-  'hello-robot', 'far-dummy', 'armored-dummy', 'counter', 'sign-dummy', 'math-dummy', 'twin-armor', 'name-tag', 'calibrator',
-  'tank-dummy', 'dummy-row', 'step-counter', 'after-the-loop', 'double-loop', 'dummy-army',
-];
+const SOLVED = [...CH0, ...CH1, ...CH2];
 const BUILD = { chassis: 'medium', locomotion: 'wheels', gear: ['blaster', 'eyes'], addons: [], blasterMark: 1 };
 
-/** Starts on the Robot Battler task map with the first 23 steps done (so challenges and the Training Grounds are open). */
+/** Starts on the Robot Battler task map with the first 19 challenges done (so the Training Grounds are open). */
 async function start(page: Page, solved: string[] = SOLVED) {
   await page.addInitScript(([s, b]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()\nfire()', build: b, runs: 40, wins: 40 })), [solved, BUILD] as const);
   await page.goto('/');
@@ -126,11 +123,9 @@ test('desktop: no control of the Robot Battler screens is a no-op', async ({ pag
     await page.getByTestId('robot-training').click();
     await page.getByTestId('robot-train-daily').click();
   });
-  for (const id of ['gl-foward', 'cn-row-3']) {
-    await press(page, `challenge ${id}`, openStep(page, id));
-  }
-  await press(page, 'challenge after a fight', async () => {
-    await openStep(page, 'cn-row-3')();
+  await press(page, 'a later challenge', openStep(page, 'dummy-army'));
+  await press(page, 'a later challenge after a fight', async () => {
+    await openStep(page, 'dummy-army')();
     await runFight(page);
   });
   expect(dead, dead.join('\n')).toEqual([]);

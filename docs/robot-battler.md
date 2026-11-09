@@ -81,7 +81,18 @@ Tests: `e2e/robot-fight.spec.ts` (samples the arena at several times during a fi
 change, no verdict at t=0, verdict last; pause / step / speed / skip; points toast only with the verdict; no share / automatic / pictures
 row / chapter name), `e2e/robot.spec.ts` (`expectOneNavigation`, desktop no-scroll, phone one column), `e2e/robot-controls.spec.ts` (dead
 controls), `e2e/robot-ux.spec.ts`, `e2e/robot-editor.spec.ts` (tap forward() then backward() = two lines), `e2e/helpers.ts` (`startFight`, `runFight` = start + skip).
-Not changed: the Home screen (shared by all games). Still open: no keyboard shortcut for stepping; a lost fight can run all 200 rounds (use "Zum Ergebnis").
+Not changed: the Home screen (shared by all games). Still open: no keyboard shortcut for stepping.
+
+**rb20 playtest fixes** (hostile first-time play at 360x740 and 1280x800, de and en, screenshots every 500 ms during fights):
+* A lost fight whose script had ended played 200 empty rounds at 800 ms (~160 s of nothing). `stepper.ts` `isIdleBeat` / `idleRunEnd`: a run of rounds with no line,
+  no event and no speech is one step ("Dein Skript ist zu Ende ..." / `robot.narr.idle`), the playback and the → button jump over it; any fight is played at the fastest speed
+  after `SLOW_STEPS` (40) steps so a never-ending loop does not take minutes (the first steps stay at the chosen speed).
+* On a phone the verdict and the primary button were below the fold when a fight ended: the page now scrolls them into view (`scrollIntoView({block:'nearest'})`, no move when visible).
+* A bug hunt opened with a script that does not win showed the text "forward() is spelled differently" but no bug: that script is replaced once per visit by the challenge's `fallback`
+  (a fix in progress stays). The map card and the next button say "Kapitel 1: Zahlen und Variablen · Aufgabe 1" when the chapter is not the current one ("Aufgabe 1" alone was ambiguous).
+* Constraint tasks said their rule twice (prompt + `rule` sentence): the `rule` field is gone. The `Python-Meldung` disclosure has an arrow (it looked like a dead label). The Training
+  buttons have a gap. The armor plates label no longer says "ab 12 Sternen" (the lock was removed long ago).
+* Known and left: the strip chips are labelled `forward(1)` but insert `forward()` with the caret inside; the points toast (app-wide) stays 4.5 s and can cover the pills.
 
 ## Robot art (modular images)
 

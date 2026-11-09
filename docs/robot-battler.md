@@ -35,6 +35,17 @@ Chapter 3 uses a 9x8 arena (robot at (4, 6)) so left and right are symmetric; it
 extras are side missions (`regression: false`) with their own set-up, like the Chapter 2 extras. Proving Grounds II mixes
 Chapter 3 and 4 fights (their frames are the only ones one script can win together); `id#n` in `mix` picks layout n.
 
+### UI/UX pass (review at 360/820/1280 px, de/en, light/dark; shots in the scratchpad `shots/`)
+
+Fixed: battle screen order is task → concept card → code → Run/Hint → result, with commands, robot builder and history as
+folded sections (the code editor used to sit below a 12-entry command list); the textarea grows with the script; all
+controls are at least 44 px; viewer controls are a wrapping grid with a primary Play button; the task map has a Continue /
+"Los geht's" button, chapters fold (finished or fully locked ones are closed) and rows show title + kind on the left, state and
+stars on the right; the fight queue folds earlier enemies' chips, won fights and lost fights beyond four into `<details>`;
+chevrons on all foldable sections; wording (Kämpfe instead of "Aufstellungen/set-ups", "Roboter bauen", clearer next steps).
+Remaining: the viewer is still long on phones (arena above code, then six panels); no keyboard shortcut for stepping; the
+`<textarea>` has no line numbers; challenge screens (line-up, predict) have not been restyled beyond bigger arrow buttons.
+
 ## Architecture
 
 ```

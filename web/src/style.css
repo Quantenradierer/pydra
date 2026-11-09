@@ -3057,3 +3057,59 @@ progress {
 .robot-vq-won .robot-vq-rows {
   margin-top: 0.2rem;
 }
+
+/* Robot Battler: foldable sections show a chevron (the flex summaries lose the default marker). */
+.robot summary {
+  list-style: none;
+}
+.robot summary::-webkit-details-marker {
+  display: none;
+}
+.robot-card-note > summary::before,
+.robot-build > summary::before,
+.robot-api > summary::before,
+.robot-history > summary::before,
+.robot-chapter > summary::before,
+.robot-vq-old > summary::before,
+.robot-vq-won > summary::before {
+  content: '▸';
+  flex: none;
+  margin-right: 0.5rem;
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+[open] > summary::before {
+  transform: rotate(90deg);
+}
+.robot-chapter > summary {
+  flex-wrap: nowrap;
+}
+.robot-chapter > summary .robot-chapter-name {
+  flex: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .robot summary::before {
+    transition: none;
+  }
+}
+
+.robot-lineup .icon-button {
+  font-size: 1.4rem;
+  min-height: 2.75rem;
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--fg);
+}
+.robot-lineup .icon-button:disabled {
+  opacity: 0.35;
+}
+.robot-original summary {
+  cursor: pointer;
+  font-size: 0.9rem;
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+}
+.robot-error p {
+  margin: 0;
+}

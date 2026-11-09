@@ -21,6 +21,7 @@ import { huntScreen } from './views/hunt.ts';
 import { orderScreen } from './views/order.ts';
 import { predictScreen } from './views/predict.ts';
 import { robotScreen } from './views/robot.ts';
+import { robotGalleryScreen } from './views/robot-gallery.ts';
 import { profileScreen } from './views/profile.ts';
 import { homeScreen } from './views/home.ts';
 import { quizScreen } from './views/quiz.ts';
@@ -150,7 +151,8 @@ export class App {
       history.replaceState(null, '', '#/');
     }
     this.screen?.dispose?.();
-    this.screen = VIEWS[route](this);
+    // Hidden dev route: every robot image, for art work (not linked anywhere).
+    this.screen = location.hash === '#/dev/robots' ? robotGalleryScreen(this) : VIEWS[route](this);
     this.screen.root.dataset.screen = route;
     this.root.replaceChildren(this.screen.root);
     document.documentElement.lang = this.lang;

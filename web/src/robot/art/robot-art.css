@@ -1,0 +1,258 @@
+/* Robot art: one palette, a few state classes. Colours are CSS variables; shapes get them through f-* classes.
+   The robot always sits on a dark "stage" (the hydra background), so it reads the same in light and dark mode. */
+:root {
+  --rb-body: #3f86c4;
+  --rb-hi: #66aee8;
+  --rb-lo: #2b6192;
+  --rb-metal: #aebfd2;
+  --rb-dark: #1d2a3a;
+  --rb-acc: #ffd43b;
+  --rb-glow: #6fe3ff;
+  --rb-hot: #ff9340;
+  --rb-light: #ffffff;
+  --rb-line: #070d15;
+  --rb-stage: var(--hydra-bg, #14202e);
+  --rb-stage-line: rgba(255, 255, 255, 0.5);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --rb-stage: #0c141e;
+    --rb-stage-line: rgba(255, 255, 255, 0.42);
+  }
+}
+.rb-enemy {
+  --rb-body: #cc524c;
+  --rb-hi: #ee7b70;
+  --rb-lo: #8f2f30;
+  --rb-acc: #ffb347;
+  --rb-glow: #ff9a7a;
+}
+.rb {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.rb [class^='f-'] {
+  stroke: var(--rb-line);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+.rb .nl [class^='f-'] {
+  stroke: none;
+}
+.rb .ln {
+  fill: none;
+  stroke: var(--rb-line);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+.rb .f-body { fill: var(--rb-body); }
+.rb .f-hi { fill: var(--rb-hi); }
+.rb .f-lo { fill: var(--rb-lo); }
+.rb .f-metal { fill: var(--rb-metal); }
+.rb .f-dark { fill: var(--rb-dark); }
+.rb .f-acc { fill: var(--rb-acc); }
+.rb .f-glow { fill: var(--rb-glow); }
+.rb .f-hot { fill: var(--rb-hot); }
+.rb .f-light { fill: var(--rb-light); }
+.rb .leg-out,
+.rb .leg-in {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.rb .leg-out {
+  stroke: var(--rb-line);
+  stroke-width: 7.2;
+}
+.rb .leg-in {
+  stroke: var(--rb-metal);
+  stroke-width: 3.4;
+}
+.rb .rb-scan path,
+.rb .rb-wide path {
+  fill: none;
+  stroke: var(--rb-glow);
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+.rb .rb-wide path {
+  stroke: var(--rb-line);
+  opacity: 1;
+}
+.rb-in {
+  transform-origin: 0 0;
+}
+.rb-flash {
+  opacity: 0;
+}
+.rb-bubble {
+  fill: var(--rb-glow);
+  fill-opacity: 0;
+  stroke: var(--rb-acc);
+  stroke-width: 0;
+}
+.rb-unit.shield-up .rb-bubble {
+  fill-opacity: 0.2;
+  stroke-width: 3;
+}
+
+/* Empty sockets and tap targets. */
+.rb-plug rect,
+.rb-plug path {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: var(--rb-stage-line);
+  stroke-width: 1.6;
+  stroke-dasharray: 3.2 2.4;
+}
+.rb-plug path {
+  fill: none;
+  stroke-dasharray: none;
+}
+.rb-hit {
+  fill: transparent;
+  stroke: none;
+}
+.rb-lochit rect {
+  fill: transparent;
+  stroke: var(--rb-stage-line);
+  stroke-width: 1.2;
+  stroke-dasharray: 3.2 2.4;
+  opacity: 0.55;
+}
+.rb [role='button'] {
+  cursor: pointer;
+  outline: none;
+}
+.rb .rb-sock[role='button']:hover .rb-hit,
+.rb .rb-plug:hover rect,
+.rb .rb-lochit:hover rect,
+.rb .rb-sock[role='button'].picked .rb-hit,
+.rb .rb-plug.picked rect,
+.rb .rb-lochit.picked rect {
+  stroke: var(--rb-acc);
+  stroke-width: 2;
+  opacity: 1;
+}
+.rb .rb-sock[role='button'] .rb-hit {
+  stroke-dasharray: 3 2;
+}
+.rb [role='button']:focus-visible .rb-hit,
+.rb .rb-plug:focus-visible rect,
+.rb .rb-lochit:focus-visible rect {
+  stroke: #fff;
+  stroke-width: 2.4;
+  opacity: 1;
+}
+
+/* A framed robot: the dark stage the art is drawn for. */
+.rb-stage {
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--rb-stage) 82%, #5a7fa6), var(--rb-stage));
+  border-radius: 0.8rem;
+  padding: 0.35rem;
+}
+.rb-stage .rb {
+  width: 100%;
+  height: 100%;
+}
+
+/* Arena units: the robot layer over the canvas. */
+.rb-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.rb-unit {
+  position: absolute;
+  transition: left 0.28s ease-out, top 0.28s ease-out, opacity 0.3s;
+}
+.rb-unit .rb-turn {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.22s ease-out;
+}
+.rb-unit.dead {
+  opacity: 0.32;
+  filter: grayscale(1);
+}
+.rb-unit.dead .rb-turn {
+  transform: scale(0.82) rotate(var(--rb-deg, 0deg)) !important;
+}
+
+/* Effects hooked to engine events (classes set by the viewer for the tick that is shown). */
+@keyframes rb-snap {
+  0% { transform: translate(var(--dx), var(--dy)) scale(1.5); opacity: 0; }
+  55% { opacity: 1; }
+  80% { transform: translate(calc(var(--dx) * -0.08), calc(var(--dy) * -0.08)) scale(0.96); }
+  100% { transform: none; }
+}
+@keyframes rb-flash {
+  0% { opacity: 1; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+@keyframes rb-swing {
+  0% { transform: rotate(-60deg); }
+  45% { transform: rotate(35deg); }
+  100% { transform: rotate(0); }
+}
+@keyframes rb-hit {
+  0% { filter: brightness(2.6) saturate(0.3); }
+  100% { filter: none; }
+}
+@keyframes rb-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+@keyframes rb-bob {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-2.5px); }
+}
+.rb-snap {
+  animation: rb-snap 0.5s cubic-bezier(0.2, 0.8, 0.3, 1.1);
+}
+.rb-unit.fx-fire .rb-flash {
+  animation: rb-flash 0.35s ease-out;
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+.rb-unit.fx-smash .rb-swing {
+  animation: rb-swing 0.5s ease-out;
+}
+.rb-unit.fx-hit .rb {
+  animation: rb-hit 0.45s ease-out;
+}
+.rb-unit.fx-move .rb-loco .rb-in {
+  animation: rb-bob 0.28s ease-in-out;
+}
+.rb-pulse {
+  animation: rb-pulse 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rb *,
+  .rb,
+  .rb-unit,
+  .rb-unit .rb-turn {
+    animation: none !important;
+    transition: none !important;
+  }
+  .rb-unit.fx-fire .rb-flash {
+    opacity: 1;
+  }
+}
+
+/* Dev gallery (#/dev/robots). */
+.robot-gallery { max-width: none; }
+.rb-themes { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 38rem), 1fr)); }
+.rb-theme { padding: 0.8rem; border-radius: 0.8rem; background: var(--bg); color: var(--fg); border: 1px solid var(--border); }
+.rb-theme.dark { --bg: #0f1722; --fg: #e7edf4; --border: #33445a; --rb-stage: #0c141e; --rb-stage-line: rgba(255, 255, 255, 0.42); }
+.rb-theme.light { --bg: #f5f7fa; --fg: #14202e; --border: #c9d3df; --rb-stage: #14202e; }
+.rb-row h3 { margin: 0.4rem 0 0.2rem; font-size: 0.85rem; }
+.rb-head { font-size: 1.05rem; margin-top: 1rem; }
+.rb-sizes { display: flex; gap: 0.4rem; align-items: flex-end; flex-wrap: wrap; }
+.rb-sample { padding: 0; box-sizing: content-box; }
+.rb-row { break-inside: avoid; }
+.rb-theme { columns: 1; }

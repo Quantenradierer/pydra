@@ -21,6 +21,8 @@ for (const [device, viewport] of [
     await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
     await expect(page.getByTestId('robot-stars')).toContainText('★★★');
     // The replay: scrub to the end and see the highlighted line and the log.
+    // (Back / restart are disabled at the start of the replay, forward / end at its end.)
+    await page.getByTestId('robot-end').click();
     await page.getByTestId('robot-restart').click();
     await page.getByTestId('robot-forward').click();
     await expect(page.locator('.robot-listing li.active')).toHaveCount(1);
@@ -284,7 +286,7 @@ for (const [device, viewport] of [
     await page.getByTestId('robot-line-forward').click();
     await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '1');
     await expect(page.getByTestId('robot-where')).toHaveText(/^Zeile 1 · Schritt 1 von \d+$/);
-    await expect(narration).toContainText('kostet keinen Tick');
+    await expect(narration).toContainText('kostet keine Runde');
     await expect(page.getByTestId('robot-vars')).toContainText('d = ');
     await expect(page.locator('.robot-listing li[data-line="1"] .robot-hint')).toContainText('distance() →');
     await expect(page.getByTestId('robot-sensors')).toContainText('distance()');
@@ -349,7 +351,7 @@ test('the variation queue: first fight, then the other variations and earlier en
   test.setTimeout(90_000);
   await openStep(page, 'one-more-line', 'forward()\nfire()\nfire()', ['first-contact']);
   const queue = page.getByTestId('robot-queue-panel');
-  await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 1 von (\d+): .*, Variante 1 von \d+$/);
+  await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 1 von (\d+): .*, Spielfeld 1 von \d+$/);
   const total = Number((await page.getByTestId('robot-vq-progress').textContent())!.match(/von (\d+):/)![1]);
   expect(total).toBeGreaterThan(3);
   await expect(page.getByTestId('robot-vq-state')).toHaveText('läuft');
@@ -357,7 +359,7 @@ test('the variation queue: first fight, then the other variations and earlier en
   await page.getByTestId('robot-end').click();
   await expect(page.getByTestId('robot-vq-state')).toHaveText('gewonnen');
   await expect(page.getByTestId('robot-layout-1')).toContainText('✓');
-  // Go on to the next variation, then let the rest play on its own at top speed (auto-advance).
+  // Go on to the next map, then let the rest play on its own at top speed (auto-advance).
   await page.getByTestId('robot-vq-next').click();
   await expect(page.getByTestId('robot-vq-progress')).toHaveText(/^Kampf 2 von/);
   await openDrawer(page, 'fight', 'robot-more-open');
@@ -367,7 +369,7 @@ test('the variation queue: first fight, then the other variations and earlier en
   await closeDrawer(page, 'fight');
   await openDrawer(page, 'fight', 'robot-vq-open');
   await expect(page.getByTestId('robot-vq-summary')).toContainText(`${total} von ${total} Kämpfen gewonnen`, { timeout: 60_000 });
-  await expect(page.getByTestId('robot-vq-verdict')).toHaveText('Dein Skript schlägt alle Varianten und alle früheren Gegner.');
+  await expect(page.getByTestId('robot-vq-verdict')).toHaveText('Dein Skript gewinnt auf allen Spielfeldern und gegen alle früheren Gegner.');
   // The earlier enemy is part of the queue and can be watched again from the summary.
   await expect(queue.getByTestId('robot-vq-row-first-contact#1')).toBeHidden(); // won fights are folded away
   await queue.getByTestId('robot-vq-won').locator('summary').click();
@@ -400,7 +402,7 @@ test('English texts in the stepping view', async ({ page }) => {
   await page.evaluate(() => localStorage.setItem('pydra.v1.language', JSON.stringify('en')));
   await openStep(page, 'first-contact', 'forward()\nfire()');
   await page.getByTestId('robot-line-forward').click();
-  await expect(page.getByTestId('robot-narration')).toContainText('is a command: it costs one tick');
+  await expect(page.getByTestId('robot-narration')).toContainText('is a command: it costs one round');
   await expect(page.getByTestId('robot-where')).toHaveText(/^Line 1 · step 1 of \d+$/);
   await expect(page.getByTestId('robot-vq-progress')).toContainText('Fight 1 of');
   await expect(page.getByTestId('robot-speed-label')).toHaveText('very slow');
@@ -443,7 +445,7 @@ test('the build screen draws the robot from its parts: tap sockets to plug parts
   await expect(page.locator('.rb-plug')).toHaveCount(1);
   // Tap the empty socket: the parts that fit are offered; plug the cannon in.
   await page.locator('.rb-plug').dispatchEvent('click');
-  await expect(page.getByTestId('robot-inspector')).toContainText('Leerer Steckplatz');
+  await expect(page.getByTestId('robot-inspector')).toContainText('Leerer Platz');
   await page.getByTestId('robot-pick-cannon').click();
   await expect(art).toHaveAttribute('data-gear', /cannon/);
   await expect(page.getByTestId('robot-part-cannon')).toBeVisible();
@@ -545,7 +547,7 @@ test('the same screens in English', async ({ page }) => {
   await page.reload();
   await page.getByTestId('start-robot').click();
   await page.getByTestId('robot-step-one-more-line').click();
-  await expect(page.getByTestId('robot-steps')).toHaveText(/1Build2Code3Fight4Improve/);
+  await expect(page.getByTestId('robot-steps')).toHaveText(/1Build2Script3Fight4Improve/);
   await expect(page.getByTestId('zone-tab-fight')).toHaveText('Fight');
   await expect(page.getByRole('heading', { level: 2, name: 'Task' })).toBeVisible();
   await runFight(page);

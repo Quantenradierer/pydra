@@ -33,11 +33,14 @@ export function effectsOf(frame: Frame, prev?: Frame): Map<string, Set<(typeof F
   return out;
 }
 
+/** The HP bar: one segment per hit point; `true` = still there. A 1-HP enemy has 1 segment, a 5-HP enemy 5. */
+export const hpSegments = (hp: number, maxHp: number): boolean[] => Array.from({ length: Math.max(1, Math.round(maxHp)) }, (_, i) => i < hp);
+
 export function createRobotLayer(battle: BattleResult, cols: number, rows: number, label: (id: string) => string): RobotLayer {
   const el = document.createElement('div');
   el.className = 'rb-layer';
   el.setAttribute('data-testid', 'robot-layer');
-  const units = new Map<string, { root: HTMLElement; turn: HTMLElement; hp: HTMLElement; deg: number }>();
+  const units = new Map<string, { root: HTMLElement; turn: HTMLElement; hp: HTMLElement; segs: HTMLElement[]; deg: number }>();
   for (const r of battle.frames[0]?.robots ?? []) {
     const build = battle.builds?.[r.id] ?? (r.id === 'player' ? START_BUILD : FALLBACK);
     const enemy = r.id !== 'player';
@@ -49,13 +52,16 @@ export function createRobotLayer(battle: BattleResult, cols: number, rows: numbe
     const turn = document.createElement('div');
     turn.className = 'rb-turn';
     turn.append(robotEl(specOf(build), { enemy, label: () => label(r.id) }));
-    const hp = document.createElement('i');
+    const hp = document.createElement('div');
     const bar = document.createElement('div');
     bar.className = 'rb-hp';
+    bar.dataset.max = String(r.maxHp);
+    const segs = hpSegments(r.hp, r.maxHp).map(() => document.createElement('i'));
+    hp.append(...segs);
     bar.append(hp);
     root.append(turn, bar);
     el.append(root);
-    units.set(r.id, { root, turn, hp, deg: FACING_DEG[r.facing] });
+    units.set(r.id, { root, turn, hp, segs, deg: FACING_DEG[r.facing] });
   }
   const update = (frame: Frame, prev?: Frame, quiet = false) => {
     const fx = quiet ? new Map() : effectsOf(frame, prev);
@@ -68,7 +74,7 @@ export function createRobotLayer(battle: BattleResult, cols: number, rows: numbe
       u.deg += ((((target - u.deg) % 360) + 540) % 360) - 180;
       u.turn.style.transform = `rotate(${u.deg}deg) scale(1.2)`;
       u.root.style.setProperty('--rb-deg', `${u.deg}deg`);
-      u.hp.style.width = `${Math.max(0, (100 * r.hp) / r.maxHp)}%`;
+      hpSegments(r.hp, r.maxHp).forEach((on, i) => u.segs[i]?.classList.toggle('off', !on));
       u.hp.className = r.hp / r.maxHp > 0.4 ? '' : 'low';
       const dead = r.hp <= 0;
       u.root.classList.toggle('dead', dead);

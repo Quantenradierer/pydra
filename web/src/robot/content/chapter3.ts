@@ -1,64 +1,73 @@
 import { chapter, lineCount, mk, T } from './helpers.ts';
 
-type Item = [string, number, number];
-/** The Chapter 3 frame: a hall 10 wide and 5 high, the robot on the left edge looking east. */
-const hall = (...items: Item[]) => mk(10, 5, ['>', 0, 2], ...items);
-/** The walker steps between columns 7 and 8 of the robot's row: 7, 8, 7, 8, ... */
-const WALK: Item = ['D', 7, 2];
-/** At the end of the hall, behind the walker. */
-const END: Item = ['2', 9, 2];
-/** In the top row, two columns past the tile the robot shoots the healer from (4, 2). */
-const TOP: Item = ['3', 6, 0];
+/** The Chapter 3 frame: a 9x8 arena, the robot at (4, 6) looking north. One enemy is ahead, one on the right, one on the left. */
+const arena = (...items: [string, number, number][]) => mk(9, 8, ['^', 4, 6], ...items);
+const AHEAD: [string, number, number] = ['D', 4, 3];
+const RIGHT: [string, number, number] = ['2', 7, 6];
+const LEFT: [string, number, number] = ['3', 1, 6];
 
-const walker = (hp: number) => ({ hp, patrol: { dir: 'E' as const, steps: 1 } });
-const HEALER = { hp: 4, regen: { every: 2, amount: 1 } };
-/** Looks down its column and shoots at whatever it sees there. */
-const SNIPER = { hp: 3, face: 'S' as const, script: 'while True:\n    if see() == "enemy":\n        fire()\n    else:\n        wait()' };
+/** Its shield is up for 2 rounds, then down for 1 (a rhythm of its own: shots at a raised shield are wasted). */
+const SHIELDED = { hp: 2, shieldCycle: { up: 2, down: 1 } };
+/** Shoots every round along its row. */
+const SNIPER = { hp: 2, script: 'while True:\n    fire()' };
 
-const S1 = 'while see() != "enemy":\n    forward()\nfire()';
-/** The first shot hits the walker at 5 tiles; it steps back out of range, so the robot has to drive on before the second. */
-const S2 = 'for i in range(2):\n    while see() != "enemy":\n        forward()\n    fire()';
-const S3 = `${S2}\nwhile see() != "enemy":\n    forward()\nwhile see() == "enemy":\n    fire()`;
-const S4 = `${S3}\nwhile see_left() != "enemy":\n    forward()\nturn_left()\nfor k in range(3):\n    fire()`;
+/** Each solution is the one before plus new lines (a block around old lines adds only its `if` / `for` line). */
+const S1 = 'if see() == "enemy":\n    fire()';
+const S2 = 'for i in range(30):\n    if see() == "enemy":\n        fire()\n    elif see_right() == "enemy":\n        turn_right()';
+const S3 = `${S2}\n    else:\n        turn_right()`;
+const S4 = S3.replace('        fire()', '        if enemy_shielded():\n            wait()\n        else:\n            fire()');
+const S5 = S4.replace('    if see() == "enemy":', '    if see_left() == "enemy":\n        turn_left()\n    if see() == "enemy":');
 
-/** Chapter 3: while loops. Nobody tells the robot how far to drive or how often to shoot: it looks. */
+/**
+ * Chapter 3: if / elif / else. One 9x8 arena, at most three enemies with different hit points; every challenge adds ONE thing
+ * (a shield with its own rhythm, an enemy behind, a sniper that shoots back) and its solution is the one before plus new lines.
+ */
 export const CHAPTER_3 = chapter(3, [
   {
-    id: 'scout',
-    title: T('Späher', 'Scout'),
-    catchLine: T('Er ist außer Reichweite. Fahr, bis du ihn siehst: while. Kein Fehlschuss.', 'It is out of range. Drive until you see it: while. No missed shot.'),
-    enemies: [walker(1)],
-    map: hall(WALK),
-    needs: { noMiss: true, uses: ['while'] },
+    id: 'peekaboo',
+    title: T('Guck-guck', 'Peekaboo'),
+    catchLine: T('Schau erst nach: Schieß nur, wenn du einen Gegner siehst.', 'Look first: fire only when you see an enemy.'),
+    enemies: [{ hp: 1 }],
+    map: arena(AHEAD),
     solution: S1,
     par: lineCount(S1),
   },
   {
-    id: 'twice',
-    title: T('Zweimal', 'Twice'),
-    catchLine: T('Er hat 2 Leben und läuft dir wieder aus der Reichweite. Kein Fehlschuss.', 'It has 2 HP and walks out of range again. No missed shot.'),
-    enemies: [walker(2)],
-    map: hall(WALK),
-    needs: { noMiss: true, uses: ['while'] },
+    id: 'right-dummy',
+    title: T('Rechts oder geradeaus', 'Right or Ahead'),
+    catchLine: T('Eine zweite Attrappe steht rechts. Prüfe beides, immer wieder.', 'A second dummy is on the right. Check both, again and again.'),
+    enemies: [{ hp: 1 }, { hp: 3 }],
+    map: arena(AHEAD, RIGHT),
     solution: S2,
     par: lineCount(S2),
   },
   {
-    id: 'healer',
-    title: T('Heiler', 'Healer'),
-    catchLine: T('Am Ende der Halle heilt sich einer. Schieß, solange du ihn siehst.', 'At the end of the hall one heals itself. Shoot while you see it.'),
-    enemies: [walker(2), HEALER],
-    map: hall(WALK, END),
+    id: 'three-way',
+    title: T('Drei Wege', 'Three-Way'),
+    catchLine: T('Ein dritter Gegner steht links, hinter deinem Rücken. Sonst dreh dich.', 'A third enemy is on the left, behind you. Otherwise turn.'),
+    enemies: [{ hp: 1 }, { hp: 3 }, { hp: 1 }],
+    map: arena(AHEAD, RIGHT, LEFT),
     solution: S3,
     par: lineCount(S3),
   },
   {
-    id: 'sniper',
-    title: T('Scharfschütze', 'Sniper'),
-    catchLine: T('Oben wartet ein Schütze: Er schießt zurück, sobald er dich sieht.', 'A gunner waits at the top: it shoots back as soon as it sees you.'),
-    enemies: [walker(2), HEALER, SNIPER],
-    map: hall(WALK, END, TOP),
+    id: 'bubble',
+    title: T('Blase', 'Bubble'),
+    catchLine: T('Sein Schild geht im eigenen Takt hoch. Schüsse darauf sind verschwendet.', 'Its shield rises at its own pace. Shots at it are wasted.'),
+    enemies: [SHIELDED, { hp: 3 }, { hp: 1 }],
+    map: arena(AHEAD, RIGHT, LEFT),
+    needs: { noWaste: true },
     solution: S4,
     par: lineCount(S4),
+  },
+  {
+    id: 'sniper',
+    title: T('Scharfschütze', 'Sniper'),
+    catchLine: T('Der Gegner links schießt zurück. Erledige ihn zuerst.', 'The enemy on the left shoots back. Take it out first.'),
+    enemies: [SHIELDED, { hp: 3 }, SNIPER],
+    map: arena(AHEAD, RIGHT, LEFT),
+    needs: { noWaste: true },
+    solution: S5,
+    par: lineCount(S5),
   },
 ]);

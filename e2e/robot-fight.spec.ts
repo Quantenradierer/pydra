@@ -127,24 +127,13 @@ test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next b
   await page.evaluate((solved) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: 'forward()', runs: 0, wins: 0 })), CH0);
   await page.reload();
   await page.getByTestId('start-robot').click();
-  await expect(page.getByTestId('robot-continue')).toContainText('Kapitel 1: Zahlen und for-Schleifen · Aufgabe 1');
+  await expect(page.getByTestId('robot-continue')).toContainText('Kapitel 1: Zahlen und Variablen · Aufgabe 1');
 });
 
-test('the arena shows each enemy\'s hit points as a number that is readable on a phone', async ({ page }) => {
-  await page.setViewportSize({ width: 360, height: 740 });
-  await openTask(page, 'wall-dummy', 'forward()', ['first-contact', 'one-more-line', 'training-dummy']);
-  const badges = await page.evaluate(() =>
-    [...document.querySelectorAll<HTMLElement>('.rb-unit.enemy .rb-hp')].map((b) => ({ text: b.textContent, px: parseFloat(getComputedStyle(b).fontSize), h: b.getBoundingClientRect().height })),
+test('the arena shows each enemy\'s hit points: one bar segment per HP, so different HP looks different', async ({ page }) => {
+  await openTask(page, 'sign-dummy', 'forward()', ['first-contact', 'one-more-line', 'training-dummy', 'wall-dummy', 'two-steps', 'far-dummy']);
+  const segments = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>('.rb-unit.enemy')].map((u) => u.querySelectorAll('.rb-hp i').length).sort(),
   );
-  expect(badges.map((b) => b.text).sort()).toEqual(['1', '2', '3']);
-  for (const b of badges) {
-    expect(b.px).toBeGreaterThanOrEqual(11);
-    expect(b.h).toBeGreaterThanOrEqual(14);
-  }
-  await expect(page.locator('.rb-unit:not(.enemy) .rb-hp')).toHaveText('8');
-  // A hit counts the number down.
-  await page.getByTestId('robot-code').fill('forward()\nfire()');
-  await startFight(page);
-  await page.getByTestId('robot-skip').click();
-  await expect(page.locator('.rb-unit.enemy .rb-hp').filter({ hasText: /^1$/ })).toHaveCount(2);
+  expect(segments).toEqual([1, 2, 3]);
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Frame } from '../battle.ts';
-import { effectsOf, hpBadge } from './arena.ts';
+import { effectsOf, hpSegments } from './arena.ts';
 
 const frame = (robots: Frame['robots'], events: Frame['events']): Frame => ({ tick: 1, robots, events, lines: {}, bubbles: [], sensors: {} });
 const rob = (id: string, x: number): Frame['robots'][number] => ({ id, pos: { x, y: 0 }, facing: 'E', hp: 5, maxHp: 5, shieldUp: false });
@@ -23,16 +23,14 @@ describe('arena effects', () => {
   });
 });
 
-describe('hp badge', () => {
-  it('is the number of hit points, so 1 HP and 3 HP read differently at any size', () => {
-    expect(hpBadge(1, 1).text).toBe('1');
-    expect(hpBadge(3, 3).text).toBe('3');
-    expect(hpBadge(8, 8).text).toBe('8');
+describe('hp bar', () => {
+  it('has one segment per hit point, so enemies with different HP look different', () => {
+    expect(hpSegments(1, 1)).toEqual([true]);
+    expect(hpSegments(5, 5)).toHaveLength(5);
+    expect(hpSegments(1, 1).length).not.toBe(hpSegments(3, 3).length);
   });
-  it('counts down when hit and turns "low" at 40 % or less (never for a fresh 1 HP enemy)', () => {
-    expect(hpBadge(2, 5)).toEqual({ text: '2', low: true });
-    expect(hpBadge(3, 5)).toEqual({ text: '3', low: false });
-    expect(hpBadge(1, 1)).toEqual({ text: '1', low: false });
-    expect(hpBadge(0, 3)).toEqual({ text: '0', low: true });
+  it('segments disappear when hit', () => {
+    expect(hpSegments(2, 5)).toEqual([true, true, false, false, false]);
+    expect(hpSegments(0, 3)).toEqual([false, false, false]);
   });
 });

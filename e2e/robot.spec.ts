@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { closeSheets, fillCode, openSheet, runFight, startFight, stored } from './helpers.ts';
-import { BEFORE_CHAPTER_3, CH0, CH1, CH3, CH4, CH5, solution } from './robot-ids.ts';
+import { BEFORE_CHAPTER_3, CH0, CH1, CH3, CH4, solution } from './robot-ids.ts';
 
 for (const [device, viewport] of [
   ['phone', { width: 360, height: 640 }],
@@ -148,13 +148,13 @@ test('the builder: every part can be equipped at any time; new parts are only ma
 
   // Chapter 1 only marks the cannon as new; it is still just a part.
   await page.evaluate(({ CH, SCRIPT }) => {
-    const solved = [...CH, 'long-way'];
+    const solved = [...CH, 'two-steps'];
     localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: SCRIPT }));
-  }, { CH: CH0, SCRIPT: solution('tank') });
+  }, { CH: CH0, SCRIPT: solution('far-dummy') });
   await page.goto('/#/');
   await page.reload();
   await page.getByTestId('start-robot').click();
-  await page.getByTestId('robot-step-tank').click();
+  await page.getByTestId('robot-step-far-dummy').click();
   await openSheet(page, 'robot-build-open');
   await expect(page.getByTestId('robot-new').first()).toHaveText('neu');
   await runFight(page);
@@ -178,43 +178,50 @@ async function win(page: import('@playwright/test').Page, id: string, script: st
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
 }
 
-test('Chapter 2: if / elif / else grow one script: the patroller, the regenerator on the flank, the flicker shield', async ({ page }) => {
+test('Chapter 3: if / elif / else grow one script: ahead, right, behind, the shield, the sniper', async ({ page }) => {
   await page.goto('/');
-  await preset(page, [...CH0, ...CH1], solution('beat'));
-  await page.getByTestId('robot-step-patrol').click();
-  // The script of Chapter 1 is still here and runs without an error; it does not win (it shoots where nobody is).
-  await expect(page.getByTestId('robot-code')).toHaveValue(solution('beat'));
-  await runFight(page);
-  await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
-  await expect(page.getByTestId('robot-error')).toHaveCount(0);
-  await fillCode(page, solution('patrol'));
+  await preset(page, BEFORE_CHAPTER_3, solution('dummy-army'));
+  await page.getByTestId('robot-step-peekaboo').click();
+  // The script of Chapter 2 is still here and runs without an error; it does not win (it never shoots ahead).
+  await expect(page.getByTestId('robot-code')).toHaveValue(solution('dummy-army'));
+  await fillCode(page, solution('peekaboo'));
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
-  // Flank: the old script loses, the one that grew wins.
-  await page.getByTestId('robot-step-flank').click();
-  await expect(page.getByTestId('robot-code')).toHaveValue(solution('patrol'));
+  // Right Dummy: the old script loses, the one that grew wins.
+  await page.getByTestId('robot-step-right-dummy').click();
+  await expect(page.getByTestId('robot-code')).toHaveValue(solution('peekaboo'));
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
-  await fillCode(page, solution('flank'));
+  await fillCode(page, solution('right-dummy'));
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
-  // Flicker Shield: shooting whenever the walker is in sight hits the shield and is refused with a reason ...
-  await page.getByTestId('robot-step-flicker').click();
-  await expect(page.getByTestId('robot-code')).toHaveValue(solution('flank'));
+  await win(page, 'three-way', solution('three-way'));
+  await page.getByRole('button', { name: 'Zurück', exact: true }).click();
+  // Bubble: blind shooting wastes shots on the shield and is refused with a reason ...
+  await page.getByTestId('robot-step-bubble').click();
+  await expect(page.getByTestId('robot-code')).toHaveValue(solution('three-way'));
   await runFight(page);
-  await expect(page.getByTestId('robot-outcome')).toContainText('ins Schild');
-  await fillCode(page, solution('flicker'));
+  await expect(page.getByTestId('robot-outcome')).toContainText('Schild geschossen');
+  await fillCode(page, solution('bubble'));
+  await runFight(page);
+  await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
+  await page.getByRole('button', { name: 'Zurück', exact: true }).click();
+  // Sniper: it shoots back, so the old script (that deals with the others first) is destroyed.
+  await page.getByTestId('robot-step-sniper').click();
+  await runFight(page);
+  await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
+  await fillCode(page, solution('sniper'));
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await expect(page.getByTestId('robot-stars')).toBeVisible();
 });
 
-test('Chapters 3 to 5 (while, functions, parameters), in English', async ({ page }) => {
+test('Chapter 4, in English', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.language', JSON.stringify('en')));
-  await preset(page, BEFORE_CHAPTER_3, solution('flicker'));
+  await preset(page, [...BEFORE_CHAPTER_3, ...CH3], solution('sniper'));
   const english = async (id: string, script: string) => {
     await page.getByTestId(`robot-step-${id}`).click();
     await fillCode(page, script);
@@ -222,9 +229,8 @@ test('Chapters 3 to 5 (while, functions, parameters), in English', async ({ page
     await expect(page.getByTestId('robot-outcome')).toContainText('Won!');
     await page.getByRole('button', { name: 'Back', exact: true }).click();
   };
-  await expect(page.getByRole('heading', { level: 2, name: 'Chapter 3: while loops' })).toBeVisible();
-  for (const id of [...CH3, ...CH4, ...CH5]) await english(id, solution(id));
-  await expect(page.getByRole('heading', { level: 2, name: 'Chapter 5: Parameters' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Chapter 4: while loops' })).toBeVisible();
+  for (const id of CH4) await english(id, solution(id));
 });
 
 test('the Training Grounds: random fights from Chapter 2 on', async ({ page }) => {
@@ -266,7 +272,7 @@ for (const [device, viewport] of [
 ] as const) {
   test(`on a ${device}: the fight runs line by line with calls and branches`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await openStep(page, 'first-contact', 'd = distance()\nif d == 0:\n    forward()\nfire()');
+    await openStep(page, 'first-contact', 'd = distance()\nif d > 0:\n    forward()\nfire()');
     const narration = page.getByTestId('robot-narration');
     // Slow by default; back at the start nothing has run yet.
     await expect(page.getByTestId('robot-speed')).toHaveText('⏱ mittel');
@@ -366,11 +372,11 @@ test('the task map: a Continue button leads to the next task and finished chapte
 
 test('the build screen draws the robot from its parts: tap sockets to plug parts in and out, swap the drive', async ({ page }) => {
   await page.goto('/');
-  const solved = [...CH0, 'long-way'];
+  const solved = [...CH0, 'two-steps'];
   await page.evaluate((s) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()' })), solved);
   await page.reload();
   await page.getByTestId('start-robot').click();
-  await page.getByTestId('robot-step-tank').click();
+  await page.getByTestId('robot-step-far-dummy').click();
   await openSheet(page, 'robot-build-open');
   const art = page.locator('.robot-bench-stage svg.rb');
   // The start build: wheels, blaster, eyes.

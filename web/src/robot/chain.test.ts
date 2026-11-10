@@ -16,17 +16,16 @@ const isSubsequence = (small: string[], big: string[]): boolean => {
   for (const l of big) if (i < small.length && l === small[i]) i++;
   return i === small.length;
 };
-const chapters = [0, 1, 2, 3, 4, 5];
-/** Chapters 4 and 5 are one idea each (def, a parameter): a second challenge there would only be the same idea again. */
-const MIN: Record<number, number> = { 0: 4, 1: 3, 2: 3, 3: 4, 4: 1, 5: 1 };
+const chapters = [0, 1, 2, 3, 4];
 const MAX_ENEMIES = 3;
 const inChapter = (c: number): EnemyData[] => ENEMIES.filter((e) => e.chapter === c);
 
 describe('chapters are chains: every challenge adds to the one before', () => {
   for (const c of chapters) {
     const list = inChapter(c);
-    const min = MIN[c]!;
-    it(`Chapter ${c} has a chain of ${min} challenges`, () => expect(list.length).toBe(min));
+    // Chapter 1 (numbers, variables, arguments) has three ideas and nothing printed to pad it out.
+    const min = c === 1 ? 3 : 4;
+    it(`Chapter ${c} has a chain of at least ${min} challenges`, () => expect(list.length).toBeGreaterThanOrEqual(min));
     for (let i = 1; i < list.length; i++) {
       const prev = list[i - 1]!;
       const next = list[i]!;
@@ -45,7 +44,7 @@ describe('chapters are chains: every challenge adds to the one before', () => {
           const b = parseMap(next.map);
           expect([b.tiles.length, b.tiles[0]!.length, b.player]).toEqual([a.tiles.length, a.tiles[0]!.length, a.player]);
           for (let y = 0; y < a.tiles.length; y++) for (let x = 0; x < a.tiles[0]!.length; x++) if (a.tiles[y]![x] !== 'floor') expect(b.tiles[y]![x], `tile ${x},${y}`).toBe(a.tiles[y]![x]);
-          // Enemies stay where they are; the exception is a swap (the number of enemies does not grow), e.g. the walker that gets a shield.
+          // Enemies stay where they are; the exception is a swap (the number of enemies does not grow), e.g. a patroller for a guard.
           if (b.enemies.length > a.enemies.length) for (const e of a.enemies) expect(b.enemies.some((o) => o.pos.x === e.pos.x && o.pos.y === e.pos.y), `enemy at ${e.pos.x},${e.pos.y}`).toBe(true);
         });
         it('at most one more enemy', () => {

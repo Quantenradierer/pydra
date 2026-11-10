@@ -123,9 +123,9 @@ test('desktop: no control of the Robot Battler screens is a no-op', async ({ pag
     await page.getByTestId('robot-training').click();
     await page.getByTestId('robot-train-daily').click();
   });
-  await press(page, 'a later challenge', openStep(page, 'flicker'));
+  await press(page, 'a later challenge', openStep(page, 'dummy-army'));
   await press(page, 'a later challenge after a fight', async () => {
-    await openStep(page, 'flicker')();
+    await openStep(page, 'dummy-army')();
     await runFight(page);
   });
   expect(dead, dead.join('\n')).toEqual([]);

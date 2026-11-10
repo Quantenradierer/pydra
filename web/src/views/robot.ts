@@ -214,6 +214,8 @@ export function robotScreen(app: App): Screen {
         return t('robot.outcome.damage', { max: enemy.needs?.maxDamage ?? 0 });
       case 'waste':
         return t('robot.outcome.waste');
+      case 'miss':
+        return t('robot.outcome.miss');
       case 'uses':
         return t('robot.outcome.uses', { words: words(enemy.needs?.uses) });
       case 'without':

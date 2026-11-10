@@ -195,3 +195,103 @@ describe('buildLayout', () => {
     expect(l.setup.robots[0]).toMatchObject({ id: 'player', hp: 8 });
   });
 });
+
+describe('patrol: an enemy that walks a fixed path back and forth', () => {
+  const patrolWorld = (patrol: { dir: 'N' | 'E' | 'S' | 'W'; steps: number; every?: number }, rows = ['.....', '.....', '..^..', '.....', 'D....']) => {
+    const w = world(rows, {}, 2);
+    w.robot('enemy1').patrol = { heading: patrol.dir, steps: patrol.steps, every: patrol.every ?? 1, done: 0 };
+    return w;
+  };
+  const path = (w: World, n: number) => Array.from({ length: n }, () => (w.step(intents({})), { ...w.robot('enemy1').pos }));
+
+  it('walks `steps` tiles, turns around, walks back, and repeats', () => {
+    const w = patrolWorld({ dir: 'E', steps: 3 });
+    expect(path(w, 8).map((p) => p.x)).toEqual([1, 2, 3, 2, 1, 0, 1, 2]);
+  });
+
+  it('moves only every `every` rounds', () => {
+    const w = patrolWorld({ dir: 'E', steps: 2, every: 3 });
+    expect(path(w, 7).map((p) => p.x)).toEqual([0, 0, 1, 1, 1, 2, 2]);
+  });
+
+  it('is built from the setup (EnemyDef patrol)', () => {
+    const m = parseMap(['^..', '...', 'D..']);
+    const w = new World({ tiles: m.tiles, seed: 1, robots: [{ id: 'player', team: 'player', pos: m.player.pos, facing: 'N', hp: 5 }, { id: 'enemy1', team: 'enemy', pos: m.enemies[0]!.pos, facing: 'N', hp: 2, patrol: { dir: 'E', steps: 2 } }] });
+    w.step(intents({}));
+    expect(w.robot('enemy1').pos).toEqual({ x: 1, y: 2 });
+  });
+
+  it('turns around at once in front of a wall or a robot, and stops when it is dead', () => {
+    const w = patrolWorld({ dir: 'E', steps: 9 }, ['^....', '.....', '.....', '.....', 'D.#..']);
+    expect(path(w, 4).map((p) => p.x)).toEqual([1, 0, 1, 0]);
+    const dead = patrolWorld({ dir: 'E', steps: 3 }, ['>.D..']);
+    dead.robot('enemy1').patrol = { heading: 'E', steps: 3, every: 1, done: 0 };
+    dead.robot('enemy1').hp = 0;
+    dead.step(intents({}));
+    expect(dead.robot('enemy1').pos).toEqual({ x: 2, y: 0 });
+  });
+
+  it('moves after the attacks of the round: a shot at the tile it stands on hits it', () => {
+    const w = world(['>.D..'], {}, 2);
+    w.robot('enemy1').patrol = { heading: 'E', steps: 2, every: 1, done: 0 };
+    const ev = w.step(intents({ player: { type: 'shoot', damage: 1, range: 5 } }));
+    expect(ev.some((e) => e.type === 'shot' && e.hit === 'enemy1')).toBe(true);
+    expect(w.robot('enemy1').hp).toBe(1);
+    expect(w.robot('enemy1').pos).toEqual({ x: 3, y: 0 });
+  });
+
+  it('is deterministic', () => {
+    const a = path(patrolWorld({ dir: 'N', steps: 2 }), 12);
+    const b = path(patrolWorld({ dir: 'N', steps: 2 }), 12);
+    expect(a).toEqual(b);
+  });
+});
+
+describe('shield cycle: an enemy shield that comes and goes on its own', () => {
+  const cycleWorld = (up: number, down: number) => {
+    const w = world(['>D'], {}, 3);
+    w.robot('enemy1').cycle = { up, down };
+    w.robot('enemy1').shieldUp = false;
+    return w;
+  };
+  const states = (w: World, n: number) => Array.from({ length: n }, () => ((w.step(intents({})), w.robot('enemy1').shieldUp)));
+
+  it('is down for `down` rounds, then up for `up` rounds, and repeats', () => {
+    // state after round t is the state during round t+1
+    expect(states(cycleWorld(3, 2), 10)).toEqual([false, true, true, true, false, false, true, true, true, false]);
+  });
+
+  it('starts as the setup says (down first)', () => {
+    const m = parseMap(['>D']);
+    const w = new World({ tiles: m.tiles, seed: 1, robots: [{ id: 'player', team: 'player', pos: m.player.pos, facing: 'E', hp: 5 }, { id: 'enemy1', team: 'enemy', pos: m.enemies[0]!.pos, facing: 'W', hp: 2, shieldCycle: { up: 2, down: 3 } }] });
+    expect(w.robot('enemy1').shieldUp).toBe(false);
+  });
+
+  it('blocks every shot while it is up (it is not used up) and takes shots while it is down', () => {
+    const w = cycleWorld(3, 2);
+    const shoot = { player: { type: 'shoot', damage: 1, range: 5 } as Intent };
+    w.step(intents(shoot)); // rounds 1 and 2: down -> hits
+    w.step(intents(shoot));
+    expect(w.robot('enemy1').hp).toBe(1);
+    const blocked: boolean[] = [];
+    for (let i = 0; i < 3; i++) {
+      const ev = w.step(intents(shoot));
+      blocked.push(ev.some((e) => e.type === 'shot' && e.blocked === true));
+      if (i < 2) expect(w.robot('enemy1').shieldUp).toBe(true); // a block does not use it up
+    }
+    expect(blocked).toEqual([true, true, true]);
+    expect(w.robot('enemy1').hp).toBe(1);
+  });
+
+  it('is deterministic and independent of the patrol period', () => {
+    const run = () => {
+      const w = world(['>D...'], {}, 2);
+      w.robot('enemy1').cycle = { up: 3, down: 2 };
+      w.robot('enemy1').patrol = { heading: 'E', steps: 4, every: 1, done: 0 };
+      return Array.from({ length: 20 }, () => (w.step(intents({})), `${w.robot('enemy1').pos.x}${w.robot('enemy1').shieldUp ? 'S' : '-'}`)).join(' ');
+    };
+    expect(run()).toBe(run());
+    // patrol period 8, shield period 5: the pattern only repeats after 40 rounds
+    expect(run().split(' ').slice(0, 8).join()).not.toBe(run().split(' ').slice(8, 16).join());
+  });
+});

@@ -22,6 +22,8 @@ export interface Needs {
   maxDamage?: number;
   /** No shot of the player may hit a raised shield (blocked shots are wasted). */
   noWaste?: boolean;
+  /** Every shot of the player must hit: a shot into empty air or into a raised shield counts as a miss. */
+  noMiss?: boolean;
   /** The script must contain each of these words (`while`, `break`, ...; comments and strings are ignored). */
   uses?: string[];
   /** The script must not contain any of these words (`for`, ...). */

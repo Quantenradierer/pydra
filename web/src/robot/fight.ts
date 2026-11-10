@@ -17,7 +17,7 @@ export interface FightReport {
   /** Won: every enemy down and the extra conditions met. */
   won: boolean;
   /** Why not, when the enemy is down but a condition failed. */
-  unmet?: 'say' | 'sayPrefix' | 'sayOnce' | 'damage' | 'waste' | 'uses' | 'without' | 'repeat';
+  unmet?: 'say' | 'sayPrefix' | 'sayOnce' | 'damage' | 'waste' | 'miss' | 'uses' | 'without' | 'repeat';
 }
 
 export interface EnemyReport {
@@ -54,6 +54,7 @@ export function judge(battle: BattleResult, needs: Needs | undefined, script = '
   if (battle.outcome !== 'win') return { battle, won: false };
   if (needs?.maxDamage !== undefined && battle.damageTaken > needs.maxDamage) return { battle, won: false, unmet: 'damage' };
   if (needs?.noWaste && battle.frames.some((f) => f.events.some((e) => e.type === 'shot' && e.by === 'player' && e.blocked))) return { battle, won: false, unmet: 'waste' };
+  if (needs?.noMiss && battle.frames.some((f) => f.events.some((e) => e.type === 'shot' && e.by === 'player' && (e.hit === undefined || e.blocked)))) return { battle, won: false, unmet: 'miss' };
   if (needs?.uses?.some((w) => !usesWord(script, w))) return { battle, won: false, unmet: 'uses' };
   if (needs?.without?.some((w) => usesWord(script, w))) return { battle, won: false, unmet: 'without' };
   if (needs?.noRepeatedNumber && repeatsNumber(script)) return { battle, won: false, unmet: 'repeat' };

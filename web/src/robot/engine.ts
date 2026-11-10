@@ -41,6 +41,24 @@ export type Intent =
   /** A lost tick: an action that was not charged. The replay shows "Shield still charging (1 tick left)". */
   | { type: 'fizzle'; part: string; reason: 'charging' | 'overheated'; ticks: number };
 
+/** A shield that comes and goes on its own: down for `down` rounds, then up for `up` rounds, and again. Blocks every shot while up. */
+export interface ShieldCycle {
+  up: number;
+  down: number;
+}
+
+/** Whether a shield cycle is up during round `tick` (0-based). */
+export const cycleUp = (c: ShieldCycle, tick: number): boolean => tick % (c.up + c.down) >= c.down;
+
+/** A fixed path: `steps` tiles in `heading`, then back, and so on; one step every `every` rounds, after the attacks of that round. */
+export interface PatrolState {
+  heading: Dir;
+  steps: number;
+  every: number;
+  /** Tiles walked since the last turn-around. */
+  done: number;
+}
+
 export interface Robot {
   id: string;
   team: 'player' | 'enemy';
@@ -63,6 +81,10 @@ export interface Robot {
   plates?: number;
   /** Heals `amount` hit points every `every` ticks (up to the maximum). */
   regen?: { every: number; amount: number };
+  /** Walks a fixed path back and forth (see PatrolState). */
+  patrol?: PatrolState;
+  /** A shield with its own rhythm; not used up by a block. */
+  cycle?: ShieldCycle;
 }
 
 export type GameEvent =
@@ -88,6 +110,8 @@ export interface RobotSetup {
   canCross?: { rubble?: boolean; pit?: boolean };
   regen?: { every: number; amount: number };
   plates?: boolean;
+  patrol?: { dir: Dir; steps: number; every?: number };
+  shieldCycle?: ShieldCycle;
 }
 
 export interface WorldSetup {
@@ -129,6 +153,8 @@ export class World {
       lastHit: null,
       ...(r.regen ? { regen: r.regen } : {}),
       ...(r.plates ? { plates: 100 } : {}),
+      ...(r.patrol ? { patrol: { heading: r.patrol.dir, steps: r.patrol.steps, every: r.patrol.every ?? 1, done: 0 } } : {}),
+      ...(r.shieldCycle ? { cycle: r.shieldCycle, shieldUp: cycleUp(r.shieldCycle, 0) } : {}),
     }));
   }
 
@@ -264,7 +290,7 @@ export class World {
     const damage = new Map<Robot, { amount: number; from: Dir }>();
     const hit = (target: Robot, amount: number, from: Dir): boolean => {
       if (target.shieldUp) {
-        target.shieldUp = false;
+        if (!target.cycle) target.shieldUp = false;
         return false;
       }
       let dealt = Math.max(0, amount - target.armor);
@@ -315,9 +341,25 @@ export class World {
       }
     }
 
-    // Shields: a raised one lasts through this tick only; a pending one rises for the next.
+    // Patrols walk last, so what a sensor saw at the start of the round is where a shot landed.
+    for (const r of live) {
+      const p = r.patrol;
+      if (!p || r.hp <= 0 || (this.tick + 1) % p.every !== 0) continue;
+      const free = (to: Pos) => this.passable(r, to) === true && !this.robotAt(to);
+      if (p.done >= p.steps || !free(step(r.pos, p.heading))) {
+        p.heading = opposite(p.heading);
+        p.done = 0;
+      }
+      const to = step(r.pos, p.heading);
+      if (free(to)) {
+        r.pos = to;
+        p.done++;
+      }
+    }
+
+    // Shields: a raised one lasts through this tick only; a pending one rises for the next. A cycle shield follows its rhythm.
     for (const r of this.robots) {
-      r.shieldUp = r.shieldPending;
+      r.shieldUp = r.cycle ? cycleUp(r.cycle, this.tick + 1) : r.shieldPending;
       r.shieldPending = false;
     }
     this.tick++;

@@ -14,6 +14,10 @@ export interface EnemyDef {
   script?: string;
   /** Heals this many hit points every so many ticks (the Regenerator). */
   regen?: { every: number; amount: number };
+  /** Walks `steps` tiles in `dir` and back again, one step every `every` rounds (default 1). */
+  patrol?: { dir: Dir; steps: number; every?: number };
+  /** A shield that is down for `down` rounds, then up for `up` rounds (blocks every shot, not used up). */
+  shieldCycle?: { up: number; down: number };
 }
 
 const PLAYER_FACING: Record<string, Dir> = { '^': 'N', '>': 'E', v: 'S', '<': 'W' };
@@ -101,7 +105,7 @@ export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCro
     const id = `enemy${i + 1}`;
     defOf[id] = def;
     const facing = def.face ? (mirrored ? MIRROR[def.face] : def.face) : towards(e.pos, parsed.player.pos);
-    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: (def.armor ?? 0) + (def.locomotion === 'treads' ? 3 : 0), canCross: { rubble: def.locomotion === 'legs' || def.locomotion === 'treads' }, ...(def.regen ? { regen: def.regen } : {}) });
+    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: (def.armor ?? 0) + (def.locomotion === 'treads' ? 3 : 0), canCross: { rubble: def.locomotion === 'legs' || def.locomotion === 'treads' }, ...(def.regen ? { regen: def.regen } : {}), ...(def.patrol ? { patrol: mirrored ? { ...def.patrol, dir: MIRROR[def.patrol.dir] } : def.patrol } : {}), ...(def.shieldCycle ? { shieldCycle: def.shieldCycle } : {}) });
   });
   return { setup: { tiles: parsed.tiles, robots, seed: spec.seed, ...(spec.maxTicks ? { maxTicks: spec.maxTicks } : {}) }, mapRows: rows, mirrored, enemyDefs: [...spec.enemies], defOf };
 }

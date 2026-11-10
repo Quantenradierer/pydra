@@ -60,7 +60,7 @@ test('the script is ONE script: challenges, the next challenge and fights never 
   await page.reload();
   await page.getByTestId('start-robot').click();
   await expect(page.getByRole('heading', { level: 2 }).first()).toHaveText('Chapter 0: Commands in a row');
-  // Challenge 1: my own script (a comment and a say line the task does not need).
+  // Challenge 1: my own script (a comment and a print line the task does not need).
   const mine = 'forward()\nfire()  # my script\nturn_left()';
   await page.getByTestId('robot-step-first-contact').click();
   await fillCode(page, mine);
@@ -148,7 +148,7 @@ test('the builder: every part can be equipped at any time; new parts are only ma
 
   // Chapter 1 only marks the cannon as new; it is still just a part.
   await page.evaluate(({ CH, SCRIPT }) => {
-    const solved = [...CH, 'status-report'];
+    const solved = [...CH, 'two-steps'];
     localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: SCRIPT }));
   }, { CH: CH0, SCRIPT: solution('far-dummy') });
   await page.goto('/#/');
@@ -327,7 +327,7 @@ test('a function call is highlighted line by line: the call, then the line insid
   await expect(page.locator('.robot-listing li.active')).toHaveAttribute('data-line', '2');
 });
 
-test('one fight per task: it plays at once, the verdict comes when it ends, a lost fight says why', async ({ page }) => {
+test('one fight per task: it plays at once, the verdict comes when it ends, a lost fight gives the reason', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()\nfire()' })));
   await page.reload();
@@ -372,7 +372,7 @@ test('the task map: a Continue button leads to the next task and finished chapte
 
 test('the build screen draws the robot from its parts: tap sockets to plug parts in and out, swap the drive', async ({ page }) => {
   await page.goto('/');
-  const solved = [...CH0, 'status-report'];
+  const solved = [...CH0, 'two-steps'];
   await page.evaluate((s) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()' })), solved);
   await page.reload();
   await page.getByTestId('start-robot').click();

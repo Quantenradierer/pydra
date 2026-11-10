@@ -474,7 +474,7 @@ export class Program {
     }
     switch (callee.kind) {
       case 'builtin':
-        if (callee.name === 'print' && this.trace) this.trace({ k: 'call', line: e.line, fn: 'print', args: args.map(repr), kind: 'say', result: 'None' });
+        if (callee.name === 'print' && this.trace) this.trace({ k: 'call', line: e.line, fn: 'print', args: args.map(repr), kind: 'print', result: 'None' });
         return callee.call(args, kwargs);
       case 'method':
         return callMethod(callee.self, callee.name, args, kwargs);
@@ -488,7 +488,7 @@ export class Program {
           this.trace?.({ k: 'call', line: e.line, fn: label, args: shown, kind: 'action' });
           return yield r;
         }
-        this.trace?.({ k: 'call', line: e.line, fn: label, args: shown, kind: label === 'say' ? 'say' : 'sensor', result: repr(r) });
+        this.trace?.({ k: 'call', line: e.line, fn: label, args: shown, kind: 'sensor', result: repr(r) });
         return r;
       }
       case 'function':

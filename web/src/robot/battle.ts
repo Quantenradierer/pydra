@@ -42,7 +42,7 @@ export interface Frame {
   sensors: Record<string, string[]>;
   /** What the player's script did before this tick's action (only recorded with `trace: true`). */
   trace?: TraceEvent[];
-  /** On the last frame of a win: what the script still did after the winning action (say("done")). */
+  /** On the last frame of a win: what the script still did after the winning action (a print after the last action). */
   after?: TraceEvent[];
 }
 
@@ -78,7 +78,7 @@ class Brain {
     private env: Env,
   ) {}
 
-  /** Runs free statements (say, assignments) up to the next action; used once after the winning tick. */
+  /** Runs free statements (print, assignments) up to the next action; used once after the winning tick. */
   runFree() {
     if (this.queue.length === 0 && !this.ended) {
       const r = this.program.runUntilAction(STEP_BUDGET, this.resume);
@@ -132,7 +132,7 @@ export function enemyBuild(def: EnemyDef): Build {
 export function precheck(build: Build, script: string): RbError | undefined {
   try {
     const ast = parse(script);
-    const env = createEnv({ world: new World({ tiles: [['floor']], robots: [], seed: 0 }), id: 'player', build, sensorLog: [], say: () => {} });
+    const env = createEnv({ world: new World({ tiles: [['floor']], robots: [], seed: 0 }), id: 'player', build, sensorLog: [] });
     return checkProgram(ast, { known: env.known, notEquipped: env.notEquipped });
   } catch (e) {
     if (e instanceof RbError) return e;
@@ -160,7 +160,7 @@ export function runBattle(input: BattleInput): BattleResult {
     if (source === undefined) return;
     const sensorLog: string[] = [];
     logs.set(id, sensorLog);
-    const env = createEnv({ world, id, build: b, sensorLog, say: (text) => bubbles.push({ robot: id, text }) });
+    const env = createEnv({ world, id, build: b, sensorLog });
     const program = new Program(parse(source), {
       globals: env.globals,
       known: [...env.notEquipped.keys()],
@@ -259,7 +259,7 @@ export function runBattle(input: BattleInput): BattleResult {
     }
   }
   if (reason === 'win') {
-    // The script may still say() something after its last action ("done" after a loop).
+    // The script may still print something after its last action ("done" after a loop).
     bubbles.length = 0;
     brains.get('player')?.runFree();
     frames.at(-1)!.bubbles.push(...bubbles);

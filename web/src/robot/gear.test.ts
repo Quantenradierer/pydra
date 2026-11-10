@@ -52,7 +52,7 @@ describe('other gear', () => {
 
   it('the burst blaster (Mk II) is a different tool, not a drop-in: it still wins where it does not overheat', () => {
     const mk2: Build = { ...START_BUILD, chassis: 'medium', blasterMark: 2 };
-    for (const id of ['first-contact', 'one-more-line', 'training-dummy', 'status-report', 'far-dummy']) {
+    for (const id of ['first-contact', 'one-more-line', 'training-dummy', 'two-steps', 'far-dummy']) {
       const e = ENEMIES.find((x) => x.id === id)!;
       expect(fightEnemy(e, mk2, e.solution).won, id).toBe(true);
     }
@@ -68,7 +68,7 @@ describe('other gear', () => {
 });
 
 describe('gear labels', () => {
-  it('promise no lock: all gear is free, so no label says "from n stars"', () => {
+  it('promise no lock: all gear is free, so no label shows "from n stars"', () => {
     for (const [key, de] of Object.entries(UI_DE)) {
       if (!key.startsWith('robot.gear.')) continue;
       expect(de, key).not.toMatch(/Stern/);

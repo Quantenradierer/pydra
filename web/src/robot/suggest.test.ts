@@ -36,7 +36,7 @@ describe('completionAt', () => {
     expect(names('wh')).toContain('while');
     expect(names('count = 3\nco')).toContain('count');
     expect(names('for step in range(3):\n    st')).toContain('step');
-    expect(names('say("fo')).toEqual([]);
+    expect(names('print("fo')).toEqual([]);
     expect(names('# fo')).toEqual([]);
   });
   it('gives every suggestion a description (except variables)', () => {

@@ -34,7 +34,7 @@ describe('friendly errors', () => {
     expect(errorOf('x = [1, 2][5]').text).toMatch(/does not exist/);
   });
 
-  it('says what is not part of Robot Battler', () => {
+  it('names what is not part of Robot Battler', () => {
     for (const src of ['import os', 'try:\n    pass\nexcept:\n    pass', 'f = lambda: 1', 'class A:\n    pass', 'with x:\n    pass']) {
       expect(errorOf(src).error.code).toBe('unsupported');
     }

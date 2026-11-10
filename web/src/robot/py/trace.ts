@@ -3,7 +3,7 @@
  * loop pass and variable change, in the order they happen. Plain data (JSON
  * safe), deterministic, and what the line-by-line viewer replays.
  */
-export type CallKind = 'action' | 'sensor' | 'say';
+export type CallKind = 'action' | 'sensor' | 'print';
 
 export type TraceEvent =
   /** A statement starts (for `if` / `while` / `for`: the line of the condition). */

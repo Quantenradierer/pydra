@@ -33,8 +33,8 @@ export const GOLDEN: Record<string, string[]> = {
   ],
   strings: [
     'print("a" + "b", "ab" * 3, 3 * "ab", "x" * 0)',
-    "print('it\\'s', \"say \\\"hi\\\"\")",
-    'print(repr("it\'s"), repr(\'say "hi"\'), repr("both \' and \\""))',
+    "print('it\\'s', \"tell \\\"hi\\\"\")",
+    'print(repr("it\'s"), repr(\'tell "hi"\'), repr("both \' and \\""))',
     'print(repr("tab\\tnew\\nline"))',
     'print(len("hello"), "hello"[1], "hello"[-1], "hello"[1:3], "hello"[::-1], "hello"[::2])',
     'print("hello"[10:], "hello"[-3:], "hello"[:-3], "hello"[1:-1])',

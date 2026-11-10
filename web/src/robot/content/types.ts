@@ -8,10 +8,6 @@ export interface Text {
 
 /** Extra conditions besides "every enemy is down" that make a fight count as won. */
 export interface Needs {
-  /** The robot must say() something. */
-  say?: boolean;
-  /** One of the bubbles must start with this text. */
-  sayPrefix?: string;
   /** The script may have at most this many lines of code (blank lines and comments do not count). */
   maxLines?: number;
   /** The player may lose at most this many HP over one layout. */

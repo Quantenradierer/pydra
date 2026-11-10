@@ -107,7 +107,7 @@ describe('RobotGame', () => {
 
   it('keeps ONE script: winning, moving on and opening the next challenge never changes it', () => {
     const { game } = setup();
-    const mine = 'forward()\nfire()\n# my own note\nsay("x")';
+    const mine = 'forward()\nfire()\n# my own note\nprint("x")';
     game.setScript(mine);
     game.run('first-contact');
     expect(game.script()).toBe(mine);

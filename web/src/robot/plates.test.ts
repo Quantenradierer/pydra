@@ -21,9 +21,9 @@ describe('armor plates', () => {
   });
 
   it('report their integrity and are friendly when missing', () => {
-    const r = runBattle({ build: plated, script: 'say(plates.integrity())\nwait()\nwait()\nsay(plates.integrity())', layout: layout(3) });
+    const r = runBattle({ build: plated, script: 'print(plates.integrity())\nwait()\nwait()\nprint(plates.integrity())', layout: layout(3) });
     const said = r.frames.flatMap((f) => f.bubbles.map((b) => b.text));
     expect(said).toEqual(['100', '60']);
-    expect(precheck({ ...plated, gear: ['eyes'] }, 'say(plates.integrity())')).toBeDefined();
+    expect(precheck({ ...plated, gear: ['eyes'] }, 'print(plates.integrity())')).toBeDefined();
   });
 });

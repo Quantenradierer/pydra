@@ -62,12 +62,12 @@ describe('interpreter trace', () => {
 });
 
 describe('battle trace', () => {
-  it('puts sensors, say and the action of a tick into that tick, with the call and its result', () => {
-    const r = run('d = distance()\nsay("hi")\nforward()\nfire()', ['>..D']);
+  it('puts sensors, print and the action of a tick into that tick, with the call and its result', () => {
+    const r = run('d = distance()\nprint("hi")\nforward()\nfire()', ['>..D']);
     const t1 = r.frames[1]!.trace!;
     expect(t1.filter((e) => e.k === 'call')).toEqual([
       { k: 'call', line: 1, fn: 'distance', args: [], kind: 'sensor', result: '3' },
-      { k: 'call', line: 2, fn: 'say', args: ["'hi'"], kind: 'say', result: 'None' },
+      { k: 'call', line: 2, fn: 'print', args: ["'hi'"], kind: 'print', result: 'None' },
       { k: 'call', line: 3, fn: 'forward', args: [], kind: 'action' },
     ]);
     expect(t1).toContainEqual({ k: 'set', line: 1, name: 'd', value: '3', depth: 0 });
@@ -100,11 +100,11 @@ describe('battle trace', () => {
     expect(plain.frames[1]!.trace).toBeUndefined();
   });
 
-  it('keeps the events after the winning action (say) in the last frame', () => {
-    const r = run('forward()\nfire()\nsay("done")', ['>.D']);
+  it('keeps the events after the winning action (print) in the last frame', () => {
+    const r = run('forward()\nfire()\nprint("done")', ['>.D']);
     expect(r.outcome).toBe('win');
-    expect(r.frames.at(-1)!.after).toContainEqual(expect.objectContaining({ k: 'call', fn: 'say', kind: 'say' }));
-    expect(r.frames.at(-1)!.trace).not.toContainEqual(expect.objectContaining({ fn: 'say' }));
+    expect(r.frames.at(-1)!.after).toContainEqual(expect.objectContaining({ k: 'call', fn: 'print', kind: 'print' }));
+    expect(r.frames.at(-1)!.trace).not.toContainEqual(expect.objectContaining({ fn: 'print' }));
   });
 
   it('cuts a tick that runs very long without acting', () => {

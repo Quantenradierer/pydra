@@ -9,15 +9,15 @@ describe('code rules', () => {
   it('finds words outside comments and strings', () => {
     expect(usesWord('while True:\n    break', 'while')).toBe(true);
     expect(usesWord('while True:\n    break', 'while True')).toBe(true);
-    expect(usesWord('x = 1  # for fun\nsay("for")', 'for')).toBe(false);
+    expect(usesWord('x = 1  # for fun\nprint("for")', 'for')).toBe(false);
     expect(usesWord('format = 1', 'for')).toBe(false);
-    expect(bareCode('say("a#b") # c').trim()).toBe('say("")');
+    expect(bareCode('print("a#b") # c').trim()).toBe('print("")');
   });
   it('sees repeated numbers', () => {
     expect(repeatsNumber('forward(4)\nfire(3)')).toBe(false);
     expect(repeatsNumber('fire(3)\nwait()\nfire(3)')).toBe(true);
     expect(repeatsNumber('x = 2.5\ny = 25')).toBe(false);
-    expect(repeatsNumber('say("3")\nfire(3)')).toBe(false);
+    expect(repeatsNumber('print("3")\nfire(3)')).toBe(false);
   });
 });
 

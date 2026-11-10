@@ -116,7 +116,7 @@ test('the pills of a chapter are 1..N in order, with no gaps, no dashed side pil
   await expect(page.locator('.level-dot.side')).toHaveCount(0);
   // The map: every chapter counts its challenges, none is missing or extra.
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
-  for (const [chapter, count] of [[0, 4], [1, 4], [2, 4]] as const) {
+  for (const [chapter, count] of [[0, 4], [1, 3], [2, 4]] as const) {
     const section = page.getByTestId(`robot-chapter-${chapter}`);
     await section.evaluate((d) => ((d as HTMLDetailsElement).open = true));
     await expect(section.locator('.level-dot')).toHaveCount(count);

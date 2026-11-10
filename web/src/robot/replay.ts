@@ -25,7 +25,7 @@ const center = (p: Pos, cell = CELL) => ({ x: p.x * cell + cell / 2, y: p.y * ce
 
 /** A call shown on the arena next to the robot: the command or sensor that just ran, with its result. */
 export interface Callout {
-  kind: 'action' | 'sensor' | 'say';
+  kind: 'action' | 'sensor' | 'print';
   text: string;
 }
 
@@ -39,7 +39,7 @@ export interface DrawExtras {
   over?: HTMLCanvasElement;
 }
 
-const CALLOUT_COLORS = { action: '#4fc3f7', sensor: '#7bd88f', say: '#ffffff' } as const;
+const CALLOUT_COLORS = { action: '#4fc3f7', sensor: '#7bd88f', print: '#ffffff' } as const;
 
 /** Calls as pills above the player's robot, move ghost + arrow, and floating damage numbers. */
 function drawOverlay(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, frame: Frame, extras: DrawExtras) {

@@ -32,7 +32,7 @@ describe('beats', () => {
   });
 
   it('puts a line that ran after the winning action behind the last resolve beat', () => {
-    const w = fight('forward()\nfire()\nsay("done")', ['>.D']);
+    const w = fight('forward()\nfire()\nprint("done")', ['>.D']);
     const beats = buildBeats(w.frames);
     expect(beats.at(-2)).toMatchObject({ kind: 'resolve', tick: 2 });
     expect(beats.at(-1)).toMatchObject({ kind: 'line', line: 3, after: true, tick: 2 });

@@ -15,10 +15,10 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | Deterministic grid/tick engine: HP, armor, walls, rubble, pits, simultaneous resolution, shields, regeneration, **patrol, shield cycle** (rb25), push, armor plates, seeded RNG, tick limit | `engine.ts`, `rng.ts`, `layout.ts` (ASCII maps, seeded mirroring) |
 | Python interpreter for the teaching subset, **resumable** (generators pause at action calls, per-tick step budget), friendly errors (de/en) with did-you-mean, pre-battle checker, CPython golden tests (200 snippets) | `py/` (`lexer`, `parser`, `interp`, `builtins`, `values`, `check`, `errors`), `friendly.ts`, `messages-errors.ts` |
 | Parts as host objects: wheels, spider legs, **treads** (+3 armor, 2-tick turns, `push()`), blaster (+ burst Mk II), cannon (power 1-2, recharge power + 1), eyes (+ wide-angle, shield scanner), hammer, shield, GPS, **armor plates** (free like all gear), `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
-| Battle runner recording frames (positions, events, script line, sensor reads, say() bubbles) | `battle.ts` |
+| Battle runner recording frames (positions, events, script line, sensor reads, print() bubbles) | `battle.ts` |
 | Robot art: registry + sockets + renderer, used by the build screen, arena, cards, Home (see *Robot art*) | `robot/art/`, `views/robot-bench.ts`, `views/robot-gallery.ts` |
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
-| **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, one step (line or round), restart, to the end, speed button (default 800 ms per step, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Plays at once when the fight starts; the listing replaces the editor in the same box, the arena sits under the task sentence | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
+| **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/print, play/pause, one step (line or round), restart, to the end, speed button (default 800 ms per step, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Plays at once when the fight starts; the listing replaces the editor in the same box, the arena sits under the task sentence | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
 | **One fight per challenge** (rb21): every challenge is exactly one fight on one map; there is no fight list, no `Kampf k von n`, no earlier-enemy re-test. The level pills of the game bar are the only list | `fight.ts` (`fightEnemy`, `layoutOf`), `views/robot.ts` (`playFight`) |
 | **44 challenges** in one linear chain, no side branches: Chapter 0 (7), 1 (7), 2 (5), Practice Field I (5), Chapter 3 (5), Chapter 4 (7), Exams (7 + boss Final Exam); one map each (`map`). See *rb23: one script, one chain* | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts`, test `chain.test.ts` |
 | Build/code/battle/improve loop; "never a blank file" persistence; stars; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
@@ -29,7 +29,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 Deviations from the doc, on purpose: chassis HP is 8/10 (the table), not "10 default"; battles run on the main thread (they
 are tiny: the engine is pure and worker-ready, see Remaining work); the editor is a `<textarea>` (no CodeMirror
 dependency); `wait()` costs one tick ("free" in the doc means "needs no part"); `distance()` returns 0 when nothing is in
-range; a win ends the battle at once, but free statements right after the winning action (e.g. `say("done")`) still run.
+range; a win ends the battle at once, but free statements right after the winning action (e.g. a `print`) still run.
 Chapter 3 uses a 9x8 arena (robot at (4, 6)) so left and right are symmetric; every fight is won with the default build; shield and hammer are optional
 (the medium chassis has three slots). Practice Field I and the Exams are review fights: each takes the map and enemies of one Chapter 2 / 3 / 4 enemy (`like` in `proving1.ts` / `proving2.ts`) and is won by one general script (the last solution of Chapter 2, `FINAL_SCRIPT` for the Exams).
 
@@ -49,7 +49,7 @@ Top to bottom on a phone (one scrolling column):
 2. **Equipment row** (`robot-equipment`): directly under the pills, one compact button "Ausrüstung / Equipment" with the equipped parts (drive + gear) as small
    icons; it opens the parts sheet.
 3. **Goal line** (`robot-catch`, at most two lines on a phone, `task-text.test.ts` limits it to 96 characters): `robot.goal.one|many` ("Zerstöre den Gegner.") + the
-   task's one short catch sentence (`catchLine`). A rule inside a fight (line limit, say once) is part of the catch sentence;
+   task's one short catch sentence (`catchLine`). A rule inside a fight (line limit) is part of the catch sentence;
    ("Höchstens 3 Zeilen Code."). Nothing generated, nothing about the bug.
 4. **Arena**: a preview with both robots before the fight; the fight afterwards (same widget).
 5. **Run controls**: ↺ restart, ▶/⏸ play / pause, → step (one code line), ⇥ to the end, and the **speed button** (`⏱ mittel`, cycles
@@ -65,14 +65,14 @@ Top to bottom on a phone (one scrolling column):
 fix the fight loaded *paused* and the verdict showed at once, so "nothing happened"). Each step lights the code line, shows the call pill and
 the move / shot on the arena; a command line is followed by its round. The verdict, the stars and the points
 (`RobotGame.run(id, true)` returns `award()`, which the screen calls when the verdict shows, so the +XP toast does not spoil the result)
-come when the fight reached its end or was skipped. Nothing advances by itself. A lost fight says why in the verdict line (unmet rule, error with line, `robot.outcome.dead|timeout`).
+come when the fight reached its end or was skipped. Nothing advances by itself. A lost fight gives the reason in the verdict line (unmet rule, error with line, `robot.outcome.dead|timeout`).
 
 **Removed in rb21**: the second list (fight pills, `Kampf k von n`, the loss reason per fight, `variations.ts`), the re-run of earlier chapter enemies (`broken`, `earlierEnemies`, `robot.regression.*`), the three layouts per enemy and `mix`, the 3-sentence goal block, the generated bug description of a bug hunt (the whole bug hunt type went in rb23), the equipment button next to the text (it is the row under the pills now).
 
 **Removed in rb19 (never asked for)**: the two-robots row and the "Teile" button above the arena (the equipment button remains, renamed),
 the *Mehr* sheet (fights summary, next / skip / skip all, **"Automatisch weiter"** / `robot.vq.auto`, speed slider, step size, variables, call
 stack, sensors, log, script versions), the variation-queue menu, the chapter / task name as text on the task page (the map's start card and the
-primary button say `Aufgabe n`). There is no share, export or achievement UI in Robot Battler (the `+XP` toast is the app-wide points system
+primary button read `Aufgabe n`). There is no share, export or achievement UI in Robot Battler (the `+XP` toast is the app-wide points system
 and now comes with the verdict). Script history is still stored by `RobotGame` but has no screen.
 
 **Inserting code** (`suggest.ts` `insertSnippet`, pure, unit-tested): commands and block snippets never share a line with other code.
@@ -92,9 +92,9 @@ Not changed: the Home screen (shared by all games). Still open: no keyboard shor
   after `SLOW_STEPS` (40) steps so a never-ending loop does not take minutes (the first steps stay at the chosen speed).
 * On a phone the verdict and the primary button were below the fold when a fight ended: the page now scrolls them into view (`scrollIntoView({block:'nearest'})`, no move when visible).
 * (The bug-hunt fallback script of that fix is gone with the bug hunts, rb23.)
-  The map card and the next button say "Kapitel 1: Zahlen und Variablen · Aufgabe 1" when the chapter is not the current one ("Aufgabe 1" alone was ambiguous).
+  The map card and the next button read "Kapitel 1: Zahlen und Variablen · Aufgabe 1" when the chapter is not the current one ("Aufgabe 1" alone was ambiguous).
 * Constraint tasks said their rule twice (prompt + `rule` sentence): the `rule` field is gone. The `Python-Meldung` disclosure has an arrow (it looked like a dead label). The Training
-  buttons have a gap. The armor plates label no longer says "ab 12 Sternen" (the lock was removed long ago).
+  buttons have a gap. The armor plates label no longer shows "ab 12 Sternen" (the lock was removed long ago).
 * Known and left: the strip chips are labelled `forward(1)` but insert `forward()` with the caret inside; the points toast (app-wide) stays 4.5 s and can cover the pills.
 
 ## Robot art (modular images)
@@ -154,7 +154,7 @@ build ─▶ createEnv (parts.ts): globals + objects (host functions)       tick
   together; win = all enemies down and the player standing; time out (200 ticks, or `maxTicks`) = loss.
 * **Progress** – `RobotGame` (`game.ts`) stores `{build, script, history, solved, stars, misses, runs, wins}` under
   `pydra.v1.robot` (`GAME_DATA_KEYS`), parsed defensively. `stats()` feeds Home and the points context; a first win calls
-  `onPoints({type:'level', game:'robot', id, clean})`. Gear is free (see *Free gear* below); `INTRODUCED_IN` in `build.ts` only says which chapter introduces a part (level =
+  `onPoints({type:'level', game:'robot', id, clean})`. Gear is free (see *Free gear* below); `INTRODUCED_IN` in `build.ts` only names which chapter introduces a part (level =
   chapter of the first unsolved main battle).
 * **PWA/offline** – nothing is fetched; all content is bundled in the main chunk and precached like the rest.
 
@@ -168,7 +168,7 @@ An enemy is a plain object (`content/types.ts` → `EnemyData`) appended to `ENE
   enemies: [{ hp: 2, armor: 0, face: 'W', gear: ['blaster','eyes'], script: 'fire()', regen: { every: 2, amount: 1 } }],   // 'D' = enemies[0], '1'-'9' = n-th
   map: mk(8, 8, ['^', 3, 7], ['D', 3, 4]),            // the ASCII map (. # ~ rubble o pit, ^ > v < player, D/1-9 enemies)
   maxTicks: 30,                                       // optional, loses at this tick
-  needs: { say: true, sayPrefix: 'Distance: ', sayOnce: 'done', maxLines: 6,
+  needs: { maxLines: 6,
            maxDamage: 4, noWaste: true, uses: ['while'], without: ['for'], noRepeatedNumber: true },
   solution: '…',                                      // a script that beats this enemy with the DEFAULT build (light chassis, wheels, blaster + eyes)
   breaks: true,                                       // the previous solution must NOT win (set false for practice enemies)
@@ -217,8 +217,7 @@ in the builder in the chapter that brings it. The eyes' wide-angle and scanner a
 
 **Rule for content: no battle or challenge needs a specific part.** `EnemyData.solution` must win with the *default build*
 (`DEFAULT_BUILD` = `START_BUILD`: light chassis, wheels, blaster + eyes); `solutionBuild` no longer exists and rules such as
-`uses: ['gps']`, a power argument, or HP-based sayings that only a weak chassis reaches are avoided (`needs.sayIfHpBelow`
-makes "say X when HP < n" count only when the robot's HP really fell that low). Parts that a chapter is "about" are optional
+`uses: ['gps']`, a power argument, or HP-based conditions that only a weak chassis reaches are avoided. Parts that a chapter is "about" are optional
 shortcuts: Chapter 1 now works with the blaster (the cannon is an extra, armor is no longer used by the dummies), Staircase is a
 walled staircase that wheels climb with turns (spider legs are the `move_north()` shortcut), Growing Shots uses a nested loop
 instead of `fire(i)`, Charger / Gatekeeper / Run to the Wall are won with blaster, eyes and wheels (hammer, shield, GPS lower
@@ -284,14 +283,14 @@ Runde zurück", "Von vorn" at the start and "Zum Ende" / forward at the end did 
 
 ## rb22: no filler text
 
-* **Fight narration** is ONE short line under the controls (keys `say.*`, `narration.ts` `describeAction`, unit-tested in
+* **Fight narration** is ONE short line under the controls (keys `narr.*`, `narration.ts` `describeAction`, unit-tested in
   `narration.test.ts`): what the player's action just did ("Du fährst einen Schritt vor.", "Du schießt: Treffer!", "Du stößt an die Wand.",
   "Du schießt: daneben."). It shows only once the action plays out (the round's arena beat) and is empty otherwise; the highlighted line
-  and the arena already say the rest. No coordinates, no generic sentences, no box. The old `robot.narr.*`, `robot.where*`,
+  and the arena already tell the rest. No coordinates, no generic sentences, no box. The old `robot.narr.*`, `robot.where*`,
   `robot.motion.*`, `robot.ev.*` texts, `describeFrame` and the `Arena · Schritt n von m` label are deleted; the only counter is `Runde n von m`.
 * **Audit of every screen** (map, task, fight, win / loss / error verdicts, training, help and equipment sheets; de and en;
-  360x740 and 1280x800; screenshots and a text dump per state). Removed or shortened: "Starte den Kampf und schau zu" (the button says it),
-  "Nächste Aufgabe frei" (the `Weiter` button says it), the star rule on a three-star win (still shown below three stars), the equipment
+  360x740 and 1280x800; screenshots and a text dump per state). Removed or shortened: "Starte den Kampf und schau zu" (the button shows it),
+  "Nächste Aufgabe frei" (the `Weiter` button shows it), the star rule on a three-star win (still shown below three stars), the equipment
   instruction paragraph (`robot.bench.help`), the help sheet's repeated heading "Befehle deines Roboters", the training intro and the
   training task text (now `Zufall: <enemy>.`), "Die Gegner sind besiegt, aber ..." prefixes in the verdict, "Die Zeit lief ab, bevor der
   Gegner besiegt war" (now "Zeit abgelaufen."). Task goals that carry a rule or a catch (line limits, hit counts) stay: they are the task.
@@ -322,7 +321,7 @@ a rule, a branch, a block), and
 So the script never has to be rebuilt: what was right for challenge n-1 is the first part of what is right for n. Loops are therefore *added*:
 a second `for` for the next dummy, a `for` around the old loop for the big dummy. Rules that would force a rewrite (line limits that
 need a loop instead of lines) are used only where the old lines are kept (`maxLines` 12 in Dummy Army counts the old lines plus the one new `for`).
-A chapter boundary may start something new (`say()`, `for`, `if`, `while`) but the script of the chapter before is still in the editor and still runs.
+A chapter boundary may start something new (`for`, `if`, `while`) but the script of the chapter before is still in the editor and still runs.
 
 The challenge list with the one new construct and the one new arena element of every step is in `docs/robot-challenges.md` (rb26). Chapters: 0 (4), 1 (4), 2 (4), 3 (5), 4 (5).
 
@@ -352,7 +351,7 @@ More enemies is not a new idea, so the chain got mechanics where the script has 
 
 The loop needs an `else: wait()`: a pass without an action is the "loop that never acts" error. An exactly tuned run of `fire()`/`wait()` can still win by luck of the phase (the game is deterministic); `moving-targets.test.ts` shows that one round more or less before it makes it miss. Tests: engine tests for the patrol path / `every` / blocked / dead / determinism and the shield cycle (rhythm, blocking, not used up, independent of the patrol) in `engine.test.ts`, the two challenges (path, shield visible in frames, sensor values, naive scripts fail, `noMiss`) in `moving-targets.test.ts`, chain and "previous solution loses" in `chain.test.ts` / `enemies.test.ts`.
 
-**Hit points** (balance): Chapter 0 dummies are 2 / 1 / 3 / 1 / 2 (first lesson 1, second 2), Chapter 1 2 / 2 / 3 / 1 / 1, Chapter 4 1 / 4 (regenerator) / 3 / 2 (patroller); Chapter 2 stays at 3 (the loops are `range(3)`) and Chapter 3 at 1 / 2 / 4. `balance.test.ts` checks that the last challenge of Chapters 0, 1, 3, 4 has at most half of its enemies at exactly 2 HP and that every moving or shielded enemy has 2 HP.
+**Hit points** (balance): Chapter 0 dummies are 2 / 1 / 3 / 1 / 2 (first lesson 1, second 2), Chapter 1 2 / 2+1 / 2+1+3, Chapter 4 1 / 4 (regenerator) / 3 / 2 (patroller); Chapter 2 stays at 3 (the loops are `range(3)`) and Chapter 3 at 1 / 2 / 4. `balance.test.ts` checks that the last challenge of Chapters 0, 1, 3, 4 has at most half of its enemies at exactly 2 HP and that every moving or shielded enemy has 2 HP.
 
 Not built (ideas, same pattern): a gate that opens on a rhythm (needs a tile state in the frames and the canvas), an enemy that retreats when approached or turns to face you.
 
@@ -360,6 +359,6 @@ Not built (ideas, same pattern): a gate that opens on a rhythm (needs a tile sta
 
 * **At most 3 enemies per challenge**, never "the last one plus one more dummy": a challenge that adds an enemy must also add a construct, a wall or an enemy behaviour (`chain.test.ts`). The chain may swap an enemy for another (`patroller`, `sniper`).
 * **Mechanics early:** the wall in Chapter 0 (`wall-dummy`: shots bounce, drive around), the patrol in Chapter 2 (`patrol-dummy`), a periodic shield in Chapter 3 (`bubble`, up 2 / down 1) and a shooting enemy (`sniper`), patrol + shield together in Chapter 4 (`flicker`).
-* **No required nonsense output:** `needs.sayOnce` and `needs.sayIfHpBelow` are gone ("done", "low", "Liftoff!"), `say()` is the robot's log line (`status-report`, `range-report`), never speech to an enemy. The Chapter 4 countdown and the Chapter 1 counter are removed; `break-out` became the wait loop of `patroller`.
+* **No required output, and no speech function (rb27):** the old speech/log function is removed completely (engine, host API, help, editor suggestions, the matching `needs` flags, the narration key prefix is now `narr.*`). Old saved scripts that call it fail with the ordinary unknown-name error (tested in `battle.test.ts`). `print()` still works and shows a bubble. Chapter 1 has three challenges without output (`two-steps`: `forward(2)`; `far-dummy`: `d = distance()`, `forward(d - 1)`; `sign-dummy`: turn and measure again). The Chapter 4 countdown and the Chapter 1 counter are removed; `break-out` became the wait loop of `patroller`.
 * **Review chapters removed** (Practice Field I, Exams, `final-exam`, the certificate): 13 challenges with 2 scripts. Old saves keep working (unknown ids are dropped). The Training Grounds keep their own general scripts.
 * **HP bar:** the arena draws one segment per hit point (`art/arena.ts`, `hpSegments`), so a 1 HP and a 3 HP enemy look different (unit test in `art/arena.test.ts`, e2e in `robot-fight.spec.ts`).

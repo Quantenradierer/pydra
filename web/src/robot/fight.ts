@@ -17,7 +17,7 @@ export interface FightReport {
   /** Won: every enemy down and the extra conditions met. */
   won: boolean;
   /** Why not, when the enemy is down but a condition failed. */
-  unmet?: 'say' | 'sayPrefix' | 'damage' | 'waste' | 'miss' | 'uses' | 'without' | 'repeat';
+  unmet?: 'damage' | 'waste' | 'miss' | 'uses' | 'without' | 'repeat';
 }
 
 export interface EnemyReport {
@@ -58,9 +58,6 @@ export function judge(battle: BattleResult, needs: Needs | undefined, script = '
   if (needs?.uses?.some((w) => !usesWord(script, w))) return { battle, won: false, unmet: 'uses' };
   if (needs?.without?.some((w) => usesWord(script, w))) return { battle, won: false, unmet: 'without' };
   if (needs?.noRepeatedNumber && repeatsNumber(script)) return { battle, won: false, unmet: 'repeat' };
-  const said = battle.frames.flatMap((f) => f.bubbles.filter((b) => b.robot === 'player').map((b) => b.text));
-  if (needs?.say && said.length === 0) return { battle, won: false, unmet: 'say' };
-  if (needs?.sayPrefix !== undefined && !said.some((t) => t.startsWith(needs.sayPrefix!))) return { battle, won: false, unmet: 'sayPrefix' };
   return { battle, won: true };
 }
 

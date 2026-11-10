@@ -14,7 +14,6 @@ import { ActionRequest, PyTuple, repr, type HostFunction, type HostObject, type 
 /** One tick of an action; a function is looked at when its tick comes (cooldowns may have changed). */
 export type Step = Intent | (() => Intent);
 
-export const MAX_SAY = 40;
 export { RANGE };
 
 /** What the parts need from the battle. */
@@ -24,7 +23,6 @@ export interface RobotContext {
   build: Build;
   /** Sensor values read this tick, for the replay ("see() → wall"). */
   sensorLog: string[];
-  say: (text: string) => void;
 }
 
 export interface Env {
@@ -71,13 +69,8 @@ export function createEnv(rc: RobotContext): Env {
   const st = (g: GearId) => gearState.get(g)!;
   for (const g of build.gear) gearState.set(g, { cooldown: 0, heat: 0, lock: 0 });
 
-  // ---- always there: wait, say, hp, alive, clock
+  // ---- always there: wait, hp, alive, clock
   globals.wait = fn('wait', () => new ActionRequest([{ type: 'wait' } satisfies Intent], 0));
-  const say = fn('say', (args) => {
-    rc.say(args.map((a) => (typeof a === 'string' ? a : repr(a))).join(' ').slice(0, MAX_SAY));
-    return null;
-  });
-  globals.say = say;
   globals.hp = fn('hp', () => me().hp);
   globals.alive = fn('alive', () => me().hp > 0);
   globals.clock = obj('clock', { tick: fn('tick', () => world.tick) });

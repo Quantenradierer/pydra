@@ -64,7 +64,7 @@ test('the run controls incl. the speed button and the equipment button are at le
   expect(small).toEqual([]);
 });
 
-test('no filler sentences: the goal is one line, the verdict says only the result, sheets have no instruction paragraph', async ({ page }) => {
+test('no filler sentences: the goal is one line, the verdict states only the result, sheets have no instruction paragraph', async ({ page }) => {
   await start(page);
   const main = page.locator('main.robot');
   await expect(main).not.toContainText('Starte den Kampf');

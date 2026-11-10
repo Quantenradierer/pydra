@@ -53,7 +53,7 @@ export interface Viewer {
 function hintText(hint: LineHint, t: T, line = ''): { text: string; branch?: 'true' | 'false' } {
   const parts: string[] = [];
   let branch: 'true' | 'false' | undefined;
-  // A hint that only repeats the line (`forward()` under `forward()`) says nothing new.
+  // A hint that only repeats the line (`forward()` under `forward()`) adds nothing.
   if (hint.call && hint.call !== line.trim()) parts.push(hint.call);
   const b = hint.branch;
   if (b) {

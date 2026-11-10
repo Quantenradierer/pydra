@@ -113,13 +113,13 @@ test('on a phone the verdict and the next button are scrolled into view when the
 
 test('pills: moving between challenges (pills, next button) never rewrites the script, a fix in progress stays', async ({ page }) => {
   await openTask(page, 'one-more-line', '', ['first-contact', 'one-more-line']);
-  await page.getByTestId('robot-code').fill('forward()\nfire()\nfire()\nsay("x")');
+  await page.getByTestId('robot-code').fill('forward()\nfire()\nfire()\nprint("x")');
   await page.getByTestId('level-3').click();
-  await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()\nfire()\nsay("x")');
+  await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()\nfire()\nprint("x")');
   await page.getByTestId('level-2').click();
   await page.getByTestId('level-1').click();
   await page.getByTestId('level-3').click();
-  await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()\nfire()\nsay("x")');
+  await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()\nfire()\nprint("x")');
 });
 
 test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next button when it changes chapter', async ({ page }) => {
@@ -131,7 +131,7 @@ test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next b
 });
 
 test('the arena shows each enemy\'s hit points: one bar segment per HP, so different HP looks different', async ({ page }) => {
-  await openTask(page, 'sign-dummy', 'forward()', ['first-contact', 'one-more-line', 'training-dummy', 'wall-dummy', 'status-report', 'far-dummy']);
+  await openTask(page, 'sign-dummy', 'forward()', ['first-contact', 'one-more-line', 'training-dummy', 'wall-dummy', 'two-steps', 'far-dummy']);
   const segments = await page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>('.rb-unit.enemy')].map((u) => u.querySelectorAll('.rb-hp i').length).sort(),
   );

@@ -38,8 +38,15 @@ describe('runBattle', () => {
     expect(r.budgetLine).toBeGreaterThan(0);
   });
 
-  it('forward(n) takes n ticks and a say() bubble is free', () => {
-    const r = runBattle({ build: START_BUILD, script: 'say("go")\nforward(2)\nfire()', layout: layout(['>..D']) });
+  it('an old saved script that calls the removed log function is an ordinary unknown-name error', () => {
+    const old = ['sa', 'y'].join('');
+    const r = runBattle({ build: START_BUILD, script: `forward()\n${old}("hi")\nfire()`, layout: layout(['>..D']) });
+    expect(r.reason).toBe('error');
+    expect([r.error?.code, r.error?.line]).toEqual(['unknown-name', 2]);
+  });
+
+  it('forward(n) takes n ticks and a print() bubble is free', () => {
+    const r = runBattle({ build: START_BUILD, script: 'print("go")\nforward(2)\nfire()', layout: layout(['>..D']) });
     expect(r.frames[1]!.bubbles).toEqual([{ robot: 'player', text: 'go' }]);
     expect(r.frames.length - 1).toBe(3);
     expect(r.outcome).toBe('win');
@@ -82,7 +89,7 @@ describe('runBattle', () => {
 
   it('wide-angle eyes see to the sides, gps tells the position', () => {
     const build = withGear({ chassis: 'medium', gear: ['eyes', 'gps', 'blaster'], addons: ['wide', 'scanner'] });
-    const r = runBattle({ build, script: 'say(eyes.see_right())\nwait()\nsay(gps.position())\nwait()\nsay(enemy_shielded())\nwait()', layout: layout(['>.', 'D.']) });
+    const r = runBattle({ build, script: 'print(eyes.see_right())\nwait()\nprint(gps.position())\nwait()\nprint(enemy_shielded())\nwait()', layout: layout(['>.', 'D.']) });
     expect(r.frames[1]!.bubbles[0]!.text).toBe('enemy');
     expect(r.frames[2]!.bubbles[0]!.text).toBe('(0, 0)');
     expect(r.frames[3]!.bubbles[0]!.text).toBe('False');

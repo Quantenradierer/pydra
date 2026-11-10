@@ -124,13 +124,13 @@
   "error": null,
   "line": null
  },
- "print('it\\'s', \"say \\\"hi\\\"\")": {
-  "out": "it's say \"hi\"\n",
+ "print('it\\'s', \"tell \\\"hi\\\"\")": {
+  "out": "it's tell \"hi\"\n",
   "error": null,
   "line": null
  },
- "print(repr(\"it's\"), repr('say \"hi\"'), repr(\"both ' and \\\"\"))": {
-  "out": "\"it's\" 'say \"hi\"' 'both \\' and \"'\n",
+ "print(repr(\"it's\"), repr('tell \"hi\"'), repr(\"both ' and \\\"\"))": {
+  "out": "\"it's\" 'tell \"hi\"' 'both \\' and \"'\n",
   "error": null,
   "line": null
  },

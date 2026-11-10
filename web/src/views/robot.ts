@@ -35,7 +35,7 @@ export function robotScreen(app: App): Screen {
   };
 
   const titleOf = (s: Step) => s.enemy!.title[lang];
-  /** What the page calls a task: its number in the chapter ("Aufgabe 3", like the pills); training fights say what they are. */
+  /** What the page calls a task: its number in the chapter ("Aufgabe 3", like the pills); training fights name what they are. */
   const taskLabel = (s: Step, withChapter = false) => {
     const n = game.steps.filter((x) => x.chapter === s.chapter).indexOf(s) + 1;
     if (!(n > 0 && !s.id.startsWith('training-'))) return titleOf(s);
@@ -206,10 +206,6 @@ export function robotScreen(app: App): Screen {
   function unmetText(unmet: NonNullable<FightReport['unmet']>, enemy: EnemyData): string {
     const words = (list: string[] | undefined) => (list ?? []).map((w) => `"${w}"`).join(', ');
     switch (unmet) {
-      case 'say':
-        return t('robot.outcome.say');
-      case 'sayPrefix':
-        return t('robot.outcome.sayPrefix', { text: enemy.needs?.sayPrefix ?? '' });
       case 'damage':
         return t('robot.outcome.damage', { max: enemy.needs?.maxDamage ?? 0 });
       case 'waste':

@@ -5,7 +5,7 @@ import { GEAR } from './build.ts';
 /**
  * The suggestion engine of the script editor (pure, no DOM): what to offer while the player types (completions) and
  * which templates sit in the insert bar (snippets). Suggestions are tools, they name commands and shapes of code;
- * they never say what the task's solution is.
+ * they never tell what the task's solution is.
  */
 
 export type SuggestKind = 'part' | 'method' | 'command' | 'keyword' | 'variable';
@@ -93,7 +93,7 @@ function globalCommands(build: Build): Cmd[] {
     if (build.addons.includes('wide')) out.push(cmd('see_left', '', 'see_side'), cmd('see_right', '', 'see_side'));
     if (build.addons.includes('scanner')) out.push(cmd('enemy_shielded', '', 'enemy_shielded'));
   }
-  out.push(cmd('wait', '', 'wait'), cmd('say', 'text', 'say'), cmd('hp', '', 'hp'), cmd('alive', '', 'alive'));
+  out.push(cmd('wait', '', 'wait'), cmd('hp', '', 'hp'), cmd('alive', '', 'alive'));
   return out;
 }
 
@@ -184,7 +184,7 @@ export function applySuggestion(text: string, c: Completion, s: Suggestion): { t
 // ------------------------------------------------------------------ snippets
 
 export interface Snippet {
-  /** What the button says. */
+  /** The button text. */
   label: string;
   /** The template; `$0` marks the caret. Lines after the first are indented like the line the caret is on. */
   text: string;
@@ -234,7 +234,7 @@ export function snippetGroups(build: Build): SnippetGroup[] {
   if (has('shield')) groups.push({ id: 'shield', snippets: [{ label: 'shield.activate()', text: 'shield.activate()$0' }, { label: 'shield.is_up()', text: 'shield.is_up()$0' }] });
   if (has('gps')) groups.push({ id: 'gps', snippets: [{ label: 'gps.position()', text: 'gps.position()$0' }, { label: 'gps.facing()', text: 'gps.facing()$0' }] });
   if (has('plates')) groups.push({ id: 'plates', snippets: [{ label: 'plates.integrity()', text: 'plates.integrity()$0' }] });
-  groups.push({ id: 'basics', snippets: [{ label: 'wait()', text: 'wait()$0' }, { label: 'say("…")', text: 'say("$0")' }, { label: 'hp()', text: 'hp()$0' }, { label: 'alive()', text: 'alive()$0' }] });
+  groups.push({ id: 'basics', snippets: [{ label: 'wait()', text: 'wait()$0' }, { label: 'hp()', text: 'hp()$0' }, { label: 'alive()', text: 'alive()$0' }] });
   return groups;
 }
 

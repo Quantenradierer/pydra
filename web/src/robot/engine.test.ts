@@ -261,7 +261,7 @@ describe('shield cycle: an enemy shield that comes and goes on its own', () => {
     expect(states(cycleWorld(3, 2), 10)).toEqual([false, true, true, true, false, false, true, true, true, false]);
   });
 
-  it('starts as the setup says (down first)', () => {
+  it('starts as the setup defines (down first)', () => {
     const m = parseMap(['>D']);
     const w = new World({ tiles: m.tiles, seed: 1, robots: [{ id: 'player', team: 'player', pos: m.player.pos, facing: 'E', hp: 5 }, { id: 'enemy1', team: 'enemy', pos: m.enemies[0]!.pos, facing: 'W', hp: 2, shieldCycle: { up: 2, down: 3 } }] });
     expect(w.robot('enemy1').shieldUp).toBe(false);

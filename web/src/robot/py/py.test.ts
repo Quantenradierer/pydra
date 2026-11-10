@@ -42,7 +42,7 @@ describe('golden tests against CPython', () => {
     });
   }
 
-  it('golden.json is what the CPython on this machine says (when python3 is installed)', () => {
+  it('golden.json is what the CPython on this machine prints (when python3 is installed)', () => {
     let fresh: Result[];
     try {
       const runner = new URL('../../../scripts/golden-runner.py', import.meta.url).pathname;

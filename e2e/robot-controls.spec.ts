@@ -34,7 +34,7 @@ const mark = (page: Page): Promise<string[]> =>
       const style = getComputedStyle(el);
       if (el.getClientRects().length === 0 || style.visibility === 'hidden' || el.closest('[hidden]') || !el.checkVisibility({ visibilityProperty: true, contentVisibilityAuto: true })) continue;
       if ((el as HTMLButtonElement).disabled || el.getAttribute('aria-disabled') === 'true') continue;
-      // The current level pill and are already what they say, and what an open sheet covers cannot be pressed at all.
+      // The current level pill and already show what they are, and what an open sheet covers cannot be pressed at all.
       if (el.getAttribute('aria-current') === 'step') continue;
       el.scrollIntoView({ block: 'nearest' });
       const box = el.getBoundingClientRect();

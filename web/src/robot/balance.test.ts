@@ -177,3 +177,17 @@ describe('enemies ramp gently along the chain', () => {
     for (const e of ENEMIES) for (const d of e.enemies) if (d.script) expect(d.script).not.toMatch(/fire\([2-9]\)|smash/);
   });
 });
+
+describe('enemies are not all alike', () => {
+  const lastOf = (c: number) => ENEMIES.filter((e) => e.chapter === c).at(-1)!;
+  it('in the last challenge of Chapters 0, 1, 3 and 4 at most half of the enemies have exactly 2 hit points', () => {
+    for (const c of [0, 1, 3, 4]) {
+      const hps = lastOf(c).enemies.map((d) => d.hp);
+      expect(hps.filter((hp) => hp === 2).length, `Chapter ${c}: ${hps.join(',')}`).toBeLessThanOrEqual(Math.ceil(hps.length / 2));
+      expect(new Set(hps).size, `Chapter ${c}: ${hps.join(',')}`).toBeGreaterThanOrEqual(2);
+    }
+  });
+  it('a moving or shielded enemy is worth 2 hit points because the script has to do more for it', () => {
+    for (const e of ENEMIES) for (const d of e.enemies) if (d.patrol || d.shieldCycle) expect(d.hp, e.id).toBe(2);
+  });
+});

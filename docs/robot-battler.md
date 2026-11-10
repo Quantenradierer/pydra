@@ -12,7 +12,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 
 | Done | Where |
 | --- | --- |
-| Deterministic grid/tick engine: HP, armor, walls, rubble, pits, simultaneous resolution, shields, regeneration, push, armor plates, seeded RNG, tick limit | `engine.ts`, `rng.ts`, `layout.ts` (ASCII maps, seeded mirroring) |
+| Deterministic grid/tick engine: HP, armor, walls, rubble, pits, simultaneous resolution, shields, regeneration, **patrol, shield cycle** (rb25), push, armor plates, seeded RNG, tick limit | `engine.ts`, `rng.ts`, `layout.ts` (ASCII maps, seeded mirroring) |
 | Python interpreter for the teaching subset, **resumable** (generators pause at action calls, per-tick step budget), friendly errors (de/en) with did-you-mean, pre-battle checker, CPython golden tests (200 snippets) | `py/` (`lexer`, `parser`, `interp`, `builtins`, `values`, `check`, `errors`), `friendly.ts`, `messages-errors.ts` |
 | Parts as host objects: wheels, spider legs, **treads** (+3 armor, 2-tick turns, `push()`), blaster (+ burst Mk II), cannon (power 1-2, recharge power + 1), eyes (+ wide-angle, shield scanner), hammer, shield, GPS, **armor plates** (free like all gear), `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
 | Battle runner recording frames (positions, events, script line, sensor reads, say() bubbles) | `battle.ts` |
@@ -20,7 +20,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
 | **Line-by-line fights**: the interpreter emits a deterministic **trace** (`py/trace.ts`: line, call with args/result, set, branch/loop pass, enter/leave) that `runBattle({trace: true})` stores per tick in `Frame.trace` (`Frame.after` = lines after the winning action; capped at `TRACE_CAP`, off for fast checks). `stepper.ts` cuts frames into *beats* (one per executed line, one `resolve` per tick) and computes variables, call stack and per-line hints at any beat; `narration.ts` words them. The viewer (`views/robot-viewer.ts`): highlighted line with inline hints (`distance() → 3`, ✓ wahr, `x = 3`), call pills and move ghost on the arena, variable strip, call stack, "what happens now", sensors/say, play/pause, one step (line or round), restart, to the end, speed button (default 800 ms per step, `SPEED_MS`), "Tick N" + "Zeile L · Schritt n von m". Plays at once when the fight starts; the listing replaces the editor in the same box, the arena sits under the task sentence | `py/trace.ts`, `stepper.ts`, `narration.ts`, `views/robot-viewer.ts`, `replay.ts` |
 | **One fight per challenge** (rb21): every challenge is exactly one fight on one map; there is no fight list, no `Kampf k von n`, no earlier-enemy re-test. The level pills of the game bar are the only list | `fight.ts` (`fightEnemy`, `layoutOf`), `views/robot.ts` (`playFight`) |
-| **42 challenges** in one linear chain, no side branches: Chapter 0 (7), 1 (7), 2 (5), Practice Field I (5), Chapter 3 (5), Chapter 4 (5), Exams (7 + boss Final Exam); one map each (`map`). See *rb23: one script, one chain* | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts`, test `chain.test.ts` |
+| **44 challenges** in one linear chain, no side branches: Chapter 0 (7), 1 (7), 2 (5), Practice Field I (5), Chapter 3 (5), Chapter 4 (7), Exams (7 + boss Final Exam); one map each (`map`). See *rb23: one script, one chain* | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts`, test `chain.test.ts` |
 | Build/code/battle/improve loop; "never a blank file" persistence; stars; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
 | **No other kinds of task** (rb23): there are no bug hunts (Glitch), special rules (Constraint) or side missions (`side`). Every task is a fight against an enemy on the normal battle screen; rules inside a fight stay as `needs` | `content/*.ts` |
 | **Training Grounds** (from Chapter 2): endless seeded fights built from the frame of the latest chapter, plus a daily fight (seed from the date); every generated fight has a winning script and is tested for 60 seeds | `training.ts`, `RobotGame.trainingStep/runTraining` |
@@ -331,7 +331,7 @@ A chapter boundary may start something new (`say()`, `for`, `if`, `while`) but t
 | 1 (7) | greet (`say`) -> second dummy far away (`forward(2)`) -> count shots (`shots = shots + 1`, say it once) -> a dummy on the right measured with `distance()` -> say `"Distance: " + str(d)` -> far left -> top |
 | 2 (5) | a `for` loop for the tank -> a dummy on the right (second loop) -> `say("done")` once after the loops -> a dummy on the left -> a 6 HP dummy behind the first: a loop around the loop, at most 12 lines |
 | 3 (5) | `if see() == "enemy"` -> right dummy (`elif see_right()`, the loop) -> a dummy behind you (`else: turn_right()`) -> a shielded dummy (`enemy_shielded()`, no wasted shot) -> a sniper (`say("low")` below 6 HP) |
-| 4 (5) | walk until `see()` -> a regenerating dummy behind it (`while alive()`) -> countdown without `for` -> a guard on the left (`while see() == "enemy"`) -> `while True` + `break` |
+| 4 (7) | walk until `see()` -> a regenerating dummy behind it (`while alive()`) -> countdown without `for` -> a guard on the left (`while see() == "enemy"`) -> `while True` + `break` -> **a patroller** (turn east, `while shots < 2: if see() == "enemy": fire() ... else: wait()`) -> **its flickering shield** (`if not enemy_shielded()`) |
 
 Dropped because they cannot be added to a chain without a rewrite: the Chapter 3 Charger and Gatekeeper (two enemies that fight back in the same lane as the dummies), Maze
 Runner / Hide & Seek / Sentry / Patroller (walls turn the open hall into a corridor and change the frame), Math Dummy / Armored Dummy (a line limit or a bigger number replaces lines),
@@ -339,3 +339,26 @@ Twin Armor and Obstacle Course as they were (they moved dummies). Gear is still 
 medium chassis and each other part). Ids that changed meaning keep their name where the position in the chain is the same (`training-dummy` is now the second dummy).
 
 **Balance (rb24):** weapon, chassis and enemy numbers and the rules behind them are in `docs/robot-balance.md`; `balance.test.ts` fails when ranged out-damages melee, a part dominates another, a fight leaves the round window or enemy HP jumps. Cannon: power 1-2, recharge power + 1; medium chassis: 10 HP, turns slowly; Chapter 2 dummies 3 HP (loops of 3), big dummy 6; shield dummy 2, sniper 4, regenerator 4.
+
+## rb25: moving targets
+
+More enemies is not a new idea, so the chain got mechanics where the script has to *look*, and the dummies stopped being 2 HP each.
+
+**Engine** (`engine.ts`, tick-based, deterministic, no RNG; `EnemyDef` fields in `layout.ts`):
+
+* `patrol: { dir, steps, every? }` - the enemy walks `steps` tiles in `dir`, turns around, walks back, and so on (one step every `every` rounds, default 1). It turns around at once in front of a wall or a robot. The step happens **after the attacks of the round**, so what a sensor saw at the start of a round (`see()`, `distance()`) is exactly where a shot of that round lands: a script that looks and then fires never misses. A dead patroller stands still.
+* `shieldCycle: { up, down }` - a shield that is down for `down` rounds, then up for `up` rounds, forever, with a rhythm of its own (independent of the patrol; choose periods that are not multiples of each other, or the two stay in step and the window never opens). While up it blocks every shot and is **not used up** (the part shield is). It shows in the arena as the normal shield bubble (`Frame.robots[].shieldUp`) and the script reads it with `enemy_shielded()` (already there since Chapter 3).
+* `needs.noMiss` (`fight.ts`, verdict `robot.outcome.miss`) - every shot of the player must hit; a shot into the air or into a raised shield is a miss. This is what makes "stand still and shoot" and fixed counts lose: the blaster has no recharge, so without the rule spamming `fire()` would win by luck.
+
+**Challenges** (end of Chapter 4, the hall of Break Out plus one more thing each; `content/chapter4.ts`):
+
+| Id | New thing | Enemy | Script |
+| --- | --- | --- | --- |
+| `patroller` | walks down column 6 between rows 9 and 11 and back (4 rounds) | 2 HP | face east, `while shots < 2:` fire when `see() == "enemy"`, else `wait()` |
+| `flicker` | the same walker, shield down 2 / up 1 (3 rounds, not 4) | 2 HP | `if not enemy_shielded():` around the shot, else `wait()` |
+
+The loop needs an `else: wait()`: a pass without an action is the "loop that never acts" error. An exactly tuned run of `fire()`/`wait()` can still win by luck of the phase (the game is deterministic); `moving-targets.test.ts` shows that one round more or less before it makes it miss. Tests: engine tests for the patrol path / `every` / blocked / dead / determinism and the shield cycle (rhythm, blocking, not used up, independent of the patrol) in `engine.test.ts`, the two challenges (path, shield visible in frames, sensor values, naive scripts fail, `noMiss`) in `moving-targets.test.ts`, chain and "previous solution loses" in `chain.test.ts` / `enemies.test.ts`.
+
+**Hit points** (balance): Chapter 0 dummies are 2 / 1 / 3 / 1 / 2 (first lesson 1, second 2), Chapter 1 2 / 2 / 3 / 1 / 1, Chapter 4 1 / 4 (regenerator) / 3 / 2 (patroller); Chapter 2 stays at 3 (the loops are `range(3)`) and Chapter 3 at 1 / 2 / 4. `balance.test.ts` checks that the last challenge of Chapters 0, 1, 3, 4 has at most half of its enemies at exactly 2 HP and that every moving or shielded enemy has 2 HP.
+
+Not built (ideas, same pattern): a gate that opens on a rhythm (needs a tile state in the frames and the canvas), an enemy that retreats when approached or turns to face you.

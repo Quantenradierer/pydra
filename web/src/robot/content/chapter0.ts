@@ -1,18 +1,21 @@
-import { chapter, mk, T } from './helpers.ts';
+import { chapter, lineCount, mk, T } from './helpers.ts';
 
 const P: ['^', number, number] = ['^', 3, 7];
-const FAR: [string, number, number] = ['D', 3, 0];
-const RIGHT: [string, number, number] = ['D', 7, 5];
-const LEFT: [string, number, number] = ['D', 0, 5];
-const CORNER: [string, number, number] = ['D', 5, 1];
+const NEAR: [string, number, number] = ['D', 3, 4];
+const FAR: [string, number, number] = ['2', 3, 0];
+const RIGHT: [string, number, number] = ['3', 7, 5];
+const LEFT: [string, number, number] = ['4', 0, 5];
+const CORNER: [string, number, number] = ['5', 5, 1];
+/** Hit points differ from dummy to dummy: the near one 2, far 1, right 3, left 1, corner 2. */
+const D = [{ hp: 2 }, { hp: 1 }, { hp: 3 }, { hp: 1 }, { hp: 2 }];
 const WALL: [string, number, number] = ['#', 5, 3];
 
 /** Each solution is the one before plus new lines (the player keeps ONE script and extends it). */
 const S1 = 'forward()\nfire()';
 const S2 = 'forward()\nfire()\nfire()';
-const S3 = `${S2}\nforward()\nfire()\nfire()`;
-const S4 = `${S3}\nturn_right()\nfire()\nfire()`;
-const S5 = `${S4}\nturn_right()\nturn_right()\nfire()\nfire()`;
+const S3 = `${S2}\nforward()\nfire()`;
+const S4 = `${S3}\nturn_right()\nfire()\nfire()\nfire()`;
+const S5 = `${S4}\nturn_right()\nturn_right()\nfire()`;
 const S6 = `${S5}\nturn_right()\nturn_right()\nforward()\nforward()\nturn_left()\nfire()\nfire()`;
 const S7 = `${S6}\nturn_right()\nforward()\nturn_left()\nforward()\nforward()\nforward()\nforward()\nturn_left()\nfire()\nfire()`;
 
@@ -29,7 +32,7 @@ export const CHAPTER_0 = chapter(0, [
     map: mk(8, 8, P, ['D', 3, 4]),
     solution: S1,
     breaks: false,
-    par: 2,
+    par: lineCount(S1),
   },
   {
     id: 'one-more-line',
@@ -38,51 +41,51 @@ export const CHAPTER_0 = chapter(0, [
     enemies: [{ hp: 2 }],
     map: mk(8, 8, P, ['D', 3, 4]),
     solution: S2,
-    par: 3,
+    par: lineCount(S2),
   },
   {
     id: 'training-dummy',
     title: T('Zweite Attrappe', 'Second Dummy'),
     catchLine: T('Hinter der ersten steht eine zweite. Der Blaster reicht nur 5 Felder.', 'A second one stands behind the first. The blaster reaches 5 tiles.'),
-    enemies: [{ hp: 2 }],
-    map: mk(8, 8, P, ['D', 3, 4], FAR),
+    enemies: D.slice(0, 2),
+    map: mk(8, 8, P, NEAR, FAR),
     solution: S3,
-    par: 6,
+    par: lineCount(S3),
   },
   {
     id: 'corner-dummy',
     title: T('Eckattrappe', 'Corner Dummy'),
-    catchLine: T('Eine dritte steht rechts von dir.', 'A third one is on your right.'),
-    enemies: [{ hp: 2 }],
-    map: mk(8, 8, P, ['D', 3, 4], FAR, RIGHT),
+    catchLine: T('Eine dritte steht rechts von dir und hält 3 Treffer aus.', 'A third one is on your right and takes 3 hits.'),
+    enemies: D.slice(0, 3),
+    map: mk(8, 8, P, NEAR, FAR, RIGHT),
     solution: S4,
-    par: 9,
+    par: lineCount(S4),
   },
   {
     id: 'u-turn',
     title: T('Wendemanöver', 'U-Turn'),
     catchLine: T('Eine vierte steht links. Du schaust nach rechts.', 'A fourth one is on the left. You look right.'),
-    enemies: [{ hp: 2 }],
-    map: mk(8, 8, P, ['D', 3, 4], FAR, RIGHT, LEFT),
+    enemies: D.slice(0, 4),
+    map: mk(8, 8, P, NEAR, FAR, RIGHT, LEFT),
     solution: S5,
-    par: 13,
+    par: lineCount(S5),
   },
   {
     id: 'far-corner',
     title: T('Ferne Ecke', 'Far Corner'),
     catchLine: T('Eine fünfte steht oben rechts, abseits deiner Linien.', 'A fifth one stands at the top right, off your lines.'),
-    enemies: [{ hp: 2 }],
-    map: mk(8, 8, P, ['D', 3, 4], FAR, RIGHT, LEFT, CORNER),
+    enemies: D.slice(0, 5),
+    map: mk(8, 8, P, NEAR, FAR, RIGHT, LEFT, CORNER),
     solution: S6,
-    par: 20,
+    par: lineCount(S6),
   },
   {
     id: 'wall-dummy',
     title: T('Mauer-Attrappe', 'Wall Dummy'),
     catchLine: T('Eine Mauer steht vor der letzten Attrappe. Schüsse prallen ab.', 'A wall stands in front of the last dummy. Shots bounce off.'),
-    enemies: [{ hp: 2 }],
-    map: mk(8, 8, P, ['D', 3, 4], FAR, RIGHT, LEFT, CORNER, WALL),
+    enemies: D.slice(0, 5),
+    map: mk(8, 8, P, NEAR, FAR, RIGHT, LEFT, CORNER, WALL),
     solution: S7,
-    par: 30,
+    par: lineCount(S7),
   },
 ]);

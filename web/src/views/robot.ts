@@ -135,7 +135,7 @@ export function robotScreen(app: App): Screen {
       buildNote = game.setBuild(withAddons) ? '' : t('robot.build.full');
       onChange();
     };
-    const isNew = (chapter: number) => chapter > 0 && chapter === Math.min(game.level(), 4);
+    const isNew = (chapter: number) => chapter > 0 && chapter === game.level();
     const newTag = (chapter: number) => (isNew(chapter) ? h('span', { class: 'robot-tag', 'data-testid': 'robot-new' }, t('robot.new')) : null);
     const radio = (name: string, value: string, label: string, checked: boolean, ok: boolean, intro: number, change: () => void) =>
       h(

@@ -1,7 +1,5 @@
-/** Texts for the second half of Robot Battler: chapters 3-4, Practice Field II, rules, Training. */
+/** Texts for the rules of a fight and the Training. */
 export const CONTENT_DE = {
-  'robot.chapter.3': 'Kapitel 3: if / elif / else',
-  'robot.chapter.4': 'Kapitel 4: while-Schleifen',
   'robot.outcome.damage': 'Zu viel Schaden: höchstens {max} Leben erlaubt.',
   'robot.outcome.waste': 'Gewonnen, aber du hast ins Schild geschossen: Schüsse auf ein gehobenes Schild sind verschwendet.',
   'robot.outcome.miss': 'Gewonnen, aber ein Schuss ging daneben oder ins Schild.',
@@ -19,8 +17,6 @@ export const CONTENT_DE = {
 } as const;
 
 export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
-  'robot.chapter.3': 'Chapter 3: if / elif / else',
-  'robot.chapter.4': 'Chapter 4: while loops',
   'robot.outcome.damage': 'Too much damage: at most {max} HP allowed.',
   'robot.outcome.waste': 'Won, but you shot into the shield: shots at a raised shield are wasted.',
   'robot.outcome.miss': 'Won, but a shot missed or hit the shield.',

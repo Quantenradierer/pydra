@@ -280,11 +280,16 @@
 .robot-board .robot-over { position: absolute; inset: 0; pointer-events: none; background: none; }
 .rb-unit .rb-turn { position: absolute; inset: 0; }
 .rb-unit .rb { width: 100%; height: 100%; }
-.rb-hp { position: absolute; left: 12%; right: 12%; top: 3%; height: 7%; min-height: 3px; background: #0b121b; border-radius: 2px; overflow: hidden; }
-.rb-hp > div { display: flex; gap: 1px; height: 100%; }
-.rb-hp i { display: block; flex: 1 1 0; height: 100%; background: #5fd37a; transition: background 0.25s; }
-.rb-hp > div.low i { background: #ef6c6c; }
-.rb-hp i.off { background: transparent; }
+.rb-unit { container-type: size; }
+/* Hit points as a number in the corner of the tile: readable on a 32 px tile, where a bar of segments was not. */
+.rb-hp {
+  position: absolute; right: 0; top: 0; z-index: 1;
+  min-width: 1.5em; padding: 0 0.25em; box-sizing: border-box;
+  font: 700 12px/1.35 system-ui, sans-serif; font-size: clamp(11px, 36cqh, 17px);
+  text-align: center; color: #0b121b; background: #5fd37a; border-radius: 0.7em; box-shadow: 0 0 0 1.5px #0b121b;
+  transition: background 0.25s;
+}
+.rb-hp.low { background: #ef6c6c; }
 .rb-unit.dead .rb-hp { display: none; }
 .robot-foes { display: flex; flex-wrap: wrap; gap: 0.4rem; float: right; margin: 0 0 0.3rem 0.6rem; }
 .robot-catch::after { content: ''; display: block; clear: both; }

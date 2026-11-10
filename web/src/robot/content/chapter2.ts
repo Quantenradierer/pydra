@@ -1,66 +1,53 @@
-import { chapter, mk, T } from './helpers.ts';
+import { chapter, lineCount, mk, T } from './helpers.ts';
 
-const P: ['^', number, number] = ['^', 3, 9];
-const NORTH: [string, number, number] = ['D', 3, 2];
-/** Where the patroller starts: it walks down column 7, rows 4 to 6, and back, so it is in the robot's row only part of the time. */
-const EAST: [string, number, number] = ['2', 7, 4];
-/** In the far corner, off every line of the robot: it has to walk there. */
-const WEST: [string, number, number] = ['3', 0, 3];
-const arena = (...items: [string, number, number][]) => mk(8, 10, P, ...items);
+type Item = [string, number, number];
+/** The Chapter 2 frame: 8 wide, 5 high, the robot on the left edge looking east. */
+const arena = (...items: Item[]) => mk(8, 5, ['>', 0, 2], ...items);
+/** Where the walker starts: it walks down column 4, rows 0 to 3, and back. It is in the robot's row on rounds 2, 4, 8, 10, 14, 16, ... */
+const WALK: Item = ['D', 4, 0];
+/** Two tiles to the left of the robot. */
+const LEFT: Item = ['2', 0, 0];
 
-const PATROLLER = { hp: 2, face: 'W' as const, patrol: { dir: 'S' as const, steps: 2 } };
+const WALKER = { hp: 2, patrol: { dir: 'S' as const, steps: 3 } };
+/** Heals 1 HP every 2 rounds: one shot per round gets it down, a shot every other round never does. */
+const REGENERATOR = { hp: 3, regen: { every: 2, amount: 1 } };
+/** The walker with a shield that is down 2 rounds and up 1: a rhythm of 3 next to the walk of 6. */
+const FLICKER = { ...WALKER, shieldCycle: { up: 1, down: 2 } };
 
-/** Each solution is the one before plus new lines (a loop around old lines adds only the `for` line). */
-const L = (n: number) => `for i in range(${n}):\n    fire()`;
-const S1 = `forward(4)\n${L(3)}`;
-const S2 = `${S1}\nturn_right()\n${L(6)}`;
-const S3 = `${S2}\nturn_right()\nturn_right()\nfor j in range(3):\n    forward()\nturn_right()\n${L(4)}`;
-const S4 = S3.replace(`forward(4)\n${L(3)}`, `forward(4)\nfor k in range(2):\n    for i in range(3):\n        fire()`);
+const S1 = 'for i in range(40):\n    if see() == "enemy":\n        fire()\n    else:\n        wait()';
+const S2 = S1.replace('    else:', '    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    else:');
+const S3 = S2.replace('        fire()', '        if enemy_shielded():\n            wait()\n        else:\n            fire()');
 
-/**
- * Chapter 2: for loops. One 8x10 arena (robot at (3, 9), `forward(4)` brings it to (3, 5)) with at most three dummies of different
- * hit points. The one to the east walks back and forth: not every shot hits, so the loop runs more often than it has hit points.
- */
+/** Chapter 2: if / elif / else. The robot has to look before it shoots: no shot may miss. */
 export const CHAPTER_2 = chapter(2, [
   {
-    id: 'tank-dummy',
-    title: T('Panzer-Attrappe', 'Tank Dummy'),
-    catchLine: T('Die Attrappe hat 3 Leben. Schreib eine for-Schleife.', 'The dummy has 3 HP. Write a for loop.'),
-    enemies: [{ hp: 3 }],
-    map: arena(NORTH),
-    needs: { uses: ['for'] },
-    solution: S1,
-    breaks: false,
-    par: 3,
-  },
-  {
-    id: 'patrol-dummy',
+    id: 'patrol',
     title: T('Streife', 'Patrol'),
-    catchLine: T('Rechts läuft eine Attrappe hin und her. Nicht jeder Schuss trifft.', 'A dummy on the right walks back and forth. Not every shot hits.'),
-    enemies: [{ hp: 3 }, PATROLLER],
-    map: arena(NORTH, EAST),
-    needs: { uses: ['for'] },
+    catchLine: T('Er läuft auf und ab. Kein Schuss darf danebengehen: nimm if und else.', 'It walks up and down. No shot may miss: use if and else.'),
+    enemies: [WALKER],
+    map: arena(WALK),
+    needs: { noMiss: true },
+    solution: S1,
+    par: lineCount(S1),
+  },
+  {
+    id: 'flank',
+    title: T('Flanke', 'Flank'),
+    catchLine: T('Links heilt sich einer jede zweite Runde. Dreh dich zu ihm: elif.', 'On the left one heals every other round. Turn to it: elif.'),
+    enemies: [WALKER, REGENERATOR],
+    map: arena(WALK, LEFT),
+    needs: { noMiss: true },
     solution: S2,
-    par: 6,
+    par: lineCount(S2),
   },
   {
-    id: 'corner-dummy',
-    title: T('Eckattrappe', 'Corner Dummy'),
-    catchLine: T('Links in der Ecke steht eine mit 4 Leben. Lauf hin, mit einer Schleife.', 'One with 4 HP stands in the far left corner. Walk there with a loop.'),
-    enemies: [{ hp: 3 }, PATROLLER, { hp: 4 }],
-    map: arena(NORTH, EAST, WEST),
-    needs: { uses: ['for'] },
+    id: 'flicker',
+    title: T('Flackerschild', 'Flicker Shield'),
+    catchLine: T('Der Läufer hat jetzt ein Schild im eigenen Takt. Kein Fehlschuss.', 'The walker now has a shield with its own rhythm. No missed shot.'),
+    enemies: [FLICKER, REGENERATOR],
+    map: arena(WALK, LEFT),
+    needs: { noMiss: true },
     solution: S3,
-    par: 14,
-  },
-  {
-    id: 'dummy-army',
-    title: T('Boss-Attrappe', 'Boss Dummy'),
-    catchLine: T('Boss: Die vordere hat jetzt 6 Leben. Höchstens 14 Zeilen.', 'Boss: the one ahead now has 6 HP. At most 14 lines.'),
-    enemies: [{ hp: 6 }, PATROLLER, { hp: 4 }],
-    map: arena(NORTH, EAST, WEST),
-    needs: { maxLines: 14 },
-    solution: S4,
-    par: 14,
+    par: lineCount(S3),
   },
 ]);

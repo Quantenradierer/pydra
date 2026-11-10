@@ -30,7 +30,7 @@ export interface Needs {
  */
 export interface EnemyData {
   id: string;
-  /** 0-4. */
+  /** 0-5. */
   chapter: number;
   title: Text;
   /** The pre-battle card: the catch in one sentence. */

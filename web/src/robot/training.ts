@@ -4,7 +4,6 @@
  * random numbers and positions). A daily fight uses a seed made from the date.
  * Every fight carries a script that wins it, so the generator is testable.
  */
-import { ENEMIES } from './content/index.ts';
 import { mk, T, wallCol } from './content/helpers.ts';
 import type { EnemyData } from './content/types.ts';
 import type { EnemyDef } from './layout.ts';
@@ -97,7 +96,6 @@ function decisions(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef
 }
 
 function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]; map: string[]; text: Words } {
-  const pickFrom = (id: string) => ENEMIES.find((e) => e.id === id)!;
   if (rng.chance(0.5)) {
     const regen = rng.chance(0.4);
     const hp = regen ? rng.between(4, 6) : rng.between(2, 4);
@@ -109,8 +107,9 @@ function walking(rng: Rng): Omit<TrainingFight, 'enemy'> & { enemies: EnemyDef[]
       text: regen ? { de: 'ein Gegner, der sich heilt', en: 'an enemy that heals itself' } : { de: 'ein weit entfernter Gegner', en: 'a far-away enemy' },
     };
   }
-  const src = pickFrom('side-guard');
-  return { enemies: src.enemies, map: src.map, solution: FINAL_SCRIPT, text: { de: 'ein Gegner, der seitlich steht', en: 'an enemy to the side' } };
+  // An enemy far down the hall and one far to the side: walk, look left and right, turn.
+  const side = rng.chance(0.5) ? 0 : 7;
+  return { enemies: [{ hp: 1 }, { hp: rng.between(2, 4) }], map: mk(8, 14, ['^', 3, 12], ['D', 3, rng.between(3, 6)], ['2', side, rng.between(8, 11)]), solution: FINAL_SCRIPT, text: { de: 'ein Gegner, der seitlich steht', en: 'an enemy to the side' } };
 }
 
 /** The fight of a seed for a player whose latest unlocked chapter is `level` (2-4). */

@@ -134,7 +134,6 @@ describe('every challenge, with its reference solution and the default gear', ()
   /** Challenges that cannot reach the usual window, and why: [min, max] rounds. */
   const exceptions: Record<string, [number, number]> = {
     'first-contact': [2, 30], // the very first lesson: one line, one shot
-    peekaboo: [1, 30], // one `if`, one shot
   };
   for (const e of ENEMIES) {
     it(`${e.id}: won with the default gear in a reasonable number of rounds, without a hard fight`, () => {
@@ -160,7 +159,7 @@ describe('every challenge, with its reference solution and the default gear', ()
 });
 
 describe('enemies ramp gently along the chain', () => {
-  const chain = ENEMIES.filter((e) => e.chapter <= 4);
+  const chain = ENEMIES.filter((e) => e.chapter <= 5);
   const top = (e: (typeof ENEMIES)[number]) => Math.max(...e.enemies.map((x) => x.hp));
   it('the strongest enemy gains at most 3 hit points from one challenge to the next', () => {
     chain.forEach((e, i) => {
@@ -176,15 +175,18 @@ describe('enemies ramp gently along the chain', () => {
 });
 
 describe('enemies are not all alike', () => {
-  const lastOf = (c: number) => ENEMIES.filter((e) => e.chapter === c).at(-1)!;
-  it('in the last challenge of Chapters 0, 1, 3 and 4 at most half of the enemies have exactly 2 hit points', () => {
-    for (const c of [0, 1, 3, 4]) {
-      const hps = lastOf(c).enemies.map((d) => d.hp);
-      expect(hps.filter((hp) => hp === 2).length, `Chapter ${c}: ${hps.join(',')}`).toBeLessThanOrEqual(Math.ceil(hps.length / 2));
-      expect(new Set(hps).size, `Chapter ${c}: ${hps.join(',')}`).toBeGreaterThanOrEqual(2);
+  it('a challenge with several enemies never gives all of them the same hit points', () => {
+    for (const e of ENEMIES) {
+      const hps = e.enemies.map((d) => d.hp);
+      if (hps.length > 1) expect(new Set(hps).size, `${e.id}: ${hps.join(',')}`).toBeGreaterThanOrEqual(2);
     }
   });
-  it('a moving or shielded enemy is worth 2 hit points because the script has to do more for it', () => {
-    for (const e of ENEMIES) for (const d of e.enemies) if (d.patrol || d.shieldCycle) expect(d.hp, e.id).toBe(2);
+  it('a walking enemy has at most 2 hit points (it is hard to hit); standing ones carry the big numbers', () => {
+    for (const e of ENEMIES) for (const d of e.enemies) if (d.patrol) expect(d.hp, e.id).toBeLessThanOrEqual(2);
+    expect(Math.max(...ENEMIES.flatMap((e) => e.enemies.filter((d) => !d.patrol).map((d) => d.hp)))).toBeGreaterThanOrEqual(4);
+  });
+  it('at most half of all enemy slots of the game have exactly 2 hit points', () => {
+    const all = ENEMIES.flatMap((e) => e.enemies.map((d) => d.hp));
+    expect(all.filter((hp) => hp === 2).length).toBeLessThanOrEqual(all.length / 2);
   });
 });

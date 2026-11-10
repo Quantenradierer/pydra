@@ -3,7 +3,7 @@ import { ENEMIES } from './content/index.ts';
 import { trainingFight } from './training.ts';
 
 /** The same word in both languages (a name, not a missing translation). */
-const NAMES = new Set(['Regenerator', 'Countdown']);
+const NAMES = new Set<string>();
 
 describe('every task text exists in German and in English', () => {
   it('enemies: title and catch line differ between the languages', () => {

@@ -12,12 +12,8 @@ export interface Needs {
   say?: boolean;
   /** One of the bubbles must start with this text. */
   sayPrefix?: string;
-  /** `sayPrefix` only counts when the robot's HP really falls below this (a sturdier chassis may never get there). */
-  sayIfHpBelow?: number;
   /** The script may have at most this many lines of code (blank lines and comments do not count). */
   maxLines?: number;
-  /** Exactly one bubble must read exactly this (a say() after a loop, not inside it). */
-  sayOnce?: string;
   /** The player may lose at most this many HP over one layout. */
   maxDamage?: number;
   /** No shot of the player may hit a raised shield (blocked shots are wasted). */

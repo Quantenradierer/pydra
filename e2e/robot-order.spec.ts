@@ -79,7 +79,7 @@ test('exactly one list of challenges, no list of fights, no fight counter - befo
     await expect(page.getByTestId('level-strip'), when).toHaveCount(1);
     // The pills are the challenges of the chapter: one pill each, none of them a fight.
     const chapter = await page.evaluate(() => document.querySelectorAll('[data-testid="level-strip"] .level-dot').length);
-    expect(chapter, when).toBeGreaterThan(5);
+    expect(chapter, when).toBeGreaterThanOrEqual(4);
     await expect(page.locator('.level-dot'), when).toHaveCount(chapter);
     await expect(page.locator('.rb-chips, .robot-layouts, .robot-queue, [data-testid^="robot-vq"], [data-testid^="robot-layout"]'), when).toHaveCount(0);
     const text = await page.locator('main.robot').innerText();
@@ -111,12 +111,12 @@ test('the pills of a chapter are 1..N in order, with no gaps, no dashed side pil
   await open(page, 'training-dummy', 'de');
   const pills = page.locator('[data-testid="level-strip"] .level-dot');
   const n = await pills.count();
-  expect(n).toBe(7);
+  expect(n).toBe(4);
   expect(await pills.allInnerTexts()).toEqual(Array.from({ length: n }, (_, i) => String(i + 1)));
   await expect(page.locator('.level-dot.side')).toHaveCount(0);
   // The map: every chapter counts its challenges, none is missing or extra.
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
-  for (const [chapter, count] of [[0, 7], [1, 7], [2, 5]] as const) {
+  for (const [chapter, count] of [[0, 4], [1, 4], [2, 4]] as const) {
     const section = page.getByTestId(`robot-chapter-${chapter}`);
     await section.evaluate((d) => ((d as HTMLDetailsElement).open = true));
     await expect(section.locator('.level-dot')).toHaveCount(count);

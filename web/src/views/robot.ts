@@ -222,8 +222,6 @@ export function robotScreen(app: App): Screen {
         return t('robot.outcome.without', { words: words(enemy.needs?.without) });
       case 'repeat':
         return t('robot.outcome.repeat');
-      case 'sayOnce':
-        return t('robot.outcome.sayOnce', { text: enemy.needs?.sayOnce ?? '' });
     }
   }
 

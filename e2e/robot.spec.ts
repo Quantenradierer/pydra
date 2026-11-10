@@ -208,10 +208,10 @@ test('Chapter 3: if / elif / else grow one script: ahead, right, behind, the shi
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
-  // Health Check: the sniper; the script has to say "low".
+  // Sniper: it shoots back, so the old script (that deals with the others first) is destroyed.
   await page.getByTestId('robot-step-sniper').click();
   await runFight(page);
-  await expect(page.getByTestId('robot-outcome')).toContainText('nicht „low“ gesagt');
+  await expect(page.getByTestId('robot-outcome')).toContainText('Verloren');
   await fillCode(page, solution('sniper'));
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');

@@ -48,28 +48,27 @@ An enemy fires like the player's blaster (1 per round at most), so no enemy out-
 
 | Enemy | HP | Damage per round | Notes |
 | --- | --- | --- | --- |
-| Dummy | 1 (first lesson of Chapter 0, Chapter 3, far/left dummies), 2 (near dummy, corner), 3 (Chapter 2, the right dummy of Chapters 0/1) | 0 | Does not move or shoot. Chapters 0/1/4 mix 1, 2 and 3 HP (rb25). |
-| Patroller (Chapter 4) | 2 | 0 | Walks a fixed path back and forth (4 rounds), steps after the attacks. A moving 2 HP asks more of the script than a static 5. |
-| Flicker shield (Chapter 4) | 2 | 0 | The patroller with a shield that is down 2 / up 1 rounds (a 3-round rhythm next to the 4-round walk); blocks every shot while up. Shots at it must not miss. |
+| Dummy | 1-6 | 0 | Does not move or shoot. At most 3 enemies per challenge; Chapters 0, 1, 2, 3, 4 mix 1, 2, 3, 4 HP (rb25, rb26). |
+| Patroller (Chapters 2 and 4) | 2 | 0 | Walks a fixed path back and forth (4 rounds), steps after the attacks. A moving 2 HP asks more of the script than a static 5. |
+| Periodic shield (Chapter 3) | 2 | 0 | Does not move; shield up 2 rounds, down 1; blocks every shot while up. |
+| Flicker shield (Chapter 4) | 2 | 0 | The patroller with a shield that is down 1 / up 2 rounds (a 3-round rhythm next to the 4-round walk). Shots at it must not miss. |
 | Big dummy (Chapter 2 boss) | 6 (was 15) | 0 | Behind the first dummy; three passes of the loop. |
 | Shield dummy | 2 (was 3) | 0 | Raises its shield every other round. |
-| Sniper | 4 (was 5) | 1 | `fire()` every round from the far end of the column. |
+| Sniper (Chapter 3) | 2 | 1 | `fire()` every round along the robot's row from the left; the robot must turn to it first. |
 | Regenerator | 4 (was 6) | 0 | Heals 1 HP every 2 rounds (0.5 per round), so it needs more than the blaster's 1 per round to fall: net 0.5. |
 
 Other Chapter 2 dummies went from 5 to 3 HP and the loops of the solutions from `range(5)` to `range(3)`.
 
 ## Rounds per challenge (default gear, reference solution)
 
-| Chapter | Rounds before | Rounds after |
-| --- | --- | --- |
-| 0 | 2-30 | 2-30 |
-| 1 | 4-23 | 4-23 |
-| 2 | 9-37 | 7-25 |
-| Practice Field I | 9-37 | 7-25 |
-| 3 | 1-13 | 1-12 |
-| 4 | 4-24 | 4-28 (Patrol 26, Flicker Shield 28) |
-| Exams | 3-39 | 3-38 |
+| Chapter | Rounds (rb26) |
+| --- | --- |
+| 0 | 2-19 |
+| 1 | 4-14 |
+| 2 | 7-27 |
+| 3 | 1-14 |
+| 4 | 3-26 (Patrol 20, Flicker Shield 26) |
 
-Outliers left on purpose (listed in `balance.test.ts`): `first-contact` (2) and `peekaboo` (1) are one-line lessons, and Exams 2-4 (`pg2-b..d`, up to 38) are walks of the one general script.
+Outliers left on purpose (listed in `balance.test.ts`): `first-contact` (2) and `peekaboo` (1) are one-line lessons.
 
-rb25: `balance.test.ts` also checks that enemy hit points are mixed (at most half of the last challenge's enemies at exactly 2 HP in Chapters 0, 1, 3, 4) and that moving or shielded enemies have 2 HP.
+rb25/rb26: `balance.test.ts` also checks that enemy hit points are mixed (at most half of the last challenge's enemies at exactly 2 HP in Chapters 0, 1, 3, 4) and that moving or shielded enemies have 2 HP.

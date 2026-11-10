@@ -135,9 +135,6 @@ describe('every challenge, with its reference solution and the default gear', ()
   const exceptions: Record<string, [number, number]> = {
     'first-contact': [2, 30], // the very first lesson: one line, one shot
     peekaboo: [1, 30], // one `if`, one shot
-    'pg2-b': [3, 40], // the one general script wanders the arena
-    'pg2-c': [3, 40],
-    'pg2-d': [3, 40],
   };
   for (const e of ENEMIES) {
     it(`${e.id}: won with the default gear in a reasonable number of rounds, without a hard fight`, () => {

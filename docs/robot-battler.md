@@ -322,16 +322,9 @@ a rule, a branch, a block), and
 So the script never has to be rebuilt: what was right for challenge n-1 is the first part of what is right for n. Loops are therefore *added*:
 a second `for` for the next dummy, a `for` around the old loop for the big dummy. Rules that would force a rewrite (line limits that
 need a loop instead of lines) are used only where the old lines are kept (`maxLines` 12 in Dummy Army counts the old lines plus the one new `for`).
-Practice Field I and the Exams take the map of an earlier challenge and are won by ONE script each (checked in `chain.test.ts`).
 A chapter boundary may start something new (`say()`, `for`, `if`, `while`) but the script of the chapter before is still in the editor and still runs.
 
-| Chapter | Chain (new thing each) |
-| --- | --- |
-| 0 (7) | `first-contact` -> hp 2 -> a second dummy far behind -> a dummy on the right -> on the left -> top right -> a wall in front of it |
-| 1 (7) | greet (`say`) -> second dummy far away (`forward(2)`) -> count shots (`shots = shots + 1`, say it once) -> a dummy on the right measured with `distance()` -> say `"Distance: " + str(d)` -> far left -> top |
-| 2 (5) | a `for` loop for the tank -> a dummy on the right (second loop) -> `say("done")` once after the loops -> a dummy on the left -> a 6 HP dummy behind the first: a loop around the loop, at most 12 lines |
-| 3 (5) | `if see() == "enemy"` -> right dummy (`elif see_right()`, the loop) -> a dummy behind you (`else: turn_right()`) -> a shielded dummy (`enemy_shielded()`, no wasted shot) -> a sniper (`say("low")` below 6 HP) |
-| 4 (7) | walk until `see()` -> a regenerating dummy behind it (`while alive()`) -> countdown without `for` -> a guard on the left (`while see() == "enemy"`) -> `while True` + `break` -> **a patroller** (turn east, `while shots < 2: if see() == "enemy": fire() ... else: wait()`) -> **its flickering shield** (`if not enemy_shielded()`) |
+The challenge list with the one new construct and the one new arena element of every step is in `docs/robot-challenges.md` (rb26). Chapters: 0 (4), 1 (4), 2 (4), 3 (5), 4 (5).
 
 Dropped because they cannot be added to a chain without a rewrite: the Chapter 3 Charger and Gatekeeper (two enemies that fight back in the same lane as the dummies), Maze
 Runner / Hide & Seek / Sentry / Patroller (walls turn the open hall into a corridor and change the frame), Math Dummy / Armored Dummy (a line limit or a bigger number replaces lines),
@@ -362,3 +355,11 @@ The loop needs an `else: wait()`: a pass without an action is the "loop that nev
 **Hit points** (balance): Chapter 0 dummies are 2 / 1 / 3 / 1 / 2 (first lesson 1, second 2), Chapter 1 2 / 2 / 3 / 1 / 1, Chapter 4 1 / 4 (regenerator) / 3 / 2 (patroller); Chapter 2 stays at 3 (the loops are `range(3)`) and Chapter 3 at 1 / 2 / 4. `balance.test.ts` checks that the last challenge of Chapters 0, 1, 3, 4 has at most half of its enemies at exactly 2 HP and that every moving or shielded enemy has 2 HP.
 
 Not built (ideas, same pattern): a gate that opens on a rhythm (needs a tile state in the frames and the canvas), an enemy that retreats when approached or turns to face you.
+
+## rb26: few enemies, real situations, no padding
+
+* **At most 3 enemies per challenge**, never "the last one plus one more dummy": a challenge that adds an enemy must also add a construct, a wall or an enemy behaviour (`chain.test.ts`). The chain may swap an enemy for another (`patroller`, `sniper`).
+* **Mechanics early:** the wall in Chapter 0 (`wall-dummy`: shots bounce, drive around), the patrol in Chapter 2 (`patrol-dummy`), a periodic shield in Chapter 3 (`bubble`, up 2 / down 1) and a shooting enemy (`sniper`), patrol + shield together in Chapter 4 (`flicker`).
+* **No required nonsense output:** `needs.sayOnce` and `needs.sayIfHpBelow` are gone ("done", "low", "Liftoff!"), `say()` is the robot's log line (`status-report`, `range-report`), never speech to an enemy. The Chapter 4 countdown and the Chapter 1 counter are removed; `break-out` became the wait loop of `patroller`.
+* **Review chapters removed** (Practice Field I, Exams, `final-exam`, the certificate): 13 challenges with 2 scripts. Old saves keep working (unknown ids are dropped). The Training Grounds keep their own general scripts.
+* **HP bar:** the arena draws one segment per hit point (`art/arena.ts`, `hpSegments`), so a 1 HP and a 3 HP enemy look different (unit test in `art/arena.test.ts`, e2e in `robot-fight.spec.ts`).

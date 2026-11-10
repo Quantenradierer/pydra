@@ -17,7 +17,7 @@ export interface FightReport {
   /** Won: every enemy down and the extra conditions met. */
   won: boolean;
   /** Why not, when the enemy is down but a condition failed. */
-  unmet?: 'say' | 'sayPrefix' | 'sayOnce' | 'damage' | 'waste' | 'miss' | 'uses' | 'without' | 'repeat';
+  unmet?: 'say' | 'sayPrefix' | 'damage' | 'waste' | 'miss' | 'uses' | 'without' | 'repeat';
 }
 
 export interface EnemyReport {
@@ -60,10 +60,7 @@ export function judge(battle: BattleResult, needs: Needs | undefined, script = '
   if (needs?.noRepeatedNumber && repeatsNumber(script)) return { battle, won: false, unmet: 'repeat' };
   const said = battle.frames.flatMap((f) => f.bubbles.filter((b) => b.robot === 'player').map((b) => b.text));
   if (needs?.say && said.length === 0) return { battle, won: false, unmet: 'say' };
-  const lowest = Math.min(...battle.frames.flatMap((f) => f.robots.filter((r) => r.id === 'player').map((r) => r.hp)));
-  const needsPrefix = needs?.sayPrefix !== undefined && (needs.sayIfHpBelow === undefined || lowest < needs.sayIfHpBelow);
-  if (needsPrefix && !said.some((t) => t.startsWith(needs!.sayPrefix!))) return { battle, won: false, unmet: 'sayPrefix' };
-  if (needs?.sayOnce && said.filter((t) => t === needs.sayOnce).length !== 1) return { battle, won: false, unmet: 'sayOnce' };
+  if (needs?.sayPrefix !== undefined && !said.some((t) => t.startsWith(needs.sayPrefix!))) return { battle, won: false, unmet: 'sayPrefix' };
   return { battle, won: true };
 }
 

@@ -129,3 +129,11 @@ test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next b
   await page.getByTestId('start-robot').click();
   await expect(page.getByTestId('robot-continue')).toContainText('Kapitel 1: Zahlen und Variablen · Aufgabe 1');
 });
+
+test('the arena shows each enemy\'s hit points: one bar segment per HP, so different HP looks different', async ({ page }) => {
+  await openTask(page, 'sign-dummy', 'forward()', ['first-contact', 'one-more-line', 'training-dummy', 'wall-dummy', 'status-report', 'far-dummy']);
+  const segments = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>('.rb-unit.enemy')].map((u) => u.querySelectorAll('.rb-hp i').length).sort(),
+  );
+  expect(segments).toEqual([1, 2, 3]);
+});

@@ -6,7 +6,7 @@ const FAR: [string, number, number] = ['D', 3, 5];
 const HEALER: [string, number, number] = ['2', 3, 2];
 const SIDE: [string, number, number] = ['3', 0, 10];
 
-const REGEN = { hp: 6, regen: { every: 2, amount: 1 } };
+const REGEN = { hp: 4, regen: { every: 2, amount: 1 } };
 
 /** Each solution is the one before plus new lines. */
 const S1 = 'while see() != "enemy":\n    forward()\nfire()\nfire()';

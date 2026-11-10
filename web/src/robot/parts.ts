@@ -5,6 +5,7 @@
  * script; status methods answer at once. Using an action that is not charged
  * costs the tick but does not crash.
  */
+import { BLASTER, BURST, CANNON, HAMMER, RANGE, SHIELD } from './balance.ts';
 import { CHASSIS, type Build, type GearId } from './build.ts';
 import { DIRS, opposite, step as stepPos, turnLeft, turnRight, type Dir, type Intent, type World } from './engine.ts';
 import { RbError } from './py/errors.ts';
@@ -14,7 +15,7 @@ import { ActionRequest, PyTuple, repr, type HostFunction, type HostObject, type 
 export type Step = Intent | (() => Intent);
 
 export const MAX_SAY = 40;
-export const RANGE = 5;
+export { RANGE };
 
 /** What the parts need from the battle. */
 export interface RobotContext {
@@ -88,8 +89,9 @@ export function createEnv(rc: RobotContext): Env {
     const treads = build.locomotion === 'treads';
     globals.forward = fn('forward', (a) => action('forward', times(count('forward', a, 1, 0, 20, 'a number from 0 to 20'), () => move(me().facing) as Intent)));
     globals.backward = fn('backward', (a) => action('backward', times(count('backward', a, 1, 0, 20, 'a number from 0 to 20'), () => move(opposite(me().facing)) as Intent)));
-    /** Treads turn slowly: a lost tick first, then the turn. */
-    const turn = (side: 'left' | 'right'): Step[] => (treads ? [{ type: 'wait' }, { type: 'turn', side }] : [{ type: 'turn', side }]);
+    /** Treads and the heavy medium chassis turn slowly: a lost tick first, then the turn. */
+    const slowTurn = treads || CHASSIS[build.chassis].slowTurn;
+    const turn = (side: 'left' | 'right'): Step[] => (slowTurn ? [{ type: 'wait' }, { type: 'turn', side }] : [{ type: 'turn', side }]);
     globals.turn_left = fn('turn_left', () => action('turn_left', turn('left')));
     globals.turn_right = fn('turn_right', () => action('turn_right', turn('right')));
     if (treads) globals.push = fn('push', () => action('push', [{ type: 'push' }]));
@@ -125,8 +127,8 @@ export function createEnv(rc: RobotContext): Env {
   // ---- weapons
   if (has('blaster')) {
     const burst = build.blasterMark === 2;
-    const shoot = (): Intent => ({ type: 'shoot', damage: 1, range: RANGE });
-    const fireOnce = use('blaster', 0, shoot());
+    const shoot = (): Intent => ({ type: 'shoot', damage: BLASTER.damage, range: RANGE });
+    const fireOnce = use('blaster', BLASTER.cooldown, shoot());
     const methods: Record<string, HostFunction> = {
       ...common('blaster'),
       fire: fn('fire', (a) => {
@@ -134,14 +136,14 @@ export function createEnv(rc: RobotContext): Env {
           if (a.length > 0) throw new RbError('TypeError', 'arg-count', { name: 'fire', expected: 0, given: a.length }, 0, 'fire() takes no arguments');
           return action('fire', [fireOnce]);
         }
-        const shots = count('fire', a, 1, 1, 3, 'a number of shots from 1 to 3');
+        const shots = count('fire', a, 1, 1, BURST.maxShots, `a number of shots from 1 to ${BURST.maxShots}`);
         const steps: Step[] = Array.from({ length: shots }, () =>
-          use('blaster', 0, shoot(), () => {
+          use('blaster', BLASTER.cooldown, shoot(), () => {
             const s = st('blaster');
-            s.heat += 3;
-            if (s.heat >= 10) {
-              s.heat = 10;
-              s.lock = 3;
+            s.heat += BURST.heatPerShot;
+            if (s.heat >= BURST.heatLimit) {
+              s.heat = BURST.heatLimit;
+              s.lock = BURST.lockTicks;
             }
           }),
         );
@@ -158,9 +160,9 @@ export function createEnv(rc: RobotContext): Env {
     const methods: Record<string, HostFunction> = {
       ...common('cannon'),
       fire: fn('fire', (a) => {
-        if (a.length === 0) throw new RbError('TypeError', 'bad-arg', { name: 'fire', expected: 'a power from 1 to 3, like fire(2)', given: 'nothing' }, 0, 'fire() missing power');
-        const power = count('fire', a, 1, 1, 3, 'a power from 1 to 3');
-        return action('fire', [use('cannon', power, { type: 'shoot', damage: power, range: RANGE })]);
+        if (a.length === 0) throw new RbError('TypeError', 'bad-arg', { name: 'fire', expected: `a power from 1 to ${CANNON.maxPower}, like fire(${CANNON.maxPower})`, given: 'nothing' }, 0, 'fire() missing power');
+        const power = count('fire', a, 1, 1, CANNON.maxPower, `a power from 1 to ${CANNON.maxPower}`);
+        return action('fire', [use('cannon', CANNON.cooldownOf(power), { type: 'shoot', damage: power, range: RANGE })]);
       }),
     };
     globals.cannon = obj('cannon', methods);
@@ -170,7 +172,7 @@ export function createEnv(rc: RobotContext): Env {
   if (has('hammer')) {
     const methods: Record<string, HostFunction> = {
       ...common('hammer'),
-      smash: fn('smash', () => action('smash', [use('hammer', 2, { type: 'melee', damage: 3 })])),
+      smash: fn('smash', () => action('smash', [use('hammer', HAMMER.cooldown, { type: 'melee', damage: HAMMER.damage })])),
     };
     globals.hammer = obj('hammer', methods);
     globals.smash = methods.smash!;
@@ -183,7 +185,7 @@ export function createEnv(rc: RobotContext): Env {
   if (has('shield')) {
     const methods: Record<string, HostFunction> = {
       ...common('shield'),
-      activate: fn('activate', () => action('activate', [use('shield', 2, { type: 'shield' })])),
+      activate: fn('activate', () => action('activate', [use('shield', SHIELD.cooldown, { type: 'shield' })])),
       is_up: fn('is_up', () => me().shieldUp),
     };
     globals.shield = obj('shield', methods);

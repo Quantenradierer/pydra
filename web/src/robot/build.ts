@@ -4,9 +4,10 @@ export type LocomotionId = 'wheels' | 'legs' | 'treads';
 export type GearId = 'blaster' | 'cannon' | 'eyes' | 'hammer' | 'shield' | 'gps' | 'plates';
 export type AddonId = 'wide' | 'scanner';
 
-export const CHASSIS: Record<ChassisId, { slots: number; hp: number }> = {
-  light: { slots: 2, hp: 8 },
-  medium: { slots: 3, hp: 12 },
+/** Light: fast turns, 2 slots. Medium: one more slot and more HP, but a heavy frame that turns slowly (a lost tick, like treads). */
+export const CHASSIS: Record<ChassisId, { slots: number; hp: number; slowTurn: boolean }> = {
+  light: { slots: 2, hp: 8, slowTurn: false },
+  medium: { slots: 3, hp: 10, slowTurn: true },
 };
 
 export const LOCOMOTIONS: readonly LocomotionId[] = ['wheels', 'legs', 'treads'];

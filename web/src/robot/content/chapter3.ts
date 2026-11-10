@@ -8,8 +8,8 @@ const LEFT: [string, number, number] = ['D', 1, 6];
 const SHIELDED: [string, number, number] = ['2', 4, 2];
 const SNIPER: [string, number, number] = ['3', 4, 1];
 
-const SHIELD_DUMMY = { hp: 3, gear: ['shield'], script: 'while True:\n    shield.activate()\n    wait()' };
-const SNIPER_DEF = { hp: 5, script: 'while True:\n    fire()' };
+const SHIELD_DUMMY = { hp: 2, gear: ['shield'], script: 'while True:\n    shield.activate()\n    wait()' };
+const SNIPER_DEF = { hp: 4, script: 'while True:\n    fire()' };
 
 /** Each solution is the one before plus new lines (a block around old lines adds only its `if` / `for` line). */
 const S1 = 'if see() == "enemy":\n    fire()';

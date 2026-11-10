@@ -33,7 +33,7 @@ const SUG = {
   'robot.sug.group.plates': ['Panzerplatten', 'Armor plates'],
   'robot.sug.group.basics': ['Immer da', 'Always there'],
   'robot.sug.part.blaster': ['Teil: schießt geradeaus', 'part: shoots straight ahead'],
-  'robot.sug.part.cannon': ['Teil: schießt mit Stärke 1 bis 3', 'part: shoots with power 1 to 3'],
+  'robot.sug.part.cannon': ['Teil: schießt mit Stärke 1 bis 2', 'part: shoots with power 1 to 2'],
   'robot.sug.part.eyes': ['Teil: sieht, was vor dir ist', 'part: sees what is ahead'],
   'robot.sug.part.hammer': ['Teil: schlägt aufs Feld vor dir', 'part: hits the tile ahead'],
   'robot.sug.part.shield': ['Teil: blockt einen Treffer', 'part: blocks one hit'],

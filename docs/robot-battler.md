@@ -14,7 +14,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | --- | --- |
 | Deterministic grid/tick engine: HP, armor, walls, rubble, pits, simultaneous resolution, shields, regeneration, push, armor plates, seeded RNG, tick limit | `engine.ts`, `rng.ts`, `layout.ts` (ASCII maps, seeded mirroring) |
 | Python interpreter for the teaching subset, **resumable** (generators pause at action calls, per-tick step budget), friendly errors (de/en) with did-you-mean, pre-battle checker, CPython golden tests (200 snippets) | `py/` (`lexer`, `parser`, `interp`, `builtins`, `values`, `check`, `errors`), `friendly.ts`, `messages-errors.ts` |
-| Parts as host objects: wheels, spider legs, **treads** (+3 armor, 2-tick turns, `push()`), blaster (+ burst Mk II), cannon, eyes (+ wide-angle, shield scanner), hammer, shield, GPS, **armor plates** (free like all gear), `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
+| Parts as host objects: wheels, spider legs, **treads** (+3 armor, 2-tick turns, `push()`), blaster (+ burst Mk II), cannon (power 1-2, recharge power + 1), eyes (+ wide-angle, shield scanner), hammer, shield, GPS, **armor plates** (free like all gear), `clock`; "not equipped" messages; uncharged actions lose the tick | `parts.ts`, `build.ts` |
 | Battle runner recording frames (positions, events, script line, sensor reads, say() bubbles) | `battle.ts` |
 | Robot art: registry + sockets + renderer, used by the build screen, arena, cards, Home (see *Robot art*) | `robot/art/`, `views/robot-bench.ts`, `views/robot-gallery.ts` |
 | Canvas replay viewer: scrub/step/play, code line highlight, sensors, text log of every tick | `replay.ts`, `views/robot.ts` |
@@ -26,7 +26,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | **Training Grounds** (from Chapter 2): endless seeded fights built from the frame of the latest chapter, plus a daily fight (seed from the date); every generated fight has a winning script and is tested for 60 seeds | `training.ts`, `RobotGame.trainingStep/runTraining` |
 | Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`) (every enemy is won by its solution and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot-order.spec.ts` (page order, one list, no fight list, bug-hunt text), `e2e/robot.spec.ts` (one-page layout, loop, builder, bug-hunt fight, Chapter 3, Chapter 4 to the certificate, Training Grounds, stepping view on phone and desktop, call stack) | |
 
-Deviations from the doc, on purpose: chassis HP is 8/12 (the table), not "10 default"; battles run on the main thread (they
+Deviations from the doc, on purpose: chassis HP is 8/10 (the table), not "10 default"; battles run on the main thread (they
 are tiny: the engine is pure and worker-ready, see Remaining work); the editor is a `<textarea>` (no CodeMirror
 dependency); `wait()` costs one tick ("free" in the doc means "needs no part"); `distance()` returns 0 when nothing is in
 range; a win ends the battle at once, but free statements right after the winning action (e.g. `say("done")`) still run.
@@ -329,7 +329,7 @@ A chapter boundary may start something new (`say()`, `for`, `if`, `while`) but t
 | --- | --- |
 | 0 (7) | `first-contact` -> hp 2 -> a second dummy far behind -> a dummy on the right -> on the left -> top right -> a wall in front of it |
 | 1 (7) | greet (`say`) -> second dummy far away (`forward(2)`) -> count shots (`shots = shots + 1`, say it once) -> a dummy on the right measured with `distance()` -> say `"Distance: " + str(d)` -> far left -> top |
-| 2 (5) | a `for` loop for the tank -> a dummy on the right (second loop) -> `say("done")` once after the loops -> a dummy on the left -> a 15 HP dummy behind the first: a loop around the loop, at most 12 lines |
+| 2 (5) | a `for` loop for the tank -> a dummy on the right (second loop) -> `say("done")` once after the loops -> a dummy on the left -> a 6 HP dummy behind the first: a loop around the loop, at most 12 lines |
 | 3 (5) | `if see() == "enemy"` -> right dummy (`elif see_right()`, the loop) -> a dummy behind you (`else: turn_right()`) -> a shielded dummy (`enemy_shielded()`, no wasted shot) -> a sniper (`say("low")` below 6 HP) |
 | 4 (5) | walk until `see()` -> a regenerating dummy behind it (`while alive()`) -> countdown without `for` -> a guard on the left (`while see() == "enemy"`) -> `while True` + `break` |
 
@@ -337,3 +337,5 @@ Dropped because they cannot be added to a chain without a rewrite: the Chapter 3
 Runner / Hide & Seek / Sentry / Patroller (walls turn the open hall into a corridor and change the frame), Math Dummy / Armored Dummy (a line limit or a bigger number replaces lines),
 Twin Armor and Obstacle Course as they were (they moved dummies). Gear is still optional: every solution wins with the default build (`gear.test.ts`, which also runs them with the
 medium chassis and each other part). Ids that changed meaning keep their name where the position in the chain is the same (`training-dummy` is now the second dummy).
+
+**Balance (rb24):** weapon, chassis and enemy numbers and the rules behind them are in `docs/robot-balance.md`; `balance.test.ts` fails when ranged out-damages melee, a part dominates another, a fight leaves the round window or enemy HP jumps. Cannon: power 1-2, recharge power + 1; medium chassis: 10 HP, turns slowly; Chapter 2 dummies 3 HP (loops of 3), big dummy 6; shield dummy 2, sniper 4, regenerator 4.

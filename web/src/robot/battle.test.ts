@@ -58,9 +58,9 @@ describe('runBattle', () => {
     expect(wheels.frames[1]!.events).toContainEqual({ type: 'bump', robot: 'player', reason: 'rubble' });
   });
 
-  it('cannon power is damage and cooldown; an uncharged action loses the tick', () => {
-    const r = runBattle({ build: withGear({ gear: ['cannon', 'eyes'] }), script: 'fire(3)\nfire(1)\nfire(1)', layout: layout(['>D'], [{ hp: 4 }]) });
-    expect(r.frames[1]!.events).toContainEqual(expect.objectContaining({ type: 'damage', amount: 3 }));
+  it('cannon power is damage, recharge is power + 1 rounds; an uncharged action loses the tick', () => {
+    const r = runBattle({ build: withGear({ gear: ['cannon', 'eyes'] }), script: 'fire(2)\nfire(1)\nfire(1)', layout: layout(['>D'], [{ hp: 4 }]) });
+    expect(r.frames[1]!.events).toContainEqual(expect.objectContaining({ type: 'damage', amount: 2 }));
     expect(r.frames[2]!.events).toContainEqual({ type: 'fizzle', robot: 'player', part: 'cannon', reason: 'charging', ticks: 2 });
     expect(r.frames[3]!.events).toContainEqual({ type: 'fizzle', robot: 'player', part: 'cannon', reason: 'charging', ticks: 1 });
   });

@@ -23,8 +23,7 @@ of scope; `try / except` stays outside the subset (friendly "not available" mess
 | **44 challenges** in one linear chain, no side branches: Chapter 0 (7), 1 (7), 2 (5), Practice Field I (5), Chapter 3 (5), Chapter 4 (7), Exams (7 + boss Final Exam); one map each (`map`). See *rb23: one script, one chain* | `content/chapter0.ts` ... `chapter4.ts`, `proving1.ts`, `proving2.ts`, test `chain.test.ts` |
 | Build/code/battle/improve loop; "never a blank file" persistence; stars; script history with restore; points/XP via the existing points system (`game: 'robot'`); **Basics Certificate** banner after the Final Exam | `game.ts`, `fight.ts` |
 | **No other kinds of task** (rb23): there are no bug hunts (Glitch), special rules (Constraint) or side missions (`side`). Every task is a fight against an enemy on the normal battle screen; rules inside a fight stay as `needs` | `content/*.ts` |
-| **Training Grounds** (from Chapter 2): endless seeded fights built from the frame of the latest chapter, plus a daily fight (seed from the date); every generated fight has a winning script and is tested for 60 seeds | `training.ts`, `RobotGame.trainingStep/runTraining` |
-| Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`) (every enemy is won by its solution and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot-order.spec.ts` (page order, one list, no fight list, bug-hunt text), `e2e/robot.spec.ts` (one-page layout, loop, builder, bug-hunt fight, Chapter 3, Chapter 4 to the certificate, Training Grounds, stepping view on phone and desktop, call stack) | |
+| Tests: 500+ robot unit tests (incl. `trace.test.ts`, `stepper.test.ts`) (every enemy is won by its solution and not won by the previous solution; chapter-specific rule tests in `chapters.test.ts`), Playwright `e2e/robot-order.spec.ts` (page order, one list, no fight list, bug-hunt text), `e2e/robot.spec.ts` (one-page layout, loop, builder, bug-hunt fight, Chapter 3, Chapter 4 to the certificate, stepping view on phone and desktop, call stack) | |
 
 Deviations from the doc, on purpose: chassis HP is 8/10 (the table), not "10 default"; battles run on the main thread (they
 are tiny: the engine is pure and worker-ready, see Remaining work); the editor is a `<textarea>` (no CodeMirror
@@ -256,7 +255,7 @@ action command such as `fire()` costs, then the arena moves); the only counter o
 
 ## Dead-controls smoke test
 
-`e2e/robot-controls.spec.ts` visits the task map, the task page before and after a lost and a won fight, the sheets (parts, help, more), challenges and the Training. It
+`e2e/robot-controls.spec.ts` visits the task map, the task page before and after a lost and a won fight, the sheets (parts, help, more), and challenges. It
 presses every visible, enabled, uncovered button and summary and requires that the DOM, the route, a text field or the
 saved game changes; otherwise the control must be disabled. Found and fixed: the replay buttons "Zeile zurück", "Eine
 Runde zurück", "Von vorn" at the start and "Zum Ende" / forward at the end did nothing, now disabled.
@@ -309,7 +308,7 @@ with a new map and solution), **9 Glitch** challenges (gl-foward, gl-parens, gl-
 **5 Constraint** challenges (cn-row-3, cn-tank-3, cn-no-repeat, cn-double-5, cn-maze-no-for): 29 in all, 76 steps before, 42 now. With them went `content/challenges.ts`, `challenges.ts`, `challenges.test.ts`, `Step.kind` / `Step.challenge`,
 `fightOf`, the `challenges` argument of `RobotGame`, the `side` field of `EnemyData`, `robot.side`, the dashed `.level-dot.side` pill and the glitch code in
 `views/robot.ts` (`checkGlitch`, `injectGlitch`, `glitchSeen`). Old saves keep working: `parseProgress` drops ids that no longer exist (solved, stars, misses, current)
-and keeps the script, the build and the history (`game.test.ts`, e2e `an old save with removed challenge ids`). Training stays as it was.
+and keeps the script, the build and the history (`game.test.ts`, e2e `an old save with removed challenge ids`).
 
 **The chain rule** (`chain.test.ts`, for Chapters 0-4): in a chapter every challenge adds exactly ONE thing to the one before (a hit point, a dummy, a wall,
 a rule, a branch, a block), and
@@ -323,12 +322,11 @@ a second `for` for the next dummy, a `for` around the old loop for the big dummy
 need a loop instead of lines) are used only where the old lines are kept (`maxLines` 12 in Dummy Army counts the old lines plus the one new `for`).
 A chapter boundary may start something new (`for`, `if`, `while`) but the script of the chapter before is still in the editor and still runs.
 
-The challenge list with the one new construct and the one new arena element of every step is in `docs/robot-challenges.md` (rb26). Chapters: 0 (4), 1 (4), 2 (4), 3 (5), 4 (5).
 
 Dropped because they cannot be added to a chain without a rewrite: the Chapter 3 Charger and Gatekeeper (two enemies that fight back in the same lane as the dummies), Maze
 Runner / Hide & Seek / Sentry / Patroller (walls turn the open hall into a corridor and change the frame), Math Dummy / Armored Dummy (a line limit or a bigger number replaces lines),
 Twin Armor and Obstacle Course as they were (they moved dummies). Gear is still optional: every solution wins with the default build (`gear.test.ts`, which also runs them with the
-medium chassis and each other part). Ids that changed meaning keep their name where the position in the chain is the same (`training-dummy` is now the second dummy).
+medium chassis and each other part). Ids that changed meaning keep their name where the position in the chain is the same (`move-and-turn` is now the second dummy).
 
 **Balance (rb24):** weapon, chassis and enemy numbers and the rules behind them are in `docs/robot-balance.md`; `balance.test.ts` fails when ranged out-damages melee, a part dominates another, a fight leaves the round window or enemy HP jumps. Cannon: power 1-2, recharge power + 1; medium chassis: 10 HP, turns slowly; Chapter 2 dummies 3 HP (loops of 3), big dummy 6; shield dummy 2, sniper 4, regenerator 4.
 
@@ -358,7 +356,11 @@ Not built (ideas, same pattern): a gate that opens on a rhythm (needs a tile sta
 ## rb26: few enemies, real situations, no padding
 
 * **At most 3 enemies per challenge**, never "the last one plus one more dummy": a challenge that adds an enemy must also add a construct, a wall or an enemy behaviour (`chain.test.ts`). The chain may swap an enemy for another (`patroller`, `sniper`).
-* **Mechanics early:** the wall in Chapter 0 (`wall-dummy`: shots bounce, drive around), the patrol in Chapter 2 (`patrol-dummy`), a periodic shield in Chapter 3 (`bubble`, up 2 / down 1) and a shooting enemy (`sniper`), patrol + shield together in Chapter 4 (`flicker`).
+* **Mechanics early:** the wall in Chapter 0 (`tough-walker`: shots bounce, drive around), the patrol in Chapter 2 (`patrol-dummy`), a periodic shield in Chapter 3 (`bubble`, up 2 / down 1) and a shooting enemy (`sniper`), patrol + shield together in Chapter 4 (`flicker`).
 * **No required output, and no speech function (rb27):** the old speech/log function is removed completely (engine, host API, help, editor suggestions, the matching `needs` flags, the narration key prefix is now `narr.*`). Old saved scripts that call it fail with the ordinary unknown-name error (tested in `battle.test.ts`). `print()` still works and shows a bubble. Chapter 1 has three challenges without output (`two-steps`: `forward(2)`; `far-dummy`: `d = distance()`, `forward(d - 1)`; `sign-dummy`: turn and measure again). The Chapter 4 countdown and the Chapter 1 counter are removed; `break-out` became the wait loop of `patroller`.
-* **Review chapters removed** (Practice Field I, Exams, `final-exam`, the certificate): 13 challenges with 2 scripts. Old saves keep working (unknown ids are dropped). The Training Grounds keep their own general scripts.
+* **Review chapters removed** (Practice Field I, Exams, `final-exam`, the certificate): 13 challenges with 2 scripts. Old saves keep working (unknown ids are dropped). The Training Grounds were removed later.
 * **HP bar:** the arena draws one segment per hit point (`art/arena.ts`, `hpSegments`), so a 1 HP and a 3 HP enemy look different (unit test in `art/arena.test.ts`, e2e in `robot-fight.spec.ts`).
+
+## Training Grounds removed
+
+The Training Grounds (random and daily fights, `training.ts`, the map button, the stats in the save) are gone. Old saves keep working: the `training` field is ignored.

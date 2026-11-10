@@ -94,7 +94,7 @@ test('nothing on the task page is decoration: no share, no automatic menu, no pi
 });
 
 test('a lost fight whose script ended does not play 200 empty rounds: the waiting is one step, the verdict comes in seconds', async ({ page }) => {
-  await openTask(page, 'one-more-line', 'forward()\nfire()', ['first-contact']);
+  await openTask(page, 'side-dummy', 'forward()\nfire()', ['first-contact']);
   const t0 = Date.now();
   await startFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Verloren', { timeout: 15_000 });
@@ -112,7 +112,7 @@ test('on a phone the verdict and the next button are scrolled into view when the
 });
 
 test('pills: moving between challenges (pills, next button) never rewrites the script, a fix in progress stays', async ({ page }) => {
-  await openTask(page, 'one-more-line', '', ['first-contact', 'one-more-line']);
+  await openTask(page, 'side-dummy', '', ['first-contact', 'side-dummy']);
   await page.getByTestId('robot-code').fill('forward()\nfire()\nfire()\nprint("x")');
   await page.getByTestId('level-3').click();
   await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()\nfire()\nprint("x")');
@@ -131,7 +131,7 @@ test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next b
 });
 
 test('the arena shows each enemy\'s hit points: one bar segment per HP, so different HP looks different', async ({ page }) => {
-  await openTask(page, 'sign-dummy', 'forward()', ['first-contact', 'one-more-line', 'training-dummy', 'wall-dummy', 'two-steps', 'far-dummy']);
+  await openTask(page, 'sign-dummy', 'forward()', ['first-contact', 'side-dummy', 'move-and-turn', 'circle-dummy', 'tough-walker', 'two-steps', 'far-dummy']);
   const segments = await page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>('.rb-unit.enemy')].map((u) => u.querySelectorAll('.rb-hp i').length).sort(),
   );

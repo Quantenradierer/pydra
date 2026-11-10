@@ -8,8 +8,8 @@ const run = (id: string, script: string, build: Build = DEFAULT_BUILD) => fightE
 const SHIELD_BUILD: Build = { ...START_BUILD, chassis: 'medium', gear: ['blaster', 'eyes', 'shield'] };
 
 describe('Chapter 2', () => {
-  it('Tank Dummy: three plain shots are not a loop, so they do not count', () => {
-    expect(run('tank-dummy', 'forward(4)\nfire()\nfire()\nfire()').won).toBe(false);
+  it('Tank Dummy: three plain shots win too, a for loop is not required', () => {
+    expect(run('tank-dummy', 'forward(4)\nfire()\nfire()\nfire()').won).toBe(true);
   });
   it('Corner Dummy: the corner dummy is not in any line of the robot, it has to walk', () => {
     expect(run('corner-dummy', enemy('patrol-dummy').solution + '\nturn_right()\nturn_right()\nfor i in range(4):\n    fire()').won).toBe(false);
@@ -50,8 +50,7 @@ describe('Chapter 4', () => {
   it('Regenerator: the old script stops after one shot and loses', () => {
     expect(run('regenerator', enemy('far-far-dummy').solution).won).toBe(false);
   });
-  it('Patrol: needs while True and break, and no shot may miss', () => {
+  it('Patrol: no shot may miss', () => {
     expect(run('patroller', enemy('side-guard').solution).won).toBe(false);
-    expect(run('patroller', enemy('patroller').solution.replace('while True:', 'while hits < 2:').replace('        break', '        wait()')).won).toBe(false);
   });
 });

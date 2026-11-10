@@ -1,4 +1,4 @@
-/** Texts for the second half of Robot Battler: chapters 3-4, Practice Field II, rules, Training. */
+/** Texts for the second half of Robot Battler: chapters 3-4, Practice Field II, rules. */
 export const CONTENT_DE = {
   'robot.chapter.3': 'Kapitel 3: if / elif / else',
   'robot.chapter.4': 'Kapitel 4: while-Schleifen',
@@ -8,14 +8,6 @@ export const CONTENT_DE = {
   'robot.outcome.uses': 'Gewonnen, aber in dieser Aufgabe sollst du {words} benutzen.',
   'robot.outcome.without': 'Gewonnen, aber in dieser Aufgabe darfst du {words} nicht benutzen.',
   'robot.outcome.repeat': 'Gewonnen, aber eine Zahl steht zweimal im Code. Gib ihr einen Namen (eine Variable).',
-  'robot.training': 'Training',
-  'robot.training.intro': 'Zufällige Kämpfe mit deinem Skript.',
-  'robot.training.daily': 'Tageskampf',
-  'robot.training.dailyDone': 'Tageskampf (heute geschafft)',
-  'robot.training.new': 'Neuer Zufallskampf',
-  'robot.training.stats': '{wins} Trainingskämpfe gewonnen',
-  'robot.training.another': 'Noch ein Kampf',
-  'robot.training.locked': 'Das Training öffnet mit Kapitel 2.',
 } as const;
 
 export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
@@ -27,12 +19,4 @@ export const CONTENT_EN: Record<keyof typeof CONTENT_DE, string> = {
   'robot.outcome.uses': 'Won, but in this task you are meant to use {words}.',
   'robot.outcome.without': 'Won, but in this task you must not use {words}.',
   'robot.outcome.repeat': 'Won, but a number is written twice in the code. Give it a name (a variable).',
-  'robot.training': 'Training',
-  'robot.training.intro': 'Random fights with your script.',
-  'robot.training.daily': 'Daily fight',
-  'robot.training.dailyDone': 'Daily fight (done today)',
-  'robot.training.new': 'New random fight',
-  'robot.training.stats': '{wins} training fights won',
-  'robot.training.another': 'Another fight',
-  'robot.training.locked': 'Training opens with Chapter 2.',
 };

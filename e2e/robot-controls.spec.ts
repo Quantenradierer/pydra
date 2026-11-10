@@ -4,7 +4,7 @@ import { CH0, CH1, CH2 } from './robot-ids.ts';
 
 /**
  * Dead-control smoke test: visits the Robot Battler screens (task map, the task page with its sheets,
- * before and after a fight, challenges, Training Grounds) and presses every visible, enabled button and
+ * before and after a fight, challenges) and presses every visible, enabled button and
  * summary once. A press must change something (the DOM, the route, a text field or the saved game); a control that
  * does nothing has to be disabled instead.
  */
@@ -12,7 +12,7 @@ import { CH0, CH1, CH2 } from './robot-ids.ts';
 const SOLVED = [...CH0, ...CH1, ...CH2];
 const BUILD = { chassis: 'medium', locomotion: 'wheels', gear: ['blaster', 'eyes'], addons: [], blasterMark: 1 };
 
-/** Starts on the Robot Battler task map with the first 19 challenges done (so the Training Grounds are open). */
+/** Starts on the Robot Battler task map with the first 19 challenges done. */
 async function start(page: Page, solved: string[] = SOLVED) {
   await page.addInitScript(([s, b]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()\nfire()', build: b, runs: 40, wins: 40 })), [solved, BUILD] as const);
   await page.goto('/');
@@ -83,10 +83,10 @@ const openStep = (page: Page, id: string) => async () => {
 
 /** All the scenarios of the task page: before a fight, after a lost and a won fight, and every sheet. */
 async function workScreens(page: Page) {
-  await press(page, 'task page', openStep(page, 'one-more-line'));
+  await press(page, 'task page', openStep(page, 'side-dummy'));
   // After a lost fight (the starter script is one line short) and after a win.
   const fought = (code: string) => async () => {
-    await openStep(page, 'one-more-line')();
+    await openStep(page, 'side-dummy')();
     await fillCode(page, code);
     await runFight(page);
     await expect(page.getByTestId('robot-outcome')).toHaveAttribute('data-state', /won|lost/);
@@ -96,7 +96,7 @@ async function workScreens(page: Page) {
   // The two sheets: the equipment and the help (the help button belongs to the editor).
   for (const opener of ['robot-build-open', 'robot-code-more']) {
     await press(page, `sheet ${opener}`, async () => {
-      await openStep(page, 'one-more-line')();
+      await openStep(page, 'side-dummy')();
       await closeSheets(page);
       await page.getByTestId(opener).click();
     });
@@ -114,15 +114,6 @@ test('desktop: no control of the Robot Battler screens is a no-op', async ({ pag
     await page.getByTestId('robot-chapter-1').locator('summary').click();
   });
   await workScreens(page);
-  await press(page, 'training grounds', async () => {
-    await start(page);
-    await page.getByTestId('robot-training').click();
-  });
-  await press(page, 'training fight', async () => {
-    await start(page);
-    await page.getByTestId('robot-training').click();
-    await page.getByTestId('robot-train-daily').click();
-  });
   await press(page, 'a later challenge', openStep(page, 'dummy-army'));
   await press(page, 'a later challenge after a fight', async () => {
     await openStep(page, 'dummy-army')();

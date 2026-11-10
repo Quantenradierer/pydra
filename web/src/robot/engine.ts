@@ -55,7 +55,9 @@ export interface PatrolState {
   heading: Dir;
   steps: number;
   every: number;
-  /** Tiles walked since the last turn-around. */
+  /** Walks a square (turns right after `steps` tiles) instead of back and forth. */
+  circle?: boolean;
+  /** Tiles walked since the last turn. */
   done: number;
 }
 
@@ -110,7 +112,7 @@ export interface RobotSetup {
   canCross?: { rubble?: boolean; pit?: boolean };
   regen?: { every: number; amount: number };
   plates?: boolean;
-  patrol?: { dir: Dir; steps: number; every?: number };
+  patrol?: { dir: Dir; steps: number; every?: number; circle?: boolean };
   shieldCycle?: ShieldCycle;
 }
 
@@ -153,7 +155,7 @@ export class World {
       lastHit: null,
       ...(r.regen ? { regen: r.regen } : {}),
       ...(r.plates ? { plates: 100 } : {}),
-      ...(r.patrol ? { patrol: { heading: r.patrol.dir, steps: r.patrol.steps, every: r.patrol.every ?? 1, done: 0 } } : {}),
+      ...(r.patrol ? { patrol: { heading: r.patrol.dir, steps: r.patrol.steps, every: r.patrol.every ?? 1, circle: r.patrol.circle ?? false, done: 0 } } : {}),
       ...(r.shieldCycle ? { cycle: r.shieldCycle, shieldUp: cycleUp(r.shieldCycle, 0) } : {}),
     }));
   }
@@ -347,7 +349,7 @@ export class World {
       if (!p || r.hp <= 0 || (this.tick + 1) % p.every !== 0) continue;
       const free = (to: Pos) => this.passable(r, to) === true && !this.robotAt(to);
       if (p.done >= p.steps || !free(step(r.pos, p.heading))) {
-        p.heading = opposite(p.heading);
+        p.heading = p.circle ? turnRight(p.heading) : opposite(p.heading);
         p.done = 0;
       }
       const to = step(r.pos, p.heading);

@@ -15,7 +15,8 @@ export interface EnemyDef {
   /** Heals this many hit points every so many ticks (the Regenerator). */
   regen?: { every: number; amount: number };
   /** Walks `steps` tiles in `dir` and back again, one step every `every` rounds (default 1). */
-  patrol?: { dir: Dir; steps: number; every?: number };
+  /** `circle`: walks a square (a right turn after `steps` tiles) instead of back and forth. */
+  patrol?: { dir: Dir; steps: number; every?: number; circle?: boolean };
   /** A shield that is down for `down` rounds, then up for `up` rounds (blocks every shot, not used up). */
   shieldCycle?: { up: number; down: number };
 }

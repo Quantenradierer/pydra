@@ -33,7 +33,6 @@ export const CHAPTER_1 = chapter(1, [
     catchLine: T('Eine zweite steht weit weg: d = distance(), dann d - 1 Felder.', 'A second one is far away: d = distance(), then d - 1 tiles.'),
     enemies: [{ hp: 2 }, { hp: 1 }],
     map: arena(NEAR, FAR),
-    needs: { uses: ['distance'] },
     solution: S2,
     par: lineCount(S2),
   },

@@ -209,6 +209,12 @@ describe('patrol: an enemy that walks a fixed path back and forth', () => {
     expect(path(w, 8).map((p) => p.x)).toEqual([1, 2, 3, 2, 1, 0, 1, 2]);
   });
 
+  it('with `circle` it walks a square: a right turn after `steps` tiles', () => {
+    const w = patrolWorld({ dir: 'E', steps: 1 }, ['.....', '.D...', '.....', '..^..', '.....']);
+    w.robot('enemy1').patrol!.circle = true;
+    expect(path(w, 5).map((p) => `${p.x},${p.y}`)).toEqual(['2,1', '2,2', '1,2', '1,1', '2,1']);
+  });
+
   it('moves only every `every` rounds', () => {
     const w = patrolWorld({ dir: 'E', steps: 2, every: 3 });
     expect(path(w, 7).map((p) => p.x)).toEqual([0, 0, 1, 1, 1, 2, 2]);

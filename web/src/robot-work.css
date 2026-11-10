@@ -478,7 +478,7 @@ textarea.robot-code {
   white-space: nowrap;
 }
 
-/* Training screen: three buttons in a row with a gap, wrapping on a phone. */
+/* Button row: three buttons in a row with a gap, wrapping on a phone. */
 .robot-actions {
   display: flex;
   flex-wrap: wrap;

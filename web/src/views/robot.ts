@@ -35,10 +35,10 @@ export function robotScreen(app: App): Screen {
   };
 
   const titleOf = (s: Step) => s.enemy!.title[lang];
-  /** What the page calls a task: its number in the chapter ("Aufgabe 3", like the pills); training fights name what they are. */
+  /** What the page calls a task: its number in the chapter ("Aufgabe 3", like the pills). */
   const taskLabel = (s: Step, withChapter = false) => {
     const n = game.steps.filter((x) => x.chapter === s.chapter).indexOf(s) + 1;
-    if (!(n > 0 && !s.id.startsWith('training-'))) return titleOf(s);
+    if (n <= 0) return titleOf(s);
     // "Aufgabe 1" alone is ambiguous between chapters: name the chapter where the player does not already know it.
     return withChapter ? `${t(`robot.chapter.${s.chapter}` as MessageKey)} · ${t('robot.taskNo', { n })}` : t('robot.taskNo', { n });
   };
@@ -104,12 +104,15 @@ export function robotScreen(app: App): Screen {
         h('div', { class: 'level-strip robot-pills' }, ...list.map(pill)),
       );
     });
-    const resume = upNext
-      ? h('button', { class: 'primary robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(upNext.id), showStep(upNext.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, taskLabel(upNext, true)))
+    /** "Continue" resumes where the player is: the open challenge, or the one after it once that is solved; only then the first unsolved. */
+    const cur = p.current ? game.step(p.current) : undefined;
+    const target = cur && game.unlocked(cur.id) ? (p.solved.includes(cur.id) ? (nextStep(cur) ?? upNext) : cur) : upNext;
+    const resume = target
+      ? h('button', { class: 'primary robot-continue', 'data-testid': 'robot-continue', onclick: () => (game.open(target.id), showStep(target.id)) }, h('small', {}, t(p.solved.length === 0 ? 'robot.start' : 'robot.continue')), h('span', {}, taskLabel(target, true)))
       : null;
     show(
       subpageHeader(app, t('lesson.robot.title')),
-      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, resume, game.canTrain() ? h('button', { class: 'run-control', 'data-testid': 'robot-training', onclick: showTraining }, t('robot.training')) : null, ...sections),
+      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, resume, ...sections),
     );
   }
 
@@ -257,13 +260,11 @@ export function robotScreen(app: App): Screen {
     return { text: t(b.reason === 'dead' ? 'robot.outcome.dead' : 'robot.outcome.timeout'), ok: false, extra };
   }
 
-  /** How a battle screen runs its fight and where it leads: the task map, or the Training Grounds. */
+  /** How a battle screen runs its fight and where it leads: the task map. */
   interface BattleOpts {
     run: () => RunReport | undefined;
     next: () => { label: string; go: () => void } | undefined;
     back: () => void;
-    /** Training fights are not stored. */
-    training?: boolean;
   }
 
   /**
@@ -429,29 +430,6 @@ export function robotScreen(app: App): Screen {
     };
   }
 
-  // ---------------------------------------------------------------- Training Grounds
-
-  function showTraining() {
-    const stats = game.trainingStats();
-    const play = (step: Step) =>
-      showBattle(step, {
-        run: () => game.runTraining(step),
-        next: () => ({ label: t('robot.training.another'), go: () => play(game.trainingStep(game.nextTrainingSeed())) }),
-        back: showTraining,
-        training: true,
-      });
-    show(
-      subpageHeader(app, t('robot.training')),
-      h('p', { class: 'robot-card' }, t('robot.training.intro')),
-      h('p', { 'data-testid': 'robot-training-stats' }, t('robot.training.stats', { wins: stats.wins })),
-      h('div', { class: 'robot-actions' },
-        h('button', { class: 'primary', 'data-testid': 'robot-train-daily', onclick: () => play(game.trainingStep('daily')) }, t(stats.dailyDone ? 'robot.training.dailyDone' : 'robot.training.daily')),
-        h('button', { class: 'run-control', 'data-testid': 'robot-train-new', onclick: () => play(game.trainingStep(game.nextTrainingSeed())) }, t('robot.training.new')),
-        h('button', { class: 'run-control', 'data-testid': 'robot-train-back', onclick: showMap }, t('robot.toMap')),
-      ),
-    );
-  }
-
   /** The next unsolved battle after this step, for the "Next" button. */
   function nextStep(step: Step): Step | undefined {
     const i = game.steps.indexOf(step);
@@ -466,7 +444,6 @@ export function robotScreen(app: App): Screen {
       h('button', { class: 'icon-button', 'aria-label': t('nav.back'), title: t('nav.back'), onclick: opts.back }, svg(BACK)),
       h('h1', { tabindex: -1, 'data-testid': 'robot-step-title' }, titleOf(step)),
     );
-    if (opts.training) return h('div', { class: 'game-bar' }, header);
     const progress = game.progress();
     const chapter = game.steps.filter((s) => s.chapter === step.chapter);
     const strip = levelStrip(

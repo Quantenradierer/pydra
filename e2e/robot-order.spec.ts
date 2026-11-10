@@ -3,7 +3,7 @@ import { startFight } from './helpers.ts';
 
 /** rb21: one list of challenges (the level pills), one fight per challenge, the equipment row right under the pills, a short goal line. */
 
-const SOLVED = ['first-contact', 'one-more-line', 'training-dummy'];
+const SOLVED = ['first-contact', 'side-dummy', 'move-and-turn'];
 
 async function open(page: Page, step: string, lang: 'de' | 'en', solved = SOLVED) {
   await page.goto('/');
@@ -33,7 +33,7 @@ const PARTS = [
 for (const lang of ['de', 'en'] as const) {
   test(`phone 360x740 (${lang}): header, pills, equipment, goal, arena, run controls, editor + strip, primary - top to bottom`, async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 740 });
-    await open(page, 'one-more-line', lang);
+    await open(page, 'side-dummy', lang);
     const tops: number[] = [];
     for (const [name, selector] of PARTS) {
       const box = await page.locator(selector).first().boundingBox();
@@ -59,7 +59,7 @@ for (const lang of ['de', 'en'] as const) {
 
 test('desktop 1280x800: pills, equipment, goal, arena in this order; the editor and the primary button are on the right', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await open(page, 'one-more-line', 'de');
+  await open(page, 'side-dummy', 'de');
   const box = async (selector: string) => (await page.locator(selector).first().boundingBox())!;
   const [pills, equip, goal, arena, controls, editor, primary] = await Promise.all(PARTS.filter(([n]) => !['header', 'suggestion strip'].includes(n)).map(([, s]) => box(s)));
   expect(equip!.y).toBeGreaterThan(pills!.y);
@@ -73,8 +73,8 @@ test('desktop 1280x800: pills, equipment, goal, arena in this order; the editor 
 
 test('exactly one list of challenges, no list of fights, no fight counter - before, during and after the fight', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 740 });
-  await open(page, 'one-more-line', 'de');
-  await page.getByTestId('robot-code').fill('forward()\nfire()\nfire()');
+  await open(page, 'side-dummy', 'de');
+  await page.getByTestId('robot-code').fill('forward()\nfire()\nturn_right()\nfire()');
   const check = async (when: string) => {
     await expect(page.getByTestId('level-strip'), when).toHaveCount(1);
     // The pills are the challenges of the chapter: one pill each, none of them a fight.
@@ -95,7 +95,7 @@ test('exactly one list of challenges, no list of fights, no fight counter - befo
 
 test('the equipment row shows the equipped parts as small icons and opens the sheet', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 740 });
-  await open(page, 'one-more-line', 'en');
+  await open(page, 'side-dummy', 'en');
   const row = page.getByTestId('robot-equipment');
   await expect(row.locator('svg')).toHaveCount(3);
   const beside = await page.getByTestId('robot-build-open').boundingBox();
@@ -108,15 +108,15 @@ test('the equipment row shows the equipped parts as small icons and opens the sh
 
 test('the pills of a chapter are 1..N in order, with no gaps, no dashed side pills and no bug hunts', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 740 });
-  await open(page, 'training-dummy', 'de');
+  await open(page, 'move-and-turn', 'de');
   const pills = page.locator('[data-testid="level-strip"] .level-dot');
   const n = await pills.count();
-  expect(n).toBe(4);
+  expect(n).toBe(5);
   expect(await pills.allInnerTexts()).toEqual(Array.from({ length: n }, (_, i) => String(i + 1)));
   await expect(page.locator('.level-dot.side')).toHaveCount(0);
   // The map: every chapter counts its challenges, none is missing or extra.
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
-  for (const [chapter, count] of [[0, 4], [1, 3], [2, 4]] as const) {
+  for (const [chapter, count] of [[0, 5], [1, 3], [2, 4]] as const) {
     const section = page.getByTestId(`robot-chapter-${chapter}`);
     await section.evaluate((d) => ((d as HTMLDetailsElement).open = true));
     await expect(section.locator('.level-dot')).toHaveCount(count);

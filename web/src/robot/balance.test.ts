@@ -133,7 +133,8 @@ describe('no part is strictly better than another', () => {
 describe('every challenge, with its reference solution and the default gear', () => {
   /** Challenges that cannot reach the usual window, and why: [min, max] rounds. */
   const exceptions: Record<string, [number, number]> = {
-    'first-contact': [2, 30], // the very first lesson: one line, one shot
+    'first-contact': [2, 30],
+    'side-dummy': [2, 30], // chapter 0: one-hit dummies // the very first lesson: one line, one shot
     peekaboo: [1, 30], // one `if`, one shot
   };
   for (const e of ENEMIES) {
@@ -181,10 +182,11 @@ describe('enemies are not all alike', () => {
     for (const c of [0, 1, 3, 4]) {
       const hps = lastOf(c).enemies.map((d) => d.hp);
       expect(hps.filter((hp) => hp === 2).length, `Chapter ${c}: ${hps.join(',')}`).toBeLessThanOrEqual(Math.ceil(hps.length / 2));
-      expect(new Set(hps).size, `Chapter ${c}: ${hps.join(',')}`).toBeGreaterThanOrEqual(2);
+      if (c !== 0) expect(new Set(hps).size, `Chapter ${c}: ${hps.join(',')}`).toBeGreaterThanOrEqual(2); // chapter 0: every dummy has 1 hit point
     }
   });
   it('a moving or shielded enemy is worth 2 hit points because the script has to do more for it', () => {
-    for (const e of ENEMIES) for (const d of e.enemies) if (d.patrol || d.shieldCycle) expect(d.hp, e.id).toBe(2);
+    for (const e of ENEMIES) for (const d of e.enemies) if ((d.patrol || d.shieldCycle) && e.id !== 'circle-dummy') // the circler in Chapter 0 has 1 hit point: the walking is the new idea
+       expect(d.hp, e.id).toBe(2);
   });
 });

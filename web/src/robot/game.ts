@@ -11,7 +11,6 @@ import { precheck } from './battle.ts';
 import { ENEMIES } from './content/index.ts';
 import type { EnemyData } from './content/types.ts';
 import { fightEnemy, type EnemyReport } from './fight.ts';
-import { dailySeed, today, TRAINING_FROM, trainingFight } from './training.ts';
 import type { RbError } from './py/errors.ts';
 
 /** The code every new robot starts with: the finished First Contact solution, "just press Run". */
@@ -51,12 +50,10 @@ export interface RobotProgress {
   /** All runs and the ones that won: the "% right" on Home. */
   runs: number;
   wins: number;
-  /** Training Grounds: fights won, the next free seed, the date of the last daily fight won. */
-  training: { wins: number; seed: number; daily: string };
   current?: string;
 }
 
-export const emptyProgress = (): RobotProgress => ({ build: { ...START_BUILD, gear: [...START_BUILD.gear] }, script: STARTER_SCRIPT, history: [], solved: [], stars: {}, misses: {}, runs: 0, wins: 0, training: { wins: 0, seed: 1, daily: '' } });
+export const emptyProgress = (): RobotProgress => ({ build: { ...START_BUILD, gear: [...START_BUILD.gear] }, script: STARTER_SCRIPT, history: [], solved: [], stars: {}, misses: {}, runs: 0, wins: 0 });
 
 const isCount = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 0;
 const record = (v: unknown, max: number, ids: Set<string>): Record<string, number> => {
@@ -82,10 +79,6 @@ export function parseProgress(raw: unknown, steps: readonly Step[]): RobotProgre
   out.misses = record(r.misses, 1000, ids);
   if (isCount(r.runs)) out.runs = r.runs;
   if (isCount(r.wins) && r.wins <= out.runs) out.wins = r.wins;
-  if (typeof r.training === 'object' && r.training !== null) {
-    const t = r.training as Record<string, unknown>;
-    out.training = { wins: isCount(t.wins) ? t.wins : 0, seed: isCount(t.seed) && t.seed > 0 ? t.seed : 1, daily: typeof t.daily === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(t.daily) ? t.daily : '' };
-  }
   if (typeof r.current === 'string' && ids.has(r.current)) out.current = r.current;
   return out;
 }
@@ -238,47 +231,6 @@ export class RobotGame {
     // The screen plays the fight first and hands out the points (and their toast) when the verdict shows.
     if (award && !deferPoints) award();
     return { step, report, won, firstWin, stars, ...(award && deferPoints ? { award } : {}) };
-  }
-
-  // ---- Training Grounds
-
-  /** Training opens with Chapter 2. */
-  canTrain(): boolean {
-    return this.level() >= TRAINING_FROM;
-  }
-
-  /** A fight of the Training Grounds as a step the battle screen can play (it is never stored as solved). */
-  trainingStep(seed: number | 'daily'): Step {
-    const date = today(this.now());
-    const fight = trainingFight(seed === 'daily' ? dailySeed(date) : seed, this.level(), seed === 'daily' ? `training-daily-${date}` : `training-${seed}`);
-    return { id: fight.enemy.id, chapter: fight.enemy.chapter, enemy: fight.enemy };
-  }
-
-  /** The seed of the next endless fight; it moves on after every call. */
-  nextTrainingSeed(): number {
-    const p = this.progress();
-    this.save({ ...p, training: { ...p.training, seed: p.training.seed + 1 } });
-    return p.training.seed;
-  }
-
-  trainingStats(): { wins: number; dailyDone: boolean } {
-    const t = this.progress().training;
-    return { wins: t.wins, dailyDone: t.daily === today(this.now()) };
-  }
-
-  /** Runs the robot against a training fight. Counts wins, the daily one once per day; nothing else is stored. */
-  runTraining(step: Step): RunReport | undefined {
-    if (!step.enemy || !this.canTrain()) return undefined;
-    const p = this.progress();
-    const error = precheck(p.build, p.script);
-    if (error) return { step, error, won: false, firstWin: false, stars: 0 };
-    const report = fightEnemy(step.enemy, p.build, p.script);
-    const stars = report.won ? Math.max(1, 1 + (report.lines <= step.enemy.par ? 1 : 0) + (report.damage === 0 ? 1 : 0)) : 0;
-    if (report.won) {
-      const daily = step.id.startsWith('training-daily-') ? step.id.slice('training-daily-'.length) : p.training.daily;
-      this.save({ ...p, training: { ...p.training, wins: p.training.wins + 1, daily } });
-    }
-    return { step, report, won: report.won, firstWin: false, stars };
   }
 
   stats(): { done: number; total: number; runs: number; percent: number; stars: number } {

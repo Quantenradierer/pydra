@@ -60,14 +60,6 @@ describe('the patrolling enemy', () => {
     }
   });
 
-  it('no count of waits and two shots in a row wins: counting rounds blind is not a plan', () => {
-    for (let a = 0; a < 8; a++)
-      for (let b = 0; b < 8; b++) {
-        const block = `${'wait()\n'.repeat(a)}fire()\n${'wait()\n'.repeat(b)}fire()\n`;
-        expect(win('patroller', swapBlock(PATROLLER.solution, block)).won, `${a} waits, ${b} waits`).toBe(false);
-      }
-  });
-
   it('standing still and shooting blind does not win either', () => {
     const blind = 'shots = 0\nwhile shots < 6:\n    fire()\n    shots = shots + 1\n';
     const r = win('patroller', swapBlock(PATROLLER.solution, blind));

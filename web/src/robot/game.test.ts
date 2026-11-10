@@ -22,9 +22,9 @@ describe('steps', () => {
 
   it('unlock one after the other, no gaps', () => {
     expect(isUnlocked(steps[0]!, [], steps)).toBe(true);
-    expect(isUnlocked(steps.find((s) => s.id === 'one-more-line')!, [], steps)).toBe(false);
-    expect(isUnlocked(steps.find((s) => s.id === 'one-more-line')!, ['first-contact'], steps)).toBe(true);
-    expect(isUnlocked(steps.find((s) => s.id === 'training-dummy')!, ['first-contact'], steps)).toBe(false);
+    expect(isUnlocked(steps.find((s) => s.id === 'side-dummy')!, [], steps)).toBe(false);
+    expect(isUnlocked(steps.find((s) => s.id === 'side-dummy')!, ['first-contact'], steps)).toBe(true);
+    expect(isUnlocked(steps.find((s) => s.id === 'move-and-turn')!, ['first-contact'], steps)).toBe(false);
   });
 });
 
@@ -65,14 +65,14 @@ describe('RobotGame', () => {
     const { game } = setup();
     game.run('first-contact');
     game.setScript('turn_left()');
-    expect(game.run('one-more-line')!.won).toBe(false);
+    expect(game.run('side-dummy')!.won).toBe(false);
     expect(game.script()).toBe('turn_left()');
-    expect(game.progress().misses['one-more-line']).toBe(1);
+    expect(game.progress().misses['side-dummy']).toBe(1);
     expect(game.history().at(-1)!.result).toBe('lost');
   });
 
   it('refuses a locked step', () => {
-    expect(setup().game.run('training-dummy')).toBeUndefined();
+    expect(setup().game.run('move-and-turn')).toBeUndefined();
   });
 
   it('reports problems before the fight', () => {
@@ -111,23 +111,23 @@ describe('RobotGame', () => {
     game.setScript(mine);
     game.run('first-contact');
     expect(game.script()).toBe(mine);
-    game.open('one-more-line');
+    game.open('side-dummy');
     expect(game.script()).toBe(mine);
-    game.run('one-more-line');
+    game.run('side-dummy');
     expect(game.script()).toBe(mine);
   });
 
   it('an old save with removed challenge ids does not crash and keeps its script and build', () => {
-    const old = { script: 'forward()\nfire()\nfire()', build: { chassis: 'medium', locomotion: 'wheels', gear: ['blaster', 'eyes'], addons: [], blasterMark: 1 }, solved: ['first-contact', 'backstep-dummy', 'gl-foward', 'cn-row-3', 'one-more-line'], stars: { 'gl-foward': 3, 'one-more-line': 2 }, misses: { 'cn-row-3': 4 }, current: 'gl-foward', history: [{ at: 1, script: 'x', step: 'gl-foward', result: 'won' }] };
+    const old = { script: 'forward()\nfire()\nfire()', build: { chassis: 'medium', locomotion: 'wheels', gear: ['blaster', 'eyes'], addons: [], blasterMark: 1 }, solved: ['first-contact', 'backstep-dummy', 'gl-foward', 'cn-row-3', 'side-dummy'], stars: { 'gl-foward': 3, 'side-dummy': 2 }, misses: { 'cn-row-3': 4 }, current: 'gl-foward', history: [{ at: 1, script: 'x', step: 'gl-foward', result: 'won' }] };
     const kv = new MemoryKeyValue();
     const storage = new AppStorage(kv, CONTENT);
     storage.setGameData(old, 'robot');
     const game = new RobotGame(storage);
     const p = game.progress();
     expect(p.script).toBe(old.script);
-    expect(p.solved).toEqual(['first-contact', 'one-more-line']);
+    expect(p.solved).toEqual(['first-contact', 'side-dummy']);
     expect(p.current).toBeUndefined();
-    expect(game.open().id).toBe('training-dummy');
+    expect(game.open().id).toBe('move-and-turn');
     expect(game.stats().done).toBe(2);
     expect(game.script()).toBe(old.script);
   });

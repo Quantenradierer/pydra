@@ -109,7 +109,7 @@ export function robotScreen(app: App): Screen {
       : null;
     show(
       subpageHeader(app, t('lesson.robot.title')),
-      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, resume, p.solved.includes('final-exam') ? h('p', { class: 'robot-win', 'data-testid': 'robot-certificate' }, `🎓 ${t('robot.certificate')}`) : null, game.canTrain() ? h('button', { class: 'run-control', 'data-testid': 'robot-training', onclick: showTraining }, t('robot.training')) : null, ...sections),
+      h('div', { class: 'robot-map', 'data-testid': 'robot-map' }, resume, game.canTrain() ? h('button', { class: 'run-control', 'data-testid': 'robot-training', onclick: showTraining }, t('robot.training')) : null, ...sections),
     );
   }
 

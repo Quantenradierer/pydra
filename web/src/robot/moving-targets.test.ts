@@ -4,7 +4,7 @@ import { ENEMIES } from './content/index.ts';
 import { DEFAULT_BUILD, fightEnemy, judge, layoutOf } from './fight.ts';
 
 /**
- * Moving targets (Chapter 4): a patrolling enemy and a shield with a rhythm of its own. The rule "no shot may miss"
+ * Moving targets: a patrolling enemy (Chapter 2, again in Chapter 4), a shield with a rhythm of its own (Chapter 3) and both at once (Chapter 4). The rule "no shot may miss"
  * means that standing still and shooting, or shooting a fixed number of times, cannot win; the script has to look.
  */
 const enemy = (id: string) => ENEMIES.find((e) => e.id === id)!;
@@ -15,7 +15,7 @@ const LOOK = 'shots = 0\nwhile shots < 2:\n    if see() == "enemy":\n        fir
 
 /** The reference solution with the part between "face east" and "face north again" swapped for `block`. */
 const swapBlock = (solution: string, block: string): string => {
-  const start = solution.indexOf('shots = 0');
+  const start = solution.indexOf('hits = 0');
   const end = solution.lastIndexOf('turn_left()');
   expect(start).toBeGreaterThan(0);
   expect(end).toBeGreaterThan(start);
@@ -32,7 +32,7 @@ const eastOf = (challenge: string) => {
 
 describe('the patrolling enemy', () => {
   it('has 2 HP, walks down column 6 between rows 9 and 11 and back, and has no shield', () => {
-    expect(PATROLLER.enemies[3]!.hp).toBe(2);
+    expect(PATROLLER.enemies[2]!.hp).toBe(2);
     const path = eastOf('patroller');
     expect(path.slice(0, 9).map((p) => p.pos.y)).toEqual([9, 10, 11, 10, 9, 10, 11, 10, 9]);
     expect(new Set(path.map((p) => p.pos.x))).toEqual(new Set([6]));
@@ -60,11 +60,12 @@ describe('the patrolling enemy', () => {
     }
   });
 
-  it('a count tuned to one exact start is fragile: one round more or less before it and it misses', () => {
-    const tuned = 'wait()\nwait()\nfire()\nwait()\nfire()\n';
-    expect(win('patroller', swapBlock(PATROLLER.solution, tuned)).won).toBe(true);
-    expect(win('patroller', swapBlock(PATROLLER.solution, `wait()\n${tuned}`)).won).toBe(false);
-    expect(win('patroller', swapBlock(PATROLLER.solution, tuned.replace('wait()\n', ''))).won).toBe(false);
+  it('no count of waits and two shots in a row wins: counting rounds blind is not a plan', () => {
+    for (let a = 0; a < 8; a++)
+      for (let b = 0; b < 8; b++) {
+        const block = `${'wait()\n'.repeat(a)}fire()\n${'wait()\n'.repeat(b)}fire()\n`;
+        expect(win('patroller', swapBlock(PATROLLER.solution, block)).won, `${a} waits, ${b} waits`).toBe(false);
+      }
   });
 
   it('standing still and shooting blind does not win either', () => {
@@ -74,16 +75,46 @@ describe('the patrolling enemy', () => {
   });
 
   it('the script of the challenge before (no turn to the east) cannot win: it never touches the patroller', () => {
-    expect(win('patroller', enemy('break-out').solution).won).toBe(false);
+    expect(win('patroller', enemy('side-guard').solution).won).toBe(false);
+  });
+});
+
+describe('Chapter 2: the patrolling dummy', () => {
+  const patrol = enemy('patrol-dummy');
+  it('has 2 HP and walks column 7 between rows 4 and 6 and back', () => {
+    expect(patrol.enemies[1]).toMatchObject({ hp: 2, patrol: { dir: 'S', steps: 2 } });
+    const r = runBattle({ build: DEFAULT_BUILD, script: patrol.solution, layout: layoutOf(patrol) });
+    const ys = r.frames.slice(0, 9).map((f) => f.robots.find((x) => x.id === 'enemy2')!.pos.y);
+    expect(ys).toEqual([4, 5, 6, 5, 4, 5, 6, 5, 4]);
+  });
+  it('as many shots as it has hit points do not win (it is not always in the row); a longer loop does', () => {
+    const plain = enemy('tank-dummy').solution + '\nturn_right()\nfire()\nfire()';
+    expect(win('patrol-dummy', plain).won).toBe(false);
+    expect(win('patrol-dummy', patrol.solution).won).toBe(true);
+  });
+});
+
+describe('Chapter 3: the shield with a rhythm of its own', () => {
+  const bubble = enemy('bubble');
+  it('belongs to a 2 HP dummy that does not move, up 2 rounds and down 1', () => {
+    expect(bubble.enemies[0]).toMatchObject({ hp: 2, shieldCycle: { up: 2, down: 1 } });
+    expect(bubble.enemies[0]!.patrol).toBeUndefined();
+  });
+  it('shooting without looking wastes shots; looking and waiting wins', () => {
+    expect(win('bubble', enemy('right-dummy').solution).won).toBe(false);
+    expect(win('bubble', bubble.solution).won).toBe(true);
+  });
+  it('standing still and shooting a fixed number of times does not win either', () => {
+    expect(win('bubble', 'fire()\nfire()\nfire()\nfire()').won).toBe(false);
   });
 });
 
 describe('the flickering shield', () => {
-  it('belongs to the same walker, down 2 rounds and up 1, a rhythm (3) that is not the walk (4)', () => {
-    const def = FLICKER.enemies[3]!;
+  it('belongs to the same walker, down 1 round and up 2, a rhythm (3) that is not the walk (4)', () => {
+    const def = FLICKER.enemies[2]!;
     expect(def.hp).toBe(2);
-    expect(def.shieldCycle).toEqual({ up: 1, down: 2 });
-    expect(def.patrol).toEqual(PATROLLER.enemies[3]!.patrol);
+    expect(def.shieldCycle).toEqual({ up: 2, down: 1 });
+    expect(def.patrol).toEqual(PATROLLER.enemies[2]!.patrol);
     const cycle = def.shieldCycle!.up + def.shieldCycle!.down;
     expect(cycle).not.toBe(2 * def.patrol!.steps);
     expect((2 * def.patrol!.steps) % cycle).not.toBe(0);
@@ -91,7 +122,7 @@ describe('the flickering shield', () => {
 
   it('the shield is visible in the frames and follows its rhythm', () => {
     const path = eastOf('flicker');
-    expect(path.slice(0, 9).map((p) => (p.shield ? 1 : 0))).toEqual([0, 0, 1, 0, 0, 1, 0, 0, 1]);
+    expect(path.slice(0, 9).map((p) => (p.shield ? 1 : 0))).toEqual([0, 1, 1, 0, 1, 1, 0, 1, 1]);
     // the walk repeats every 4 rounds, the shield every 3: the two only line up again after 12
     expect(path.slice(0, 4).map((p) => p.pos.y)).toEqual([9, 10, 11, 10]);
   });

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { closeSheets, fillCode, openSheet, runFight, startFight, stored } from './helpers.ts';
-import { BEFORE_CHAPTER_3, CH0, CH1, CH3, CH4, PG2, solution } from './robot-ids.ts';
+import { BEFORE_CHAPTER_3, CH0, CH1, CH3, CH4, solution } from './robot-ids.ts';
 
 for (const [device, viewport] of [
   ['phone', { width: 360, height: 640 }],
@@ -148,7 +148,7 @@ test('the builder: every part can be equipped at any time; new parts are only ma
 
   // Chapter 1 only marks the cannon as new; it is still just a part.
   await page.evaluate(({ CH, SCRIPT }) => {
-    const solved = [...CH, 'hello-robot'];
+    const solved = [...CH, 'status-report'];
     localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: SCRIPT }));
   }, { CH: CH0, SCRIPT: solution('far-dummy') });
   await page.goto('/#/');
@@ -163,8 +163,6 @@ test('the builder: every part can be equipped at any time; new parts are only ma
 
 /** The starting robot: every task is won with it. */
 const DEFAULT_BUILD = { chassis: 'light', locomotion: 'wheels', gear: ['blaster', 'eyes'], addons: ['wide', 'scanner'], blasterMark: 1 };
-
-const FINAL = solution('final-exam');
 
 async function preset(page: import('@playwright/test').Page, solved: string[], script: string, build: object = DEFAULT_BUILD) {
   await page.evaluate(([s, sc, b]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: sc, build: b, runs: 40, wins: 40 })), [solved, script, build] as const);
@@ -211,19 +209,19 @@ test('Chapter 3: if / elif / else grow one script: ahead, right, behind, the shi
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await page.getByRole('button', { name: 'Zurück', exact: true }).click();
   // Health Check: the sniper; the script has to say "low".
-  await page.getByTestId('robot-step-health-check').click();
+  await page.getByTestId('robot-step-sniper').click();
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('nicht „low“ gesagt');
-  await fillCode(page, solution('health-check'));
+  await fillCode(page, solution('sniper'));
   await runFight(page);
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
   await expect(page.getByTestId('robot-stars')).toBeVisible();
 });
 
-test('Chapter 4 to the Basics Certificate, in English', async ({ page }) => {
+test('Chapter 4, in English', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.language', JSON.stringify('en')));
-  await preset(page, [...BEFORE_CHAPTER_3, ...CH3], solution('health-check'));
+  await preset(page, [...BEFORE_CHAPTER_3, ...CH3], solution('sniper'));
   const english = async (id: string, script: string) => {
     await page.getByTestId(`robot-step-${id}`).click();
     await fillCode(page, script);
@@ -233,12 +231,6 @@ test('Chapter 4 to the Basics Certificate, in English', async ({ page }) => {
   };
   await expect(page.getByRole('heading', { level: 2, name: 'Chapter 4: while loops' })).toBeVisible();
   for (const id of CH4) await english(id, solution(id));
-
-  // Exams: the whole of Chapters 3 and 4 in a row with one script, then the certificate.
-  await expect(page.getByTestId('robot-step-final-exam')).toBeDisabled();
-  for (const id of PG2.slice(0, -1)) await english(id, FINAL);
-  await english('final-exam', FINAL);
-  await expect(page.getByTestId('robot-certificate')).toContainText('Basics Certificate');
 });
 
 test('the Training Grounds: random fights from Chapter 2 on', async ({ page }) => {
@@ -380,7 +372,7 @@ test('the task map: a Continue button leads to the next task and finished chapte
 
 test('the build screen draws the robot from its parts: tap sockets to plug parts in and out, swap the drive', async ({ page }) => {
   await page.goto('/');
-  const solved = [...CH0, 'hello-robot'];
+  const solved = [...CH0, 'status-report'];
   await page.evaluate((s) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()' })), solved);
   await page.reload();
   await page.getByTestId('start-robot').click();

@@ -14,7 +14,7 @@ import { UI_DE, UI_EN } from './messages-ui.ts';
  * same script must still win when other parts are added.
  */
 const chapters = [...new Set(ENEMIES.map((e) => e.chapter))];
-const label = (c: number) => (c === 25 ? 'Practice Field I' : c === 45 ? 'Exams' : `Chapter ${c}`);
+const label = (c: number) => `Chapter ${c}`;
 
 describe('default gear', () => {
   it('is the blaster and eyes on wheels', () => {
@@ -52,7 +52,7 @@ describe('other gear', () => {
 
   it('the burst blaster (Mk II) is a different tool, not a drop-in: it still wins where it does not overheat', () => {
     const mk2: Build = { ...START_BUILD, chassis: 'medium', blasterMark: 2 };
-    for (const id of ['first-contact', 'one-more-line', 'training-dummy', 'hello-robot', 'far-dummy']) {
+    for (const id of ['first-contact', 'one-more-line', 'training-dummy', 'status-report', 'far-dummy']) {
       const e = ENEMIES.find((x) => x.id === id)!;
       expect(fightEnemy(e, mk2, e.solution).won, id).toBe(true);
     }

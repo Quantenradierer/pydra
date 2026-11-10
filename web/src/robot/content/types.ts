@@ -38,7 +38,7 @@ export interface Needs {
  */
 export interface EnemyData {
   id: string;
-  /** 0-4 for the chapters; 25 = Proving Grounds I ("chapter 2.5"), 45 = Proving Grounds II. */
+  /** 0-4. */
   chapter: number;
   title: Text;
   /** The pre-battle card: the catch in one sentence. */

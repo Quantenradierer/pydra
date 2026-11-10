@@ -5,7 +5,6 @@
  * Every fight carries a script that wins it, so the generator is testable.
  */
 import { ENEMIES } from './content/index.ts';
-import { FINAL_SCRIPT } from './content/proving2.ts';
 import { mk, T, wallCol } from './content/helpers.ts';
 import type { EnemyData } from './content/types.ts';
 import type { EnemyDef } from './layout.ts';
@@ -19,6 +18,10 @@ export interface TrainingFight {
   /** A script that wins it with the default build. */
   solution: string;
 }
+
+/** One general script for the Training fights to the side: look around, respect shields, walk, turn at walls. */
+const FINAL_SCRIPT =
+  'while alive():\n    if see() == "enemy":\n        if enemy_shielded():\n            wait()\n        else:\n            fire()\n    elif see_left() == "enemy":\n        turn_left()\n    elif see_right() == "enemy":\n        turn_right()\n    elif see() == "wall" and distance() == 1:\n        turn_right()\n    else:\n        forward()';
 
 const SHIELD_SCRIPT = 'while True:\n    shield.activate()\n    wait()';
 const SNIPER_SCRIPT = 'while True:\n    fire()';

@@ -3,6 +3,9 @@ export const WORK_DE = {
   'work.close': 'Schließen',
   'work.parts': 'Ausrüstung',
   'work.edit': 'Skript ändern',
+  'work.enemyCode': 'Gegner-Code',
+  'work.myCode': 'Mein Code',
+  'work.enemyN': 'Gegner {n}/{total}',
   'work.improve': 'Skript verbessern',
 };
 
@@ -10,6 +13,9 @@ export const WORK_EN = {
   'work.close': 'Close',
   'work.parts': 'Equipment',
   'work.edit': 'Edit script',
+  'work.enemyCode': 'Enemy code',
+  'work.myCode': 'My code',
+  'work.enemyN': 'Enemy {n}/{total}',
   'work.improve': 'Improve script',
 };
 

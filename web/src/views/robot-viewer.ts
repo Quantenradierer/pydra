@@ -4,7 +4,7 @@ import type { BattleResult } from '../robot/battle.ts';
 import { describeAction } from '../robot/narration.ts';
 import { createRobotLayer } from '../robot/art/arena.ts';
 import { drawFrame, type Callout } from '../robot/replay.ts';
-import { buildBeats, idleRunEnd, isIdleBeat, nextBeat, stateAt, type Beat, type LineHint } from '../robot/stepper.ts';
+import { buildBeats, idleRunEnd, isIdleBeat, nextBeat, stateAt, traceOf, type Beat, type LineHint } from '../robot/stepper.ts';
 
 type T = (key: MessageKey, params?: Params) => string;
 
@@ -46,6 +46,11 @@ export interface Viewer {
   play(): void;
   pause(): void;
   playing(): boolean;
+  /** The robots whose code can be watched besides the player's (the enemies that ran a script). */
+  enemies: string[];
+  /** Whose code the listing shows and the steps follow: 'player' or an enemy's id. The tick stays. */
+  watch(id: string): void;
+  watching(): string;
   dispose(): void;
 }
 
@@ -73,10 +78,12 @@ function hintText(hint: LineHint, t: T, line = ''): { text: string; branch?: 'tr
 export function createViewer(battle: BattleResult, script: string, o: ViewerOptions): Viewer {
   const { t, speed } = o;
   const frames = battle.frames;
-  const beats = buildBeats(frames);
-  const lastBeat = beats.length - 1;
+  let watched = 'player';
+  let beats = buildBeats(frames);
+  let lastBeat = beats.length - 1;
   const lastTick = frames.length - 1;
-  const source = script.split('\n');
+  const scriptOf = (id: string) => (id === 'player' ? script : (battle.scripts?.[id] ?? ''));
+  let source = script.split('\n');
   let index = 0;
   let timer: ReturnType<typeof setTimeout> | undefined;
   let playedToEnd = false;
@@ -85,13 +92,15 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   const over = h('canvas', { class: 'robot-over', 'aria-hidden': 'true' }) as HTMLCanvasElement;
   const layer = createRobotLayer(battle, battle.tiles[0]?.length ?? 1, battle.tiles.length, (id) => (id === 'player' ? t('robot.you') : t('robot.enemy')));
   const position = h('p', { class: 'run-position', 'data-testid': 'robot-position', 'aria-live': 'off' });
-  const listing = h('ol', { class: 'robot-listing', 'data-testid': 'robot-listing' }, ...source.map((l, i) => h('li', { 'data-line': String(i + 1) }, h('code', {}, l || ' '), h('span', { class: 'robot-note-inline' }))));
+  const listing = h('ol', { class: 'robot-listing', 'data-testid': 'robot-listing' });
+  const fillListing = () => listing.replaceChildren(...source.map((l, i) => h('li', { 'data-line': String(i + 1) }, h('code', {}, l || ' '), h('span', { class: 'robot-note-inline' }))));
+  fillListing();
   const narration = h('p', { class: 'robot-narration', 'data-testid': 'robot-narration', 'aria-live': 'polite' });
   const playBtn = h('button', { class: 'run-control robot-play', 'data-testid': 'robot-play', 'aria-label': t('robot.play'), title: t('robot.play') }, '▶');
 
   /** The calls to put on the arena: the ones of this line, or the tick's command once it plays out. */
   function calloutsOf(beat: Beat): Callout[] {
-    const calls = (beat.kind === 'resolve' ? (frames[beat.tick]?.trace ?? []).filter((e) => e.k === 'call' && e.kind === 'action').slice(-1) : beat.events).filter((e) => e.k === 'call');
+    const calls = (beat.kind === 'resolve' ? (traceOf(frames[beat.tick], watched) ?? []).filter((e) => e.k === 'call' && e.kind === 'action').slice(-1) : beat.events).filter((e) => e.k === 'call');
     return calls.flatMap((e) => (e.k === 'call' ? [{ kind: e.kind, text: e.result !== undefined && e.kind === 'sensor' ? `${e.fn}(${e.args.join(', ')}) → ${e.result}` : `${e.fn}(${e.args.join(', ')})` }] : [])).slice(-3);
   }
 
@@ -129,7 +138,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     listing.dataset.active = active == null ? '' : String(active);
 
     // In words: what the action of this round did (one short line, only once it plays out).
-    narration.textContent = beat.kind === 'resolve' ? (describeAction(frames[beat.tick - 1], frames[beat.tick]!, t) ?? '') : '';
+    narration.textContent = beat.kind === 'resolve' && watched === 'player' ? (describeAction(frames[beat.tick - 1], frames[beat.tick]!, t) ?? '') : '';
 
     paintSpeed();
   }
@@ -156,7 +165,7 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
   /** The beat after `from`: a long wait with nothing happening (script over) is one step, not 200. */
   function advance(from: number): number {
     const next = nextBeat(beats, from, 'line');
-    return isIdleBeat(beats, frames, from) ? idleRunEnd(beats, frames, next) : next;
+    return isIdleBeat(beats, frames, from, watched) ? idleRunEnd(beats, frames, next, watched) : next;
   }
   function tickOn() {
     const wait = index >= SLOW_STEPS ? Math.min(SPEED_MS[speed.level]!, SPEED_MS[MAX_SPEED]!) : SPEED_MS[speed.level];
@@ -185,6 +194,19 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     playBtn.setAttribute('aria-label', t('robot.pause'));
     playBtn.title = t('robot.pause');
     tickOn();
+  }
+
+  function watch(id: string) {
+    if (id === watched) return;
+    const tick = beats[index]!.tick;
+    watched = id;
+    source = scriptOf(id).split('\n');
+    beats = buildBeats(frames, id);
+    lastBeat = beats.length - 1;
+    index = Math.max(0, beats.findIndex((b) => b.tick === tick));
+    fillListing();
+    for (const u of layer.el.querySelectorAll<HTMLElement>('.rb-unit')) u.classList.toggle('rb-watched', id !== 'player' && u.dataset.robot === id);
+    render();
   }
 
   playBtn.addEventListener('click', () => (o.onUser?.(), timer ? pause() : play()));
@@ -227,5 +249,5 @@ export function createViewer(battle: BattleResult, script: string, o: ViewerOpti
     { class: 'run-controls robot-controls' },
     ...controlList,
   );
-  return { el, explain, listing, controls, atEnd: () => index >= lastBeat, toEnd: () => (pause(), go(lastBeat)), play, pause, playing: () => timer !== undefined, dispose: pause };
+  return { el, explain, listing, controls, atEnd: () => index >= lastBeat, toEnd: () => (pause(), go(lastBeat)), play, pause, playing: () => timer !== undefined, enemies: Object.keys(battle.scripts ?? {}), watch, watching: () => watched, dispose: pause };
 }

@@ -43,6 +43,21 @@
 /* The equipment: one compact row under the level pills, the equipped parts as small icons */
 .rb-equip-row {
   display: flex;
+  gap: 0.5rem;
+}
+.robot .rb-enemy-code {
+  min-height: 2.75rem;
+  padding: 0.2rem 0.6rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.robot .rb-enemy-code[aria-pressed='true'] {
+  border-color: var(--accent, currentColor);
+  font-weight: 600;
+}
+/* the enemy whose code is shown */
+.rb-unit.rb-watched {
+  filter: drop-shadow(0 0 3px var(--accent, currentColor)) drop-shadow(0 0 1px var(--accent, currentColor));
 }
 .robot .rb-equip {
   display: inline-flex;

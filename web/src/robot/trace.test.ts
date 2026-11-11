@@ -96,7 +96,7 @@ describe('battle trace', () => {
     const a = run(script, ['>...D']);
     expect(run(script, ['>...D'])).toEqual(a);
     const plain = runBattle({ build: START_BUILD, script, layout: layout(['>...D']) });
-    expect(a.frames.map(({ trace: _t, ...f }) => f)).toEqual(plain.frames);
+    expect(a.frames.map(({ trace: _t, traces: _ts, ...f }) => f)).toEqual(plain.frames);
     expect(plain.frames[1]!.trace).toBeUndefined();
   });
 

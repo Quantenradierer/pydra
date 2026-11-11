@@ -36,6 +36,8 @@ export type Intent =
   /** A hit on the tile in front. */
   | { type: 'melee'; damage: number }
   | { type: 'shield' }
+  /** A step in an absolute direction that is taken after the attacks of the round (enemy scripts: `walk("east")`): the robot turns to face it, and stays put when the tile is not free. No bump. */
+  | { type: 'stride'; dir: Dir }
   /** A step forward that shoves a robot standing there one tile further (when that tile is free). */
   | { type: 'push' }
   /** A lost tick: an action that was not charged. The replay shows "Shield still charging (1 tick left)". */
@@ -49,17 +51,6 @@ export interface ShieldCycle {
 
 /** Whether a shield cycle is up during round `tick` (0-based). */
 export const cycleUp = (c: ShieldCycle, tick: number): boolean => tick % (c.up + c.down) >= c.down;
-
-/** A fixed path: `steps` tiles in `heading`, then back, and so on; one step every `every` rounds, after the attacks of that round. */
-export interface PatrolState {
-  heading: Dir;
-  steps: number;
-  every: number;
-  /** Walks a square (turns right after `steps` tiles) instead of back and forth. */
-  circle?: boolean;
-  /** Tiles walked since the last turn. */
-  done: number;
-}
 
 export interface Robot {
   id: string;
@@ -83,12 +74,8 @@ export interface Robot {
   plates?: number;
   /** Heals `amount` hit points every `every` ticks (up to the maximum). */
   regen?: { every: number; amount: number };
-  /** Walks a fixed path back and forth (see PatrolState). */
-  patrol?: PatrolState;
   /** A shield with its own rhythm; not used up by a block. */
   cycle?: ShieldCycle;
-  /** A cooldown of `every` rounds between shots; when it is over and the player is in line (same row or column, nothing between), it turns to the player and shoots instead of walking. */
-  aim?: { every: number; /** Rounds until the next shot is ready. */ ready: number };
 }
 
 export type GameEvent =
@@ -114,8 +101,6 @@ export interface RobotSetup {
   canCross?: { rubble?: boolean; pit?: boolean };
   regen?: { every: number; amount: number };
   plates?: boolean;
-  patrol?: { dir: Dir; steps: number; every?: number; circle?: boolean; start?: number };
-  aim?: { every: number };
   shieldCycle?: ShieldCycle;
 }
 
@@ -158,8 +143,6 @@ export class World {
       lastHit: null,
       ...(r.regen ? { regen: r.regen } : {}),
       ...(r.plates ? { plates: 100 } : {}),
-      ...(r.patrol ? { patrol: { heading: r.patrol.dir, steps: r.patrol.steps, every: r.patrol.every ?? 1, circle: r.patrol.circle ?? false, done: r.patrol.start ?? 0 } } : {}),
-      ...(r.aim ? { aim: { every: r.aim.every, ready: r.aim.every } } : {}),
       ...(r.shieldCycle ? { cycle: r.shieldCycle, shieldUp: cycleUp(r.shieldCycle, 0) } : {}),
     }));
   }
@@ -240,27 +223,7 @@ export class World {
     const events: GameEvent[] = [];
     const live = this.alive();
     const pushed = new Map<string, Intent>();
-    const aimed = new Set<string>();
     const intentOf = (r: Robot): Intent => pushed.get(r.id) ?? intents.get(r.id) ?? { type: 'wait' };
-
-    // Aiming enemies: when the player is in line on their shooting round they turn to it and shoot (and do not walk this round).
-    for (const r of live) {
-      if (!r.aim) continue;
-      if (r.aim.ready > 0) {
-        r.aim.ready--;
-        continue;
-      }
-      for (const dir of DIRS) {
-        const found = this.ahead(r.pos, dir, 99, r);
-        if (found?.robot?.team === 'player') {
-          r.facing = dir;
-          aimed.add(r.id);
-          r.aim.ready = r.aim.every;
-          pushed.set(r.id, { type: 'shoot', range: 99, damage: 1 } as Intent);
-          break;
-        }
-      }
-    }
 
     // Pushes: the robot ahead is shoved one tile further, then the pusher steps like on a normal move.
     for (const r of live) {
@@ -367,21 +330,13 @@ export class World {
       }
     }
 
-    // Patrols walk last, so what a sensor saw at the start of the round is where a shot landed.
+    // Strides come last, so what a sensor saw at the start of the round is where a shot landed.
     for (const r of live) {
-      const p = r.patrol;
-      if (!p || r.hp <= 0 || aimed.has(r.id) || (this.tick + 1) % p.every !== 0) continue;
-      const free = (to: Pos) => this.passable(r, to) === true && !this.robotAt(to);
-      if (p.done >= p.steps || !free(step(r.pos, p.heading))) {
-        p.heading = p.circle ? turnRight(p.heading) : opposite(p.heading);
-        p.done = 0;
-      }
-      const to = step(r.pos, p.heading);
-      r.facing = p.heading;
-      if (free(to)) {
-        r.pos = to;
-        p.done++;
-      }
+      const i = intentOf(r);
+      if (i.type !== 'stride' || r.hp <= 0) continue;
+      const to = step(r.pos, i.dir);
+      r.facing = i.dir;
+      if (this.passable(r, to) === true && !this.robotAt(to)) r.pos = to;
     }
 
     // Shields: a raised one lasts through this tick only; a pending one rises for the next. A cycle shield follows its rhythm.

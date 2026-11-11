@@ -196,74 +196,36 @@ describe('buildLayout', () => {
   });
 });
 
-describe('patrol: an enemy that walks a fixed path back and forth', () => {
-  const patrolWorld = (patrol: { dir: 'N' | 'E' | 'S' | 'W'; steps: number; every?: number }, rows = ['.....', '.....', '..^..', '.....', 'D....']) => {
-    const w = world(rows, {}, 2);
-    w.robot('enemy1').patrol = { heading: patrol.dir, steps: patrol.steps, every: patrol.every ?? 1, done: 0 };
-    return w;
-  };
-  const path = (w: World, n: number) => Array.from({ length: n }, () => (w.step(intents({})), { ...w.robot('enemy1').pos }));
-
-  it('walks `steps` tiles, turns around, walks back, and repeats', () => {
-    const w = patrolWorld({ dir: 'E', steps: 3 });
-    expect(path(w, 8).map((p) => p.x)).toEqual([1, 2, 3, 2, 1, 0, 1, 2]);
-  });
-
-  it('with `circle` it walks a square: a right turn after `steps` tiles', () => {
-    const w = patrolWorld({ dir: 'E', steps: 1 }, ['.....', '.D...', '.....', '..^..', '.....']);
-    w.robot('enemy1').patrol!.circle = true;
-    expect(path(w, 5).map((p) => `${p.x},${p.y}`)).toEqual(['2,1', '2,2', '1,2', '1,1', '2,1']);
-  });
-
-  it('turns to face the way it walks (a wheeled robot does not slide sideways)', () => {
-    const w = patrolWorld({ dir: 'E', steps: 1 }, ['.....', '.D...', '.....', '..^..', '.....']);
-    w.robot('enemy1').patrol!.circle = true;
-    const faces: string[] = [];
-    for (let i = 0; i < 4; i++) (w.step(intents({})), faces.push(w.robot('enemy1').facing));
-    expect(faces).toEqual(['E', 'S', 'W', 'N']);
-  });
-
-  it('`start` is how far into its first leg the patrol begins', () => {
-    const w = patrolWorld({ dir: 'E', steps: 3 });
-    w.robot('enemy1').patrol!.done = 2;
-    expect(path(w, 4).map((p) => p.x)).toEqual([1, 0, 1, 2]);
-  });
-
-  it('moves only every `every` rounds', () => {
-    const w = patrolWorld({ dir: 'E', steps: 2, every: 3 });
-    expect(path(w, 7).map((p) => p.x)).toEqual([0, 0, 1, 1, 1, 2, 2]);
-  });
-
-  it('is built from the setup (EnemyDef patrol)', () => {
-    const m = parseMap(['^..', '...', 'D..']);
-    const w = new World({ tiles: m.tiles, seed: 1, robots: [{ id: 'player', team: 'player', pos: m.player.pos, facing: 'N', hp: 5 }, { id: 'enemy1', team: 'enemy', pos: m.enemies[0]!.pos, facing: 'N', hp: 2, patrol: { dir: 'E', steps: 2 } }] });
-    w.step(intents({}));
+describe('stride: a step that is taken after the attacks of the round (enemy scripts, walk())', () => {
+  const east: Intent = { type: 'stride', dir: 'E' };
+  it('moves one tile and turns to face it (a wheeled robot does not slide sideways)', () => {
+    const w = world(['^....', '.....', 'D....'], {}, 2);
+    w.step(intents({ enemy1: east }));
     expect(w.robot('enemy1').pos).toEqual({ x: 1, y: 2 });
+    expect(w.robot('enemy1').facing).toBe('E');
   });
 
-  it('turns around at once in front of a wall or a robot, and stops when it is dead', () => {
-    const w = patrolWorld({ dir: 'E', steps: 9 }, ['^....', '.....', '.....', '.....', 'D.#..']);
-    expect(path(w, 4).map((p) => p.x)).toEqual([1, 0, 1, 0]);
-    const dead = patrolWorld({ dir: 'E', steps: 3 }, ['>.D..']);
-    dead.robot('enemy1').patrol = { heading: 'E', steps: 3, every: 1, done: 0 };
-    dead.robot('enemy1').hp = 0;
-    dead.step(intents({}));
-    expect(dead.robot('enemy1').pos).toEqual({ x: 2, y: 0 });
+  it('turns but stays put in front of a wall, the edge or a robot (no bump)', () => {
+    const w = world(['^....', '.....', 'D#...'], {}, 2);
+    const ev = w.step(intents({ enemy1: east }));
+    expect(w.robot('enemy1').pos).toEqual({ x: 0, y: 2 });
+    expect(w.robot('enemy1').facing).toBe('E');
+    expect(ev.some((e) => e.type === 'bump')).toBe(false);
   });
 
-  it('moves after the attacks of the round: a shot at the tile it stands on hits it', () => {
+  it('is not taken when the robot is dead', () => {
     const w = world(['>.D..'], {}, 2);
-    w.robot('enemy1').patrol = { heading: 'E', steps: 2, every: 1, done: 0 };
-    const ev = w.step(intents({ player: { type: 'shoot', damage: 1, range: 5 } }));
+    w.robot('enemy1').hp = 0;
+    w.step(intents({ enemy1: east }));
+    expect(w.robot('enemy1').pos).toEqual({ x: 2, y: 0 });
+  });
+
+  it('comes after the attacks of the round: a shot at the tile it stands on hits it', () => {
+    const w = world(['>.D..'], {}, 2);
+    const ev = w.step(intents({ player: { type: 'shoot', damage: 1, range: 5 }, enemy1: east }));
     expect(ev.some((e) => e.type === 'shot' && e.hit === 'enemy1')).toBe(true);
     expect(w.robot('enemy1').hp).toBe(1);
     expect(w.robot('enemy1').pos).toEqual({ x: 3, y: 0 });
-  });
-
-  it('is deterministic', () => {
-    const a = path(patrolWorld({ dir: 'N', steps: 2 }), 12);
-    const b = path(patrolWorld({ dir: 'N', steps: 2 }), 12);
-    expect(a).toEqual(b);
   });
 });
 
@@ -303,43 +265,14 @@ describe('shield cycle: an enemy shield that comes and goes on its own', () => {
     expect(w.robot('enemy1').hp).toBe(1);
   });
 
-  it('is deterministic and independent of the patrol period', () => {
+  it('is deterministic and independent of what the enemy does', () => {
     const run = () => {
       const w = world(['>D...'], {}, 2);
       w.robot('enemy1').cycle = { up: 3, down: 2 };
-      w.robot('enemy1').patrol = { heading: 'E', steps: 4, every: 1, done: 0 };
-      return Array.from({ length: 20 }, () => (w.step(intents({})), `${w.robot('enemy1').pos.x}${w.robot('enemy1').shieldUp ? 'S' : '-'}`)).join(' ');
+      return Array.from({ length: 20 }, (_, i) => (w.step(intents({ enemy1: { type: 'stride', dir: i % 8 < 4 ? 'E' : 'W' } })), `${w.robot('enemy1').pos.x}${w.robot('enemy1').shieldUp ? 'S' : '-'}`)).join(' ');
     };
     expect(run()).toBe(run());
-    // patrol period 8, shield period 5: the pattern only repeats after 40 rounds
+    // walking period 8, shield period 5: the pattern only repeats after 40 rounds
     expect(run().split(' ').slice(0, 8).join()).not.toBe(run().split(' ').slice(8, 16).join());
-  });
-});
-
-describe('an enemy that aims: shoots at the player when in line, then waits', () => {
-  const aimWorld = (cooldown: number) => {
-    const w = world(['..^..', '.....', '.....', '.....', 'D....'], {}, 3);
-    // the enemy walks along the bottom row, below the player
-    const e = w.robot('enemy1');
-    e.pos = { x: 0, y: 4 };
-    e.patrol = { heading: 'E', steps: 4, every: 1, done: 0 };
-    e.aim = { every: cooldown, ready: cooldown };
-    return w;
-  };
-  it('does not shoot before its cooldown is over, and only when the player is in line', () => {
-    const w = aimWorld(3);
-    const shots: number[] = [];
-    for (let i = 0; i < 12; i++) {
-      const events = w.step(intents({}));
-      if (events.some((ev) => ev.type === 'shot' && ev.by === 'enemy1')) shots.push(w.robot('enemy1').pos.x);
-    }
-    // in line only in column 2; it shoots there (standing still that round), facing the player
-    expect(shots.length).toBeGreaterThan(0);
-    expect(new Set(shots)).toEqual(new Set([2]));
-  });
-  it('turns to the player to shoot, and damages it', () => {
-    const w = aimWorld(1);
-    for (let i = 0; i < 6; i++) w.step(intents({}));
-    expect(w.player.hp).toBeLessThan(10);
   });
 });

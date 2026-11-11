@@ -381,3 +381,13 @@ Engine and data (all tested in `engine.test.ts` and `chapters.test.ts`):
 * **Patrols turn to face the way they walk**, so a wheeled enemy no longer slides sideways. `patrol.circle` walks a square (right turn after `steps` tiles), `patrol.start` is how far into the first leg it begins.
 * **`aim: { every }`**: an enemy shoots at the player when they are in line (same row or column, nothing between), turning to face it and standing still for that round, then waits `every` rounds. It only ever hits from the middle of a side of the ring.
 * **`variants`** on a challenge: more starts of the same fight (another map and enemy definitions). The fight counts as won only if it is won from every start, so the script has to work for all of them; the report shows the first lost start, else the last.
+
+## Enemy code
+
+Every enemy is a robot with a Python script, run by the same interpreter as the player's, one action per round (`web/src/robot/enemy-script.ts`).
+Challenge files describe a walker or shooter in a few words (`patrol`, `aim`); `enemyScript()` turns them into the script that really runs
+(a dummy runs `while True: wait()`; an explicit `script` is used as it is). Besides the player's functions an enemy can call
+`walk("east")` (one step, taken after the round's attacks), `player_in_line()` and `shoot_player()`. The world has no patrol or aim logic of its own.
+
+On the task page the **Gegner-Code** button swaps the listing (and the line-by-line steps) from the player's code to one enemy's code, enemy by enemy,
+and back. The enemy shown is outlined in the arena. Before the first fight a fight with the current script is made only for looking; nothing counts.

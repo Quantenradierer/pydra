@@ -137,3 +137,25 @@ test('the arena shows each enemy\'s hit points: one bar segment per HP, so diffe
   );
   expect(segments).toEqual([1, 2, 3]);
 });
+
+test('"Gegner-Code" shows the code the enemy really runs, steps through it, and brings the own script back', async ({ page }) => {
+  await openTask(page, 'tough-walker', 'wait()', ['first-contact', 'side-dummy', 'move-and-turn', 'circle-dummy']);
+  const listing = page.getByTestId('robot-listing');
+  await page.getByTestId('robot-enemy-code').click();
+  await expect(listing).toContainText('walk("north")');
+  await expect(page.getByTestId('robot-code')).toBeHidden();
+  await page.getByTestId('robot-step').click();
+  await expect(listing.locator('li.active')).toHaveCount(1);
+  expect(await page.locator('.rb-unit.rb-watched').count()).toBe(1);
+  await page.getByTestId('robot-enemy-code').click();
+  await expect(page.getByTestId('robot-code')).toHaveValue('wait()');
+  await expect(page.locator('.rb-unit.rb-watched')).toHaveCount(0);
+  // during and after a real fight the button swaps the listing, too
+  await startFight(page);
+  await page.getByTestId('robot-enemy-code').click();
+  await expect(listing).toContainText('walk("north")');
+  await page.getByTestId('robot-enemy-code').click();
+  await expect(listing).toContainText('wait()');
+  const box = await page.getByTestId('robot-enemy-code').boundingBox();
+  expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+});

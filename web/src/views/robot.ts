@@ -7,6 +7,7 @@ import { INTRODUCED_IN, CHASSIS, addonsFor, type Build, type GearId } from '../r
 import type { EnemyData } from '../robot/content/types.ts';
 import type { EnemyReport, FightReport } from '../robot/fight.ts';
 import { fightEnemy } from '../robot/fight.ts';
+import { precheck } from '../robot/battle.ts';
 import { createViewer, DEFAULT_SPEED, type Speed, type Viewer } from './robot-viewer.ts';
 import { parseMap } from '../robot/layout.ts';
 import { friendlyError } from '../robot/friendly.ts';
@@ -233,14 +234,14 @@ export function robotScreen(app: App): Screen {
   }
 
   /** Plays the task's one fight on the arena, slowly, line by line. `onFinished` fires when it reached its end (playing or skipping). */
-  function playFight(enemy: EnemyData, build: Build, script: string, mount: Mount, onFinished: () => void): { toEnd: () => void; dispose: () => void } {
+  function playFight(enemy: EnemyData, build: Build, script: string, mount: Mount, onFinished: () => void): { toEnd: () => void; dispose: () => void; viewer: Viewer } {
     const viewer: Viewer = createViewer(fightEnemy(enemy, build, script, true).fight.battle, script, { t, speed, onEnd: onFinished });
     mount.arena.replaceChildren(viewer.el);
     mount.explain.replaceChildren(viewer.explain);
     mount.controls.replaceChildren(viewer.controls);
     mount.listing.replaceChildren(viewer.listing);
     viewer.play();
-    return { toEnd: () => viewer.toEnd(), dispose: () => viewer.dispose() };
+    return { toEnd: () => viewer.toEnd(), dispose: () => viewer.dispose(), viewer };
   }
 
   // ---------------------------------------------------------------- a battle step
@@ -280,13 +281,18 @@ export function robotScreen(app: App): Screen {
     let fighting: ReturnType<typeof playFight> | undefined;
     let ed: Editor | undefined;
     let area: HTMLTextAreaElement;
+    /** Whose code is shown: undefined = the player's, else the id of an enemy robot. `debugView` is the fight made only to look at it before the real one. */
+    let viewing: string | undefined;
+    let debugView: ReturnType<typeof createViewer> | undefined;
     const sheetClose = t('work.close');
 
     // ---- the equipment row (the only way to change the robot) and the goal line
     const partsSheet = createSheet(t('robot.build'), sheetClose, 'robot-parts-sheet');
     const equipIcons = h('span', { class: 'rb-equip-icons', 'aria-hidden': 'true' });
     const partsBtn = h('button', { type: 'button', class: 'run-control rb-equip', 'data-testid': 'robot-build-open', 'aria-haspopup': 'dialog', onclick: partsSheet.open }, h('span', { class: 'rb-equip-label' }, t('work.parts')), equipIcons);
-    const equipRow = h('div', { class: 'rb-equip-row', 'data-testid': 'robot-equipment' }, partsBtn);
+    /** The enemy's code: the listing (and the steps) follow one enemy's script instead of the player's, which the editor keeps. */
+    const enemyBtn = h('button', { type: 'button', class: 'run-control rb-enemy-code', 'data-testid': 'robot-enemy-code', 'aria-pressed': 'false', onclick: () => cycleEnemy() }, t('work.enemyCode'));
+    const equipRow = h('div', { class: 'rb-equip-row', 'data-testid': 'robot-equipment' }, partsBtn, enemyBtn);
     /** The goal in plain words, and what is special about this task: two short sentences at most. */
     const task = h('p', { class: 'rb-task-text', 'data-testid': 'robot-catch' }, goalText(enemy), ' ', h('span', { class: 'rb-task-hint' }, enemy.catchLine[lang]));
 
@@ -313,8 +319,9 @@ export function robotScreen(app: App): Screen {
     const errorHolder = h('div', { class: 'robot-error-holder' });
     const listingHolder = h('div', { class: 'robot-listing-holder', hidden: true, role: 'button', tabindex: 0, 'aria-label': t('work.edit'), title: t('work.edit'), 'data-testid': 'robot-view-toggle' });
     listingHolder.append(listingMount);
-    listingHolder.addEventListener('click', () => showEditor(true));
-    listingHolder.addEventListener('keydown', (e) => ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') && (e.preventDefault(), showEditor(true)));
+    const edit = () => (viewing === undefined ? showEditor(true) : undefined);
+    listingHolder.addEventListener('click', edit);
+    listingHolder.addEventListener('keydown', (e) => ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') && (e.preventDefault(), edit()));
     ed = editor(game.script(), () => game.build(), (text) => (game.setScript(text), toIdle()));
     area = ed.area;
     area.addEventListener('focus', toIdle);
@@ -342,7 +349,44 @@ export function robotScreen(app: App): Screen {
       else opts.back();
     });
     /** Editing the script starts the next try: the fight on the arena stops, the verdict goes, the primary is "Kampf starten" again. */
+    /** Back to the player's own code: the debug fight (if there was one) goes, the editor and the preview come back. */
+    function ownCode() {
+      if (viewing === undefined) return;
+      viewing = undefined;
+      enemyBtn.setAttribute('aria-pressed', 'false');
+      enemyBtn.textContent = t('work.enemyCode');
+      if (debugView) {
+        debugView.dispose();
+        debugView = undefined;
+        drawPreview();
+        showEditor(true);
+      } else fighting?.viewer.watch('player');
+    }
+    /** The button: the first enemy's code, the next enemy's code, ..., then the player's code again. */
+    function cycleEnemy() {
+      const v = debugView ?? fighting?.viewer;
+      if (!v && state !== 'idle') return;
+      if (!v) {
+        // Nothing has been fought yet: a fight with the player's script (or with none when it does not run) is made to look at the enemy.
+        const code = precheck(game.build(), area.value) ? '' : area.value;
+        debugView = createViewer(fightEnemy(enemy, game.build(), code, true).fight.battle, code, { t, speed });
+        arenaHolder.replaceChildren(debugView.el);
+        explainHolder.replaceChildren(debugView.explain);
+        controlsHolder.replaceChildren(debugView.controls);
+        listingMount.replaceChildren(debugView.listing);
+        showEditor(false);
+      }
+      const view = (debugView ?? fighting?.viewer)!;
+      const ids = view.enemies;
+      const next = viewing === undefined ? 0 : ids.indexOf(viewing) + 1;
+      if (next >= ids.length) return ownCode();
+      viewing = ids[next]!;
+      view.watch(viewing);
+      enemyBtn.setAttribute('aria-pressed', 'true');
+      enemyBtn.textContent = ids.length > 1 ? t('work.enemyN', { n: next + 1, total: ids.length }) : t('work.myCode');
+    }
     function toIdle() {
+      ownCode();
       if (state === 'idle') return;
       stop();
       fighting = undefined;
@@ -366,6 +410,11 @@ export function robotScreen(app: App): Screen {
     }
 
     function fight() {
+      viewing = undefined;
+      debugView?.dispose();
+      debugView = undefined;
+      enemyBtn.setAttribute('aria-pressed', 'false');
+      enemyBtn.textContent = t('work.enemyCode');
       const run = opts.run();
       if (!run) return;
       errorHolder.replaceChildren();

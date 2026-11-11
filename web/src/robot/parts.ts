@@ -230,6 +230,26 @@ export function createEnv(rc: RobotContext): Env {
     for (const n of ['see', 'distance', 'see_left', 'see_right', 'enemy_shielded']) notEquipped.set(n, { kind: 'part', need: 'eyes' });
   }
 
+  // ---- only enemy scripts (see enemy-script.ts): a step after the attacks, a look for the player, a shot at it
+  if (id !== 'player') {
+    const inLine = (): Dir | undefined => DIRS.find((d) => world.ahead(me().pos, d, 99, me())?.robot?.team === 'player');
+    globals.walk = fn('walk', (a) => {
+      const dir = typeof a[0] === 'string' ? DIR_NAMES[a[0]] : undefined;
+      if (!dir) return badArg('walk', '"north", "east", "south" or "west"', a[0] as Value);
+      return action('walk', [{ type: 'stride', dir } satisfies Intent]);
+    });
+    globals.player_in_line = fn('player_in_line', () => log('player_in_line()', inLine() !== undefined));
+    globals.shoot_player = fn('shoot_player', () =>
+      action('shoot_player', [
+        () => {
+          const dir = inLine();
+          if (dir) me().facing = dir;
+          return { type: 'shoot', damage: 1, range: 99 } satisfies Intent;
+        },
+      ]),
+    );
+  }
+
   for (const name of Object.keys(globals)) notEquipped.delete(name);
   return {
     globals,

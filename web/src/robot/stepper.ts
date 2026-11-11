@@ -21,11 +21,14 @@ export interface Beat {
   after?: true;
 }
 
+/** The trace of one robot's script in one frame (the player's, or an enemy's). */
+export const traceOf = (frame: Frame | undefined, robot = 'player'): TraceEvent[] | undefined => (robot === 'player' ? frame?.trace : frame?.traces?.[robot]);
+
 const startsGroup = (e: TraceEvent) => e.k === 'line' || e.k === 'leave';
 const lineOf = (e: TraceEvent): number | null => (e.k === 'cut' ? null : e.line);
 
-/** Cuts the frames into beats: a start, then per tick one beat per executed line and one `resolve` beat. */
-export function buildBeats(frames: readonly Frame[]): Beat[] {
+/** Cuts the frames into beats: a start, then per tick one beat per executed line and one `resolve` beat. `robot` is whose script the beats follow (the player's, or an enemy's). */
+export function buildBeats(frames: readonly Frame[], robot = 'player'): Beat[] {
   const beats: Beat[] = [{ tick: 0, kind: 'start', line: null, events: [] }];
   for (const [tick, frame] of frames.entries()) {
     if (tick === 0) continue;
@@ -35,12 +38,12 @@ export function buildBeats(frames: readonly Frame[]): Beat[] {
       beats.push({ tick, kind: 'line', line: lineOf(group[0]!), events: group });
       group = [];
     };
-    for (const e of frame.trace ?? []) {
+    for (const e of traceOf(frame, robot) ?? []) {
       if (startsGroup(e) || group.length === 0) flush();
       group.push(e);
     }
     flush();
-    beats.push({ tick, kind: 'resolve', line: frame.lines.player ?? null, events: [] });
+    beats.push({ tick, kind: 'resolve', line: frame.lines[robot] ?? null, events: [] });
   }
   const last = frames.length - 1;
   let group: TraceEvent[] = [];
@@ -48,7 +51,7 @@ export function buildBeats(frames: readonly Frame[]): Beat[] {
     if (group.length > 0) beats.push({ tick: last, kind: 'line', line: lineOf(group[0]!), events: group, after: true });
     group = [];
   };
-  for (const e of frames[last]?.after ?? []) {
+  for (const e of robot === 'player' ? (frames[last]?.after ?? []) : []) {
     if (startsGroup(e) || group.length === 0) flushAfter();
     group.push(e);
   }
@@ -57,18 +60,18 @@ export function buildBeats(frames: readonly Frame[]): Beat[] {
 }
 
 /** A round in which nothing at all happens: the script has ended (no line), no action, no event, no speech. */
-export function isIdleBeat(beats: readonly Beat[], frames: readonly Frame[], index: number): boolean {
+export function isIdleBeat(beats: readonly Beat[], frames: readonly Frame[], index: number, robot = 'player'): boolean {
   const beat = beats[index];
   if (!beat || beat.kind !== 'resolve' || beat.line !== null) return false;
   const frame = frames[beat.tick];
-  return !!frame && frame.events.length === 0 && frame.bubbles.length === 0 && (frame.trace ?? []).length === 0;
+  return !!frame && frame.events.length === 0 && frame.bubbles.length === 0 && (traceOf(frame, robot) ?? []).length === 0;
 }
 
 /** The last beat of the run of idle rounds that starts at `index` (`index` itself when it is not idle). */
-export function idleRunEnd(beats: readonly Beat[], frames: readonly Frame[], index: number): number {
+export function idleRunEnd(beats: readonly Beat[], frames: readonly Frame[], index: number, robot = 'player'): number {
   let i = index;
-  if (!isIdleBeat(beats, frames, i)) return i;
-  while (isIdleBeat(beats, frames, i + 1)) i++;
+  if (!isIdleBeat(beats, frames, i, robot)) return i;
+  while (isIdleBeat(beats, frames, i + 1, robot)) i++;
   return i;
 }
 

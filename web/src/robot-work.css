@@ -43,20 +43,6 @@
 /* The equipment: one compact row under the level pills, the equipped parts as small icons */
 .rb-equip-row {
   display: flex;
-  gap: 0.5rem;
-}
-.rb-peek-note[hidden] {
-  display: none;
-}
-.robot .rb-peek {
-  min-height: 2.75rem;
-  padding: 0.2rem 0.6rem;
-  margin-left: auto;
-  white-space: nowrap;
-}
-.robot .rb-peek[aria-pressed='true'] {
-  border-color: var(--accent, currentColor);
-  font-weight: 600;
 }
 .robot .rb-equip {
   display: inline-flex;

@@ -3,9 +3,6 @@ export const WORK_DE = {
   'work.close': 'Schließen',
   'work.parts': 'Ausrüstung',
   'work.edit': 'Skript ändern',
-  'work.peek': 'Lösung',
-  'work.peekOff': 'Mein Skript',
-  'work.peekNote': 'Lösungscode dieser Aufgabe. Du kannst ihn ausführen und Zeile für Zeile verfolgen – dein Skript bleibt unberührt, nichts zählt.',
   'work.improve': 'Skript verbessern',
 };
 
@@ -13,9 +10,6 @@ export const WORK_EN = {
   'work.close': 'Close',
   'work.parts': 'Equipment',
   'work.edit': 'Edit script',
-  'work.peek': 'See solution',
-  'work.peekOff': 'My script',
-  'work.peekNote': "This challenge's solution code. Run it and follow it line by line - your script stays untouched and nothing counts.",
   'work.improve': 'Improve script',
 };
 

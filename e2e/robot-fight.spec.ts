@@ -137,21 +137,3 @@ test('the arena shows each enemy\'s hit points: one bar segment per HP, so diffe
   );
   expect(segments).toEqual([1, 2, 3]);
 });
-
-test('"Lösung ansehen" swaps the editor for the solution, runs it without touching the script; "Mein Skript" brings it back', async ({ page }) => {
-  await openTask(page, 'first-contact', 'wait()');
-  const code = page.getByTestId('robot-code');
-  await page.getByTestId('robot-peek').click();
-  await expect(code).toHaveValue('forward()\nfire()');
-  await expect(page.getByTestId('robot-peek-note')).toBeVisible();
-  await page.getByTestId('robot-run').click();
-  await page.getByTestId('robot-skip').click();
-  await expect(page.getByTestId('robot-outcome')).toHaveAttribute('data-state', 'won');
-  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pydra.v1.robot')!).script)).toBe('wait()');
-  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pydra.v1.robot')!).solved)).toEqual([]);
-  await page.getByTestId('robot-peek').click();
-  await expect(code).toHaveValue('wait()');
-  await expect(page.getByTestId('robot-peek-note')).toBeHidden();
-  const box = await page.getByTestId('robot-peek').boundingBox();
-  expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
-});

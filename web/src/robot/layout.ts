@@ -16,7 +16,9 @@ export interface EnemyDef {
   regen?: { every: number; amount: number };
   /** Walks `steps` tiles in `dir` and back again, one step every `every` rounds (default 1). */
   /** `circle`: walks a square (a right turn after `steps` tiles) instead of back and forth. */
-  patrol?: { dir: Dir; steps: number; every?: number; circle?: boolean };
+  patrol?: { dir: Dir; steps: number; every?: number; circle?: boolean; /** Tiles of the first leg already walked (where on its path it starts). */ start?: number };
+  /** Shoots at the player when it is in line (turning to it first; it stands still for that round), then waits `every` rounds before the next shot. */
+  aim?: { every: number };
   /** A shield that is down for `down` rounds, then up for `up` rounds (blocks every shot, not used up). */
   shieldCycle?: { up: number; down: number };
 }
@@ -106,7 +108,7 @@ export function buildLayout(spec: LayoutSpec, playerHp: number, player: { canCro
     const id = `enemy${i + 1}`;
     defOf[id] = def;
     const facing = def.face ? (mirrored ? MIRROR[def.face] : def.face) : towards(e.pos, parsed.player.pos);
-    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: (def.armor ?? 0) + (def.locomotion === 'treads' ? 3 : 0), canCross: { rubble: def.locomotion === 'legs' || def.locomotion === 'treads' }, ...(def.regen ? { regen: def.regen } : {}), ...(def.patrol ? { patrol: mirrored ? { ...def.patrol, dir: MIRROR[def.patrol.dir] } : def.patrol } : {}), ...(def.shieldCycle ? { shieldCycle: def.shieldCycle } : {}) });
+    robots.push({ id, team: 'enemy', pos: e.pos, facing, hp: def.hp, armor: (def.armor ?? 0) + (def.locomotion === 'treads' ? 3 : 0), canCross: { rubble: def.locomotion === 'legs' || def.locomotion === 'treads' }, ...(def.regen ? { regen: def.regen } : {}), ...(def.patrol ? { patrol: mirrored ? { ...def.patrol, dir: MIRROR[def.patrol.dir] } : def.patrol } : {}), ...(def.aim ? { aim: def.aim } : {}), ...(def.shieldCycle ? { shieldCycle: def.shieldCycle } : {}) });
   });
   return { setup: { tiles: parsed.tiles, robots, seed: spec.seed, ...(spec.maxTicks ? { maxTicks: spec.maxTicks } : {}) }, mapRows: rows, mirrored, enemyDefs: [...spec.enemies], defOf };
 }

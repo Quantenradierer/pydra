@@ -186,7 +186,7 @@ describe('enemies are not all alike', () => {
     }
   });
   it('a moving or shielded enemy is worth 2 hit points because the script has to do more for it', () => {
-    for (const e of ENEMIES) for (const d of e.enemies) if ((d.patrol || d.shieldCycle) && e.id !== 'circle-dummy') // the circler in Chapter 0 has 1 hit point: the walking is the new idea
+    for (const e of ENEMIES) for (const d of e.enemies) if ((d.patrol || d.shieldCycle) && !['circle-dummy', 'roamer', 'ring-search'].includes(e.id)) // the circler in Chapter 0 has 1 hit point: the walking is the new idea
        expect(d.hp, e.id).toBe(2);
   });
 });

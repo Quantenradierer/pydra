@@ -46,6 +46,25 @@ describe('Chapter 3', () => {
   });
 });
 
+describe('Chapter 1: the ring', () => {
+  it('Roamer: the dummy walks past the robot; waiting three rounds and then firing wins, one round too early or too late does not', () => {
+    expect(run('roamer', 'wait()\nwait()\nwait()\nfire()').won).toBe(true);
+    expect(run('roamer', 'wait()\nwait()\nfire()').won).toBe(false);
+  });
+  it('Circle Search: it starts at another place on the circle; timing alone is not enough, looking is', () => {
+    expect(run('ring-search', 'wait()\nwait()\nwait()\nfire()').won).toBe(false);
+    expect(run('ring-search', enemy('ring-search').solution).won).toBe(true);
+  });
+  it('Circle Search: a fight is won only if it is won from every start (a script that finds just one of the four does not win)', () => {
+    const turnsOnce = 'for i in range(40):\n    if see() == "enemy":\n        fire()';
+    expect(run('ring-search', turnsOnce).won).toBe(false);
+  });
+  it('Four Spots: staying put loses, turning and looking wins from all four places', () => {
+    expect(run('four-spots', 'fire()\nfire()').won).toBe(false);
+    expect(run('four-spots', enemy('four-spots').solution).won).toBe(true);
+  });
+});
+
 describe('Chapter 4', () => {
   it('Regenerator: the old script stops after one shot and loses', () => {
     expect(run('regenerator', enemy('far-far-dummy').solution).won).toBe(false);

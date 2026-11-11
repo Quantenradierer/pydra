@@ -29,6 +29,7 @@ describe('chapters are chains: every challenge adds to the one before', () => {
     for (let i = 1; i < list.length; i++) {
       const prev = list[i - 1]!;
       const next = list[i]!;
+      if (next.fresh) continue;
       describe(`Chapter ${c}: ${prev.id} -> ${next.id}`, () => {
         it('the new solution contains the old one, line by line in order', () => {
           expect(isSubsequence(lines(prev.solution), lines(next.solution))).toBe(true);

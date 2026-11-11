@@ -44,6 +44,10 @@ export interface EnemyData {
   solution: string;
   /** Pieces the catch should break: false when the previous solution may also win (practice enemies). */
   breaks?: boolean;
+  /** More starts of the same fight (another map and enemy definitions, e.g. the enemy elsewhere on its path): the fight is won only if it is won from every start, so the script must work for all of them. */
+  variants?: { map: string[]; enemies: EnemyDef[] }[];
+  /** The script of the challenge before is not the base of this one: the idea changes and the player writes a new script. */
+  fresh?: boolean;
   /** Lines of a clean solution: fewer or equal lines earns the "few lines" star. */
   par: number;
 }

@@ -364,3 +364,20 @@ Not built (ideas, same pattern): a gate that opens on a rhythm (needs a tile sta
 ## Training Grounds removed
 
 The Training Grounds (random and daily fights, `training.ts`, the map button, the stats in the save) are gone. Old saves keep working: the `training` field is ignored.
+
+## The ring challenges (start of Chapter 1)
+
+Chapter 1 now starts with four challenges in a 9x9 arena (robot in the middle at (4, 4), a dummy walking a big square of side 6 around it); then the three number challenges (`two-steps`, `far-dummy`, `sign-dummy`) follow, with `fresh: true` on `two-steps` (the script chain restarts there; `chain.test.ts` skips pairs whose second challenge is `fresh`).
+
+| Challenge | Enemy | Idea |
+|---|---|---|
+| `roamer` | walks the ring from a corner, 1 HP, shoots rarely (cooldown 8) | wait until it is in front, then `fire()` |
+| `ring-search` | starts at one of four places on the ring (`variants`), 1 HP, cooldown 8 | `see()` and `if`: turn, look, fire |
+| `ring-shooter` | same, 2 HP, cooldown 3 (shoots more); the hint explains `else` | stay while you see it |
+| `four-spots` | stands still at one of four places around the robot, 2 HP | turn and find it |
+
+Engine and data (all tested in `engine.test.ts` and `chapters.test.ts`):
+
+* **Patrols turn to face the way they walk**, so a wheeled enemy no longer slides sideways. `patrol.circle` walks a square (right turn after `steps` tiles), `patrol.start` is how far into the first leg it begins.
+* **`aim: { every }`**: an enemy shoots at the player when they are in line (same row or column, nothing between), turning to face it and standing still for that round, then waits `every` rounds. It only ever hits from the middle of a side of the ring.
+* **`variants`** on a challenge: more starts of the same fight (another map and enemy definitions). The fight counts as won only if it is won from every start, so the script has to work for all of them; the report shows the first lost start, else the last.

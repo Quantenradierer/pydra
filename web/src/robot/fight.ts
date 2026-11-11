@@ -2,14 +2,14 @@ import { START_BUILD, type Build } from './build.ts';
 import { runBattle, type BattleResult } from './battle.ts';
 import type { EnemyData, Needs } from './content/types.ts';
 import { SEED } from './content/types.ts';
-import type { LayoutSpec } from './layout.ts';
+import type { EnemyDef, LayoutSpec } from './layout.ts';
 
 /** Lines of code: blank lines and comment-only lines do not count. */
 export const codeLines = (script: string): number => script.split('\n').filter((l) => l.trim() !== '' && !l.trim().startsWith('#')).length;
 
 /** The one fight of an enemy: its map, its enemies and the seed. */
-export function layoutOf(enemy: EnemyData): LayoutSpec {
-  return { map: enemy.map, enemies: enemy.enemies, seed: SEED, ...(enemy.maxTicks ? { maxTicks: enemy.maxTicks } : {}) };
+export function layoutOf(enemy: EnemyData, variant?: { map: string[]; enemies: EnemyDef[] }): LayoutSpec {
+  return { map: variant?.map ?? enemy.map, enemies: variant?.enemies ?? enemy.enemies, seed: SEED, ...(enemy.maxTicks ? { maxTicks: enemy.maxTicks } : {}) };
 }
 
 export interface FightReport {
@@ -63,7 +63,9 @@ export function judge(battle: BattleResult, needs: Needs | undefined, script = '
 
 /** The fight of an enemy with the player's build and script, judged against the enemy's extra conditions. `trace` records the line-by-line trace for the viewer. */
 export function fightEnemy(enemy: EnemyData, build: Build, script: string, trace = false): EnemyReport {
-  const fight = judge(runBattle({ build, script, layout: layoutOf(enemy), ...(trace ? { trace } : {}) }), enemy.needs, script);
+  // Every start of the fight must be won; the report shows the first one that was lost, else the last one.
+  const reports = [undefined, ...(enemy.variants ?? [])].map((v) => judge(runBattle({ build, script, layout: layoutOf(enemy, v), ...(trace ? { trace } : {}) }), enemy.needs, script));
+  const fight = reports.find((r) => !r.won) ?? reports.at(-1)!;
   const lines = codeLines(script);
   const tooLong = enemy.needs?.maxLines !== undefined && lines > enemy.needs.maxLines;
   return { fight, won: fight.won && !tooLong, tooLong, lines, damage: fight.battle.damageTaken };

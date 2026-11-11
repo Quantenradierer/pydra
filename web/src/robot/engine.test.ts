@@ -215,6 +215,20 @@ describe('patrol: an enemy that walks a fixed path back and forth', () => {
     expect(path(w, 5).map((p) => `${p.x},${p.y}`)).toEqual(['2,1', '2,2', '1,2', '1,1', '2,1']);
   });
 
+  it('turns to face the way it walks (a wheeled robot does not slide sideways)', () => {
+    const w = patrolWorld({ dir: 'E', steps: 1 }, ['.....', '.D...', '.....', '..^..', '.....']);
+    w.robot('enemy1').patrol!.circle = true;
+    const faces: string[] = [];
+    for (let i = 0; i < 4; i++) (w.step(intents({})), faces.push(w.robot('enemy1').facing));
+    expect(faces).toEqual(['E', 'S', 'W', 'N']);
+  });
+
+  it('`start` is how far into its first leg the patrol begins', () => {
+    const w = patrolWorld({ dir: 'E', steps: 3 });
+    w.robot('enemy1').patrol!.done = 2;
+    expect(path(w, 4).map((p) => p.x)).toEqual([1, 0, 1, 2]);
+  });
+
   it('moves only every `every` rounds', () => {
     const w = patrolWorld({ dir: 'E', steps: 2, every: 3 });
     expect(path(w, 7).map((p) => p.x)).toEqual([0, 0, 1, 1, 1, 2, 2]);
@@ -299,5 +313,33 @@ describe('shield cycle: an enemy shield that comes and goes on its own', () => {
     expect(run()).toBe(run());
     // patrol period 8, shield period 5: the pattern only repeats after 40 rounds
     expect(run().split(' ').slice(0, 8).join()).not.toBe(run().split(' ').slice(8, 16).join());
+  });
+});
+
+describe('an enemy that aims: shoots at the player when in line, then waits', () => {
+  const aimWorld = (cooldown: number) => {
+    const w = world(['..^..', '.....', '.....', '.....', 'D....'], {}, 3);
+    // the enemy walks along the bottom row, below the player
+    const e = w.robot('enemy1');
+    e.pos = { x: 0, y: 4 };
+    e.patrol = { heading: 'E', steps: 4, every: 1, done: 0 };
+    e.aim = { every: cooldown, ready: cooldown };
+    return w;
+  };
+  it('does not shoot before its cooldown is over, and only when the player is in line', () => {
+    const w = aimWorld(3);
+    const shots: number[] = [];
+    for (let i = 0; i < 12; i++) {
+      const events = w.step(intents({}));
+      if (events.some((ev) => ev.type === 'shot' && ev.by === 'enemy1')) shots.push(w.robot('enemy1').pos.x);
+    }
+    // in line only in column 2; it shoots there (standing still that round), facing the player
+    expect(shots.length).toBeGreaterThan(0);
+    expect(new Set(shots)).toEqual(new Set([2]));
+  });
+  it('turns to the player to shoot, and damages it', () => {
+    const w = aimWorld(1);
+    for (let i = 0; i < 6; i++) w.step(intents({}));
+    expect(w.player.hp).toBeLessThan(10);
   });
 });

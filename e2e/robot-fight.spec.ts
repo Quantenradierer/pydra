@@ -131,7 +131,7 @@ test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next b
 });
 
 test('the arena shows each enemy\'s hit points: one bar segment per HP, so different HP looks different', async ({ page }) => {
-  await openTask(page, 'sign-dummy', 'forward()', ['first-contact', 'side-dummy', 'move-and-turn', 'circle-dummy', 'tough-walker', 'two-steps', 'far-dummy']);
+  await openTask(page, 'sign-dummy', 'forward()', ['first-contact', 'side-dummy', 'move-and-turn', 'circle-dummy', 'tough-walker', 'roamer', 'ring-search', 'ring-shooter', 'four-spots', 'two-steps', 'far-dummy']);
   const segments = await page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>('.rb-unit.enemy')].map((u) => u.querySelectorAll('.rb-hp i').length).sort(),
   );

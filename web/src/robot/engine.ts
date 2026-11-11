@@ -87,6 +87,8 @@ export interface Robot {
   patrol?: PatrolState;
   /** A shield with its own rhythm; not used up by a block. */
   cycle?: ShieldCycle;
+  /** A cooldown of `every` rounds between shots; when it is over and the player is in line (same row or column, nothing between), it turns to the player and shoots instead of walking. */
+  aim?: { every: number; /** Rounds until the next shot is ready. */ ready: number };
 }
 
 export type GameEvent =
@@ -112,7 +114,8 @@ export interface RobotSetup {
   canCross?: { rubble?: boolean; pit?: boolean };
   regen?: { every: number; amount: number };
   plates?: boolean;
-  patrol?: { dir: Dir; steps: number; every?: number; circle?: boolean };
+  patrol?: { dir: Dir; steps: number; every?: number; circle?: boolean; start?: number };
+  aim?: { every: number };
   shieldCycle?: ShieldCycle;
 }
 
@@ -155,7 +158,8 @@ export class World {
       lastHit: null,
       ...(r.regen ? { regen: r.regen } : {}),
       ...(r.plates ? { plates: 100 } : {}),
-      ...(r.patrol ? { patrol: { heading: r.patrol.dir, steps: r.patrol.steps, every: r.patrol.every ?? 1, circle: r.patrol.circle ?? false, done: 0 } } : {}),
+      ...(r.patrol ? { patrol: { heading: r.patrol.dir, steps: r.patrol.steps, every: r.patrol.every ?? 1, circle: r.patrol.circle ?? false, done: r.patrol.start ?? 0 } } : {}),
+      ...(r.aim ? { aim: { every: r.aim.every, ready: r.aim.every } } : {}),
       ...(r.shieldCycle ? { cycle: r.shieldCycle, shieldUp: cycleUp(r.shieldCycle, 0) } : {}),
     }));
   }
@@ -236,7 +240,27 @@ export class World {
     const events: GameEvent[] = [];
     const live = this.alive();
     const pushed = new Map<string, Intent>();
+    const aimed = new Set<string>();
     const intentOf = (r: Robot): Intent => pushed.get(r.id) ?? intents.get(r.id) ?? { type: 'wait' };
+
+    // Aiming enemies: when the player is in line on their shooting round they turn to it and shoot (and do not walk this round).
+    for (const r of live) {
+      if (!r.aim) continue;
+      if (r.aim.ready > 0) {
+        r.aim.ready--;
+        continue;
+      }
+      for (const dir of DIRS) {
+        const found = this.ahead(r.pos, dir, 99, r);
+        if (found?.robot?.team === 'player') {
+          r.facing = dir;
+          aimed.add(r.id);
+          r.aim.ready = r.aim.every;
+          pushed.set(r.id, { type: 'shoot', range: 99, damage: 1 } as Intent);
+          break;
+        }
+      }
+    }
 
     // Pushes: the robot ahead is shoved one tile further, then the pusher steps like on a normal move.
     for (const r of live) {
@@ -346,13 +370,14 @@ export class World {
     // Patrols walk last, so what a sensor saw at the start of the round is where a shot landed.
     for (const r of live) {
       const p = r.patrol;
-      if (!p || r.hp <= 0 || (this.tick + 1) % p.every !== 0) continue;
+      if (!p || r.hp <= 0 || aimed.has(r.id) || (this.tick + 1) % p.every !== 0) continue;
       const free = (to: Pos) => this.passable(r, to) === true && !this.robotAt(to);
       if (p.done >= p.steps || !free(step(r.pos, p.heading))) {
         p.heading = p.circle ? turnRight(p.heading) : opposite(p.heading);
         p.done = 0;
       }
       const to = step(r.pos, p.heading);
+      r.facing = p.heading;
       if (free(to)) {
         r.pos = to;
         p.done++;

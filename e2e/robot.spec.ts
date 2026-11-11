@@ -147,10 +147,10 @@ test('the builder: every part can be equipped at any time; new parts are only ma
   await expect(page.getByTestId('robot-outcome')).toContainText('Gewonnen!');
 
   // Chapter 1 only marks the cannon as new; it is still just a part.
-  await page.evaluate(({ CH, SCRIPT }) => {
-    const solved = [...CH, 'two-steps'];
+  await page.evaluate(({ CH, RING, SCRIPT }) => {
+    const solved = [...CH, ...RING, 'two-steps'];
     localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: SCRIPT }));
-  }, { CH: CH0, SCRIPT: solution('far-dummy') });
+  }, { CH: CH0, RING: CH1.slice(0, 4), SCRIPT: solution('far-dummy') });
   await page.goto('/#/');
   await page.reload();
   await page.getByTestId('start-robot').click();
@@ -352,7 +352,7 @@ test('the task map: a Continue button leads to the next task and finished chapte
 
 test('the build screen draws the robot from its parts: tap sockets to plug parts in and out, swap the drive', async ({ page }) => {
   await page.goto('/');
-  const solved = [...CH0, 'two-steps'];
+  const solved = [...CH0, ...CH1.slice(0, 5)];
   await page.evaluate((s) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()' })), solved);
   await page.reload();
   await page.getByTestId('start-robot').click();

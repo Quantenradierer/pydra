@@ -7,6 +7,7 @@ import { INTRODUCED_IN, CHASSIS, addonsFor, type Build, type GearId } from '../r
 import type { EnemyData } from '../robot/content/types.ts';
 import type { EnemyReport, FightReport } from '../robot/fight.ts';
 import { fightEnemy } from '../robot/fight.ts';
+import { precheck } from '../robot/battle.ts';
 import { createViewer, DEFAULT_SPEED, type Speed, type Viewer } from './robot-viewer.ts';
 import { parseMap } from '../robot/layout.ts';
 import { friendlyError } from '../robot/friendly.ts';
@@ -286,7 +287,11 @@ export function robotScreen(app: App): Screen {
     const partsSheet = createSheet(t('robot.build'), sheetClose, 'robot-parts-sheet');
     const equipIcons = h('span', { class: 'rb-equip-icons', 'aria-hidden': 'true' });
     const partsBtn = h('button', { type: 'button', class: 'run-control rb-equip', 'data-testid': 'robot-build-open', 'aria-haspopup': 'dialog', onclick: partsSheet.open }, h('span', { class: 'rb-equip-label' }, t('work.parts')), equipIcons);
-    const equipRow = h('div', { class: 'rb-equip-row', 'data-testid': 'robot-equipment' }, partsBtn);
+    /** Peek: the editor shows the reference code of this challenge instead of the player's script. It runs and steps like any script, but nothing is saved and nothing counts. */
+    let peek = false;
+    const peekBtn = h('button', { type: 'button', class: 'run-control rb-peek', 'data-testid': 'robot-peek', 'aria-pressed': 'false', onclick: () => setPeek(!peek) }, t('work.peek'));
+    const equipRow = h('div', { class: 'rb-equip-row', 'data-testid': 'robot-equipment' }, partsBtn, peekBtn);
+    const peekNote = h('p', { class: 'robot-note rb-peek-note', 'data-testid': 'robot-peek-note', hidden: true }, t('work.peekNote'));
     /** The goal in plain words, and what is special about this task: two short sentences at most. */
     const task = h('p', { class: 'rb-task-text', 'data-testid': 'robot-catch' }, goalText(enemy), ' ', h('span', { class: 'rb-task-hint' }, enemy.catchLine[lang]));
 
@@ -315,9 +320,21 @@ export function robotScreen(app: App): Screen {
     listingHolder.append(listingMount);
     listingHolder.addEventListener('click', () => showEditor(true));
     listingHolder.addEventListener('keydown', (e) => ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') && (e.preventDefault(), showEditor(true)));
-    ed = editor(game.script(), () => game.build(), (text) => (game.setScript(text), toIdle()));
+    ed = editor(game.script(), () => game.build(), (text) => (peek || game.setScript(text), toIdle()));
     area = ed.area;
     area.addEventListener('focus', toIdle);
+
+    function setPeek(on: boolean) {
+      if (on === peek) return;
+      peek = on;
+      peekBtn.setAttribute('aria-pressed', String(on));
+      peekBtn.textContent = on ? t('work.peekOff') : t('work.peek');
+      peekNote.hidden = !on;
+      errorHolder.replaceChildren();
+      ed!.set(on ? enemy.solution : game.script());
+      toIdle();
+      showEditor(true);
+    }
 
     function showEditor(edit: boolean) {
       ed!.el.hidden = !edit;
@@ -335,7 +352,7 @@ export function robotScreen(app: App): Screen {
       primary.dataset.state = state;
     }
     primary.addEventListener('click', () => {
-      if (state === 'idle') return (game.setScript(area.value), fight());
+      if (state === 'idle') return (peek || game.setScript(area.value), fight());
       if (state === 'playing') return fighting?.toEnd();
       if (state === 'lost') return showEditor(true);
       if (nextAction) nextAction.go();
@@ -365,8 +382,17 @@ export function robotScreen(app: App): Screen {
       }
     }
 
+    /** A fight of the reference code: nothing is saved, no points, no stars. */
+    function peekRun(): RunReport {
+      const script = area.value;
+      const error = precheck(game.build(), script);
+      if (error) return { step, error, won: false, firstWin: false, stars: 0 };
+      const report = fightEnemy(enemy, game.build(), script);
+      return { step, report, won: report.won, firstWin: false, stars: 0 };
+    }
+
     function fight() {
-      const run = opts.run();
+      const run = peek ? peekRun() : opts.run();
       if (!run) return;
       errorHolder.replaceChildren();
       if (run.error) {
@@ -390,16 +416,16 @@ export function robotScreen(app: App): Screen {
         nextAction = ok ? opts.next() : undefined;
         result.hidden = false;
         result.replaceChildren(
-          h('p', { class: `verdict ${ok ? 'correct' : 'wrong'}`, 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text, run.won ? h('span', { class: 'rb-stars', 'data-testid': 'robot-stars', title: t('robot.stars', { n: run.stars }) }, ` ${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)}`) : null),
+          h('p', { class: `verdict ${ok ? 'correct' : 'wrong'}`, 'data-testid': 'robot-outcome', 'data-state': ok ? 'won' : 'lost', 'aria-live': 'polite' }, text, run.won && !peek ? h('span', { class: 'rb-stars', 'data-testid': 'robot-stars', title: t('robot.stars', { n: run.stars }) }, ` ${'★'.repeat(run.stars)}${'☆'.repeat(3 - run.stars)}`) : null),
           ...(report.tooLong ? [h('p', { class: 'robot-loss' }, t('robot.outcome.tooLong', { lines: report.lines, max: enemy.needs?.maxLines ?? 0 }))] : []),
           ...extra,
-          ...(rule ? [rule] : []),
+          ...(rule && !peek ? [rule] : []),
         );
         paintPrimary();
         // On a phone the verdict and the button sit below the arena: bring them into view (nothing moves when they are already visible).
         requestAnimationFrame(() => primary.scrollIntoView({ block: 'nearest' }));
       };
-      fighting = playFight(enemy, game.build(), game.script(), { arena: arenaHolder, explain: explainHolder, controls: controlsHolder, listing: listingMount }, reveal);
+      fighting = playFight(enemy, game.build(), peek ? area.value : game.script(), { arena: arenaHolder, explain: explainHolder, controls: controlsHolder, listing: listingMount }, reveal);
       cleanup = fighting.dispose;
       paintPrimary();
       showEditor(false);
@@ -407,7 +433,7 @@ export function robotScreen(app: App): Screen {
     }
 
     const left = h('div', { class: 'rb-main' }, task, arenaHolder, controlRow, explainHolder);
-    const right = h('div', { class: 'rb-code' }, errorHolder, ed.el, listingHolder, result, primary);
+    const right = h('div', { class: 'rb-code' }, peekNote, errorHolder, ed.el, listingHolder, result, primary);
     const page = h('div', { class: 'rb-page', 'data-testid': 'robot-work' }, left, right, partsSheet.dialog);
     drawRobot();
     showWork(h('div', { class: 'rb-work' }, stepBar(step, opts), equipRow, page));

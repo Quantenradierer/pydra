@@ -1,5 +1,5 @@
 /** The hydra games that award points; the same keys as their routes. */
-export const XP_GAMES = ['game', 'hunt', 'order', 'predict', 'robot'] as const;
+export const XP_GAMES = ['game', 'hunt', 'order', 'predict', 'robot', 'factory'] as const;
 export type XpGame = (typeof XP_GAMES)[number];
 
 export const isXpGame = (v: unknown): v is XpGame => (XP_GAMES as readonly unknown[]).includes(v);

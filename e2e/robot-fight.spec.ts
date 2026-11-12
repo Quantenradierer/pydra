@@ -1,6 +1,6 @@
 import { CH0 } from './robot-ids.ts';
 import { expect, test, type Page } from '@playwright/test';
-import { startFight } from './helpers.ts';
+import { startFight, openGame } from './helpers.ts';
 
 /** The fight is played, slowly, on the arena; the verdict only comes when it is over. And nothing on the task page is decoration. */
 
@@ -8,7 +8,7 @@ async function openTask(page: Page, step = 'first-contact', script = 'forward()\
   await page.goto('/');
   await page.evaluate(([code, solved]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: code, runs: 0, wins: 0 })), [script, solved] as const);
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId(`robot-step-${step}`).click();
 }
 
@@ -126,7 +126,7 @@ test('"Aufgabe 1" is never ambiguous: the map card names the chapter, the next b
   await page.goto('/');
   await page.evaluate((solved) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved, script: 'forward()', runs: 0, wins: 0 })), CH0);
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await expect(page.getByTestId('robot-continue')).toContainText('Kapitel 1: Zahlen und Variablen · Aufgabe 1');
 });
 

@@ -9,8 +9,8 @@ import { PointsService } from './service.ts';
 import { currentStreak, dayKey, emptyPoints, parsePoints, previousDay, type GameContext, type PointsEvent, type PointsState } from './state.ts';
 
 const CTX: GameContext = {
-  totals: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10 },
-  remaining: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10 },
+  totals: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10, factory: 10 },
+  remaining: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10, factory: 10 },
 };
 const at = (day: string, hour = 12) => new Date(`${day}T${String(hour).padStart(2, '0')}:00:00`);
 

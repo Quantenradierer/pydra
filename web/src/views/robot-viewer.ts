@@ -55,7 +55,7 @@ export interface Viewer {
 }
 
 /** A hint for the end of a code line: `distance() → 3 · d = 3`, `✓ wahr`, ... */
-function hintText(hint: LineHint, t: T, line = ''): { text: string; branch?: 'true' | 'false' } {
+export function hintText(hint: LineHint, t: T, line = ''): { text: string; branch?: 'true' | 'false' } {
   const parts: string[] = [];
   let branch: 'true' | 'false' | undefined;
   // A hint that only repeats the line (`forward()` under `forward()`) adds nothing.

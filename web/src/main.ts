@@ -8,6 +8,7 @@ import { HUNT_LEVELS, type HuntLevel } from './game/hunt-levels.ts';
 import { OrderGame } from './game/order.ts';
 import { PredictGame } from './game/predict.ts';
 import { RobotGame } from './robot/game.ts';
+import { FactoryGame } from './factory/game.ts';
 import { InstallPrompt } from './install.ts';
 import { PointsService } from './points/service.ts';
 import { XP_GAMES, type PointsEvent, type XpGame } from './points/state.ts';
@@ -17,11 +18,12 @@ import { UpdateManager, watchForUpdates } from './update.ts';
 import './style.css';
 import './robot/art/robot-art.css';
 import './robot-work.css';
+import './factory.css';
 
 const storage = new AppStorage(localStorage, CONTENT);
 
 // The games by key; assigned below, read lazily by the points.
-let games: { game: Game; hunt: Game<HuntLevel>; order: OrderGame; predict: PredictGame; robot: RobotGame };
+let games: { game: Game; hunt: Game<HuntLevel>; order: OrderGame; predict: PredictGame; robot: RobotGame; factory: FactoryGame };
 
 const byGame = <T>(fn: (key: XpGame) => T) => Object.fromEntries(XP_GAMES.map((key) => [key, fn(key)])) as Record<XpGame, T>;
 
@@ -46,7 +48,8 @@ const hunt = new Game(storage, HUNT_LEVELS, Math.random, 'hunt', onPoints);
 const order = new OrderGame(storage, undefined, onPoints);
 const predict = new PredictGame(storage, undefined, onPoints);
 const robot = new RobotGame(storage, undefined, onPoints);
-games = { game, hunt, order, predict, robot };
+const factory = new FactoryGame(storage, onPoints);
+games = { game, hunt, order, predict, robot, factory };
 const feedback = new FeedbackQueue(storage);
 const install = new InstallPrompt(window);
 
@@ -63,7 +66,7 @@ const updateSW = registerSW({
   },
 });
 
-new App(document.getElementById('app')!, { storage, trainer, daily, game, hunt, order, predict, robot, points, feedback, install, updates }).start();
+new App(document.getElementById('app')!, { storage, trainer, daily, game, hunt, order, predict, robot, factory, points, feedback, install, updates }).start();
 
 // Deliver feedback written while offline.
 const flushFeedback = () => void feedback.flush();

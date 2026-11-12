@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { startFight } from './helpers.ts';
+import { startFight, openGame } from './helpers.ts';
 
 /** rb21: one list of challenges (the level pills), one fight per challenge, the equipment row right under the pills, a short goal line. */
 
@@ -12,7 +12,7 @@ async function open(page: Page, step: string, lang: 'de' | 'en', solved = SOLVED
     localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()\nfire()', runs: 1, wins: 1 }));
   }, [lang, solved] as const);
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.locator('details.robot-chapter').first().evaluate((d) => ((d as HTMLDetailsElement).open = true));
   await page.getByTestId(`robot-step-${step}`).click();
 }

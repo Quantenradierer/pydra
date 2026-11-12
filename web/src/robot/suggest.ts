@@ -195,6 +195,8 @@ export interface Snippet {
 export interface SnippetGroup {
   /** `flow`, `compare`, `move` or a gear id. */
   id: string;
+  /** The tab's text; missing: the `robot.sug.group.<id>` text. */
+  label?: string;
   snippets: Snippet[];
 }
 

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { runFight } from './helpers.ts';
+import { runFight, openGame } from './helpers.ts';
 
 /** Independent UX review checks: tap targets, clipped text, a primary button that does not jump. */
 
@@ -11,7 +11,7 @@ const SIZES = [
 async function start(page: Page) {
   await page.addInitScript(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()', runs: 1, wins: 1 })));
   await page.goto('/');
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-first-contact').click();
 }
 

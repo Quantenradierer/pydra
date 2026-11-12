@@ -7,6 +7,9 @@ import { GEAR, SPEECH_BUBBLE } from '../icons.ts';
 import { levelInfo, titleKey } from '../points/levels.ts';
 import { percentCorrect } from '../stats.ts';
 
+/** Games not listed on the home screen for now (the route itself still works). */
+const HIDDEN_GAMES: readonly GameRoute[] = ['robot', 'factory'];
+
 export function homeScreen(app: App): Screen {
   const { t } = app;
   const { storage, trainer } = app.services;
@@ -59,6 +62,9 @@ export function homeScreen(app: App): Screen {
     } else if (route === 'robot') {
       const stats = app.services.robot.stats();
       statsText = stats.runs === 0 ? t('home.robot.noStats') : t('home.robot.stats', stats);
+    } else if (route === 'factory') {
+      const stats = app.services.factory.stats();
+      statsText = stats.runs === 0 ? t('home.factory.noStats') : t('home.factory.stats', stats);
     } else if (route === 'order') {
       const stats = app.services.order.stats();
       statsText = stats.runs === 0 ? t('home.order.noStats') : t(stats.runs === 1 ? 'home.order.stats.one' : 'home.order.stats.other', stats);
@@ -162,7 +168,7 @@ export function homeScreen(app: App): Screen {
       'section',
       { class: 'lesson-group' },
       h('h2', { id: 'home-games' }, t('home.games')),
-      h('ul', { class: 'lessons', 'aria-labelledby': 'home-games' }, ...GAME_ROUTES.map(gameCard)),
+      h('ul', { class: 'lessons', 'aria-labelledby': 'home-games' }, ...GAME_ROUTES.filter((route) => !HIDDEN_GAMES.includes(route)).map(gameCard)),
     ),
   );
   return { root };

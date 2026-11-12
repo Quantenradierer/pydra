@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { closeSheets, fillCode, runFight } from './helpers.ts';
+import { closeSheets, fillCode, runFight, openGame } from './helpers.ts';
 import { CH0, CH1, CH2 } from './robot-ids.ts';
 
 /**
@@ -16,7 +16,7 @@ const BUILD = { chassis: 'medium', locomotion: 'wheels', gear: ['blaster', 'eyes
 async function start(page: Page, solved: string[] = SOLVED) {
   await page.addInitScript(([s, b]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()\nfire()', build: b, runs: 40, wins: 40 })), [solved, BUILD] as const);
   await page.goto('/');
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await expect(page.getByTestId('robot-map')).toBeVisible();
 }
 

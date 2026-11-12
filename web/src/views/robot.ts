@@ -30,6 +30,11 @@ export function robotScreen(app: App): Screen {
   const speed: Speed = { level: DEFAULT_SPEED };
   /** Stops whatever is playing on the current screen (set by the battle screen). */
   let cleanup: (() => void) | undefined;
+  /** The editors this screen made: once a screen is shown, the ones it no longer holds drop their window listeners. */
+  let editors: Editor[] = [];
+  const pruneEditors = () => {
+    editors = editors.filter((e) => (root.contains(e.el) ? true : (e.dispose(), false)));
+  };
   const stop = () => {
     cleanup?.();
     cleanup = undefined;
@@ -52,6 +57,7 @@ export function robotScreen(app: App): Screen {
     stop();
     root.classList.remove('robot-workmode');
     root.replaceChildren(...(children.filter(Boolean) as Node[]));
+    pruneEditors();
     window.scrollTo(0, 0);
   }
 
@@ -60,6 +66,7 @@ export function robotScreen(app: App): Screen {
     stop();
     root.classList.add('robot-workmode');
     root.replaceChildren(el);
+    pruneEditors();
     window.scrollTo(0, 0);
   }
 
@@ -201,7 +208,9 @@ export function robotScreen(app: App): Screen {
   // ---------------------------------------------------------------- the editor
 
   function editor(initial: string, build: () => Build, onInput: (text: string) => void, testId = 'robot-code'): Editor {
-    return createEditor(t as (key: MessageKey) => string, initial, build, onInput, testId, () => apiEntries(build()).map((e) => ({ sig: e.sig, desc: t(`robot.api.${e.id}` as MessageKey) })));
+    const ed = createEditor(t as (key: MessageKey) => string, initial, build, onInput, testId, () => apiEntries(build()).map((e) => ({ sig: e.sig, desc: t(`robot.api.${e.id}` as MessageKey) })));
+    editors.push(ed);
+    return ed;
   }
 
   // ---------------------------------------------------------------- the fight

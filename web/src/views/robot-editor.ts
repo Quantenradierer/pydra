@@ -2,7 +2,24 @@ import { h } from '../dom.ts';
 import { createSheet } from './robot-sheet.ts';
 import type { MessageKey } from '../i18n.ts';
 import type { Build } from '../robot/build.ts';
-import { applySuggestion, completionAt, insertSnippet, nextSnippets, snippetGroups, type Completion, type Snippet } from '../robot/suggest.ts';
+import { applySuggestion, completionAt, insertSnippet, nextSnippets, snippetGroups, type Completion, type Snippet, type SnippetGroup } from '../robot/suggest.ts';
+
+/** Where the editor's suggestions come from: the robot's build (the default), or another game's own words (Hydra Works' toolbox). */
+export interface SuggestSource {
+  /** What the strip offers when nothing is being typed. */
+  next(): Snippet[];
+  /** The groups of the help sheet. */
+  groups(): SnippetGroup[];
+  /** The completions while a word is typed. */
+  complete(text: string, caret: number, opts: { manual?: boolean }): Completion | null;
+}
+
+/** The robot's suggestions for a build. */
+export const robotSuggestions = (build: () => Build): SuggestSource => ({
+  next: () => nextSnippets(build()),
+  groups: () => snippetGroups(build()),
+  complete: (text, caret, opts) => completionAt(text, caret, build(), opts),
+});
 
 export interface Editor {
   /** The whole editor (line numbers, text, suggestion strip, help sheet): put this on the page. */
@@ -12,6 +29,8 @@ export interface Editor {
   set(text: string): void;
   /** Redraws the strip and the help sheet after the build changed. */
   refresh(): void;
+  /** Removes the window listeners of this editor (call it when the screen that shows it goes). */
+  dispose(): void;
 }
 
 /** One line of the command help (in the sheet). */
@@ -31,7 +50,8 @@ let sheetGroup = 'flow';
  * Nothing floats over the text and focusing opens nothing but the strip. The command list and the full template palette live
  * in a bottom sheet behind the "Befehle" button. The suggestions come from robot/suggest.ts; this file is only the DOM around them.
  */
-export function createEditor(t: (key: MessageKey) => string, initial: string, build: () => Build, onInput: (text: string) => void, testId = 'robot-code', help: () => HelpEntry[] = () => []): Editor {
+export function createEditor(t: (key: MessageKey) => string, initial: string, build: (() => Build) | SuggestSource, onInput: (text: string) => void, testId = 'robot-code', help: () => HelpEntry[] = () => []): Editor {
+  const source = typeof build === 'function' ? robotSuggestions(build) : build;
   const area = h('textarea', {
     class: 'robot-code',
     rows: 4,
@@ -96,13 +116,13 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
       strip.querySelector('.active')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       strip.dataset.mode = 'complete';
     } else {
-      for (const s of nextSnippets(build())) strip.append(chip('robot-chip', s.label, () => put(s), { 'data-testid': 'strip-chip' }));
+      for (const s of source.next()) strip.append(chip('robot-chip', s.label, () => put(s), { 'data-testid': 'strip-chip' }));
       strip.dataset.mode = 'next';
       strip.scrollLeft = 0;
     }
   }
   function refresh(manual = false) {
-    const c = area.selectionStart === area.selectionEnd ? completionAt(area.value, area.selectionStart, build(), { manual }) : null;
+    const c = area.selectionStart === area.selectionEnd ? source.complete(area.value, area.selectionStart, { manual }) : null;
     // A blank line is not "typing a word": the strip then shows the next templates.
     current = c && !c.fresh ? c : null;
     active = 0;
@@ -124,7 +144,8 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
   area.addEventListener('scroll', () => (gutter.scrollTop = area.scrollTop));
   area.addEventListener('click', () => refresh());
   area.addEventListener('focus', () => (refresh(), reveal()));
-  window.visualViewport?.addEventListener('resize', () => document.activeElement === area && reveal());
+  const onViewportResize = () => document.activeElement === area && reveal();
+  window.visualViewport?.addEventListener('resize', onViewportResize);
   area.addEventListener('keydown', (e) => {
     if (current && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const n = Math.min(current.items.length, STRIP_MAX);
@@ -166,10 +187,10 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
     put(s);
   };
   function drawSheet() {
-    const gs = snippetGroups(build());
+    const gs = source.groups();
     if (!gs.some((g) => g.id === sheetGroup)) sheetGroup = gs[0]!.id;
     tabs.replaceChildren(
-      ...gs.map((g) => h('button', { type: 'button', class: 'robot-snippet-tab', 'aria-pressed': String(g.id === sheetGroup), 'data-testid': `snippet-group-${g.id}`, onclick: () => ((sheetGroup = g.id), drawSheet()) }, t(`robot.sug.group.${g.id}` as MessageKey))),
+      ...gs.map((g) => h('button', { type: 'button', class: 'robot-snippet-tab', 'aria-pressed': String(g.id === sheetGroup), 'data-testid': `snippet-group-${g.id}`, onclick: () => ((sheetGroup = g.id), drawSheet()) }, g.label ?? t(`robot.sug.group.${g.id}` as MessageKey))),
     );
     row.replaceChildren(...gs.find((g) => g.id === sheetGroup)!.snippets.map((s) => h('button', { type: 'button', class: 'robot-snippet', 'data-testid': 'snippet', onclick: () => insertFromSheet(s) }, s.label)));
     cmds.replaceChildren(
@@ -199,6 +220,9 @@ export function createEditor(t: (key: MessageKey) => string, initial: string, bu
     refresh() {
       drawStrip();
       if (sheet.open) drawSheet();
+    },
+    dispose() {
+      window.visualViewport?.removeEventListener('resize', onViewportResize);
     },
   };
 }

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { closeSheets, fillCode, openSheet, runFight, startFight, stored } from './helpers.ts';
+import { closeSheets, fillCode, openSheet, runFight, startFight, stored, openGame } from './helpers.ts';
 import { BEFORE_CHAPTER_3, CH0, CH1, CH3, CH4, solution } from './robot-ids.ts';
 
 for (const [device, viewport] of [
@@ -9,8 +9,9 @@ for (const [device, viewport] of [
   test(`on a ${device}: build, code, battle, lose, improve, win and replay`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto('/');
-    await expect(page.getByTestId('stats-robot')).toHaveText('Noch kein Kampf gespielt.');
-    await page.getByTestId('start-robot').click();
+    // Robot Battler is not listed on Home for now; its route still works.
+    await expect(page.getByTestId('start-robot')).toHaveCount(0);
+    await openGame(page, 'robot');
     await expect(page.getByTestId('robot-map')).toBeVisible();
     // Only the first battle is open.
     await expect(page.getByTestId('robot-step-side-dummy')).toBeDisabled();
@@ -49,7 +50,7 @@ for (const [device, viewport] of [
     await expect(page.getByTestId('robot-step-side-dummy')).toHaveAttribute('aria-label', /geschafft/);
     await expect(page.getByTestId('robot-step-move-and-turn')).toBeEnabled();
     await page.getByRole('button', { name: 'Zurück', exact: true }).click();
-    await expect(page.getByTestId('stats-robot')).toContainText(/^2 von \d+ Aufgaben geschafft/);
+    expect(((await stored(page, 'robot')) as { solved: string[] }).solved).toHaveLength(2);
     await expect(page.getByTestId('home-level')).toBeVisible();
   });
 }
@@ -58,7 +59,7 @@ test('the script is ONE script: challenges, the next challenge and fights never 
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.language', JSON.stringify('en')));
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await expect(page.getByRole('heading', { level: 2 }).first()).toHaveText('Chapter 0: Commands in a row');
   // Challenge 1: my own script (a comment and a print line the task does not need).
   const mine = 'forward()\nfire()  # my script\nturn_left()';
@@ -85,7 +86,7 @@ test('the script is ONE script: challenges, the next challenge and fights never 
   await expect(page.getByTestId('robot-code')).toHaveValue(extended);
   await page.goto('/#/');
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-move-and-turn').click();
   await expect(page.getByTestId('robot-code')).toHaveValue(extended);
   // The old script runs on challenge 3 (it does not crash) and the map has only grown.
@@ -99,7 +100,7 @@ test('an old save with removed challenge ids opens without a crash and keeps its
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact', 'backstep-dummy', 'gl-foward', 'cn-row-3', 'side-dummy'], stars: { 'gl-foward': 3 }, current: 'gl-foward', script: 'forward()\nfire()\nfire()\n# mine', runs: 4, wins: 4 })));
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await expect(page.getByTestId('robot-map')).toBeVisible();
   await page.getByTestId('robot-continue').click();
   await expect(page.getByTestId('robot-code')).toHaveValue('forward()\nfire()\nfire()\n# mine');
@@ -111,7 +112,7 @@ test('the builder: every part can be equipped at any time; new parts are only ma
   await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()' })));
   await page.goto('/#/');
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-side-dummy').click();
   await openSheet(page, 'robot-build-open');
   // Chapter 0: nothing is locked, not even the cannon, spider legs, treads or the shield.
@@ -153,7 +154,7 @@ test('the builder: every part can be equipped at any time; new parts are only ma
   }, { CH: CH0, RING: CH1.slice(0, 4), SCRIPT: solution('far-dummy') });
   await page.goto('/#/');
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-far-dummy').click();
   await openSheet(page, 'robot-build-open');
   await expect(page.getByTestId('robot-new').first()).toHaveText('neu');
@@ -168,7 +169,7 @@ async function preset(page: import('@playwright/test').Page, solved: string[], s
   await page.evaluate(([s, sc, b]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: sc, build: b, runs: 40, wins: 40 })), [solved, script, build] as const);
   await page.goto('/#/');
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
 }
 
 async function win(page: import('@playwright/test').Page, id: string, script: string) {
@@ -238,7 +239,7 @@ async function openStep(page: import('@playwright/test').Page, step: string, scr
   await page.goto('/');
   await page.evaluate(([solvedIds, code]) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: solvedIds, script: code, runs: 1, wins: 1 })), [solved, script] as const);
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId(`robot-step-${step}`).click();
   // The fight starts playing by itself; pause it at once (still at the start) to step through it by hand.
   await startFight(page);
@@ -311,7 +312,7 @@ test('one fight per task: it plays at once, the verdict comes when it ends, a lo
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()\nturn_right()\nfire()' })));
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-side-dummy').click();
   await startFight(page);
   await expect(page.getByTestId('robot-play')).toHaveAttribute('aria-label', 'Pause');
@@ -337,7 +338,7 @@ test('English texts in the stepping view', async ({ page }) => {
 
 test('the task map: a Continue button leads to the next task and finished chapters fold away', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await expect(page.getByTestId('robot-continue')).toContainText('Los geht’s');
   await expect(page.getByTestId('robot-continue')).toContainText('Aufgabe 1');
   await expect(page.getByTestId('robot-chapter-1')).not.toHaveAttribute('open', '');
@@ -355,7 +356,7 @@ test('the build screen draws the robot from its parts: tap sockets to plug parts
   const solved = [...CH0, ...CH1.slice(0, 5)];
   await page.evaluate((s) => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: s, script: 'forward()' })), solved);
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-far-dummy').click();
   await openSheet(page, 'robot-build-open');
   const art = page.locator('.robot-bench-stage svg.rb');
@@ -429,7 +430,7 @@ test('phone 360x740: one column, one navigation, one primary button that changes
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()', runs: 1, wins: 1 })));
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-side-dummy').click();
   await expectOneNavigation(page);
   // The task, the arena (a preview with both robots), the controls (waiting) and the script are on one page.
@@ -469,7 +470,7 @@ test('the same screens in English', async ({ page }) => {
     localStorage.setItem('pydra.v1.robot', JSON.stringify({ solved: ['first-contact'], script: 'forward()\nfire()', runs: 1, wins: 1 }));
   });
   await page.reload();
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-side-dummy').click();
   await expectOneNavigation(page);
   await expect(page.getByTestId('robot-run')).toHaveText('Start fight');
@@ -481,7 +482,7 @@ test('the same screens in English', async ({ page }) => {
 
 test('there are no hints anywhere in the work screen', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-first-contact').click();
   await expect(page.getByTestId('robot-hint')).toHaveCount(0);
   await expect(page.getByTestId('robot-hint-code')).toHaveCount(0);

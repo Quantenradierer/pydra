@@ -2636,6 +2636,11 @@ progress {
   color: #14202e;
   font-weight: 700;
 }
+/* The line number sits outside the yellow box: it takes the text colour of the theme (dark on dark otherwise). */
+.robot-listing li.active::marker {
+  color: var(--fg);
+  font-weight: 700;
+}
 .robot-arena {
   display: grid;
   gap: 0.3rem;

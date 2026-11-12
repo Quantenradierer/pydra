@@ -141,8 +141,8 @@ describe('parsing saved daily data', () => {
 
 describe('daily challenge points', () => {
   const ctx = {
-    totals: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10 },
-    remaining: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10 },
+    totals: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10, factory: 10 },
+    remaining: { game: 10, hunt: 10, order: 10, predict: 10, robot: 10, factory: 10 },
   };
   const at = (day: string) => new Date(`${day}T12:00:00`);
   const event = (day: string, n: number): PointsEvent => ({ type: 'daily', day, right: [0, 1, 2, 3, 4].map((i) => i < n) });
@@ -179,7 +179,7 @@ describe('daily challenge points', () => {
   });
 
   it('unlocks the three daily achievements', () => {
-    expect(ACHIEVEMENTS).toHaveLength(22);
+    expect(ACHIEVEMENTS).toHaveLength(23);
     let state = emptyPoints();
     const out = applyEvent(state, event('2026-01-01', 5), at('2026-01-01'), ctx);
     expect(out.result.achievements).toContain('daily-1');

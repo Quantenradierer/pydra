@@ -1,0 +1,542 @@
+/*
+ * Hydra Works: the lesson map (the dependency graph) and the lesson page (task, order sign, the block as an SVG,
+ * run controls, caption, "Your machines", editor / listing, verdict, one primary button). The editor and the
+ * listing reuse the Robot Battler styles. On a desktop (>= 960px) the page has two columns.
+ */
+:root {
+  --fw-belt: #5b6573;
+  --fw-roller: #3e4652;
+  --fw-jaw: #3e4652;
+  --fw-machine: #dfe5ec;
+  --fw-machine-stroke: #6a7686;
+  --fw-inside: #efe9e1;
+  --fw-floor: #e6e1d7;
+  --fw-floor-stroke: #b5ab98;
+  --fw-arm: #3776ab;
+  --fw-base: #ffd43b;
+  --fw-grey: #8a94a3;
+  --fw-ore: #d08f3e;
+  --fw-ore-stroke: #5e3a12;
+  --fw-coal: #1d1f23;
+  --fw-coal-stroke: #000000;
+  --fw-facing: #ffd43b;
+  --fw-plate: #d5dce4;
+  --fw-plate-stroke: #6f7b89;
+  --fw-label: #526173;
+  --fw-var: #1d2a3a;
+  --fw-var-bg: #ffffff;
+  --fw-name: #b8892b;
+  --fw-lamp: #c9d3df;
+  --fw-fire: #ff8a1f;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fw-belt: #4a5361;
+    --fw-roller: #2a313b;
+    --fw-jaw: #c2ccd8;
+    --fw-machine: #26344a;
+    --fw-machine-stroke: #8a9bb1;
+    --fw-inside: #31404f;
+    --fw-floor: #232c38;
+    --fw-floor-stroke: #4a5668;
+    --fw-arm: #5a9bd4;
+    --fw-base: #ffd43b;
+    --fw-grey: #7d8796;
+    --fw-ore: #e3a85a;
+    --fw-ore-stroke: #fff1d6;
+    --fw-coal: #3a3f48;
+    --fw-coal-stroke: #e8edf3;
+    --fw-facing: #ffd43b;
+    --fw-plate: #c6ced8;
+    --fw-plate-stroke: #8e9aa8;
+    --fw-label: #a3b1c2;
+    --fw-var: #dfe7f1;
+    --fw-var-bg: #0b111a;
+    --fw-name: #d9a640;
+    --fw-lamp: #3b4a5e;
+    --fw-fire: #ff9a3c;
+  }
+}
+
+/* ---- the map */
+.factory .fw-intro {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.fw-continue.primary {
+  display: grid;
+  text-align: left;
+  gap: 0.1rem;
+}
+.fw-continue small {
+  font-weight: 400;
+  opacity: 0.9;
+}
+.fw-map {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.fw-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.fw-row.single {
+  grid-template-columns: minmax(0, 0.6fr);
+  justify-content: center;
+}
+.fw-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  height: 0.9rem;
+}
+.fw-links.single {
+  grid-template-columns: 1fr;
+}
+.fw-link {
+  justify-self: center;
+  width: 2px;
+  background: var(--border);
+}
+.fw-fork {
+  height: 1.4rem;
+  color: var(--border);
+}
+.fw-fork svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.fw-node {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-width: 2px;
+  line-height: 1.25;
+}
+.fw-node-id {
+  font-weight: 700;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+}
+.fw-node-title {
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+.fw-node-state {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.fw-node.grabber .fw-node-id {
+  color: var(--accent);
+}
+.fw-node.smelter .fw-node-id {
+  color: var(--code-number);
+}
+.fw-node.block .fw-node-id {
+  color: var(--code-keyword);
+}
+.fw-node.open {
+  border-color: var(--accent);
+}
+.fw-node.solved {
+  border-color: var(--green);
+  background: var(--green-bg);
+}
+.fw-node.solved .fw-node-state {
+  color: var(--green);
+}
+.fw-node.solved .fw-node-state::before {
+  content: '✓ ';
+}
+.fw-node.locked {
+  opacity: 0.6;
+  border-style: dashed;
+}
+.fw-node[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+.fw-roots {
+  margin-top: 0.3rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+  border-top: 2px solid var(--border);
+  padding-top: 0.2rem;
+}
+
+/* ---- the lesson page */
+#app:has(.fw-work) {
+  max-width: 640px;
+}
+.fw-work,
+.fw-page,
+.fw-main,
+.fw-code {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.fw-task {
+  display: grid;
+  gap: 0.25rem;
+}
+.fw-task-text {
+  line-height: 1.35;
+}
+.fw-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.6rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+.fw-new {
+  margin: 0;
+  color: var(--fg);
+}
+.fw-other-belt {
+  margin: 0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.fw-other-belt[hidden] {
+  display: none;
+}
+
+/* the order sign and the block */
+.fw-scene-wrap {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.fw-order {
+  justify-self: start;
+  padding: 0.2rem 0.6rem;
+  border: 2px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.fw-order.met {
+  border-color: var(--green);
+  background: var(--green-bg);
+  color: var(--green);
+}
+.fw-order.met::before {
+  content: '✓ ';
+}
+.fw-scene {
+  display: block;
+  width: 100%;
+  max-width: 34rem;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-family: system-ui, sans-serif;
+}
+.fw-belt {
+  fill: var(--fw-belt);
+}
+.fw-roller {
+  stroke: var(--fw-roller);
+  stroke-width: 1.5;
+}
+.fw-arrow {
+  fill: none;
+  stroke: var(--fw-label);
+  stroke-width: 1.5;
+}
+.fw-floor {
+  fill: var(--fw-floor);
+  stroke: var(--fw-floor-stroke);
+  stroke-dasharray: 4 3;
+}
+.fw-bunker,
+.fw-smelter {
+  fill: var(--fw-machine);
+  stroke: var(--fw-machine-stroke);
+  stroke-width: 2;
+}
+.fw-smelter {
+  fill: var(--fw-inside);
+}
+.fw-bunker-mouth {
+  fill: var(--fw-roller);
+}
+.fw-chute {
+  fill: none;
+  stroke: var(--fw-machine-stroke);
+  stroke-width: 9;
+  stroke-linejoin: round;
+  opacity: 0.45;
+}
+.fw-hatch {
+  fill: var(--fw-roller);
+  stroke: var(--fw-machine-stroke);
+}
+.fw-scene[data-error='smelter'] .fw-smelter,
+.fw-scene[data-error='bunker'] .fw-bunker,
+.fw-scene[data-error='grabber'] .fw-base {
+  stroke: var(--red);
+  stroke-width: 3;
+}
+.fw-label {
+  fill: var(--fw-label);
+  font-size: 11px;
+}
+.fw-var {
+  fill: var(--fw-var);
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--fw-var-bg);
+  stroke-width: 3px;
+}
+.fw-arm {
+  fill: var(--fw-arm);
+}
+.fw-wrist,
+.fw-jaw {
+  fill: var(--fw-jaw);
+}
+.fw-base {
+  fill: var(--fw-base);
+  stroke: var(--fw-roller);
+  stroke-width: 2;
+}
+.fw-factory .fw-arm,
+.fw-factory .fw-base {
+  fill: var(--fw-grey);
+}
+.fw-ore circle:first-child {
+  fill: var(--fw-ore);
+  stroke: var(--fw-ore-stroke);
+  stroke-width: 1.6;
+}
+.fw-fleck {
+  fill: var(--fw-ore-stroke);
+}
+.fw-coal path {
+  fill: var(--fw-coal);
+  stroke: var(--fw-coal-stroke);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+.fw-shine {
+  fill: #ffffff;
+  opacity: 0.5;
+}
+.fw-facing {
+  fill: var(--fw-facing);
+  stroke: var(--fw-roller);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+.fw-plate {
+  fill: var(--fw-plate);
+  stroke: var(--fw-plate-stroke);
+}
+.fw-fire {
+  fill: var(--fw-fire);
+}
+.fw-ring {
+  fill: none;
+  stroke: var(--yellow);
+  stroke-width: 3;
+}
+.fw-lamp {
+  fill: var(--fw-lamp);
+  stroke: var(--fw-roller);
+}
+.fw-lamp.on {
+  fill: #e5372b;
+}
+.fw-smoke circle {
+  fill: var(--fw-grey);
+  opacity: 0.55;
+  animation: fw-smoke 1.4s ease-out infinite;
+}
+@keyframes fw-smoke {
+  from {
+    transform: translateY(4px);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fw-smoke circle {
+    animation: none;
+  }
+  .fw-order {
+    transition: none;
+  }
+}
+.fw-name rect {
+  fill: var(--fw-name);
+}
+.fw-name text {
+  fill: #1d1406;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* controls, position, caption */
+.fw-controlbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.fw-controlbar .fw-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+.factory .fw-controls .run-control {
+  width: 2.75rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+.factory .fw-controls .fw-speed {
+  width: auto;
+  padding: 0 0.5rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.factory .fw-position {
+  flex: 1 1 8rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.fw-caption {
+  min-height: 1.4rem;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+.fw-caption.error {
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* the code */
+.fw-header h1 {
+  font-size: 1.25rem;
+}
+.factory .robot-listing {
+  padding-left: 2.9rem;
+}
+.fw-machines {
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.2rem 0.6rem;
+}
+.fw-machines > summary {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+.fw-machines[open] > summary {
+  margin-bottom: 0.2rem;
+}
+.fw-machines .robot-listing {
+  max-height: 14rem;
+  overflow: auto;
+  margin-bottom: 0.4rem;
+  opacity: 0.92;
+}
+.fw-machines .robot-listing li {
+  overflow-wrap: anywhere;
+}
+.fw-note {
+  margin: 0.2rem 0 0.4rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.fw-code .robot-editor[hidden],
+.fw-listing-holder[hidden],
+.fw-result[hidden] {
+  display: none;
+}
+.fw-code .robot-editor-box,
+.fw-listing-holder {
+  height: clamp(7rem, 28dvh, 15rem);
+}
+.robot-listing li.error {
+  background: var(--red-bg);
+  color: var(--red);
+}
+.robot-listing.fw-restart {
+  animation: fw-restart 0.6s ease-out;
+}
+@keyframes fw-restart {
+  from {
+    box-shadow: inset 0 0 0 3px var(--yellow);
+  }
+  to {
+    box-shadow: inset 0 0 0 3px transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .robot-listing.fw-restart {
+    animation: none;
+    box-shadow: inset 0 0 0 3px var(--yellow);
+  }
+}
+.fw-result {
+  display: grid;
+  gap: 0.3rem;
+}
+.fw-result .verdict {
+  margin: 0;
+  font-size: 1rem;
+}
+.fw-reward {
+  font-weight: 600;
+  color: var(--fw-name);
+}
+
+@media (min-width: 960px) {
+  #app:has(.fw-work) {
+    max-width: 1100px;
+  }
+  .fw-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 0.9fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .fw-code .robot-editor-box,
+  .fw-listing-holder {
+    height: clamp(9rem, 40dvh, 22rem);
+  }
+}
+.robot-listing li.fw-calling {
+  outline: 2px solid var(--yellow);
+  outline-offset: -2px;
+}

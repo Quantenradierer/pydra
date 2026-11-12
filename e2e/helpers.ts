@@ -112,3 +112,11 @@ export async function openSheet(page: Page, opener: string) {
   await page.getByTestId(opener).click();
   return page.locator('dialog[open]');
 }
+
+/** Opens a hydra game from Home the way the app does (pushed history entry), also for games Home does not list. */
+export async function openGame(page: Page, route: string) {
+  await page.evaluate((r) => {
+    history.pushState({ fromHome: true }, '', `#/${r}`);
+    dispatchEvent(new PopStateEvent('popstate'));
+  }, route);
+}

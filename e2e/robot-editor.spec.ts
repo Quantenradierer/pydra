@@ -1,11 +1,11 @@
 import { expect, test, type Page } from '@playwright/test';
-import { codeBox, fillCode, runFight } from './helpers.ts';
+import { codeBox, fillCode, runFight, openGame } from './helpers.ts';
 
 /** The script editor: fixed height, ONE suggestion strip under it, the help sheet behind "?"; on desktop (keys) and phone (taps). */
 
 async function openFirstFight(page: Page) {
   await page.goto('/');
-  await page.getByTestId('start-robot').click();
+  await openGame(page, 'robot');
   await page.getByTestId('robot-step-first-contact').click();
 }
 

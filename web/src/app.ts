@@ -6,6 +6,7 @@ import type { OrderGame } from './game/order.ts';
 import type { PredictGame } from './game/predict.ts';
 import type { RobotGame } from './robot/game.ts';
 import type { FactoryGame } from './factory/game.ts';
+import type { ElevatorGame } from './elevator/game.ts';
 import { h } from './dom.ts';
 import { levelInfo, titleKey } from './points/levels.ts';
 import { translate, type Lang, type MessageKey, type Params } from './i18n.ts';
@@ -23,6 +24,7 @@ import { orderScreen } from './views/order.ts';
 import { predictScreen } from './views/predict.ts';
 import { robotScreen } from './views/robot.ts';
 import { factoryScreen } from './views/factory.ts';
+import { elevatorScreen } from './views/elevator.ts';
 import { robotGalleryScreen } from './views/robot-gallery.ts';
 import { profileScreen } from './views/profile.ts';
 import { homeScreen } from './views/home.ts';
@@ -30,7 +32,7 @@ import { quizScreen } from './views/quiz.ts';
 import { settingsScreen } from './views/settings.ts';
 import { summaryScreen } from './views/summary.ts';
 
-export const ROUTES = ['home', 'quiz', 'summary', 'settings', 'feedback', 'game', 'hunt', 'order', 'predict', 'robot', 'factory', 'profile', 'daily'] as const;
+export const ROUTES = ['home', 'quiz', 'summary', 'settings', 'feedback', 'game', 'hunt', 'order', 'predict', 'robot', 'factory', 'elevator', 'profile', 'daily'] as const;
 export type Route = (typeof ROUTES)[number];
 
 /** What a view renders; dispose() removes listeners when the screen is left. */
@@ -51,6 +53,7 @@ export interface Services {
   predict: PredictGame;
   robot: RobotGame;
   factory: FactoryGame;
+  elevator: ElevatorGame;
   points: PointsService;
   feedback: FeedbackQueue;
   install: InstallPrompt;
@@ -69,12 +72,13 @@ const VIEWS: Record<Route, (app: App) => Screen> = {
   predict: predictScreen,
   robot: robotScreen,
   factory: factoryScreen,
+  elevator: elevatorScreen,
   profile: profileScreen,
   daily: dailyScreen,
 };
 
 /** The hydra games' screens. */
-export const GAME_ROUTES = ['game', 'hunt', 'order', 'predict', 'robot', 'factory'] as const satisfies readonly Route[];
+export const GAME_ROUTES = ['game', 'hunt', 'order', 'predict', 'robot', 'factory', 'elevator'] as const satisfies readonly Route[];
 export type GameRoute = (typeof GAME_ROUTES)[number];
 export const isGame = (route: Route): route is GameRoute => (GAME_ROUTES as readonly Route[]).includes(route);
 

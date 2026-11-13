@@ -178,6 +178,22 @@ export class Program {
     }
   }
 
+  /**
+   * After the module has run to its end: starts a call of one of its functions (an event handler the host calls,
+   * `on_idle()`), run with `runUntilAction` like the module. Globals keep what the module and earlier calls left
+   * in them. The caller checks the number of arguments first.
+   */
+  startCall(fn: PyFunction, args: Value[]): void {
+    const self = this;
+    this.gen = (function* (): Gen<void> {
+      yield* self.callFunction(fn, args, {});
+    })();
+    this.started = false;
+    this.finished = false;
+    this.scope = this.module;
+    this.depth = 0;
+  }
+
   /** Runs to the end (no actions allowed to pause: they return None at once). Used by the golden tests. */
   runAll(maxSteps = 1_000_000): RunResult {
     let result = this.runUntilAction(maxSteps);

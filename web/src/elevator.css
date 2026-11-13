@@ -1,0 +1,715 @@
+/*
+ * Hydra Lift: the list of challenges and the challenge page (task with goal, the building as an SVG, the stats, run
+ * controls, caption, the fixed first line, editor / listing, verdict, one primary button). The editor and the listing
+ * reuse the Robot Battler styles. On a desktop (>= 960px) the page has two columns.
+ *
+ * The building is drawn plainly, like Elevator Saga: flat floor bands, shafts, boxes for cars. Each building type only
+ * sets its accent colour (`.lift-theme-<id>`: the name label, the list's headings).
+ */
+:root {
+  --lift-bg: #f3f5f8;
+  --lift-scene-border: #c9d3df;
+  --lift-floor: #ffffff;
+  --lift-floor-odd: #f7f9fb;
+  --lift-floor-closed: #f4f1ea;
+  --lift-floorline: #c4cdd8;
+  --lift-floorno: #526173;
+  --lift-sign: #3776ab;
+  --lift-sign-text: #ffffff;
+  --lift-shaft: rgba(55, 80, 110, 0.09);
+  --lift-shaft-stroke: #a9b5c3;
+  --lift-rail: #c4cdd8;
+  --lift-motor: #6a7686;
+  --lift-cable: #6a7686;
+  --lift-car: #3776ab;
+  --lift-car-stroke: #1f4d75;
+  --lift-car-in: #fff6d6;
+  --lift-car-in-shut: #e3ecf5;
+  --lift-door: #b4c5d6;
+  --lift-door-edge: #6f86a0;
+  --lift-display-text: #ffffff;
+  --lift-display-arrow: #b8f5c8;
+  --lift-skin-0: #f1c7a1;
+  --lift-skin-1: #c98f63;
+  --lift-skin-2: #8d5a3b;
+  --lift-shirt-0: #2f6aa0;
+  --lift-shirt-1: #1f7a6d;
+  --lift-shirt-2: #6b4fa3;
+  --lift-shirt-3: #8a5a2b;
+  --lift-shirt-4: #3e4652;
+  --lift-shirt-text: #ffffff;
+  --lift-person-edge: transparent;
+  --lift-late: #c62828;
+  --lift-late-edge: #7f1010;
+  --lift-lamp: #d3dae3;
+  --lift-lamp-on: #f28c00;
+  --lift-pressed: #ffc400;
+  --lift-text: #44505f;
+  --lift-chip: #ffffff;
+  --lift-goal-met: #17723a;
+  --lift-hole: #14202e;
+  --lift-debris: #6a7686;
+  --lift-dust: #b5ab98;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lift-bg: #0f1722;
+    --lift-scene-border: #33445a;
+    --lift-floor: #1a2533;
+    --lift-floor-odd: #17212e;
+    --lift-floor-closed: #241f1a;
+    --lift-floorline: #33445a;
+    --lift-floorno: #a9b6c6;
+    --lift-shaft: rgba(0, 0, 0, 0.28);
+    --lift-shaft-stroke: #46586f;
+    --lift-rail: #2f3e51;
+    --lift-motor: #8a9bb1;
+    --lift-cable: #8a9bb1;
+    --lift-car: #4a8cc7;
+    --lift-car-stroke: #c9e1f6;
+    --lift-car-in: #4a4128;
+    --lift-car-in-shut: #26344a;
+    --lift-door: #3a5070;
+    --lift-door-edge: #7f9fc5;
+    --lift-display-text: #ffffff;
+    --lift-display-arrow: #b8f5c8;
+    --lift-shirt-4: #4a5361;
+    --lift-person-edge: rgba(255, 255, 255, 0.55);
+    --lift-late: #d32f2f;
+    --lift-late-edge: #ffb4ab;
+    --lift-lamp: #33445a;
+    --lift-lamp-on: #ff9a3c;
+    --lift-pressed: #ffd43b;
+    --lift-text: #c2ccd8;
+    --lift-chip: #0b111a;
+    --lift-goal-met: #6fdc8c;
+    --lift-hole: #000000;
+    --lift-debris: #8a9bb1;
+    --lift-dust: #8a8170;
+  }
+}
+
+/* ---- the buildings' accent colours */
+.lift-theme-house { --lift-sign: #4f7a36; }
+.lift-theme-school { --lift-sign: #9a6b00; }
+.lift-theme-highrise { --lift-sign: #4a5361; }
+@media (prefers-color-scheme: dark) {
+  .lift-theme-house { --lift-sign: #3f6a2a; }
+  .lift-theme-school { --lift-sign: #8a6a12; }
+  .lift-theme-highrise { --lift-sign: #4a5361; }
+  /* The name label in the scene sits on the dark background: a lighter tone of the accent. */
+  .lift-scene .lift-name { fill: color-mix(in srgb, var(--lift-sign) 45%, #ffffff); }
+}
+
+/* ---- the list */
+.lift .lift-intro {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin: 0 0 0.75rem;
+}
+.lift-continue.primary {
+  display: grid;
+  width: 100%;
+  text-align: left;
+  gap: 0.1rem;
+}
+.lift-continue small {
+  font-weight: 400;
+  opacity: 0.9;
+}
+.lift-groups {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.lift-group {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+.lift-group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  font-size: 1.05rem;
+  color: var(--lift-sign-text, #ffffff);
+  background: var(--lift-sign, #3776ab);
+}
+.lift-group-title > span {
+  flex: 1;
+  min-width: 0;
+}
+.lift-group-title small {
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  white-space: nowrap;
+}
+.lift-group-icon {
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.lift-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.lift-list > li + li {
+  border-top: 1px solid var(--border);
+}
+.lift-item {
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 2.2rem 1fr;
+  column-gap: 0.75rem;
+  row-gap: 0.1rem;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+}
+.lift-item:hover:not(:disabled) {
+  background: var(--code-bg);
+}
+.lift-item:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: -3px;
+}
+.lift-item-id {
+  grid-row: span 3;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--lift-sign, #3776ab);
+  border: 2px solid var(--lift-sign, #3776ab);
+}
+.lift-item.open .lift-item-id {
+  background: var(--lift-sign, #3776ab);
+  color: var(--lift-sign-text, #ffffff);
+}
+.lift-item.solved .lift-item-id {
+  border-color: var(--lift-goal-met);
+  color: var(--lift-goal-met);
+}
+.lift-item-title {
+  font-weight: 600;
+}
+.lift-item-goal,
+.lift-item-state {
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.lift-item.solved .lift-item-state {
+  color: var(--lift-goal-met);
+  font-weight: 600;
+}
+.lift-item.open .lift-item-state {
+  color: var(--fg);
+  font-weight: 600;
+}
+.lift-item.locked {
+  opacity: 0.55;
+  cursor: default;
+}
+.lift-item.locked .lift-item-id {
+  border-style: dashed;
+}
+
+/* ---- the page */
+#app:has(.lift-work) {
+  max-width: 640px;
+}
+.lift-page,
+.lift-main,
+.lift-code {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-width: 0;
+}
+@media (min-width: 960px) {
+  #app:has(.lift-work) {
+    max-width: 1140px;
+  }
+  .lift-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 0.9fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
+  .lift-code {
+    position: sticky;
+    top: 0.75rem;
+  }
+  .lift-code .robot-editor-box,
+  .lift-listing-holder {
+    height: clamp(9rem, 40dvh, 22rem);
+  }
+}
+.lift-header h1 {
+  font-size: 1.25rem;
+}
+.lift-task {
+  display: grid;
+  gap: 0.5rem;
+}
+.lift-task p {
+  margin: 0;
+}
+.lift-task-text {
+  line-height: 1.45;
+}
+.lift-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.lift-new {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: #2b2100;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.lift-new code {
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-weight: 700;
+}
+.lift-goal {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-weight: 600;
+  line-height: 1.35;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--lift-sign, var(--accent));
+  background: var(--surface);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.lift-goal::before {
+  content: '';
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.1rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--surface) 0 18%, currentColor 19% 34%, var(--surface) 35% 52%, currentColor 53% 70%, transparent 71%);
+  color: var(--muted);
+}
+.lift-goal.met {
+  border-color: var(--lift-goal-met);
+  background: var(--green-bg);
+  color: var(--lift-goal-met);
+}
+.lift-goal.met::before,
+.lift-goal.missed::before {
+  content: '✓';
+  width: auto;
+  height: auto;
+  margin: 0;
+  background: none;
+  color: inherit;
+}
+.lift-goal.missed {
+  border-color: var(--red);
+  background: var(--red-bg);
+}
+.lift-goal.missed::before {
+  content: '✗';
+  color: var(--red);
+}
+
+/* ---- the building */
+.lift-scene-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0.35rem 0.4rem 0.15rem;
+  border: 1px solid var(--lift-scene-border);
+  border-radius: var(--radius);
+  background: var(--lift-bg);
+  overflow: hidden;
+}
+.lift-scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70dvh;
+  font-family: system-ui, sans-serif;
+}
+.lift-name {
+  fill: var(--lift-sign);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.lift-floor {
+  fill: var(--lift-floor);
+}
+.lift-floor.odd {
+  fill: var(--lift-floor-odd);
+}
+.lift-floor.closed {
+  fill: var(--lift-floor-closed);
+}
+.lift-floorline {
+  stroke: var(--lift-floorline);
+  stroke-width: 1;
+}
+.lift-floorno {
+  fill: var(--lift-floorno);
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.lift-dir {
+  fill: var(--lift-lamp);
+}
+.lift-dir.on {
+  fill: var(--lift-lamp-on);
+}
+
+/* the shafts and the cars */
+.lift-shaft {
+  fill: var(--lift-shaft);
+  stroke: var(--lift-shaft-stroke);
+  stroke-width: 1;
+}
+.lift-rail {
+  stroke: var(--lift-rail);
+  stroke-width: 1.2;
+}
+.lift-motor {
+  fill: var(--lift-motor);
+}
+.lift-cable {
+  fill: none;
+  stroke: var(--lift-cable);
+  stroke-width: 1.2;
+}
+.lift-carname,
+.lift-queue,
+.lift-more {
+  fill: var(--lift-text);
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 10px;
+}
+.lift-more {
+  font-size: 11px;
+  font-weight: 700;
+}
+.lift-queue {
+  font-weight: 700;
+  font-size: 12px;
+  fill: var(--code-fg);
+}
+.lift-queue-chip {
+  fill: var(--lift-chip);
+  stroke: var(--lift-scene-border);
+  stroke-width: 1;
+}
+.lift-car-body {
+  fill: var(--lift-car);
+  stroke: var(--lift-car-stroke);
+  stroke-width: 1.4;
+}
+.lift-car-in {
+  fill: var(--lift-car-in-shut);
+}
+.lift-car.stopped .lift-car-in,
+.lift-car.crashed .lift-car-in {
+  fill: var(--lift-car-in);
+}
+.lift-door {
+  fill: var(--lift-door);
+  stroke: var(--lift-door-edge);
+  stroke-width: 0.7;
+}
+.lift-display-arrow {
+  fill: var(--lift-display-arrow);
+}
+.lift-display-text {
+  fill: var(--lift-display-text);
+  font-size: 9.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.lift-display-text.alarm {
+  fill: #ffd43b;
+}
+
+/* people */
+.lift-head.k0 { fill: var(--lift-skin-0); }
+.lift-head.k1 { fill: var(--lift-skin-1); }
+.lift-head.k2 { fill: var(--lift-skin-2); }
+.lift-person.s0 .lift-shirt { fill: var(--lift-shirt-0); }
+.lift-person.s1 .lift-shirt { fill: var(--lift-shirt-1); }
+.lift-person.s2 .lift-shirt { fill: var(--lift-shirt-2); }
+.lift-person.s3 .lift-shirt { fill: var(--lift-shirt-3); }
+.lift-person.s4 .lift-shirt { fill: var(--lift-shirt-4); }
+.lift-shirt {
+  stroke: var(--lift-person-edge);
+  stroke-width: 0.8;
+}
+.lift-person text {
+  fill: var(--lift-shirt-text);
+  font-size: 9.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.lift-person.late .lift-shirt {
+  fill: var(--lift-late);
+  stroke: var(--lift-late-edge);
+  stroke-width: 1.4;
+}
+
+/* the floor-button lamps beside each car */
+.lift-btn {
+  fill: var(--lift-lamp);
+}
+.lift-pressed {
+  fill: var(--lift-pressed);
+  stroke: var(--lift-car-stroke);
+  stroke-width: 0.8;
+}
+
+/* ---- stats: a compact block of label and value, like Elevator Saga's */
+.lift-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1rem;
+  margin: 0;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--surface);
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+@media (min-width: 560px) {
+  .lift-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 1.25rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+.lift-stats div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0.15rem 0.3rem;
+  margin: 0 -0.3rem;
+  border-bottom: 1px dotted var(--border);
+  border-radius: 0.3rem;
+}
+.lift-stats dt {
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.lift-stats dd {
+  margin: 0;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.lift-stats div:has(dd.over) {
+  background: var(--red-bg);
+}
+.lift-stats dd.over {
+  color: var(--red);
+}
+.lift-stats dd.over::after {
+  content: ' !';
+}
+
+/* ---- controls, position, caption */
+.lift-controlbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.lift-controlbar:not(:has(button)) {
+  display: none;
+}
+.lift-controlbar .lift-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+.lift .lift-controls .run-control {
+  width: 2.75rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+.lift .lift-controls .lift-speed {
+  width: auto;
+  padding: 0 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.lift .lift-controls [data-testid='lift-play'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.lift .lift-position {
+  /* beside the buttons when it fits, else on its own line */
+  flex: 1 0 auto;
+  white-space: nowrap;
+  margin: 0;
+  text-align: right;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.lift-caption {
+  margin: 0;
+  min-height: 2.6rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 0.6rem;
+  border-left: 4px solid var(--accent);
+  background: var(--code-bg);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.lift-caption:empty {
+  display: none;
+}
+.lift-caption.error {
+  border-left-color: var(--red);
+  background: var(--red-bg);
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* ---- the code */
+.lift .robot-listing {
+  padding-left: 2.9rem;
+}
+.lift-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
+}
+.lift-result[hidden] {
+  display: none;
+}
+.lift-result .verdict {
+  margin: 0;
+}
+
+/* On a phone long lines in the listing wrap (the indent is kept); in two columns it scrolls sideways. */
+.lift .robot-note-inline {
+  margin-left: 0.6rem;
+  white-space: nowrap;
+}
+@media (max-width: 959px) {
+  .lift .robot-listing {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+@media (max-width: 559px) {
+  .lift .robot-listing-holder .robot-listing {
+    font-size: 0.8rem;
+  }
+}
+
+/* ---- the building site */
+.lift-tape {
+  fill: url(#lift-tape);
+  stroke: #1d1f23;
+  stroke-width: 0.6;
+}
+.lift-tape-a {
+  fill: #ffd43b;
+}
+.lift-tape-b {
+  fill: #1d1f23;
+}
+.lift-car.site .lift-car-body {
+  stroke: var(--red);
+  stroke-width: 3;
+}
+.lift-car.site .lift-car-in {
+  fill: var(--red-bg);
+}
+
+/* ---- the crash */
+.lift-alarm {
+  fill: #ff3b30;
+  opacity: 0;
+}
+.lift-alarm.on {
+  opacity: 1;
+  stroke: rgba(255, 59, 48, 0.35);
+  stroke-width: 7;
+}
+.lift-car.crashing .lift-car-body,
+.lift-car.crashed .lift-car-body {
+  stroke: var(--red);
+  stroke-width: 2.2;
+}
+.lift-spark {
+  stroke: #ffb300;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.lift-hole {
+  fill: var(--lift-hole);
+}
+.lift-debris {
+  fill: var(--lift-debris);
+}
+.lift-dust {
+  fill: var(--lift-dust);
+}
+.lift-scene.lift-shake {
+  animation: lift-shake 0.12s linear infinite;
+}
+@keyframes lift-shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3px, 1px); }
+  50% { transform: translate(2px, -2px); }
+  75% { transform: translate(-1px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lift-scene.lift-shake {
+    animation: none;
+  }
+  .lift-goal {
+    transition: none;
+  }
+}

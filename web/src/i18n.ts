@@ -1,4 +1,5 @@
 import { FACTORY_DE, FACTORY_EN } from './factory/messages.ts';
+import { ELEVATOR_DE, ELEVATOR_EN } from './elevator/messages.ts';
 import { ERRORS_DE, ERRORS_EN } from './robot/messages-errors.ts';
 import { CONTENT_DE, CONTENT_EN } from './robot/messages-content.ts';
 import { UI_DE, UI_EN } from './robot/messages-ui.ts';
@@ -19,6 +20,7 @@ const de = {
   ...SUG_DE,
   ...CONTENT_DE,
   ...FACTORY_DE,
+  ...ELEVATOR_DE,
   'app.title': 'Pydra: Python Trainer',
   'app.tagline': 'Python-Grundlagen. Aufgaben mit Köpfchen.',
   'home.lessons': 'Lektionen',
@@ -326,6 +328,7 @@ const en: Record<MessageKey, string> = {
   ...SUG_EN,
   ...CONTENT_EN,
   ...FACTORY_EN,
+  ...ELEVATOR_EN,
   'app.title': 'Pydra: Python Trainer',
   'app.tagline': 'Python basics, one head at a time.',
   'home.lessons': 'Lessons',

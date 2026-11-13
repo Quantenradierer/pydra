@@ -65,6 +65,9 @@ export function homeScreen(app: App): Screen {
     } else if (route === 'factory') {
       const stats = app.services.factory.stats();
       statsText = stats.runs === 0 ? t('home.factory.noStats') : t('home.factory.stats', stats);
+    } else if (route === 'elevator') {
+      const stats = app.services.elevator.stats();
+      statsText = stats.runs === 0 ? t('home.elevator.noStats') : t('home.elevator.stats', stats);
     } else if (route === 'order') {
       const stats = app.services.order.stats();
       statsText = stats.runs === 0 ? t('home.order.noStats') : t(stats.runs === 1 ? 'home.order.stats.one' : 'home.order.stats.other', stats);
